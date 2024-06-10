@@ -39,6 +39,13 @@ export const exampleNodeData: NodeData[] = [
               style: { background: "red", width: "100px", height: "100px" },
             },
           },
+          {
+            id: "1-2-3",
+            elementType: "Custom",
+            staticProps: {
+              style: { background: "red", width: "100px", height: "100px" },
+            },
+          },
         ],
       },
     ],

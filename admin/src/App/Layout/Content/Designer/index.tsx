@@ -2,15 +2,41 @@ import stores from "@/stores";
 import { NodeData, NodePlainChild } from "@/stores/designs";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
+import { Button } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSnapshot } from "valtio";
 
+const Custom = (props: DesignableComponentProps) => {
+  return (
+    <div {...props}>
+      <Button>自定义按钮</Button>
+    </div>
+  );
+};
+
+type DesignableComponentProps = {
+  style?: React.CSSProperties;
+  onMouseEnter?: React.MouseEventHandler;
+  onMouseLeave?: React.MouseEventHandler;
+  onMouseDown?: React.MouseEventHandler;
+  onMouseOver?: React.MouseEventHandler;
+};
+
+type ComponentType =
+  | React.FC<
+      {
+        children?: React.ReactNode;
+      } & DesignableComponentProps
+    >
+  | string;
+
 const components: {
-  [key in string]?: string;
+  [key in string]?: ComponentType;
 } = {
   div: "div",
   span: "span",
   text: "text",
+  Custom: Custom,
 };
 
 // 类型断言函数
@@ -114,8 +140,12 @@ const RenderNode: React.FC<{
     ...node.staticProps,
     style: {
       ...node.staticProps.style,
-      background: isDragging ? "#eee" : node.staticProps.style?.background,
-      border: isHighlighted ? "1px solid blue" : node.staticProps.style?.border, // 这里使用简单的边框来高亮，可以根据需求调整
+      background: isDragging
+        ? "#eee"
+        : (node.staticProps.style?.background as string),
+      border: isHighlighted
+        ? "1px solid blue"
+        : (node.staticProps.style?.border as string), // 这里使用简单的边框来高亮，可以根据需求调整
     },
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
