@@ -23,9 +23,7 @@ export const Layout = () => {
         </main>
 
         {/* 右侧边栏 */}
-        <aside className="bg-gray-200 w-[400px] border-l">
-          <RightAside />
-        </aside>
+        <RightAside />
       </div>
     </div>
   );

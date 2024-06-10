@@ -1,9 +1,16 @@
+import stores from "@/stores";
+import { useSnapshot } from "valtio";
 import SettingsForm from "./SettingsForm";
 
 export const RightAside = () => {
-  return (
-    <div>
+  const currentSystemPaths = useSnapshot(stores.navs.currentSystemPaths);
+  const isApps = currentSystemPaths[0] === "apps";
+
+  return !isApps ? null : (
+    <aside className={"w-[400px] border-l"}>
       <SettingsForm />
-    </div>
+    </aside>
   );
 };
+
+export default RightAside;
