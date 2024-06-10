@@ -1,8 +1,11 @@
 import type { TabsProps } from "antd";
 import { Tabs } from "antd";
 import { css } from "@emotion/css";
+import { useTranslation } from "react-i18next";
 
 export const Header = () => {
+  const { t } = useTranslation();
+
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -10,7 +13,7 @@ export const Header = () => {
   const items: TabsProps["items"] = [
     {
       key: "apps",
-      label: "apps",
+      label: t("apps"),
     },
     {
       key: "users",
