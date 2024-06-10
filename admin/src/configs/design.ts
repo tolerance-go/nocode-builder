@@ -20,7 +20,7 @@ export const exampleNodeData: NodeData[] = [
           style: {
             background: "white",
             width: "300px",
-            height: "300px",
+            height: "500px",
             padding: "30px",
           },
         },
@@ -43,7 +43,12 @@ export const exampleNodeData: NodeData[] = [
             id: "1-2-3",
             elementType: "Custom",
             staticProps: {
-              style: { background: "red", width: "100px", height: "100px" },
+              style: {
+                background: "green",
+                width: "150px",
+                height: "150px",
+                padding: "10px",
+              },
             },
           },
         ],
