@@ -6,14 +6,18 @@ import { Designer } from "./Designer";
 
 export const Content = () => {
   const currentSystemPaths = useSnapshot(stores.navs.states.currentSystemPaths);
-  const currentSelectedApp = useSnapshot(stores.navs.states.currentSelectedApp);
 
-  if (currentSystemPaths.paths[0].value === "apps") {
-    if (currentSelectedApp.id) {
-      return <Designer />;
-    }
+  if (currentSystemPaths.isAppData) {
+    return <DataTable />;
+  }
+
+  if (currentSystemPaths.isAppDesign) {
+    return <Designer />;
+  }
+
+  if (currentSystemPaths.isApp) {
     return <AppList />;
   }
 
-  return <DataTable />;
+  return <div>empty</div>;
 };

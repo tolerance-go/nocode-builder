@@ -18,6 +18,8 @@ export const currentSystemPaths = proxy<{
   startsWithAppAndId: boolean;
   isApp: boolean;
   activeNavKey: string | undefined;
+  isAppData: boolean;
+  isAppDesign: boolean;
 }>({
   paths: [
     {
@@ -25,6 +27,20 @@ export const currentSystemPaths = proxy<{
       value: "apps",
     },
   ],
+  get isAppData() {
+    return (
+      this.startsWithApp &&
+      this.paths.length === 3 &&
+      this.paths.at(2)?.value === "data"
+    );
+  },
+  get isAppDesign() {
+    return (
+      this.startsWithApp &&
+      this.paths.length === 3 &&
+      this.paths.at(2)?.value === "design"
+    );
+  },
   get isApp() {
     return this.paths.length === 1 && this.paths[0].value === "apps";
   },
