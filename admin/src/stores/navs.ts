@@ -1,3 +1,5 @@
+import configs from "@/configs";
+import { ensure } from "@/utils/ensure";
 import { proxy } from "valtio";
 
 /**
@@ -55,7 +57,7 @@ export const actions = {
       return;
     }
 
-    if (currentSystemPaths.paths.length === 2) {
+    if (currentSystemPaths.paths.length === 3) {
       currentSystemPaths.paths[2] = key;
     }
   },
@@ -71,13 +73,17 @@ export const actions = {
    * 回退导航
    */
   backNav: () => {
-    currentSystemPaths.paths.pop();
-
     // 清空选中
-    if (currentSystemPaths.paths.length === 1) {
-      if (currentSelectedApp.id) {
-        currentSelectedApp.id = null;
+    if (currentSystemPaths.paths.length === 3) {
+      if (currentSystemPaths.startsWithApp) {
+        currentSystemPaths.paths = ["apps"];
+
+        if (currentSelectedApp.id) {
+          currentSelectedApp.id = null;
+        }
       }
+    } else {
+      currentSystemPaths.paths.pop();
     }
   },
 
@@ -90,5 +96,13 @@ export const actions = {
     currentSelectedApp.id = id;
 
     actions.pushNav(id);
+
+    const appsFirstItemKey = configs.base.navs
+      .find((item) => item.key === "apps")
+      ?.items?.at(0)?.key;
+
+    ensure(!!appsFirstItemKey, "appsFirstItemKey 不能为空");
+
+    actions.pushNav(appsFirstItemKey);
   },
 };
