@@ -14,9 +14,10 @@ const resources = {
 
 i18n.use(initReactI18next).init({
   resources,
-  lng: "en", // 默认语言
+  lng: "en", // 初始语言
+  fallbackLng: "en", // 备用语言
   interpolation: {
-    escapeValue: false,
+    escapeValue: false, // react 已经安全转义
   },
 });
 

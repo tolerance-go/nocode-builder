@@ -1,7 +1,8 @@
 import type { TabsProps } from "antd";
-import { Tabs } from "antd";
+import { Flex, Row, Tabs } from "antd";
 import { css } from "@emotion/css";
 import { useTranslation } from "react-i18next";
+import { LngSwitcher } from "./LngSwitcher";
 
 export const Header = () => {
   const { t } = useTranslation();
@@ -30,15 +31,18 @@ export const Header = () => {
   ];
 
   return (
-    <Tabs
-      className={css`
-        .ant-tabs-nav {
-          margin-bottom: 0;
-        }
-      `}
-      defaultActiveKey="apps"
-      items={items}
-      onChange={onChange}
-    />
+    <Flex justify="space-between" align="center">
+      <Tabs
+        className={css`
+          .ant-tabs-nav {
+            margin-bottom: 0;
+          }
+        `}
+        defaultActiveKey="apps"
+        items={items}
+        onChange={onChange}
+      />
+      <LngSwitcher />
+    </Flex>
   );
 };
