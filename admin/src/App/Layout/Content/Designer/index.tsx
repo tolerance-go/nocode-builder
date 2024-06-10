@@ -30,9 +30,9 @@ const RenderNode: React.FC<{
   node: DeepReadonly<NodeData>;
   /**
    * 拖拽的时候，悬停的 node 的 html 元素，不包括自身
-   * 
-   * @param node 
-   * @returns 
+   *
+   * @param node
+   * @returns
    */
   onDraggingHover: (node: HTMLElement | null) => void;
 }> = ({ node, onDraggingHover }) => {
@@ -48,6 +48,12 @@ const RenderNode: React.FC<{
     stores.designs.actions.switchHoveredComponent(node.id, true);
 
     if (dragging.draggingId) {
+      /** 如果拖拽的时候悬停是自己，就取消 */
+      if (dragging.draggingId === node.id) {
+        onDraggingHover(null);
+        return;
+      }
+
       onDraggingHover(event.currentTarget as HTMLElement);
     }
   };
