@@ -1,5 +1,11 @@
+import { TopBar } from "./TopBar";
 import TreeNavs from "./TreeNavs";
 
 export const LeftAside = () => {
-  return <TreeNavs />;
+  return (
+    <div>
+      <TopBar />
+      <TreeNavs />
+    </div>
+  );
 };
