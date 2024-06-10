@@ -26,7 +26,10 @@ const isPrimitiveOrNull = (
   );
 };
 
-const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
+const RenderNode: React.FC<{
+  node: DeepReadonly<NodeData>;
+  onHover: (node: HTMLElement) => void;
+}> = ({ node, onHover }) => {
   const hoveredComponents = useSnapshot(
     stores.designs.states.hoveredComponents
   );
@@ -35,8 +38,10 @@ const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
 
   const isHighlighted = hoveredComponents.ids.includes(node.id);
 
-  const handleMouseEnter = () => {
+  const handleMouseEnter = (event: React.MouseEvent) => {
     stores.designs.actions.switchHoveredComponent(node.id, true);
+
+    onHover(event.currentTarget as HTMLElement);
   };
   const handleMouseLeave = () => {
     stores.designs.actions.switchHoveredComponent(node.id, false);
@@ -98,19 +103,65 @@ const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
     children: isPrimitiveOrNull(node.children)
       ? node.children
       : node.children?.map((childNode) => (
-          <RenderNode key={childNode.id} node={childNode} />
+          <RenderNode key={childNode.id} node={childNode} onHover={onHover} />
         )),
   });
 };
 
 export const Designer: React.FC = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
+  const [hoveredNode, setHoveredNode] = useState<HTMLElement | null>(null);
+
+  const handleHover = (node: HTMLElement) => {
+    setHoveredNode(node);
+  };
+
+  const floatingDivsStyle = (position: { top: number; left: number }) => ({
+    position: "absolute" as const,
+    top: position.top,
+    left: position.left,
+    width: "10px",
+    height: "10px",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  });
 
   return (
-    <>
+    <div style={{ position: "relative" }}>
       {designTreeData.nodeData.map((node) => (
-        <RenderNode key={node.id} node={node} />
+        <RenderNode key={node.id} node={node} onHover={handleHover} />
       ))}
-    </>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      {hoveredNode && (
+        <>
+          <div
+            style={floatingDivsStyle({
+              top: hoveredNode.offsetTop - 10,
+              left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+            })}
+          ></div>
+          <div
+            style={floatingDivsStyle({
+              top: hoveredNode.offsetTop + hoveredNode.offsetHeight,
+              left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+            })}
+          ></div>
+          <div
+            style={floatingDivsStyle({
+              top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
+              left: hoveredNode.offsetLeft - 10,
+            })}
+          ></div>
+          <div
+            style={floatingDivsStyle({
+              top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
+              left: hoveredNode.offsetLeft + hoveredNode.offsetWidth,
+            })}
+          ></div>
+        </>
+      )}
+    </div>
   );
 };
