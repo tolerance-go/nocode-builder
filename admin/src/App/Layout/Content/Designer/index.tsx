@@ -29,9 +29,7 @@ const isPrimitiveOrNull = (
 const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
   const Component = components[node.elementType]; // Default to div if elementType is not found
 
-  if (!Component) {
-    throw new Error("未知组件类型");
-  }
+  ensure(!!Component, "未知组件类型。");
 
   if (Component === components.text) {
     ensure(
