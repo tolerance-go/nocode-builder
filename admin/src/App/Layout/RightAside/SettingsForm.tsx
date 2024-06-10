@@ -1,11 +1,13 @@
-import React from "react";
 import type { FormProps } from "antd";
-import { Button, Checkbox, Form, Input } from "antd";
+import { Checkbox, Form, Input } from "antd";
+import React from "react";
 
 type FieldType = {
   username?: string;
   password?: string;
-  remember?: string;
+  description?: string;
+  search?: string;
+  remember?: boolean;
 };
 
 const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
@@ -45,9 +47,25 @@ const SettingsForm: React.FC = () => (
       </Form.Item>
 
       <Form.Item<FieldType>
+        label="Description"
+        name="description"
+        rules={[{ required: true, message: "Please input a description!" }]}
+      >
+        <Input.TextArea />
+      </Form.Item>
+
+      <Form.Item<FieldType>
+        label="Search"
+        name="search"
+        rules={[{ required: true, message: "Please input your search query!" }]}
+      >
+        <Input.Search />
+      </Form.Item>
+
+      <Form.Item<FieldType>
+        label="Remember"
         name="remember"
         valuePropName="checked"
-        wrapperCol={{ offset: 8, span: 16 }}
       >
         <Checkbox>Remember me</Checkbox>
       </Form.Item>
