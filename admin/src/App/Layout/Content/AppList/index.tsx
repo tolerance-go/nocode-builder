@@ -1,5 +1,6 @@
 import { Button, Flex, Input, Select, Typography } from "antd";
 import ItemList from "./ItemList";
+import CreateAppModal from "./CreateAppModal";
 
 export const AppList = () => {
   const selectBefore = (
@@ -18,7 +19,9 @@ export const AppList = () => {
             Below you'll find the list of apps that you have access to
           </Typography.Paragraph>
           <Flex justify="space-between" className="my-8">
-            <Button type="primary">创建应用</Button>
+            <CreateAppModal>
+              <Button type="primary">创建应用</Button>
+            </CreateAppModal>
             <Input.Search
               addonBefore={selectBefore}
               className="max-w-[300px]"
