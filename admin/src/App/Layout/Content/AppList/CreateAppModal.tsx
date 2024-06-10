@@ -65,8 +65,7 @@ const CreateAppModal: React.FC<{
           autoComplete="off"
           layout="vertical"
         >
-          <Divider></Divider>
-          <div>
+          <div className="py-6">
             <Form.Item<FieldType>
               label="名称"
               name="username"
@@ -89,7 +88,7 @@ const CreateAppModal: React.FC<{
             </Form.Item>
           </div>
 
-          <Flex justify="end" className="pt-6">
+          <Flex justify="end">
             <Space size={15}>
               <Button onClick={() => handleCancel()}>取消</Button>
               <Button type="primary" htmlType="submit">

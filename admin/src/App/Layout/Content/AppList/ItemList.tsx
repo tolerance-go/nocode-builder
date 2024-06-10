@@ -35,12 +35,10 @@ const ItemList: React.FC = () => (
         <b>ant design</b> footer part
       </div>
     }
+    split={false}
     renderItem={(item) => (
       <List.Item
-        style={{
-          paddingLeft: 0,
-          paddingRight: 0,
-        }}
+        className="hover:border-blue-400 rounded-md border hover:cursor-pointer mt-4 transition-all"
         key={item.title}
         actions={[
           <IconText
