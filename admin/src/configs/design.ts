@@ -1,6 +1,6 @@
 import { NodeData } from "@/stores/designs";
 
-export const exampleNodeData: NodeData = [
+export const exampleNodeData: NodeData[] = [
   {
     id: "1",
     elementType: "div",
@@ -15,13 +15,33 @@ export const exampleNodeData: NodeData = [
             id: "3",
             elementType: "div",
             staticProps: { style: { fontSize: "20px" } },
-            children: ["sdlfj", "alsdjf"],
+            children: [
+              {
+                id: "3-1",
+                elementType: "text",
+                staticProps: {},
+                children: "sdlfj",
+              },
+              {
+                id: "3-2",
+                elementType: "text",
+                staticProps: {},
+                children: "sdlfj",
+              },
+            ],
           },
           {
             id: "4",
             elementType: "div",
             staticProps: { style: { fontSize: "20px" } },
-            children: ["sdlfj"],
+            children: [
+              {
+                id: "4-1",
+                elementType: "text",
+                staticProps: {},
+                children: "sdlfj",
+              },
+            ],
           },
         ],
       },

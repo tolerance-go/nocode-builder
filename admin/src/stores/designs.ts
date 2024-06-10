@@ -6,17 +6,17 @@ type StaticProps = {
   [key: string]: StaticPropsValue | StaticProps;
 };
 
-export type Node = {
+export type NodePlainChild = string | number | boolean | null | undefined;
+
+export type NodeData = {
   id: string;
   elementType: string;
-  children?: (Node | string | number | boolean | null | undefined)[];
+  children?: NodeData[] | NodePlainChild;
   staticProps: StaticProps;
 };
 
-export type NodeData = Node["children"];
-
 const designTreeData = proxy<{
-  nodeData: NodeData;
+  nodeData: NodeData[];
 }>({
   nodeData: [],
 });
@@ -26,7 +26,7 @@ export const states = {
 };
 
 export const actions = {
-  replaceNodeData: (data: NodeData) => {
+  replaceNodeData: (data: NodeData[]) => {
     designTreeData.nodeData = data;
   },
 };

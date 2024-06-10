@@ -18,7 +18,7 @@ export const Layout = () => {
         </aside>
 
         {/* 中间内容区域 */}
-        <main className="flex-1 bg-white p-4">
+        <main className="flex-1 bg-white">
           <Content />
         </main>
 

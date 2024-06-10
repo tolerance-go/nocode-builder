@@ -1,5 +1,6 @@
 import stores from "@/stores";
-import { Node } from "@/stores/designs";
+import { Node, NodeData, NodePlainChild } from "@/stores/designs";
+import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
 import React from "react";
 import { useSnapshot } from "valtio";
@@ -9,24 +10,44 @@ const components: {
 } = {
   div: "div",
   span: "span",
+  text: "text",
 };
 
-const RenderNode: React.FC<{ node: DeepReadonly<Node> }> = ({ node }) => {
-  const Component = components[node.elementType] || "div"; // Default to div if elementType is not found
+// 类型断言函数
+const isPrimitiveOrNull = (
+  value: unknown
+): value is string | number | boolean | undefined | null => {
+  return (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean" ||
+    value === undefined ||
+    value === null
+  );
+};
+
+const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
+  const Component = components[node.elementType]; // Default to div if elementType is not found
+
+  if (!Component) {
+    throw new Error("未知组件类型");
+  }
+
+  if (Component === components.text) {
+    ensure(
+      isPrimitiveOrNull(node.children),
+      "text 类型的元素的 child 不合法。"
+    );
+    return node.children as NodePlainChild;
+  }
 
   return React.createElement(Component, {
     ...node.staticProps,
-    children: node.children?.map((childNode) =>
-      typeof childNode === "string" ||
-      typeof childNode === "number" ||
-      typeof childNode === "boolean" ||
-      childNode === undefined ||
-      childNode === null ? (
-        childNode
-      ) : (
-        <RenderNode key={childNode.id} node={childNode} />
-      )
-    ),
+    children: isPrimitiveOrNull(node.children)
+      ? node.children
+      : node.children?.map((childNode) => (
+          <RenderNode key={childNode.id} node={childNode} />
+        )),
   });
 };
 
@@ -34,18 +55,10 @@ export const Designer: React.FC = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
 
   return (
-    <div>
-      {designTreeData.nodeData?.map((node) =>
-        typeof node === "string" ||
-        typeof node === "number" ||
-        typeof node === "boolean" ||
-        node === undefined ||
-        node === null ? (
-          node
-        ) : (
-          <RenderNode key={node.id} node={node} />
-        )
-      )}
-    </div>
+    <>
+      {designTreeData.nodeData.map((node) => (
+        <RenderNode key={node.id} node={node} />
+      ))}
+    </>
   );
 };
