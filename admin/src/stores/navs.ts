@@ -14,6 +14,7 @@ export const currentSystemPaths = proxy<{
   startsWithApp: boolean;
   startsWithAppAndId: boolean;
   isApp: boolean;
+  activeNavKey: string;
 }>({
   paths: ["apps"],
   get isApp() {
@@ -24,6 +25,9 @@ export const currentSystemPaths = proxy<{
   },
   get startsWithAppAndId() {
     return this.startsWithApp && !!this.paths[1];
+  },
+  get activeNavKey() {
+    return this.paths[this.paths.length - 1];
   },
 });
 

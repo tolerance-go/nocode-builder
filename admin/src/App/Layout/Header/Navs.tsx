@@ -38,7 +38,7 @@ export const Navs = () => {
             margin-bottom: 0;
           }
         `}
-        defaultActiveKey="apps"
+        activeKey="apps"
         items={items}
         onChange={onChange}
       />
