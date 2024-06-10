@@ -1,10 +1,12 @@
 import configs from "@/configs";
+import stores from "@/stores";
 import { css } from "@emotion/css";
 import { Space, Tabs, TabsProps } from "antd";
 
 export const Navs = () => {
   const onChange = (key: string) => {
     console.log(key);
+    stores.navs.changePaths(0, key);
   };
 
   const items: TabsProps["items"] = configs.base.navs;

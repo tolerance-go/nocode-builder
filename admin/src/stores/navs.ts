@@ -5,6 +5,10 @@ import { proxy } from "valtio";
  *
  * eg: apps -> design
  */
-export type SystemPaths = { id: string }[];
+export type SystemPaths = string[];
 
-export const currentSystemPaths = proxy<SystemPaths>([]);
+export const currentSystemPaths = proxy<SystemPaths>(["apps"]);
+
+export const changePaths = (index: number, item: string) => {
+  currentSystemPaths[index] = item;
+};
