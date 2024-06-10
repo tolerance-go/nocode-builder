@@ -1,8 +1,8 @@
 import stores from "@/stores";
-import { Node, NodeData, NodePlainChild } from "@/stores/designs";
+import { NodeData, NodePlainChild } from "@/stores/designs";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
-import React from "react";
+import React, { useState } from "react";
 import { useSnapshot } from "valtio";
 
 const components: {
@@ -27,6 +27,10 @@ const isPrimitiveOrNull = (
 };
 
 const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
+  const [isHighlighted, setIsHighlighted] = useState(false);
+  const handleMouseEnter = () => setIsHighlighted(true);
+  const handleMouseLeave = () => setIsHighlighted(false);
+
   const Component = components[node.elementType]; // Default to div if elementType is not found
 
   ensure(!!Component, "未知组件类型。");
@@ -39,8 +43,19 @@ const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
     return node.children as NodePlainChild;
   }
 
+  ensure(
+    !!node.staticProps.style && typeof node.staticProps.style === "object",
+    "node.staticProps.style 类型不是对象。"
+  );
+
   return React.createElement(Component, {
     ...node.staticProps,
+    style: {
+      ...node.staticProps.style,
+      border: isHighlighted ? "1px solid blue" : undefined, // 这里使用简单的边框来高亮，可以根据需求调整
+    },
+    onMouseEnter: handleMouseEnter,
+    onMouseLeave: handleMouseLeave,
     children: isPrimitiveOrNull(node.children)
       ? node.children
       : node.children?.map((childNode) => (
