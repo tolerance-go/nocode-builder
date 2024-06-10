@@ -1,3 +1,4 @@
+import { Content } from "./Content";
 import { Header } from "./Header";
 import { LeftAside } from "./LeftAside";
 
@@ -17,8 +18,7 @@ export const Layout = () => {
 
         {/* 中间内容区域 */}
         <main className="flex-1 bg-white p-4">
-          <h2 className="text-lg">中间内容区域</h2>
-          <p>这里是主要内容...</p>
+          <Content />
         </main>
 
         {/* 右侧边栏 */}
