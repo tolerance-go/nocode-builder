@@ -8,7 +8,7 @@ export const Content = () => {
   const currentSystemPaths = useSnapshot(stores.navs.states.currentSystemPaths);
   const currentSelectedApp = useSnapshot(stores.navs.states.currentSelectedApp);
 
-  if (currentSystemPaths.paths[0] === "apps") {
+  if (currentSystemPaths.paths[0].value === "apps") {
     if (currentSelectedApp.id) {
       return <Designer />;
     }

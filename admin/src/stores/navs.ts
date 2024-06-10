@@ -7,27 +7,46 @@ import { proxy } from "valtio";
  *
  * eg: ['apps', 'appId']
  */
-export type SystemPaths = string[];
+export type SystemPaths = {
+  type: "nav" | "id";
+  value: string;
+}[];
 
 export const currentSystemPaths = proxy<{
   paths: SystemPaths;
   startsWithApp: boolean;
   startsWithAppAndId: boolean;
   isApp: boolean;
-  activeNavKey: string;
+  activeNavKey: string | undefined;
 }>({
-  paths: ["apps"],
+  paths: [
+    {
+      type: "nav",
+      value: "apps",
+    },
+  ],
   get isApp() {
-    return this.paths.length === 1 && this.paths[0] === "apps";
+    return this.paths.length === 1 && this.paths[0].value === "apps";
   },
   get startsWithApp() {
-    return this.paths[0] === "apps";
+    return this.paths[0].value === "apps";
   },
   get startsWithAppAndId() {
     return this.startsWithApp && !!this.paths[1];
   },
   get activeNavKey() {
-    return this.paths[this.paths.length - 1];
+    if (this.paths.length) {
+      const last = this.paths.at(this.paths.length - 1) as SystemPaths[number];
+      if (last.type === "id") {
+        // 倒数第二个
+        const penultimate = this.paths.at(
+          this.paths.length - 2
+        ) as SystemPaths[number];
+        return penultimate.value;
+      }
+      return last.value;
+    }
+    return undefined;
   },
 });
 
@@ -57,12 +76,12 @@ export const actions = {
    */
   changeNav: (key: string) => {
     if (currentSystemPaths.paths.length === 1) {
-      currentSystemPaths.paths[0] = key;
+      currentSystemPaths.paths[0].value = key;
       return;
     }
 
     if (currentSystemPaths.paths.length === 3) {
-      currentSystemPaths.paths[2] = key;
+      currentSystemPaths.paths[2].value = key;
     }
   },
 
@@ -70,7 +89,20 @@ export const actions = {
    * 追加导航
    */
   pushNav: (key: string) => {
-    currentSystemPaths.paths.push(key);
+    currentSystemPaths.paths.push({
+      type: "nav",
+      value: key,
+    });
+  },
+
+  /**
+   * 追加导航
+   */
+  pushId: (id: string) => {
+    currentSystemPaths.paths.push({
+      type: "id",
+      value: id,
+    });
   },
 
   /**
@@ -80,7 +112,12 @@ export const actions = {
     // 清空选中
     if (currentSystemPaths.paths.length === 3) {
       if (currentSystemPaths.startsWithApp) {
-        currentSystemPaths.paths = ["apps"];
+        currentSystemPaths.paths = [
+          {
+            type: "nav",
+            value: "apps",
+          },
+        ];
 
         if (currentSelectedApp.id) {
           currentSelectedApp.id = null;
@@ -99,7 +136,7 @@ export const actions = {
   selectApp: (id: string) => {
     currentSelectedApp.id = id;
 
-    actions.pushNav(id);
+    actions.pushId(id);
 
     const appsFirstItemKey = configs.base.navs
       .find((item) => item.key === "apps")

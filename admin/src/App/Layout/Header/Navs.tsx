@@ -15,7 +15,7 @@ export const Navs = () => {
     /**
      * 如果第一个是 apps 并且第二个参数不为空，则显示 app 下的子导航
      */
-    if (currentSystemPaths.paths[0] === "apps") {
+    if (currentSystemPaths.paths[0].value === "apps") {
       if (currentSystemPaths.paths[1]) {
         return configs.base.navs.find((item) => item.key === "apps")?.items;
       }
@@ -38,7 +38,7 @@ export const Navs = () => {
             margin-bottom: 0;
           }
         `}
-        activeKey="apps"
+        activeKey={currentSystemPaths.activeNavKey}
         items={items}
         onChange={onChange}
       />
