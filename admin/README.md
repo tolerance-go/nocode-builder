@@ -12,7 +12,14 @@
 
 ### 应用管理系统
 
-对项目按照 system/[apps/[data/[models, tables], design, pipelines, dashboard, settings], users, plugins, settings] 的层级进行管理
+对项目按照 
+system/[
+  apps/[
+    data/[models, tables], 
+    design, pipelines, dashboard, settings
+  ], 
+  users, plugins, settings
+] 的层级进行管理
 
 ---
 
