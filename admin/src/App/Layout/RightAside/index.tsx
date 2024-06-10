@@ -1,5 +1,6 @@
 import stores from "@/stores";
 import { useSnapshot } from "valtio";
+import Editor from "./Editor";
 import SettingsForm from "./SettingsForm";
 
 export const RightAside = () => {
@@ -11,7 +12,7 @@ export const RightAside = () => {
 
   return (
     <aside className={"w-[400px] border-l"}>
-      <SettingsForm />
+      {currentSystemPaths.isAppDesign ? <Editor /> : <SettingsForm />}
     </aside>
   );
 };
