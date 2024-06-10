@@ -27,9 +27,18 @@ const isPrimitiveOrNull = (
 };
 
 const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
-  const [isHighlighted, setIsHighlighted] = useState(false);
-  const handleMouseEnter = () => setIsHighlighted(true);
-  const handleMouseLeave = () => setIsHighlighted(false);
+  const hoveredComponents = useSnapshot(
+    stores.designs.states.hoveredComponents
+  );
+
+  const isHighlighted = hoveredComponents.ids.includes(node.id);
+
+  const handleMouseEnter = () => {
+    stores.designs.actions.switchHoveredComponent(node.id, true);
+  };
+  const handleMouseLeave = () => {
+    stores.designs.actions.switchHoveredComponent(node.id, false);
+  };
 
   const Component = components[node.elementType]; // Default to div if elementType is not found
 
