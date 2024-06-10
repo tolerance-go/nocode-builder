@@ -44,9 +44,12 @@ const RenderNode: React.FC<{
 
   const isHighlighted = hoveredComponents.ids.includes(node.id);
 
-  const handleMouseEnter = (event: React.MouseEvent) => {
-    console.log("handleMouseEnter");
+  const handleMouseEnter = () => {
     stores.designs.actions.switchHoveredComponent(node.id, true);
+  };
+  const handleMouseOver = (event: React.MouseEvent) => {
+    /** 禁止冒泡 */
+    event.stopPropagation();
 
     if (dragging.draggingId) {
       /** 如果拖拽的时候悬停是自己，就取消 */
@@ -117,6 +120,7 @@ const RenderNode: React.FC<{
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
     onMouseDown: handleMouseDown,
+    onMouseOver: handleMouseOver,
     children: isPrimitiveOrNull(node.children)
       ? node.children
       : node.children?.map((childNode) => (
