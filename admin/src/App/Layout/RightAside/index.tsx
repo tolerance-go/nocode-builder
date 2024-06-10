@@ -3,10 +3,13 @@ import { useSnapshot } from "valtio";
 import SettingsForm from "./SettingsForm";
 
 export const RightAside = () => {
-  const currentSystemPaths = useSnapshot(stores.navs.currentSystemPaths);
-  const isApps = currentSystemPaths[0] === "apps";
+  const currentSystemPaths = useSnapshot(stores.navs.states.currentSystemPaths);
 
-  return isApps ? null : (
+  if (currentSystemPaths.isApp) {
+    return null;
+  }
+
+  return (
     <aside className={"w-[400px] border-l"}>
       <SettingsForm />
     </aside>
