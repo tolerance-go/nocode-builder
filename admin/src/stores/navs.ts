@@ -50,13 +50,13 @@ export const actions = {
    * @returns
    */
   changeNav: (key: string) => {
-    if (states.currentSystemPaths.paths.length === 1) {
-      states.currentSystemPaths.paths[0] = key;
+    if (currentSystemPaths.paths.length === 1) {
+      currentSystemPaths.paths[0] = key;
       return;
     }
 
-    if (states.currentSystemPaths.paths.length === 2) {
-      states.currentSystemPaths.paths[2] = key;
+    if (currentSystemPaths.paths.length === 2) {
+      currentSystemPaths.paths[2] = key;
     }
   },
 
@@ -64,19 +64,19 @@ export const actions = {
    * 追加导航
    */
   pushNav: (key: string) => {
-    states.currentSystemPaths.paths.push(key);
+    currentSystemPaths.paths.push(key);
   },
 
   /**
    * 回退导航
    */
   backNav: () => {
-    states.currentSystemPaths.paths.pop();
+    currentSystemPaths.paths.pop();
 
     // 清空选中
-    if (states.currentSystemPaths.paths.length === 1) {
-      if (states.currentSelectedApp.id) {
-        states.currentSelectedApp.id = null;
+    if (currentSystemPaths.paths.length === 1) {
+      if (currentSelectedApp.id) {
+        currentSelectedApp.id = null;
       }
     }
   },
@@ -87,7 +87,7 @@ export const actions = {
    * @param id
    */
   selectApp: (id: string) => {
-    states.currentSelectedApp.id = id;
+    currentSelectedApp.id = id;
 
     actions.pushNav(id);
   },
