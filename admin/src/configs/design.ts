@@ -4,44 +4,40 @@ export const exampleNodeData: NodeData[] = [
   {
     id: "1",
     elementType: "div",
-    staticProps: { style: { background: "lightblue", padding: "10px" } },
+    staticProps: { style: { background: "lightblue", padding: "20px" } },
     children: [
       {
-        id: "2",
-        elementType: "span",
-        staticProps: { style: { color: "red" } },
+        id: "1-1",
+        elementType: "div",
+        staticProps: {
+          style: { background: "blue", width: "100px", height: "100px" },
+        },
+      },
+      {
+        id: "1-2",
+        elementType: "div",
+        staticProps: {
+          style: {
+            background: "white",
+            width: "300px",
+            height: "300px",
+            padding: "30px",
+          },
+        },
         children: [
           {
-            id: "3",
+            id: "1-2-1",
             elementType: "div",
-            staticProps: { style: { fontSize: "20px" } },
-            children: [
-              {
-                id: "3-1",
-                elementType: "text",
-                staticProps: {},
-                children: "sdlfj",
-              },
-              {
-                id: "3-2",
-                elementType: "text",
-                staticProps: {},
-                children: "sdlfj",
-              },
-            ],
+            staticProps: {
+              style: { background: "yellow", width: "100px", height: "100px" },
+            },
           },
           {
-            id: "4",
+            id: "1-2-2",
             elementType: "div",
-            staticProps: { style: { fontSize: "20px" } },
-            children: [
-              {
-                id: "4-1",
-                elementType: "text",
-                staticProps: {},
-                children: "sdlfj",
-              },
-            ],
+            staticProps: {
+              style: { background: "red", width: "100px", height: "100px" },
+            },
           },
         ],
       },

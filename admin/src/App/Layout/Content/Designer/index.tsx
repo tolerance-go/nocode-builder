@@ -45,6 +45,7 @@ const RenderNode: React.FC<{
   const isHighlighted = hoveredComponents.ids.includes(node.id);
 
   const handleMouseEnter = (event: React.MouseEvent) => {
+    console.log("handleMouseEnter");
     stores.designs.actions.switchHoveredComponent(node.id, true);
 
     if (dragging.draggingId) {
@@ -110,8 +111,8 @@ const RenderNode: React.FC<{
     ...node.staticProps,
     style: {
       ...node.staticProps.style,
-      background: isDragging ? "#eee" : undefined,
-      border: isHighlighted ? "1px solid blue" : undefined, // 这里使用简单的边框来高亮，可以根据需求调整
+      background: isDragging ? "#eee" : node.staticProps.style?.background,
+      border: isHighlighted ? "1px solid blue" : node.staticProps.style?.border, // 这里使用简单的边框来高亮，可以根据需求调整
     },
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
