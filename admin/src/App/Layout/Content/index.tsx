@@ -7,11 +7,11 @@ export const Content = () => {
   const currentSystemPaths = useSnapshot(stores.navs.currentSystemPaths);
   return currentSystemPaths[0] === "apps" ? (
     <>
-      <DataTable />
+      <AppList />
     </>
   ) : (
     <>
-      <AppList />
+      <DataTable />
     </>
   );
 };

@@ -37,6 +37,10 @@ const ItemList: React.FC = () => (
     }
     renderItem={(item) => (
       <List.Item
+        style={{
+          paddingLeft: 0,
+          paddingRight: 0,
+        }}
         key={item.title}
         actions={[
           <IconText

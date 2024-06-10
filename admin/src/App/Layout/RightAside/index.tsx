@@ -6,7 +6,7 @@ export const RightAside = () => {
   const currentSystemPaths = useSnapshot(stores.navs.currentSystemPaths);
   const isApps = currentSystemPaths[0] === "apps";
 
-  return !isApps ? null : (
+  return isApps ? null : (
     <aside className={"w-[400px] border-l"}>
       <SettingsForm />
     </aside>
