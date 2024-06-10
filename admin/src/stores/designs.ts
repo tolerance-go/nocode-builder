@@ -31,16 +31,16 @@ const hoveredComponents = proxy<{
 /**
  * 当前是否在拖拽组件中
  */
-const isDragging = proxy<{
-  dragging: boolean;
+const dragging = proxy<{
+  draggingId: string | null;
 }>({
-  dragging: false,
+  draggingId: null,
 });
 
 export const states = {
   designTreeData,
   hoveredComponents,
-  isDragging,
+  dragging,
 };
 
 export const actions = {
@@ -60,7 +60,10 @@ export const actions = {
     }
   },
   /** 修改拖拽状态 */
-  changeDragging: (value: boolean) => {
-    isDragging.dragging = value;
+  startDragging: (id: string) => {
+    dragging.draggingId = id;
+  },
+  stopDragging: () => {
+    dragging.draggingId = null;
   },
 };

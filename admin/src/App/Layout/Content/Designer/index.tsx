@@ -2,7 +2,7 @@ import stores from "@/stores";
 import { NodeData, NodePlainChild } from "@/stores/designs";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSnapshot } from "valtio";
 
 const components: {
@@ -30,6 +30,8 @@ const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
   const hoveredComponents = useSnapshot(
     stores.designs.states.hoveredComponents
   );
+  const dragging = useSnapshot(stores.designs.states.dragging);
+  const isDragging = dragging.draggingId === node.id;
 
   const isHighlighted = hoveredComponents.ids.includes(node.id);
 
@@ -39,6 +41,32 @@ const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
   const handleMouseLeave = () => {
     stores.designs.actions.switchHoveredComponent(node.id, false);
   };
+
+  const handleMouseDown = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    stores.designs.actions.startDragging(node.id);
+  };
+
+  const handleMouseMove = () => {};
+
+  const handleMouseUp = () => {
+    stores.designs.actions.stopDragging();
+  };
+
+  useEffect(() => {
+    if (isDragging) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    } else {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    }
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [isDragging]);
 
   const Component = components[node.elementType]; // Default to div if elementType is not found
 
@@ -61,10 +89,12 @@ const RenderNode: React.FC<{ node: DeepReadonly<NodeData> }> = ({ node }) => {
     ...node.staticProps,
     style: {
       ...node.staticProps.style,
+      background: isDragging ? "#eee" : undefined,
       border: isHighlighted ? "1px solid blue" : undefined, // 这里使用简单的边框来高亮，可以根据需求调整
     },
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
+    onMouseDown: handleMouseDown,
     children: isPrimitiveOrNull(node.children)
       ? node.children
       : node.children?.map((childNode) => (
