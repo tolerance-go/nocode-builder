@@ -1,6 +1,7 @@
 import { Content } from "./Content";
 import { Header } from "./Header";
 import { LeftAside } from "./LeftAside";
+import { RightAside } from "./RightAside";
 
 export const Layout = () => {
   return (
@@ -22,9 +23,8 @@ export const Layout = () => {
         </main>
 
         {/* 右侧边栏 */}
-        <aside className="bg-gray-200 w-1/4 p-4">
-          <h2 className="text-lg">右侧边栏</h2>
-          <p>一些内容...</p>
+        <aside className="bg-gray-200 w-[400px] border-l">
+          <RightAside />
         </aside>
       </div>
     </div>
