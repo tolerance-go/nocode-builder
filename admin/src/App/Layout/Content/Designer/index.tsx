@@ -28,8 +28,14 @@ const isPrimitiveOrNull = (
 
 const RenderNode: React.FC<{
   node: DeepReadonly<NodeData>;
-  onHover: (node: HTMLElement) => void;
-}> = ({ node, onHover }) => {
+  /**
+   * 拖拽的时候，悬停的 node 的 html 元素，不包括自身
+   * 
+   * @param node 
+   * @returns 
+   */
+  onDraggingHover: (node: HTMLElement | null) => void;
+}> = ({ node, onDraggingHover }) => {
   const hoveredComponents = useSnapshot(
     stores.designs.states.hoveredComponents
   );
@@ -41,7 +47,9 @@ const RenderNode: React.FC<{
   const handleMouseEnter = (event: React.MouseEvent) => {
     stores.designs.actions.switchHoveredComponent(node.id, true);
 
-    onHover(event.currentTarget as HTMLElement);
+    if (dragging.draggingId) {
+      onDraggingHover(event.currentTarget as HTMLElement);
+    }
   };
   const handleMouseLeave = () => {
     stores.designs.actions.switchHoveredComponent(node.id, false);
@@ -56,6 +64,8 @@ const RenderNode: React.FC<{
 
   const handleMouseUp = () => {
     stores.designs.actions.stopDragging();
+
+    onDraggingHover(null);
   };
 
   useEffect(() => {
@@ -103,7 +113,11 @@ const RenderNode: React.FC<{
     children: isPrimitiveOrNull(node.children)
       ? node.children
       : node.children?.map((childNode) => (
-          <RenderNode key={childNode.id} node={childNode} onHover={onHover} />
+          <RenderNode
+            key={childNode.id}
+            node={childNode}
+            onDraggingHover={onDraggingHover}
+          />
         )),
   });
 };
@@ -112,7 +126,7 @@ export const Designer: React.FC = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
   const [hoveredNode, setHoveredNode] = useState<HTMLElement | null>(null);
 
-  const handleHover = (node: HTMLElement) => {
+  const handleDraggingHover = (node: HTMLElement | null) => {
     setHoveredNode(node);
   };
 
@@ -128,7 +142,11 @@ export const Designer: React.FC = () => {
   return (
     <div style={{ position: "relative" }}>
       {designTreeData.nodeData.map((node) => (
-        <RenderNode key={node.id} node={node} onHover={handleHover} />
+        <RenderNode
+          key={node.id}
+          node={node}
+          onDraggingHover={handleDraggingHover}
+        />
       ))}
       <div></div>
       <div></div>
