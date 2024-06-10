@@ -1,6 +1,6 @@
-import type { TabsProps } from "antd";
-import { Flex, Row, Tabs } from "antd";
 import { css } from "@emotion/css";
+import type { TabsProps } from "antd";
+import { Flex, Tabs } from "antd";
 import { useTranslation } from "react-i18next";
 import { LngSwitcher } from "./LngSwitcher";
 
