@@ -74,7 +74,10 @@ export const actions = {
     target: DeepReadonly<NodeData>,
     pos: DocumentInsertionPosition
   ) => {
-    if (pos === "not-allowed") return;
+    if (pos === "not-allowed") {
+      console.warn("不允许移动当前节点。");
+      return;
+    }
 
     const removeNode = (
       nodeList: NodeData[],
