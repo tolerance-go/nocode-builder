@@ -1,5 +1,6 @@
 import { globalEventBus } from "@/globals/eventBus";
 import { DocumentInsertionPosition } from "@/types";
+import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
 import { proxy, subscribe } from "valtio";
 
@@ -158,6 +159,17 @@ export const actions = {
               slot.push(newNode);
               return true;
             }
+            // 递归查找
+            if (nodeList[i].children) {
+              const inserted = insertNode(
+                nodeList[i].children as SlotsChildren,
+                newNode,
+                referenceNodeId,
+                position,
+                slotName
+              );
+              if (inserted) return true;
+            }
           }
         } else {
           for (const key in nodeList) {
@@ -176,6 +188,17 @@ export const actions = {
                   slot.push(newNode);
                   return true;
                 }
+                // 递归查找
+                if (childrenArray[i].children) {
+                  const inserted = insertNode(
+                    childrenArray[i].children as SlotsChildren,
+                    newNode,
+                    referenceNodeId,
+                    position,
+                    slotName
+                  );
+                  if (inserted) return true;
+                }
               }
             }
           }
@@ -192,6 +215,7 @@ export const actions = {
               }
               return true;
             }
+            // 递归查找
             if (nodeList[i].children) {
               const inserted = insertNode(
                 nodeList[i].children as SlotsChildren,
@@ -215,6 +239,7 @@ export const actions = {
                   }
                   return true;
                 }
+                // 递归查找
                 if (childrenArray[i].children) {
                   const inserted = insertNode(
                     childrenArray[i].children as SlotsChildren,
@@ -225,13 +250,6 @@ export const actions = {
                   if (inserted) return true;
                 }
               }
-            } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
-              if (position === "before") {
-                nodeList[key] = [newNode, nodeList[key] as NodeData];
-              } else if (position === "after") {
-                nodeList[key] = [nodeList[key] as NodeData, newNode];
-              }
-              return true;
             }
           }
         }
@@ -244,7 +262,14 @@ export const actions = {
 
     const nodeRemoved = removeNode(fromParent, nodeToMove.id);
     if (nodeRemoved) {
-      insertNode(targetParent, nodeRemoved, target.id, pos, slotName);
+      const success = insertNode(
+        targetParent,
+        nodeRemoved,
+        target.id,
+        pos,
+        slotName
+      );
+      ensure(success, "插入节点错误。");
     }
   },
 };
