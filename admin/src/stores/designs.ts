@@ -93,47 +93,105 @@ export const actions = {
     }
 
     const removeNode = (
-      nodeList: NodeData[],
+      nodeList: NodeData[] | SlotsChildren,
       nodeId: string
     ): NodeData | null => {
-      for (let i = 0; i < nodeList.length; i++) {
-        if (nodeList[i].id === nodeId) {
-          return nodeList.splice(i, 1)[0];
+      if (Array.isArray(nodeList)) {
+        for (let i = 0; i < nodeList.length; i++) {
+          if (nodeList[i].id === nodeId) {
+            return nodeList.splice(i, 1)[0];
+          }
+          if (nodeList[i].children) {
+            const removedNode = removeNode(
+              nodeList[i].children as SlotsChildren,
+              nodeId
+            );
+            if (removedNode) return removedNode;
+          }
         }
-        if (nodeList[i].children && Array.isArray(nodeList[i].children)) {
-          const removedNode = removeNode(
-            nodeList[i].children as NodeData[],
-            nodeId
-          );
-          if (removedNode) return removedNode;
+      } else {
+        for (const key in nodeList) {
+          if (Array.isArray(nodeList[key])) {
+            const childrenArray = nodeList[key] as NodeData[];
+            for (let i = 0; i < childrenArray.length; i++) {
+              if (childrenArray[i].id === nodeId) {
+                return childrenArray.splice(i, 1)[0];
+              }
+              if (childrenArray[i].children) {
+                const removedNode = removeNode(
+                  childrenArray[i].children as SlotsChildren,
+                  nodeId
+                );
+                if (removedNode) return removedNode;
+              }
+            }
+          } else if ((nodeList[key] as NodeData).id === nodeId) {
+            const removedNode = nodeList[key] as NodeData;
+            delete nodeList[key];
+            return removedNode;
+          }
         }
       }
       return null;
     };
 
     const insertNode = (
-      nodeList: NodeData[],
+      nodeList: NodeData[] | SlotsChildren,
       newNode: NodeData,
       referenceNodeId: string,
       position: DocumentInsertionPosition
     ): boolean => {
-      for (let i = 0; i < nodeList.length; i++) {
-        if (nodeList[i].id === referenceNodeId) {
-          if (position === "before") {
-            nodeList.splice(i, 0, newNode);
-          } else if (position === "after") {
-            nodeList.splice(i + 1, 0, newNode);
+      if (Array.isArray(nodeList)) {
+        for (let i = 0; i < nodeList.length; i++) {
+          if (nodeList[i].id === referenceNodeId) {
+            if (position === "before") {
+              nodeList.splice(i, 0, newNode);
+            } else if (position === "after") {
+              nodeList.splice(i + 1, 0, newNode);
+            }
+            return true;
           }
-          return true;
+          if (nodeList[i].children) {
+            const inserted = insertNode(
+              nodeList[i].children as SlotsChildren,
+              newNode,
+              referenceNodeId,
+              position
+            );
+            if (inserted) return true;
+          }
         }
-        if (nodeList[i].children && Array.isArray(nodeList[i].children)) {
-          const inserted = insertNode(
-            nodeList[i].children as NodeData[],
-            newNode,
-            referenceNodeId,
-            position
-          );
-          if (inserted) return true;
+      } else {
+        for (const key in nodeList) {
+          if (Array.isArray(nodeList[key])) {
+            const childrenArray = nodeList[key] as NodeData[];
+            for (let i = 0; i < childrenArray.length; i++) {
+              if (childrenArray[i].id === referenceNodeId) {
+                if (position === "before") {
+                  childrenArray.splice(i, 0, newNode);
+                } else if (position === "after") {
+                  childrenArray.splice(i + 1, 0, newNode);
+                }
+                return true;
+              }
+              if (childrenArray[i].children) {
+                const inserted = insertNode(
+                  childrenArray[i].children as SlotsChildren,
+                  newNode,
+                  referenceNodeId,
+                  position
+                );
+                if (inserted) return true;
+              }
+            }
+          } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
+            if (position === "before") {
+              nodeList[key] = [newNode, nodeList[key] as NodeData];
+            } else if (position === "after") {
+              nodeList[key] = [nodeList[key] as NodeData, newNode];
+            }
+            return true;
+          }
         }
       }
       return false;
