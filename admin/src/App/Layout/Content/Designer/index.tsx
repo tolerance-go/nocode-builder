@@ -1,6 +1,7 @@
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { NodeData, NodePlainChild } from "@/stores/designs";
+import { VisualPosition } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
 import { InsertionAnalyzer } from "@/utils/insertionAnalyzer";
@@ -181,7 +182,7 @@ const RenderNode: React.FC<{
 };
 
 export const Designer: React.FC = () => {
-  const insertionAnalyzer = useState(() => new InsertionAnalyzer());
+  // const insertionAnalyzer = useState(() => new InsertionAnalyzer());
 
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
   const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] = useState<
@@ -190,23 +191,28 @@ export const Designer: React.FC = () => {
   const [draggingNode, setDraggingNode] = useState<
     [DeepReadonly<NodeData>, HTMLElement] | null
   >(null);
-  const [highlightedDiv, setHighlightedDiv] = useState<string | null>(null);
+  const [highlightedDiv, setHighlightedDiv] = useState<VisualPosition | null>(
+    null
+  );
   const containerRef = useRef<HTMLDivElement>(null);
   const PROXIMITY_THRESHOLD = 20; // Define the proximity threshold
 
   const handleMoveDrop = (
-    from: [DeepReadonly<NodeData>, HTMLElement],
+    draggingItem: [DeepReadonly<NodeData>, HTMLElement],
     target: [DeepReadonly<NodeData>, HTMLElement],
-    position: string
+    position: VisualPosition
   ) => {
-    console.log(from[0], target[0], position);
+    stores.designs.actions.moveNode(
+      draggingItem[0],
+      target[0],
+      InsertionAnalyzer.analyzeDocumentPosition(target[1], position)
+    );
   };
 
   const handleDraggingHover = (
     node: [DeepReadonly<NodeData>, HTMLElement],
     isHoverSelf?: boolean
   ) => {
-    console.log("handleDraggingHover", isHoverSelf ? null : node);
     setDraggingHoveredOtherNode(isHoverSelf ? null : node);
   };
 
@@ -319,64 +325,75 @@ export const Designer: React.FC = () => {
 
   const renderFloatingDivs = () => {
     if (draggingHoveredOtherNode) {
+      const insertionPositions = InsertionAnalyzer.analyzeVisualPositions(
+        draggingHoveredOtherNode[1]
+      );
       return (
         <>
-          <div
-            style={floatingDivsStyle(
-              {
-                top: draggingHoveredOtherNode[1].offsetTop - 10,
-                left:
-                  draggingHoveredOtherNode[1].offsetLeft +
-                  draggingHoveredOtherNode[1].offsetWidth / 2 -
-                  5,
-              },
-              highlightedDiv === "top"
-            )}
-            data-name="top"
-          ></div>
-          <div
-            style={floatingDivsStyle(
-              {
-                top:
-                  draggingHoveredOtherNode[1].offsetTop +
-                  draggingHoveredOtherNode[1].offsetHeight,
-                left:
-                  draggingHoveredOtherNode[1].offsetLeft +
-                  draggingHoveredOtherNode[1].offsetWidth / 2 -
-                  5,
-              },
-              highlightedDiv === "bottom"
-            )}
-            data-name="bottom"
-          ></div>
-          <div
-            style={floatingDivsStyle(
-              {
-                top:
-                  draggingHoveredOtherNode[1].offsetTop +
-                  draggingHoveredOtherNode[1].offsetHeight / 2 -
-                  5,
-                left: draggingHoveredOtherNode[1].offsetLeft - 10,
-              },
-              highlightedDiv === "left"
-            )}
-            data-name="left"
-          ></div>
-          <div
-            style={floatingDivsStyle(
-              {
-                top:
-                  draggingHoveredOtherNode[1].offsetTop +
-                  draggingHoveredOtherNode[1].offsetHeight / 2 -
-                  5,
-                left:
-                  draggingHoveredOtherNode[1].offsetLeft +
-                  draggingHoveredOtherNode[1].offsetWidth,
-              },
-              highlightedDiv === "right"
-            )}
-            data-name="right"
-          ></div>
+          {insertionPositions.top && (
+            <div
+              style={floatingDivsStyle(
+                {
+                  top: draggingHoveredOtherNode[1].offsetTop - 10,
+                  left:
+                    draggingHoveredOtherNode[1].offsetLeft +
+                    draggingHoveredOtherNode[1].offsetWidth / 2 -
+                    5,
+                },
+                highlightedDiv === "top"
+              )}
+              data-name="top"
+            ></div>
+          )}
+          {insertionPositions.bottom && (
+            <div
+              style={floatingDivsStyle(
+                {
+                  top:
+                    draggingHoveredOtherNode[1].offsetTop +
+                    draggingHoveredOtherNode[1].offsetHeight,
+                  left:
+                    draggingHoveredOtherNode[1].offsetLeft +
+                    draggingHoveredOtherNode[1].offsetWidth / 2 -
+                    5,
+                },
+                highlightedDiv === "bottom"
+              )}
+              data-name="bottom"
+            ></div>
+          )}
+          {insertionPositions.left && (
+            <div
+              style={floatingDivsStyle(
+                {
+                  top:
+                    draggingHoveredOtherNode[1].offsetTop +
+                    draggingHoveredOtherNode[1].offsetHeight / 2 -
+                    5,
+                  left: draggingHoveredOtherNode[1].offsetLeft - 10,
+                },
+                highlightedDiv === "left"
+              )}
+              data-name="left"
+            ></div>
+          )}
+          {insertionPositions.right && (
+            <div
+              style={floatingDivsStyle(
+                {
+                  top:
+                    draggingHoveredOtherNode[1].offsetTop +
+                    draggingHoveredOtherNode[1].offsetHeight / 2 -
+                    5,
+                  left:
+                    draggingHoveredOtherNode[1].offsetLeft +
+                    draggingHoveredOtherNode[1].offsetWidth,
+                },
+                highlightedDiv === "right"
+              )}
+              data-name="right"
+            ></div>
+          )}
         </>
       );
     }
