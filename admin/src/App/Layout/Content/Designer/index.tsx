@@ -1,3 +1,4 @@
+import { exampleNodeData } from "@/configs/design";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { NodeData, NodePlainChild } from "@/stores/designs";
@@ -530,31 +531,6 @@ export const Designer: React.FC = () => {
     setHighlightedSlot(newHighlightedSlot);
   };
 
-  useEffect(() => {
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [draggingHoveredOtherNode]);
-
-  useEffect(() => {
-    eventBus.emit("draggingHoveringNode", {
-      node: draggingHoveredOtherNode ? draggingHoveredOtherNode[0] : null,
-    });
-  }, [draggingHoveredOtherNode]);
-
-  useEffect(() => {
-    eventBus.emit("draggingNestHoveringNodeSlot", {
-      nodeMeta: highlightedSlot
-        ? {
-            nodeId: highlightedSlot.nodeId,
-            slotName: highlightedSlot.slotName,
-          }
-        : null,
-    });
-  }, [highlightedSlot]);
-
   const renderFloatingDivs = () => {
     if (draggingHoveredOtherNode) {
       const insertionPositions = InsertionAnalyzer.analyzeVisualPositions(
@@ -632,6 +608,31 @@ export const Designer: React.FC = () => {
 
     return null;
   };
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [draggingHoveredOtherNode]);
+
+  useEffect(() => {
+    eventBus.emit("draggingHoveringNode", {
+      node: draggingHoveredOtherNode ? draggingHoveredOtherNode[0] : null,
+    });
+  }, [draggingHoveredOtherNode]);
+
+  useEffect(() => {
+    eventBus.emit("draggingNestHoveringNodeSlot", {
+      nodeMeta: highlightedSlot
+        ? {
+            nodeId: highlightedSlot.nodeId,
+            slotName: highlightedSlot.slotName,
+          }
+        : null,
+    });
+  }, [highlightedSlot]);
 
   return (
     <div style={{ position: "relative" }} ref={containerRef}>

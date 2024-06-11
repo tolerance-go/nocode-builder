@@ -1,5 +1,5 @@
 import * as monaco from "monaco-editor";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 
 import { exampleNodeData } from "@/configs/design";
 import { globalEventBus } from "@/globals/eventBus";
@@ -9,6 +9,7 @@ import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
+import { useSnapshot } from "valtio";
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -33,6 +34,7 @@ const Editor = () => {
   const editorInstance = useRef<monaco.editor.IStandaloneCodeEditor | null>(
     null
   );
+  const designTreeData = useSnapshot(stores.designs.states.designTreeData);
 
   const isSyncingNodeTree = useRef(false);
 
@@ -76,7 +78,7 @@ const Editor = () => {
   useEffect(() => {
     if (editorRef.current) {
       editorInstance.current = monaco.editor.create(editorRef.current, {
-        value: "",
+        value: JSON.stringify(designTreeData, null, 2),
         language: "json", // 使用自定义DSL语言
         theme: "vs-dark",
       });
