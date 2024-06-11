@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Segmented } from "antd";
 import { ComponentStore } from "./ComponentStore";
 import stores from "@/stores";
 
@@ -16,6 +16,7 @@ export const ComponentStorePanel = () => {
           编辑器
         </Button>
       </div>
+      <Segmented options={["模板", "组件", "区块"]} block defaultValue="模板" />
       <div className="flex-grow">
         <ComponentStore />
       </div>
