@@ -1,3 +1,4 @@
+import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { NodeData, NodePlainChild } from "@/stores/designs";
 import { ensure } from "@/utils/ensure";
@@ -60,12 +61,19 @@ const RenderNode: React.FC<{
    * @param node
    * @returns
    */
-  onDraggingHover: (node: HTMLElement, isHoverSelf?: boolean) => void;
+  onDraggingHover: (
+    node: [DeepReadonly<NodeData>, HTMLElement],
+    isHoverSelf?: boolean
+  ) => void;
   /**
    * 当拖拽停止的时候
    */
   onDraggingEnd: () => void;
-}> = ({ node, onDraggingHover, onDraggingEnd }) => {
+  /**
+   * 当拖拽开始的时候
+   */
+  onDraggingStart: (node: [DeepReadonly<NodeData>, HTMLElement]) => void;
+}> = ({ node, onDraggingHover, onDraggingEnd, onDraggingStart }) => {
   const hoveredComponents = useSnapshot(
     stores.designs.states.hoveredComponents
   );
@@ -84,11 +92,11 @@ const RenderNode: React.FC<{
     if (dragging.draggingId) {
       /** 如果拖拽的时候悬停是自己，就取消 */
       if (dragging.draggingId === node.id) {
-        onDraggingHover(event.currentTarget as HTMLElement, true);
+        onDraggingHover([node, event.currentTarget as HTMLElement], true);
         return;
       }
 
-      onDraggingHover(event.currentTarget as HTMLElement);
+      onDraggingHover([node, event.currentTarget as HTMLElement]);
     }
   };
   const handleMouseLeave = () => {
@@ -98,6 +106,8 @@ const RenderNode: React.FC<{
   const handleMouseDown = (event: React.MouseEvent) => {
     event.stopPropagation();
     stores.designs.actions.startDragging(node.id);
+
+    onDraggingStart([node, event.currentTarget as HTMLElement]);
   };
 
   const handleMouseMove = () => {};
@@ -163,6 +173,7 @@ const RenderNode: React.FC<{
             node={childNode}
             onDraggingHover={onDraggingHover}
             onDraggingEnd={onDraggingEnd}
+            onDraggingStart={onDraggingStart}
           />
         )),
   });
@@ -170,18 +181,55 @@ const RenderNode: React.FC<{
 
 export const Designer: React.FC = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
-  const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] =
-    useState<HTMLElement | null>(null);
+  const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] = useState<
+    [DeepReadonly<NodeData>, HTMLElement] | null
+  >(null);
+  const [draggingNode, setDraggingNode] = useState<
+    [DeepReadonly<NodeData>, HTMLElement] | null
+  >(null);
   const [highlightedDiv, setHighlightedDiv] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const PROXIMITY_THRESHOLD = 20; // Define the proximity threshold
 
-  const handleDraggingHover = (node: HTMLElement, isHoverSelf?: boolean) => {
+  const handleMoveDrop = (
+    from: [DeepReadonly<NodeData>, HTMLElement],
+    target: [DeepReadonly<NodeData>, HTMLElement],
+    position: string
+  ) => {
+    console.log(from[0], target[0], position);
+  };
+
+  const handleDraggingHover = (
+    node: [DeepReadonly<NodeData>, HTMLElement],
+    isHoverSelf?: boolean
+  ) => {
+    console.log("handleDraggingHover", isHoverSelf ? null : node);
     setDraggingHoveredOtherNode(isHoverSelf ? null : node);
   };
 
+  const latestDraggingHoveredOtherNode = useLatest(draggingHoveredOtherNode);
+  const latestHighlightedDiv = useLatest(highlightedDiv);
+  const latestDraggingNode = useLatest(draggingNode);
+
   const handleDraggingEnd = () => {
+    if (
+      latestDraggingNode.current &&
+      latestDraggingHoveredOtherNode.current &&
+      latestHighlightedDiv.current
+    ) {
+      handleMoveDrop(
+        latestDraggingNode.current,
+        latestDraggingHoveredOtherNode.current,
+        latestHighlightedDiv.current
+      );
+    }
+
     setDraggingHoveredOtherNode(null);
+    setDraggingNode(null);
+  };
+
+  const handleDraggingStart = (node: [DeepReadonly<NodeData>, HTMLElement]) => {
+    setDraggingNode(node);
   };
 
   const floatingDivsStyle = (
@@ -205,39 +253,39 @@ export const Designer: React.FC = () => {
 
     const positions = [
       {
-        top: draggingHoveredOtherNode.offsetTop - 10,
+        top: draggingHoveredOtherNode[1].offsetTop - 10,
         left:
-          draggingHoveredOtherNode.offsetLeft +
-          draggingHoveredOtherNode.offsetWidth / 2 -
+          draggingHoveredOtherNode[1].offsetLeft +
+          draggingHoveredOtherNode[1].offsetWidth / 2 -
           5,
         name: "top",
       },
       {
         top:
-          draggingHoveredOtherNode.offsetTop +
-          draggingHoveredOtherNode.offsetHeight,
+          draggingHoveredOtherNode[1].offsetTop +
+          draggingHoveredOtherNode[1].offsetHeight,
         left:
-          draggingHoveredOtherNode.offsetLeft +
-          draggingHoveredOtherNode.offsetWidth / 2 -
+          draggingHoveredOtherNode[1].offsetLeft +
+          draggingHoveredOtherNode[1].offsetWidth / 2 -
           5,
         name: "bottom",
       },
       {
         top:
-          draggingHoveredOtherNode.offsetTop +
-          draggingHoveredOtherNode.offsetHeight / 2 -
+          draggingHoveredOtherNode[1].offsetTop +
+          draggingHoveredOtherNode[1].offsetHeight / 2 -
           5,
-        left: draggingHoveredOtherNode.offsetLeft - 10,
+        left: draggingHoveredOtherNode[1].offsetLeft - 10,
         name: "left",
       },
       {
         top:
-          draggingHoveredOtherNode.offsetTop +
-          draggingHoveredOtherNode.offsetHeight / 2 -
+          draggingHoveredOtherNode[1].offsetTop +
+          draggingHoveredOtherNode[1].offsetHeight / 2 -
           5,
         left:
-          draggingHoveredOtherNode.offsetLeft +
-          draggingHoveredOtherNode.offsetWidth,
+          draggingHoveredOtherNode[1].offsetLeft +
+          draggingHoveredOtherNode[1].offsetWidth,
         name: "right",
       },
     ];
@@ -274,6 +322,7 @@ export const Designer: React.FC = () => {
           node={node}
           onDraggingHover={handleDraggingHover}
           onDraggingEnd={handleDraggingEnd}
+          onDraggingStart={handleDraggingStart}
         />
       ))}
       {draggingHoveredOtherNode && (
@@ -281,10 +330,10 @@ export const Designer: React.FC = () => {
           <div
             style={floatingDivsStyle(
               {
-                top: draggingHoveredOtherNode.offsetTop - 10,
+                top: draggingHoveredOtherNode[1].offsetTop - 10,
                 left:
-                  draggingHoveredOtherNode.offsetLeft +
-                  draggingHoveredOtherNode.offsetWidth / 2 -
+                  draggingHoveredOtherNode[1].offsetLeft +
+                  draggingHoveredOtherNode[1].offsetWidth / 2 -
                   5,
               },
               highlightedDiv === "top"
@@ -295,11 +344,11 @@ export const Designer: React.FC = () => {
             style={floatingDivsStyle(
               {
                 top:
-                  draggingHoveredOtherNode.offsetTop +
-                  draggingHoveredOtherNode.offsetHeight,
+                  draggingHoveredOtherNode[1].offsetTop +
+                  draggingHoveredOtherNode[1].offsetHeight,
                 left:
-                  draggingHoveredOtherNode.offsetLeft +
-                  draggingHoveredOtherNode.offsetWidth / 2 -
+                  draggingHoveredOtherNode[1].offsetLeft +
+                  draggingHoveredOtherNode[1].offsetWidth / 2 -
                   5,
               },
               highlightedDiv === "bottom"
@@ -310,10 +359,10 @@ export const Designer: React.FC = () => {
             style={floatingDivsStyle(
               {
                 top:
-                  draggingHoveredOtherNode.offsetTop +
-                  draggingHoveredOtherNode.offsetHeight / 2 -
+                  draggingHoveredOtherNode[1].offsetTop +
+                  draggingHoveredOtherNode[1].offsetHeight / 2 -
                   5,
-                left: draggingHoveredOtherNode.offsetLeft - 10,
+                left: draggingHoveredOtherNode[1].offsetLeft - 10,
               },
               highlightedDiv === "left"
             )}
@@ -323,12 +372,12 @@ export const Designer: React.FC = () => {
             style={floatingDivsStyle(
               {
                 top:
-                  draggingHoveredOtherNode.offsetTop +
-                  draggingHoveredOtherNode.offsetHeight / 2 -
+                  draggingHoveredOtherNode[1].offsetTop +
+                  draggingHoveredOtherNode[1].offsetHeight / 2 -
                   5,
                 left:
-                  draggingHoveredOtherNode.offsetLeft +
-                  draggingHoveredOtherNode.offsetWidth,
+                  draggingHoveredOtherNode[1].offsetLeft +
+                  draggingHoveredOtherNode[1].offsetWidth,
               },
               highlightedDiv === "right"
             )}

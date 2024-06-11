@@ -66,4 +66,5 @@ export const actions = {
   stopDragging: () => {
     dragging.draggingId = null;
   },
+  /** 移动某个 node 到其他 node */
 };
