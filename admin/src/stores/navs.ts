@@ -1,6 +1,6 @@
 import configs from "@/configs";
 import { ensure } from "@/utils/ensure";
-import { proxy } from "valtio";
+import { proxy, subscribe } from "valtio";
 
 /**
  * 当前系统路径
@@ -12,7 +12,7 @@ export type SystemPaths = {
   value: string;
 }[];
 
-export const currentSystemPaths = proxy<{
+type CurrentSystemPaths = {
   paths: SystemPaths;
   startsWithApp: boolean;
   startsWithAppAndId: boolean;
@@ -20,8 +20,10 @@ export const currentSystemPaths = proxy<{
   activeNavKey: string | undefined;
   isAppData: boolean;
   isAppDesign: boolean;
-}>({
-  paths: [
+};
+
+export const currentSystemPaths = proxy<CurrentSystemPaths>({
+  paths: JSON.parse(localStorage.getItem("currentSystemPaths.paths") || "null") || [
     {
       type: "nav",
       value: "apps",
@@ -64,6 +66,13 @@ export const currentSystemPaths = proxy<{
     }
     return undefined;
   },
+});
+
+subscribe(currentSystemPaths, () => {
+  localStorage.setItem(
+    "currentSystemPaths.paths",
+    JSON.stringify(currentSystemPaths.paths)
+  );
 });
 
 /**
