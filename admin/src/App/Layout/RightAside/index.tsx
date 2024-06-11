@@ -1,7 +1,8 @@
 import stores from "@/stores";
 import { useSnapshot } from "valtio";
-import Editor from "./Editor";
+import { EditorPanel } from "./EditorPanel";
 import SettingsForm from "./SettingsForm";
+import { ComponentStorePanel } from "./ComponentStorePanel";
 
 export const RightAside = () => {
   const currentSystemPaths = useSnapshot(stores.navs.states.currentSystemPaths);
@@ -10,11 +11,18 @@ export const RightAside = () => {
     return null;
   }
 
-  return (
-    <aside className={"w-[400px] border-l"}>
-      {currentSystemPaths.isAppDesign ? <Editor /> : <SettingsForm />}
-    </aside>
-  );
+  const render = () => {
+    if (currentSystemPaths.isAppDesign) {
+      if (currentSystemPaths.isAppDesignAndRightSideIsEditor) {
+        return <EditorPanel />;
+      }
+
+      return <ComponentStorePanel />;
+    }
+    return <SettingsForm />;
+  };
+
+  return <aside className={"w-[400px] border-l"}>{render()}</aside>;
 };
 
 export default RightAside;

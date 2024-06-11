@@ -1,7 +1,6 @@
 import * as monaco from "monaco-editor";
 import { useEffect, useRef } from "react";
 
-import { exampleNodeData } from "@/configs/design";
 import { globalEventBus } from "@/globals/eventBus";
 import stores from "@/stores";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
@@ -72,13 +71,9 @@ const Editor = () => {
   }, []);
 
   useEffect(() => {
-    stores.designs.actions.initTreeData(exampleNodeData);
-  }, []);
-
-  useEffect(() => {
     if (editorRef.current) {
       editorInstance.current = monaco.editor.create(editorRef.current, {
-        value: JSON.stringify(designTreeData, null, 2),
+        value: JSON.stringify(designTreeData.nodeData, null, 2),
         language: "json", // 使用自定义DSL语言
         theme: "vs-dark",
       });

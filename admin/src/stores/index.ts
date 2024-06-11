@@ -8,8 +8,8 @@ import { devtools } from "valtio/utils";
 //   enabled: true,
 // });
 
-devtools(designs.states.hoveredComponents, {
-  name: "designs.states.hoveredComponents",
+devtools(designs.states.designTreeData, {
+  name: "designs.states.designTreeData",
   enabled: true,
 });
 

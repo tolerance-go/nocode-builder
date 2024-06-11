@@ -5,11 +5,24 @@ import { proxy, subscribe } from "valtio";
 /**
  * 当前系统路径
  *
- * eg: ['apps', 'appId']
+ * eg: [
+ *  { type: 'nav', value: 'apps' },
+ *  { type: "id", value: 'appId' },
+ *  {
+ *    type: 'nav',
+ *    value: 'design',
+ *    subNavs: {
+ *      leftPanel: [{ type: 'nav', value: 'editor' }]
+ *    }
+ *  }
+ * ]
  */
 export type SystemPaths = {
   type: "nav" | "id";
   value: string;
+  subNavs?: {
+    [key: string]: SystemPaths;
+  };
 }[];
 
 type CurrentSystemPaths = {
@@ -20,15 +33,28 @@ type CurrentSystemPaths = {
   activeNavKey: string | undefined;
   isAppData: boolean;
   isAppDesign: boolean;
+  isAppDesignAndRightSideIsEditor: boolean;
+  isAppDesignAndRightSideIsComponentStore: boolean;
+  designPathItem: SystemPaths[number];
 };
 
 export const currentSystemPaths = proxy<CurrentSystemPaths>({
-  paths: JSON.parse(localStorage.getItem("currentSystemPaths.paths") || "null") || [
-    {
-      type: "nav",
-      value: "apps",
-    },
-  ],
+  paths:
+    (JSON.parse(
+      localStorage.getItem("currentSystemPaths.paths") || "null"
+    ) as SystemPaths | null) ||
+    ([
+      {
+        type: "nav",
+        value: "apps",
+      },
+    ] as SystemPaths),
+  get designPathItem() {
+    return this.paths.find(
+      (item: SystemPaths[number]) =>
+        item.type === "nav" && item.value === "design"
+    );
+  },
   get isAppData() {
     return (
       this.startsWithApp &&
@@ -41,6 +67,20 @@ export const currentSystemPaths = proxy<CurrentSystemPaths>({
       this.startsWithApp &&
       this.paths.length === 3 &&
       this.paths.at(2)?.value === "design"
+    );
+  },
+  get isAppDesignAndRightSideIsEditor() {
+    return (
+      this.isAppDesign &&
+      this.designPathItem.subNavs?.rightSide[0].type === "nav" &&
+      this.designPathItem.subNavs?.rightSide[0].value === "editor"
+    );
+  },
+  get isAppDesignAndRightSideIsComponentStore() {
+    return (
+      this.isAppDesign &&
+      this.designPathItem.subNavs?.rightSide[0].type === "nav" &&
+      this.designPathItem.subNavs?.rightSide[0].value === "componentStore"
     );
   },
   get isApp() {
@@ -123,7 +163,7 @@ export const actions = {
   /**
    * 追加导航
    */
-  pushId: (id: string) => {
+  pushNavById: (id: string) => {
     currentSystemPaths.paths.push({
       type: "id",
       value: id,
@@ -161,7 +201,7 @@ export const actions = {
   selectApp: (id: string) => {
     currentSelectedApp.id = id;
 
-    actions.pushId(id);
+    actions.pushNavById(id);
 
     const appsFirstItemKey = configs.base.navs
       .find((item) => item.key === "apps")
@@ -170,5 +210,27 @@ export const actions = {
     ensure(!!appsFirstItemKey, "appsFirstItemKey 不能为空");
 
     actions.pushNav(appsFirstItemKey);
+  },
+  /**
+   * 修改 design 的 rightSide 的导航为编辑器
+   */
+  changeDesignRightSideNav: (key: string) => {
+    if (currentSystemPaths.designPathItem.subNavs === undefined) {
+      currentSystemPaths.designPathItem.subNavs = {
+        rightSide: [
+          {
+            type: "nav",
+            value: key,
+          },
+        ],
+      };
+    } else {
+      currentSystemPaths.designPathItem.subNavs.rightSide = [
+        {
+          type: "nav",
+          value: key,
+        },
+      ];
+    }
   },
 };
