@@ -165,13 +165,14 @@ const RenderNode: React.FC<{
 
 export const Designer: React.FC = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
-  const [hoveredNode, setHoveredNode] = useState<HTMLElement | null>(null);
+  const [draggingHoveredNode, setDraggingHoveredNode] =
+    useState<HTMLElement | null>(null);
   const [highlightedDiv, setHighlightedDiv] = useState<number | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const PROXIMITY_THRESHOLD = 20; // Define the proximity threshold
 
   const handleDraggingHover = (node: HTMLElement | null) => {
-    setHoveredNode(node);
+    setDraggingHoveredNode(node);
   };
 
   const floatingDivsStyle = (
@@ -187,7 +188,7 @@ export const Designer: React.FC = () => {
   });
 
   const handleMouseMove = (event: MouseEvent) => {
-    if (!hoveredNode || !containerRef.current) return;
+    if (!draggingHoveredNode || !containerRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
     const mouseX = event.clientX - containerRect.left;
@@ -195,20 +196,32 @@ export const Designer: React.FC = () => {
 
     const positions = [
       {
-        top: hoveredNode.offsetTop - 10,
-        left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+        top: draggingHoveredNode.offsetTop - 10,
+        left:
+          draggingHoveredNode.offsetLeft +
+          draggingHoveredNode.offsetWidth / 2 -
+          5,
       },
       {
-        top: hoveredNode.offsetTop + hoveredNode.offsetHeight,
-        left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+        top: draggingHoveredNode.offsetTop + draggingHoveredNode.offsetHeight,
+        left:
+          draggingHoveredNode.offsetLeft +
+          draggingHoveredNode.offsetWidth / 2 -
+          5,
       },
       {
-        top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
-        left: hoveredNode.offsetLeft - 10,
+        top:
+          draggingHoveredNode.offsetTop +
+          draggingHoveredNode.offsetHeight / 2 -
+          5,
+        left: draggingHoveredNode.offsetLeft - 10,
       },
       {
-        top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
-        left: hoveredNode.offsetLeft + hoveredNode.offsetWidth,
+        top:
+          draggingHoveredNode.offsetTop +
+          draggingHoveredNode.offsetHeight / 2 -
+          5,
+        left: draggingHoveredNode.offsetLeft + draggingHoveredNode.offsetWidth,
       },
     ];
 
@@ -234,7 +247,7 @@ export const Designer: React.FC = () => {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [hoveredNode]);
+  }, [draggingHoveredNode]);
 
   return (
     <div style={{ position: "relative" }} ref={containerRef}>
@@ -245,13 +258,16 @@ export const Designer: React.FC = () => {
           onDraggingHover={handleDraggingHover}
         />
       ))}
-      {hoveredNode && (
+      {draggingHoveredNode && (
         <>
           <div
             style={floatingDivsStyle(
               {
-                top: hoveredNode.offsetTop - 10,
-                left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+                top: draggingHoveredNode.offsetTop - 10,
+                left:
+                  draggingHoveredNode.offsetLeft +
+                  draggingHoveredNode.offsetWidth / 2 -
+                  5,
               },
               highlightedDiv === 0
             )}
@@ -259,8 +275,13 @@ export const Designer: React.FC = () => {
           <div
             style={floatingDivsStyle(
               {
-                top: hoveredNode.offsetTop + hoveredNode.offsetHeight,
-                left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+                top:
+                  draggingHoveredNode.offsetTop +
+                  draggingHoveredNode.offsetHeight,
+                left:
+                  draggingHoveredNode.offsetLeft +
+                  draggingHoveredNode.offsetWidth / 2 -
+                  5,
               },
               highlightedDiv === 1
             )}
@@ -268,8 +289,11 @@ export const Designer: React.FC = () => {
           <div
             style={floatingDivsStyle(
               {
-                top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
-                left: hoveredNode.offsetLeft - 10,
+                top:
+                  draggingHoveredNode.offsetTop +
+                  draggingHoveredNode.offsetHeight / 2 -
+                  5,
+                left: draggingHoveredNode.offsetLeft - 10,
               },
               highlightedDiv === 2
             )}
@@ -277,8 +301,13 @@ export const Designer: React.FC = () => {
           <div
             style={floatingDivsStyle(
               {
-                top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
-                left: hoveredNode.offsetLeft + hoveredNode.offsetWidth,
+                top:
+                  draggingHoveredNode.offsetTop +
+                  draggingHoveredNode.offsetHeight / 2 -
+                  5,
+                left:
+                  draggingHoveredNode.offsetLeft +
+                  draggingHoveredNode.offsetWidth,
               },
               highlightedDiv === 3
             )}
