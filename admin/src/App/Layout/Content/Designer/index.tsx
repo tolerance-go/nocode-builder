@@ -5,14 +5,36 @@ import { VisualPosition } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
 import { InsertionAnalyzer } from "@/utils/insertionAnalyzer";
+import { isPlainObject } from "@/utils/isPlainObject";
 import { Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useSnapshot } from "valtio";
 
-const Custom = (props: DesignableComponentProps) => {
+const Custom = ({ children, ...rest }: DesignableComponentProps) => {
+  ensure(!isPlainObject(children), "children 类型是 ReactNode。");
+
   return (
-    <div {...props}>
+    <div {...rest}>
       <Button>自定义按钮</Button>
+      {children}
+    </div>
+  );
+};
+
+const CustomWithSlots = ({ children, ...rest }: DesignableComponentProps) => {
+  ensure(isPlainObject(children), "children 类型是对象");
+
+  return (
+    <div {...rest}>
+      <Button>自定义按钮</Button>
+      <div>
+        left:
+        {children.left}
+      </div>
+      <div>
+        left:
+        {children.right}
+      </div>
     </div>
   );
 };
@@ -23,15 +45,10 @@ type DesignableComponentProps = {
   onMouseLeave?: React.MouseEventHandler;
   onMouseDown?: React.MouseEventHandler;
   onMouseOver?: React.MouseEventHandler;
+  children?: React.ReactNode | Record<string, React.ReactNode>;
 };
 
-type ComponentType =
-  | React.FC<
-      {
-        children?: React.ReactNode;
-      } & DesignableComponentProps
-    >
-  | string;
+type ComponentType = React.FC<DesignableComponentProps> | string;
 
 const components: {
   [key in string]?: ComponentType;
@@ -40,6 +57,7 @@ const components: {
   span: "span",
   text: "text",
   Custom: Custom,
+  CustomWithSlots,
 };
 
 // 类型断言函数
@@ -152,6 +170,41 @@ const RenderNode: React.FC<{
     "node.staticProps.style 类型不是对象。"
   );
 
+  const getChildren = () => {
+    if (isPrimitiveOrNull(node.children)) {
+      return node.children;
+    }
+
+    if (isPlainObject(node.children)) {
+      return Object.entries(node.children).reduce((acc, [slot, children]) => {
+        return {
+          ...acc,
+          [slot]: (Array.isArray(children) ? children : [children]).map(
+            (childNode) => (
+              <RenderNode
+                key={childNode.id}
+                node={childNode}
+                onDraggingHover={onDraggingHover}
+                onDraggingEnd={onDraggingEnd}
+                onDraggingStart={onDraggingStart}
+              />
+            )
+          ),
+        };
+      }, {});
+    }
+
+    return node.children?.map((childNode) => (
+      <RenderNode
+        key={childNode.id}
+        node={childNode}
+        onDraggingHover={onDraggingHover}
+        onDraggingEnd={onDraggingEnd}
+        onDraggingStart={onDraggingStart}
+      />
+    ));
+  };
+
   return React.createElement(Component, {
     ...node.staticProps,
     style: {
@@ -167,17 +220,7 @@ const RenderNode: React.FC<{
     onMouseLeave: handleMouseLeave,
     onMouseDown: handleMouseDown,
     onMouseOver: handleMouseOver,
-    children: isPrimitiveOrNull(node.children)
-      ? node.children
-      : node.children?.map((childNode) => (
-          <RenderNode
-            key={childNode.id}
-            node={childNode}
-            onDraggingHover={onDraggingHover}
-            onDraggingEnd={onDraggingEnd}
-            onDraggingStart={onDraggingStart}
-          />
-        )),
+    children: getChildren(),
   });
 };
 

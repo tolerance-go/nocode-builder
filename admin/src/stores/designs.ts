@@ -1,6 +1,7 @@
+import { eventBus } from "@/globals/eventBus";
 import { DocumentInsertionPosition } from "@/types";
 import { DeepReadonly } from "@/utils/ensure/types";
-import { proxy } from "valtio";
+import { proxy, subscribe } from "valtio";
 
 type StaticPropsValue = string | number | boolean | null | undefined;
 
@@ -10,10 +11,14 @@ type StaticProps = {
 
 export type NodePlainChild = string | number | boolean | null | undefined;
 
+export type SlotsChildren = {
+  [key: string]: NodeData[] | NodeData | NodePlainChild;
+};
+
 export type NodeData = {
   id: string;
   elementType: string;
-  children?: NodeData[] | NodePlainChild;
+  children?: SlotsChildren | NodeData[] | NodePlainChild;
   staticProps: StaticProps;
 };
 
@@ -21,6 +26,10 @@ const designTreeData = proxy<{
   nodeData: NodeData[];
 }>({
   nodeData: [],
+});
+
+subscribe(designTreeData, () => {
+  eventBus.emit("nodeTreeChange", designTreeData.nodeData);
 });
 
 /** 当前悬停的组件 id 集合 */
@@ -67,6 +76,10 @@ export const actions = {
   },
   stopDragging: () => {
     dragging.draggingId = null;
+  },
+  /** 初始化节点树 */
+  initTreeData: (data: NodeData[]) => {
+    designTreeData.nodeData = data;
   },
   /** 移动某个 node 到其他 node */
   moveNode: (

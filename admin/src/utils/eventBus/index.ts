@@ -49,6 +49,7 @@ export class EventBus<TEvents extends Record<string, unknown>> {
 
   // 触发事件
   emit<K extends keyof TEvents>(eventType: K, payload: TEvents[K]): void {
+    console.log("eventType", eventType, payload);
     const listeners = this.listeners[eventType];
     // 存储已触发的事件及其数据
     this.eventHistory[eventType] = payload;

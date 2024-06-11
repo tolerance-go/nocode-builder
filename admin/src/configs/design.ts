@@ -50,6 +50,55 @@ export const exampleNodeData: NodeData[] = [
                 padding: "10px",
               },
             },
+            children: [
+              {
+                id: "1-2-3-1",
+                elementType: "div",
+                staticProps: {
+                  style: {
+                    background: "blue",
+                    width: "100px",
+                    height: "100px",
+                  },
+                },
+              },
+            ],
+          },
+          {
+            id: "1-2-4",
+            elementType: "CustomWithSlots",
+            staticProps: {
+              style: {
+                background: "black",
+                width: "350px",
+                height: "350px",
+                padding: "10px",
+              },
+            },
+            children: {
+              left: {
+                id: "1-2-4-1",
+                elementType: "div",
+                staticProps: {
+                  style: {
+                    background: "blue",
+                    width: "100px",
+                    height: "100px",
+                  },
+                },
+              },
+              right: {
+                id: "1-2-4-2",
+                elementType: "div",
+                staticProps: {
+                  style: {
+                    background: "red",
+                    width: "100px",
+                    height: "100px",
+                  },
+                },
+              },
+            },
           },
         ],
       },
