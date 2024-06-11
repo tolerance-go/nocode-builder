@@ -1,4 +1,4 @@
-import { DocumentInsertionPosition, VisualPosition } from "@/types";
+import { DocumentInsertionPosition, RectVisualPosition, VisualPosition } from "@/types";
 
 type InsertionPositions = {
   top: boolean;
@@ -71,7 +71,7 @@ export class InsertionAnalyzer {
   // 根据视觉插入位置确定文档结构中的插入位置
   public static analyzeDocumentPosition(
     element: HTMLElement,
-    visualPosition: VisualPosition
+    visualPosition: RectVisualPosition
   ): DocumentInsertionPosition {
     const visualPositions = this.analyzeVisualPositions(element);
 

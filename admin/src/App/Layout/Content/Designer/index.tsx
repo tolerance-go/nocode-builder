@@ -1,7 +1,7 @@
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { NodeData, NodePlainChild } from "@/stores/designs";
-import { VisualPosition } from "@/types";
+import { RectVisualPosition, VisualPosition } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
 import { EventBus } from "@/utils/eventBus";
@@ -34,21 +34,27 @@ const CustomWithSlots = ({
       <Button>自定义按钮</Button>
       <div>
         slot0:
-        {children.left || (
+        {children.slot0 || (
           <SlotPlaceholder slotName="slot0" parentNode={node}></SlotPlaceholder>
         )}
       </div>
       <div>
         slot1:{" "}
-        <SlotPlaceholder slotName="slot1" parentNode={node}></SlotPlaceholder>
+        {children.slot1 || (
+          <SlotPlaceholder slotName="slot1" parentNode={node}></SlotPlaceholder>
+        )}
       </div>
       <div>
         slot2:{" "}
-        <SlotPlaceholder slotName="slot2" parentNode={node}></SlotPlaceholder>
+        {children.slot2 || (
+          <SlotPlaceholder slotName="slot2" parentNode={node}></SlotPlaceholder>
+        )}
       </div>
       <div>
         slot3:{" "}
-        <SlotPlaceholder slotName="slot3" parentNode={node}></SlotPlaceholder>
+        {children.slot3 || (
+          <SlotPlaceholder slotName="slot3" parentNode={node}></SlotPlaceholder>
+        )}
       </div>
     </div>
   );
@@ -314,9 +320,8 @@ export const Designer: React.FC = () => {
   const [draggingNode, setDraggingNode] = useState<
     [DeepReadonly<NodeData>, HTMLElement] | null
   >(null);
-  const [highlightedPos, setHighlightedPos] = useState<VisualPosition | null>(
-    null
-  );
+  const [highlightedPos, setHighlightedPos] =
+    useState<RectVisualPosition | null>(null);
   const [highlightedSlot, setHighlightedSlot] =
     useState<HighlightedSlotMeta | null>(null);
 
@@ -326,13 +331,23 @@ export const Designer: React.FC = () => {
   const handleMoveDrop = (
     draggingItem: [DeepReadonly<NodeData>, HTMLElement],
     target: [DeepReadonly<NodeData>, HTMLElement],
-    position: VisualPosition
+    position: VisualPosition,
+    slotName?: string
   ) => {
-    stores.designs.actions.moveNode(
-      draggingItem[0],
-      target[0],
-      InsertionAnalyzer.analyzeDocumentPosition(target[1], position)
-    );
+    if (position === "inner") {
+      stores.designs.actions.moveNode(
+        draggingItem[0],
+        target[0],
+        "inner",
+        slotName
+      );
+    } else {
+      stores.designs.actions.moveNode(
+        draggingItem[0],
+        target[0],
+        InsertionAnalyzer.analyzeDocumentPosition(target[1], position)
+      );
+    }
   };
 
   const handleDraggingHover = (
@@ -343,20 +358,30 @@ export const Designer: React.FC = () => {
   };
 
   const latestDraggingHoveredOtherNode = useLatest(draggingHoveredOtherNode);
-  const latestHighlightedDiv = useLatest(highlightedPos);
+  const latestHighlightedPos = useLatest(highlightedPos);
+  const latestHighlightedSlot = useLatest(highlightedSlot);
   const latestDraggingNode = useLatest(draggingNode);
 
   const handleDraggingEnd = () => {
     if (
       latestDraggingNode.current &&
       latestDraggingHoveredOtherNode.current &&
-      latestHighlightedDiv.current
+      (latestHighlightedPos.current || latestHighlightedSlot.current)
     ) {
-      handleMoveDrop(
-        latestDraggingNode.current,
-        latestDraggingHoveredOtherNode.current,
-        latestHighlightedDiv.current
-      );
+      if (latestHighlightedPos.current) {
+        handleMoveDrop(
+          latestDraggingNode.current,
+          latestDraggingHoveredOtherNode.current,
+          latestHighlightedPos.current
+        );
+      } else {
+        handleMoveDrop(
+          latestDraggingNode.current,
+          latestDraggingHoveredOtherNode.current,
+          "inner",
+          latestHighlightedSlot.current!.slotName
+        );
+      }
     }
 
     setDraggingHoveredOtherNode(null);
@@ -440,6 +465,15 @@ export const Designer: React.FC = () => {
     });
 
     setHighlightedPos(newHighlightedDiv);
+
+    /**
+     * 这里保证外部四周的插槽和内部的插槽不会同时高亮
+     *
+     * 检测到已经接近并高亮了外部插槽后，就不检测内部的
+     */
+    if (newHighlightedDiv) {
+      return;
+    }
 
     // 动态查找插槽占位符元素
     const slotPlaceholders = draggingHoveredOtherNode[1].querySelectorAll(

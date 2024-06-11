@@ -85,7 +85,8 @@ export const actions = {
   moveNode: (
     nodeToMove: DeepReadonly<NodeData>,
     target: DeepReadonly<NodeData>,
-    pos: DocumentInsertionPosition
+    pos: DocumentInsertionPosition,
+    slotName?: string
   ) => {
     if (pos === "not-allowed") {
       console.warn("不允许移动当前节点。");
@@ -139,62 +140,103 @@ export const actions = {
       nodeList: NodeData[] | SlotsChildren,
       newNode: NodeData,
       referenceNodeId: string,
-      position: DocumentInsertionPosition
+      position: DocumentInsertionPosition,
+      slotName?: string
     ): boolean => {
-      if (Array.isArray(nodeList)) {
-        for (let i = 0; i < nodeList.length; i++) {
-          if (nodeList[i].id === referenceNodeId) {
-            if (position === "before") {
-              nodeList.splice(i, 0, newNode);
-            } else if (position === "after") {
-              nodeList.splice(i + 1, 0, newNode);
+      if (position === "inner" && slotName) {
+        if (Array.isArray(nodeList)) {
+          for (let i = 0; i < nodeList.length; i++) {
+            if (nodeList[i].id === referenceNodeId) {
+              if (!nodeList[i].children) {
+                nodeList[i].children = {};
+              }
+              const children = nodeList[i].children as SlotsChildren;
+              if (!children[slotName]) {
+                children[slotName] = [];
+              }
+              const slot = children[slotName] as NodeData[];
+              slot.push(newNode);
+              return true;
             }
-            return true;
           }
-          if (nodeList[i].children) {
-            const inserted = insertNode(
-              nodeList[i].children as SlotsChildren,
-              newNode,
-              referenceNodeId,
-              position
-            );
-            if (inserted) return true;
-          }
-        }
-      } else {
-        for (const key in nodeList) {
-          if (Array.isArray(nodeList[key])) {
-            const childrenArray = nodeList[key] as NodeData[];
-            for (let i = 0; i < childrenArray.length; i++) {
-              if (childrenArray[i].id === referenceNodeId) {
-                if (position === "before") {
-                  childrenArray.splice(i, 0, newNode);
-                } else if (position === "after") {
-                  childrenArray.splice(i + 1, 0, newNode);
+        } else {
+          for (const key in nodeList) {
+            if (Array.isArray(nodeList[key])) {
+              const childrenArray = nodeList[key] as NodeData[];
+              for (let i = 0; i < childrenArray.length; i++) {
+                if (childrenArray[i].id === referenceNodeId) {
+                  if (!childrenArray[i].children) {
+                    childrenArray[i].children = {};
+                  }
+                  const children = childrenArray[i].children as SlotsChildren;
+                  if (!children[slotName]) {
+                    children[slotName] = [];
+                  }
+                  const slot = children[slotName] as NodeData[];
+                  slot.push(newNode);
+                  return true;
                 }
-                return true;
-              }
-              if (childrenArray[i].children) {
-                const inserted = insertNode(
-                  childrenArray[i].children as SlotsChildren,
-                  newNode,
-                  referenceNodeId,
-                  position
-                );
-                if (inserted) return true;
               }
             }
-          } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
-            if (position === "before") {
-              nodeList[key] = [newNode, nodeList[key] as NodeData];
-            } else if (position === "after") {
-              nodeList[key] = [nodeList[key] as NodeData, newNode];
-            }
-            return true;
           }
         }
+        return false;
+      } else {
+        if (Array.isArray(nodeList)) {
+          for (let i = 0; i < nodeList.length; i++) {
+            if (nodeList[i].id === referenceNodeId) {
+              if (position === "before") {
+                nodeList.splice(i, 0, newNode);
+              } else if (position === "after") {
+                nodeList.splice(i + 1, 0, newNode);
+              }
+              return true;
+            }
+            if (nodeList[i].children) {
+              const inserted = insertNode(
+                nodeList[i].children as SlotsChildren,
+                newNode,
+                referenceNodeId,
+                position
+              );
+              if (inserted) return true;
+            }
+          }
+        } else {
+          for (const key in nodeList) {
+            if (Array.isArray(nodeList[key])) {
+              const childrenArray = nodeList[key] as NodeData[];
+              for (let i = 0; i < childrenArray.length; i++) {
+                if (childrenArray[i].id === referenceNodeId) {
+                  if (position === "before") {
+                    childrenArray.splice(i, 0, newNode);
+                  } else if (position === "after") {
+                    childrenArray.splice(i + 1, 0, newNode);
+                  }
+                  return true;
+                }
+                if (childrenArray[i].children) {
+                  const inserted = insertNode(
+                    childrenArray[i].children as SlotsChildren,
+                    newNode,
+                    referenceNodeId,
+                    position
+                  );
+                  if (inserted) return true;
+                }
+              }
+            } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
+              if (position === "before") {
+                nodeList[key] = [newNode, nodeList[key] as NodeData];
+              } else if (position === "after") {
+                nodeList[key] = [nodeList[key] as NodeData, newNode];
+              }
+              return true;
+            }
+          }
+        }
+        return false;
       }
-      return false;
     };
 
     const fromParent = designTreeData.nodeData;
@@ -202,7 +244,7 @@ export const actions = {
 
     const nodeRemoved = removeNode(fromParent, nodeToMove.id);
     if (nodeRemoved) {
-      insertNode(targetParent, nodeRemoved, target.id, pos);
+      insertNode(targetParent, nodeRemoved, target.id, pos, slotName);
     }
   },
 };
