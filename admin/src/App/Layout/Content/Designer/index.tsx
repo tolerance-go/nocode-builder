@@ -63,6 +63,15 @@ const eventBus = new EventBus<{
   draggingHoveringNode: {
     node: DeepReadonly<NodeData> | null;
   };
+  /**
+   * 悬停鼠标接近悬停 node 中的插槽
+   */
+  draggingNestHoveringNodeSlot: {
+    nodeMeta: {
+      slotName: string;
+      nodeId: string;
+    } | null;
+  };
 }>();
 
 const slotBackground = "rgba(0,0,0,0.5)";
@@ -80,13 +89,25 @@ const SlotPlaceholder: React.FC<SlotPlaceholderProps> = ({
     });
   }, []);
 
+  useEffect(() => {
+    return eventBus.on("draggingNestHoveringNodeSlot", ({ nodeMeta }) => {
+      setIsHighlighted(
+        nodeMeta
+          ? nodeMeta.nodeId === parentNode.id && slotName === nodeMeta.slotName
+          : false
+      );
+    });
+  }, []);
+
   return isHovering ? (
     <div
+      data-slot-placeholder
+      data-slot-name={slotName}
+      data-slot-parent-id={parentNode.id}
       style={{
-        // border: isHighlighted ? "1px solid red" : "1px dashed grey",
         width: "10px",
         height: "10px",
-        background: slotBackground,
+        background: isHighlighted ? "red" : slotBackground,
       }}
     ></div>
   ) : null;
@@ -280,6 +301,11 @@ const RenderNode: React.FC<{
   });
 };
 
+type HighlightedSlotMeta = {
+  slotName: string;
+  nodeId: string;
+};
+
 export const Designer: React.FC = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
   const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] = useState<
@@ -291,6 +317,9 @@ export const Designer: React.FC = () => {
   const [highlightedPos, setHighlightedPos] = useState<VisualPosition | null>(
     null
   );
+  const [highlightedSlot, setHighlightedSlot] =
+    useState<HighlightedSlotMeta | null>(null);
+
   const containerRef = useRef<HTMLDivElement>(null);
   const PROXIMITY_THRESHOLD = 20; // Define the proximity threshold
 
@@ -332,6 +361,7 @@ export const Designer: React.FC = () => {
 
     setDraggingHoveredOtherNode(null);
     setDraggingNode(null);
+    setHighlightedSlot(null);
   };
 
   const handleDraggingStart = (node: [DeepReadonly<NodeData>, HTMLElement]) => {
@@ -410,6 +440,42 @@ export const Designer: React.FC = () => {
     });
 
     setHighlightedPos(newHighlightedDiv);
+
+    // 动态查找插槽占位符元素
+    const slotPlaceholders = draggingHoveredOtherNode[1].querySelectorAll(
+      "[data-slot-placeholder]"
+    ) as NodeListOf<HTMLElement>;
+
+    let newHighlightedSlot: HighlightedSlotMeta | null = null;
+
+    slotPlaceholders.forEach((slot: HTMLElement) => {
+      const slotRect = slot.getBoundingClientRect();
+      const slotLeft = slotRect.left - containerRect.left;
+      const slotTop = slotRect.top - containerRect.top;
+
+      const distance = Math.sqrt(
+        Math.pow(mouseX - (slotLeft + slotRect.width / 2), 2) +
+          Math.pow(mouseY - (slotTop + slotRect.height / 2), 2)
+      );
+
+      if (distance < PROXIMITY_THRESHOLD) {
+        ensure(
+          typeof slot.dataset.slotName === "string",
+          "slot.dataset.slotName 不合法。"
+        );
+        ensure(
+          typeof slot.dataset.slotParentId === "string",
+          "slot.dataset.slotParentId 不合法。"
+        );
+
+        newHighlightedSlot = {
+          slotName: slot.dataset.slotName,
+          nodeId: slot.dataset.slotParentId,
+        };
+      }
+    });
+
+    setHighlightedSlot(newHighlightedSlot);
   };
 
   useEffect(() => {
@@ -425,6 +491,17 @@ export const Designer: React.FC = () => {
       node: draggingHoveredOtherNode ? draggingHoveredOtherNode[0] : null,
     });
   }, [draggingHoveredOtherNode]);
+
+  useEffect(() => {
+    eventBus.emit("draggingNestHoveringNodeSlot", {
+      nodeMeta: highlightedSlot
+        ? {
+            nodeId: highlightedSlot.nodeId,
+            slotName: highlightedSlot.slotName,
+          }
+        : null,
+    });
+  }, [highlightedSlot]);
 
   const renderFloatingDivs = () => {
     if (draggingHoveredOtherNode) {
