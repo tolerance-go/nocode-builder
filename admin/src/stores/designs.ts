@@ -200,6 +200,18 @@ export const actions = {
                   if (inserted) return true;
                 }
               }
+            } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
+              const slotNode = nodeList[key] as NodeData;
+              if (!slotNode.children) {
+                slotNode.children = {};
+              }
+              const children = slotNode.children as SlotsChildren;
+              if (!children[slotName]) {
+                children[slotName] = [];
+              }
+              const slot = children[slotName] as NodeData[];
+              slot.push(newNode);
+              return true;
             }
           }
         }
@@ -249,6 +261,20 @@ export const actions = {
                   );
                   if (inserted) return true;
                 }
+              }
+            } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
+              if (position === "before" || position === "after") {
+                const slotNode = nodeList[key] as NodeData;
+                if (!Array.isArray(nodeList[key])) {
+                  nodeList[key] = [slotNode];
+                }
+                const index = (nodeList[key] as NodeData[]).indexOf(slotNode);
+                if (position === "before") {
+                  (nodeList[key] as NodeData[]).splice(index, 0, newNode);
+                } else if (position === "after") {
+                  (nodeList[key] as NodeData[]).splice(index + 1, 0, newNode);
+                }
+                return true;
               }
             }
           }
