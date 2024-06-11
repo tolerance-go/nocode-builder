@@ -4,18 +4,10 @@ import { Collapse } from "antd";
 import React from "react";
 import { ComponentDisplay } from "./ComponentDisplay";
 
-const text = (
-  <p style={{ paddingLeft: 24 }}>
-    A dog is a type of domesticated animal. Known for its loyalty and
-    faithfulness, it can be found as a welcome guest in many households across
-    the world.
-  </p>
-);
-
 const items: CollapseProps["items"] = [
   {
-    key: "基础",
-    label: "基础",
+    key: "通用",
+    label: "通用",
     children: <ComponentDisplay />,
   },
   {
@@ -24,16 +16,25 @@ const items: CollapseProps["items"] = [
     children: <ComponentDisplay />,
   },
   {
+    key: "导航",
+    label: "导航",
+    children: <ComponentDisplay />,
+  },
+  {
+    key: "反馈",
+    label: "反馈",
+    children: <ComponentDisplay />,
+  },
+  {
     key: "表单",
     label: "表单",
     children: <ComponentDisplay />,
   },
   {
-    key: "媒体",
-    label: "媒体",
+    key: "展示",
+    label: "展示",
     children: <ComponentDisplay />,
   },
-
   {
     key: "其他",
     label: "其他",
@@ -50,7 +51,7 @@ export const ComponentStore: React.FC = () => (
     `}
     items={items}
     bordered={false}
-    defaultActiveKey={["基础", "表单", "媒体", "布局", "其他"]}
+    defaultActiveKey={["展示", "导航", "表单", "通用", "反馈", "布局", "其他"]}
     size="small"
     ghost
   />

@@ -16,7 +16,7 @@ export const ComponentStorePanel = () => {
           编辑器
         </Button>
       </div>
-      <Segmented options={["模板", "组件", "区块"]} block defaultValue="模板" />
+      <Segmented options={["组件", "区块", "模板"]} block defaultValue="组件" />
       <div className="flex-grow">
         <ComponentStore />
       </div>
