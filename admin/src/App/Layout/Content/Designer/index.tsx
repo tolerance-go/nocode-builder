@@ -127,6 +127,7 @@ type DesignableComponentProps = {
   onMouseOver: React.MouseEventHandler;
   children?: React.ReactNode | Record<string, React.ReactNode>;
   node: DeepReadonly<NodeData>;
+  ["data-node-id"]: string;
 };
 
 type ComponentType = React.FC<DesignableComponentProps> | string;
@@ -164,7 +165,16 @@ const RenderNode: React.FC<{
    */
   onDraggingHover: (
     node: [DeepReadonly<NodeData>, HTMLElement],
-    isHoverSelf?: boolean
+    info: {
+      /**
+       * 是否是自身，这里是范围是 Node，而不是 DOM
+       */
+      isHoverSelf?: boolean;
+      /**
+       * 是否是后代元素，这里的范围是 DOM，并且是动态的
+       */
+      isHoverDescendant?: boolean;
+    }
   ) => void;
   /**
    * 当拖拽停止的时候
@@ -191,13 +201,17 @@ const RenderNode: React.FC<{
     event.stopPropagation();
 
     if (dragging.draggingId) {
-      /** 如果拖拽的时候悬停是自己，就取消 */
-      if (dragging.draggingId === node.id) {
-        onDraggingHover([node, event.currentTarget as HTMLElement], true);
-        return;
-      }
+      const draggingNodeEl = document.querySelector(
+        `[data-node-id="${dragging.draggingId}"]`
+      );
 
-      onDraggingHover([node, event.currentTarget as HTMLElement]);
+      const isHoverDescendant = draggingNodeEl?.contains(event.currentTarget);
+      const isHoverSelf = dragging.draggingId === node.id;
+
+      onDraggingHover([node, event.currentTarget as HTMLElement], {
+        isHoverSelf,
+        isHoverDescendant,
+      });
     }
   };
   const handleMouseLeave = () => {
@@ -304,6 +318,7 @@ const RenderNode: React.FC<{
     onMouseOver: handleMouseOver,
     children: getChildren(),
     node,
+    ["data-node-id"]: node.id,
   });
 };
 
@@ -352,9 +367,12 @@ export const Designer: React.FC = () => {
 
   const handleDraggingHover = (
     node: [DeepReadonly<NodeData>, HTMLElement],
-    isHoverSelf?: boolean
+    info: { isHoverSelf?: boolean; isHoverDescendant?: boolean }
   ) => {
-    setDraggingHoveredOtherNode(isHoverSelf ? null : node);
+    console.log("info", info);
+    setDraggingHoveredOtherNode(
+      info.isHoverSelf || info.isHoverDescendant ? null : node
+    );
   };
 
   const latestDraggingHoveredOtherNode = useLatest(draggingHoveredOtherNode);

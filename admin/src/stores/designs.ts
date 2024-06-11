@@ -44,6 +44,9 @@ const hoveredComponents = proxy<{
  * 当前是否在拖拽组件中
  */
 const dragging = proxy<{
+  /**
+   * 当前被拖拽的 node id
+   */
   draggingId: string | null;
 }>({
   draggingId: null,
