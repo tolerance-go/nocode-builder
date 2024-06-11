@@ -3,6 +3,7 @@ import stores from "@/stores";
 import { NodeData, NodePlainChild } from "@/stores/designs";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
+import { InsertionAnalyzer } from "@/utils/insertionAnalyzer";
 import { Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useSnapshot } from "valtio";
@@ -180,6 +181,8 @@ const RenderNode: React.FC<{
 };
 
 export const Designer: React.FC = () => {
+  const insertionAnalyzer = useState(() => new InsertionAnalyzer());
+
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
   const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] = useState<
     [DeepReadonly<NodeData>, HTMLElement] | null
@@ -314,18 +317,9 @@ export const Designer: React.FC = () => {
     };
   }, [draggingHoveredOtherNode]);
 
-  return (
-    <div style={{ position: "relative" }} ref={containerRef}>
-      {designTreeData.nodeData.map((node) => (
-        <RenderNode
-          key={node.id}
-          node={node}
-          onDraggingHover={handleDraggingHover}
-          onDraggingEnd={handleDraggingEnd}
-          onDraggingStart={handleDraggingStart}
-        />
-      ))}
-      {draggingHoveredOtherNode && (
+  const renderFloatingDivs = () => {
+    if (draggingHoveredOtherNode) {
+      return (
         <>
           <div
             style={floatingDivsStyle(
@@ -384,7 +378,24 @@ export const Designer: React.FC = () => {
             data-name="right"
           ></div>
         </>
-      )}
+      );
+    }
+
+    return null;
+  };
+
+  return (
+    <div style={{ position: "relative" }} ref={containerRef}>
+      {designTreeData.nodeData.map((node) => (
+        <RenderNode
+          key={node.id}
+          node={node}
+          onDraggingHover={handleDraggingHover}
+          onDraggingEnd={handleDraggingEnd}
+          onDraggingStart={handleDraggingStart}
+        />
+      ))}
+      {renderFloatingDivs()}
     </div>
   );
 };
