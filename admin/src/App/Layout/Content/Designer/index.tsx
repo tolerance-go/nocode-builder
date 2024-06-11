@@ -281,8 +281,6 @@ const RenderNode: React.FC<{
 };
 
 export const Designer: React.FC = () => {
-  // const insertionAnalyzer = useState(() => new InsertionAnalyzer());
-
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
   const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] = useState<
     [DeepReadonly<NodeData>, HTMLElement] | null
@@ -290,7 +288,7 @@ export const Designer: React.FC = () => {
   const [draggingNode, setDraggingNode] = useState<
     [DeepReadonly<NodeData>, HTMLElement] | null
   >(null);
-  const [highlightedDiv, setHighlightedDiv] = useState<VisualPosition | null>(
+  const [highlightedPos, setHighlightedPos] = useState<VisualPosition | null>(
     null
   );
   const containerRef = useRef<HTMLDivElement>(null);
@@ -316,7 +314,7 @@ export const Designer: React.FC = () => {
   };
 
   const latestDraggingHoveredOtherNode = useLatest(draggingHoveredOtherNode);
-  const latestHighlightedDiv = useLatest(highlightedDiv);
+  const latestHighlightedDiv = useLatest(highlightedPos);
   const latestDraggingNode = useLatest(draggingNode);
 
   const handleDraggingEnd = () => {
@@ -411,7 +409,7 @@ export const Designer: React.FC = () => {
       }
     });
 
-    setHighlightedDiv(newHighlightedDiv);
+    setHighlightedPos(newHighlightedDiv);
   };
 
   useEffect(() => {
@@ -445,7 +443,7 @@ export const Designer: React.FC = () => {
                     draggingHoveredOtherNode[1].offsetWidth / 2 -
                     5,
                 },
-                highlightedDiv === "top"
+                highlightedPos === "top"
               )}
               data-name="top"
             ></div>
@@ -462,7 +460,7 @@ export const Designer: React.FC = () => {
                     draggingHoveredOtherNode[1].offsetWidth / 2 -
                     5,
                 },
-                highlightedDiv === "bottom"
+                highlightedPos === "bottom"
               )}
               data-name="bottom"
             ></div>
@@ -477,7 +475,7 @@ export const Designer: React.FC = () => {
                     5,
                   left: draggingHoveredOtherNode[1].offsetLeft - 10,
                 },
-                highlightedDiv === "left"
+                highlightedPos === "left"
               )}
               data-name="left"
             ></div>
@@ -494,7 +492,7 @@ export const Designer: React.FC = () => {
                     draggingHoveredOtherNode[1].offsetLeft +
                     draggingHoveredOtherNode[1].offsetWidth,
                 },
-                highlightedDiv === "right"
+                highlightedPos === "right"
               )}
               data-name="right"
             ></div>
