@@ -3,7 +3,7 @@ import { NodeData, NodePlainChild } from "@/stores/designs";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
 import { Button } from "antd";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSnapshot } from "valtio";
 
 const Custom = (props: DesignableComponentProps) => {
@@ -166,22 +166,78 @@ const RenderNode: React.FC<{
 export const Designer: React.FC = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
   const [hoveredNode, setHoveredNode] = useState<HTMLElement | null>(null);
+  const [highlightedDiv, setHighlightedDiv] = useState<number | null>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const PROXIMITY_THRESHOLD = 20; // Define the proximity threshold
 
   const handleDraggingHover = (node: HTMLElement | null) => {
     setHoveredNode(node);
   };
 
-  const floatingDivsStyle = (position: { top: number; left: number }) => ({
+  const floatingDivsStyle = (
+    position: { top: number; left: number },
+    isHighlighted: boolean
+  ) => ({
     position: "absolute" as const,
     top: position.top,
     left: position.left,
     width: "10px",
     height: "10px",
-    backgroundColor: "rgba(0,0,0,0.5)",
+    backgroundColor: isHighlighted ? "red" : "rgba(0,0,0,0.5)",
   });
 
+  const handleMouseMove = (event: MouseEvent) => {
+    if (!hoveredNode || !containerRef.current) return;
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const mouseX = event.clientX - containerRect.left;
+    const mouseY = event.clientY - containerRect.top;
+
+    const positions = [
+      {
+        top: hoveredNode.offsetTop - 10,
+        left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+      },
+      {
+        top: hoveredNode.offsetTop + hoveredNode.offsetHeight,
+        left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+      },
+      {
+        top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
+        left: hoveredNode.offsetLeft - 10,
+      },
+      {
+        top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
+        left: hoveredNode.offsetLeft + hoveredNode.offsetWidth,
+      },
+    ];
+
+    let newHighlightedDiv = null;
+
+    positions.forEach((pos, index) => {
+      const distance = Math.sqrt(
+        Math.pow(mouseX - (pos.left + 5), 2) + // 5 is half the width of the floating div
+          Math.pow(mouseY - (pos.top + 5), 2) // 5 is half the height of the floating div
+      );
+
+      if (distance < PROXIMITY_THRESHOLD) {
+        newHighlightedDiv = index;
+      }
+    });
+
+    setHighlightedDiv(newHighlightedDiv);
+  };
+
+  useEffect(() => {
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, [hoveredNode]);
+
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative" }} ref={containerRef}>
       {designTreeData.nodeData.map((node) => (
         <RenderNode
           key={node.id}
@@ -189,35 +245,43 @@ export const Designer: React.FC = () => {
           onDraggingHover={handleDraggingHover}
         />
       ))}
-      <div></div>
-      <div></div>
-      <div></div>
-      <div></div>
       {hoveredNode && (
         <>
           <div
-            style={floatingDivsStyle({
-              top: hoveredNode.offsetTop - 10,
-              left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
-            })}
+            style={floatingDivsStyle(
+              {
+                top: hoveredNode.offsetTop - 10,
+                left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+              },
+              highlightedDiv === 0
+            )}
           ></div>
           <div
-            style={floatingDivsStyle({
-              top: hoveredNode.offsetTop + hoveredNode.offsetHeight,
-              left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
-            })}
+            style={floatingDivsStyle(
+              {
+                top: hoveredNode.offsetTop + hoveredNode.offsetHeight,
+                left: hoveredNode.offsetLeft + hoveredNode.offsetWidth / 2 - 5,
+              },
+              highlightedDiv === 1
+            )}
           ></div>
           <div
-            style={floatingDivsStyle({
-              top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
-              left: hoveredNode.offsetLeft - 10,
-            })}
+            style={floatingDivsStyle(
+              {
+                top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
+                left: hoveredNode.offsetLeft - 10,
+              },
+              highlightedDiv === 2
+            )}
           ></div>
           <div
-            style={floatingDivsStyle({
-              top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
-              left: hoveredNode.offsetLeft + hoveredNode.offsetWidth,
-            })}
+            style={floatingDivsStyle(
+              {
+                top: hoveredNode.offsetTop + hoveredNode.offsetHeight / 2 - 5,
+                left: hoveredNode.offsetLeft + hoveredNode.offsetWidth,
+              },
+              highlightedDiv === 3
+            )}
           ></div>
         </>
       )}
