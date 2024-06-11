@@ -4,6 +4,7 @@ import { NodeData, NodePlainChild } from "@/stores/designs";
 import { VisualPosition } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/ensure/types";
+import { EventBus } from "@/utils/eventBus";
 import { InsertionAnalyzer } from "@/utils/insertionAnalyzer";
 import { isPlainObject } from "@/utils/isPlainObject";
 import { Button } from "antd";
@@ -21,31 +22,84 @@ const Custom = ({ children, ...rest }: DesignableComponentProps) => {
   );
 };
 
-const CustomWithSlots = ({ children, ...rest }: DesignableComponentProps) => {
+const CustomWithSlots = ({
+  children,
+  node,
+  ...rest
+}: DesignableComponentProps) => {
   ensure(isPlainObject(children), "children 类型是对象");
 
   return (
     <div {...rest}>
       <Button>自定义按钮</Button>
       <div>
-        left:
-        {children.left}
+        slot0:
+        {children.left || (
+          <SlotPlaceholder slotName="slot0" parentNode={node}></SlotPlaceholder>
+        )}
       </div>
       <div>
-        left:
-        {children.right}
+        slot1:{" "}
+        <SlotPlaceholder slotName="slot1" parentNode={node}></SlotPlaceholder>
+      </div>
+      <div>
+        slot2:{" "}
+        <SlotPlaceholder slotName="slot2" parentNode={node}></SlotPlaceholder>
+      </div>
+      <div>
+        slot3:{" "}
+        <SlotPlaceholder slotName="slot3" parentNode={node}></SlotPlaceholder>
       </div>
     </div>
   );
 };
 
+type SlotPlaceholderProps = {
+  slotName: string;
+  parentNode: DeepReadonly<NodeData>;
+};
+
+const eventBus = new EventBus<{
+  draggingHoveringNode: {
+    node: DeepReadonly<NodeData> | null;
+  };
+}>();
+
+const slotBackground = "rgba(0,0,0,0.5)";
+
+const SlotPlaceholder: React.FC<SlotPlaceholderProps> = ({
+  slotName,
+  parentNode,
+}) => {
+  const [isHighlighted, setIsHighlighted] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    return eventBus.on("draggingHoveringNode", ({ node }) => {
+      setIsHovering(node?.id === parentNode.id);
+    });
+  }, []);
+
+  return isHovering ? (
+    <div
+      style={{
+        // border: isHighlighted ? "1px solid red" : "1px dashed grey",
+        width: "10px",
+        height: "10px",
+        background: slotBackground,
+      }}
+    ></div>
+  ) : null;
+};
+
 type DesignableComponentProps = {
-  style?: React.CSSProperties;
-  onMouseEnter?: React.MouseEventHandler;
-  onMouseLeave?: React.MouseEventHandler;
-  onMouseDown?: React.MouseEventHandler;
-  onMouseOver?: React.MouseEventHandler;
+  style: React.CSSProperties;
+  onMouseEnter: React.MouseEventHandler;
+  onMouseLeave: React.MouseEventHandler;
+  onMouseDown: React.MouseEventHandler;
+  onMouseOver: React.MouseEventHandler;
   children?: React.ReactNode | Record<string, React.ReactNode>;
+  node: DeepReadonly<NodeData>;
 };
 
 type ComponentType = React.FC<DesignableComponentProps> | string;
@@ -221,6 +275,7 @@ const RenderNode: React.FC<{
     onMouseDown: handleMouseDown,
     onMouseOver: handleMouseOver,
     children: getChildren(),
+    node,
   });
 };
 
@@ -293,7 +348,7 @@ export const Designer: React.FC = () => {
     left: position.left,
     width: "10px",
     height: "10px",
-    backgroundColor: isHighlighted ? "red" : "rgba(0,0,0,0.5)",
+    backgroundColor: isHighlighted ? "red" : slotBackground,
   });
 
   const handleMouseMove = (event: MouseEvent) => {
@@ -364,6 +419,12 @@ export const Designer: React.FC = () => {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
+  }, [draggingHoveredOtherNode]);
+
+  useEffect(() => {
+    eventBus.emit("draggingHoveringNode", {
+      node: draggingHoveredOtherNode ? draggingHoveredOtherNode[0] : null,
+    });
   }, [draggingHoveredOtherNode]);
 
   const renderFloatingDivs = () => {

@@ -69,30 +69,19 @@ export const exampleNodeData: NodeData[] = [
             elementType: "CustomWithSlots",
             staticProps: {
               style: {
-                background: "black",
+                background: "#91caff",
                 width: "350px",
                 height: "350px",
                 padding: "10px",
               },
             },
             children: {
-              left: {
+              slot0: {
                 id: "1-2-4-1",
                 elementType: "div",
                 staticProps: {
                   style: {
                     background: "blue",
-                    width: "100px",
-                    height: "100px",
-                  },
-                },
-              },
-              right: {
-                id: "1-2-4-2",
-                elementType: "div",
-                staticProps: {
-                  style: {
-                    background: "red",
                     width: "100px",
                     height: "100px",
                   },
