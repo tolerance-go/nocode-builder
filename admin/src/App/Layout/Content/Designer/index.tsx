@@ -263,6 +263,7 @@ const RenderNode: React.FC<{
     ...node.staticProps,
     style: {
       ...node.staticProps.style,
+      userSelect: "none",
       background: isDragging
         ? "#eee"
         : (node.staticProps.style?.background as string),
