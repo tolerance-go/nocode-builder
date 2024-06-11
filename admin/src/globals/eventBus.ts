@@ -17,4 +17,4 @@ export type EventMaps = {
   nodeTreeChange: NodeData[];
 };
 
-export const eventBus = new EventBus<EventMaps>();
+export const globalEventBus = new EventBus<EventMaps>();

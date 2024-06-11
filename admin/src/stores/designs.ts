@@ -1,4 +1,4 @@
-import { eventBus } from "@/globals/eventBus";
+import { globalEventBus } from "@/globals/eventBus";
 import { DocumentInsertionPosition } from "@/types";
 import { DeepReadonly } from "@/utils/ensure/types";
 import { proxy, subscribe } from "valtio";
@@ -29,7 +29,7 @@ const designTreeData = proxy<{
 });
 
 subscribe(designTreeData, () => {
-  eventBus.emit("nodeTreeChange", designTreeData.nodeData);
+  globalEventBus.emit("nodeTreeChange", designTreeData.nodeData);
 });
 
 /** 当前悬停的组件 id 集合 */

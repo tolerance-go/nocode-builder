@@ -2,7 +2,7 @@ import * as monaco from "monaco-editor";
 import { useEffect, useRef, useState } from "react";
 
 import { exampleNodeData } from "@/configs/design";
-import { eventBus } from "@/globals/eventBus";
+import { globalEventBus } from "@/globals/eventBus";
 import stores from "@/stores";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
@@ -37,7 +37,7 @@ const Editor = () => {
   const isSyncingNodeTree = useRef(false);
 
   useEffect(() => {
-    return eventBus.on("editTextChange", ({ text, reason }) => {
+    return globalEventBus.on("editTextChange", ({ text, reason }) => {
       if (reason === "userEdit") {
         stores.designs.actions.replaceNodeData(JSON.parse(text));
       }
@@ -45,7 +45,7 @@ const Editor = () => {
   }, []);
 
   useEffect(() => {
-    return eventBus.on("nodeTreeChange", (nodeTree) => {
+    return globalEventBus.on("nodeTreeChange", (nodeTree) => {
       if (editorInstance.current) {
         /**
          * 刚刚编辑完，会马上触发 treeNode 更新，此时不需要同步 treeNode 到编辑文本
@@ -86,7 +86,7 @@ const Editor = () => {
         if (isSyncingNodeTree.current) {
           isSyncingNodeTree.current = false;
           const value = editorInstance.current?.getValue() || "";
-          eventBus.emit("editTextChange", {
+          globalEventBus.emit("editTextChange", {
             text: value,
             reason: "syncNodeTree",
           });
@@ -94,7 +94,7 @@ const Editor = () => {
         }
 
         const value = editorInstance.current?.getValue() || "";
-        eventBus.emit("editTextChange", {
+        globalEventBus.emit("editTextChange", {
           text: value,
           reason: "userEdit",
         });
