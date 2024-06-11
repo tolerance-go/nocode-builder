@@ -60,8 +60,12 @@ const RenderNode: React.FC<{
    * @param node
    * @returns
    */
-  onDraggingHover: (node: HTMLElement | null) => void;
-}> = ({ node, onDraggingHover }) => {
+  onDraggingHover: (node: HTMLElement, isHoverSelf?: boolean) => void;
+  /**
+   * 当拖拽停止的时候
+   */
+  onDraggingEnd: () => void;
+}> = ({ node, onDraggingHover, onDraggingEnd }) => {
   const hoveredComponents = useSnapshot(
     stores.designs.states.hoveredComponents
   );
@@ -80,7 +84,7 @@ const RenderNode: React.FC<{
     if (dragging.draggingId) {
       /** 如果拖拽的时候悬停是自己，就取消 */
       if (dragging.draggingId === node.id) {
-        onDraggingHover(null);
+        onDraggingHover(event.currentTarget as HTMLElement, true);
         return;
       }
 
@@ -101,7 +105,7 @@ const RenderNode: React.FC<{
   const handleMouseUp = () => {
     stores.designs.actions.stopDragging();
 
-    onDraggingHover(null);
+    onDraggingEnd();
   };
 
   useEffect(() => {
@@ -158,6 +162,7 @@ const RenderNode: React.FC<{
             key={childNode.id}
             node={childNode}
             onDraggingHover={onDraggingHover}
+            onDraggingEnd={onDraggingEnd}
           />
         )),
   });
@@ -165,14 +170,18 @@ const RenderNode: React.FC<{
 
 export const Designer: React.FC = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
-  const [draggingHoveredNode, setDraggingHoveredNode] =
+  const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] =
     useState<HTMLElement | null>(null);
-  const [highlightedDiv, setHighlightedDiv] = useState<number | null>(null);
+  const [highlightedDiv, setHighlightedDiv] = useState<string | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const PROXIMITY_THRESHOLD = 20; // Define the proximity threshold
 
-  const handleDraggingHover = (node: HTMLElement | null) => {
-    setDraggingHoveredNode(node);
+  const handleDraggingHover = (node: HTMLElement, isHoverSelf?: boolean) => {
+    setDraggingHoveredOtherNode(isHoverSelf ? null : node);
+  };
+
+  const handleDraggingEnd = () => {
+    setDraggingHoveredOtherNode(null);
   };
 
   const floatingDivsStyle = (
@@ -188,7 +197,7 @@ export const Designer: React.FC = () => {
   });
 
   const handleMouseMove = (event: MouseEvent) => {
-    if (!draggingHoveredNode || !containerRef.current) return;
+    if (!draggingHoveredOtherNode || !containerRef.current) return;
 
     const containerRect = containerRef.current.getBoundingClientRect();
     const mouseX = event.clientX - containerRect.left;
@@ -196,45 +205,53 @@ export const Designer: React.FC = () => {
 
     const positions = [
       {
-        top: draggingHoveredNode.offsetTop - 10,
+        top: draggingHoveredOtherNode.offsetTop - 10,
         left:
-          draggingHoveredNode.offsetLeft +
-          draggingHoveredNode.offsetWidth / 2 -
+          draggingHoveredOtherNode.offsetLeft +
+          draggingHoveredOtherNode.offsetWidth / 2 -
           5,
-      },
-      {
-        top: draggingHoveredNode.offsetTop + draggingHoveredNode.offsetHeight,
-        left:
-          draggingHoveredNode.offsetLeft +
-          draggingHoveredNode.offsetWidth / 2 -
-          5,
+        name: "top",
       },
       {
         top:
-          draggingHoveredNode.offsetTop +
-          draggingHoveredNode.offsetHeight / 2 -
+          draggingHoveredOtherNode.offsetTop +
+          draggingHoveredOtherNode.offsetHeight,
+        left:
+          draggingHoveredOtherNode.offsetLeft +
+          draggingHoveredOtherNode.offsetWidth / 2 -
           5,
-        left: draggingHoveredNode.offsetLeft - 10,
+        name: "bottom",
       },
       {
         top:
-          draggingHoveredNode.offsetTop +
-          draggingHoveredNode.offsetHeight / 2 -
+          draggingHoveredOtherNode.offsetTop +
+          draggingHoveredOtherNode.offsetHeight / 2 -
           5,
-        left: draggingHoveredNode.offsetLeft + draggingHoveredNode.offsetWidth,
+        left: draggingHoveredOtherNode.offsetLeft - 10,
+        name: "left",
+      },
+      {
+        top:
+          draggingHoveredOtherNode.offsetTop +
+          draggingHoveredOtherNode.offsetHeight / 2 -
+          5,
+        left:
+          draggingHoveredOtherNode.offsetLeft +
+          draggingHoveredOtherNode.offsetWidth,
+        name: "right",
       },
     ];
 
     let newHighlightedDiv = null;
 
-    positions.forEach((pos, index) => {
+    positions.forEach((pos) => {
       const distance = Math.sqrt(
         Math.pow(mouseX - (pos.left + 5), 2) + // 5 is half the width of the floating div
           Math.pow(mouseY - (pos.top + 5), 2) // 5 is half the height of the floating div
       );
 
       if (distance < PROXIMITY_THRESHOLD) {
-        newHighlightedDiv = index;
+        newHighlightedDiv = pos.name;
       }
     });
 
@@ -247,7 +264,7 @@ export const Designer: React.FC = () => {
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [draggingHoveredNode]);
+  }, [draggingHoveredOtherNode]);
 
   return (
     <div style={{ position: "relative" }} ref={containerRef}>
@@ -256,61 +273,66 @@ export const Designer: React.FC = () => {
           key={node.id}
           node={node}
           onDraggingHover={handleDraggingHover}
+          onDraggingEnd={handleDraggingEnd}
         />
       ))}
-      {draggingHoveredNode && (
+      {draggingHoveredOtherNode && (
         <>
           <div
             style={floatingDivsStyle(
               {
-                top: draggingHoveredNode.offsetTop - 10,
+                top: draggingHoveredOtherNode.offsetTop - 10,
                 left:
-                  draggingHoveredNode.offsetLeft +
-                  draggingHoveredNode.offsetWidth / 2 -
+                  draggingHoveredOtherNode.offsetLeft +
+                  draggingHoveredOtherNode.offsetWidth / 2 -
                   5,
               },
-              highlightedDiv === 0
+              highlightedDiv === "top"
             )}
+            data-name="top"
           ></div>
           <div
             style={floatingDivsStyle(
               {
                 top:
-                  draggingHoveredNode.offsetTop +
-                  draggingHoveredNode.offsetHeight,
+                  draggingHoveredOtherNode.offsetTop +
+                  draggingHoveredOtherNode.offsetHeight,
                 left:
-                  draggingHoveredNode.offsetLeft +
-                  draggingHoveredNode.offsetWidth / 2 -
+                  draggingHoveredOtherNode.offsetLeft +
+                  draggingHoveredOtherNode.offsetWidth / 2 -
                   5,
               },
-              highlightedDiv === 1
+              highlightedDiv === "bottom"
             )}
+            data-name="bottom"
           ></div>
           <div
             style={floatingDivsStyle(
               {
                 top:
-                  draggingHoveredNode.offsetTop +
-                  draggingHoveredNode.offsetHeight / 2 -
+                  draggingHoveredOtherNode.offsetTop +
+                  draggingHoveredOtherNode.offsetHeight / 2 -
                   5,
-                left: draggingHoveredNode.offsetLeft - 10,
+                left: draggingHoveredOtherNode.offsetLeft - 10,
               },
-              highlightedDiv === 2
+              highlightedDiv === "left"
             )}
+            data-name="left"
           ></div>
           <div
             style={floatingDivsStyle(
               {
                 top:
-                  draggingHoveredNode.offsetTop +
-                  draggingHoveredNode.offsetHeight / 2 -
+                  draggingHoveredOtherNode.offsetTop +
+                  draggingHoveredOtherNode.offsetHeight / 2 -
                   5,
                 left:
-                  draggingHoveredNode.offsetLeft +
-                  draggingHoveredNode.offsetWidth,
+                  draggingHoveredOtherNode.offsetLeft +
+                  draggingHoveredOtherNode.offsetWidth,
               },
-              highlightedDiv === 3
+              highlightedDiv === "right"
             )}
+            data-name="right"
           ></div>
         </>
       )}
