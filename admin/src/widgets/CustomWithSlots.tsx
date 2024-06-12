@@ -10,7 +10,7 @@ export const CustomWithSlots = ({
   node,
   ...rest
 }: DesignableComponentProps) => {
-  ensure(isPlainObject(children), "children 类型是对象");
+  ensure(isPlainObject(children), "children 类型应该是对象。");
 
   return (
     <div {...rest}>
