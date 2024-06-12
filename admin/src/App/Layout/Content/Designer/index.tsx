@@ -4,8 +4,12 @@ import { slotBackground } from "@/configs/other";
 import { globalEventBus } from "@/globals/eventBus";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
-import { NodeData, NodePlainChild } from "@/stores/designs";
-import { RectVisualPosition, VisualPosition } from "@/types";
+import {
+  NodeData,
+  NodePlainChild,
+  RectVisualPosition,
+  VisualPosition,
+} from "@/types";
 import { ensure } from "@/utils/ensure";
 import { InsertionAnalyzer } from "@/utils/insertionAnalyzer";
 import { isPlainObject } from "@/utils/isPlainObject";

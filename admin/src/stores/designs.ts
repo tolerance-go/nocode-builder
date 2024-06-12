@@ -1,27 +1,8 @@
 import { globalEventBus } from "@/globals/eventBus";
-import { DocumentInsertionPosition } from "@/types";
+import { DocumentInsertionPosition, NodeData, SlotsChildren } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/types";
 import { proxy, subscribe } from "valtio";
-
-type StaticPropsValue = string | number | boolean | null | undefined;
-
-type StaticProps = {
-  [key: string]: StaticPropsValue | StaticProps;
-};
-
-export type NodePlainChild = string | number | boolean | null | undefined;
-
-export type SlotsChildren = {
-  [key: string]: NodeData[] | NodeData | NodePlainChild;
-};
-
-export type NodeData = {
-  id: string;
-  elementType: string;
-  children?: SlotsChildren | NodeData[] | NodePlainChild;
-  staticProps: StaticProps;
-};
 
 const designTreeData = proxy<{
   nodeData: NodeData[];

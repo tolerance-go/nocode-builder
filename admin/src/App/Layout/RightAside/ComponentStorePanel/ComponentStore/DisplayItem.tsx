@@ -1,7 +1,6 @@
 import { globalEventBus } from "@/globals/eventBus";
 import stores from "@/stores";
-import { NodeData } from "@/stores/designs";
-import { ComponentWidget } from "@/types";
+import { ComponentWidget, NodeData } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { Card } from "antd";
 import { useEffect, useState } from "react";
@@ -28,6 +27,16 @@ export const DisplayItem: React.FC<{
       ...nodeDataTpl,
       elementType: component.elementType,
       id: Math.random() + "",
+      staticProps: {
+        ...nodeDataTpl.staticProps,
+        ...component.defaultStaticProps,
+        style: {
+          ...nodeDataTpl.staticProps.style,
+          ...(typeof component.defaultStaticProps?.style === "object"
+            ? component.defaultStaticProps?.style
+            : undefined),
+        },
+      },
     } as NodeData;
   });
 
@@ -46,6 +55,16 @@ export const DisplayItem: React.FC<{
       ...nodeDataTpl,
       elementType: component.elementType,
       id: Math.random() + "",
+      staticProps: {
+        ...nodeDataTpl.staticProps,
+        ...component.defaultStaticProps,
+        style: {
+          ...nodeDataTpl.staticProps.style,
+          ...(typeof component.defaultStaticProps?.style === "object"
+            ? component.defaultStaticProps?.style
+            : undefined),
+        },
+      },
     });
   };
 

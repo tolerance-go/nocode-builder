@@ -2,6 +2,7 @@ import { ComponentType } from "@/types";
 import { Button } from "@/widgets/Button";
 import { Custom } from "@/widgets/Custom";
 import { CustomWithSlots } from "@/widgets/CustomWithSlots";
+import { Flex } from "@/widgets/Flex";
 import { Table } from "@/widgets/Table";
 
 export const components: {
@@ -14,4 +15,5 @@ export const components: {
   CustomWithSlots,
   Button,
   Table,
+  Flex,
 };
