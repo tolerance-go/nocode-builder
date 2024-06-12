@@ -14,6 +14,12 @@ devtools(designs.states.designTreeData, {
   enabled: true,
 });
 
+devtools(designs.states.hoveredComponents, {
+  name: "designs.states.hoveredComponents",
+  enabled: true,
+});
+
+
 devtools(components.states.windowDisplayComponents, {
   name: "components.states.windowDisplayComponents",
   enabled: true,
