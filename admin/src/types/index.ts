@@ -52,13 +52,16 @@ export type DocumentInsertionPosition =
 export type Widget = ComponentWidget | GroupWidget;
 
 type WidgetBase<T extends string> = {
+  /** 部件类型 */
   type: T;
+  /** 分组类型 */
+  groupType: string;
   /** 代码组件名称 */
   elementType: string;
   /** 名称 */
   name: string;
-  /** 类别 */
-  categories: string[];
+  /** 标签 */
+  tags: string[];
 };
 
 export type ComponentWidget = WidgetBase<"component">;

@@ -16,9 +16,15 @@ type CurrentSystemPaths = {
   isAppDesignAndRightSideIsEditor: boolean;
   isAppDesignAndRightSideIsComponentStore: boolean;
   designPathItem: SystemPaths[number];
+  /**
+   * 当前 app 下 design 界面的右侧栏目的 componentStore 的 segmented 视图的导航名称
+   */
 };
 
 export const currentSystemPaths = proxy<CurrentSystemPaths>({
+  /**
+   * 是一个不断增长的数组，并且可以在根部进行分叉增长（通过 subPaths）
+   */
   paths:
     (JSON.parse(
       localStorage.getItem("currentSystemPaths.paths") || "null"
