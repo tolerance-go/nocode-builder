@@ -85,6 +85,181 @@ export const actions = {
   initTreeData: (data: NodeData[]) => {
     designTreeData.nodeData = data;
   },
+  insertNode: (
+    newNode: DeepReadonly<NodeData>,
+    referenceNodeId: string,
+    position: DocumentInsertionPosition,
+    slotName?: string
+  ) => {
+    return actions._insertNode(
+      designTreeData.nodeData,
+      newNode,
+      referenceNodeId,
+      position,
+      slotName
+    );
+  },
+  _insertNode: (
+    nodeList: NodeData[] | SlotsChildren,
+    newNode: DeepReadonly<NodeData>,
+    referenceNodeId: string,
+    position: DocumentInsertionPosition,
+    slotName?: string
+  ): boolean => {
+    if (position === "inner" && slotName) {
+      if (Array.isArray(nodeList)) {
+        for (let i = 0; i < nodeList.length; i++) {
+          if (nodeList[i].id === referenceNodeId) {
+            if (!nodeList[i].children) {
+              nodeList[i].children = {};
+            }
+            const children = nodeList[i].children as SlotsChildren;
+            if (!children[slotName]) {
+              children[slotName] = [];
+            }
+            const slot = children[slotName] as DeepReadonly<NodeData>[];
+            slot.push(newNode);
+            return true;
+          }
+          // 递归查找
+          if (nodeList[i].children) {
+            const inserted = actions._insertNode(
+              nodeList[i].children as SlotsChildren,
+              newNode,
+              referenceNodeId,
+              position,
+              slotName
+            );
+            if (inserted) return true;
+          }
+        }
+      } else {
+        for (const key in nodeList) {
+          if (Array.isArray(nodeList[key])) {
+            const childrenArray = nodeList[key] as NodeData[];
+            for (let i = 0; i < childrenArray.length; i++) {
+              if (childrenArray[i].id === referenceNodeId) {
+                if (!childrenArray[i].children) {
+                  childrenArray[i].children = {};
+                }
+                const children = childrenArray[i].children as SlotsChildren;
+                if (!children[slotName]) {
+                  children[slotName] = [];
+                }
+                const slot = children[slotName] as DeepReadonly<NodeData>[];
+                slot.push(newNode);
+                return true;
+              }
+              // 递归查找
+              if (childrenArray[i].children) {
+                const inserted = actions._insertNode(
+                  childrenArray[i].children as SlotsChildren,
+                  newNode,
+                  referenceNodeId,
+                  position,
+                  slotName
+                );
+                if (inserted) return true;
+              }
+            }
+          } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
+            const slotNode = nodeList[key] as NodeData;
+            if (!slotNode.children) {
+              slotNode.children = {};
+            }
+            const children = slotNode.children as SlotsChildren;
+            if (!children[slotName]) {
+              children[slotName] = [];
+            }
+            const slot = children[slotName] as DeepReadonly<NodeData>[];
+            slot.push(newNode);
+            return true;
+          }
+        }
+      }
+      return false;
+    } else {
+      if (Array.isArray(nodeList)) {
+        for (let i = 0; i < nodeList.length; i++) {
+          if (nodeList[i].id === referenceNodeId) {
+            if (position === "before") {
+              (nodeList as DeepReadonly<NodeData>[]).splice(i, 0, newNode);
+            } else if (position === "after") {
+              (nodeList as DeepReadonly<NodeData>[]).splice(i + 1, 0, newNode);
+            }
+            return true;
+          }
+          // 递归查找
+          if (nodeList[i].children) {
+            const inserted = actions._insertNode(
+              nodeList[i].children as SlotsChildren,
+              newNode,
+              referenceNodeId,
+              position
+            );
+            if (inserted) return true;
+          }
+        }
+      } else {
+        for (const key in nodeList) {
+          if (Array.isArray(nodeList[key])) {
+            const childrenArray = nodeList[key] as NodeData[];
+            for (let i = 0; i < childrenArray.length; i++) {
+              if (childrenArray[i].id === referenceNodeId) {
+                if (position === "before") {
+                  (childrenArray as DeepReadonly<NodeData>[]).splice(
+                    i,
+                    0,
+                    newNode
+                  );
+                } else if (position === "after") {
+                  (childrenArray as DeepReadonly<NodeData>[]).splice(
+                    i + 1,
+                    0,
+                    newNode
+                  );
+                }
+                return true;
+              }
+              // 递归查找
+              if (childrenArray[i].children) {
+                const inserted = actions._insertNode(
+                  childrenArray[i].children as SlotsChildren,
+                  newNode,
+                  referenceNodeId,
+                  position
+                );
+                if (inserted) return true;
+              }
+            }
+          } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
+            if (position === "before" || position === "after") {
+              const slotNode = nodeList[key] as NodeData;
+              if (!Array.isArray(nodeList[key])) {
+                nodeList[key] = [slotNode];
+              }
+              const index = (nodeList[key] as NodeData[]).indexOf(slotNode);
+              if (position === "before") {
+                (nodeList[key] as DeepReadonly<NodeData>[]).splice(
+                  index,
+                  0,
+                  newNode
+                );
+              } else if (position === "after") {
+                (nodeList[key] as DeepReadonly<NodeData>[]).splice(
+                  index + 1,
+                  0,
+                  newNode
+                );
+              }
+              return true;
+            }
+          }
+        }
+      }
+      return false;
+    }
+  },
   /** 移动某个 node 到其他 node */
   moveNode: (
     nodeToMove: DeepReadonly<NodeData>,
@@ -140,158 +315,12 @@ export const actions = {
       return null;
     };
 
-    const insertNode = (
-      nodeList: NodeData[] | SlotsChildren,
-      newNode: NodeData,
-      referenceNodeId: string,
-      position: DocumentInsertionPosition,
-      slotName?: string
-    ): boolean => {
-      if (position === "inner" && slotName) {
-        if (Array.isArray(nodeList)) {
-          for (let i = 0; i < nodeList.length; i++) {
-            if (nodeList[i].id === referenceNodeId) {
-              if (!nodeList[i].children) {
-                nodeList[i].children = {};
-              }
-              const children = nodeList[i].children as SlotsChildren;
-              if (!children[slotName]) {
-                children[slotName] = [];
-              }
-              const slot = children[slotName] as NodeData[];
-              slot.push(newNode);
-              return true;
-            }
-            // 递归查找
-            if (nodeList[i].children) {
-              const inserted = insertNode(
-                nodeList[i].children as SlotsChildren,
-                newNode,
-                referenceNodeId,
-                position,
-                slotName
-              );
-              if (inserted) return true;
-            }
-          }
-        } else {
-          for (const key in nodeList) {
-            if (Array.isArray(nodeList[key])) {
-              const childrenArray = nodeList[key] as NodeData[];
-              for (let i = 0; i < childrenArray.length; i++) {
-                if (childrenArray[i].id === referenceNodeId) {
-                  if (!childrenArray[i].children) {
-                    childrenArray[i].children = {};
-                  }
-                  const children = childrenArray[i].children as SlotsChildren;
-                  if (!children[slotName]) {
-                    children[slotName] = [];
-                  }
-                  const slot = children[slotName] as NodeData[];
-                  slot.push(newNode);
-                  return true;
-                }
-                // 递归查找
-                if (childrenArray[i].children) {
-                  const inserted = insertNode(
-                    childrenArray[i].children as SlotsChildren,
-                    newNode,
-                    referenceNodeId,
-                    position,
-                    slotName
-                  );
-                  if (inserted) return true;
-                }
-              }
-            } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
-              const slotNode = nodeList[key] as NodeData;
-              if (!slotNode.children) {
-                slotNode.children = {};
-              }
-              const children = slotNode.children as SlotsChildren;
-              if (!children[slotName]) {
-                children[slotName] = [];
-              }
-              const slot = children[slotName] as NodeData[];
-              slot.push(newNode);
-              return true;
-            }
-          }
-        }
-        return false;
-      } else {
-        if (Array.isArray(nodeList)) {
-          for (let i = 0; i < nodeList.length; i++) {
-            if (nodeList[i].id === referenceNodeId) {
-              if (position === "before") {
-                nodeList.splice(i, 0, newNode);
-              } else if (position === "after") {
-                nodeList.splice(i + 1, 0, newNode);
-              }
-              return true;
-            }
-            // 递归查找
-            if (nodeList[i].children) {
-              const inserted = insertNode(
-                nodeList[i].children as SlotsChildren,
-                newNode,
-                referenceNodeId,
-                position
-              );
-              if (inserted) return true;
-            }
-          }
-        } else {
-          for (const key in nodeList) {
-            if (Array.isArray(nodeList[key])) {
-              const childrenArray = nodeList[key] as NodeData[];
-              for (let i = 0; i < childrenArray.length; i++) {
-                if (childrenArray[i].id === referenceNodeId) {
-                  if (position === "before") {
-                    childrenArray.splice(i, 0, newNode);
-                  } else if (position === "after") {
-                    childrenArray.splice(i + 1, 0, newNode);
-                  }
-                  return true;
-                }
-                // 递归查找
-                if (childrenArray[i].children) {
-                  const inserted = insertNode(
-                    childrenArray[i].children as SlotsChildren,
-                    newNode,
-                    referenceNodeId,
-                    position
-                  );
-                  if (inserted) return true;
-                }
-              }
-            } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
-              if (position === "before" || position === "after") {
-                const slotNode = nodeList[key] as NodeData;
-                if (!Array.isArray(nodeList[key])) {
-                  nodeList[key] = [slotNode];
-                }
-                const index = (nodeList[key] as NodeData[]).indexOf(slotNode);
-                if (position === "before") {
-                  (nodeList[key] as NodeData[]).splice(index, 0, newNode);
-                } else if (position === "after") {
-                  (nodeList[key] as NodeData[]).splice(index + 1, 0, newNode);
-                }
-                return true;
-              }
-            }
-          }
-        }
-        return false;
-      }
-    };
-
     const fromParent = designTreeData.nodeData;
     const targetParent = designTreeData.nodeData;
 
     const nodeRemoved = removeNode(fromParent, nodeToMove.id);
     if (nodeRemoved) {
-      const success = insertNode(
+      const success = actions._insertNode(
         targetParent,
         nodeRemoved,
         target.id,

@@ -224,19 +224,40 @@ export const Designer: React.FC = () => {
     position: VisualPosition,
     slotName?: string
   ) => {
-    if (position === "inner") {
-      stores.designs.actions.moveNode(
-        draggingItem[0],
-        target[0],
-        "inner",
-        slotName
-      );
+    const [draggingNodeData, draggingNodeElement] = draggingItem;
+    // Check if the node is being dragged externally (not in the component tree)
+    if (draggingNodeElement === null) {
+      // External drag, use insertNode
+      if (position === "inner") {
+        stores.designs.actions.insertNode(
+          draggingNodeData,
+          target[0].id,
+          "inner",
+          slotName
+        );
+      } else {
+        stores.designs.actions.insertNode(
+          draggingNodeData,
+          target[0].id,
+          InsertionAnalyzer.analyzeDocumentPosition(target[1], position)
+        );
+      }
     } else {
-      stores.designs.actions.moveNode(
-        draggingItem[0],
-        target[0],
-        InsertionAnalyzer.analyzeDocumentPosition(target[1], position)
-      );
+      // Internal drag, use moveNode
+      if (position === "inner") {
+        stores.designs.actions.moveNode(
+          draggingNodeData,
+          target[0],
+          "inner",
+          slotName
+        );
+      } else {
+        stores.designs.actions.moveNode(
+          draggingNodeData,
+          target[0],
+          InsertionAnalyzer.analyzeDocumentPosition(target[1], position)
+        );
+      }
     }
   };
 
