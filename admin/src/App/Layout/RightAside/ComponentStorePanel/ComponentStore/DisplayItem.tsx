@@ -18,27 +18,29 @@ const nodeDataTpl = {
   },
 };
 
+const createNodeData = (component: DeepReadonly<ComponentWidget>): NodeData => {
+  return {
+    ...nodeDataTpl,
+    elementType: component.elementType,
+    id: Math.random() + "",
+    staticProps: {
+      ...nodeDataTpl.staticProps,
+      ...component.defaultStaticProps,
+      style: {
+        ...nodeDataTpl.staticProps.style,
+        ...(typeof component.defaultStaticProps?.style === "object"
+          ? component.defaultStaticProps?.style
+          : undefined),
+      },
+    },
+  } as NodeData;
+};
+
 export const DisplayItem: React.FC<{
   component: DeepReadonly<ComponentWidget>;
   index: number;
 }> = ({ component, index }) => {
-  const [nodeData, setNodeData] = useState(() => {
-    return {
-      ...nodeDataTpl,
-      elementType: component.elementType,
-      id: Math.random() + "",
-      staticProps: {
-        ...nodeDataTpl.staticProps,
-        ...component.defaultStaticProps,
-        style: {
-          ...nodeDataTpl.staticProps.style,
-          ...(typeof component.defaultStaticProps?.style === "object"
-            ? component.defaultStaticProps?.style
-            : undefined),
-        },
-      },
-    } as NodeData;
-  });
+  const [nodeData, setNodeData] = useState(() => createNodeData(component));
 
   const dragging = useSnapshot(stores.designs.states.dragging);
   const isDragging = dragging.draggingId === nodeData.id;
@@ -51,21 +53,7 @@ export const DisplayItem: React.FC<{
     globalEventBus.emit("externalDragEnd", { nodeData });
 
     // 更新下一次拖拽的 id
-    setNodeData({
-      ...nodeDataTpl,
-      elementType: component.elementType,
-      id: Math.random() + "",
-      staticProps: {
-        ...nodeDataTpl.staticProps,
-        ...component.defaultStaticProps,
-        style: {
-          ...nodeDataTpl.staticProps.style,
-          ...(typeof component.defaultStaticProps?.style === "object"
-            ? component.defaultStaticProps?.style
-            : undefined),
-        },
-      },
-    });
+    setNodeData(createNodeData(component));
   };
 
   useEffect(() => {
