@@ -1,14 +1,16 @@
 import { slotBackground } from "@/configs/other";
 import { globalEventBus } from "@/globals/eventBus";
-import { NodeData } from "@/stores/designs";
+import { NodeData } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { useState, useEffect } from "react";
+
 export type SlotPlaceholderProps = {
-  slotName: string;
+  slotName?: string;
   parentNode: DeepReadonly<NodeData>;
 };
+
 export const SlotPlaceholder: React.FC<SlotPlaceholderProps> = ({
-  slotName,
+  slotName = "",
   parentNode,
 }) => {
   const [isHighlighted, setIsHighlighted] = useState(false);

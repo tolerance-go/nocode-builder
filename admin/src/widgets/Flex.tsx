@@ -12,20 +12,14 @@ export const Flex = ({
   children,
   ...rest
 }: DesignableComponentProps) => {
-  ensure(
-    isPlainObject(children) || children === undefined,
-    "children 类型应该是对象。"
-  );
+  ensure(!isPlainObject(children), "children 类型不应该是简单对象。");
   return (
     <div {...rest}>
       <AntdFlex>
-        {isEmpty(children?.default) ? (
-          <SlotPlaceholder
-            slotName="default"
-            parentNode={node}
-          ></SlotPlaceholder>
+        {isEmpty(children) ? (
+          <SlotPlaceholder parentNode={node}></SlotPlaceholder>
         ) : (
-          children?.default
+          children
         )}
       </AntdFlex>
     </div>

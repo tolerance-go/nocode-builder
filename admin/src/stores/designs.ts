@@ -87,19 +87,26 @@ export const actions = {
     position: DocumentInsertionPosition,
     slotName?: string
   ): boolean => {
-    if (position === "inner" && slotName) {
+    if (position === "inner" && (slotName || slotName === "")) {
       if (Array.isArray(nodeList)) {
         for (let i = 0; i < nodeList.length; i++) {
           if (nodeList[i].id === referenceNodeId) {
-            if (!nodeList[i].children) {
-              nodeList[i].children = {};
+            if (slotName === "") {
+              if (!Array.isArray(nodeList[i].children)) {
+                nodeList[i].children = [];
+              }
+              (nodeList[i].children as DeepReadonly<NodeData>[]).push(newNode);
+            } else {
+              if (!nodeList[i].children) {
+                nodeList[i].children = {};
+              }
+              const children = nodeList[i].children as SlotsChildren;
+              if (!children[slotName]) {
+                children[slotName] = [];
+              }
+              const slot = children[slotName] as DeepReadonly<NodeData>[];
+              slot.push(newNode);
             }
-            const children = nodeList[i].children as SlotsChildren;
-            if (!children[slotName]) {
-              children[slotName] = [];
-            }
-            const slot = children[slotName] as DeepReadonly<NodeData>[];
-            slot.push(newNode);
             return true;
           }
           // 递归查找
@@ -120,15 +127,22 @@ export const actions = {
             const childrenArray = nodeList[key] as NodeData[];
             for (let i = 0; i < childrenArray.length; i++) {
               if (childrenArray[i].id === referenceNodeId) {
-                if (!childrenArray[i].children) {
-                  childrenArray[i].children = {};
+                if (slotName === "") {
+                  if (!Array.isArray(childrenArray[i].children)) {
+                    childrenArray[i].children = [];
+                  }
+                  (childrenArray[i].children as DeepReadonly<NodeData>[]).push(newNode);
+                } else {
+                  if (!childrenArray[i].children) {
+                    childrenArray[i].children = {};
+                  }
+                  const children = childrenArray[i].children as SlotsChildren;
+                  if (!children[slotName]) {
+                    children[slotName] = [];
+                  }
+                  const slot = children[slotName] as DeepReadonly<NodeData>[];
+                  slot.push(newNode);
                 }
-                const children = childrenArray[i].children as SlotsChildren;
-                if (!children[slotName]) {
-                  children[slotName] = [];
-                }
-                const slot = children[slotName] as DeepReadonly<NodeData>[];
-                slot.push(newNode);
                 return true;
               }
               // 递归查找
@@ -145,15 +159,22 @@ export const actions = {
             }
           } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
             const slotNode = nodeList[key] as NodeData;
-            if (!slotNode.children) {
-              slotNode.children = {};
+            if (slotName === "") {
+              if (!Array.isArray(slotNode.children)) {
+                slotNode.children = [];
+              }
+              (slotNode.children as DeepReadonly<NodeData>[]).push(newNode);
+            } else {
+              if (!slotNode.children) {
+                slotNode.children = {};
+              }
+              const children = slotNode.children as SlotsChildren;
+              if (!children[slotName]) {
+                children[slotName] = [];
+              }
+              const slot = children[slotName] as DeepReadonly<NodeData>[];
+              slot.push(newNode);
             }
-            const children = slotNode.children as SlotsChildren;
-            if (!children[slotName]) {
-              children[slotName] = [];
-            }
-            const slot = children[slotName] as DeepReadonly<NodeData>[];
-            slot.push(newNode);
             return true;
           }
         }
