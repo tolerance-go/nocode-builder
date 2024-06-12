@@ -18,7 +18,7 @@ export const ComponentDisplay: React.FC<{
     }}
   >
     {components.map((component, index) => (
-      <Card.Grid key={index} style={gridStyle}>
+      <Card.Grid key={index} style={gridStyle} className="cursor-move select-none">
         {component.name}
       </Card.Grid>
     ))}
