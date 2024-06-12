@@ -1,4 +1,4 @@
-import { exampleNodeData } from "@/configs/design";
+import { exampleNodeData } from "@/configs/designs";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { NodeData, NodePlainChild } from "@/stores/designs";

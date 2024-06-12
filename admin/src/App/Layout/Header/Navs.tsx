@@ -17,10 +17,10 @@ export const Navs = () => {
      */
     if (currentSystemPaths.paths[0].value === "apps") {
       if (currentSystemPaths.paths[1]) {
-        return configs.navs.navs.find((item) => item.key === "apps")?.items;
+        return configs.navs.topNavs.find((item) => item.key === "apps")?.items;
       }
     }
-    return configs.navs.navs;
+    return configs.navs.topNavs;
   };
 
   const items: TabsProps["items"] = getItems();

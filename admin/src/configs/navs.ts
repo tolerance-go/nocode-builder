@@ -34,7 +34,7 @@ export const siteAgreementNavs = [
 /**
  * 顶部导航
  */
-export const navs: NavItem[] = [
+export const topNavs: NavItem[] = [
   {
     key: "apps",
     label: "apps",

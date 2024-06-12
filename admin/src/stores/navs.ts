@@ -203,7 +203,7 @@ export const actions = {
 
     actions.pushNavById(id);
 
-    const appsFirstItemKey = configs.navs.navs
+    const appsFirstItemKey = configs.navs.topNavs
       .find((item) => item.key === "apps")
       ?.items?.at(0)?.key;
 
