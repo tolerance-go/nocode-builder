@@ -29,6 +29,20 @@ export type EventMaps = {
       nodeId: string;
     } | null;
   };
+
+  /**
+   * 外部拖拽开始
+   */
+  externalDragStart: {
+    nodeData: NodeData;
+  };
+
+  /**
+   * 外部拖拽结束
+   */
+  externalDragEnd: {
+    nodeData: NodeData;
+  };
 };
 
 export const globalEventBus = new EventBus<EventMaps>();

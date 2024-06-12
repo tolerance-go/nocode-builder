@@ -204,7 +204,11 @@ export const Designer: React.FC = () => {
     [DeepReadonly<NodeData>, HTMLElement] | null
   >(null);
   const [draggingNode, setDraggingNode] = useState<
-    [DeepReadonly<NodeData>, HTMLElement] | null
+    | [
+        DeepReadonly<NodeData>,
+        HTMLElement | null /** 如果为 null 表示拖拽的是外部创建的，不在组件树中 */
+      ]
+    | null
   >(null);
   const [highlightedPos, setHighlightedPos] =
     useState<RectVisualPosition | null>(null);
@@ -215,7 +219,7 @@ export const Designer: React.FC = () => {
   const PROXIMITY_THRESHOLD = 20; // Define the proximity threshold
 
   const handleMoveDrop = (
-    draggingItem: [DeepReadonly<NodeData>, HTMLElement],
+    draggingItem: [DeepReadonly<NodeData>, HTMLElement | null],
     target: [DeepReadonly<NodeData>, HTMLElement],
     position: VisualPosition,
     slotName?: string
@@ -240,7 +244,6 @@ export const Designer: React.FC = () => {
     node: [DeepReadonly<NodeData>, HTMLElement],
     info: { isHoverSelf?: boolean; isHoverDescendant?: boolean }
   ) => {
-    console.log("info", info);
     setDraggingHoveredOtherNode(
       info.isHoverSelf || info.isHoverDescendant ? null : node
     );
@@ -278,7 +281,9 @@ export const Designer: React.FC = () => {
     setHighlightedSlot(null);
   };
 
-  const handleDraggingStart = (node: [DeepReadonly<NodeData>, HTMLElement]) => {
+  const handleDraggingStart = (
+    node: [DeepReadonly<NodeData>, HTMLElement | null]
+  ) => {
     setDraggingNode(node);
   };
 
@@ -506,6 +511,22 @@ export const Designer: React.FC = () => {
 
   useEffect(() => {
     stores.designs.actions.initTreeData(exampleNodeData);
+  }, []);
+
+  useEffect(() => {
+    return globalEventBus.on(
+      "externalDragStart",
+      ({ nodeData }: { nodeData: NodeData }) => {
+        stores.designs.actions.startDragging(nodeData.id);
+        handleDraggingStart([nodeData, null]);
+      }
+    );
+  }, []);
+
+  useEffect(() => {
+    return globalEventBus.on("externalDragEnd", () => {
+      handleDraggingEnd();
+    });
   }, []);
 
   return (
