@@ -42,16 +42,6 @@ export const topNavs: NavItem[] = [
       {
         key: "data",
         label: "data",
-        items: [
-          {
-            key: "models",
-            label: "models",
-          },
-          {
-            key: "tables",
-            label: "tables",
-          },
-        ],
       },
       {
         key: "design",
