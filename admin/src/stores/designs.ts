@@ -1,7 +1,7 @@
 import { globalEventBus } from "@/globals/eventBus";
 import { DocumentInsertionPosition } from "@/types";
 import { ensure } from "@/utils/ensure";
-import { DeepReadonly } from "@/utils/ensure/types";
+import { DeepReadonly } from "@/utils/types";
 import { proxy, subscribe } from "valtio";
 
 type StaticPropsValue = string | number | boolean | null | undefined;

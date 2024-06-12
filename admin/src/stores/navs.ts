@@ -1,4 +1,3 @@
-import configs from "@/configs";
 import { topNavs } from "@/configs/navs";
 import { SystemPaths } from "@/types";
 import { ensure } from "@/utils/ensure";
