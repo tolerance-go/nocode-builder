@@ -19,6 +19,7 @@ type CurrentSystemPaths = {
   /**
    * 当前 app 下 design 界面的右侧栏目的 componentStore 的 segmented 视图的导航名称
    */
+  segmentedView: string | undefined;
 };
 
 export const currentSystemPaths = proxy<CurrentSystemPaths>({
@@ -40,6 +41,15 @@ export const currentSystemPaths = proxy<CurrentSystemPaths>({
       (item: SystemPaths[number]) =>
         item.type === "nav" && item.value === "design"
     );
+  },
+  get segmentedView() {
+    if (this.isAppDesignAndRightSideIsComponentStore) {
+      return (
+        this.designPathItem.subPaths?.rightSide[0].subPaths?.segmented?.[0]
+          .value ?? undefined
+      );
+    }
+    return undefined;
   },
   get isAppData() {
     return (
@@ -225,6 +235,41 @@ export const actions = {
           value: key,
         },
       ];
+    }
+  },
+
+  changeSegmentedView: (key: string) => {
+    if (currentSystemPaths.isAppDesignAndRightSideIsComponentStore) {
+      if (
+        !currentSystemPaths.designPathItem.subPaths ||
+        !currentSystemPaths.designPathItem.subPaths.rightSide
+      ) {
+        currentSystemPaths.designPathItem.subPaths = {
+          rightSide: [
+            {
+              type: "nav",
+              value: "componentStore",
+              subPaths: {
+                segmented: [
+                  {
+                    type: "nav",
+                    value: key,
+                  },
+                ],
+              },
+            },
+          ],
+        };
+      } else {
+        currentSystemPaths.designPathItem.subPaths.rightSide[0].subPaths = {
+          segmented: [
+            {
+              type: "nav",
+              value: key,
+            },
+          ],
+        };
+      }
     }
   },
 };

@@ -1,8 +1,10 @@
 import { Button, Segmented } from "antd";
 import { ComponentStore } from "./ComponentStore";
 import stores from "@/stores";
+import { useSnapshot } from "valtio";
 
 export const ComponentStorePanel = () => {
+  const currentSystemPaths = useSnapshot(stores.navs.currentSystemPaths);
   return (
     <div className="flex flex-col h-[100%]">
       <div className="px-3 py-2">
@@ -16,7 +18,25 @@ export const ComponentStorePanel = () => {
           编辑器
         </Button>
       </div>
-      <Segmented options={["组件", "区块", "模板"]} block defaultValue="组件" />
+      <Segmented
+        options={[
+          {
+            label: "组件",
+            value: "component",
+          },
+          {
+            label: "区块",
+            value: "section",
+          },
+          {
+            label: "模板",
+            value: "template",
+          },
+        ]}
+        block
+        value={currentSystemPaths.segmentedView ?? "component"}
+        onChange={(val) => stores.navs.actions.changeSegmentedView(val)}
+      />
       <div className="flex-grow">
         <ComponentStore />
       </div>
