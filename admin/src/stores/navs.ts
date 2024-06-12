@@ -143,6 +143,25 @@ export const actions = {
 
     if (currentSystemPaths.paths.length === 3) {
       currentSystemPaths.paths[2].value = key;
+
+      if (key === "design") {
+        currentSystemPaths.designPathItem.subPaths = {
+          rightSide: [
+            {
+              type: "nav",
+              value: "componentStore",
+              subPaths: {
+                segmented: [
+                  {
+                    type: "nav",
+                    value: "component",
+                  },
+                ],
+              },
+            },
+          ],
+        };
+      }
     }
   },
 

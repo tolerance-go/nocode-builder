@@ -5,6 +5,9 @@ import { useSnapshot } from "valtio";
 
 export const ComponentStorePanel = () => {
   const currentSystemPaths = useSnapshot(stores.navs.currentSystemPaths);
+
+  const activeKey = currentSystemPaths.segmentedView ?? "component";
+
   return (
     <div className="flex flex-col h-[100%]">
       <div className="px-3 py-2">
@@ -34,11 +37,11 @@ export const ComponentStorePanel = () => {
           },
         ]}
         block
-        value={currentSystemPaths.segmentedView ?? "component"}
+        value={activeKey}
         onChange={(val) => stores.navs.actions.changeSegmentedView(val)}
       />
       <div className="flex-grow">
-        <ComponentStore />
+        {activeKey === "component" && <ComponentStore />}
       </div>
     </div>
   );
