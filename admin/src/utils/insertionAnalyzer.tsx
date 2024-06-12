@@ -5,41 +5,6 @@ import {
 } from "@/types";
 
 export class InsertionAnalyzer {
-  // 判断一个元素是否为块级元素
-  private static isBlockLevelElement(element: HTMLElement): boolean {
-    const blockElements = [
-      "div",
-      "section",
-      "article",
-      "aside",
-      "footer",
-      "header",
-      "nav",
-      "main",
-      "figure",
-      "figcaption",
-      "form",
-      "p",
-      "h1",
-      "h2",
-      "h3",
-      "h4",
-      "h5",
-      "h6",
-      "ul",
-      "ol",
-      "li",
-      "table",
-      "thead",
-      "tbody",
-      "tfoot",
-      "tr",
-      "td",
-      "th",
-    ];
-    return blockElements.includes(element.tagName.toLowerCase());
-  }
-
   // 分析传入的元素，返回视觉上的插入位置
   public static analyzeVisualPositions(
     element: HTMLElement
@@ -48,7 +13,28 @@ export class InsertionAnalyzer {
     const display = computedStyle.display;
     const isBlock = this.isBlockLevelElement(element);
 
-    // 根据元素的布局属性和类型确定视觉上的插入位置
+    const parentElement = element.parentElement;
+    const parentDisplay = parentElement
+      ? window.getComputedStyle(parentElement).display
+      : "";
+    const parentFlexDirection = parentElement
+      ? window.getComputedStyle(parentElement).flexDirection
+      : "";
+
+    const isParentFlex = parentDisplay === "flex";
+    const isHorizontalFlex =
+      isParentFlex &&
+      (parentFlexDirection === "row" || parentFlexDirection === "row-reverse");
+
+    if (isParentFlex) {
+      return {
+        top: !isHorizontalFlex,
+        bottom: !isHorizontalFlex,
+        left: isHorizontalFlex,
+        right: isHorizontalFlex,
+      };
+    }
+
     return {
       top:
         isBlock ||
@@ -63,6 +49,11 @@ export class InsertionAnalyzer {
       left: !isBlock || display === "inline" || display === "inline-block",
       right: !isBlock || display === "inline" || display === "inline-block",
     };
+  }
+
+  private static isBlockLevelElement(element: HTMLElement): boolean {
+    const display = window.getComputedStyle(element).display;
+    return display === "block" || display === "flex" || display === "grid";
   }
 
   // 根据视觉插入位置确定文档结构中的插入位置
