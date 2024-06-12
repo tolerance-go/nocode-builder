@@ -1,5 +1,6 @@
 import { NodeData } from "@/stores/designs";
 import { EventBus } from "@/utils/eventBus";
+import { DeepReadonly } from "@/utils/types";
 
 export type EventMaps = {
   /**
@@ -15,6 +16,19 @@ export type EventMaps = {
    * 当节点树改变
    */
   nodeTreeChange: NodeData[];
+
+  draggingHoveringNode: {
+    node: DeepReadonly<NodeData> | null;
+  };
+  /**
+   * 悬停鼠标接近悬停 node 中的插槽
+   */
+  draggingNestHoveringNodeSlot: {
+    nodeMeta: {
+      slotName: string;
+      nodeId: string;
+    } | null;
+  };
 };
 
 export const globalEventBus = new EventBus<EventMaps>();

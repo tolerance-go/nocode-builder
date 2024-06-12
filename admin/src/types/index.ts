@@ -1,3 +1,19 @@
+import { NodeData } from "@/stores/designs";
+import { DeepReadonly } from "@/utils/types";
+
+export type DesignableComponentProps = {
+  style: React.CSSProperties;
+  onMouseEnter: React.MouseEventHandler;
+  onMouseLeave: React.MouseEventHandler;
+  onMouseDown: React.MouseEventHandler;
+  onMouseOver: React.MouseEventHandler;
+  children?: React.ReactNode | Record<string, React.ReactNode>;
+  node: DeepReadonly<NodeData>;
+  ["data-node-id"]: string;
+};
+
+export type ComponentType = React.FC<DesignableComponentProps> | string;
+
 export type InsertionPositions = {
   top: boolean;
   bottom: boolean;

@@ -1,162 +1,17 @@
+import { components } from "@/configs/components";
 import { exampleNodeData } from "@/configs/designs";
+import { slotBackground } from "@/configs/other";
+import { globalEventBus } from "@/globals/eventBus";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { NodeData, NodePlainChild } from "@/stores/designs";
 import { RectVisualPosition, VisualPosition } from "@/types";
 import { ensure } from "@/utils/ensure";
-import { EventBus } from "@/utils/eventBus";
 import { InsertionAnalyzer } from "@/utils/insertionAnalyzer";
 import { isPlainObject } from "@/utils/isPlainObject";
 import { DeepReadonly } from "@/utils/types";
-import { Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useSnapshot } from "valtio";
-
-const Custom = ({ children, ...rest }: DesignableComponentProps) => {
-  ensure(!isPlainObject(children), "children 类型是 ReactNode。");
-
-  return (
-    <div {...rest}>
-      <Button>自定义按钮</Button>
-      {children}
-    </div>
-  );
-};
-
-const isEmpty = (value: unknown): boolean => {
-  if (Array.isArray(value)) {
-    return value.length === 0;
-  }
-  return !value;
-};
-
-const CustomWithSlots = ({
-  children,
-  node,
-  ...rest
-}: DesignableComponentProps) => {
-  ensure(isPlainObject(children), "children 类型是对象");
-
-  return (
-    <div {...rest}>
-      <Button>自定义按钮</Button>
-      <div>
-        slot0:
-        {isEmpty(children.slot0) ? (
-          <SlotPlaceholder slotName="slot0" parentNode={node}></SlotPlaceholder>
-        ) : (
-          children.slot0
-        )}
-      </div>
-      <div>
-        slot1:{" "}
-        {isEmpty(children.slot1) ? (
-          <SlotPlaceholder slotName="slot1" parentNode={node}></SlotPlaceholder>
-        ) : (
-          children.slot1
-        )}
-      </div>
-      <div>
-        slot2:{" "}
-        {isEmpty(children.slot2) ? (
-          <SlotPlaceholder slotName="slot2" parentNode={node}></SlotPlaceholder>
-        ) : (
-          children.slot2
-        )}
-      </div>
-      <div>
-        slot3:{" "}
-        {isEmpty(children.slot3) ? (
-          <SlotPlaceholder slotName="slot3" parentNode={node}></SlotPlaceholder>
-        ) : (
-          children.slot3
-        )}
-      </div>
-    </div>
-  );
-};
-
-type SlotPlaceholderProps = {
-  slotName: string;
-  parentNode: DeepReadonly<NodeData>;
-};
-
-const eventBus = new EventBus<{
-  draggingHoveringNode: {
-    node: DeepReadonly<NodeData> | null;
-  };
-  /**
-   * 悬停鼠标接近悬停 node 中的插槽
-   */
-  draggingNestHoveringNodeSlot: {
-    nodeMeta: {
-      slotName: string;
-      nodeId: string;
-    } | null;
-  };
-}>();
-
-const slotBackground = "rgba(0,0,0,0.5)";
-
-const SlotPlaceholder: React.FC<SlotPlaceholderProps> = ({
-  slotName,
-  parentNode,
-}) => {
-  const [isHighlighted, setIsHighlighted] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-
-  useEffect(() => {
-    return eventBus.on("draggingHoveringNode", ({ node }) => {
-      setIsHovering(node?.id === parentNode.id);
-    });
-  }, []);
-
-  useEffect(() => {
-    return eventBus.on("draggingNestHoveringNodeSlot", ({ nodeMeta }) => {
-      setIsHighlighted(
-        nodeMeta
-          ? nodeMeta.nodeId === parentNode.id && slotName === nodeMeta.slotName
-          : false
-      );
-    });
-  }, []);
-
-  return isHovering ? (
-    <div
-      data-slot-placeholder
-      data-slot-name={slotName}
-      data-slot-parent-id={parentNode.id}
-      style={{
-        width: "10px",
-        height: "10px",
-        background: isHighlighted ? "red" : slotBackground,
-      }}
-    ></div>
-  ) : null;
-};
-
-type DesignableComponentProps = {
-  style: React.CSSProperties;
-  onMouseEnter: React.MouseEventHandler;
-  onMouseLeave: React.MouseEventHandler;
-  onMouseDown: React.MouseEventHandler;
-  onMouseOver: React.MouseEventHandler;
-  children?: React.ReactNode | Record<string, React.ReactNode>;
-  node: DeepReadonly<NodeData>;
-  ["data-node-id"]: string;
-};
-
-type ComponentType = React.FC<DesignableComponentProps> | string;
-
-const components: {
-  [key in string]?: ComponentType;
-} = {
-  div: "div",
-  span: "span",
-  text: "text",
-  Custom: Custom,
-  CustomWithSlots,
-};
 
 // 类型断言函数
 const isPrimitiveOrNull = (
@@ -633,13 +488,13 @@ export const Designer: React.FC = () => {
   }, [draggingHoveredOtherNode]);
 
   useEffect(() => {
-    eventBus.emit("draggingHoveringNode", {
+    globalEventBus.emit("draggingHoveringNode", {
       node: draggingHoveredOtherNode ? draggingHoveredOtherNode[0] : null,
     });
   }, [draggingHoveredOtherNode]);
 
   useEffect(() => {
-    eventBus.emit("draggingNestHoveringNodeSlot", {
+    globalEventBus.emit("draggingNestHoveringNodeSlot", {
       nodeMeta: highlightedSlot
         ? {
             nodeId: highlightedSlot.nodeId,
