@@ -1,4 +1,5 @@
 import { topNavs } from "@/configs/navs";
+import { APPS_NAV } from "@/constants";
 import { SystemPaths } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { findFirstItem } from "@/utils/findFirstItem";
@@ -25,7 +26,7 @@ export const currentSystemPaths = proxy<CurrentSystemPaths>({
     ([
       {
         type: "nav",
-        value: "apps",
+        value: APPS_NAV,
       },
     ] as SystemPaths),
   get designPathItem() {
@@ -63,10 +64,10 @@ export const currentSystemPaths = proxy<CurrentSystemPaths>({
     );
   },
   get isApp() {
-    return this.paths.length === 1 && this.paths[0].value === "apps";
+    return this.paths.length === 1 && this.paths[0].value === APPS_NAV;
   },
   get startsWithApp() {
-    return this.paths[0].value === "apps";
+    return this.paths[0].value === APPS_NAV;
   },
   get startsWithAppAndId() {
     return this.startsWithApp && !!this.paths[1];
@@ -159,7 +160,7 @@ export const actions = {
         currentSystemPaths.paths = [
           {
             type: "nav",
-            value: "apps",
+            value: APPS_NAV,
           },
         ];
 
@@ -192,7 +193,7 @@ export const actions = {
      */
     actions.pushNavById(id);
 
-    const appsIdFirstChild = findFirstItem(topNavs, "apps", ":id");
+    const appsIdFirstChild = findFirstItem(topNavs, APPS_NAV, ":id");
 
     ensure(!!appsIdFirstChild, "appsIdFirstChild 不能为空");
 
