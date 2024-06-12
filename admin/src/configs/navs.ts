@@ -1,12 +1,5 @@
-export interface NavItem {
-  key: string;
-  label: string;
-  items?: NavItem[];
-}
-
-export type SiteAgreementNavs = Array<
-  string | SiteAgreementNavs | { [key: string]: SiteAgreementNavs }
->;
+import { NavItem, SiteAgreementNavs } from "@/types";
+import { transformNavs } from "@/utils/transformNavs";
 
 // labels.ts
 export const labelMap: { [key: string]: string } = {
@@ -59,37 +52,5 @@ export const siteAgreementNavs: SiteAgreementNavs = [
   "plugins",
   "settings",
 ];
-
-export const transformNavs = (
-  navs: SiteAgreementNavs,
-  labelMap: { [key: string]: string }
-): NavItem[] => {
-  const transformItem = (
-    item: string | SiteAgreementNavs | { [key: string]: SiteAgreementNavs }
-  ): NavItem | null => {
-    if (typeof item === "string") {
-      return { key: item, label: labelMap[item] || item };
-    } else if (
-      Array.isArray(item) &&
-      typeof item[0] === "string" &&
-      Array.isArray(item[1])
-    ) {
-      /**
-       * 父子关系
-       */
-      const [key, children] = item;
-      return {
-        key: key as string,
-        label: labelMap[key as string] || (key as string),
-        items: transformNavs(children, labelMap),
-      };
-    }
-    return null;
-  };
-
-  return navs
-    .map(transformItem)
-    .filter((item): item is NavItem => item !== null); // Filter out null values
-};
 
 export const topNavs: NavItem[] = transformNavs(siteAgreementNavs, labelMap);

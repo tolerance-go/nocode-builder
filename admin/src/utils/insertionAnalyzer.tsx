@@ -1,11 +1,8 @@
-import { DocumentInsertionPosition, RectVisualPosition, VisualPosition } from "@/types";
-
-type InsertionPositions = {
-  top: boolean;
-  bottom: boolean;
-  left: boolean;
-  right: boolean;
-};
+import {
+  DocumentInsertionPosition,
+  InsertionPositions,
+  RectVisualPosition,
+} from "@/types";
 
 export class InsertionAnalyzer {
   // 判断一个元素是否为块级元素

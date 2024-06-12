@@ -1,36 +1,16 @@
 import configs from "@/configs";
+import { topNavs } from "@/configs/navs";
+import { SystemPaths } from "@/types";
 import { ensure } from "@/utils/ensure";
+import { findFirstItem } from "@/utils/findFirstItem";
 import { proxy, subscribe } from "valtio";
-
-/**
- * 当前系统路径
- *
- * eg: [
- *  { type: 'nav', value: 'apps' },
- *  { type: "id", value: 'appId' },
- *  {
- *    type: 'nav',
- *    value: 'design',
- *    subNavs: {
- *      leftPanel: [{ type: 'nav', value: 'editor' }]
- *    }
- *  }
- * ]
- */
-export type SystemPaths = {
-  type: "nav" | "id";
-  value: string;
-  subNavs?: {
-    [key: string]: SystemPaths;
-  };
-}[];
 
 type CurrentSystemPaths = {
   paths: SystemPaths;
   startsWithApp: boolean;
   startsWithAppAndId: boolean;
   isApp: boolean;
-  activeNavKey: string | undefined;
+  activeTopNavKey: string | undefined;
   isAppData: boolean;
   isAppDesign: boolean;
   isAppDesignAndRightSideIsEditor: boolean;
@@ -72,15 +52,15 @@ export const currentSystemPaths = proxy<CurrentSystemPaths>({
   get isAppDesignAndRightSideIsEditor() {
     return (
       this.isAppDesign &&
-      this.designPathItem.subNavs?.rightSide[0].type === "nav" &&
-      this.designPathItem.subNavs?.rightSide[0].value === "editor"
+      this.designPathItem.subPaths?.rightSide[0].type === "nav" &&
+      this.designPathItem.subPaths?.rightSide[0].value === "editor"
     );
   },
   get isAppDesignAndRightSideIsComponentStore() {
     return (
       this.isAppDesign &&
-      this.designPathItem.subNavs?.rightSide[0].type === "nav" &&
-      this.designPathItem.subNavs?.rightSide[0].value === "componentStore"
+      this.designPathItem.subPaths?.rightSide[0].type === "nav" &&
+      this.designPathItem.subPaths?.rightSide[0].value === "componentStore"
     );
   },
   get isApp() {
@@ -92,7 +72,7 @@ export const currentSystemPaths = proxy<CurrentSystemPaths>({
   get startsWithAppAndId() {
     return this.startsWithApp && !!this.paths[1];
   },
-  get activeNavKey() {
+  get activeTopNavKey() {
     if (this.paths.length) {
       const last = this.paths.at(this.paths.length - 1) as SystemPaths[number];
       if (last.type === "id") {
@@ -196,27 +176,35 @@ export const actions = {
   /**
    * 选中 app
    *
+   * 选中 app 后，需要改变 paths，插入 2 个元素
+   * 一个是 type 为 id 类型的元素，表示当前路径下的 app id
+   * 紧接着是 type 为 nav 类型的元素，表示此时的激活路径，比如 design
+   * 一个场景数据如下
+   *
+   * app -> :id -> design
+   *
    * @param id
    */
   selectApp: (id: string) => {
     currentSelectedApp.id = id;
 
+    /**
+     * 假设此时 paths 长度为 1 且为 nav:app
+     */
     actions.pushNavById(id);
 
-    const appsFirstItemKey = configs.navs.topNavs
-      .find((item) => item.key === "apps")
-      ?.items?.at(0)?.key;
+    const appsIdFirstChild = findFirstItem(topNavs, "apps", ":id");
 
-    ensure(!!appsFirstItemKey, "appsFirstItemKey 不能为空");
+    ensure(!!appsIdFirstChild, "appsIdFirstChild 不能为空");
 
-    actions.pushNav(appsFirstItemKey);
+    actions.pushNav(appsIdFirstChild.key);
   },
   /**
    * 修改 design 的 rightSide 的导航为编辑器
    */
   changeDesignRightSideNav: (key: string) => {
-    if (currentSystemPaths.designPathItem.subNavs === undefined) {
-      currentSystemPaths.designPathItem.subNavs = {
+    if (currentSystemPaths.designPathItem.subPaths === undefined) {
+      currentSystemPaths.designPathItem.subPaths = {
         rightSide: [
           {
             type: "nav",
@@ -225,7 +213,7 @@ export const actions = {
         ],
       };
     } else {
-      currentSystemPaths.designPathItem.subNavs.rightSide = [
+      currentSystemPaths.designPathItem.subPaths.rightSide = [
         {
           type: "nav",
           value: key,

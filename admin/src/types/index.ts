@@ -1,3 +1,37 @@
+export type InsertionPositions = {
+  top: boolean;
+  bottom: boolean;
+  left: boolean;
+  right: boolean;
+};
+
+export type SiteAgreementNavs = Array<
+  string | SiteAgreementNavs | { [key: string]: SiteAgreementNavs }
+>;
+
+/**
+ * 当前系统路径
+ *
+ * eg: [
+ *  { type: 'nav', value: 'apps' },
+ *  { type: "id", value: 'appId' },
+ *  {
+ *    type: 'nav',
+ *    value: 'design',
+ *    subNavs: {
+ *      leftPanel: [{ type: 'nav', value: 'editor' }]
+ *    }
+ *  }
+ * ]
+ */
+export type SystemPaths = {
+  type: "nav" | "id";
+  value: string;
+  subPaths?: {
+    [key: string]: SystemPaths;
+  };
+}[];
+
 export type NavItem = {
   key: string;
   label: string;

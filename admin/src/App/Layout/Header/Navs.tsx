@@ -1,7 +1,8 @@
 import configs from "@/configs";
 import stores from "@/stores";
+import { findTabItems } from "@/utils/findTabItems";
 import { css } from "@emotion/css";
-import { Button, Divider, Space, Tabs, TabsProps } from "antd";
+import { Button, Divider, Space, Tabs, TabsProps, Typography } from "antd";
 import { useSnapshot } from "valtio";
 
 export const Navs = () => {
@@ -12,15 +13,7 @@ export const Navs = () => {
   const currentSystemPaths = useSnapshot(stores.navs.states.currentSystemPaths);
 
   const getItems = (): TabsProps["items"] => {
-    /**
-     * 如果第一个是 apps 并且第二个参数不为空，则显示 app 下的子导航
-     */
-    if (currentSystemPaths.paths[0].value === "apps") {
-      if (currentSystemPaths.paths[1]) {
-        return configs.navs.topNavs.find((item) => item.key === "apps")?.items;
-      }
-    }
-    return configs.navs.topNavs;
+    return findTabItems(configs.navs.topNavs, currentSystemPaths.paths);
   };
 
   const items: TabsProps["items"] = getItems();
@@ -32,13 +25,18 @@ export const Navs = () => {
           回退
         </Button>
       )}
+      {currentSystemPaths.startsWithAppAndId && (
+        <Typography.Text type="secondary">
+          {currentSystemPaths.paths[1].value}
+        </Typography.Text>
+      )}
       <Tabs
         className={css`
           .ant-tabs-nav {
             margin-bottom: 0;
           }
         `}
-        activeKey={currentSystemPaths.activeNavKey}
+        activeKey={currentSystemPaths.activeTopNavKey}
         items={items}
         onChange={onChange}
       />
