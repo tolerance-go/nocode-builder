@@ -10,5 +10,15 @@ export const Button = ({
   ...rest
 }: DesignableComponentProps) => {
   ensure(!isPlainObject(children), "children 类型应该是 ReactNode。");
-  return <AntdButton {...rest}>{children}</AntdButton>;
+  return (
+    <div
+      {...rest}
+      style={{
+        display: "inline-flex",
+        ...rest.style,
+      }}
+    >
+      <AntdButton>{children}</AntdButton>
+    </div>
+  );
 };

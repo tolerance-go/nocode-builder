@@ -13,11 +13,10 @@ const gridStyle: React.CSSProperties = {
 
 const nodeData = {
   id: Math.random() + "",
-  elementType: "div",
+  elementType: "Button",
   staticProps: {
     style: {
       background: "lightblue",
-      padding: "20px",
     },
   },
 };

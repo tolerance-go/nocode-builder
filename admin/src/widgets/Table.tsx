@@ -8,5 +8,9 @@ export const Table = ({
   children,
   ...rest
 }: DesignableComponentProps) => {
-  return <AntdTable {...rest}></AntdTable>;
+  return (
+    <div {...rest}>
+      <AntdTable></AntdTable>
+    </div>
+  );
 };
