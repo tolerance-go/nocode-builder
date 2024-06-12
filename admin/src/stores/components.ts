@@ -29,6 +29,7 @@ const windowDisplayComponents = proxy<{
       elementType: "Button",
       name: "Button",
       tags: [],
+      defaultStaticProps: {},
     },
     {
       type: "component",
