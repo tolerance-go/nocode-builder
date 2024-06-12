@@ -1,5 +1,5 @@
-import * as base from "./base";
+import * as navs from "./navs";
 
 export default {
-  base,
+  navs,
 };

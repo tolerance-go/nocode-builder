@@ -1,5 +1,36 @@
 import { NavItem } from "@/types";
 
+/** 合法导航 */
+export const siteAgreementNavs = [
+  [
+    "apps",
+    ":id",
+    [
+      "data",
+      [
+        "design",
+        {
+          rightSide: [
+            [
+              "componentStore",
+              {
+                segmented: ["component", "section", "template"],
+              },
+            ],
+            "editor",
+          ],
+        },
+      ],
+      "pipelines",
+      "dashboard",
+      "settings",
+    ],
+  ],
+  "users",
+  "plugins",
+  "settings",
+];
+
 /**
  * 顶部导航
  */
