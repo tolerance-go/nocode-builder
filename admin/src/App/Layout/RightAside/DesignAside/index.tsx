@@ -1,6 +1,6 @@
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { ComponentStorePanel } from "../ComponentStorePanel";
-import SettingsForm from "../SettingsForm";
+import SettingsForm from "./SettingsForm";
 import { DesignAsideType } from "@/types";
 
 export const DesignAside = () => {
