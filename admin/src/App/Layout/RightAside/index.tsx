@@ -1,7 +1,8 @@
-import { Route, Routes } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 import { DesignAside } from "./DesignAside";
 
 export const RightAside = () => {
+  const match = useMatch("/apps/:id/design");
   // const render = () => {
   //   if (currentSystemPaths.isAppDesign) {
   //     if (currentSystemPaths.isAppDesignAndRightSideIsEditor) {
@@ -15,9 +16,7 @@ export const RightAside = () => {
 
   return (
     <aside className={"w-[400px] border-l h-[100%]"}>
-      <Routes>
-        <Route path="/apps/:id/design" element={<DesignAside />}></Route>
-      </Routes>
+      {match && <DesignAside />}
     </aside>
   );
 };

@@ -1,14 +1,13 @@
-import { DesignAside } from "./DesignAside";
+import { matchPath, useLocation } from "react-router-dom";
 import { AppAside } from "./AppAside";
-import { Route, Routes } from "react-router-dom";
+import { DesignAside } from "./DesignAside";
 
 export const LeftAside = () => {
+  const location = useLocation();
   return (
     <div className="flex flex-col h-[100%]">
-      <Routes>
-        <Route path="/apps" element={<AppAside />}></Route>
-        <Route path="/apps/:id/design" element={<DesignAside />}></Route>
-      </Routes>
+      {matchPath("/apps", location.pathname) && <AppAside />}
+      {matchPath("/apps/:id/design", location.pathname) && <DesignAside />}
     </div>
   );
 };

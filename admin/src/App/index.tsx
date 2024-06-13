@@ -1,6 +1,6 @@
 import "@antv/s2-react/dist/style.min.css";
 import { useEffect } from "react";
-import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "./Layout";
 import "./index.css";
 
@@ -14,11 +14,7 @@ function App() {
     }
   }, []);
 
-  return (
-    <Routes>
-      <Route path="/*" element={<Layout />}></Route>
-    </Routes>
-  );
+  return <Layout />;
 }
 
 export default App;

@@ -1,63 +1,57 @@
 import { appSubNavs, navTabs } from "@/configs/navs";
 import { css } from "@emotion/css";
 import { Button, Divider, Space, Tabs, Typography } from "antd";
-import { Route, Routes, useMatch, useNavigate } from "react-router-dom";
+import { useMatch, useNavigate } from "react-router-dom";
 
 export const Navs = () => {
-  const match = useMatch("/:feature/:id/:sub");
+  const featureMatch = useMatch("/:feature");
+  const featureIdSubMatch = useMatch("/:feature/:id/:sub");
+  const featureIdMatch = useMatch("/:feature/:id/:sub");
 
   const navigate = useNavigate();
 
-  if (!match) {
-    return <div>not match</div>;
-  }
-
-  const { id, feature, sub } = match.params;
-
   return (
     <Space split={<Divider type="vertical" />}>
-      {id && (
+      {featureIdMatch?.params.id && (
         <Button type="text" onClick={() => navigate("/apps")}>
           回退
         </Button>
       )}
-      {id && <Typography.Text type="secondary">{id}</Typography.Text>}
-      <Routes>
-        <Route
-          path="/:feature"
-          element={
-            <Tabs
-              className={css`
-                .ant-tabs-nav {
-                  margin-bottom: 0;
-                }
-              `}
-              activeKey={feature}
-              items={navTabs}
-              onChange={(key: string) => {
-                navigate(`/${key}`);
-              }}
-            />
-          }
-        ></Route>
-        <Route
-          path="/:feature/:id/:sub"
-          element={
-            <Tabs
-              className={css`
-                .ant-tabs-nav {
-                  margin-bottom: 0;
-                }
-              `}
-              activeKey={sub}
-              items={appSubNavs}
-              onChange={(key: string) => {
-                navigate(`/${feature}/${id}/${key}`);
-              }}
-            />
-          }
-        ></Route>
-      </Routes>
+      {featureIdMatch?.params.id && (
+        <Typography.Text type="secondary">
+          {featureIdMatch.params.id}
+        </Typography.Text>
+      )}
+      {featureMatch && (
+        <Tabs
+          className={css`
+            .ant-tabs-nav {
+              margin-bottom: 0;
+            }
+          `}
+          activeKey={featureMatch.params.feature}
+          items={navTabs}
+          onChange={(key: string) => {
+            navigate(`/${key}`);
+          }}
+        />
+      )}
+      {featureIdSubMatch && (
+        <Tabs
+          className={css`
+            .ant-tabs-nav {
+              margin-bottom: 0;
+            }
+          `}
+          activeKey={featureIdSubMatch.params.sub}
+          items={appSubNavs}
+          onChange={(key: string) => {
+            navigate(
+              `/${featureIdSubMatch.params.feature}/${featureIdSubMatch.params.id}/${key}`
+            );
+          }}
+        />
+      )}
     </Space>
   );
 };

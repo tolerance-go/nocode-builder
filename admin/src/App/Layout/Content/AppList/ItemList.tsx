@@ -42,7 +42,7 @@ const ItemList: React.FC = () => {
       split={false}
       renderItem={(item) => (
         <List.Item
-          onClick={() => navigate(`${item.id}/data`)}
+          onClick={() => navigate(`/apps/${item.id}/data`)}
           className="hover:border-blue-400 rounded-md border hover:cursor-pointer mt-4 transition-all"
           key={item.title}
           actions={[
