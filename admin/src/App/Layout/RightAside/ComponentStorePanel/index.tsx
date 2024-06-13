@@ -1,7 +1,6 @@
+import { useQueryParams } from "@/hooks/useQueryParams";
 import { Button, Segmented } from "antd";
 import { ComponentStore } from "./ComponentStore";
-import stores from "@/stores";
-import { useQueryParams } from "@/hooks/useQueryParams";
 
 type SegmentedType = "component" | "section" | "template";
 
@@ -17,10 +16,12 @@ export const ComponentStorePanel = () => {
           size="small"
           type="text"
           onClick={() => {
-            stores.navs.actions.changeDesignRightSideNav("editor");
+            updateQueryParams({
+              designAsideType: "settings",
+            });
           }}
         >
-          编辑器
+          关闭
         </Button>
       </div>
       <Segmented<SegmentedType>

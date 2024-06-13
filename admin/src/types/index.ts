@@ -1,4 +1,5 @@
 import { DeepReadonly } from "@/utils/types";
+export type DesignAsideType = "store" | "settings";
 
 export type StaticPropsValue = string | number | boolean | null | undefined;
 

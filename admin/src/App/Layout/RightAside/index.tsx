@@ -1,5 +1,5 @@
 import Route from "@/components/Route";
-import { ComponentStorePanel } from "./ComponentStorePanel";
+import { DesignAside } from "./DesignAside";
 
 export const RightAside = () => {
   // const render = () => {
@@ -15,7 +15,7 @@ export const RightAside = () => {
 
   return (
     <aside className={"w-[400px] border-l"}>
-      <Route path="/apps/:id/design" element={<ComponentStorePanel />}></Route>
+      <Route path="/apps/:id/design" element={<DesignAside />}></Route>
     </aside>
   );
 };

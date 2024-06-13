@@ -1,4 +1,4 @@
-import { NodeData } from "@/stores/designs";
+import { NodeData } from "@/types";
 import { EventBus } from "@/utils/eventBus";
 import { DeepReadonly } from "@/utils/types";
 
@@ -43,6 +43,13 @@ export type EventMaps = {
   externalDragEnd: {
     nodeData: NodeData;
   };
+
+  /**
+   * 代码层面的 popstate
+   *
+   * 因为 手动调用 window.history.pushState 不会触发 window 的 popstate
+   */
+  popstate: undefined;
 };
 
 export const globalEventBus = new EventBus<EventMaps>();

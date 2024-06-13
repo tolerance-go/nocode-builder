@@ -1,3 +1,4 @@
+import { globalEventBus } from "@/globals/eventBus";
 import { useEffect, useState } from "react";
 
 // 自定义 Hook 来管理查询参数，支持泛型
@@ -41,8 +42,12 @@ export const useQueryParams = <D extends Record<string, string>>(
     };
 
     window.addEventListener("popstate", handlePopState);
+
+    const off = globalEventBus.on("popstate", handlePopState);
+
     return () => {
       window.removeEventListener("popstate", handlePopState);
+      off();
     };
   }, []);
 
@@ -59,6 +64,7 @@ export const useQueryParams = <D extends Record<string, string>>(
 
     const newUrl = `${window.location.pathname}?${updatedParams.toString()}`;
     window.history.pushState({}, "", newUrl);
+    globalEventBus.emit("popstate", undefined);
     setQueryParams(Object.fromEntries(updatedParams) as Partial<D>);
   };
 

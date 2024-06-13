@@ -33,13 +33,26 @@ const dragging = proxy<{
   draggingId: null,
 });
 
+/** 选中的组件 */
+const selectedNodes = proxy<{
+  selectedIds: string[];
+}>({
+  selectedIds: [],
+});
+
 export const states = {
   designTreeData,
   hoveredComponents,
   dragging,
+  selectedNodes,
 };
 
 export const actions = {
+  /** 选择 node */
+  selectNode: (ids: string[]) => {
+    const uniqueIds = Array.from(new Set(ids));
+    selectedNodes.selectedIds = uniqueIds;
+  },
   replaceNodeData: (data: NodeData[]) => {
     designTreeData.nodeData = data;
   },
@@ -131,7 +144,9 @@ export const actions = {
                   if (!Array.isArray(childrenArray[i].children)) {
                     childrenArray[i].children = [];
                   }
-                  (childrenArray[i].children as DeepReadonly<NodeData>[]).push(newNode);
+                  (childrenArray[i].children as DeepReadonly<NodeData>[]).push(
+                    newNode
+                  );
                 } else {
                   if (!childrenArray[i].children) {
                     childrenArray[i].children = {};

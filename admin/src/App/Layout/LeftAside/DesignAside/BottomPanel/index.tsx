@@ -1,4 +1,4 @@
-import { Tabs } from "antd";
+import { Button, Tabs } from "antd";
 import TreeList from "./TreeList";
 import { css } from "@emotion/css";
 import { useQueryParams } from "@/hooks/useQueryParams";
@@ -23,6 +23,19 @@ export const BottomPanel = () => {
   return (
     <div className="flex-grow">
       <Tabs
+        tabBarExtraContent={
+          <Button
+            type="text"
+            size="small"
+            onClick={() => {
+              updateQueryParams({
+                designAsideType: "store",
+              });
+            }}
+          >
+            添加
+          </Button>
+        }
         className={css`
           .ant-tabs-nav {
             margin-bottom: 0;
