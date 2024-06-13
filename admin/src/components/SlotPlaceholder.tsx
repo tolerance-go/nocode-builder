@@ -1,4 +1,4 @@
-import { slotBackground } from "@/configs/other";
+import { slotBackground } from "@/configs/styles";
 import { globalEventBus } from "@/globals/eventBus";
 import { NodeData } from "@/types";
 import { DeepReadonly } from "@/utils/types";
