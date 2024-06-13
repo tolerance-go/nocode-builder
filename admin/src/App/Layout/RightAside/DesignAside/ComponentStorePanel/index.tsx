@@ -1,12 +1,12 @@
-import { useQueryParams } from "@/hooks/useQueryParams";
 import { Button, Segmented } from "antd";
+import { useSearchParams } from "react-router-dom";
 import { ComponentStore } from "./ComponentStore";
 
 type SegmentedType = "component" | "section" | "template";
 
 export const ComponentStorePanel = () => {
-  const [queryParams, updateQueryParams] = useQueryParams({
-    segmented: "component" as SegmentedType,
+  const [searchParams, setSearchParams] = useSearchParams({
+    segmented: "component",
   });
 
   return (
@@ -16,9 +16,8 @@ export const ComponentStorePanel = () => {
           size="small"
           type="text"
           onClick={() => {
-            updateQueryParams({
-              designAsideType: "settings",
-            });
+            searchParams.set("designAsideType", "settings");
+            setSearchParams(searchParams);
           }}
         >
           关闭
@@ -40,15 +39,14 @@ export const ComponentStorePanel = () => {
           },
         ]}
         block
-        value={queryParams.segmented}
-        onChange={(val) =>
-          updateQueryParams({
-            segmented: val,
-          })
-        }
+        value={searchParams.get("segmented") as SegmentedType}
+        onChange={(val) => {
+          searchParams.set("segmented", val);
+          setSearchParams(searchParams);
+        }}
       />
       <div className="flex-grow">
-        {queryParams.segmented === "component" && <ComponentStore />}
+        {searchParams.get("segmented") === "component" && <ComponentStore />}
       </div>
     </div>
   );

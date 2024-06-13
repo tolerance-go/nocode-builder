@@ -1,4 +1,3 @@
-import { Route, Routes } from "react-router-dom";
 import { Content } from "./Content";
 import { Header } from "./Header";
 import { LeftAside } from "./LeftAside";
@@ -24,9 +23,7 @@ export const Layout = () => {
         </main>
 
         {/* 右侧边栏 */}
-        <Routes>
-          <Route path="/apps/:id/design" element={<RightAside />}></Route>
-        </Routes>
+        <RightAside />
       </div>
     </div>
   );

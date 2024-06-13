@@ -1,13 +1,18 @@
 import { appSubNavs, navTabs } from "@/configs/navs";
-import useNavigate from "@/hooks/useNavigate";
-import useParams from "@/hooks/useParams";
 import { css } from "@emotion/css";
 import { Button, Divider, Space, Tabs, Typography } from "antd";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useMatch, useNavigate } from "react-router-dom";
 
 export const Navs = () => {
-  const { feature, id, sub } = useParams("/:feature/:id/:sub");
+  const match = useMatch("/:feature/:id/:sub");
+
   const navigate = useNavigate();
+
+  if (!match) {
+    return <div>not match</div>;
+  }
+
+  const { id, feature, sub } = match.params;
 
   return (
     <Space split={<Divider type="vertical" />}>

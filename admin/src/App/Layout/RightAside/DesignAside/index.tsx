@@ -1,18 +1,18 @@
-import { useQueryParams } from "@/hooks/useQueryParams";
-import { ComponentStorePanel } from "./ComponentStorePanel";
-import ComponentSettingsForm from "./ComponentSettingsForm";
 import { DesignAsideType } from "@/types";
+import { useSearchParams } from "react-router-dom";
+import ComponentSettingsForm from "./ComponentSettingsForm";
+import { ComponentStorePanel } from "./ComponentStorePanel";
 
 export const DesignAside = () => {
-  const [query] = useQueryParams({
+  const [searchParams] = useSearchParams({
     designAsideType: "settings" as DesignAsideType,
   });
 
-  if (query.designAsideType === "store") {
+  if (searchParams.get("designAsideType") === "store") {
     return <ComponentStorePanel />;
   }
 
-  if (query.designAsideType === "settings") {
+  if (searchParams.get("designAsideType") === "settings") {
     return <ComponentSettingsForm />;
   }
 };

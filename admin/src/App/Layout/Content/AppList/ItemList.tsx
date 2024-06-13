@@ -1,7 +1,7 @@
 import React from "react";
 import { LikeOutlined, MessageOutlined, StarOutlined } from "@ant-design/icons";
 import { Avatar, List, Space } from "antd";
-import useNavigate from "@/hooks/useNavigate";
+import { useNavigate } from "react-router-dom";
 
 const data = Array.from({ length: 23 }).map((_, i) => ({
   id: i + "",

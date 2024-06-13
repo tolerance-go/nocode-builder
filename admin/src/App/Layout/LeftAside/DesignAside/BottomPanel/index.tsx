@@ -1,15 +1,17 @@
 import { Button, Tabs } from "antd";
 import TreeList from "./TreeList";
 import { css } from "@emotion/css";
-import { useQueryParams } from "@/hooks/useQueryParams";
 import Editor from "./Editor";
+import { useSearchParams } from "react-router-dom";
 
 type TreePanel = "tree" | "editor";
 
 export const BottomPanel = () => {
-  const [{ treePanel }, updateQueryParams] = useQueryParams({
+  const [searchParams, setSearchParams] = useSearchParams({
     treePanel: "tree" as TreePanel,
   });
+
+  const treePanel = searchParams.get("treePanel") as TreePanel;
 
   const render = () => {
     if (treePanel === "tree") {
@@ -28,9 +30,8 @@ export const BottomPanel = () => {
             type="text"
             size="small"
             onClick={() => {
-              updateQueryParams({
-                designAsideType: "store",
-              });
+              searchParams.set("designAsideType", "store");
+              setSearchParams(searchParams);
             }}
           >
             添加
@@ -55,9 +56,8 @@ export const BottomPanel = () => {
           },
         ]}
         onChange={(key) => {
-          updateQueryParams({
-            treePanel: key as TreePanel,
-          });
+          searchParams.set("treePanel", key);
+          setSearchParams(searchParams);
         }}
       />
       {render()}
