@@ -62,41 +62,43 @@ export const actions = {
     nodeId: string,
     nodeList: NodeData[] | SlotsChildren = designTreeData.nodeData
   ): NodeData | null => {
-    if (Array.isArray(nodeList)) {
-      for (const node of nodeList) {
-        if (node.id === nodeId) {
-          return node;
-        }
-        if (node.children) {
-          const found = actions.findNodeById(
-            nodeId,
-            node.children as SlotsChildren
-          );
-          if (found) {
-            return found;
-          }
-        }
-      }
-    } else {
-      for (const key in nodeList) {
-        const childrenArray = nodeList[key] as NodeData[];
-        for (const node of childrenArray) {
+    const iterateNodeList = (
+      nodeList: NodeData[] | SlotsChildren
+    ): NodeData | null => {
+      if (Array.isArray(nodeList)) {
+        for (const node of nodeList) {
           if (node.id === nodeId) {
             return node;
           }
           if (node.children) {
-            const found = actions.findNodeById(
-              nodeId,
-              node.children as SlotsChildren
-            );
+            const found = iterateNodeList(node.children as SlotsChildren);
             if (found) {
               return found;
             }
           }
         }
+      } else {
+        for (const key in nodeList) {
+          const childrenArray = nodeList[key];
+          if (Array.isArray(childrenArray)) {
+            for (const node of childrenArray) {
+              if (node.id === nodeId) {
+                return node;
+              }
+              if (node.children) {
+                const found = iterateNodeList(node.children as SlotsChildren);
+                if (found) {
+                  return found;
+                }
+              }
+            }
+          }
+        }
       }
-    }
-    return null;
+      return null;
+    };
+
+    return iterateNodeList(nodeList);
   },
   /** 选择 node */
   selectNode: (ids: string[]) => {
