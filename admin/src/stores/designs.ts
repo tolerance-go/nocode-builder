@@ -15,11 +15,12 @@ import { proxyWithHistory } from "valtio-history";
 const designTreeData = proxyWithHistory<{
   nodeData: NodeData[];
 }>({
-  nodeData: [],
+  nodeData: store.get("designTreeData", []),
 });
 
 subscribe(designTreeData, () => {
   globalEventBus.emit("nodeTreeChange", designTreeData.value.nodeData);
+  store.set("designTreeData", designTreeData.value.nodeData);
 });
 
 /** 当前悬停的组件 id 集合 */

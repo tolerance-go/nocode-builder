@@ -1,5 +1,4 @@
 import { components } from "@/configs/components";
-import { exampleNodeData } from "@/configs/designs";
 import { slotBackground } from "@/configs/other";
 import { globalEventBus } from "@/globals/eventBus";
 import useLatest from "@/hooks/useLatest";
@@ -551,10 +550,6 @@ export const Stage: React.FC = () => {
         : null,
     });
   }, [highlightedSlot]);
-
-  useEffect(() => {
-    stores.designs.actions.initTreeData(exampleNodeData);
-  }, []);
 
   useEffect(() => {
     return globalEventBus.on(
