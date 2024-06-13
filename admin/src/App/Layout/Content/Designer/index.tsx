@@ -12,6 +12,7 @@ export const Designer = () => {
         <Space>
           <Button
             size="small"
+            type="text"
             onClick={() => {
               designTreeData.undo();
             }}
@@ -20,6 +21,7 @@ export const Designer = () => {
           </Button>
           <Button
             size="small"
+            type="text"
             onClick={() => {
               designTreeData.redo();
             }}
