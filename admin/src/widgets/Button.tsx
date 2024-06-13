@@ -4,17 +4,15 @@ import { isEmpty } from "@/utils/isEmpty";
 import { Button as AntdButton, ButtonProps } from "antd";
 import React from "react";
 
-type Settings = {
+export type ButtonSettings = {
   text: string;
   type: ButtonProps["type"];
 };
 
-export const Button: React.FC<DesignableComponentProps<React.ReactNode>> = ({
-  node,
-  children,
-  ...rest
-}) => {
-  const { text, type } = node.settings as Settings;
+export const Button: React.FC<
+  DesignableComponentProps<React.ReactNode, ButtonSettings>
+> = ({ node, children, ...rest }) => {
+  const { text, type } = node.settings;
 
   return (
     <div

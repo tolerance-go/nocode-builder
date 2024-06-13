@@ -1,4 +1,4 @@
-import { ComponentType } from "@/types";
+import { ComponentType, DesignableComponentProps } from "@/types";
 import { Button } from "@/widgets/Button";
 import { Custom } from "@/widgets/Custom";
 import { CustomWithSlots } from "@/widgets/CustomWithSlots";
@@ -13,7 +13,7 @@ export const components: {
   text: "text",
   Custom,
   CustomWithSlots,
-  Button,
+  Button: Button as React.FC<DesignableComponentProps<React.ReactNode>>,
   Table,
   Flex,
 };

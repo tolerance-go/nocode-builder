@@ -15,7 +15,7 @@ export type SlotsChildren = {
   [key: string]: NodeData[] | NodeData | NodePlainChild;
 };
 
-export type NodeData = {
+export type NodeData<Settings = StaticProps> = {
   id: string;
   elementType: string;
   children?: SlotsChildren | NodeData[] | NodePlainChild;
@@ -25,11 +25,14 @@ export type NodeData = {
    */
   fromWidgetId: string;
   /** 表单配置数据 */
-  settings: StaticProps;
+  settings: Settings;
 };
 
 export type DesignableComponentProps<
-  Children = React.ReactNode | Record<string, React.ReactNode>
+  Children extends React.ReactNode | Record<string, React.ReactNode> =
+    | React.ReactNode
+    | Record<string, React.ReactNode>,
+  Settings extends StaticProps = StaticProps
 > = {
   style: React.CSSProperties;
   onMouseEnter: React.MouseEventHandler;
@@ -38,7 +41,7 @@ export type DesignableComponentProps<
   onMouseOver: React.MouseEventHandler;
   onClick: React.MouseEventHandler;
   children?: Children;
-  node: DeepReadonly<NodeData>;
+  node: DeepReadonly<NodeData<Settings>>;
   ["data-node-id"]: string;
 };
 
