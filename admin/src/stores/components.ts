@@ -120,9 +120,9 @@ const windowDisplayComponents = proxy<{
   },
 });
 
-export const states = {
+export const states = proxy({
   windowDisplayComponents,
-};
+});
 
 export const actions = {
   /** 根据 id 找到 widget */

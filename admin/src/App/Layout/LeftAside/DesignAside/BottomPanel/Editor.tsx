@@ -73,7 +73,7 @@ const Editor = () => {
   useEffect(() => {
     if (editorRef.current) {
       editorInstance.current = monaco.editor.create(editorRef.current, {
-        value: JSON.stringify(designTreeData.value.nodeData, null, 2),
+        value: JSON.stringify(designTreeData.nodeData, null, 2),
         language: "json", // 使用自定义DSL语言
         theme: "vs-dark",
       });

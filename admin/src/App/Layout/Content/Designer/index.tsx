@@ -14,7 +14,7 @@ export const Designer = () => {
             size="small"
             type="text"
             onClick={() => {
-              designTreeData.undo();
+              // designTreeData.undo();
             }}
           >
             回撤
@@ -23,7 +23,7 @@ export const Designer = () => {
             size="small"
             type="text"
             onClick={() => {
-              designTreeData.redo();
+              // designTreeData.redo();
             }}
           >
             重做

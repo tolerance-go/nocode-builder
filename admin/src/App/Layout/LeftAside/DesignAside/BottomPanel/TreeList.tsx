@@ -35,7 +35,7 @@ const TreeList: React.FC = () => {
   };
 
   useEffect(() => {
-    const treeDataConverted = designTreeData.value.nodeData.map((item) =>
+    const treeDataConverted = designTreeData.nodeData.map((item) =>
       convertNodeDataToTreeData(item)
     );
     setTreeData(treeDataConverted);

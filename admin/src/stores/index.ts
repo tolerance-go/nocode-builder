@@ -1,28 +1,16 @@
-import * as navs from "./navs";
 import * as designs from "./designs";
 import * as components from "./components";
 
 import { devtools } from "valtio/utils";
 
-devtools(navs.states.currentSystemPaths, {
-  name: "navs.states.currentSystemPaths",
+devtools(designs.states, {
+  name: "designs.states",
   enabled: true,
 });
 
-devtools(designs.states.designTreeData, {
-  name: "designs.states.designTreeData",
+devtools(components.states, {
+  name: "components.states",
   enabled: true,
 });
 
-devtools(designs.states.hoveredComponents, {
-  name: "designs.states.hoveredComponents",
-  enabled: true,
-});
-
-
-devtools(components.states.windowDisplayComponents, {
-  name: "components.states.windowDisplayComponents",
-  enabled: true,
-});
-
-export default { navs, designs, components };
+export default { designs, components };
