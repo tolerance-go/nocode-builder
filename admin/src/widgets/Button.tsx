@@ -3,19 +3,18 @@ import { DesignableComponentProps } from "@/types";
 import { isEmpty } from "@/utils/isEmpty";
 import { Button as AntdButton, ButtonProps } from "antd";
 
-export const Button = ({
+type Settings = {
+  text: string;
+  type: ButtonProps["type"];
+};
+
+export const Button: React.FC<DesignableComponentProps> = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   node,
   children,
   ...rest
-}: DesignableComponentProps<{
-  children: React.ReactNode;
-  settings: {
-    text: string;
-    type: ButtonProps["type"];
-  };
-}>) => {
-  const { text, type } = node.settings ?? {};
+}) => {
+  const { text, type } = node.settings as Settings;
 
   return (
     <div
@@ -27,10 +26,10 @@ export const Button = ({
     >
       <AntdButton type={type}>
         {text ||
-          (isEmpty(children) ? (
+          (isEmpty(children as React.ReactNode) ? (
             <SlotPlaceholder parentNode={node}></SlotPlaceholder>
           ) : (
-            children
+            (children as React.ReactNode)
           ))}
       </AntdButton>
     </div>

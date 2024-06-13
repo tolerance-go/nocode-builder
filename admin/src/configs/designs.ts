@@ -5,6 +5,8 @@ export const exampleNodeData: NodeData[] = [
     id: "1",
     elementType: "div",
     staticProps: { style: { background: "lightblue", padding: "20px" } },
+    fromWidgetId: "component-test-Custom",
+    settings: {},
     children: [
       {
         id: "1-1",
@@ -12,6 +14,8 @@ export const exampleNodeData: NodeData[] = [
         staticProps: {
           style: { background: "blue", width: "100px", height: "100px" },
         },
+        fromWidgetId: "component-test-Custom",
+        settings: {},
       },
       {
         id: "1-2",
@@ -24,6 +28,8 @@ export const exampleNodeData: NodeData[] = [
             padding: "30px",
           },
         },
+        fromWidgetId: "component-test-Custom",
+        settings: {},
         children: [
           {
             id: "1-2-1",
@@ -31,6 +37,8 @@ export const exampleNodeData: NodeData[] = [
             staticProps: {
               style: { background: "yellow", width: "100px", height: "100px" },
             },
+            fromWidgetId: "component-test-Custom",
+            settings: {},
           },
           {
             id: "1-2-2",
@@ -38,6 +46,8 @@ export const exampleNodeData: NodeData[] = [
             staticProps: {
               style: { background: "red", width: "100px", height: "100px" },
             },
+            fromWidgetId: "component-test-Custom",
+            settings: {},
           },
           {
             id: "1-2-3",
@@ -50,6 +60,8 @@ export const exampleNodeData: NodeData[] = [
                 padding: "10px",
               },
             },
+            fromWidgetId: "component-test-Custom",
+            settings: {},
             children: [
               {
                 id: "1-2-3-1",
@@ -61,6 +73,8 @@ export const exampleNodeData: NodeData[] = [
                     height: "100px",
                   },
                 },
+                fromWidgetId: "component-test-Custom",
+                settings: {},
               },
             ],
           },
@@ -75,6 +89,8 @@ export const exampleNodeData: NodeData[] = [
                 padding: "10px",
               },
             },
+            fromWidgetId: "component-test-Custom",
+            settings: {},
             children: {
               slot0: {
                 id: "1-2-4-1",
@@ -86,6 +102,8 @@ export const exampleNodeData: NodeData[] = [
                     height: "100px",
                   },
                 },
+                fromWidgetId: "component-test-Custom",
+                settings: {},
               },
             },
           },

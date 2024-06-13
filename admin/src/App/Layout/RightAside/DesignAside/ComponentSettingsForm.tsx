@@ -1,18 +1,22 @@
 import SettingsForm from "@/components/SettingsForm";
 import stores from "@/stores";
-import { NodeData } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { Empty, Form } from "antd";
 import React, { useLayoutEffect } from "react";
 import { useSnapshot } from "valtio";
 
-const ComponentSettingsFormCoreCore: React.FC<{
-  selectedNodeData: NodeData;
-  fromWidgetId: string;
-}> = ({ selectedNodeData, fromWidgetId }) => {
+const ComponentSettingsFormCore: React.FC<{
+  uniqueSelectedId: string;
+}> = ({ uniqueSelectedId }) => {
+  const selectedNodeData =
+    stores.designs.actions.findNodeById(uniqueSelectedId);
+
+  ensure(!!selectedNodeData, "selectedNodeData 不应该不存在。");
+
   const [form] = Form.useForm();
-  const selectedNodeFromWidget =
-    stores.components.actions.findWidgetById(fromWidgetId);
+  const selectedNodeFromWidget = stores.components.actions.findWidgetById(
+    selectedNodeData.fromWidgetId
+  );
 
   /**
    * antd 的 form 的setFieldsValue  不会触发 onValuesChange
@@ -34,26 +38,6 @@ const ComponentSettingsFormCoreCore: React.FC<{
         settings={selectedNodeFromWidget?.settingsForm ?? []}
       />
     </div>
-  );
-};
-
-const ComponentSettingsFormCore: React.FC<{
-  uniqueSelectedId: string;
-}> = ({ uniqueSelectedId }) => {
-  const selectedNodeData =
-    stores.designs.actions.findNodeById(uniqueSelectedId);
-
-  ensure(!!selectedNodeData, "selectedNodeData 不应该不存在。");
-
-  if (!selectedNodeData.fromWidgetId) {
-    return <div></div>;
-  }
-
-  return (
-    <ComponentSettingsFormCoreCore
-      selectedNodeData={selectedNodeData}
-      fromWidgetId={selectedNodeData.fromWidgetId}
-    />
   );
 };
 
