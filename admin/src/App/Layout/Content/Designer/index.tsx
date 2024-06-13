@@ -3,6 +3,7 @@ import { exampleNodeData } from "@/configs/designs";
 import { slotBackground } from "@/configs/other";
 import { globalEventBus } from "@/globals/eventBus";
 import useLatest from "@/hooks/useLatest";
+import { useQueryParams } from "@/hooks/useQueryParams";
 import stores from "@/stores";
 import {
   NodeData,
@@ -213,6 +214,8 @@ type HighlightedSlotMeta = {
 };
 
 export const Designer: React.FC = () => {
+  const [, updateQueryParams] = useQueryParams();
+
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
   const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] = useState<
     [DeepReadonly<NodeData>, HTMLElement] | null
@@ -228,6 +231,7 @@ export const Designer: React.FC = () => {
     useState<RectVisualPosition | null>(null);
   const [highlightedSlot, setHighlightedSlot] =
     useState<HighlightedSlotMeta | null>(null);
+  const selectedNodes = useSnapshot(stores.designs.states.selectedNodes);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const PROXIMITY_THRESHOLD = 20; // Define the proximity threshold
@@ -563,6 +567,12 @@ export const Designer: React.FC = () => {
       handleDraggingEnd();
     });
   }, []);
+
+  useEffect(() => {
+    updateQueryParams({
+      designAsideType: "settings",
+    });
+  }, [selectedNodes.uniqueSelectedId]);
 
   return (
     <div style={{ position: "relative" }} ref={containerRef}>
