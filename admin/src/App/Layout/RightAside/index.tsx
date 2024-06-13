@@ -14,7 +14,7 @@ export const RightAside = () => {
   // };
 
   return (
-    <aside className={"w-[400px] border-l"}>
+    <aside className={"w-[400px] border-l h-[100%]"}>
       <Route path="/apps/:id/design" element={<DesignAside />}></Route>
     </aside>
   );

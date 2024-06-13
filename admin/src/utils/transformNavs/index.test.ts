@@ -59,7 +59,7 @@ describe("transformNavs", () => {
                   ],
                 },
               ],
-              "pipelines",
+              "bluemap",
               "dashboard",
               "settings",
             ],
@@ -75,7 +75,7 @@ describe("transformNavs", () => {
       apps: "应用",
       data: "数据",
       design: "设计",
-      pipelines: "管道",
+      bluemap: "蓝图",
       dashboard: "仪表板",
       settings: "设置",
       users: "用户",
@@ -105,8 +105,8 @@ describe("transformNavs", () => {
                   "label": "设计",
                 },
                 {
-                  "key": "pipelines",
-                  "label": "管道",
+                  "key": "bluemap",
+                  "label": "蓝图",
                 },
                 {
                   "key": "dashboard",

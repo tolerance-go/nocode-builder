@@ -17,8 +17,8 @@ describe("findTabItems", () => {
               label: "数据",
             },
             {
-              key: "pipelines",
-              label: "管道",
+              key: "bluemap",
+              label: "蓝图",
             },
             {
               key: "dashboard",
@@ -130,8 +130,8 @@ describe("findTabItems", () => {
         label: "数据",
       },
       {
-        key: "pipelines",
-        label: "管道",
+        key: "bluemap",
+        label: "蓝图",
       },
       {
         key: "dashboard",
@@ -163,8 +163,8 @@ describe("findTabItems", () => {
         label: "数据",
       },
       {
-        key: "pipelines",
-        label: "管道",
+        key: "bluemap",
+        label: "蓝图",
       },
       {
         key: "dashboard",
@@ -186,7 +186,7 @@ describe("findTabItems", () => {
       },
       {
         type: "nav",
-        value: "pipelines",
+        value: "bluemap",
       },
     ];
     const result = findTabItems(navData, path);
@@ -196,8 +196,8 @@ describe("findTabItems", () => {
         label: "数据",
       },
       {
-        key: "pipelines",
-        label: "管道",
+        key: "bluemap",
+        label: "蓝图",
       },
       {
         key: "dashboard",

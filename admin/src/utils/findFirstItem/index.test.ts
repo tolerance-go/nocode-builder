@@ -17,8 +17,8 @@ describe("findFirstItem 函数测试", () => {
               label: "数据",
             },
             {
-              key: "pipelines",
-              label: "管道",
+              key: "bluemap",
+              label: "蓝图",
             },
             {
               key: "dashboard",

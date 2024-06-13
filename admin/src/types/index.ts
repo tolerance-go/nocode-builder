@@ -98,8 +98,10 @@ type WidgetBase<T extends string> = {
   name: string;
   /** 标签 */
   tags: string[];
-
+  /** 默认静态配置 */
   defaultStaticProps?: StaticProps;
+  /** 表单配置 */
+  settingForm?: [][];
 };
 
 export type ComponentWidget = WidgetBase<"component">;

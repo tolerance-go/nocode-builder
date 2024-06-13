@@ -65,8 +65,8 @@ export const appSubNavs = [
     label: "设计",
   },
   {
-    key: "pipelines",
-    label: "管道",
+    key: "bluemap",
+    label: "蓝图",
   },
   {
     key: "dashboard",

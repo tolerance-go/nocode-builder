@@ -16,7 +16,7 @@
 system/[
   apps/[
     data/[models, tables], 
-    design, pipelines, dashboard, settings
+    design, bluemap, dashboard, settings
   ], 
   users, plugins, settings
 ] 的层级进行管理
