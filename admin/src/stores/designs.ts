@@ -442,8 +442,22 @@ export const actions = {
         }
       } else {
         for (const key in nodeList) {
-          const childrenArray = nodeList[key] as NodeData[];
-          for (const node of childrenArray) {
+          const children = nodeList[key];
+          if (Array.isArray(children)) {
+            for (const node of children) {
+              if (node.id === nodeId) {
+                node.settings = newSettings;
+                return true;
+              }
+              if (node.children) {
+                const updated = updateSettingsRecursive(
+                  node.children as SlotsChildren
+                );
+                if (updated) return true;
+              }
+            }
+          } else if (typeof children === "object" && children !== null) {
+            const node = children as NodeData;
             if (node.id === nodeId) {
               node.settings = newSettings;
               return true;
