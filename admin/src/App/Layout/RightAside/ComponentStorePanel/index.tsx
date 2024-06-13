@@ -3,9 +3,11 @@ import { ComponentStore } from "./ComponentStore";
 import stores from "@/stores";
 import { useQueryParams } from "@/hooks/useQueryParams";
 
+type SegmentedType = "component" | "section" | "template";
+
 export const ComponentStorePanel = () => {
   const [queryParams, updateQueryParams] = useQueryParams({
-    segmented: "component",
+    segmented: "component" as SegmentedType,
   });
 
   return (
@@ -21,7 +23,7 @@ export const ComponentStorePanel = () => {
           编辑器
         </Button>
       </div>
-      <Segmented
+      <Segmented<SegmentedType>
         options={[
           {
             label: "组件",
@@ -37,10 +39,10 @@ export const ComponentStorePanel = () => {
           },
         ]}
         block
-        value={queryParams.segmented ?? "component"}
+        value={queryParams.segmented}
         onChange={(val) =>
           updateQueryParams({
-            segmented: val ?? undefined,
+            segmented: val,
           })
         }
       />

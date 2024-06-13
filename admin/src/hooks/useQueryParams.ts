@@ -1,24 +1,21 @@
 import { useEffect, useState } from "react";
 
 // 自定义 Hook 来管理查询参数，支持泛型
-export const useQueryParams = <
-  D extends Record<string, string | undefined>,
-  T extends Record<keyof D, string | undefined>
->(
+export const useQueryParams = <D extends Record<string, string>>(
   defaultValues: Partial<D> = {}
 ): [
-  T & {
+  Partial<D> & {
     [key: string]: string | undefined;
   },
   (
-    newParams: T & {
+    newParams: Partial<D> & {
       [key: string]: string | undefined;
     }
   ) => void
 ] => {
-  const [queryParams, setQueryParams] = useState<Partial<T>>(() => {
+  const [queryParams, setQueryParams] = useState<Partial<D>>(() => {
     const params = new URLSearchParams(window.location.search);
-    const initialParams = Object.fromEntries(params) as Partial<T>;
+    const initialParams = Object.fromEntries(params) as Partial<D>;
     const combinedParams = { ...defaultValues, ...initialParams };
 
     // 如果 URL 中缺少默认值中的参数，将其添加到 URL 中
@@ -39,7 +36,7 @@ export const useQueryParams = <
   useEffect(() => {
     const handlePopState = () => {
       const params = new URLSearchParams(window.location.search);
-      const newParams = Object.fromEntries(params) as Partial<T>;
+      const newParams = Object.fromEntries(params) as Partial<D>;
       setQueryParams({ ...defaultValues, ...newParams });
     };
 
@@ -49,7 +46,7 @@ export const useQueryParams = <
     };
   }, []);
 
-  const updateQueryParams = (newParams: Partial<T>) => {
+  const updateQueryParams = (newParams: Partial<D>) => {
     const updatedParams = new URLSearchParams(window.location.search);
 
     Object.entries(newParams).forEach(([key, value]) => {
@@ -62,7 +59,7 @@ export const useQueryParams = <
 
     const newUrl = `${window.location.pathname}?${updatedParams.toString()}`;
     window.history.pushState({}, "", newUrl);
-    setQueryParams(Object.fromEntries(updatedParams) as Partial<T>);
+    setQueryParams(Object.fromEntries(updatedParams) as Partial<D>);
   };
 
   return [queryParams, updateQueryParams];
