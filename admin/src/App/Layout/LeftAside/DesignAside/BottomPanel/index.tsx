@@ -33,7 +33,7 @@ export const BottomPanel = () => {
         size={"small"}
         items={[
           {
-            label: "文件树",
+            label: "节点树",
             key: "tree",
           },
           {
