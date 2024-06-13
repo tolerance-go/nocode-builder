@@ -63,10 +63,12 @@ const RenderNode: React.FC<{
   const hoveredComponents = useSnapshot(
     stores.designs.states.hoveredComponents
   );
+  const selectedNodes = useSnapshot(stores.designs.states.selectedNodes);
   const dragging = useSnapshot(stores.designs.states.dragging);
+  const isSelected = selectedNodes.selectedIds.includes(node.id);
   const isDragging = dragging.draggingId === node.id;
 
-  const isHighlighted = hoveredComponents.ids.includes(node.id);
+  const isHighlighted = hoveredComponents.ids.includes(node.id) || isSelected;
 
   const handleMouseEnter = () => {
     stores.designs.actions.switchHoveredComponent(node.id, true);
@@ -106,6 +108,11 @@ const RenderNode: React.FC<{
     stores.designs.actions.stopDragging();
 
     onDraggingEnd();
+  };
+
+  const handleClick = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    stores.designs.actions.selectNode([node.id]);
   };
 
   useEffect(() => {
@@ -184,13 +191,16 @@ const RenderNode: React.FC<{
         ? "#eee"
         : (node.staticProps.style?.background as string),
       border: isHighlighted
-        ? "1px solid blue"
+        ? isSelected
+          ? "2px solid blue"
+          : "1px solid blue"
         : (node.staticProps.style?.border as string), // 这里使用简单的边框来高亮，可以根据需求调整
     },
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
     onMouseDown: handleMouseDown,
     onMouseOver: handleMouseOver,
+    onClick: handleClick,
     children: getChildren(),
     node,
     ["data-node-id"]: node.id,

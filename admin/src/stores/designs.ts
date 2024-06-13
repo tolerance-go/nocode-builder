@@ -36,8 +36,12 @@ const dragging = proxy<{
 /** 选中的组件 */
 const selectedNodes = proxy<{
   selectedIds: string[];
+  uniqueSelectedId: undefined | string;
 }>({
   selectedIds: [],
+  get uniqueSelectedId() {
+    return this.selectedIds[0];
+  },
 });
 
 export const states = {

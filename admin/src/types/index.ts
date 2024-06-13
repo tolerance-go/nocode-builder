@@ -26,6 +26,7 @@ export type DesignableComponentProps = {
   onMouseLeave: React.MouseEventHandler;
   onMouseDown: React.MouseEventHandler;
   onMouseOver: React.MouseEventHandler;
+  onClick: React.MouseEventHandler;
   children?: React.ReactNode | Record<string, React.ReactNode>;
   node: DeepReadonly<NodeData>;
   ["data-node-id"]: string;
