@@ -1,4 +1,4 @@
-import Route from "@/components/Route";
+import { Route, Routes } from "react-router-dom";
 import { DesignAside } from "./DesignAside";
 
 export const RightAside = () => {
@@ -15,7 +15,9 @@ export const RightAside = () => {
 
   return (
     <aside className={"w-[400px] border-l h-[100%]"}>
-      <Route path="/apps/:id/design" element={<DesignAside />}></Route>
+      <Routes>
+        <Route path="/apps/:id/design" element={<DesignAside />}></Route>
+      </Routes>
     </aside>
   );
 };

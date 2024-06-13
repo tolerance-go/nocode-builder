@@ -1,12 +1,12 @@
-import Route from "@/components/Route";
 import "@antv/s2-react/dist/style.min.css";
+import { useEffect } from "react";
+import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "./Layout";
 import "./index.css";
-import useNavigate from "@/hooks/useNavigate";
-import { useEffect } from "react";
 
 function App() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -14,7 +14,11 @@ function App() {
     }
   }, []);
 
-  return <Route path="/*" element={<Layout />}></Route>;
+  return (
+    <Routes>
+      <Route path="/*" element={<Layout />}></Route>
+    </Routes>
+  );
 }
 
 export default App;
