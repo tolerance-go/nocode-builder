@@ -4,9 +4,9 @@ import stores from "@/stores";
 import { useQueryParams } from "@/hooks/useQueryParams";
 
 export const ComponentStorePanel = () => {
-  const [queryParams, updateQueryParams] = useQueryParams<{
-    segmented: string;
-  }>();
+  const [queryParams, updateQueryParams] = useQueryParams({
+    segmented: "component",
+  });
 
   return (
     <div className="flex flex-col h-[100%]">
