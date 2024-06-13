@@ -43,6 +43,9 @@ importers:
       valtio:
         specifier: ^1.13.2
         version: 1.13.2(@types/react@18.3.3)(react@18.3.1)
+      valtio-history:
+        specifier: ^0.3.3
+        version: 0.3.3(valtio@1.13.2(@types/react@18.3.3)(react@18.3.1))
     devDependencies:
       '@rollup/plugin-alias':
         specifier: ^5.1.0
@@ -2180,6 +2183,11 @@ packages:
 
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  valtio-history@0.3.3:
+    resolution: {integrity: sha512-Jg+cvMt6BY1w0Rwf4TQDhOnqHIjdUgzv0ad3OKUxjusY3PWpRdFgJfCi5G5tcijpp1IscJJASrThBT7/LbKPXg==}
+    peerDependencies:
+      valtio: '>=1.0.0'
 
   valtio@1.13.2:
     resolution: {integrity: sha512-Qik0o+DSy741TmkqmRfjq+0xpZBXi/Y6+fXZLn0xNF1z/waFMbE3rkivv5Zcf9RrMUp6zswf2J7sbh2KBlba5A==}
@@ -4572,6 +4580,11 @@ snapshots:
       react: 18.3.1
 
   util-deprecate@1.0.2: {}
+
+  valtio-history@0.3.3(valtio@1.13.2(@types/react@18.3.3)(react@18.3.1)):
+    dependencies:
+      tslib: 2.6.3
+      valtio: 1.13.2(@types/react@18.3.3)(react@18.3.1)
 
   valtio@1.13.2(@types/react@18.3.3)(react@18.3.1):
     dependencies:
