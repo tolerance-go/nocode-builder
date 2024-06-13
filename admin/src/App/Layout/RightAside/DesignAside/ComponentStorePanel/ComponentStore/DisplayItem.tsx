@@ -14,7 +14,7 @@ const gridStyle: React.CSSProperties = {
 const nodeDataTpl = {
   staticProps: {
     style: {
-      background: "lightblue",
+      // background: "lightblue",
     },
   },
 };

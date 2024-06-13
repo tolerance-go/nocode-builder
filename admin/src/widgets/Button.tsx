@@ -1,21 +1,22 @@
+import { SlotPlaceholder } from "@/components/SlotPlaceholder";
 import { DesignableComponentProps } from "@/types";
-import { ensure } from "@/utils/ensure";
-import { isPlainObject } from "@/utils/isPlainObject";
-import { Button as AntdButton } from "antd";
+import { isEmpty } from "@/utils/isEmpty";
+import { Button as AntdButton, ButtonProps } from "antd";
 
 export const Button = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   node,
   children,
   ...rest
-}: DesignableComponentProps) => {
-  ensure(!isPlainObject(children), "children 类型应该是 ReactNode。");
+}: DesignableComponentProps<{
+  children: React.ReactNode;
+  settings: {
+    text: string;
+    type: ButtonProps["type"];
+  };
+}>) => {
+  const { text, type } = node.settings ?? {};
 
-  const text = node.settings?.text;
-  ensure(
-    text === undefined || typeof text === "string",
-    "node.settings?.text 类型必须是 string。"
-  );
   return (
     <div
       {...rest}
@@ -24,7 +25,14 @@ export const Button = ({
         ...rest.style,
       }}
     >
-      <AntdButton>{text ?? children}</AntdButton>
+      <AntdButton type={type}>
+        {text ||
+          (isEmpty(children) ? (
+            <SlotPlaceholder parentNode={node}></SlotPlaceholder>
+          ) : (
+            children
+          ))}
+      </AntdButton>
     </div>
   );
 };
