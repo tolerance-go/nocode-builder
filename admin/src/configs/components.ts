@@ -1,4 +1,4 @@
-import { ComponentType, DesignableComponentProps } from "@/types";
+import { ComponentType } from "@/types";
 import { Button } from "@/widgets/Button";
 import { Custom } from "@/widgets/Custom";
 import { CustomWithSlots } from "@/widgets/CustomWithSlots";
@@ -11,9 +11,9 @@ export const components: {
   div: "div",
   span: "span",
   text: "text",
-  Custom,
-  CustomWithSlots,
-  Button: Button as React.FC<DesignableComponentProps<React.ReactNode>>,
-  Table,
-  Flex,
+  Custom: Custom as ComponentType,
+  CustomWithSlots: CustomWithSlots as ComponentType,
+  Button: Button as ComponentType,
+  Table: Table as ComponentType,
+  Flex: Flex as ComponentType,
 };

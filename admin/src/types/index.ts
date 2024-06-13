@@ -6,7 +6,7 @@ export type StaticPropsValue = string | number | boolean | null | undefined;
 export type StaticPropsArrayValue = StaticPropsValue[];
 
 export type StaticProps = {
-  [key: string]: StaticPropsValue | StaticPropsArrayValue | StaticProps;
+  [key: string]: StaticPropsValue | StaticProps;
 };
 
 export type NodePlainChild = string | number | boolean | null | undefined;
@@ -45,10 +45,7 @@ export type DesignableComponentProps<
   ["data-node-id"]: string;
 };
 
-export type ComponentType =
-  | React.FC<DesignableComponentProps<React.ReactNode>>
-  | React.FC<DesignableComponentProps<Record<string, React.ReactNode>>>
-  | string;
+export type ComponentType = React.FC<DesignableComponentProps> | string;
 
 export type InsertionPositions = {
   top: boolean;
