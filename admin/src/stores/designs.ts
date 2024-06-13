@@ -71,25 +71,45 @@ export const actions = {
             return node;
           }
           if (node.children) {
-            const found = iterateNodeList(node.children as SlotsChildren);
+            const found = iterateNodeList(
+              node.children as NodeData[] | SlotsChildren
+            );
             if (found) {
               return found;
             }
           }
         }
-      } else {
+      } else if (nodeList && typeof nodeList === "object") {
         for (const key in nodeList) {
-          const childrenArray = nodeList[key];
-          if (Array.isArray(childrenArray)) {
-            for (const node of childrenArray) {
+          const childNode = nodeList[key];
+          if (Array.isArray(childNode)) {
+            for (const node of childNode) {
               if (node.id === nodeId) {
                 return node;
               }
               if (node.children) {
-                const found = iterateNodeList(node.children as SlotsChildren);
+                const found = iterateNodeList(
+                  node.children as NodeData[] | SlotsChildren
+                );
                 if (found) {
                   return found;
                 }
+              }
+            }
+          } else if (
+            childNode &&
+            typeof childNode === "object" &&
+            "id" in childNode
+          ) {
+            if (childNode.id === nodeId) {
+              return childNode;
+            }
+            if (childNode.children) {
+              const found = iterateNodeList(
+                childNode.children as NodeData[] | SlotsChildren
+              );
+              if (found) {
+                return found;
               }
             }
           }
@@ -98,8 +118,11 @@ export const actions = {
       return null;
     };
 
-    return iterateNodeList(nodeList);
+    return Array.isArray(nodeList) || (nodeList && typeof nodeList === "object")
+      ? iterateNodeList(nodeList)
+      : null;
   },
+
   /** 选择 node */
   selectNode: (ids: string[]) => {
     const uniqueIds = Array.from(new Set(ids));
