@@ -15,7 +15,15 @@ import { proxyWithHistory } from "valtio-history";
 const designTreeData = proxyWithHistory<{
   nodeData: NodeData[];
 }>({
-  nodeData: store.get("designTreeData", []),
+  nodeData: store.get("designTreeData", [
+    {
+      id: "1",
+      elementType: "div",
+      staticProps: { style: { background: "lightblue", padding: "20px" } },
+      fromWidgetId: "component-test-Custom",
+      settings: {},
+    },
+  ]),
 });
 
 subscribe(designTreeData, () => {
