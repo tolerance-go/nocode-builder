@@ -1,45 +1,58 @@
-import configs from "@/configs";
-import stores from "@/stores";
-import { findTabItems } from "@/utils/findTabItems";
+import Route from "@/components/Route";
+import { appSubNavs, navTabs } from "@/configs/navs";
+import useNavigate from "@/hooks/useNavigate";
+import useParams from "@/hooks/useParams";
 import { css } from "@emotion/css";
-import { Button, Divider, Space, Tabs, TabsProps, Typography } from "antd";
-import { useSnapshot } from "valtio";
+import { Button, Divider, Space, Tabs, Typography } from "antd";
 
 export const Navs = () => {
-  const onChange = (key: string) => {
-    stores.navs.actions.changeNav(key);
-  };
-
-  const currentSystemPaths = useSnapshot(stores.navs.states.currentSystemPaths);
-
-  const getItems = (): TabsProps["items"] => {
-    return findTabItems(configs.navs.topNavs, currentSystemPaths.paths);
-  };
-
-  const items: TabsProps["items"] = getItems();
+  const { feature, id, sub } = useParams("/:feature/:id/:sub");
+  const navigate = useNavigate();
 
   return (
     <Space split={<Divider type="vertical" />}>
-      {currentSystemPaths.paths.length > 1 && (
-        <Button type="text" onClick={() => stores.navs.actions.backNav()}>
+      {id && (
+        <Button type="text" onClick={() => navigate("/apps")}>
           回退
         </Button>
       )}
-      {currentSystemPaths.startsWithAppAndId && (
-        <Typography.Text type="secondary">
-          {currentSystemPaths.paths[1].value}
-        </Typography.Text>
-      )}
-      <Tabs
-        className={css`
-          .ant-tabs-nav {
-            margin-bottom: 0;
+      {id && <Typography.Text type="secondary">{id}</Typography.Text>}
+      <div>
+        <Route
+          path="/:feature"
+          element={
+            <Tabs
+              className={css`
+                .ant-tabs-nav {
+                  margin-bottom: 0;
+                }
+              `}
+              activeKey={feature}
+              items={navTabs}
+              onChange={(key: string) => {
+                navigate(`/${key}`);
+              }}
+            />
           }
-        `}
-        activeKey={currentSystemPaths.activeTopNavKey}
-        items={items}
-        onChange={onChange}
-      />
+        ></Route>
+        <Route
+          path="/:feature/:id/:sub"
+          element={
+            <Tabs
+              className={css`
+                .ant-tabs-nav {
+                  margin-bottom: 0;
+                }
+              `}
+              activeKey={sub}
+              items={appSubNavs}
+              onChange={(key: string) => {
+                navigate(`/${feature}/${id}/${key}`);
+              }}
+            />
+          }
+        ></Route>
+      </div>
     </Space>
   );
 };

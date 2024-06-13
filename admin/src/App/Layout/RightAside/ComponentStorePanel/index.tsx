@@ -1,12 +1,12 @@
 import { Button, Segmented } from "antd";
 import { ComponentStore } from "./ComponentStore";
 import stores from "@/stores";
-import { useSnapshot } from "valtio";
+import { useQueryParams } from "@/hooks/useQueryParams";
 
 export const ComponentStorePanel = () => {
-  const currentSystemPaths = useSnapshot(stores.navs.currentSystemPaths);
-
-  const activeKey = currentSystemPaths.segmentedView ?? "component";
+  const [queryParams, updateQueryParams] = useQueryParams<{
+    segmented: string;
+  }>();
 
   return (
     <div className="flex flex-col h-[100%]">
@@ -37,11 +37,15 @@ export const ComponentStorePanel = () => {
           },
         ]}
         block
-        value={activeKey}
-        onChange={(val) => stores.navs.actions.changeSegmentedView(val)}
+        value={queryParams.segmented ?? "component"}
+        onChange={(val) =>
+          updateQueryParams({
+            segmented: val ?? undefined,
+          })
+        }
       />
       <div className="flex-grow">
-        {activeKey === "component" && <ComponentStore />}
+        {queryParams.segmented === "component" && <ComponentStore />}
       </div>
     </div>
   );

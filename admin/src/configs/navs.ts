@@ -54,3 +54,46 @@ export const siteAgreementNavs: SiteAgreementNavs = [
 ];
 
 export const topNavs: NavItem[] = transformNavs(siteAgreementNavs, labelMap);
+
+export const appSubNavs = [
+  {
+    key: "data",
+    label: "数据",
+  },
+  {
+    key: "design",
+    label: "设计",
+  },
+  {
+    key: "pipelines",
+    label: "管道",
+  },
+  {
+    key: "dashboard",
+    label: "仪表板",
+  },
+  {
+    key: "settings",
+    label: "设置",
+  },
+];
+
+export const navTabs: NavItem[] = [
+  {
+    key: "apps",
+    label: "应用",
+    items: appSubNavs,
+  },
+  {
+    key: "users",
+    label: "用户",
+  },
+  {
+    key: "plugins",
+    label: "插件",
+  },
+  {
+    key: "settings",
+    label: "设置",
+  },
+];

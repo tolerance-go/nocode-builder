@@ -1,7 +1,7 @@
 import React from "react";
 import { LikeOutlined, MessageOutlined, StarOutlined } from "@ant-design/icons";
 import { Avatar, List, Space } from "antd";
-import stores from "@/stores";
+import useNavigate from "@/hooks/useNavigate";
 
 const data = Array.from({ length: 23 }).map((_, i) => ({
   id: i + "",
@@ -22,6 +22,7 @@ const IconText = ({ icon, text }: { icon: React.FC; text: string }) => (
 );
 
 const ItemList: React.FC = () => {
+  const navigate = useNavigate();
   return (
     <List
       itemLayout="vertical"
@@ -41,7 +42,7 @@ const ItemList: React.FC = () => {
       split={false}
       renderItem={(item) => (
         <List.Item
-          onClick={() => stores.navs.actions.selectApp(item.id)}
+          onClick={() => navigate(`${item.id}/data`)}
           className="hover:border-blue-400 rounded-md border hover:cursor-pointer mt-4 transition-all"
           key={item.title}
           actions={[

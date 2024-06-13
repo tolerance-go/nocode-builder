@@ -1,23 +1,14 @@
-import { useSnapshot } from "valtio";
-import { DataTable } from "./DataTable";
-import stores from "@/stores";
 import { AppList } from "./AppList";
+import { DataTable } from "./DataTable";
 import { Designer } from "./Designer";
+import Route from "@/components/Route";
 
 export const Content = () => {
-  const currentSystemPaths = useSnapshot(stores.navs.states.currentSystemPaths);
-
-  if (currentSystemPaths.isAppData) {
-    return <DataTable />;
-  }
-
-  if (currentSystemPaths.isAppDesign) {
-    return <Designer />;
-  }
-
-  if (currentSystemPaths.isApp) {
-    return <AppList />;
-  }
-
-  return <div>empty</div>;
+  return (
+    <>
+      <Route path="/apps" element={<AppList />}></Route>
+      <Route path="/apps/:id/data" element={<DataTable />}></Route>
+      <Route path="/apps/:id/design" element={<Designer />}></Route>
+    </>
+  );
 };

@@ -1,28 +1,23 @@
-import stores from "@/stores";
-import { useSnapshot } from "valtio";
-import { EditorPanel } from "./EditorPanel";
-import SettingsForm from "./SettingsForm";
+import Route from "@/components/Route";
 import { ComponentStorePanel } from "./ComponentStorePanel";
 
 export const RightAside = () => {
-  const currentSystemPaths = useSnapshot(stores.navs.states.currentSystemPaths);
+  // const render = () => {
+  //   if (currentSystemPaths.isAppDesign) {
+  //     if (currentSystemPaths.isAppDesignAndRightSideIsEditor) {
+  //       return <EditorPanel />;
+  //     }
 
-  if (currentSystemPaths.isApp) {
-    return null;
-  }
+  //     return <ComponentStorePanel />;
+  //   }
+  //   return <SettingsForm />;
+  // };
 
-  const render = () => {
-    if (currentSystemPaths.isAppDesign) {
-      if (currentSystemPaths.isAppDesignAndRightSideIsEditor) {
-        return <EditorPanel />;
-      }
-
-      return <ComponentStorePanel />;
-    }
-    return <SettingsForm />;
-  };
-
-  return <aside className={"w-[400px] border-l"}>{render()}</aside>;
+  return (
+    <aside className={"w-[400px] border-l"}>
+      <Route path="/apps/:id/design" element={<ComponentStorePanel />}></Route>
+    </aside>
+  );
 };
 
 export default RightAside;
