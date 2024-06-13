@@ -576,7 +576,7 @@ export const Stage: React.FC = () => {
 
   return (
     <div style={{ position: "relative" }} ref={containerRef}>
-      {designTreeData.nodeData.map((node) => (
+      {designTreeData.value.nodeData.map((node) => (
         <RenderNode
           key={node.id}
           node={node}

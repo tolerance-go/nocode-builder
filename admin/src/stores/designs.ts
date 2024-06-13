@@ -8,15 +8,16 @@ import {
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/types";
 import { proxy, subscribe } from "valtio";
+import { proxyWithHistory } from "valtio-history";
 
-const designTreeData = proxy<{
+const designTreeData = proxyWithHistory<{
   nodeData: NodeData[];
 }>({
   nodeData: [],
 });
 
 subscribe(designTreeData, () => {
-  globalEventBus.emit("nodeTreeChange", designTreeData.nodeData);
+  globalEventBus.emit("nodeTreeChange", designTreeData.value.nodeData);
 });
 
 /** 当前悬停的组件 id 集合 */
@@ -60,7 +61,7 @@ export const actions = {
   /** 根据 id 从树中查找 node */
   findNodeById: (
     nodeId: string,
-    nodeList: NodeData[] | SlotsChildren = designTreeData.nodeData
+    nodeList: NodeData[] | SlotsChildren = designTreeData.value.nodeData
   ): NodeData | null => {
     const iterateNodeList = (
       nodeList: NodeData[] | SlotsChildren
@@ -129,7 +130,7 @@ export const actions = {
     selectedNodes.selectedIds = uniqueIds;
   },
   replaceNodeData: (data: NodeData[]) => {
-    designTreeData.nodeData = data;
+    designTreeData.value.nodeData = data;
   },
   /** 切换悬停组件高亮 */
   switchHoveredComponent: (id: string, hovered: boolean) => {
@@ -152,7 +153,7 @@ export const actions = {
   },
   /** 初始化节点树 */
   initTreeData: (data: NodeData[]) => {
-    designTreeData.nodeData = data;
+    designTreeData.value.nodeData = data;
   },
   insertNode: (
     newNode: DeepReadonly<NodeData>,
@@ -161,7 +162,7 @@ export const actions = {
     slotName?: string
   ) => {
     return actions._insertNode(
-      designTreeData.nodeData,
+      designTreeData.value.nodeData,
       newNode,
       referenceNodeId,
       position,
@@ -407,8 +408,8 @@ export const actions = {
       return null;
     };
 
-    const fromParent = designTreeData.nodeData;
-    const targetParent = designTreeData.nodeData;
+    const fromParent = designTreeData.value.nodeData;
+    const targetParent = designTreeData.value.nodeData;
 
     const nodeRemoved = removeNode(fromParent, nodeToMove.id);
     if (nodeRemoved) {
@@ -474,7 +475,7 @@ export const actions = {
       return false;
     };
 
-    const success = updateSettingsRecursive(designTreeData.nodeData);
+    const success = updateSettingsRecursive(designTreeData.value.nodeData);
     ensure(success, "更新节点设置失败。");
   },
 };
