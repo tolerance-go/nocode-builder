@@ -52,6 +52,47 @@ export const states = {
 };
 
 export const actions = {
+  /** 根据 id 从树中查找 node */
+  findNodeById: (
+    nodeId: string,
+    nodeList: NodeData[] | SlotsChildren = designTreeData.nodeData
+  ): NodeData | null => {
+    if (Array.isArray(nodeList)) {
+      for (const node of nodeList) {
+        if (node.id === nodeId) {
+          return node;
+        }
+        if (node.children) {
+          const found = actions.findNodeById(
+            nodeId,
+            node.children as SlotsChildren
+          );
+          if (found) {
+            return found;
+          }
+        }
+      }
+    } else {
+      for (const key in nodeList) {
+        const childrenArray = nodeList[key] as NodeData[];
+        for (const node of childrenArray) {
+          if (node.id === nodeId) {
+            return node;
+          }
+          if (node.children) {
+            const found = actions.findNodeById(
+              nodeId,
+              node.children as SlotsChildren
+            );
+            if (found) {
+              return found;
+            }
+          }
+        }
+      }
+    }
+    return null;
+  },
   /** 选择 node */
   selectNode: (ids: string[]) => {
     const uniqueIds = Array.from(new Set(ids));

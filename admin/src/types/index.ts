@@ -1,3 +1,4 @@
+import { SettingConfig } from "@/components/SettingsForm";
 import { DeepReadonly } from "@/utils/types";
 export type DesignAsideType = "store" | "settings";
 
@@ -18,6 +19,10 @@ export type NodeData = {
   elementType: string;
   children?: SlotsChildren | NodeData[] | NodePlainChild;
   staticProps: StaticProps;
+  /**
+   * 从哪个 widget 创建
+   */
+  fromWidgetId?: string;
 };
 
 export type DesignableComponentProps = {
@@ -88,6 +93,8 @@ export type DocumentInsertionPosition =
 export type Widget = ComponentWidget | GroupWidget;
 
 type WidgetBase<T extends string> = {
+  /** 唯一标识 */
+  id: string;
   /** 部件类型 */
   type: T;
   /** 分组类型 */
@@ -101,7 +108,7 @@ type WidgetBase<T extends string> = {
   /** 默认静态配置 */
   defaultStaticProps?: StaticProps;
   /** 表单配置 */
-  settingForm?: [][];
+  settingsForm?: SettingConfig[];
 };
 
 export type ComponentWidget = WidgetBase<"component">;

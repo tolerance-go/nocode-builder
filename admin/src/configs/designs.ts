@@ -1,4 +1,4 @@
-import { NodeData } from "@/stores/designs";
+import { NodeData } from "@/types";
 
 export const exampleNodeData: NodeData[] = [
   {

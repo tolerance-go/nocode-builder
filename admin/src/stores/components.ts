@@ -24,14 +24,56 @@ const windowDisplayComponents = proxy<{
 }>({
   components: [
     {
+      id: "component-test-Custom",
+      type: "component",
+      groupType: "test",
+      elementType: "Custom",
+      name: "Custom",
+      tags: [],
+      defaultStaticProps: {},
+      settingsForm: [
+        { type: "text", label: "Name", name: "name", defaultValue: "John Doe" },
+        {
+          type: "select",
+          label: "Gender",
+          name: "gender",
+          defaultValue: "male",
+          options: ["male", "female"],
+        },
+        {
+          type: "checkbox",
+          label: "Agree to Terms",
+          name: "agree",
+          defaultValue: true,
+        },
+        {
+          type: "date",
+          label: "Date of Birth",
+          name: "dob",
+        },
+        { type: "number", label: "Age", name: "age", defaultValue: 30 },
+        {
+          type: "switch",
+          label: "Subscribe",
+          name: "subscribe",
+          defaultValue: false,
+        },
+      ],
+    },
+    {
+      id: "component-general-Button",
       type: "component",
       groupType: "general",
       elementType: "Button",
       name: "Button",
       tags: [],
       defaultStaticProps: {},
+      settingsForm: [
+        { type: "text", label: "Name", name: "name", defaultValue: "John Doe" },
+      ],
     },
     {
+      id: "component-dataDisplay-Table",
       type: "component",
       groupType: "dataDisplay",
       elementType: "Table",
@@ -39,6 +81,7 @@ const windowDisplayComponents = proxy<{
       tags: [],
     },
     {
+      id: "component-layout-Flex",
       type: "component",
       groupType: "layout",
       elementType: "Flex",
@@ -72,4 +115,32 @@ const windowDisplayComponents = proxy<{
 
 export const states = {
   windowDisplayComponents,
+};
+
+export const actions = {
+  /** 根据 id 找到 widget */
+  findWidgetById: (id: string): ComponentWidget | GroupWidget | null => {
+    // 从 components 中查找
+    for (const component of windowDisplayComponents.components) {
+      if (component.id === id) {
+        return component;
+      }
+    }
+
+    // 从 sections 中查找
+    for (const section of windowDisplayComponents.sections) {
+      if (section.id === id) {
+        return section;
+      }
+    }
+
+    // 从 templates 中查找
+    for (const template of windowDisplayComponents.templates) {
+      if (template.id === id) {
+        return template;
+      }
+    }
+
+    return null;
+  },
 };

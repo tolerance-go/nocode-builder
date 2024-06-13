@@ -1,6 +1,6 @@
 import { useQueryParams } from "@/hooks/useQueryParams";
 import { ComponentStorePanel } from "./ComponentStorePanel";
-import SettingsForm from "./SettingsForm";
+import ComponentSettingsForm from "./ComponentSettingsForm";
 import { DesignAsideType } from "@/types";
 
 export const DesignAside = () => {
@@ -13,6 +13,6 @@ export const DesignAside = () => {
   }
 
   if (query.designAsideType === "settings") {
-    return <SettingsForm />;
+    return <ComponentSettingsForm />;
   }
 };

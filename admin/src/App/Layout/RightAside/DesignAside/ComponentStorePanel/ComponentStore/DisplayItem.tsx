@@ -21,6 +21,7 @@ const nodeDataTpl = {
 const createNodeData = (component: DeepReadonly<ComponentWidget>): NodeData => {
   return {
     ...nodeDataTpl,
+    fromWidgetId: component.id,
     elementType: component.elementType,
     id: Math.random() + "",
     staticProps: {
