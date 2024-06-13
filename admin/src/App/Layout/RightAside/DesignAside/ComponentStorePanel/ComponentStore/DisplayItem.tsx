@@ -1,6 +1,7 @@
+import { SettingConfig } from "@/components/SettingsForm";
 import { globalEventBus } from "@/globals/eventBus";
 import stores from "@/stores";
-import { ComponentWidget, NodeData } from "@/types";
+import { ComponentWidget, NodeData, StaticProps } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { Card } from "antd";
 import { useEffect, useState } from "react";
@@ -16,6 +17,18 @@ const nodeDataTpl = {
       background: "lightblue",
     },
   },
+};
+
+const collectDefaultSettings = (
+  settingsForm: DeepReadonly<SettingConfig[]>
+): StaticProps => {
+  const settings: StaticProps = {};
+
+  settingsForm.forEach((config) => {
+    settings[config.name] = config.defaultValue ?? null;
+  });
+
+  return settings;
 };
 
 const createNodeData = (component: DeepReadonly<ComponentWidget>): NodeData => {
@@ -34,6 +47,8 @@ const createNodeData = (component: DeepReadonly<ComponentWidget>): NodeData => {
           : undefined),
       },
     },
+    /** 收集所有 component.settingsForm 内的 defaultValue 设置一次 settings */
+    settings: collectDefaultSettings(component.settingsForm ?? []),
   } as NodeData;
 };
 

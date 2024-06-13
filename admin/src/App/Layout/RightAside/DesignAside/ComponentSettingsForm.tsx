@@ -1,9 +1,61 @@
 import SettingsForm from "@/components/SettingsForm";
 import stores from "@/stores";
+import { NodeData } from "@/types";
 import { ensure } from "@/utils/ensure";
-import { Empty } from "antd";
-import React from "react";
+import { Empty, Form } from "antd";
+import React, { useLayoutEffect } from "react";
 import { useSnapshot } from "valtio";
+
+const ComponentSettingsFormCoreCore: React.FC<{
+  selectedNodeData: NodeData;
+  fromWidgetId: string;
+}> = ({ selectedNodeData, fromWidgetId }) => {
+  const [form] = Form.useForm();
+  const selectedNodeFromWidget =
+    stores.components.actions.findWidgetById(fromWidgetId);
+
+  /**
+   * antd 的 form 的setFieldsValue  不会触发 onValuesChange
+   */
+  useLayoutEffect(() => {
+    form.setFieldsValue(selectedNodeData.settings);
+  }, [form, selectedNodeData.settings]);
+
+  return (
+    <div className="p-2">
+      <SettingsForm
+        form={form}
+        onChange={(values) => {
+          stores.designs.actions.updateNodeSettings(
+            selectedNodeData.id,
+            values
+          );
+        }}
+        settings={selectedNodeFromWidget?.settingsForm ?? []}
+      />
+    </div>
+  );
+};
+
+const ComponentSettingsFormCore: React.FC<{
+  uniqueSelectedId: string;
+}> = ({ uniqueSelectedId }) => {
+  const selectedNodeData =
+    stores.designs.actions.findNodeById(uniqueSelectedId);
+
+  ensure(!!selectedNodeData, "selectedNodeData 不应该不存在。");
+
+  if (!selectedNodeData.fromWidgetId) {
+    return <div></div>;
+  }
+
+  return (
+    <ComponentSettingsFormCoreCore
+      selectedNodeData={selectedNodeData}
+      fromWidgetId={selectedNodeData.fromWidgetId}
+    />
+  );
+};
 
 const ComponentSettingsForm: React.FC = () => {
   const selectedNodes = useSnapshot(stores.designs.states.selectedNodes);
@@ -16,32 +68,10 @@ const ComponentSettingsForm: React.FC = () => {
     );
   }
 
-  const selectedNodeData = stores.designs.actions.findNodeById(
-    selectedNodes.uniqueSelectedId
-  );
-
-  ensure(!!selectedNodeData, "selectedNodeData 不应该不存在。");
-
-  if (!selectedNodeData.fromWidgetId) {
-    return <div></div>;
-  }
-
-  const selectedNodeFromWidget = stores.components.actions.findWidgetById(
-    selectedNodeData.fromWidgetId
-  );
-
   return (
-    <div className="p-2">
-      <SettingsForm
-        onChange={(values) => {
-          stores.designs.actions.updateNodeSettings(
-            selectedNodeData.id,
-            values
-          );
-        }}
-        settings={selectedNodeFromWidget?.settingsForm ?? []}
-      />
-    </div>
+    <ComponentSettingsFormCore
+      uniqueSelectedId={selectedNodes.uniqueSelectedId}
+    />
   );
 };
 
