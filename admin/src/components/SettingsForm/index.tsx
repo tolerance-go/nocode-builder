@@ -9,6 +9,7 @@ import {
   Switch,
 } from "antd";
 import { FormInstance } from "antd/lib/form";
+import { StaticPropsValue } from "@/types";
 
 const { Option } = Select;
 
@@ -59,9 +60,14 @@ export type SettingConfig =
 interface SettingsFormProps {
   settings: SettingConfig[];
   form?: FormInstance;
+  onChange?: (values: Record<string, StaticPropsValue>) => void;
 }
 
-const SettingsForm: React.FC<SettingsFormProps> = ({ settings, form }) => {
+const SettingsForm: React.FC<SettingsFormProps> = ({
+  settings,
+  form,
+  onChange,
+}) => {
   const renderFormItem = (setting: SettingConfig) => {
     switch (setting.type) {
       case "text":
@@ -90,7 +96,15 @@ const SettingsForm: React.FC<SettingsFormProps> = ({ settings, form }) => {
   };
 
   return (
-    <Form form={form} layout="vertical">
+    <Form
+      form={form}
+      onValuesChange={(_, values) => {
+        if (onChange) {
+          onChange(values);
+        }
+      }}
+      layout="vertical"
+    >
       {settings.map((setting) => (
         <Form.Item key={setting.name} label={setting.label} name={setting.name}>
           {renderFormItem(setting)}

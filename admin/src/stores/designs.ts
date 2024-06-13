@@ -1,5 +1,10 @@
 import { globalEventBus } from "@/globals/eventBus";
-import { DocumentInsertionPosition, NodeData, SlotsChildren } from "@/types";
+import {
+  DocumentInsertionPosition,
+  NodeData,
+  SlotsChildren,
+  StaticProps,
+} from "@/types";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/types";
 import { proxy, subscribe } from "valtio";
@@ -391,5 +396,46 @@ export const actions = {
       );
       ensure(success, "插入节点错误。");
     }
+  },
+  /** 更新节点设置 */
+  updateNodeSettings: (nodeId: string, newSettings: StaticProps) => {
+    const updateSettingsRecursive = (
+      nodeList: NodeData[] | SlotsChildren
+    ): boolean => {
+      if (Array.isArray(nodeList)) {
+        for (const node of nodeList) {
+          if (node.id === nodeId) {
+            node.settings = newSettings;
+            return true;
+          }
+          if (node.children) {
+            const updated = updateSettingsRecursive(
+              node.children as SlotsChildren
+            );
+            if (updated) return true;
+          }
+        }
+      } else {
+        for (const key in nodeList) {
+          const childrenArray = nodeList[key] as NodeData[];
+          for (const node of childrenArray) {
+            if (node.id === nodeId) {
+              node.settings = newSettings;
+              return true;
+            }
+            if (node.children) {
+              const updated = updateSettingsRecursive(
+                node.children as SlotsChildren
+              );
+              if (updated) return true;
+            }
+          }
+        }
+      }
+      return false;
+    };
+
+    const success = updateSettingsRecursive(designTreeData.nodeData);
+    ensure(success, "更新节点设置失败。");
   },
 };

@@ -69,7 +69,7 @@ const windowDisplayComponents = proxy<{
       tags: [],
       defaultStaticProps: {},
       settingsForm: [
-        { type: "text", label: "Name", name: "name", defaultValue: "John Doe" },
+        { type: "text", label: "Name", name: "text", defaultValue: "John Doe" },
       ],
     },
     {

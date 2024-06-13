@@ -32,7 +32,15 @@ const ComponentSettingsForm: React.FC = () => {
 
   return (
     <div className="p-2">
-      <SettingsForm settings={selectedNodeFromWidget?.settingsForm ?? []} />
+      <SettingsForm
+        onChange={(values) => {
+          stores.designs.actions.updateNodeSettings(
+            selectedNodeData.id,
+            values
+          );
+        }}
+        settings={selectedNodeFromWidget?.settingsForm ?? []}
+      />
     </div>
   );
 };

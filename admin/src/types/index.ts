@@ -23,6 +23,8 @@ export type NodeData = {
    * 从哪个 widget 创建
    */
   fromWidgetId?: string;
+  /** 表单配置数据 */
+  settings?: StaticProps;
 };
 
 export type DesignableComponentProps = {

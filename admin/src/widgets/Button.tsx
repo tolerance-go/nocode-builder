@@ -10,6 +10,12 @@ export const Button = ({
   ...rest
 }: DesignableComponentProps) => {
   ensure(!isPlainObject(children), "children 类型应该是 ReactNode。");
+
+  const text = node.settings?.text;
+  ensure(
+    text === undefined || typeof text === "string",
+    "node.settings?.text 类型必须是 string。"
+  );
   return (
     <div
       {...rest}
@@ -18,7 +24,7 @@ export const Button = ({
         ...rest.style,
       }}
     >
-      <AntdButton>{children}</AntdButton>
+      <AntdButton>{text ?? children}</AntdButton>
     </div>
   );
 };
