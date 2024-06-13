@@ -7,7 +7,7 @@ export const TopBar = () => {
 
       <Space>
         <span>搜索</span>
-        <span>添加 </span>
+        <span>添加</span>
       </Space>
     </Flex>
   );

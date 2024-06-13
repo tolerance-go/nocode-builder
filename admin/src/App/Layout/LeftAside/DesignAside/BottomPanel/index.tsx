@@ -3,6 +3,7 @@ import TreeList from "./TreeList";
 import { css } from "@emotion/css";
 import Editor from "./Editor";
 import { useSearchParams } from "react-router-dom";
+import { updateSearchParams } from "@/utils/updateSearchParams";
 
 type TreePanel = "tree" | "editor";
 
@@ -30,8 +31,11 @@ export const BottomPanel = () => {
             type="text"
             size="small"
             onClick={() => {
-              searchParams.set("designAsideType", "store");
-              setSearchParams(searchParams);
+              setSearchParams(
+                updateSearchParams(searchParams, {
+                  designAsideType: "store",
+                })
+              );
             }}
           >
             添加
@@ -56,8 +60,11 @@ export const BottomPanel = () => {
           },
         ]}
         onChange={(key) => {
-          searchParams.set("treePanel", key);
-          setSearchParams(searchParams);
+          setSearchParams(
+            updateSearchParams(searchParams, {
+              treePanel: key,
+            })
+          );
         }}
       />
       {render()}
