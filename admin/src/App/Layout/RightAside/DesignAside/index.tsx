@@ -1,5 +1,5 @@
 import { useQueryParams } from "@/hooks/useQueryParams";
-import { ComponentStorePanel } from "../ComponentStorePanel";
+import { ComponentStorePanel } from "./ComponentStorePanel";
 import SettingsForm from "./SettingsForm";
 import { DesignAsideType } from "@/types";
 
