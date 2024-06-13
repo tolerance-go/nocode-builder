@@ -2,14 +2,14 @@ import { SlotPlaceholder } from "@/components/SlotPlaceholder";
 import { DesignableComponentProps } from "@/types";
 import { isEmpty } from "@/utils/isEmpty";
 import { Button as AntdButton, ButtonProps } from "antd";
+import React from "react";
 
 type Settings = {
   text: string;
   type: ButtonProps["type"];
 };
 
-export const Button: React.FC<DesignableComponentProps> = ({
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const Button: React.FC<DesignableComponentProps<React.ReactNode>> = ({
   node,
   children,
   ...rest
@@ -26,10 +26,10 @@ export const Button: React.FC<DesignableComponentProps> = ({
     >
       <AntdButton type={type}>
         {text ||
-          (isEmpty(children as React.ReactNode) ? (
+          (isEmpty(children) ? (
             <SlotPlaceholder parentNode={node}></SlotPlaceholder>
           ) : (
-            (children as React.ReactNode)
+            children
           ))}
       </AntdButton>
     </div>

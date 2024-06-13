@@ -3,9 +3,10 @@ import { DeepReadonly } from "@/utils/types";
 export type DesignAsideType = "store" | "settings";
 
 export type StaticPropsValue = string | number | boolean | null | undefined;
+export type StaticPropsArrayValue = StaticPropsValue[];
 
 export type StaticProps = {
-  [key: string]: StaticPropsValue | StaticProps;
+  [key: string]: StaticPropsValue | StaticPropsArrayValue | StaticProps;
 };
 
 export type NodePlainChild = string | number | boolean | null | undefined;
@@ -27,19 +28,24 @@ export type NodeData = {
   settings: StaticProps;
 };
 
-export type DesignableComponentProps = {
+export type DesignableComponentProps<
+  Children = React.ReactNode | Record<string, React.ReactNode>
+> = {
   style: React.CSSProperties;
   onMouseEnter: React.MouseEventHandler;
   onMouseLeave: React.MouseEventHandler;
   onMouseDown: React.MouseEventHandler;
   onMouseOver: React.MouseEventHandler;
   onClick: React.MouseEventHandler;
-  children?: React.ReactNode | Record<string, React.ReactNode>;
+  children?: Children;
   node: DeepReadonly<NodeData>;
   ["data-node-id"]: string;
 };
 
-export type ComponentType = React.FC<DesignableComponentProps> | string;
+export type ComponentType =
+  | React.FC<DesignableComponentProps<React.ReactNode>>
+  | React.FC<DesignableComponentProps<Record<string, React.ReactNode>>>
+  | string;
 
 export type InsertionPositions = {
   top: boolean;
