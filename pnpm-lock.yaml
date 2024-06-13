@@ -46,6 +46,9 @@ importers:
       react-router-dom:
         specifier: ^6.23.1
         version: 6.23.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      store2:
+        specifier: ^2.14.3
+        version: 2.14.3
       valtio:
         specifier: ^1.13.2
         version: 1.13.2(@types/react@18.3.3)(react@18.3.1)
@@ -2057,6 +2060,9 @@ packages:
 
   std-env@3.7.0:
     resolution: {integrity: sha512-JPbdCEQLj1w5GilpiHAx3qJvFndqybBysA3qUOnznweH4QbNYUsW/ea8QzSrnh0vNsezMMw5bcVool8lM0gwzg==}
+
+  store2@2.14.3:
+    resolution: {integrity: sha512-4QcZ+yx7nzEFiV4BMLnr/pRa5HYzNITX2ri0Zh6sT9EyQHbBHacC6YigllUPU9X3D0f/22QCgfokpKs52YRrUg==}
 
   string-convert@0.2.1:
     resolution: {integrity: sha512-u/1tdPl4yQnPBjnVrmdLo9gtuLvELKsAoRapekWggdiQNvvvum+jYF329d84NAa660KQw7pB2n36KrIKVoXa3A==}
@@ -4475,6 +4481,8 @@ snapshots:
   stackback@0.0.2: {}
 
   std-env@3.7.0: {}
+
+  store2@2.14.3: {}
 
   string-convert@0.2.1: {}
 

@@ -1,19 +1,16 @@
 import SettingsForm from "@/components/SettingsForm";
 import stores from "@/stores";
-import { ensure } from "@/utils/ensure";
+import { NodeData } from "@/types";
+import { DeepReadonly } from "@/utils/types";
 import { Empty, Form } from "antd";
 import React, { useLayoutEffect } from "react";
 import { useSnapshot } from "valtio";
 
 const ComponentSettingsFormCore: React.FC<{
-  uniqueSelectedId: string;
-}> = ({ uniqueSelectedId }) => {
-  const selectedNodeData =
-    stores.designs.actions.findNodeById(uniqueSelectedId);
-
-  ensure(!!selectedNodeData, "selectedNodeData 不应该不存在。");
-
+  selectedNodeData: DeepReadonly<NodeData>;
+}> = ({ selectedNodeData }) => {
   const [form] = Form.useForm();
+
   const selectedNodeFromWidget = stores.components.actions.findWidgetById(
     selectedNodeData.fromWidgetId
   );
@@ -42,9 +39,11 @@ const ComponentSettingsFormCore: React.FC<{
 };
 
 const ComponentSettingsForm: React.FC = () => {
-  const selectedNodes = useSnapshot(stores.designs.states.selectedNodes);
+  const uniqueSelectedNodeData = useSnapshot(
+    stores.designs.states.uniqueSelectedNodeData
+  );
 
-  if (!selectedNodes.uniqueSelectedId) {
+  if (!uniqueSelectedNodeData.nodeData) {
     return (
       <div className="flex h-[100%] flex-col justify-center">
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="未选择元素" />
@@ -54,7 +53,7 @@ const ComponentSettingsForm: React.FC = () => {
 
   return (
     <ComponentSettingsFormCore
-      uniqueSelectedId={selectedNodes.uniqueSelectedId}
+      selectedNodeData={uniqueSelectedNodeData.nodeData}
     />
   );
 };

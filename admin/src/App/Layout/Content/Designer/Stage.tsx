@@ -14,7 +14,9 @@ import { ensure } from "@/utils/ensure";
 import { InsertionAnalyzer } from "@/utils/insertionAnalyzer";
 import { isPlainObject } from "@/utils/isPlainObject";
 import { DeepReadonly } from "@/utils/types";
+import { updateSearchParams } from "@/utils/updateSearchParams";
 import React, { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useSnapshot } from "valtio";
 
 // 类型断言函数
@@ -60,10 +62,11 @@ const RenderNode: React.FC<{
    */
   onDraggingStart: (node: [DeepReadonly<NodeData>, HTMLElement]) => void;
 }> = ({ node, onDraggingHover, onDraggingEnd, onDraggingStart }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const hoveredComponents = useSnapshot(
     stores.designs.states.hoveredComponents
   );
-  const selectedNodes = useSnapshot(stores.designs.states.selectedNodes);
+  const selectedNodes = useSnapshot(stores.designs.states.selectedNodeIds);
   const dragging = useSnapshot(stores.designs.states.dragging);
   const isSelected = selectedNodes.selectedIds.includes(node.id);
   const isDragging = dragging.draggingId === node.id;
@@ -113,6 +116,11 @@ const RenderNode: React.FC<{
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
     stores.designs.actions.selectNode([node.id]);
+    setSearchParams(
+      updateSearchParams(searchParams, {
+        designAsideType: "settings",
+      })
+    );
   };
 
   useEffect(() => {

@@ -7,6 +7,8 @@ import {
 } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/types";
+import { derive } from "derive-valtio";
+import store from "store2";
 import { proxy, subscribe } from "valtio";
 import { proxyWithHistory } from "valtio-history";
 
@@ -39,14 +41,98 @@ const dragging = proxy<{
   draggingId: null,
 });
 
-/** 选中的组件 */
-const selectedNodes = proxy<{
+/** 选中的组件 id */
+const selectedNodeIds = proxy<{
   selectedIds: string[];
   uniqueSelectedId: undefined | string;
 }>({
-  selectedIds: [],
+  selectedIds: store.get("selectedIds", []),
   get uniqueSelectedId() {
     return this.selectedIds[0];
+  },
+});
+
+subscribe(selectedNodeIds, () => {
+  store.set("selectedIds", selectedNodeIds.selectedIds);
+});
+
+const findNodeById = (
+  nodeId: string,
+  nodeList: NodeData[] | SlotsChildren = designTreeData.value.nodeData
+): NodeData | null => {
+  const iterateNodeList = (
+    nodeList: NodeData[] | SlotsChildren
+  ): NodeData | null => {
+    if (Array.isArray(nodeList)) {
+      for (const node of nodeList) {
+        if (node.id === nodeId) {
+          return node;
+        }
+        if (node.children) {
+          const found = iterateNodeList(
+            node.children as NodeData[] | SlotsChildren
+          );
+          if (found) {
+            return found;
+          }
+        }
+      }
+    } else if (nodeList && typeof nodeList === "object") {
+      for (const key in nodeList) {
+        const childNode = nodeList[key];
+        if (Array.isArray(childNode)) {
+          for (const node of childNode) {
+            if (node.id === nodeId) {
+              return node;
+            }
+            if (node.children) {
+              const found = iterateNodeList(
+                node.children as NodeData[] | SlotsChildren
+              );
+              if (found) {
+                return found;
+              }
+            }
+          }
+        } else if (
+          childNode &&
+          typeof childNode === "object" &&
+          "id" in childNode
+        ) {
+          if (childNode.id === nodeId) {
+            return childNode;
+          }
+          if (childNode.children) {
+            const found = iterateNodeList(
+              childNode.children as NodeData[] | SlotsChildren
+            );
+            if (found) {
+              return found;
+            }
+          }
+        }
+      }
+    }
+    return null;
+  };
+
+  return Array.isArray(nodeList) || (nodeList && typeof nodeList === "object")
+    ? iterateNodeList(nodeList)
+    : null;
+};
+
+/** 选中的组件数据 */
+const selectedNodeDatas = derive({
+  nodeDatas: (get) =>
+    get(selectedNodeIds).selectedIds.map((id) =>
+      findNodeById(id, get(designTreeData).value.nodeData)
+    ),
+});
+
+/** 唯一选中的 nodeData 数据 */
+const uniqueSelectedNodeData = derive({
+  nodeData: (get) => {
+    return get(selectedNodeDatas).nodeDatas[0];
   },
 });
 
@@ -54,80 +140,19 @@ export const states = proxy({
   designTreeData,
   hoveredComponents,
   dragging,
-  selectedNodes,
+  selectedNodeIds,
+  selectedNodeDatas,
+  uniqueSelectedNodeData,
 });
 
 export const actions = {
   /** 根据 id 从树中查找 node */
-  findNodeById: (
-    nodeId: string,
-    nodeList: NodeData[] | SlotsChildren = designTreeData.value.nodeData
-  ): NodeData | null => {
-    const iterateNodeList = (
-      nodeList: NodeData[] | SlotsChildren
-    ): NodeData | null => {
-      if (Array.isArray(nodeList)) {
-        for (const node of nodeList) {
-          if (node.id === nodeId) {
-            return node;
-          }
-          if (node.children) {
-            const found = iterateNodeList(
-              node.children as NodeData[] | SlotsChildren
-            );
-            if (found) {
-              return found;
-            }
-          }
-        }
-      } else if (nodeList && typeof nodeList === "object") {
-        for (const key in nodeList) {
-          const childNode = nodeList[key];
-          if (Array.isArray(childNode)) {
-            for (const node of childNode) {
-              if (node.id === nodeId) {
-                return node;
-              }
-              if (node.children) {
-                const found = iterateNodeList(
-                  node.children as NodeData[] | SlotsChildren
-                );
-                if (found) {
-                  return found;
-                }
-              }
-            }
-          } else if (
-            childNode &&
-            typeof childNode === "object" &&
-            "id" in childNode
-          ) {
-            if (childNode.id === nodeId) {
-              return childNode;
-            }
-            if (childNode.children) {
-              const found = iterateNodeList(
-                childNode.children as NodeData[] | SlotsChildren
-              );
-              if (found) {
-                return found;
-              }
-            }
-          }
-        }
-      }
-      return null;
-    };
-
-    return Array.isArray(nodeList) || (nodeList && typeof nodeList === "object")
-      ? iterateNodeList(nodeList)
-      : null;
-  },
+  findNodeById,
 
   /** 选择 node */
   selectNode: (ids: string[]) => {
     const uniqueIds = Array.from(new Set(ids));
-    selectedNodes.selectedIds = uniqueIds;
+    selectedNodeIds.selectedIds = uniqueIds;
   },
   replaceNodeData: (data: NodeData[]) => {
     designTreeData.value.nodeData = data;
