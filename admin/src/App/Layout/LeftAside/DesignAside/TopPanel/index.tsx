@@ -1,3 +1,9 @@
+import TreeList from "./TreeList";
+
 export const TopPanel = () => {
-  return <div>TopPanel</div>;
+  return (
+    <div>
+      <TreeList />
+    </div>
+  );
 };

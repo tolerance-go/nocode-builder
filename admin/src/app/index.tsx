@@ -9,7 +9,9 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    navigate("/apps");
+    if (location.pathname === "/") {
+      navigate("/apps");
+    }
   }, []);
 
   return <Route path="/*" element={<Layout />}></Route>;

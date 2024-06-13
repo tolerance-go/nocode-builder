@@ -4,7 +4,7 @@ import { AppAside } from "./AppAside";
 
 export const LeftAside = () => {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-[100%]">
       <Route path="/apps" element={<AppAside />}></Route>
       <Route path="/apps/:id/design" element={<DesignAside />}></Route>
     </div>

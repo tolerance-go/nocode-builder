@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import Editor from "./Editor";
+import Editor from "../../LeftAside/DesignAside/BottomPanel/Editor";
 import stores from "@/stores";
 
 export const EditorPanel = () => {
