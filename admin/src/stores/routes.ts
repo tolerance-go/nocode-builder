@@ -52,7 +52,8 @@ export const actions = {
 
     const path = findNodePath(states.routeNodes.nodes, id);
     if (path?.length) {
-      return `${path[0]}${path.slice(1).join("/")}`;
+      const after = path.slice(1).join("/");
+      return `${path[0]}${after && path[0] !== "/" ? "/" : ""}${after}`;
     }
     return null;
   },

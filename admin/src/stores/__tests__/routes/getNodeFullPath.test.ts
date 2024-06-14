@@ -57,7 +57,13 @@ describe("getNodeFullPath", () => {
   const rootNode: RouteNode = {
     id: "1718353525602",
     path: "/admin",
-    children: [],
+    children: [
+      {
+        id: "child2",
+        path: "child2",
+        children: [],
+      },
+    ],
   };
 
   beforeEach(() => {
@@ -65,8 +71,11 @@ describe("getNodeFullPath", () => {
   });
 
   it("应该返回节点的完整路径", () => {
-    const fullPath = actions.getNodeFullPath("1718353525602");
+    let fullPath = actions.getNodeFullPath("1718353525602");
     expect(fullPath).toBe("/admin");
+
+    fullPath = actions.getNodeFullPath("child2");
+    expect(fullPath).toBe("/admin/child2");
   });
 
   it("如果节点不存在，应该返回 null", () => {
