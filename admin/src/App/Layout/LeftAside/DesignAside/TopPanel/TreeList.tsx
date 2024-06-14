@@ -1,15 +1,21 @@
 import stores from "@/stores";
 import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
+import {
+  PlusCircleFilled,
+  PlusOutlined,
+  PlusSquareFilled,
+} from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { InputRef, TreeDataNode, TreeProps } from "antd";
-import { Button, Input, Tree } from "antd";
+import { Button, Flex, Input, Tree } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useSnapshot } from "valtio";
 
 const TreeList: React.FC = () => {
   const snapshot = useSnapshot(stores.routes.states.routeNodes);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
+  const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const inputRef = useRef<InputRef>(null);
 
@@ -20,7 +26,7 @@ const TreeList: React.FC = () => {
     ): TreeDataNode[] => {
       return nodes.map((node) => ({
         title: (
-          <div>
+          <Flex justify="space-between">
             {node.id === editingKey ? (
               <Input
                 ref={inputRef}
@@ -32,15 +38,16 @@ const TreeList: React.FC = () => {
             ) : (
               node.name || node.path
             )}
-            <Button
-              type="text"
-              size="small"
-              onClick={() => addNode(node.id)}
-              style={{ marginLeft: 8 }}
-            >
-              新增
-            </Button>
-          </div>
+            {node.id !== editingKey && (
+              <Button
+                type="text"
+                size="small"
+                onClick={() => addNode(node.id)}
+                style={{ marginLeft: 8 }}
+                icon={<PlusOutlined />}
+              ></Button>
+            )}
+          </Flex>
         ),
         key: node.id,
         children: node.children ? convertToTreeData(node.children) : undefined,
@@ -79,6 +86,9 @@ const TreeList: React.FC = () => {
     };
     stores.routes.actions.addNode(parentId, newNode);
     setEditingKey(newNode.id);
+    if (parentId) {
+      setExpandedKeys((prevKeys) => [...prevKeys, parentId]);
+    }
   };
 
   const onSelect: TreeProps["onSelect"] = (selectedKeys, info) => {
@@ -87,6 +97,10 @@ const TreeList: React.FC = () => {
 
   const onCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
     console.log("onCheck", checkedKeys, info);
+  };
+
+  const onExpand: TreeProps["onExpand"] = (expandedKeys) => {
+    setExpandedKeys(expandedKeys as string[]);
   };
 
   return (
@@ -105,6 +119,8 @@ const TreeList: React.FC = () => {
         blockNode
         onSelect={onSelect}
         onCheck={onCheck}
+        onExpand={onExpand}
+        expandedKeys={expandedKeys}
         treeData={treeData}
       />
     </div>
