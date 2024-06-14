@@ -1,14 +1,10 @@
 import stores from "@/stores";
 import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
-import {
-  PlusCircleFilled,
-  PlusOutlined,
-  PlusSquareFilled,
-} from "@ant-design/icons";
+import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { InputRef, TreeDataNode, TreeProps } from "antd";
-import { Button, Flex, Input, Tree } from "antd";
+import { Button, Input, Space, Tree } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useSnapshot } from "valtio";
 
@@ -26,7 +22,7 @@ const TreeList: React.FC = () => {
     ): TreeDataNode[] => {
       return nodes.map((node) => ({
         title: (
-          <Flex justify="space-between">
+          <div className="flex justify-between items-center">
             {node.id === editingKey ? (
               <Input
                 ref={inputRef}
@@ -39,15 +35,22 @@ const TreeList: React.FC = () => {
               node.name || node.path
             )}
             {node.id !== editingKey && (
-              <Button
-                type="text"
-                size="small"
-                onClick={() => addNode(node.id)}
-                style={{ marginLeft: 8 }}
-                icon={<PlusOutlined />}
-              ></Button>
+              <Space>
+                <Button
+                  type="text"
+                  size="small"
+                  onClick={() => addNode(node.id)}
+                  icon={<PlusOutlined />}
+                />
+                <Button
+                  type="text"
+                  size="small"
+                  onClick={() => deleteNode(node.id)}
+                  icon={<DeleteOutlined />}
+                />
+              </Space>
             )}
-          </Flex>
+          </div>
         ),
         key: node.id,
         children: node.children ? convertToTreeData(node.children) : undefined,
@@ -89,6 +92,10 @@ const TreeList: React.FC = () => {
     if (parentId) {
       setExpandedKeys((prevKeys) => [...prevKeys, parentId]);
     }
+  };
+
+  const deleteNode = (nodeId: string) => {
+    stores.routes.actions.deleteNode(nodeId);
   };
 
   const onSelect: TreeProps["onSelect"] = (selectedKeys, info) => {
