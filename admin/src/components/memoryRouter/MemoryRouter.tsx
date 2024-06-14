@@ -46,16 +46,26 @@ export const MemoryRouter: FC<MemoryRouterProps> = ({
     }
   }, [index, latestOnIndexChange]);
 
-  const navigate = (to: To) => {
-    const path = typeof to === "string" ? to : createPath(to);
-    setLocation(path);
-    const newIndex = entries.indexOf(path);
-    if (newIndex !== -1) {
-      setIndex(newIndex);
+  const navigate = (to: To | -1) => {
+    if (to === -1) {
+      // 回退操作
+      if (index > 0) {
+        const newIndex = index - 1;
+        setIndex(newIndex);
+        setLocation(entries[newIndex]);
+      }
     } else {
-      const newEntries = [...entries, path];
-      setEntries(newEntries);
-      setIndex(newEntries.length - 1);
+      // 正常导航操作
+      const path = typeof to === "string" ? to : createPath(to);
+      setLocation(path);
+      const newIndex = entries.indexOf(path);
+      if (newIndex !== -1) {
+        setIndex(newIndex);
+      } else {
+        const newEntries = [...entries, path];
+        setEntries(newEntries);
+        setIndex(newEntries.length - 1);
+      }
     }
   };
 
