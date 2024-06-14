@@ -40,6 +40,10 @@ describe("MemoryRoute 组件", () => {
     );
   };
 
+  const Component = () => {
+    return <h1>Component</h1>;
+  };
+
   it("嵌套非 Route 子组件，无 Route", () => {
     expect(() => {
       render(
@@ -78,6 +82,7 @@ describe("MemoryRoute 组件", () => {
             {true}
             {null}
             {undefined}
+            <Component />
             <Route path="/" element={<Home />}>
               <div>
                 <Route path="about" element={<About />}>
@@ -97,6 +102,9 @@ describe("MemoryRoute 组件", () => {
       <div>
         <div>
           100
+          <h1>
+            Component
+          </h1>
           <div>
             <h1>
               欢迎来到主页
@@ -121,7 +129,7 @@ describe("MemoryRoute 组件", () => {
     `);
   });
 
-  it("支持嵌套其他元素确渲染子路径", () => {
+  it("支持嵌套其他元素确渲染子路径 /contact", () => {
     const { container: teamContainer } = render(
       <Router initialEntries={["/contact"]}>
         <Routes>
@@ -131,6 +139,7 @@ describe("MemoryRoute 组件", () => {
             {true}
             {null}
             {undefined}
+            <Component />
             <Route path="/" element={<Home />}>
               <div>
                 <Route path="about" element={<About />}>
@@ -150,6 +159,9 @@ describe("MemoryRoute 组件", () => {
       <div>
         <div>
           100
+          <h1>
+            Component
+          </h1>
           <div>
             <h1>
               欢迎来到主页
