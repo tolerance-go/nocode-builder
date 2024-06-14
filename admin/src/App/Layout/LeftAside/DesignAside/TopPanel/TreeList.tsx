@@ -140,9 +140,13 @@ const TreeList: React.FC = () => {
     ): TreeDataNode[] => {
       return nodes.map((node) => ({
         title: (
-          <div className="flex justify-between items-center">
+          <div
+            className="flex justify-between items-center"
+            onDoubleClick={() => setEditingKey(node.id)}
+          >
             {node.id === editingKey ? (
               <Input
+              variant="borderless"
                 ref={inputRef}
                 defaultValue={node.path}
                 status={inputStatus}
