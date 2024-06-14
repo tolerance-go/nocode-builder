@@ -26,8 +26,8 @@ const TreeList: React.FC = () => {
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
 
-  const onSelect: TreeProps["onSelect"] = (selectedKeys, info) => {
-    console.log("selected", selectedKeys, info);
+  const onSelect: TreeProps["onSelect"] = (selectedKeys) => {
+    stores.designs.actions.selectNode(selectedKeys as string[]);
   };
 
   const onCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
