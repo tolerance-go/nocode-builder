@@ -7,10 +7,6 @@ import { Card } from "antd";
 import { useEffect, useState } from "react";
 import { useSnapshot } from "valtio";
 
-const gridStyle: React.CSSProperties = {
-  width: "25%",
-  textAlign: "center",
-};
 const nodeDataTpl = {
   staticProps: {
     style: {
@@ -88,17 +84,18 @@ export const DisplayItem: React.FC<{
   }, [isDragging]);
 
   return (
-    <Card.Grid
-      key={index}
-      style={gridStyle}
+    <div
       className="cursor-move select-none"
       onMouseDown={() => {
         globalEventBus.emit("externalDragStart", {
           nodeData,
         });
       }}
+      style={{
+        padding: 24,
+      }}
     >
       {component.name}
-    </Card.Grid>
+    </div>
   );
 };

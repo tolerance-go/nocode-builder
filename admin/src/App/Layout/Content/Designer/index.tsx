@@ -2,6 +2,8 @@ import stores from "@/stores";
 import { Button, Flex, Space } from "antd";
 import { useSnapshot } from "valtio";
 import { Stage } from "./Stage";
+import { MemoryRouter } from "@/components/memoryRouter/MemoryRouter";
+
 export const Designer = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
 
@@ -29,7 +31,9 @@ export const Designer = () => {
           </Button>
         </Space>
       </Flex>
-      <Stage></Stage>
+      <MemoryRouter>
+        <Stage></Stage>
+      </MemoryRouter>
     </div>
   );
 };
