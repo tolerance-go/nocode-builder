@@ -1,14 +1,13 @@
+import useLatest from "@/hooks/useLatest";
 import {
   FC,
   ReactNode,
   createContext,
-  useState,
   useEffect,
-  useRef,
   useImperativeHandle,
+  useState,
 } from "react";
 import { To, createPath } from "react-router-dom";
-import useLatest from "@/hooks/useLatest";
 
 interface MemoryRouterContextType {
   location: string;
