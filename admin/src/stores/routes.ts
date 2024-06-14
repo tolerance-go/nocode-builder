@@ -2,13 +2,22 @@ import { RouteNode } from "@/types";
 import store2 from "store2";
 import { proxy, subscribe } from "valtio";
 
+const stageMemoryRouterLocal = store2.get("stageMemoryRouter", {});
+
 /** 舞台内存路由数据 */
 const stageMemoryRouter = proxy({
-  entries: ["/"] as string[],
-  index: 0,
+  entries: stageMemoryRouterLocal.entries || (["/"] as string[]),
+  index: stageMemoryRouterLocal.index || 0,
   get location() {
     return this.entries[this.index];
   },
+});
+
+subscribe(stageMemoryRouter, () => {
+  store2.set("stageMemoryRouter", {
+    entries: stageMemoryRouter.entries,
+    index: stageMemoryRouter.index,
+  });
 });
 
 const routeNodes = proxy({
