@@ -1,4 +1,5 @@
-import { FC, ReactNode, createContext, useState } from "react";
+import useLatest from "@/hooks/useLatest";
+import { FC, ReactNode, createContext, useState, useEffect } from "react";
 import { To, createPath } from "react-router-dom";
 
 interface MemoryRouterContextType {
@@ -10,20 +11,40 @@ export const MemoryRouterContext = createContext<
   MemoryRouterContextType | undefined
 >(undefined);
 
-interface MemoryRouterProps {
-  initialEntries?: string[];
+export interface MemoryRouterProps {
+  initialEntries?: readonly string[];
   initialIndex?: number;
   children: ReactNode;
+  onEntriesChange?: (entries: readonly string[]) => void;
+  onIndexChange?: (index: number) => void;
 }
 
 export const MemoryRouter: FC<MemoryRouterProps> = ({
   initialEntries = ["/"],
   initialIndex = 0,
   children,
+  onEntriesChange,
+  onIndexChange,
 }) => {
-  const [entries] = useState(initialEntries);
-  const [, setIndex] = useState(initialIndex);
+  const [entries, setEntries] = useState<readonly string[]>(initialEntries);
+  const [index, setIndex] = useState(initialIndex);
   const [location, setLocation] = useState(entries[initialIndex]);
+
+  // 使用 useLatest 来保存最新的 onEntriesChange 和 onIndexChange
+  const latestOnEntriesChange = useLatest(onEntriesChange);
+  const latestOnIndexChange = useLatest(onIndexChange);
+
+  useEffect(() => {
+    if (latestOnEntriesChange.current) {
+      latestOnEntriesChange.current(entries);
+    }
+  }, [entries, latestOnEntriesChange]);
+
+  useEffect(() => {
+    if (latestOnIndexChange.current) {
+      latestOnIndexChange.current(index);
+    }
+  }, [index, latestOnIndexChange]);
 
   const navigate = (to: To) => {
     const path = typeof to === "string" ? to : createPath(to);
@@ -32,8 +53,9 @@ export const MemoryRouter: FC<MemoryRouterProps> = ({
     if (newIndex !== -1) {
       setIndex(newIndex);
     } else {
-      entries.push(path);
-      setIndex(entries.length - 1);
+      const newEntries = [...entries, path];
+      setEntries(newEntries);
+      setIndex(newEntries.length - 1);
     }
   };
 

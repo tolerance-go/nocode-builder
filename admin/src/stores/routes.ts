@@ -1,15 +1,28 @@
 import { RouteNode } from "@/types";
 import { proxy } from "valtio";
 
+/** 舞台内存路由数据 */
+const stageMemoryRouter = proxy({
+  entries: [] as string[],
+  index: 0,
+});
+
 const routeNodes = proxy({
   nodes: [] as RouteNode[],
 });
 
 export const states = proxy({
   routeNodes,
+  stageMemoryRouter,
 });
 
 export const actions = {
+  updateStageMemoryRouterEntries(entries: string[]) {
+    states.stageMemoryRouter.entries = entries;
+  },
+  updateStageMemoryRouterIndex(index: number) {
+    states.stageMemoryRouter.index = index;
+  },
   addNode(parentId: string | null, newNode: RouteNode) {
     const findNode = (nodes: RouteNode[], id: string): RouteNode | null => {
       for (const node of nodes) {
