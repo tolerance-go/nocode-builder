@@ -1,11 +1,20 @@
-import { useMatch } from "react-router-dom";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import { Content } from "./Content";
 import { Header } from "./Header";
 import { LeftAside } from "./LeftAside";
 import { RightAside } from "./RightAside";
+import { useEffect } from "react";
 
 export const Layout = () => {
   const rightAsideMatch = useMatch("/apps/:id/design");
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      navigate("/apps");
+    }
+  }, []);
 
   return (
     <div className="bg-gray-100">

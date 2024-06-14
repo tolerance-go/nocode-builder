@@ -1,8 +1,7 @@
+import stores from "@/stores";
 import { Button, Flex, Space } from "antd";
 import { useSnapshot } from "valtio";
 import { Stage } from "./Stage";
-import stores from "@/stores";
-
 export const Designer = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
 
