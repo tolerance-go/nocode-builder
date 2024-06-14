@@ -143,7 +143,7 @@ const TreeList: React.FC = () => {
     };
     stores.routes.actions.addNode(parentId, newNode);
     setEditingKey(newNode.id);
-    setInputValue("");
+    setInputValue(newNode.path);
     setInputStatus(undefined);
     if (parentId) {
       setExpandedKeys((prevKeys) => [...prevKeys, parentId]);
