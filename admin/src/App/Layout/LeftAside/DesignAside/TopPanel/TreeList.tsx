@@ -1,3 +1,4 @@
+import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
@@ -17,52 +18,6 @@ const TreeList: React.FC = () => {
     undefined
   );
   const inputRef = useRef<InputRef>(null);
-
-  useEffect(() => {
-    // 将 routeNodes 转换为 treeData 格式
-    const convertToTreeData = (
-      nodes: DeepReadonly<RouteNode[]>
-    ): TreeDataNode[] => {
-      return nodes.map((node) => ({
-        title: (
-          <div className="flex justify-between items-center">
-            {node.id === editingKey ? (
-              <Input
-                ref={inputRef}
-                defaultValue={node.path}
-                status={inputStatus}
-                onChange={(e) => handleInputChange(e.target.value, node.id)}
-                onBlur={(e) => handleInputBlur(e, node.id)}
-                onPressEnter={(e) => handleInputBlur(e, node.id)}
-                autoFocus
-              />
-            ) : (
-              node.name || node.path
-            )}
-            {node.id !== editingKey && (
-              <Space>
-                <Button
-                  type="text"
-                  size="small"
-                  onClick={() => addNode(node.id)}
-                  icon={<PlusOutlined />}
-                />
-                <Button
-                  type="text"
-                  size="small"
-                  onClick={() => deleteNode(node.id)}
-                  icon={<DeleteOutlined />}
-                />
-              </Space>
-            )}
-          </div>
-        ),
-        key: node.id,
-        children: node.children ? convertToTreeData(node.children) : undefined,
-      }));
-    };
-    setTreeData(convertToTreeData(snapshot.nodes));
-  }, [snapshot.nodes, editingKey, inputStatus]);
 
   const handleInputChange = (value: string, nodeId: string) => {
     if (isValidPath(value, nodeId)) {
@@ -99,17 +54,29 @@ const TreeList: React.FC = () => {
       node: DeepReadonly<RouteNode> | null;
       parent: DeepReadonly<RouteNode> | null;
     } => {
-      for (const node of nodes) {
-        if (node.id === id) return { node, parent: null };
-        if (node.children) {
-          for (const child of node.children) {
-            if (child.id === id) return { node: child, parent: node };
-            const result = findNodeAndParent(node.children, id);
-            if (result.node) return result;
+      let foundNode: DeepReadonly<RouteNode> | null = null;
+      let foundParent: DeepReadonly<RouteNode> | null = null;
+
+      const traverse = (
+        currentNodes: DeepReadonly<RouteNode[]>,
+        parentNode: DeepReadonly<RouteNode> | null
+      ) => {
+        for (const node of currentNodes) {
+          if (node.id === id) {
+            foundNode = node;
+            foundParent = parentNode;
+            return;
+          }
+          if (node.children) {
+            traverse(node.children, node);
+            if (foundNode) return;
           }
         }
-      }
-      return { node: null, parent: null };
+      };
+
+      traverse(nodes, null);
+
+      return { node: foundNode, parent: foundParent };
     };
 
     const { node, parent } = findNodeAndParent(snapshot.nodes, nodeId);
@@ -161,10 +128,67 @@ const TreeList: React.FC = () => {
     setExpandedKeys(expandedKeys as string[]);
   };
 
+  const latestHandleInputChange = useLatest(handleInputChange);
+  const latestHandleInputBlur = useLatest(handleInputBlur);
+  const latestAddNode = useLatest(addNode);
+  const latestDeleteNode = useLatest(deleteNode);
+
+  useEffect(() => {
+    // 将 routeNodes 转换为 treeData 格式
+    const convertToTreeData = (
+      nodes: DeepReadonly<RouteNode[]>
+    ): TreeDataNode[] => {
+      return nodes.map((node) => ({
+        title: (
+          <div className="flex justify-between items-center">
+            {node.id === editingKey ? (
+              <Input
+                ref={inputRef}
+                defaultValue={node.path}
+                status={inputStatus}
+                onChange={(e) =>
+                  latestHandleInputChange.current(e.target.value, node.id)
+                }
+                onBlur={(e) => latestHandleInputBlur.current(e, node.id)}
+                onPressEnter={(e) => latestHandleInputBlur.current(e, node.id)}
+                autoFocus
+              />
+            ) : (
+              node.name || node.path
+            )}
+            {node.id !== editingKey && (
+              <Space>
+                <Button
+                  type="text"
+                  size="small"
+                  onClick={() => latestAddNode.current(node.id)}
+                  icon={<PlusOutlined />}
+                />
+                <Button
+                  type="text"
+                  size="small"
+                  onClick={() => latestDeleteNode.current(node.id)}
+                  icon={<DeleteOutlined />}
+                />
+              </Space>
+            )}
+          </div>
+        ),
+        key: node.id,
+        children: node.children ? convertToTreeData(node.children) : undefined,
+      }));
+    };
+    setTreeData(convertToTreeData(snapshot.nodes));
+  }, [snapshot.nodes, editingKey, inputStatus]);
+
   return (
     <div className="bg-white">
       <div className="flex justify-end px-2 py-1 border-b">
-        <Button type="text" size="small" onClick={() => addNode(null)}>
+        <Button
+          type="text"
+          size="small"
+          onClick={() => latestAddNode.current(null)}
+        >
           新增
         </Button>
       </div>
