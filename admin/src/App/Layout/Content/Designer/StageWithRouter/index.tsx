@@ -5,6 +5,7 @@ import { useSnapshot } from "valtio";
 import { Stage } from "./Stage";
 import { To } from "react-router-dom";
 import { globalEventBus } from "@/globals/eventBus";
+import { MemoryRoutes } from "@/components/memoryRouter/MemoryRoutes";
 
 export const StageWithRouter = () => {
   const stageMemoryRouter = useSnapshot(stores.routes.states.stageMemoryRouter);
@@ -34,7 +35,9 @@ export const StageWithRouter = () => {
       onIndexChange={handleIndexChange}
       navigateRef={navigateRef}
     >
-      <Stage />
+      <MemoryRoutes>
+        <Stage />
+      </MemoryRoutes>
     </MemoryRouter>
   );
 };

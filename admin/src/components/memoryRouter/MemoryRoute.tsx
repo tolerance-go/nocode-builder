@@ -7,7 +7,7 @@ export interface RouteProps {
   children?: React.ReactNode;
 }
 
-export const MemoryRoute: React.FC<RouteProps> = ({ children }) => {
+export const MemoryRoute: React.FC<RouteProps> = ({ children, element }) => {
   const context = useContext(MemoryRoutesContext);
 
   if (!context) {
@@ -16,5 +16,10 @@ export const MemoryRoute: React.FC<RouteProps> = ({ children }) => {
     );
   }
 
-  return children;
+  return (
+    <>
+      {element}
+      {children}
+    </>
+  );
 };
