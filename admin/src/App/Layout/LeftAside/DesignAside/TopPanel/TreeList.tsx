@@ -179,7 +179,15 @@ const TreeList: React.FC = () => {
       }));
     };
     setTreeData(convertToTreeData(snapshot.nodes));
-  }, [snapshot.nodes, editingKey, inputStatus]);
+  }, [
+    snapshot.nodes,
+    editingKey,
+    inputStatus,
+    latestHandleInputChange,
+    latestHandleInputBlur,
+    latestAddNode,
+    latestDeleteNode,
+  ]);
 
   return (
     <div className="bg-white">
