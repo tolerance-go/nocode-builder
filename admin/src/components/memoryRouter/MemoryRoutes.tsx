@@ -2,6 +2,7 @@ import React from "react";
 import { MemoryRouteContext } from "./MemoryRouteContext";
 import { useMemoryRouter } from "./useMemoryRouter";
 import { MemoryRoutesContext } from "./MemoryRoutesContext";
+import { MemoryRoute } from "./MemoryRoute";
 
 interface RouteProps {
   children?: React.ReactNode;
@@ -14,44 +15,44 @@ export const MemoryRoutes: React.FC<RouteProps> = ({ children }) => {
     routes: React.ReactNode,
     parentPath: string
   ): React.ReactNode => {
-    let matchedElement: React.ReactNode = null;
+    return React.Children.map(routes, (route) => {
+      if (!React.isValidElement(route)) {
+        return null;
+      }
 
-    React.Children.forEach(routes, (child) => {
-      if (!React.isValidElement(child)) {
+      if (route.type !== MemoryRoute) {
         throw new Error(
-          `[Error: [${child}] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+          `[Error: [${route}] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
         );
       }
 
-      const { path = "", element } = child.props;
-      const fullPath = `${parentPath}/${path}`.replace(/\/+/g, "/");
+      const { path, element } = route.props;
+      const fullPath = `${parentPath}/${path}`.replace(/\/\//g, "/");
 
-      if (location === fullPath) {
-        matchedElement = element;
-      }
-
-      if (child.props.children) {
-        const childRoutes = renderRoutes(child.props.children, fullPath);
-        if (childRoutes) {
-          matchedElement = React.cloneElement(element, {
-            children: (
-              <MemoryRouteContext.Provider value={{ outlet: childRoutes }}>
-                {childRoutes}
-              </MemoryRouteContext.Provider>
-            ),
-          });
+      if (location.startsWith(fullPath)) {
+        console.log("location", location, "fullPath", fullPath);
+        if (location === fullPath) {
+          return element;
         }
+
+        return (
+          <MemoryRouteContext.Provider
+            value={{
+              outlet: renderRoutes(route.props.children, fullPath),
+            }}
+          >
+            {element}
+          </MemoryRouteContext.Provider>
+        );
       }
+
+      return null;
     });
-
-    return matchedElement;
   };
-
-  const matchedElement = renderRoutes(children, "");
 
   return (
     <MemoryRoutesContext.Provider value={true}>
-      {matchedElement}
+      {renderRoutes(children, "")}
     </MemoryRoutesContext.Provider>
   );
 };

@@ -140,6 +140,17 @@ describe("Route components", () => {
       render(
         <MemoryRouter>
           <Routes>
+            {100}
+            <Route>{100}</Route>
+          </Routes>
+        </MemoryRouter>
+      );
+    }).not.throw();
+
+    expect(() => {
+      render(
+        <MemoryRouter>
+          <Routes>
             <Route>
               <Home />
             </Route>
