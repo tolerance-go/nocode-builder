@@ -1,9 +1,11 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { MemoryOutlet as Outlet } from "../../MemoryOutlet";
-import { MemoryRoute as Route } from "../../MemoryRoute";
-import { MemoryRouter as Router } from "../../MemoryRouter";
-import { MemoryRoutes as Routes } from "../../MemoryRoutes";
+import {
+  MemoryRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 
 describe("MemoryRoute 组件", () => {
   const Home = () => {
@@ -24,7 +26,9 @@ describe("MemoryRoute 组件", () => {
           </Routes>
         </Router>
       );
-    }).not.throw();
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+    );
   });
 
   it("嵌套非 Route 子组件", () => {
@@ -40,6 +44,7 @@ describe("MemoryRoute 组件", () => {
           </Routes>
         </Router>
       );
-    }).not.throw();
+    }).toThrowErrorMatchingInlineSnapshot(
+    `[Error: [div] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`);
   });
 });

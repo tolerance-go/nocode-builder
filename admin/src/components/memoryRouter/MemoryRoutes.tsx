@@ -8,20 +8,17 @@ interface RoutesProps {
   children?: React.ReactNode;
 }
 
-interface RouteData {
-  path: string;
-  element: React.ReactNode;
-  children?: RouteData[];
-}
-
-// 收集所有的路由数据
-const collectRoutes = (
+// 收集和渲染路由数据
+const processRoutes = (
   routes: React.ReactNode,
-  parentPath: string = ""
-): RouteData[] => {
-  return React.Children.toArray(routes).reduce<RouteData[]>((acc, route) => {
+  parentPath: string = "",
+  location: string
+): React.ReactNode | null => {
+  const childrenArray = React.Children.toArray(routes);
+
+  for (const route of childrenArray) {
     if (!React.isValidElement(route)) {
-      return acc;
+      continue;
     }
 
     if (typeof route.type !== "string" && route.type !== MemoryRoute) {
@@ -35,24 +32,8 @@ const collectRoutes = (
     const { path = "", element, children } = route.props as RouteProps;
     const fullPath = `${parentPath}/${path}`.replace(/\/\//g, "/");
 
-    acc.push({
-      path: fullPath,
-      element,
-      children: collectRoutes(children, fullPath),
-    });
-
-    return acc;
-  }, []);
-};
-
-// 渲染路由
-const renderRoutes = (
-  routes: RouteData[],
-  location: string
-): React.ReactNode => {
-  for (const route of routes) {
-    if (location.startsWith(route.path)) {
-      if (location === route.path) {
+    if (location.startsWith(fullPath)) {
+      if (location === fullPath) {
         return (
           // 这个 Provider 十分重要，否则元素可能拿到父组件的 context 导致死循环
           // 明确告诉它，它的 outlet 是空
@@ -61,7 +42,7 @@ const renderRoutes = (
               outlet: null,
             }}
           >
-            {route.element}
+            {element}
           </MemoryRouteContext.Provider>
         );
       }
@@ -69,10 +50,10 @@ const renderRoutes = (
       return (
         <MemoryRouteContext.Provider
           value={{
-            outlet: renderRoutes(route.children || [], location),
+            outlet: processRoutes(children, fullPath, location),
           }}
         >
-          {route.element}
+          {element}
         </MemoryRouteContext.Provider>
       );
     }
@@ -83,11 +64,10 @@ const renderRoutes = (
 
 export const MemoryRoutes: React.FC<RoutesProps> = ({ children }) => {
   const { location } = useMemoryRouter();
-  const routesData = React.useMemo(() => collectRoutes(children), [children]);
 
   return (
     <MemoryRoutesContext.Provider value={true}>
-      {renderRoutes(routesData, location)}
+      {processRoutes(children, "", location)}
     </MemoryRoutesContext.Provider>
   );
 };
