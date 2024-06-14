@@ -1,10 +1,18 @@
-import useLatest from "@/hooks/useLatest";
-import { FC, ReactNode, createContext, useState, useEffect } from "react";
+import {
+  FC,
+  ReactNode,
+  createContext,
+  useState,
+  useEffect,
+  useRef,
+  useImperativeHandle,
+} from "react";
 import { To, createPath } from "react-router-dom";
+import useLatest from "@/hooks/useLatest";
 
 interface MemoryRouterContextType {
   location: string;
-  navigate: (to: To) => void;
+  navigate: (to: To | -1) => void;
 }
 
 export const MemoryRouterContext = createContext<
@@ -19,12 +27,17 @@ export interface MemoryRouterProps {
   onIndexChange?: (index: number) => void;
 }
 
-export const MemoryRouter: FC<MemoryRouterProps> = ({
+export const MemoryRouter: FC<
+  MemoryRouterProps & {
+    navigateRef?: React.Ref<{ navigate: (to: To | -1) => void }>;
+  }
+> = ({
   initialEntries = ["/"],
   initialIndex = 0,
   children,
   onEntriesChange,
   onIndexChange,
+  navigateRef,
 }) => {
   const [entries, setEntries] = useState<readonly string[]>(initialEntries);
   const [index, setIndex] = useState(initialIndex);
@@ -68,6 +81,11 @@ export const MemoryRouter: FC<MemoryRouterProps> = ({
       }
     }
   };
+
+  // 把 navigate 暴露出去
+  useImperativeHandle(navigateRef, () => ({
+    navigate,
+  }));
 
   return (
     <MemoryRouterContext.Provider value={{ location, navigate }}>

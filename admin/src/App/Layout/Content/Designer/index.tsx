@@ -2,6 +2,7 @@ import stores from "@/stores";
 import { Button, Flex, Input, Space } from "antd";
 import { useSnapshot } from "valtio";
 import { StageWithRouter } from "./StageWithRouter";
+import { globalEventBus } from "@/globals/eventBus";
 
 export const Designer = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
@@ -12,10 +13,26 @@ export const Designer = () => {
       <Flex justify="space-between" className="px-2 py-1 border-b">
         <Space>
           <Space>
-            <Button size="small" type="text">
+            <Button
+              size="small"
+              type="text"
+              onClick={() => {
+                globalEventBus.emit("stageNavigate", {
+                  to: -1,
+                });
+              }}
+            >
               回退
             </Button>
-            <Button size="small" type="text">
+            <Button
+              size="small"
+              type="text"
+              onClick={() => {
+                globalEventBus.emit("stageNavigate", {
+                  to: 1,
+                });
+              }}
+            >
               前进
             </Button>
           </Space>

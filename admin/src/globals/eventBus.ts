@@ -1,6 +1,7 @@
 import { NodeData } from "@/types";
 import { EventBus } from "@/utils/eventBus";
 import { DeepReadonly } from "@/utils/types";
+import { To } from "react-router-dom";
 
 export type EventMaps = {
   /**
@@ -50,6 +51,12 @@ export type EventMaps = {
    * 因为 手动调用 window.history.pushState 不会触发 window 的 popstate
    */
   popstate: undefined;
+  /**
+   * 触发舞台路由变化
+   */
+  stageNavigate: {
+    to: To | number;
+  };
 };
 
 export const globalEventBus = new EventBus<EventMaps>();
