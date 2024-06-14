@@ -1,9 +1,9 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { MemoryOutlet as Outlet } from "../MemoryOutlet";
-import { MemoryRoute as Route } from "../MemoryRoute";
-import { MemoryRouter as Router } from "../MemoryRouter";
-import { MemoryRoutes as Routes } from "../MemoryRoutes";
+import { MemoryOutlet as Outlet } from "../../MemoryOutlet";
+import { MemoryRoute as Route } from "../../MemoryRoute";
+import { MemoryRouter as Router } from "../../MemoryRouter";
+import { MemoryRoutes as Routes } from "../../MemoryRoutes";
 
 describe("MemoryRoute 组件", () => {
   const Home = () => {
