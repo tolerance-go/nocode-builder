@@ -42,8 +42,8 @@ const TreeList: React.FC = () => {
   };
 
   const handleAddNode = () => {
-    if (newNodeTitle && selectedNodeKey !== null) {
-      stores.routes.actions.addNode(selectedNodeKey, {
+    if (newNodeTitle) {
+      stores.routes.actions.addNode(null, {
         path: `${selectedNodeKey}-${newNodeTitle}`,
         name: newNodeTitle,
       });
