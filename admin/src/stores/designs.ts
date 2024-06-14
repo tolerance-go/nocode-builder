@@ -203,6 +203,9 @@ export const actions = {
       slotName
     );
   },
+  removeNode: (nodeId: string) => {
+    return actions._removeNode(designTreeData.value.nodeData, nodeId);
+  },
   _insertNode: (
     nodeList: NodeData[] | SlotsChildren,
     newNode: DeepReadonly<NodeData>,
@@ -387,6 +390,48 @@ export const actions = {
       return false;
     }
   },
+  _removeNode: (
+    nodeList: NodeData[] | SlotsChildren,
+    nodeId: string
+  ): NodeData | null => {
+    if (Array.isArray(nodeList)) {
+      for (let i = 0; i < nodeList.length; i++) {
+        if (nodeList[i].id === nodeId) {
+          return nodeList.splice(i, 1)[0];
+        }
+        if (nodeList[i].children) {
+          const removedNode = actions._removeNode(
+            nodeList[i].children as SlotsChildren,
+            nodeId
+          );
+          if (removedNode) return removedNode;
+        }
+      }
+    } else {
+      for (const key in nodeList) {
+        if (Array.isArray(nodeList[key])) {
+          const childrenArray = nodeList[key] as NodeData[];
+          for (let i = 0; i < childrenArray.length; i++) {
+            if (childrenArray[i].id === nodeId) {
+              return childrenArray.splice(i, 1)[0];
+            }
+            if (childrenArray[i].children) {
+              const removedNode = actions._removeNode(
+                childrenArray[i].children as SlotsChildren,
+                nodeId
+              );
+              if (removedNode) return removedNode;
+            }
+          }
+        } else if ((nodeList[key] as NodeData).id === nodeId) {
+          const removedNode = nodeList[key] as NodeData;
+          delete nodeList[key];
+          return removedNode;
+        }
+      }
+    }
+    return null;
+  },
   /** 移动某个 node 到其他 node */
   moveNode: (
     nodeToMove: DeepReadonly<NodeData>,
@@ -399,53 +444,10 @@ export const actions = {
       return;
     }
 
-    const removeNode = (
-      nodeList: NodeData[] | SlotsChildren,
-      nodeId: string
-    ): NodeData | null => {
-      if (Array.isArray(nodeList)) {
-        for (let i = 0; i < nodeList.length; i++) {
-          if (nodeList[i].id === nodeId) {
-            return nodeList.splice(i, 1)[0];
-          }
-          if (nodeList[i].children) {
-            const removedNode = removeNode(
-              nodeList[i].children as SlotsChildren,
-              nodeId
-            );
-            if (removedNode) return removedNode;
-          }
-        }
-      } else {
-        for (const key in nodeList) {
-          if (Array.isArray(nodeList[key])) {
-            const childrenArray = nodeList[key] as NodeData[];
-            for (let i = 0; i < childrenArray.length; i++) {
-              if (childrenArray[i].id === nodeId) {
-                return childrenArray.splice(i, 1)[0];
-              }
-              if (childrenArray[i].children) {
-                const removedNode = removeNode(
-                  childrenArray[i].children as SlotsChildren,
-                  nodeId
-                );
-                if (removedNode) return removedNode;
-              }
-            }
-          } else if ((nodeList[key] as NodeData).id === nodeId) {
-            const removedNode = nodeList[key] as NodeData;
-            delete nodeList[key];
-            return removedNode;
-          }
-        }
-      }
-      return null;
-    };
-
     const fromParent = designTreeData.value.nodeData;
     const targetParent = designTreeData.value.nodeData;
 
-    const nodeRemoved = removeNode(fromParent, nodeToMove.id);
+    const nodeRemoved = actions._removeNode(fromParent, nodeToMove.id);
     if (nodeRemoved) {
       const success = actions._insertNode(
         targetParent,
