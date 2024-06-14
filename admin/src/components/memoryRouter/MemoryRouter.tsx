@@ -12,7 +12,7 @@ import useLatest from "@/hooks/useLatest";
 
 interface MemoryRouterContextType {
   location: string;
-  navigate: (to: To | -1) => void;
+  navigate: (to: To | number) => void;
 }
 
 export const MemoryRouterContext = createContext<
@@ -59,11 +59,11 @@ export const MemoryRouter: FC<
     }
   }, [index, latestOnIndexChange]);
 
-  const navigate = (to: To | -1) => {
-    if (to === -1) {
-      // 回退操作
-      if (index > 0) {
-        const newIndex = index - 1;
+  const navigate = (to: To | number) => {
+    if (typeof to === "number") {
+      // 回退或前进操作
+      const newIndex = index + to;
+      if (newIndex >= 0 && newIndex < entries.length) {
         setIndex(newIndex);
         setLocation(entries[newIndex]);
       }
