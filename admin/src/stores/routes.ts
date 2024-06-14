@@ -10,22 +10,22 @@ export const states = proxy({
 });
 
 export const actions = {
-  addNode(parentPath: string | null, newNode: RouteNode) {
-    const findNode = (nodes: RouteNode[], path: string): RouteNode | null => {
+  addNode(parentId: string | null, newNode: RouteNode) {
+    const findNode = (nodes: RouteNode[], id: string): RouteNode | null => {
       for (const node of nodes) {
-        if (node.path === path) return node;
+        if (node.id === id) return node;
         if (node.children) {
-          const found = findNode(node.children, path);
+          const found = findNode(node.children, id);
           if (found) return found;
         }
       }
       return null;
     };
 
-    if (parentPath === null) {
+    if (parentId === null) {
       states.routeNodes.nodes.push(newNode);
     } else {
-      const parentNode = findNode(states.routeNodes.nodes, parentPath);
+      const parentNode = findNode(states.routeNodes.nodes, parentId);
       if (parentNode) {
         parentNode.children = parentNode.children ?? [];
         parentNode.children.push(newNode);
@@ -33,76 +33,73 @@ export const actions = {
     }
   },
 
-  deleteNode(path: string) {
-    const deleteNodeHelper = (nodes: RouteNode[], path: string): boolean => {
+  deleteNode(id: string) {
+    const deleteNodeHelper = (nodes: RouteNode[], id: string): boolean => {
       for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].path === path) {
+        if (nodes[i].id === id) {
           nodes.splice(i, 1);
           return true;
         }
         if (nodes[i].children) {
-          const deleted = deleteNodeHelper(nodes[i].children!, path);
+          const deleted = deleteNodeHelper(nodes[i].children!, id);
           if (deleted) return true;
         }
       }
       return false;
     };
 
-    deleteNodeHelper(states.routeNodes.nodes, path);
+    deleteNodeHelper(states.routeNodes.nodes, id);
   },
 
-  updateNode(path: string, updatedNode: Partial<RouteNode>) {
-    const findNode = (nodes: RouteNode[], path: string): RouteNode | null => {
+  updateNode(id: string, updatedNode: Partial<RouteNode>) {
+    const findNode = (nodes: RouteNode[], id: string): RouteNode | null => {
       for (const node of nodes) {
-        if (node.path === path) return node;
+        if (node.id === id) return node;
         if (node.children) {
-          const found = findNode(node.children, path);
+          const found = findNode(node.children, id);
           if (found) return found;
         }
       }
       return null;
     };
 
-    const node = findNode(states.routeNodes.nodes, path);
+    const node = findNode(states.routeNodes.nodes, id);
     if (node) {
       Object.assign(node, updatedNode);
     }
   },
 
-  moveNode(path: string, newParentPath: string | null) {
-    const findNode = (nodes: RouteNode[], path: string): RouteNode | null => {
+  moveNode(id: string, newParentId: string | null) {
+    const findNode = (nodes: RouteNode[], id: string): RouteNode | null => {
       for (const node of nodes) {
-        if (node.path === path) return node;
+        if (node.id === id) return node;
         if (node.children) {
-          const found = findNode(node.children, path);
+          const found = findNode(node.children, id);
           if (found) return found;
         }
       }
       return null;
     };
 
-    const removeNode = (nodes: RouteNode[], path: string): RouteNode | null => {
+    const removeNode = (nodes: RouteNode[], id: string): RouteNode | null => {
       for (let i = 0; i < nodes.length; i++) {
-        if (nodes[i].path === path) {
+        if (nodes[i].id === id) {
           return nodes.splice(i, 1)[0];
         }
         if (nodes[i].children) {
-          const removedNode = removeNode(nodes[i].children!, path);
+          const removedNode = removeNode(nodes[i].children!, id);
           if (removedNode) return removedNode;
         }
       }
       return null;
     };
 
-    const node = removeNode(states.routeNodes.nodes, path);
+    const node = removeNode(states.routeNodes.nodes, id);
     if (node) {
-      if (newParentPath === null) {
+      if (newParentId === null) {
         states.routeNodes.nodes.push(node);
       } else {
-        const parentNode = findNode(
-          states.routeNodes.nodes,
-          newParentPath
-        );
+        const parentNode = findNode(states.routeNodes.nodes, newParentId);
         if (parentNode) {
           parentNode.children = parentNode.children ?? [];
           parentNode.children.push(node);
@@ -111,18 +108,18 @@ export const actions = {
     }
   },
 
-  getNode(path: string): RouteNode | null {
-    const findNode = (nodes: RouteNode[], path: string): RouteNode | null => {
+  getNode(id: string): RouteNode | null {
+    const findNode = (nodes: RouteNode[], id: string): RouteNode | null => {
       for (const node of nodes) {
-        if (node.path === path) return node;
+        if (node.id === id) return node;
         if (node.children) {
-          const found = findNode(node.children, path);
+          const found = findNode(node.children, id);
           if (found) return found;
         }
       }
       return null;
     };
 
-    return findNode(states.routeNodes.nodes, path);
+    return findNode(states.routeNodes.nodes, id);
   },
 };

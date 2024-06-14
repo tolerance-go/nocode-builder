@@ -9,8 +9,8 @@ describe("actions", () => {
   });
 
   describe("addNode", () => {
-    it("当 parentPath 为 null 时应该在根目录添加一个新节点", () => {
-      const newNode: RouteNode = { path: "/new-node", children: [] };
+    it("当 parentId 为 null 时应该在根目录添加一个新节点", () => {
+      const newNode: RouteNode = { id: "1", path: "/new-node", children: [] };
       actions.addNode(null, newNode);
 
       expect(states.routeNodes.nodes).toHaveLength(1);
@@ -18,23 +18,28 @@ describe("actions", () => {
     });
 
     it("应该在指定的父节点下添加一个新节点", () => {
-      const parent: RouteNode = { path: "/parent", children: [] };
-      const newNode: RouteNode = { path: "/parent/child", children: [] };
+      const parent: RouteNode = { id: "1", path: "/parent", children: [] };
+      const newNode: RouteNode = {
+        id: "2",
+        path: "/parent/child",
+        children: [],
+      };
       states.routeNodes.nodes.push(parent);
 
-      actions.addNode("/parent", newNode);
+      actions.addNode("1", newNode);
 
       expect(states.routeNodes.nodes[0].children).toHaveLength(1);
       expect(states.routeNodes.nodes[0].children![0]).toEqual(newNode);
     });
 
-    it("如果父路径不存在，不应该添加新节点", () => {
+    it("如果父 id 不存在，不应该添加新节点", () => {
       const newNode: RouteNode = {
+        id: "2",
         path: "/non-existent-parent/child",
         children: [],
       };
 
-      actions.addNode("/non-existent-parent", newNode);
+      actions.addNode("non-existent-id", newNode);
 
       expect(states.routeNodes.nodes).toHaveLength(0);
     });

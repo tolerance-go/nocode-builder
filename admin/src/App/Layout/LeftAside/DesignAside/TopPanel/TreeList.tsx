@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { Tree, Button, Input, Modal, Flex } from "antd";
-import type { TreeDataNode, TreeProps } from "antd";
-import { css } from "@emotion/css";
-import { useSnapshot } from "valtio";
 import stores from "@/stores";
 import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
+import { css } from "@emotion/css";
+import type { InputRef, TreeDataNode, TreeProps } from "antd";
+import { Button, Flex, Input, Tree } from "antd";
+import React, { useEffect, useRef, useState } from "react";
+import { useSnapshot } from "valtio";
 
 const TreeList: React.FC = () => {
   const snapshot = useSnapshot(stores.routes.states.routeNodes);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
-  const [newNodeTitle, setNewNodeTitle] = useState<string>("");
-  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const [selectedNodeKey, setSelectedNodeKey] = useState<string | null>(null);
+  const [editingKey, setEditingKey] = useState<string | null>(null);
+  const inputRef = useRef<InputRef>(null);
 
   useEffect(() => {
     // Convert routeNodes to treeData format
@@ -20,48 +19,69 @@ const TreeList: React.FC = () => {
       nodes: DeepReadonly<RouteNode[]>
     ): TreeDataNode[] => {
       return nodes.map((node) => ({
-        title: node.name || node.path,
-        key: node.path,
+        title:
+          node.id === editingKey ? (
+            <Input
+              ref={inputRef}
+              defaultValue={node.path}
+              onBlur={(e) => handleInputBlur(e, node.id)}
+              onPressEnter={(e) => handleInputBlur(e, node.id)}
+              autoFocus
+            />
+          ) : (
+            node.name || node.path
+          ),
+        key: node.id,
         children: node.children ? convertToTreeData(node.children) : undefined,
       }));
     };
     setTreeData(convertToTreeData(snapshot.nodes));
-  }, [snapshot.nodes]);
+  }, [snapshot.nodes, editingKey]);
+
+  const handleInputBlur = (
+    e:
+      | React.FocusEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLInputElement>,
+    nodeId: string
+  ) => {
+    const newPath = (e.target as HTMLInputElement).value.trim();
+    if (newPath && isValidPath(newPath)) {
+      // Update the node path
+      stores.routes.actions.updateNode(nodeId, { path: newPath });
+    } else {
+      // Remove the node if the input is not valid
+      stores.routes.actions.deleteNode(nodeId);
+    }
+    setEditingKey(null);
+  };
+
+  const isValidPath = (path: string): boolean => {
+    // Add your validation logic here
+    return !!path;
+  };
+
+  const addNode = () => {
+    const newNode: RouteNode = {
+      id: `${Date.now()}`,
+      path: "",
+      children: [],
+    };
+    stores.routes.actions.addNode(null, newNode);
+    setEditingKey(newNode.id);
+  };
 
   const onSelect: TreeProps["onSelect"] = (selectedKeys, info) => {
     console.log("selected", selectedKeys, info);
-    setSelectedNodeKey(selectedKeys[0] as string);
   };
 
   const onCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
     console.log("onCheck", checkedKeys, info);
   };
 
-  const showAddNodeModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleAddNode = () => {
-    if (newNodeTitle) {
-      stores.routes.actions.addNode(null, {
-        path: `${selectedNodeKey}-${newNodeTitle}`,
-        name: newNodeTitle,
-      });
-    }
-    setIsModalVisible(false);
-    setNewNodeTitle("");
-  };
-
-  const handleDeleteNode = () => {
-    if (selectedNodeKey !== null) {
-      stores.routes.actions.deleteNode(selectedNodeKey);
-    }
-  };
-
   return (
     <div className="bg-white">
       <Flex justify="end" className="px-2 py-1 border-b">
-        <Button type="text" size="small">
+        <Button type="text" size="small" onClick={addNode}>
           新增
         </Button>
       </Flex>
@@ -72,27 +92,10 @@ const TreeList: React.FC = () => {
           }
         `}
         blockNode
-        defaultExpandedKeys={["0-0-0", "0-0-1"]}
-        defaultSelectedKeys={["0-0-0", "0-0-1"]}
-        defaultCheckedKeys={["0-0-0", "0-0-1"]}
         onSelect={onSelect}
         onCheck={onCheck}
         treeData={treeData}
       />
-      <Button onClick={showAddNodeModal}>Add Node</Button>
-      <Button onClick={handleDeleteNode}>Delete Node</Button>
-      <Modal
-        title="Add Node"
-        visible={isModalVisible}
-        onOk={handleAddNode}
-        onCancel={() => setIsModalVisible(false)}
-      >
-        <Input
-          value={newNodeTitle}
-          onChange={(e) => setNewNodeTitle(e.target.value)}
-          placeholder="Enter node title"
-        />
-      </Modal>
     </div>
   );
 };
