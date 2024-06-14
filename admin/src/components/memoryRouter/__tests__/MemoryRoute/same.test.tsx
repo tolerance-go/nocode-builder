@@ -189,36 +189,6 @@ describe("MemoryRoute 组件", () => {
     }).not.toThrow();
   });
 
-  it("嵌套非 Route 子组件，无 Route", () => {
-    expect(() => {
-      render(
-        <Router>
-          <Routes>
-            <Home />
-          </Routes>
-        </Router>
-      );
-    }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
-    );
-  });
-
-  it("嵌套非 Route 子组件", () => {
-    expect(() => {
-      render(
-        <Router>
-          <Routes>
-            <Route>
-              <Home />
-            </Route>
-          </Routes>
-        </Router>
-      );
-    }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
-    );
-  });
-
   it("省略 path", () => {
     const { container: empty } = render(
       <Router initialEntries={["/team"]}>

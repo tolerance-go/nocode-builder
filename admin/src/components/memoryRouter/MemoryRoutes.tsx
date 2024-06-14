@@ -14,19 +14,20 @@ const processRoutes = (
   parentPath: string = "",
   location: string
 ): React.ReactNode | null => {
-  const childrenArray = React.Children.toArray(routes);
-
-  for (const route of childrenArray) {
+  return React.Children.map(routes, (route) => {
     if (!React.isValidElement(route)) {
-      continue;
+      return route;
     }
 
-    if (typeof route.type !== "string" && route.type !== MemoryRoute) {
-      throw new Error(
-        `[${
-          (route.type as React.JSXElementConstructor<unknown>).name
-        }] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>`
-      );
+    if (route.type !== MemoryRoute) {
+      // throw new Error(
+      //   `[${
+      //     (route.type as React.JSXElementConstructor<unknown>).name
+      //   }] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>`
+      // );
+      return React.cloneElement(route, {
+        children: processRoutes(route.props.children, parentPath, location),
+      } as React.Attributes);
     }
 
     const { path = "", element, children } = route.props as RouteProps;
@@ -57,9 +58,7 @@ const processRoutes = (
         </MemoryRouteContext.Provider>
       );
     }
-  }
-
-  return null;
+  });
 };
 
 export const MemoryRoutes: React.FC<RoutesProps> = ({ children }) => {
