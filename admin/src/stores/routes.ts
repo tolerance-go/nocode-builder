@@ -3,8 +3,11 @@ import { proxy } from "valtio";
 
 /** 舞台内存路由数据 */
 const stageMemoryRouter = proxy({
-  entries: [] as string[],
+  entries: ['/'] as string[],
   index: 0,
+  get location() {
+    return this.entries[this.index];
+  },
 });
 
 const routeNodes = proxy({
