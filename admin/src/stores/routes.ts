@@ -1,5 +1,6 @@
 import { RouteNode } from "@/types";
-import { proxy } from "valtio";
+import store2 from "store2";
+import { proxy, subscribe } from "valtio";
 
 /** 舞台内存路由数据 */
 const stageMemoryRouter = proxy({
@@ -11,7 +12,11 @@ const stageMemoryRouter = proxy({
 });
 
 const routeNodes = proxy({
-  nodes: [] as RouteNode[],
+  nodes: store2.get("routeNodes", []) as RouteNode[],
+});
+
+subscribe(routeNodes, () => {
+  store2.set("routeNodes", routeNodes.nodes);
 });
 
 export const states = proxy({
