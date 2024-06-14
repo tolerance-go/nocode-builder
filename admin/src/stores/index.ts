@@ -1,16 +1,19 @@
 import * as designs from "./designs";
 import * as components from "./components";
+import * as routes from "./routes";
 
 import { devtools } from "valtio/utils";
+import { proxy } from "valtio";
 
-devtools(designs.states, {
-  name: "designs.states",
+const states = proxy({
+  routes: routes.states,
+  designs: designs.states,
+  components: components.states,
+});
+
+devtools(states, {
+  name: "states",
   enabled: true,
 });
 
-devtools(components.states, {
-  name: "components.states",
-  enabled: true,
-});
-
-export default { designs, components };
+export default { designs, components, routes };

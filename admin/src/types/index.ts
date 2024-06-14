@@ -1,5 +1,13 @@
 import { SettingConfig } from "@/components/SettingsForm";
 import { DeepReadonly } from "@/utils/types";
+
+// 路由节点的接口定义
+export interface RouteNode {
+  path: string; // 路由路径
+  children?: RouteNode[]; // 子路由
+  name?: string; // 路由名称
+}
+
 export type DesignAsideType = "store" | "settings";
 
 export type StaticPropsValue = string | number | boolean | null | undefined;

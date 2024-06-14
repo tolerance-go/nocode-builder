@@ -8,7 +8,7 @@ export const Designer = () => {
 
   return (
     <div>
-      <Flex justify="end" className="px-2 py-1">
+      <Flex justify="end" className="px-2 py-1 border-b">
         <Space>
           <Button
             size="small"
