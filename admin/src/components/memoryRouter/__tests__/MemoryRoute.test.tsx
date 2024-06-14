@@ -5,7 +5,7 @@ import { MemoryRoute as Route } from "../MemoryRoute";
 import { MemoryRouter as Router } from "../MemoryRouter";
 import { MemoryRoutes as Routes } from "../MemoryRoutes";
 
-describe("MemoryRoute component", () => {
+describe("MemoryRoute 组件", () => {
   const Home = () => {
     return (
       <div>
@@ -40,8 +40,7 @@ describe("MemoryRoute component", () => {
     );
   };
 
-  it("renders correctly with nested routes", () => {
-    // 渲染主路径
+  it("正确渲染主路径 /", () => {
     const { container: homeContainer } = render(
       <Router initialEntries={["/"]}>
         <Routes>
@@ -64,8 +63,9 @@ describe("MemoryRoute component", () => {
         </div>
       </div>
     `);
+  });
 
-    // // 渲染子路径 /about
+  it("正确渲染子路径 /about", () => {
     const { container: aboutContainer } = render(
       <Router initialEntries={["/about"]}>
         <Routes>
@@ -93,8 +93,9 @@ describe("MemoryRoute component", () => {
         </div>
       </div>
     `);
+  });
 
-    // 渲染子路径 /about/team
+  it("正确渲染子路径 /about/team", () => {
     const { container: teamContainer } = render(
       <Router initialEntries={["/about/team"]}>
         <Routes>
@@ -127,8 +128,9 @@ describe("MemoryRoute component", () => {
         </div>
       </div>
     `);
+  });
 
-    // 渲染子路径 /contact
+  it("正确渲染子路径 /contact", () => {
     const { container: contactContainer } = render(
       <Router initialEntries={["/contact"]}>
         <Routes>
@@ -156,7 +158,9 @@ describe("MemoryRoute component", () => {
         </div>
       </div>
     `);
+  });
 
+  it("抛出错误当直接渲染 Route 时", () => {
     expect(() => {
       render(<Route path="/" element={<Home />} />);
     }).toThrowErrorMatchingInlineSnapshot(
@@ -182,7 +186,7 @@ describe("MemoryRoute component", () => {
           </Routes>
         </Router>
       );
-    }).not.throw();
+    }).not.toThrow();
   });
 
   it("嵌套非 Route 子组件，无 Route", () => {
@@ -216,7 +220,6 @@ describe("MemoryRoute component", () => {
   });
 
   it("省略 path", () => {
-    // 渲染子路径 /contact
     const { container: empty } = render(
       <Router initialEntries={["/team"]}>
         <Routes>
@@ -252,7 +255,6 @@ describe("MemoryRoute component", () => {
   });
 
   it("深层级省略 path", () => {
-    // 渲染子路径 /contact
     const { container: empty } = render(
       <Router initialEntries={["/about"]}>
         <Routes>
