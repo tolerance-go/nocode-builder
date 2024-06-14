@@ -3,7 +3,11 @@ import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import {
+  ClockCircleOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { InputRef, TreeDataNode, TreeProps } from "antd";
 import { Button, Input, Space, Tree } from "antd";
@@ -140,6 +144,11 @@ const TreeList: React.FC = () => {
   const latestAddNode = useLatest(addNode);
   const latestDeleteNode = useLatest(deleteNode);
 
+  const statusStyles = {
+    error: { backgroundColor: "rgba(255, 0, 0, 0.1)" },
+    warning: { backgroundColor: "rgba(255, 165, 0, 0.1)" },
+  };
+
   useEffect(() => {
     // 将 routeNodes 转换为 treeData 格式
     const convertToTreeData = (
@@ -154,6 +163,10 @@ const TreeList: React.FC = () => {
             {node.id === editingKey ? (
               <Input
                 variant="borderless"
+                // borderless 下的警告样式需要自己实现
+                style={
+                  inputStatus ? { ...statusStyles[inputStatus] } : undefined
+                }
                 ref={inputRef}
                 defaultValue={node.path}
                 status={inputStatus}
