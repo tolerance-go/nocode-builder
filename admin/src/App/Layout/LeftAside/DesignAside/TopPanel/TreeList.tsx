@@ -3,7 +3,7 @@ import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { css } from "@emotion/css";
 import type { InputRef, TreeDataNode, TreeProps } from "antd";
-import { Button, Flex, Input, Tree } from "antd";
+import { Button, Input, Tree } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useSnapshot } from "valtio";
 
@@ -19,18 +19,29 @@ const TreeList: React.FC = () => {
       nodes: DeepReadonly<RouteNode[]>
     ): TreeDataNode[] => {
       return nodes.map((node) => ({
-        title:
-          node.id === editingKey ? (
-            <Input
-              ref={inputRef}
-              defaultValue={node.path}
-              onBlur={(e) => handleInputBlur(e, node.id)}
-              onPressEnter={(e) => handleInputBlur(e, node.id)}
-              autoFocus
-            />
-          ) : (
-            node.name || node.path
-          ),
+        title: (
+          <div>
+            {node.id === editingKey ? (
+              <Input
+                ref={inputRef}
+                defaultValue={node.path}
+                onBlur={(e) => handleInputBlur(e, node.id)}
+                onPressEnter={(e) => handleInputBlur(e, node.id)}
+                autoFocus
+              />
+            ) : (
+              node.name || node.path
+            )}
+            <Button
+              type="text"
+              size="small"
+              onClick={() => addNode(node.id)}
+              style={{ marginLeft: 8 }}
+            >
+              新增
+            </Button>
+          </div>
+        ),
         key: node.id,
         children: node.children ? convertToTreeData(node.children) : undefined,
       }));
@@ -60,13 +71,13 @@ const TreeList: React.FC = () => {
     return !!path;
   };
 
-  const addNode = () => {
+  const addNode = (parentId: string | null = null) => {
     const newNode: RouteNode = {
       id: `${Date.now()}`,
       path: "",
       children: [],
     };
-    stores.routes.actions.addNode(null, newNode);
+    stores.routes.actions.addNode(parentId, newNode);
     setEditingKey(newNode.id);
   };
 
@@ -80,11 +91,11 @@ const TreeList: React.FC = () => {
 
   return (
     <div className="bg-white">
-      <Flex justify="end" className="px-2 py-1 border-b">
-        <Button type="text" size="small" onClick={addNode}>
+      <div className="flex justify-end px-2 py-1 border-b">
+        <Button type="text" size="small" onClick={() => addNode(null)}>
           新增
         </Button>
-      </Flex>
+      </div>
       <Tree
         className={css`
           & {
