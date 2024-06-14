@@ -3,7 +3,7 @@ import { proxy } from "valtio";
 
 /** 舞台内存路由数据 */
 const stageMemoryRouter = proxy({
-  entries: ['/'] as string[],
+  entries: ["/"] as string[],
   index: 0,
   get location() {
     return this.entries[this.index];
@@ -26,6 +26,37 @@ export const actions = {
   updateStageMemoryRouterIndex(index: number) {
     states.stageMemoryRouter.index = index;
   },
+
+  /**
+   * 获取完整 path 路径
+   *
+   * 传入 routeNode 的 id，找到他，拼接上所有父级的 path 然后返回
+   * path 已经是 '/' 分割的了，而且根才是 以 / 开头，子节点都是相对的
+   */
+  getNodeFullPath(id: string): string | null {
+    const findNodePath = (
+      nodes: RouteNode[],
+      id: string,
+      path: string[]
+    ): string[] | null => {
+      for (const node of nodes) {
+        const currentPath = [...path, node.path];
+        if (node.id === id) return currentPath;
+        if (node.children) {
+          const foundPath = findNodePath(node.children, id, currentPath);
+          if (foundPath) return foundPath;
+        }
+      }
+      return null;
+    };
+
+    const path = findNodePath(states.routeNodes.nodes, id, []);
+    if (path) {
+      return "/" + path.filter((segment) => segment !== "/").join("/");
+    }
+    return null;
+  },
+
   addNode(parentId: string | null, newNode: RouteNode) {
     const findNode = (nodes: RouteNode[], id: string): RouteNode | null => {
       for (const node of nodes) {

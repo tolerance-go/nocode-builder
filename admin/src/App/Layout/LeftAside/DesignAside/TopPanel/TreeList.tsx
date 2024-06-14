@@ -1,8 +1,9 @@
+import { globalEventBus } from "@/globals/eventBus";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
-import { PlusOutlined, DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { InputRef, TreeDataNode, TreeProps } from "antd";
 import { Button, Input, Space, Tree } from "antd";
@@ -116,8 +117,14 @@ const TreeList: React.FC = () => {
     stores.routes.actions.deleteNode(nodeId);
   };
 
-  const onSelect: TreeProps["onSelect"] = (selectedKeys, info) => {
-    console.log("selected", selectedKeys, info);
+  const onSelect: TreeProps["onSelect"] = (selectedKeys) => {
+    if (selectedKeys.length > 0) {
+      const nodeId = selectedKeys[0] as string;
+      const fullPath = stores.routes.actions.getNodeFullPath(nodeId);
+      if (fullPath) {
+        globalEventBus.emit("stageNavigate", { to: fullPath });
+      }
+    }
   };
 
   const onCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
@@ -146,7 +153,7 @@ const TreeList: React.FC = () => {
           >
             {node.id === editingKey ? (
               <Input
-              variant="borderless"
+                variant="borderless"
                 ref={inputRef}
                 defaultValue={node.path}
                 status={inputStatus}
