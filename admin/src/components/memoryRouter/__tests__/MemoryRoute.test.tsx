@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { MemoryOutlet } from "../MemoryOutlet";
 import { MemoryRoute } from "../MemoryRoute";
 import { MemoryRouter } from "../MemoryRouter";
+import { MemoryRoutes } from "../MemoryRoutes";
 
 describe("MemoryRoute component", () => {
   it("renders correctly with nested routes", () => {
@@ -43,12 +44,14 @@ describe("MemoryRoute component", () => {
     // 渲染主路径
     const { container: homeContainer } = render(
       <MemoryRouter initialEntries={["/"]}>
-        <MemoryRoute path="/" element={<Home />}>
-          <MemoryRoute path="about" element={<About />}>
-            <MemoryRoute path="team" element={<Team />} />
+        <MemoryRoutes>
+          <MemoryRoute path="/" element={<Home />}>
+            <MemoryRoute path="about" element={<About />}>
+              <MemoryRoute path="team" element={<Team />} />
+            </MemoryRoute>
+            <MemoryRoute path="contact" element={<Contact />} />
           </MemoryRoute>
-          <MemoryRoute path="contact" element={<Contact />} />
-        </MemoryRoute>
+        </MemoryRoutes>
       </MemoryRouter>
     );
 
@@ -65,12 +68,14 @@ describe("MemoryRoute component", () => {
     // 渲染子路径 /about
     const { container: aboutContainer } = render(
       <MemoryRouter initialEntries={["/about"]}>
-        <MemoryRoute path="/" element={<Home />}>
-          <MemoryRoute path="about" element={<About />}>
-            <MemoryRoute path="team" element={<Team />} />
+        <MemoryRoutes>
+          <MemoryRoute path="/" element={<Home />}>
+            <MemoryRoute path="about" element={<About />}>
+              <MemoryRoute path="team" element={<Team />} />
+            </MemoryRoute>
+            <MemoryRoute path="contact" element={<Contact />} />
           </MemoryRoute>
-          <MemoryRoute path="contact" element={<Contact />} />
-        </MemoryRoute>
+        </MemoryRoutes>
       </MemoryRouter>
     );
 
@@ -92,12 +97,14 @@ describe("MemoryRoute component", () => {
     // 渲染子路径 /about/team
     const { container: teamContainer } = render(
       <MemoryRouter initialEntries={["/about/team"]}>
-        <MemoryRoute path="/" element={<Home />}>
-          <MemoryRoute path="about" element={<About />}>
-            <MemoryRoute path="team" element={<Team />} />
+        <MemoryRoutes>
+          <MemoryRoute path="/" element={<Home />}>
+            <MemoryRoute path="about" element={<About />}>
+              <MemoryRoute path="team" element={<Team />} />
+            </MemoryRoute>
+            <MemoryRoute path="contact" element={<Contact />} />
           </MemoryRoute>
-          <MemoryRoute path="contact" element={<Contact />} />
-        </MemoryRoute>
+        </MemoryRoutes>
       </MemoryRouter>
     );
 
@@ -124,12 +131,14 @@ describe("MemoryRoute component", () => {
     // 渲染子路径 /contact
     const { container: contactContainer } = render(
       <MemoryRouter initialEntries={["/contact"]}>
-        <MemoryRoute path="/" element={<Home />}>
-          <MemoryRoute path="about" element={<About />}>
-            <MemoryRoute path="team" element={<Team />} />
+        <MemoryRoutes>
+          <MemoryRoute path="/" element={<Home />}>
+            <MemoryRoute path="about" element={<About />}>
+              <MemoryRoute path="team" element={<Team />} />
+            </MemoryRoute>
+            <MemoryRoute path="contact" element={<Contact />} />
           </MemoryRoute>
-          <MemoryRoute path="contact" element={<Contact />} />
-        </MemoryRoute>
+        </MemoryRoutes>
       </MemoryRouter>
     );
 

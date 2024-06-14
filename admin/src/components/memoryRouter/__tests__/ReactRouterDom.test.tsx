@@ -109,5 +109,47 @@ describe("Route components", () => {
         </div>
       </div>
     `);
+
+    expect(() => {
+      render(<Route path="/" element={<Home />} />);
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.]`
+    );
+
+    expect(() => {
+      render(
+        <Router>
+          <Route path="/" element={<Home />} />
+        </Router>
+      );
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.]`
+    );
+
+    expect(() => {
+      render(
+        <Router>
+          <Routes>
+            <Route>
+              <Home />
+            </Route>
+          </Routes>
+        </Router>
+      );
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+    );
+
+    expect(() => {
+      render(
+        <Router>
+          <Routes>
+            <Home />
+          </Routes>
+        </Router>
+      );
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+    );
   });
 });
