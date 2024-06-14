@@ -183,21 +183,23 @@ describe("MemoryRoute component", () => {
         </Router>
       );
     }).not.throw();
-
-    // expect(() => {
-    //   render(
-    //     <Router>
-    //       <Routes>
-    //         <Home />
-    //       </Routes>
-    //     </Router>
-    //   );
-    // }).toThrowErrorMatchingInlineSnapshot(
-    //   `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
-    // );
   });
 
-  it.only("嵌套非 Route 子组件", () => {
+  it("嵌套非 Route 子组件，无 Route", () => {
+    expect(() => {
+      render(
+        <Router>
+          <Routes>
+            <Home />
+          </Routes>
+        </Router>
+      );
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+    );
+  });
+
+  it("嵌套非 Route 子组件", () => {
     expect(() => {
       render(
         <Router>
