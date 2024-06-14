@@ -66,7 +66,7 @@ const TreeList: React.FC = () => {
     nodeId: string
   ) => {
     const newPath = (e.target as HTMLInputElement).value.trim();
-    if (newPath && isValidPath(newPath)) {
+    if (newPath && isValidPath(newPath, nodeId)) {
       // Update the node path
       stores.routes.actions.updateNode(nodeId, { path: newPath });
     } else {
@@ -76,15 +76,22 @@ const TreeList: React.FC = () => {
     setEditingKey(null);
   };
 
-  const isValidPath = (path: string): boolean => {
-    // Add your validation logic here
-    return !!path;
+  const isValidPath = (path: string, nodeId: string): boolean => {
+    // Ensure the first layer path starts with '/'
+    if (
+      snapshot.nodes.some((node) => node.id === nodeId && !path.startsWith("/"))
+    ) {
+      return false;
+    }
+    // Ensure the path contains only valid URL characters
+    const urlPattern = /^[a-zA-Z0-9\-._~!$&'()*+,;=:@/]*$/;
+    return urlPattern.test(path);
   };
 
   const addNode = (parentId: string | null = null) => {
     const newNode: RouteNode = {
       id: `${Date.now()}`,
-      path: "",
+      path: parentId ? "" : "/",
       children: [],
     };
     stores.routes.actions.addNode(parentId, newNode);
