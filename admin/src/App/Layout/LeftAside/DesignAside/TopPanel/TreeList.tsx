@@ -13,6 +13,10 @@ const TreeList: React.FC = () => {
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const [editingKey, setEditingKey] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [inputStatus, setInputStatus] = useState<"error" | "" | undefined>(
+    undefined
+  );
   const inputRef = useRef<InputRef>(null);
 
   useEffect(() => {
@@ -27,6 +31,9 @@ const TreeList: React.FC = () => {
               <Input
                 ref={inputRef}
                 defaultValue={node.path}
+                value={inputValue}
+                status={inputStatus}
+                onChange={(e) => handleInputChange(e.target.value, node.id)}
                 onBlur={(e) => handleInputBlur(e, node.id)}
                 onPressEnter={(e) => handleInputBlur(e, node.id)}
                 autoFocus
@@ -57,7 +64,16 @@ const TreeList: React.FC = () => {
       }));
     };
     setTreeData(convertToTreeData(snapshot.nodes));
-  }, [snapshot.nodes, editingKey]);
+  }, [snapshot.nodes, editingKey, inputValue, inputStatus]);
+
+  const handleInputChange = (value: string, nodeId: string) => {
+    setInputValue(value);
+    if (isValidPath(value, nodeId)) {
+      setInputStatus(undefined);
+    } else {
+      setInputStatus("error");
+    }
+  };
 
   const handleInputBlur = (
     e:
@@ -65,7 +81,7 @@ const TreeList: React.FC = () => {
       | React.KeyboardEvent<HTMLInputElement>,
     nodeId: string
   ) => {
-    const newPath = (e.target as HTMLInputElement).value.trim();
+    const newPath = inputValue.trim();
     if (newPath && isValidPath(newPath, nodeId)) {
       // Update the node path
       stores.routes.actions.updateNode(nodeId, { path: newPath });
@@ -74,6 +90,8 @@ const TreeList: React.FC = () => {
       stores.routes.actions.deleteNode(nodeId);
     }
     setEditingKey(null);
+    setInputValue("");
+    setInputStatus(undefined);
   };
 
   const isValidPath = (path: string, nodeId: string): boolean => {
@@ -125,6 +143,8 @@ const TreeList: React.FC = () => {
     };
     stores.routes.actions.addNode(parentId, newNode);
     setEditingKey(newNode.id);
+    setInputValue("");
+    setInputStatus(undefined);
     if (parentId) {
       setExpandedKeys((prevKeys) => [...prevKeys, parentId]);
     }
