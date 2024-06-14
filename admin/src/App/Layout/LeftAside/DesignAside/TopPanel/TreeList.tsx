@@ -77,12 +77,41 @@ const TreeList: React.FC = () => {
   };
 
   const isValidPath = (path: string, nodeId: string): boolean => {
+    // Find the node and its parent
+    const findNodeAndParent = (
+      nodes: DeepReadonly<RouteNode[]>,
+      id: string
+    ): {
+      node: DeepReadonly<RouteNode> | null;
+      parent: DeepReadonly<RouteNode> | null;
+    } => {
+      for (const node of nodes) {
+        if (node.id === id) return { node, parent: null };
+        if (node.children) {
+          for (const child of node.children) {
+            if (child.id === id) return { node: child, parent: node };
+            const result = findNodeAndParent(node.children, id);
+            if (result.node) return result;
+          }
+        }
+      }
+      return { node: null, parent: null };
+    };
+
+    const { node, parent } = findNodeAndParent(snapshot.nodes, nodeId);
+
+    if (!node) return false;
+
     // Ensure the first layer path starts with '/'
-    if (
-      snapshot.nodes.some((node) => node.id === nodeId && !path.startsWith("/"))
-    ) {
+    if (!parent && !path.startsWith("/")) {
       return false;
     }
+
+    // Ensure non-first layer paths do not start with '/'
+    if (parent && path.startsWith("/")) {
+      return false;
+    }
+
     // Ensure the path contains only valid URL characters
     const urlPattern = /^[a-zA-Z0-9\-._~!$&'()*+,;=:@/]*$/;
     return urlPattern.test(path);
