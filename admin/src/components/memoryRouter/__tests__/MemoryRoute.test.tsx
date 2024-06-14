@@ -19,6 +19,7 @@ describe("MemoryRoute component", () => {
       return (
         <div>
           <h1>关于我们</h1>
+          <MemoryOutlet />
         </div>
       );
     };
@@ -31,11 +32,21 @@ describe("MemoryRoute component", () => {
       );
     };
 
+    const Team = () => {
+      return (
+        <div>
+          <h1>我们的团队</h1>
+        </div>
+      );
+    };
+
     // 渲染主路径
     const { container: homeContainer } = render(
       <MemoryRouter initialEntries={["/"]}>
         <MemoryRoute path="/" element={<Home />}>
-          <MemoryRoute path="about" element={<About />} />
+          <MemoryRoute path="about" element={<About />}>
+            <MemoryRoute path="team" element={<Team />} />
+          </MemoryRoute>
           <MemoryRoute path="contact" element={<Contact />} />
         </MemoryRoute>
       </MemoryRouter>
@@ -55,7 +66,9 @@ describe("MemoryRoute component", () => {
     const { container: aboutContainer } = render(
       <MemoryRouter initialEntries={["/about"]}>
         <MemoryRoute path="/" element={<Home />}>
-          <MemoryRoute path="about" element={<About />} />
+          <MemoryRoute path="about" element={<About />}>
+            <MemoryRoute path="team" element={<Team />} />
+          </MemoryRoute>
           <MemoryRoute path="contact" element={<Contact />} />
         </MemoryRoute>
       </MemoryRouter>
@@ -76,11 +89,45 @@ describe("MemoryRoute component", () => {
       </div>
     `);
 
+    // 渲染子路径 /about/team
+    const { container: teamContainer } = render(
+      <MemoryRouter initialEntries={["/about/team"]}>
+        <MemoryRoute path="/" element={<Home />}>
+          <MemoryRoute path="about" element={<About />}>
+            <MemoryRoute path="team" element={<Team />} />
+          </MemoryRoute>
+          <MemoryRoute path="contact" element={<Contact />} />
+        </MemoryRoute>
+      </MemoryRouter>
+    );
+
+    expect(teamContainer).toMatchInlineSnapshot(`
+      <div>
+        <div>
+          <h1>
+            欢迎来到主页
+          </h1>
+          <div>
+            <h1>
+              关于我们
+            </h1>
+            <div>
+              <h1>
+                我们的团队
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    `);
+
     // 渲染子路径 /contact
     const { container: contactContainer } = render(
       <MemoryRouter initialEntries={["/contact"]}>
         <MemoryRoute path="/" element={<Home />}>
-          <MemoryRoute path="about" element={<About />} />
+          <MemoryRoute path="about" element={<About />}>
+            <MemoryRoute path="team" element={<Team />} />
+          </MemoryRoute>
           <MemoryRoute path="contact" element={<Contact />} />
         </MemoryRoute>
       </MemoryRouter>
