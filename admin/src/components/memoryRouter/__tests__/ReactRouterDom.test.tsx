@@ -7,7 +7,7 @@ import {
   Outlet,
 } from "react-router-dom";
 
-describe("Route components", () => {
+describe("MemoryRoute component", () => {
   const Home = () => {
     return (
       <div>
@@ -67,7 +67,7 @@ describe("Route components", () => {
       </div>
     `);
 
-    // 渲染子路径 /about
+    // // 渲染子路径 /about
     const { container: aboutContainer } = render(
       <Router initialEntries={["/about"]}>
         <Routes>
@@ -91,6 +91,40 @@ describe("Route components", () => {
             <h1>
               关于我们
             </h1>
+          </div>
+        </div>
+      </div>
+    `);
+
+    // 渲染子路径 /about/team
+    const { container: teamContainer } = render(
+      <Router initialEntries={["/about/team"]}>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route path="about" element={<About />}>
+              <Route path="team" element={<Team />} />
+            </Route>
+            <Route path="contact" element={<Contact />} />
+          </Route>
+        </Routes>
+      </Router>
+    );
+
+    expect(teamContainer).toMatchInlineSnapshot(`
+      <div>
+        <div>
+          <h1>
+            欢迎来到主页
+          </h1>
+          <div>
+            <h1>
+              关于我们
+            </h1>
+            <div>
+              <h1>
+                我们的团队
+              </h1>
+            </div>
           </div>
         </div>
       </div>
@@ -125,40 +159,6 @@ describe("Route components", () => {
       </div>
     `);
 
-    // 渲染子路径 /contact
-    const { container: empty } = render(
-      <Router initialEntries={["/team"]}>
-        <Routes>
-          <Route path="/" element={<Home />}>
-            <Route element={<About />}>
-              <Route path="team" element={<Team />} />
-            </Route>
-            <Route path="contact" element={<Contact />} />
-          </Route>
-        </Routes>
-      </Router>
-    );
-
-    expect(empty).toMatchInlineSnapshot(`
-      <div>
-        <div>
-          <h1>
-            欢迎来到主页
-          </h1>
-          <div>
-            <h1>
-              关于我们
-            </h1>
-            <div>
-              <h1>
-                我们的团队
-              </h1>
-            </div>
-          </div>
-        </div>
-      </div>
-    `);
-
     expect(() => {
       render(<Route path="/" element={<Home />} />);
     }).toThrowErrorMatchingInlineSnapshot(
@@ -185,7 +185,23 @@ describe("Route components", () => {
         </Router>
       );
     }).not.throw();
+  });
 
+  it("嵌套非 Route 子组件，无 Route", () => {
+    expect(() => {
+      render(
+        <Router>
+          <Routes>
+            <Home />
+          </Routes>
+        </Router>
+      );
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+    );
+  });
+
+  it("嵌套非 Route 子组件", () => {
     expect(() => {
       render(
         <Router>
@@ -199,18 +215,42 @@ describe("Route components", () => {
     }).toThrowErrorMatchingInlineSnapshot(
       `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
     );
+  });
 
-    expect(() => {
-      render(
-        <Router>
-          <Routes>
-            <Home />
-          </Routes>
-        </Router>
-      );
-    }).toThrowErrorMatchingInlineSnapshot(
-      `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+  it("省略 path", () => {
+    // 渲染子路径 /contact
+    const { container: empty } = render(
+      <Router initialEntries={["/team"]}>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route element={<About />}>
+              <Route path="team" element={<Team />} />
+            </Route>
+            <Route path="contact" element={<Contact />} />
+          </Route>
+        </Routes>
+      </Router>
     );
+
+    expect(empty).toMatchInlineSnapshot(`
+        <div>
+          <div>
+            <h1>
+              欢迎来到主页
+            </h1>
+            <div>
+              <h1>
+                关于我们
+              </h1>
+              <div>
+                <h1>
+                  我们的团队
+                </h1>
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
   });
 
   it("深层级省略 path", () => {
