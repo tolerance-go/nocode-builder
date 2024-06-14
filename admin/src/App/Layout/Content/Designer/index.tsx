@@ -14,6 +14,7 @@ export const Designer = () => {
         <Space>
           <Space>
             <Button
+              disabled={stageMemoryRouter.index === 0}
               size="small"
               type="text"
               onClick={() => {
@@ -25,6 +26,9 @@ export const Designer = () => {
               回退
             </Button>
             <Button
+              disabled={
+                stageMemoryRouter.index >= stageMemoryRouter.entries.length - 1
+              }
               size="small"
               type="text"
               onClick={() => {
