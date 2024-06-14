@@ -13,14 +13,13 @@ const TreeList: React.FC = () => {
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const [editingKey, setEditingKey] = useState<string | null>(null);
-  const [inputValue, setInputValue] = useState<string>("");
-  const [inputStatus, setInputStatus] = useState<"error" | "" | undefined>(
+  const [inputStatus, setInputStatus] = useState<"error" | undefined>(
     undefined
   );
   const inputRef = useRef<InputRef>(null);
 
   useEffect(() => {
-    // Convert routeNodes to treeData format
+    // 将 routeNodes 转换为 treeData 格式
     const convertToTreeData = (
       nodes: DeepReadonly<RouteNode[]>
     ): TreeDataNode[] => {
@@ -31,7 +30,6 @@ const TreeList: React.FC = () => {
               <Input
                 ref={inputRef}
                 defaultValue={node.path}
-                value={inputValue}
                 status={inputStatus}
                 onChange={(e) => handleInputChange(e.target.value, node.id)}
                 onBlur={(e) => handleInputBlur(e, node.id)}
@@ -64,10 +62,9 @@ const TreeList: React.FC = () => {
       }));
     };
     setTreeData(convertToTreeData(snapshot.nodes));
-  }, [snapshot.nodes, editingKey, inputValue, inputStatus]);
+  }, [snapshot.nodes, editingKey, inputStatus]);
 
   const handleInputChange = (value: string, nodeId: string) => {
-    setInputValue(value);
     if (isValidPath(value, nodeId)) {
       setInputStatus(undefined);
     } else {
@@ -81,21 +78,20 @@ const TreeList: React.FC = () => {
       | React.KeyboardEvent<HTMLInputElement>,
     nodeId: string
   ) => {
-    const newPath = inputValue.trim();
+    const newPath = inputRef.current?.input?.value.trim();
     if (newPath && isValidPath(newPath, nodeId)) {
-      // Update the node path
+      // 更新节点路径
       stores.routes.actions.updateNode(nodeId, { path: newPath });
     } else {
-      // Remove the node if the input is not valid
+      // 如果输入无效，删除节点
       stores.routes.actions.deleteNode(nodeId);
     }
     setEditingKey(null);
-    setInputValue("");
     setInputStatus(undefined);
   };
 
   const isValidPath = (path: string, nodeId: string): boolean => {
-    // Find the node and its parent
+    // 查找节点及其父节点
     const findNodeAndParent = (
       nodes: DeepReadonly<RouteNode[]>,
       id: string
@@ -120,17 +116,17 @@ const TreeList: React.FC = () => {
 
     if (!node) return false;
 
-    // Ensure the first layer path starts with '/'
+    // 确保顶层路径以 '/' 开头
     if (!parent && !path.startsWith("/")) {
       return false;
     }
 
-    // Ensure non-first layer paths do not start with '/'
+    // 确保非顶层路径不以 '/' 开头
     if (parent && path.startsWith("/")) {
       return false;
     }
 
-    // Ensure the path contains only valid URL characters
+    // 确保路径只包含有效的 URL 字符
     const urlPattern = /^[a-zA-Z0-9\-._~!$&'()*+,;=:@/]*$/;
     return urlPattern.test(path);
   };
@@ -143,7 +139,6 @@ const TreeList: React.FC = () => {
     };
     stores.routes.actions.addNode(parentId, newNode);
     setEditingKey(newNode.id);
-    setInputValue(newNode.path);
     setInputStatus(undefined);
     if (parentId) {
       setExpandedKeys((prevKeys) => [...prevKeys, parentId]);
