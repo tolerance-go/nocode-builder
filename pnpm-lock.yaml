@@ -8,7 +8,7 @@ importers:
 
   .: {}
 
-  packages/admin:
+  admin:
     dependencies:
       '@ant-design/icons':
         specifier: ^5.3.7
