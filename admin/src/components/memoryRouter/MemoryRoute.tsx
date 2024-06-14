@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { MemoryRoutesContext } from "./MemoryRoutesContext";
 
-interface RouteProps {
-  path: string;
-  element: React.ReactNode;
+export interface RouteProps {
+  path?: string;
+  element?: React.ReactNode;
   children?: React.ReactNode;
 }
 

@@ -1,46 +1,51 @@
 import { render } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { MemoryRouter, Routes, Route, Outlet } from "react-router-dom";
+import {
+  MemoryRouter as Router,
+  Routes,
+  Route,
+  Outlet,
+} from "react-router-dom";
 
 describe("Route components", () => {
+  const Home = () => {
+    return (
+      <div>
+        <h1>欢迎来到主页</h1>
+        <Outlet />
+      </div>
+    );
+  };
+
+  const About = () => {
+    return (
+      <div>
+        <h1>关于我们</h1>
+        <Outlet />
+      </div>
+    );
+  };
+
+  const Contact = () => {
+    return (
+      <div>
+        <h1>联系我们</h1>
+      </div>
+    );
+  };
+
+  const Team = () => {
+    return (
+      <div>
+        <h1>我们的团队</h1>
+      </div>
+    );
+  };
+
   it("renders correctly with nested routes", () => {
-    const Home = () => {
-      return (
-        <div>
-          <h1>欢迎来到主页</h1>
-          <Outlet />
-        </div>
-      );
-    };
-
-    const About = () => {
-      return (
-        <div>
-          <h1>关于我们</h1>
-          <Outlet />
-        </div>
-      );
-    };
-
-    const Contact = () => {
-      return (
-        <div>
-          <h1>联系我们</h1>
-        </div>
-      );
-    };
-
-    const Team = () => {
-      return (
-        <div>
-          <h1>我们的团队</h1>
-        </div>
-      );
-    };
-
     // 渲染主路径
     const { container: homeContainer } = render(
-      <MemoryRouter initialEntries={["/"]}>
+      <Router initialEntries={["/"]}>
         <Routes>
           <Route path="/" element={<Home />}>
             <Route path="about" element={<About />}>
@@ -49,7 +54,7 @@ describe("Route components", () => {
             <Route path="contact" element={<Contact />} />
           </Route>
         </Routes>
-      </MemoryRouter>
+      </Router>
     );
 
     expect(homeContainer).toMatchInlineSnapshot(`
@@ -64,7 +69,7 @@ describe("Route components", () => {
 
     // 渲染子路径 /about
     const { container: aboutContainer } = render(
-      <MemoryRouter initialEntries={["/about"]}>
+      <Router initialEntries={["/about"]}>
         <Routes>
           <Route path="/" element={<Home />}>
             <Route path="about" element={<About />}>
@@ -73,7 +78,7 @@ describe("Route components", () => {
             <Route path="contact" element={<Contact />} />
           </Route>
         </Routes>
-      </MemoryRouter>
+      </Router>
     );
 
     expect(aboutContainer).toMatchInlineSnapshot(`
@@ -93,7 +98,7 @@ describe("Route components", () => {
 
     // 渲染子路径 /contact
     const { container: contactContainer } = render(
-      <MemoryRouter initialEntries={["/contact"]}>
+      <Router initialEntries={["/contact"]}>
         <Routes>
           <Route path="/" element={<Home />}>
             <Route path="about" element={<About />}>
@@ -102,7 +107,7 @@ describe("Route components", () => {
             <Route path="contact" element={<Contact />} />
           </Route>
         </Routes>
-      </MemoryRouter>
+      </Router>
     );
 
     expect(contactContainer).toMatchInlineSnapshot(`
@@ -120,6 +125,40 @@ describe("Route components", () => {
       </div>
     `);
 
+    // 渲染子路径 /contact
+    const { container: empty } = render(
+      <Router initialEntries={["/team"]}>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route element={<About />}>
+              <Route path="team" element={<Team />} />
+            </Route>
+            <Route path="contact" element={<Contact />} />
+          </Route>
+        </Routes>
+      </Router>
+    );
+
+    expect(empty).toMatchInlineSnapshot(`
+      <div>
+        <div>
+          <h1>
+            欢迎来到主页
+          </h1>
+          <div>
+            <h1>
+              关于我们
+            </h1>
+            <div>
+              <h1>
+                我们的团队
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    `);
+
     expect(() => {
       render(<Route path="/" element={<Home />} />);
     }).toThrowErrorMatchingInlineSnapshot(
@@ -128,9 +167,9 @@ describe("Route components", () => {
 
     expect(() => {
       render(
-        <MemoryRouter>
+        <Router>
           <Route path="/" element={<Home />} />
-        </MemoryRouter>
+        </Router>
       );
     }).toThrowErrorMatchingInlineSnapshot(
       `[Error: A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.]`
@@ -138,24 +177,24 @@ describe("Route components", () => {
 
     expect(() => {
       render(
-        <MemoryRouter>
+        <Router>
           <Routes>
             {100}
             <Route>{100}</Route>
           </Routes>
-        </MemoryRouter>
+        </Router>
       );
     }).not.throw();
 
     expect(() => {
       render(
-        <MemoryRouter>
+        <Router>
           <Routes>
             <Route>
               <Home />
             </Route>
           </Routes>
-        </MemoryRouter>
+        </Router>
       );
     }).toThrowErrorMatchingInlineSnapshot(
       `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
@@ -163,14 +202,45 @@ describe("Route components", () => {
 
     expect(() => {
       render(
-        <MemoryRouter>
+        <Router>
           <Routes>
             <Home />
           </Routes>
-        </MemoryRouter>
+        </Router>
       );
     }).toThrowErrorMatchingInlineSnapshot(
       `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
     );
+  });
+
+  it("深层级省略 path", () => {
+    // 渲染子路径 /contact
+    const { container: empty } = render(
+      <Router initialEntries={["/about"]}>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route path="about" element={<About />}>
+              <Route element={<Team />} />
+            </Route>
+            <Route path="contact" element={<Contact />} />
+          </Route>
+        </Routes>
+      </Router>
+    );
+
+    expect(empty).toMatchInlineSnapshot(`
+      <div>
+        <div>
+          <h1>
+            欢迎来到主页
+          </h1>
+          <div>
+            <h1>
+              关于我们
+            </h1>
+          </div>
+        </div>
+      </div>
+    `);
   });
 });
