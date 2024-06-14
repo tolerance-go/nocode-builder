@@ -37,7 +37,7 @@ export const actions = {
     const findNodePath = (
       nodes: RouteNode[],
       id: string,
-      path: string[]
+      path: string[] = []
     ): string[] | null => {
       for (const node of nodes) {
         const currentPath = [...path, node.path];
@@ -50,9 +50,9 @@ export const actions = {
       return null;
     };
 
-    const path = findNodePath(states.routeNodes.nodes, id, []);
-    if (path) {
-      return "/" + path.filter((segment) => segment !== "/").join("/");
+    const path = findNodePath(states.routeNodes.nodes, id);
+    if (path?.length) {
+      return `${path[0]}${path.slice(1).join("/")}`;
     }
     return null;
   },
