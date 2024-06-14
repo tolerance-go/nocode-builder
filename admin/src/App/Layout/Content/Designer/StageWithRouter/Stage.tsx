@@ -220,6 +220,7 @@ type HighlightedSlotMeta = {
 };
 
 export const Stage: React.FC = () => {
+  const selectedNodes = useSnapshot(stores.designs.states.selectedNodeIds);
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
   const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] = useState<
     [DeepReadonly<NodeData>, HTMLElement] | null
@@ -566,6 +567,20 @@ export const Stage: React.FC = () => {
       handleDraggingEnd();
     });
   }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Delete" && selectedNodes.selectedIds.length > 0) {
+        stores.designs.actions.removeSelectedNodes();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedNodes.selectedIds]);
 
   return (
     <div style={{ position: "relative" }} ref={containerRef}>

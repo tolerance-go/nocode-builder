@@ -203,6 +203,14 @@ export const actions = {
       slotName
     );
   },
+  /** 删除选中的节点 */
+  removeSelectedNodes: () => {
+    selectedNodeIds.selectedIds.forEach((id) => {
+      actions._removeNode(designTreeData.value.nodeData, id);
+    });
+    selectedNodeIds.selectedIds = [];
+  },
+  /** 从节点树删除节点 */
   removeNode: (nodeId: string) => {
     return actions._removeNode(designTreeData.value.nodeData, nodeId);
   },
