@@ -36,15 +36,14 @@ describe("MemoryRoute 组件", () => {
       render(
         <Router>
           <Routes>
-            <div>
-              <Route>
-                <div></div>
-              </Route>
-            </div>
+            <Route>
+              <div></div>
+            </Route>
           </Routes>
         </Router>
       );
     }).toThrowErrorMatchingInlineSnapshot(
-    `[Error: [div] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`);
+      `[Error: [div] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+    );
   });
 });
