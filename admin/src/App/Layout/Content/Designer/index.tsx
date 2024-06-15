@@ -1,17 +1,17 @@
 import stores from "@/stores";
-import { Button, Flex, Input, Space } from "antd";
+import { Button, Flex, Space } from "antd";
 import { useSnapshot } from "valtio";
+import { Location } from "./Location";
 import { StageWithRouter } from "./StageWithRouter";
 
 export const Designer = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
-  const stageMemoryRouter = useSnapshot(stores.routes.states.stageMemoryRouter);
 
   return (
     <div>
       <Flex justify="space-between" className="px-2 py-1 border-b">
         <Space>
-          <Input size="small" value={stageMemoryRouter.pathname}></Input>
+          <Location />
         </Space>
         <Space>
           <Button

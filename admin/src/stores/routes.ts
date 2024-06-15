@@ -2,19 +2,6 @@ import { RouteNode } from "@/types";
 import store2 from "store2";
 import { proxy, subscribe } from "valtio";
 
-const stageMemoryRouterLocal = store2.get("stageMemoryRouter", {});
-
-/** 舞台内存路由数据 */
-const stageMemoryRouter = proxy({
-  pathname: stageMemoryRouterLocal.pathname || "/",
-});
-
-subscribe(stageMemoryRouter, () => {
-  store2.set("stageMemoryRouter", {
-    pathname: stageMemoryRouter.pathname,
-  });
-});
-
 const routeNodes = proxy({
   nodes: store2.get("routeNodes", []) as RouteNode[],
 });
@@ -25,14 +12,9 @@ subscribe(routeNodes, () => {
 
 export const states = proxy({
   routeNodes,
-  stageMemoryRouter,
 });
 
 export const actions = {
-  updateStageMemoryRouterPathname(pathname: string) {
-    states.stageMemoryRouter.pathname = pathname;
-  },
-
   /**
    * 获取完整 path 路径
    *
