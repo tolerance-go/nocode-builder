@@ -7,7 +7,8 @@ import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { InputRef, TreeDataNode, TreeProps } from "antd";
 import { Button, Input, Space, Tree } from "antd";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { useSnapshot } from "valtio";
 
 const statusStyles = {
@@ -16,9 +17,15 @@ const statusStyles = {
 };
 
 const TreeList: React.FC = () => {
+  const location = useLocation();
+
+  const searchParams = new URLSearchParams(location.search);
+  const pathname = searchParams.get("pathname");
+
   const snapshot = useSnapshot(stores.routes.states.routeNodes);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   const [editingKey, setEditingKey] = useState<string | null>(null);
   const [inputStatus, setInputStatus] = useState<"error" | undefined>(
     undefined
@@ -130,6 +137,8 @@ const TreeList: React.FC = () => {
         globalEventBus.emit("stageNavigate", { to: fullPath });
       }
     }
+
+    setSelectedKeys(selectedKeys as string[]);
   };
 
   const onCheck: TreeProps["onCheck"] = (checkedKeys, info) => {
@@ -209,6 +218,38 @@ const TreeList: React.FC = () => {
     latestDeleteNode,
   ]);
 
+  useLayoutEffect(() => {
+    const defaultExpandedKeys: string[] = [];
+    const defaultSelectedKeys: string[] = [];
+
+    // 查找并展开包含当前 pathname 的节点
+    const findPathInNodes = (
+      nodes: DeepReadonly<RouteNode[]>,
+      currentPath: string
+    ): boolean => {
+      for (const node of nodes) {
+        if (stores.routes.actions.getNodeFullPath(node.id) === currentPath) {
+          defaultSelectedKeys.push(node.id);
+          return true;
+        }
+        if (node.children && findPathInNodes(node.children, currentPath)) {
+          defaultExpandedKeys.push(node.id);
+          return true;
+        }
+      }
+      return false;
+    };
+
+    if (pathname) {
+      findPathInNodes(snapshot.nodes, pathname);
+    }
+
+    setExpandedKeys(defaultExpandedKeys);
+    setSelectedKeys(defaultSelectedKeys);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="bg-white">
       <div className="flex justify-end px-2 py-1 border-b">
@@ -231,6 +272,7 @@ const TreeList: React.FC = () => {
         onCheck={onCheck}
         onExpand={onExpand}
         expandedKeys={expandedKeys}
+        selectedKeys={selectedKeys}
         treeData={treeData}
       />
     </div>
