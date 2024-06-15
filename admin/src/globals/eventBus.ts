@@ -55,7 +55,7 @@ export type EventMaps = {
    * 触发舞台路由变化
    */
   stageNavigate: {
-    to: To | number;
+    to: string;
   };
 };
 

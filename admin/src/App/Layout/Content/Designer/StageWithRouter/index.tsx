@@ -10,12 +10,8 @@ export const StageWithRouter = () => {
   const stageMemoryRouter = useSnapshot(stores.routes.states.stageMemoryRouter);
   const navigateRef = useRef<{ navigate: (to: To | number) => void }>(null);
 
-  const handleEntriesChange = (entries: readonly string[]) => {
-    stores.routes.actions.updateStageMemoryRouterEntries(entries as string[]);
-  };
-
-  const handleIndexChange = (index: number) => {
-    stores.routes.actions.updateStageMemoryRouterIndex(index);
+  const handlePathnameChange = (pathname: string) => {
+    stores.routes.actions.updateStageMemoryRouterPathname(pathname);
   };
 
   useEffect(() => {
@@ -28,10 +24,8 @@ export const StageWithRouter = () => {
 
   return (
     <MemoryRouter
-      initialEntries={stageMemoryRouter.entries}
-      initialIndex={stageMemoryRouter.index}
-      onEntriesChange={handleEntriesChange}
-      onIndexChange={handleIndexChange}
+      initialLocation={stageMemoryRouter.pathname}
+      onPathnameChange={handlePathnameChange}
       navigateRef={navigateRef}
     >
       <Stage />

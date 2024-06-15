@@ -3,16 +3,17 @@ import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
-import {
-  ClockCircleOutlined,
-  DeleteOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { InputRef, TreeDataNode, TreeProps } from "antd";
 import { Button, Input, Space, Tree } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import { useSnapshot } from "valtio";
+
+const statusStyles = {
+  error: { backgroundColor: "rgba(255, 0, 0, 0.1)" },
+  warning: { backgroundColor: "rgba(255, 165, 0, 0.1)" },
+};
 
 const TreeList: React.FC = () => {
   const snapshot = useSnapshot(stores.routes.states.routeNodes);
@@ -143,11 +144,6 @@ const TreeList: React.FC = () => {
   const latestHandleInputBlur = useLatest(handleInputBlur);
   const latestAddNode = useLatest(addNode);
   const latestDeleteNode = useLatest(deleteNode);
-
-  const statusStyles = {
-    error: { backgroundColor: "rgba(255, 0, 0, 0.1)" },
-    warning: { backgroundColor: "rgba(255, 165, 0, 0.1)" },
-  };
 
   useEffect(() => {
     // 将 routeNodes 转换为 treeData 格式

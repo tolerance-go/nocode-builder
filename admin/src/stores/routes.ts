@@ -6,17 +6,12 @@ const stageMemoryRouterLocal = store2.get("stageMemoryRouter", {});
 
 /** 舞台内存路由数据 */
 const stageMemoryRouter = proxy({
-  entries: stageMemoryRouterLocal.entries || (["/"] as string[]),
-  index: stageMemoryRouterLocal.index || 0,
-  get location() {
-    return this.entries[this.index];
-  },
+  pathname: stageMemoryRouterLocal.pathname || "/",
 });
 
 subscribe(stageMemoryRouter, () => {
   store2.set("stageMemoryRouter", {
-    entries: stageMemoryRouter.entries,
-    index: stageMemoryRouter.index,
+    pathname: stageMemoryRouter.pathname,
   });
 });
 
@@ -34,11 +29,8 @@ export const states = proxy({
 });
 
 export const actions = {
-  updateStageMemoryRouterEntries(entries: string[]) {
-    states.stageMemoryRouter.entries = entries;
-  },
-  updateStageMemoryRouterIndex(index: number) {
-    states.stageMemoryRouter.index = index;
+  updateStageMemoryRouterPathname(pathname: string) {
+    states.stageMemoryRouter.pathname = pathname;
   },
 
   /**
