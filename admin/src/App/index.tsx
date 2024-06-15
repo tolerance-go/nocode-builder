@@ -15,6 +15,9 @@ function App() {
               borderRadius: 0,
             },
           },
+          token: {
+            colorBorderSecondary: "rgb(229, 231, 235)",
+          },
         }}
       >
         <Layout />

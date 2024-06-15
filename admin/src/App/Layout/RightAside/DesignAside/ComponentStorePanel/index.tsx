@@ -14,7 +14,7 @@ export const ComponentStorePanel = () => {
 
   return (
     <div className="flex flex-col h-[100%]">
-      <div className="px-2 py-1">
+      <div className="px-2 py-1 h-[34px] flex items-center justify-between border-b">
         <Button
           size="small"
           type="text"
@@ -29,7 +29,7 @@ export const ComponentStorePanel = () => {
           关闭
         </Button>
       </div>
-      <div className="px-2 py-1">
+      <div className="px-2 py-2">
         <Segmented<SegmentedType>
           options={[
             {
