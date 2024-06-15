@@ -14,7 +14,7 @@ export const ComponentStorePanel = () => {
 
   return (
     <div className="flex flex-col h-[100%]">
-      <div className="px-3 py-2">
+      <div className="px-2 py-1">
         <Button
           size="small"
           type="text"
