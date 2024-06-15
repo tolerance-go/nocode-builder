@@ -1,8 +1,8 @@
 import { NodeData } from "@/types";
 import { describe, expect, it } from "vitest";
-import { generateRouterComponentString } from ".";
+import { generateRouterComponent } from ".";
 
-describe("generateRouterComponentString", () => {
+describe("generateRouterComponent", () => {
   it("test1", () => {
     const nodeDatas: NodeData[] = [
       {
@@ -25,7 +25,7 @@ describe("generateRouterComponentString", () => {
         ],
       },
     ];
-    expect(generateRouterComponentString(nodeDatas)).toEqual({
+    expect(generateRouterComponent(nodeDatas)).toEqual({
       type: "Router",
       children: {
         type: "Routes",
@@ -48,7 +48,8 @@ describe("generateRouterComponentString", () => {
       },
     });
   });
-  it("test1", () => {
+
+  it("test2", () => {
     const nodeDatas: NodeData[] = [
       {
         id: "1",
@@ -141,7 +142,7 @@ describe("generateRouterComponentString", () => {
       },
     ];
 
-    expect(generateRouterComponentString(nodeDatas)).toEqual({
+    expect(generateRouterComponent(nodeDatas)).toEqual({
       type: "Router",
       children: {
         type: "Routes",
@@ -227,7 +228,7 @@ describe("generateRouterComponentString", () => {
               },
               {
                 type: "Route",
-                path: "route1",
+                path: "route2",
                 element: [
                   {
                     id: "1-1-3-2-1",
