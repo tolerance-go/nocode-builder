@@ -17,7 +17,7 @@ export const Layout = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 overflow-hidden">
       {/* 顶部导航栏 */}
       <header className="text-white px-4 border-b">
         <Header />

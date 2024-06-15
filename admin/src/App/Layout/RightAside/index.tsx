@@ -15,7 +15,7 @@ export const RightAside = () => {
   // };
 
   return (
-    <aside className={"w-[400px] border-l h-[100%] bg-white"}>
+    <aside className={"w-[400px] relative border-l h-[100%] bg-white"}>
       {match && <DesignAside />}
     </aside>
   );

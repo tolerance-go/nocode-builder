@@ -130,7 +130,7 @@ const RenderNode: React.FC<{
     stores.designs.actions.selectNode([node.id]);
     setSearchParams(
       updateSearchParams(searchParams, {
-        designAsideType: "settings",
+        designAsideSettings: "true",
       })
     );
   };

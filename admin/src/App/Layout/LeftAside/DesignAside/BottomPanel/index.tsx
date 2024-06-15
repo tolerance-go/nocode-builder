@@ -34,7 +34,7 @@ export const BottomPanel = () => {
               onClick={() => {
                 setSearchParams(
                   updateSearchParams(searchParams, {
-                    designAsideType: "store",
+                    designAsideStore: "true",
                   })
                 );
               }}

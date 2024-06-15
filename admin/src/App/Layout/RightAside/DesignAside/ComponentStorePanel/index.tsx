@@ -13,51 +13,53 @@ export const ComponentStorePanel = () => {
   const segmented = searchParams.get("segmented") as SegmentedType;
 
   return (
-    <div className="flex flex-col h-[100%]">
-      <div className="px-2 py-1 h-[34px] flex items-center justify-between border-b">
-        <Button
-          size="small"
-          type="text"
-          onClick={() => {
-            setSearchParams(
-              updateSearchParams(searchParams, {
-                designAsideType: "settings",
-              })
-            );
-          }}
-        >
-          关闭
-        </Button>
-      </div>
-      <div className="px-1.5 py-2">
-        <Segmented<SegmentedType>
-          options={[
-            {
-              label: "组件",
-              value: "component",
-            },
-            {
-              label: "区块",
-              value: "section",
-            },
-            {
-              label: "模板",
-              value: "template",
-            },
-          ]}
-          block
-          value={segmented}
-          onChange={(val) => {
-            setSearchParams(
-              updateSearchParams(searchParams, {
-                segmented: val,
-              })
-            );
-          }}
-        />
-      </div>
-      <div className="flex-grow">
-        {segmented === "component" && <ComponentStore />}
+    <div className="animate-slideInRight absolute inset-0 z-50 bg-white">
+      <div className="flex flex-col h-[100%]">
+        <div className="px-2 py-1 h-[34px] flex items-center justify-between border-b">
+          <Button
+            size="small"
+            type="text"
+            onClick={() => {
+              setSearchParams(
+                updateSearchParams(searchParams, {
+                  designAsideStore: "false",
+                })
+              );
+            }}
+          >
+            关闭
+          </Button>
+        </div>
+        <div className="px-1.5 py-2">
+          <Segmented<SegmentedType>
+            options={[
+              {
+                label: "组件",
+                value: "component",
+              },
+              {
+                label: "区块",
+                value: "section",
+              },
+              {
+                label: "模板",
+                value: "template",
+              },
+            ]}
+            block
+            value={segmented}
+            onChange={(val) => {
+              setSearchParams(
+                updateSearchParams(searchParams, {
+                  segmented: val,
+                })
+              );
+            }}
+          />
+        </div>
+        <div className="flex-grow">
+          {segmented === "component" && <ComponentStore />}
+        </div>
       </div>
     </div>
   );

@@ -9,8 +9,6 @@ export interface RouteNode {
   name?: string; // 路由名称
 }
 
-export type DesignAsideType = "store" | "settings";
-
 export type StaticPropsValue = string | number | boolean | null | undefined;
 export type StaticPropsArrayValue = StaticPropsValue[];
 
