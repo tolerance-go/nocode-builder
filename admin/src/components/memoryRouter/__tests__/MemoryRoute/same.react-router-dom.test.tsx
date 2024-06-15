@@ -321,6 +321,25 @@ describe("MemoryRoute 组件", () => {
     `);
   });
 
+  it("子节点绝对路径 /other", () => {
+    expect(() => {
+      render(
+        <Router initialEntries={["/other"]}>
+          <Routes>
+            <Route path="/" element={<Home />}>
+              <Route path="about" element={<About />}>
+                <Route path="/other" element={<Team />} />
+              </Route>
+              <Route path="contact" element={<Contact />} />
+            </Route>
+          </Routes>
+        </Router>
+      );
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: Absolute route path "/other" nested under path "/about" is not valid. An absolute child route path must start with the combined path of all its parent routes.]`
+    );
+  });
+
   it("嵌套非 Route 子组件，无 Route", () => {
     expect(() => {
       render(
