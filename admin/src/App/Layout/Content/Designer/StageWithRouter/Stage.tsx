@@ -34,12 +34,6 @@ const isPrimitiveOrNull = (
 
 const RenderNode: React.FC<{
   node: DeepReadonly<NodeData>;
-  /**
-   * 拖拽的时候，悬停的 node 的 html 元素，不包括自身
-   *
-   * @param node
-   * @returns
-   */
   onDraggingHover: (
     node: [DeepReadonly<NodeData>, HTMLElement],
     info: {
@@ -76,13 +70,21 @@ const RenderNode: React.FC<{
   const handleMouseEnter = () => {
     stores.designs.actions.switchHoveredComponent(node.id, true);
   };
+
+  const handleMouseLeave = (event: React.MouseEvent) => {
+    stores.designs.actions.switchHoveredComponent(node.id, false);
+
+    if (dragging.draggingId) {
+    }
+  };
+
   const handleMouseOver = (event: React.MouseEvent) => {
     /** 禁止冒泡 */
     event.stopPropagation();
 
     if (dragging.draggingId) {
       const draggingNodeEl = document.querySelector(
-        `[data-node-id="${dragging.draggingId}"]`
+        `[data-type="stage-node"][data-node-id="${dragging.draggingId}"]`
       );
 
       const isHoverDescendant = draggingNodeEl?.contains(event.currentTarget);
@@ -94,9 +96,6 @@ const RenderNode: React.FC<{
       });
     }
   };
-  const handleMouseLeave = () => {
-    stores.designs.actions.switchHoveredComponent(node.id, false);
-  };
 
   const handleMouseDown = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -105,13 +104,13 @@ const RenderNode: React.FC<{
     onDraggingStart([node, event.currentTarget as HTMLElement]);
   };
 
-  const handleMouseMove = () => {};
-
   const handleMouseUp = () => {
     stores.designs.actions.stopDragging();
 
     onDraggingEnd();
   };
+
+  const handleMouseMove = () => {};
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -212,6 +211,7 @@ const RenderNode: React.FC<{
     children: getChildren(),
     node,
     ["data-node-id"]: node.id,
+    ["data-type"]: "stage-node",
   });
 };
 
@@ -392,7 +392,7 @@ export const Stage: React.FC = () => {
 
     // 动态查找插槽占位符元素
     const slotPlaceholders = draggingHoveredOtherNode[1].querySelectorAll(
-      "[data-slot-placeholder]"
+      `[data-type="inner-slot"]`
     ) as NodeListOf<HTMLElement>;
 
     let newHighlightedSlot: HighlightedSlotMeta | null = null;

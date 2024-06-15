@@ -34,7 +34,7 @@ export const SlotPlaceholder: React.FC<SlotPlaceholderProps> = ({
 
   return isHovering ? (
     <div
-      data-slot-placeholder
+      data-type={"inner-slot"}
       data-slot-name={slotName}
       data-slot-parent-id={parentNode.id}
       style={{
