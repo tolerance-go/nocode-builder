@@ -27,32 +27,17 @@ export type RouteSettings = {
 };
 
 export const Route: React.FC<
-  DesignableComponentProps<Record<string, React.ReactNode>, RouteSettings>
+  DesignableComponentProps<React.ReactNode, RouteSettings>
 > = ({ node, children, ...rest }) => {
   const { path } = node.settings;
 
   return (
     <div {...rest}>
-      <MemoryRoute
-        path={path}
-        element={
-          isEmpty(children?.element) ? (
-            <SlotPlaceholder
-              slotName="element"
-              parentNode={node}
-            ></SlotPlaceholder>
-          ) : (
-            children?.element
-          )
-        }
-      >
-        {isEmpty(children?.routes) ? (
-          <SlotPlaceholder
-            slotName="routes"
-            parentNode={node}
-          ></SlotPlaceholder>
+      <MemoryRoute path={path}>
+        {isEmpty(children) ? (
+          <SlotPlaceholder parentNode={node}></SlotPlaceholder>
         ) : (
-          children?.routes
+          children
         )}
       </MemoryRoute>
     </div>

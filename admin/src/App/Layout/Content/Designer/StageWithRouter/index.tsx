@@ -1,11 +1,10 @@
-import { useRef, useEffect } from "react";
 import { MemoryRouter } from "@/components/memoryRouter/MemoryRouter";
+import { globalEventBus } from "@/globals/eventBus";
 import stores from "@/stores";
+import { useEffect, useRef } from "react";
+import { To } from "react-router-dom";
 import { useSnapshot } from "valtio";
 import { Stage } from "./Stage";
-import { To } from "react-router-dom";
-import { globalEventBus } from "@/globals/eventBus";
-import { MemoryRoutes } from "@/components/memoryRouter/MemoryRoutes";
 
 export const StageWithRouter = () => {
   const stageMemoryRouter = useSnapshot(stores.routes.states.stageMemoryRouter);
@@ -35,9 +34,7 @@ export const StageWithRouter = () => {
       onIndexChange={handleIndexChange}
       navigateRef={navigateRef}
     >
-      <MemoryRoutes>
-        <Stage />
-      </MemoryRoutes>
+      <Stage />
     </MemoryRouter>
   );
 };

@@ -1,12 +1,14 @@
-import React, { createContext, useContext } from "react";
+import { createContext, useContext } from "react";
 
 interface MemoryRouteContextType {
-  outlet: React.ReactNode;
+  path: string;
 }
 
-export const MemoryRouteContext = createContext<MemoryRouteContextType | null>(null);
+export const MemoryRouteContext = createContext<MemoryRouteContextType | null>(
+  null
+);
 
 // eslint-disable-next-line react-refresh/only-export-components
-export const useMemoryRouteContext = () => {
+export const useMemoryRoute = () => {
   return useContext(MemoryRouteContext);
 };
