@@ -266,7 +266,7 @@ const TreeList: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-white border-b">
+    <div className="bg-white border-b h-[400px]">
       <div className="flex items-center justify-between py-1 border-b h-[34px]">
         <Typography.Text className="ml-[16px]">页面路由</Typography.Text>
         <Space className="px-2">
@@ -279,7 +279,7 @@ const TreeList: React.FC = () => {
           </Button>
         </Space>
       </div>
-      <div className="py-2 pl-1 pr-1.5">
+      <div className="py-2 px-1.5">
         <Tree
           className={css`
             & {
