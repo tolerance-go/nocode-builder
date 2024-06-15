@@ -29,31 +29,33 @@ export const ComponentStorePanel = () => {
           关闭
         </Button>
       </div>
-      <Segmented<SegmentedType>
-        options={[
-          {
-            label: "组件",
-            value: "component",
-          },
-          {
-            label: "区块",
-            value: "section",
-          },
-          {
-            label: "模板",
-            value: "template",
-          },
-        ]}
-        block
-        value={segmented}
-        onChange={(val) => {
-          setSearchParams(
-            updateSearchParams(searchParams, {
-              segmented: val,
-            })
-          );
-        }}
-      />
+      <div className="px-2 py-1">
+        <Segmented<SegmentedType>
+          options={[
+            {
+              label: "组件",
+              value: "component",
+            },
+            {
+              label: "区块",
+              value: "section",
+            },
+            {
+              label: "模板",
+              value: "template",
+            },
+          ]}
+          block
+          value={segmented}
+          onChange={(val) => {
+            setSearchParams(
+              updateSearchParams(searchParams, {
+                segmented: val,
+              })
+            );
+          }}
+        />
+      </div>
       <div className="flex-grow">
         {segmented === "component" && <ComponentStore />}
       </div>
