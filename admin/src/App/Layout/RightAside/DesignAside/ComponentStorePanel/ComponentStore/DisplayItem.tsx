@@ -3,7 +3,6 @@ import { globalEventBus } from "@/globals/eventBus";
 import stores from "@/stores";
 import { ComponentWidget, NodeData, StaticProps } from "@/types";
 import { DeepReadonly } from "@/utils/types";
-import { Card } from "antd";
 import { useEffect, useState } from "react";
 import { useSnapshot } from "valtio";
 
@@ -51,7 +50,7 @@ const createNodeData = (component: DeepReadonly<ComponentWidget>): NodeData => {
 export const DisplayItem: React.FC<{
   component: DeepReadonly<ComponentWidget>;
   index: number;
-}> = ({ component, index }) => {
+}> = ({ component }) => {
   const [nodeData, setNodeData] = useState(() => createNodeData(component));
 
   const dragging = useSnapshot(stores.designs.states.dragging);

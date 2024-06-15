@@ -3,14 +3,13 @@ import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { InputRef, TreeDataNode, TreeProps } from "antd";
-import { Button, Input, Space, Tree, Typography } from "antd";
+import { Button, Dropdown, Input, Space, Tree, Typography } from "antd";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSnapshot } from "valtio";
-import { Menu, Dropdown } from "antd";
 
 const statusStyles = {
   error: { backgroundColor: "rgba(255, 0, 0, 0.1)" },
@@ -42,7 +41,7 @@ const TreeList: React.FC = () => {
   };
 
   const handleInputBlur = (
-    e:
+    _e:
       | React.FocusEvent<HTMLInputElement>
       | React.KeyboardEvent<HTMLInputElement>,
     nodeId: string
