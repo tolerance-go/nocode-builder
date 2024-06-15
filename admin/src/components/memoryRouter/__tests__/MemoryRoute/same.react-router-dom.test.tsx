@@ -285,4 +285,69 @@ describe("MemoryRoute 组件", () => {
       </div>
     `);
   });
+
+  it("子节点绝对路径", () => {
+    const { container: empty } = render(
+      <Router initialEntries={["/about/team"]}>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route path="about" element={<About />}>
+              <Route path="/about/team" element={<Team />} />
+            </Route>
+            <Route path="contact" element={<Contact />} />
+          </Route>
+        </Routes>
+      </Router>
+    );
+
+    expect(empty).toMatchInlineSnapshot(`
+      <div>
+        <div>
+          <h1>
+            欢迎来到主页
+          </h1>
+          <div>
+            <h1>
+              关于我们
+            </h1>
+            <div>
+              <h1>
+                我们的团队
+              </h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    `);
+  });
+
+  it("嵌套非 Route 子组件，无 Route", () => {
+    expect(() => {
+      render(
+        <Router>
+          <Routes>
+            <Home />
+          </Routes>
+        </Router>
+      );
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: [Home] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+    );
+  });
+
+  it("嵌套非 Route 子组件", () => {
+    expect(() => {
+      render(
+        <Router>
+          <Routes>
+            <Route>
+              <div></div>
+            </Route>
+          </Routes>
+        </Router>
+      );
+    }).toThrowErrorMatchingInlineSnapshot(
+      `[Error: [div] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>]`
+    );
+  });
 });
