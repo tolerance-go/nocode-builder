@@ -162,7 +162,7 @@ const TreeList: React.FC = () => {
       return nodes.map((node) => ({
         title: (
           <div
-            className="flex justify-between items-center"
+            className="flex justify-between items-center group"
             onDoubleClick={() => setEditingKey(node.id)}
           >
             {node.id === editingKey ? (
@@ -186,7 +186,7 @@ const TreeList: React.FC = () => {
               node.name || node.path
             )}
             {node.id !== editingKey && (
-              <Space>
+              <div className="group-hover:inline-flex hidden gap-2">
                 <Button
                   type="text"
                   size="small"
@@ -199,7 +199,7 @@ const TreeList: React.FC = () => {
                   onClick={() => latestDeleteNode.current(node.id)}
                   icon={<DeleteOutlined />}
                 />
-              </Space>
+              </div>
             )}
           </div>
         ),
@@ -264,7 +264,7 @@ const TreeList: React.FC = () => {
           </Button>
         </Space>
       </div>
-      <div className='py-2 pl-1 pr-1.5'>
+      <div className="py-2 pl-1 pr-1.5">
         <Tree
           className={css`
             & {
