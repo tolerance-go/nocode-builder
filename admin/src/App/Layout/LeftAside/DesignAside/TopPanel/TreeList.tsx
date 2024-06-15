@@ -6,7 +6,7 @@ import { DeepReadonly } from "@/utils/types";
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { InputRef, TreeDataNode, TreeProps } from "antd";
-import { Button, Input, Space, Tree } from "antd";
+import { Button, Input, Space, Tree, Typography } from "antd";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSnapshot } from "valtio";
@@ -251,15 +251,20 @@ const TreeList: React.FC = () => {
   }, []);
 
   return (
-    <div className="bg-white">
-      <div className="flex justify-end px-2 py-1 border-b">
-        <Button
-          type="text"
-          size="small"
-          onClick={() => latestAddNode.current(null)}
-        >
-          新增
-        </Button>
+    <div className="bg-white border-b">
+      <div className="flex items-center justify-between py-1 border-b h-[34px]">
+        <Typography.Text className="ml-[16px]">
+          页面路由
+        </Typography.Text>
+        <Space className="px-2">
+          <Button
+            type="text"
+            size="small"
+            onClick={() => latestAddNode.current(null)}
+          >
+            新增
+          </Button>
+        </Space>
       </div>
       <Tree
         className={css`

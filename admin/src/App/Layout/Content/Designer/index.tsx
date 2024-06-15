@@ -1,5 +1,5 @@
 import stores from "@/stores";
-import { Button, Flex, Space } from "antd";
+import { Button, Space } from "antd";
 import { useSnapshot } from "valtio";
 import { Location } from "./Location";
 import { StageWithRouter } from "./StageWithRouter";
@@ -9,7 +9,7 @@ export const Designer = () => {
 
   return (
     <div>
-      <Flex justify="space-between" className="px-2 py-1 border-b">
+      <div className="flex justify-between items-center h-[34px] px-2 py-1 border-b">
         <Space>
           <Location />
         </Space>
@@ -33,7 +33,7 @@ export const Designer = () => {
             重做
           </Button>
         </Space>
-      </Flex>
+      </div>
       <StageWithRouter />
     </div>
   );

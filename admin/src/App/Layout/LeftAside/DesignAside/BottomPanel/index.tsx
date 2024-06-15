@@ -24,7 +24,7 @@ export const BottomPanel = () => {
   };
 
   return (
-    <div className="flex-grow">
+    <div className="flex-grow bg-white">
       <Tabs
         tabBarExtraContent={
           <Space className="px-2">
@@ -46,6 +46,10 @@ export const BottomPanel = () => {
         className={css`
           .ant-tabs-nav {
             margin-bottom: 0;
+          }
+          .ant-tabs-nav .ant-tabs-tab {
+            border-top: 0 !important;
+            border-left: 0 !important;
           }
         `}
         activeKey={treePanel}
