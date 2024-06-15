@@ -4,6 +4,7 @@ import { globalEventBus } from "@/globals/eventBus";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import {
+  InsertionPositions,
   NodeData,
   NodePlainChild,
   RectVisualPosition,
@@ -342,14 +343,30 @@ export const Stage: React.FC = () => {
     backgroundColor: isHighlighted ? "red" : slotBackground,
   });
 
+  /**
+   * 先用 analyzeVisualPositions 计算出高亮的外部插槽位置有哪些
+   * 然后计算他们的位置，再把内部插槽的位置一起都拿到
+   * 最后根据鼠标位置，判断应该高亮哪个插槽
+   *
+   * @param event
+   * @returns
+   */
   const handleMouseMove = (event: MouseEvent) => {
     if (!draggingHoveredOtherNode || !containerRef.current) return;
+
+    const insertionPositions = InsertionAnalyzer.analyzeVisualPositions(
+      draggingHoveredOtherNode[1]
+    );
 
     const containerRect = containerRef.current.getBoundingClientRect();
     const mouseX = event.clientX - containerRect.left;
     const mouseY = event.clientY - containerRect.top;
 
-    const positions = [
+    const positions: {
+      top: number;
+      left: number;
+      name: keyof InsertionPositions;
+    }[] = [
       {
         top: draggingHoveredOtherNode[1].offsetTop - 10,
         left:
@@ -390,16 +407,18 @@ export const Stage: React.FC = () => {
 
     let newHighlightedDiv = null;
 
-    positions.forEach((pos) => {
-      const distance = Math.sqrt(
-        Math.pow(mouseX - (pos.left + 5), 2) + // 5 is half the width of the floating div
-          Math.pow(mouseY - (pos.top + 5), 2) // 5 is half the height of the floating div
-      );
+    positions
+      .filter((pos) => insertionPositions[pos.name])
+      .forEach((pos) => {
+        const distance = Math.sqrt(
+          Math.pow(mouseX - (pos.left + 5), 2) + // 5 is half the width of the floating div
+            Math.pow(mouseY - (pos.top + 5), 2) // 5 is half the height of the floating div
+        );
 
-      if (distance < PROXIMITY_THRESHOLD) {
-        newHighlightedDiv = pos.name;
-      }
-    });
+        if (distance < PROXIMITY_THRESHOLD) {
+          newHighlightedDiv = pos.name;
+        }
+      });
 
     setHighlightedPos(newHighlightedDiv);
 
