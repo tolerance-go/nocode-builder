@@ -8,5 +8,5 @@ export const Location = () => {
 
   const pathname = searchParams.get("pathname") as string;
 
-  return <Input size="small" value={pathname}></Input>;
+  return <Input variant="filled" size="small" value={pathname}></Input>;
 };
