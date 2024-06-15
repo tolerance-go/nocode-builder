@@ -162,6 +162,68 @@ describe("MemoryRoute 组件", () => {
     `);
   });
 
+  it("正确渲染子路径 /contact", () => {
+    const { container: contactContainer } = render(
+      <Router initialEntries={["/about/other"]}>
+        <Routes>
+          <Route path="/" element={<Home />}>
+            <Route path="about" element={<About />}>
+              <Route path="team" element={<Team />} />
+            </Route>
+            <Route path="contact" element={<Contact />} />
+          </Route>
+        </Routes>
+      </Router>
+    );
+
+    expect(contactContainer).toMatchInlineSnapshot(`<div />`);
+  });
+
+  it("空 path 渲染", () => {
+    const { container: empty } = render(
+      <Router initialEntries={["/"]}>
+        <Routes>
+          <Route element={<Home />}>
+            <Route path="about" element={<About />}>
+              <Route path="team" element={<Team />} />
+            </Route>
+            <Route path="contact" element={<Contact />} />
+          </Route>
+        </Routes>
+      </Router>
+    );
+
+    expect(empty).toMatchInlineSnapshot(`<div />`);
+
+    const { container: contactContainer } = render(
+      <Router initialEntries={["/about"]}>
+        <Routes>
+          <Route element={<Home />}>
+            <Route path="about" element={<About />}>
+              <Route path="team" element={<Team />} />
+            </Route>
+            <Route path="contact" element={<Contact />} />
+          </Route>
+        </Routes>
+      </Router>
+    );
+
+    expect(contactContainer).toMatchInlineSnapshot(`
+      <div>
+        <div>
+          <h1>
+            欢迎来到主页
+          </h1>
+          <div>
+            <h1>
+              关于我们
+            </h1>
+          </div>
+        </div>
+      </div>
+    `);
+  });
+
   it("抛出错误当直接渲染 Route 时", () => {
     expect(() => {
       render(<Route path="/" element={<Home />} />);
