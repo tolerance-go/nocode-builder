@@ -103,22 +103,6 @@ const findNodeById = (
               }
             }
           }
-        } else if (
-          childNode &&
-          typeof childNode === "object" &&
-          "id" in childNode
-        ) {
-          if (childNode.id === nodeId) {
-            return childNode;
-          }
-          if (childNode.children) {
-            const found = iterateNodeList(
-              childNode.children as NodeData[] | SlotsChildren
-            );
-            if (found) {
-              return found;
-            }
-          }
         }
       }
     }
@@ -300,13 +284,13 @@ export const actions = {
    * 代码中通过 Array.isArray 方法来区分 nodeList 是 NodeData[] 还是 SlotsChildren。
    * 在代码逻辑中，NodeData[] 被认为是 React 节点数组，而对象类型 SlotsChildren 被认为是插槽。
    * 尽管在类型上可能会有一些冲突(nodeData 对象 和 插槽对象)，但代码逻辑是基于这种假设来工作的
-   * 
-   * @param nodeList 
-   * @param newNode 
-   * @param referenceNodeId 
-   * @param position 
-   * @param slotName 
-   * @returns 
+   *
+   * @param nodeList
+   * @param newNode
+   * @param referenceNodeId
+   * @param position
+   * @param slotName
+   * @returns
    */
   _insertNode: (
     nodeList: NodeData[] | SlotsChildren,
@@ -387,25 +371,6 @@ export const actions = {
                 if (inserted) return true;
               }
             }
-          } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
-            const slotNode = nodeList[key] as NodeData;
-            if (slotName === "") {
-              if (!Array.isArray(slotNode.children)) {
-                slotNode.children = [];
-              }
-              (slotNode.children as DeepReadonly<NodeData>[]).push(newNode);
-            } else {
-              if (!slotNode.children) {
-                slotNode.children = {};
-              }
-              const children = slotNode.children as SlotsChildren;
-              if (!children[slotName]) {
-                children[slotName] = [];
-              }
-              const slot = children[slotName] as DeepReadonly<NodeData>[];
-              slot.push(newNode);
-            }
-            return true;
           }
         }
       }
@@ -464,28 +429,6 @@ export const actions = {
                 if (inserted) return true;
               }
             }
-          } else if ((nodeList[key] as NodeData).id === referenceNodeId) {
-            if (position === "before" || position === "after") {
-              const slotNode = nodeList[key] as NodeData;
-              if (!Array.isArray(nodeList[key])) {
-                nodeList[key] = [slotNode];
-              }
-              const index = (nodeList[key] as NodeData[]).indexOf(slotNode);
-              if (position === "before") {
-                (nodeList[key] as DeepReadonly<NodeData>[]).splice(
-                  index,
-                  0,
-                  newNode
-                );
-              } else if (position === "after") {
-                (nodeList[key] as DeepReadonly<NodeData>[]).splice(
-                  index + 1,
-                  0,
-                  newNode
-                );
-              }
-              return true;
-            }
           }
         }
       }
@@ -525,10 +468,6 @@ export const actions = {
               if (removedNode) return removedNode;
             }
           }
-        } else if ((nodeList[key] as NodeData).id === nodeId) {
-          const removedNode = nodeList[key] as NodeData;
-          delete nodeList[key];
-          return removedNode;
         }
       }
     }

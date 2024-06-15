@@ -1,107 +1,83 @@
-import { NodeData, RouteNodeData, SlotsChildren } from "@/types";
+import { NodeData, SlotsChildren } from "@/types";
 
-interface RouterComponent {
-  type: string;
-  children: any;
+interface RouteComponent {
+  type: "Router" | "Routes" | "Route";
+  path?: string;
+  element?: RouteComponent[];
+  children?: RouteComponent[];
 }
 
-export function generateRouterComponent(
-  nodeDatas: NodeData[]
-): RouterComponent {
-  function generateRoute(node: NodeData): any {
-    const { elementType, settings, children } = node as RouteNodeData;
-    const route: any = {
-      type: elementType,
-      path: settings?.path,
-      element: generateElement(node),
-    };
+function generateRouterComponent(nodeDatas: NodeData[]): RouteComponent {
+  function transformNode(node: NodeData): RouteComponent {
+    if (node.elementType === "Route") {
+      const route: RouteComponent = {
+        type: "Route",
+        path: node.settings.path as string,
+        element: [],
+      };
 
-    if (children) {
-      const routeChildren = generateRouteChildren(children);
-      if (routeChildren.length > 0) {
-        route.children = routeChildren;
+      if (node.children && Array.isArray(node.children)) {
+        route.element = node.children.map(
+          transformNode as (child: NodeData) => RouteComponent
+        );
+      } else if (node.children && typeof node.children === "object") {
+        const slotChildren = node.children as SlotsChildren;
+        route.element = [
+          {
+            ...node,
+            children: Object.fromEntries(
+              Object.entries(slotChildren).map(([slot, children]) => [
+                slot,
+                Array.isArray(children)
+                  ? children.map((child: NodeData) =>
+                      child.elementType === "Route"
+                        ? { ...child, children: [] }
+                        : transformNode(child)
+                    )
+                  : transformNode(children as NodeData),
+              ])
+            ),
+          } as unknown as RouteComponent,
+        ];
+
+        route.children = Object.values(slotChildren)
+          .flat()
+          .filter(
+            (child): child is NodeData =>
+              (child as NodeData).elementType === "Route"
+          )
+          .map((child: NodeData) => {
+            return {
+              type: "Route",
+              path: child.settings.path as string,
+              element: child.children
+                ? Array.isArray(child.children)
+                  ? child.children.map(
+                      transformNode as (child: NodeData) => RouteComponent
+                    )
+                  : [transformNode(child)]
+                : [],
+            };
+          });
       }
-    }
-
-    return route;
-  }
-
-  function generateElement(node: NodeData): any {
-    const { id, elementType, staticProps, fromWidgetId, children } = node;
-
-    if (Array.isArray(children)) {
-      return children.map(generateElement);
-    }
-
-    if (typeof children === "object" && children !== null) {
-      const slots: any = {};
-      for (const key in children) {
-        if (Array.isArray(children[key])) {
-          slots[key] = children[key].map(generateElement);
-        } else {
-          slots[key] = generateElement(children[key] as NodeData);
-        }
-      }
+      return route;
+    } else {
       return {
-        id,
-        elementType,
-        staticProps,
-        fromWidgetId,
-        children: slots,
+        type: node.elementType as "Router" | "Routes" | "Route",
+        children: node.children
+          ? (node.children as NodeData[]).map(transformNode)
+          : [],
       };
     }
-
-    return {
-      id,
-      elementType,
-      staticProps,
-      fromWidgetId,
-      children: children || [],
-    };
-  }
-
-  function generateRouteChildren(children: SlotsChildren | NodeData[]): any[] {
-    if (Array.isArray(children)) {
-      return children.map((child) => {
-        if ((child as RouteNodeData).elementType === "Route") {
-          return generateRoute(child as RouteNodeData);
-        }
-        return generateElement(child);
-      });
-    }
-
-    if (typeof children === "object" && children !== null) {
-      const routes: any[] = [];
-      for (const key in children) {
-        if (Array.isArray(children[key])) {
-          routes.push(
-            ...children[key].map((child) => {
-              if ((child as RouteNodeData).elementType === "Route") {
-                return generateRoute(child as RouteNodeData);
-              }
-              return generateElement(child);
-            })
-          );
-        } else {
-          const child = children[key] as NodeData;
-          if (child.elementType === "Route") {
-            routes.push(generateRoute(child as RouteNodeData));
-          } else {
-            routes.push(generateElement(child));
-          }
-        }
-      }
-      return routes;
-    }
-
-    return [];
   }
 
   return {
     type: "Router",
     children: {
       type: "Routes",
-      children: nodeDatas.map(generateRoute),
+      children: nodeDatas.map(transformNode),
     },
   };
 }
+
+export { generateRouterComponent };

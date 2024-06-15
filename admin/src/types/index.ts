@@ -19,7 +19,7 @@ export type StaticProps = {
 export type NodePlainChild = string | number | boolean | null | undefined;
 
 export type SlotsChildren = {
-  [key: string]: NodeData[] | NodeData | NodePlainChild;
+  [key: string]: NodeData[] | NodePlainChild;
 };
 
 export type NodeData<Settings = StaticProps> = {
