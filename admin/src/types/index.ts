@@ -35,6 +35,10 @@ export type NodeData<Settings = StaticProps> = {
   settings: Settings;
 };
 
+export type RouteNodeData = NodeData & {
+  elementType: "Route";
+};
+
 export type DesignableComponentProps<
   Children extends React.ReactNode | Record<string, React.ReactNode> =
     | React.ReactNode

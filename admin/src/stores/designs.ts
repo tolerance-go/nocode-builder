@@ -296,6 +296,18 @@ export const actions = {
     const success = updateSettingsRecursive(designTreeData.value.nodeData);
     ensure(success, "更新节点设置失败。");
   },
+  /**
+   * 代码中通过 Array.isArray 方法来区分 nodeList 是 NodeData[] 还是 SlotsChildren。
+   * 在代码逻辑中，NodeData[] 被认为是 React 节点数组，而对象类型 SlotsChildren 被认为是插槽。
+   * 尽管在类型上可能会有一些冲突(nodeData 对象 和 插槽对象)，但代码逻辑是基于这种假设来工作的
+   * 
+   * @param nodeList 
+   * @param newNode 
+   * @param referenceNodeId 
+   * @param position 
+   * @param slotName 
+   * @returns 
+   */
   _insertNode: (
     nodeList: NodeData[] | SlotsChildren,
     newNode: DeepReadonly<NodeData>,
