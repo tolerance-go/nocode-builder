@@ -10,6 +10,7 @@ import { Button, Input, Space, Tree, Typography } from "antd";
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSnapshot } from "valtio";
+import { Menu, Dropdown } from "antd";
 
 const statusStyles = {
   error: { backgroundColor: "rgba(255, 0, 0, 0.1)" },
@@ -161,47 +162,61 @@ const TreeList: React.FC = () => {
     ): TreeDataNode[] => {
       return nodes.map((node) => ({
         title: (
-          <div
-            className="flex justify-between items-center group"
-            onDoubleClick={() => setEditingKey(node.id)}
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  label: "新增",
+                  key: "add",
+                  onClick: () => latestAddNode.current(node.id),
+                },
+                {
+                  label: "删除",
+                  key: "delete",
+                  onClick: () => latestDeleteNode.current(node.id),
+                },
+              ],
+            }}
+            trigger={["contextMenu"]}
           >
-            {node.id === editingKey ? (
-              <Input
-                variant="borderless"
-                // borderless 下的警告样式需要自己实现
-                style={
-                  inputStatus ? { ...statusStyles[inputStatus] } : undefined
-                }
-                ref={inputRef}
-                defaultValue={node.path}
-                status={inputStatus}
-                onChange={(e) =>
-                  latestHandleInputChange.current(e.target.value, node.id)
-                }
-                onBlur={(e) => latestHandleInputBlur.current(e, node.id)}
-                onPressEnter={(e) => latestHandleInputBlur.current(e, node.id)}
-                autoFocus
-              />
-            ) : (
-              node.name || node.path
-            )}
-            {node.id !== editingKey && (
-              <div className="group-hover:inline-flex hidden gap-2">
-                <Button
-                  type="text"
-                  size="small"
-                  onClick={() => latestAddNode.current(node.id)}
-                  icon={<PlusOutlined />}
+            <div
+              className="flex justify-between items-center group"
+              onDoubleClick={() => setEditingKey(node.id)}
+            >
+              {node.id === editingKey ? (
+                <Input
+                  variant="borderless"
+                  // borderless 下的警告样式需要自己实现
+                  style={
+                    inputStatus ? { ...statusStyles[inputStatus] } : undefined
+                  }
+                  ref={inputRef}
+                  defaultValue={node.path}
+                  status={inputStatus}
+                  onChange={(e) =>
+                    latestHandleInputChange.current(e.target.value, node.id)
+                  }
+                  onBlur={(e) => latestHandleInputBlur.current(e, node.id)}
+                  onPressEnter={(e) =>
+                    latestHandleInputBlur.current(e, node.id)
+                  }
+                  autoFocus
                 />
-                <Button
-                  type="text"
-                  size="small"
-                  onClick={() => latestDeleteNode.current(node.id)}
-                  icon={<DeleteOutlined />}
-                />
-              </div>
-            )}
-          </div>
+              ) : (
+                node.name || node.path
+              )}
+              {node.id !== editingKey && (
+                <div className="gap-2 transition-opacity opacity-0 group-hover:opacity-100">
+                  <Button
+                    type="text"
+                    size="small"
+                    onClick={() => latestAddNode.current(node.id)}
+                    icon={<PlusOutlined />}
+                  />
+                </div>
+              )}
+            </div>
+          </Dropdown>
         ),
         key: node.id,
         children: node.children ? convertToTreeData(node.children) : undefined,
