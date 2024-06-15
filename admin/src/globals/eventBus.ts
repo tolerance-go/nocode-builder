@@ -1,7 +1,6 @@
 import { NodeData } from "@/types";
 import { EventBus } from "@/utils/eventBus";
 import { DeepReadonly } from "@/utils/types";
-import { To } from "react-router-dom";
 
 export type EventMaps = {
   /**
