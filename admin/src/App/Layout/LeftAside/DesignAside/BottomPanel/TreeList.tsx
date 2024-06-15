@@ -58,19 +58,21 @@ const TreeList: React.FC = () => {
   }, [designTreeData]);
 
   return (
-    <Tree
-      className={css`
-        & {
-          border-radius: 0;
-        }
-      `}
-      blockNode
-      expandedKeys={expandedKeys}
-      onExpand={(keys) => setExpandedKeys(keys)}
-      onSelect={onSelect}
-      onCheck={onCheck}
-      treeData={treeData}
-    />
+    <div className="py-2 pl-1 pr-2">
+      <Tree
+        className={css`
+          & {
+            border-radius: 0;
+          }
+        `}
+        blockNode
+        expandedKeys={expandedKeys}
+        onExpand={(keys) => setExpandedKeys(keys)}
+        onSelect={onSelect}
+        onCheck={onCheck}
+        treeData={treeData}
+      />
+    </div>
   );
 };
 

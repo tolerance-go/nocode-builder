@@ -253,9 +253,7 @@ const TreeList: React.FC = () => {
   return (
     <div className="bg-white border-b">
       <div className="flex items-center justify-between py-1 border-b h-[34px]">
-        <Typography.Text className="ml-[16px]">
-          页面路由
-        </Typography.Text>
+        <Typography.Text className="ml-[16px]">页面路由</Typography.Text>
         <Space className="px-2">
           <Button
             type="text"
@@ -266,20 +264,22 @@ const TreeList: React.FC = () => {
           </Button>
         </Space>
       </div>
-      <Tree
-        className={css`
-          & {
-            border-radius: 0;
-          }
-        `}
-        blockNode
-        onSelect={onSelect}
-        onCheck={onCheck}
-        onExpand={onExpand}
-        expandedKeys={expandedKeys}
-        selectedKeys={selectedKeys}
-        treeData={treeData}
-      />
+      <div className='py-2 pl-1 pr-2'>
+        <Tree
+          className={css`
+            & {
+              border-radius: 0;
+            }
+          `}
+          blockNode
+          onSelect={onSelect}
+          onCheck={onCheck}
+          onExpand={onExpand}
+          expandedKeys={expandedKeys}
+          selectedKeys={selectedKeys}
+          treeData={treeData}
+        />
+      </div>
     </div>
   );
 };
