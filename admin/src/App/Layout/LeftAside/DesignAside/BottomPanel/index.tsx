@@ -1,4 +1,4 @@
-import { Button, Tabs } from "antd";
+import { Button, Space, Tabs } from "antd";
 import TreeList from "./TreeList";
 import { css } from "@emotion/css";
 import Editor from "./Editor";
@@ -27,19 +27,21 @@ export const BottomPanel = () => {
     <div className="flex-grow">
       <Tabs
         tabBarExtraContent={
-          <Button
-            type="text"
-            size="small"
-            onClick={() => {
-              setSearchParams(
-                updateSearchParams(searchParams, {
-                  designAsideType: "store",
-                })
-              );
-            }}
-          >
-            添加
-          </Button>
+          <Space className="px-2">
+            <Button
+              type="text"
+              size="small"
+              onClick={() => {
+                setSearchParams(
+                  updateSearchParams(searchParams, {
+                    designAsideType: "store",
+                  })
+                );
+              }}
+            >
+              添加
+            </Button>
+          </Space>
         }
         className={css`
           .ant-tabs-nav {
