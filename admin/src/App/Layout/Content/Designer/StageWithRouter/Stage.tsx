@@ -35,7 +35,7 @@ const isPrimitiveOrNull = (
 const RenderNode: React.FC<{
   node: DeepReadonly<NodeData>;
   onDraggingHover: (
-    node: [DeepReadonly<NodeData>, HTMLElement],
+    node: [DeepReadonly<NodeData>, HTMLElement] | null,
     info: {
       /**
        * 是否是自身，这里是范围是 Node，而不是 DOM
@@ -55,7 +55,17 @@ const RenderNode: React.FC<{
    * 当拖拽开始的时候
    */
   onDraggingStart: (node: [DeepReadonly<NodeData>, HTMLElement]) => void;
-}> = ({ node, onDraggingHover, onDraggingEnd, onDraggingStart }) => {
+  /**
+   * 是否是根节点
+   */
+  isRoot?: boolean;
+}> = ({
+  node,
+  onDraggingHover,
+  onDraggingEnd,
+  onDraggingStart,
+  isRoot = true,
+}) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const hoveredComponents = useSnapshot(
     stores.designs.states.hoveredComponents
@@ -71,10 +81,13 @@ const RenderNode: React.FC<{
     stores.designs.actions.switchHoveredComponent(node.id, true);
   };
 
-  const handleMouseLeave = (event: React.MouseEvent) => {
+  const handleMouseLeave = () => {
     stores.designs.actions.switchHoveredComponent(node.id, false);
 
     if (dragging.draggingId) {
+      if (isRoot) {
+        onDraggingHover(null, {});
+      }
     }
   };
 
@@ -173,6 +186,7 @@ const RenderNode: React.FC<{
                 onDraggingHover={onDraggingHover}
                 onDraggingEnd={onDraggingEnd}
                 onDraggingStart={onDraggingStart}
+                isRoot={false}
               />
             )
           ),
@@ -187,6 +201,7 @@ const RenderNode: React.FC<{
         onDraggingHover={onDraggingHover}
         onDraggingEnd={onDraggingEnd}
         onDraggingStart={onDraggingStart}
+        isRoot={false}
       />
     ));
   };
@@ -285,7 +300,7 @@ export const Stage: React.FC = () => {
   };
 
   const handleDraggingHover = (
-    node: [DeepReadonly<NodeData>, HTMLElement],
+    node: [DeepReadonly<NodeData>, HTMLElement] | null,
     info: { isHoverSelf?: boolean; isHoverDescendant?: boolean }
   ) => {
     setDraggingHoveredOtherNode(
