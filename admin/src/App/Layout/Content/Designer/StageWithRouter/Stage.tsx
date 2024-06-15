@@ -354,71 +354,30 @@ export const Stage: React.FC = () => {
   const handleMouseMove = (event: MouseEvent) => {
     if (!draggingHoveredOtherNode || !containerRef.current) return;
 
-    const insertionPositions = InsertionAnalyzer.analyzeVisualPositions(
-      draggingHoveredOtherNode[1]
-    );
-
     const containerRect = containerRef.current.getBoundingClientRect();
     const mouseX = event.clientX - containerRect.left;
     const mouseY = event.clientY - containerRect.top;
 
-    const positions: {
-      top: number;
-      left: number;
-      name: keyof InsertionPositions;
-    }[] = [
-      {
-        top: draggingHoveredOtherNode[1].offsetTop - 10,
-        left:
-          draggingHoveredOtherNode[1].offsetLeft +
-          draggingHoveredOtherNode[1].offsetWidth / 2 -
-          5,
-        name: "top",
-      },
-      {
-        top:
-          draggingHoveredOtherNode[1].offsetTop +
-          draggingHoveredOtherNode[1].offsetHeight,
-        left:
-          draggingHoveredOtherNode[1].offsetLeft +
-          draggingHoveredOtherNode[1].offsetWidth / 2 -
-          5,
-        name: "bottom",
-      },
-      {
-        top:
-          draggingHoveredOtherNode[1].offsetTop +
-          draggingHoveredOtherNode[1].offsetHeight / 2 -
-          5,
-        left: draggingHoveredOtherNode[1].offsetLeft - 10,
-        name: "left",
-      },
-      {
-        top:
-          draggingHoveredOtherNode[1].offsetTop +
-          draggingHoveredOtherNode[1].offsetHeight / 2 -
-          5,
-        left:
-          draggingHoveredOtherNode[1].offsetLeft +
-          draggingHoveredOtherNode[1].offsetWidth,
-        name: "right",
-      },
-    ];
-
     let newHighlightedDiv = null;
 
-    positions
-      .filter((pos) => insertionPositions[pos.name])
-      .forEach((pos) => {
-        const distance = Math.sqrt(
-          Math.pow(mouseX - (pos.left + 5), 2) + // 5 is half the width of the floating div
-            Math.pow(mouseY - (pos.top + 5), 2) // 5 is half the height of the floating div
-        );
+    const floatingDivs = containerRef.current.querySelectorAll(
+      `[data-type="external-slot"][data-node-id="${draggingHoveredOtherNode[0].id}"]`
+    ) as NodeListOf<HTMLElement>;
 
-        if (distance < PROXIMITY_THRESHOLD) {
-          newHighlightedDiv = pos.name;
-        }
-      });
+    floatingDivs.forEach((div) => {
+      const divRect = div.getBoundingClientRect();
+      const divLeft = divRect.left - containerRect.left;
+      const divTop = divRect.top - containerRect.top;
+
+      const distance = Math.sqrt(
+        Math.pow(mouseX - (divLeft + divRect.width / 2), 2) +
+          Math.pow(mouseY - (divTop + divRect.height / 2), 2)
+      );
+
+      if (distance < PROXIMITY_THRESHOLD) {
+        newHighlightedDiv = div.dataset.name as keyof InsertionPositions;
+      }
+    });
 
     setHighlightedPos(newHighlightedDiv);
 
@@ -488,6 +447,8 @@ export const Stage: React.FC = () => {
                 highlightedPos === "top"
               )}
               data-name="top"
+              data-node-id={draggingHoveredOtherNode[0].id}
+              data-type="external-slot"
             ></div>
           )}
           {insertionPositions.bottom && (
@@ -505,6 +466,8 @@ export const Stage: React.FC = () => {
                 highlightedPos === "bottom"
               )}
               data-name="bottom"
+              data-node-id={draggingHoveredOtherNode[0].id}
+              data-type="external-slot"
             ></div>
           )}
           {insertionPositions.left && (
@@ -520,6 +483,8 @@ export const Stage: React.FC = () => {
                 highlightedPos === "left"
               )}
               data-name="left"
+              data-node-id={draggingHoveredOtherNode[0].id}
+              data-type="external-slot"
             ></div>
           )}
           {insertionPositions.right && (
@@ -537,6 +502,8 @@ export const Stage: React.FC = () => {
                 highlightedPos === "right"
               )}
               data-name="right"
+              data-node-id={draggingHoveredOtherNode[0].id}
+              data-type="external-slot"
             ></div>
           )}
         </>
