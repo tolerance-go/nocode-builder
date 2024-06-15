@@ -29,7 +29,7 @@ export const ComponentStorePanel = () => {
           关闭
         </Button>
       </div>
-      <div className="px-2 py-2">
+      <div className="px-1.5 py-2">
         <Segmented<SegmentedType>
           options={[
             {
