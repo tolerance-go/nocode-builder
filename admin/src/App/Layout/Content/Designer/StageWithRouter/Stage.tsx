@@ -150,8 +150,8 @@ const RenderNode: React.FC<{
   }
 
   ensure(
-    !!node.staticProps.style && typeof node.staticProps.style === "object",
-    "node.staticProps.style 类型不是对象。"
+    node.staticProps.style ? typeof node.staticProps.style === "object" : true,
+    "node.staticProps.style 存在但是类型不是对象。"
   );
 
   const getChildren = () => {

@@ -1,4 +1,5 @@
 import { ComponentWidget, GroupWidget } from "@/types";
+import { RootWidget } from "@/widgets/Root";
 import { RouteWidget } from "@/widgets/Route";
 import { proxy } from "valtio";
 
@@ -102,6 +103,7 @@ const windowDisplayComponents = proxy<{
       },
     },
     RouteWidget,
+    RootWidget,
   ],
   sections: [],
   templates: [],

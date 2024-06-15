@@ -18,9 +18,9 @@ const designTreeData = proxyWithHistory<{
   nodeData: store.get("designTreeData", [
     {
       id: "1",
-      elementType: "div",
-      staticProps: { style: { background: "lightblue", padding: "20px" } },
-      fromWidgetId: "component-test-Custom",
+      elementType: "Root",
+      staticProps: {},
+      fromWidgetId: "component-general-Root",
       settings: {},
     },
   ]),
@@ -213,6 +213,88 @@ export const actions = {
   /** 从节点树删除节点 */
   removeNode: (nodeId: string) => {
     return actions._removeNode(designTreeData.value.nodeData, nodeId);
+  },
+  /** 移动某个 node 到其他 node */
+  moveNode: (
+    nodeToMove: DeepReadonly<NodeData>,
+    target: DeepReadonly<NodeData>,
+    pos: DocumentInsertionPosition,
+    slotName?: string
+  ) => {
+    if (pos === "not-allowed") {
+      console.warn("不允许移动当前节点。");
+      return;
+    }
+
+    const fromParent = designTreeData.value.nodeData;
+    const targetParent = designTreeData.value.nodeData;
+
+    const nodeRemoved = actions._removeNode(fromParent, nodeToMove.id);
+    if (nodeRemoved) {
+      const success = actions._insertNode(
+        targetParent,
+        nodeRemoved,
+        target.id,
+        pos,
+        slotName
+      );
+      ensure(success, "插入节点错误。");
+    }
+  },
+  /** 更新节点设置 */
+  updateNodeSettings: (nodeId: string, newSettings: StaticProps) => {
+    const updateSettingsRecursive = (
+      nodeList: NodeData[] | SlotsChildren
+    ): boolean => {
+      if (Array.isArray(nodeList)) {
+        for (const node of nodeList) {
+          if (node.id === nodeId) {
+            node.settings = newSettings;
+            return true;
+          }
+          if (node.children) {
+            const updated = updateSettingsRecursive(
+              node.children as SlotsChildren
+            );
+            if (updated) return true;
+          }
+        }
+      } else {
+        for (const key in nodeList) {
+          const children = nodeList[key];
+          if (Array.isArray(children)) {
+            for (const node of children) {
+              if (node.id === nodeId) {
+                node.settings = newSettings;
+                return true;
+              }
+              if (node.children) {
+                const updated = updateSettingsRecursive(
+                  node.children as SlotsChildren
+                );
+                if (updated) return true;
+              }
+            }
+          } else if (typeof children === "object" && children !== null) {
+            const node = children as NodeData;
+            if (node.id === nodeId) {
+              node.settings = newSettings;
+              return true;
+            }
+            if (node.children) {
+              const updated = updateSettingsRecursive(
+                node.children as SlotsChildren
+              );
+              if (updated) return true;
+            }
+          }
+        }
+      }
+      return false;
+    };
+
+    const success = updateSettingsRecursive(designTreeData.value.nodeData);
+    ensure(success, "更新节点设置失败。");
   },
   _insertNode: (
     nodeList: NodeData[] | SlotsChildren,
@@ -439,87 +521,5 @@ export const actions = {
       }
     }
     return null;
-  },
-  /** 移动某个 node 到其他 node */
-  moveNode: (
-    nodeToMove: DeepReadonly<NodeData>,
-    target: DeepReadonly<NodeData>,
-    pos: DocumentInsertionPosition,
-    slotName?: string
-  ) => {
-    if (pos === "not-allowed") {
-      console.warn("不允许移动当前节点。");
-      return;
-    }
-
-    const fromParent = designTreeData.value.nodeData;
-    const targetParent = designTreeData.value.nodeData;
-
-    const nodeRemoved = actions._removeNode(fromParent, nodeToMove.id);
-    if (nodeRemoved) {
-      const success = actions._insertNode(
-        targetParent,
-        nodeRemoved,
-        target.id,
-        pos,
-        slotName
-      );
-      ensure(success, "插入节点错误。");
-    }
-  },
-  /** 更新节点设置 */
-  updateNodeSettings: (nodeId: string, newSettings: StaticProps) => {
-    const updateSettingsRecursive = (
-      nodeList: NodeData[] | SlotsChildren
-    ): boolean => {
-      if (Array.isArray(nodeList)) {
-        for (const node of nodeList) {
-          if (node.id === nodeId) {
-            node.settings = newSettings;
-            return true;
-          }
-          if (node.children) {
-            const updated = updateSettingsRecursive(
-              node.children as SlotsChildren
-            );
-            if (updated) return true;
-          }
-        }
-      } else {
-        for (const key in nodeList) {
-          const children = nodeList[key];
-          if (Array.isArray(children)) {
-            for (const node of children) {
-              if (node.id === nodeId) {
-                node.settings = newSettings;
-                return true;
-              }
-              if (node.children) {
-                const updated = updateSettingsRecursive(
-                  node.children as SlotsChildren
-                );
-                if (updated) return true;
-              }
-            }
-          } else if (typeof children === "object" && children !== null) {
-            const node = children as NodeData;
-            if (node.id === nodeId) {
-              node.settings = newSettings;
-              return true;
-            }
-            if (node.children) {
-              const updated = updateSettingsRecursive(
-                node.children as SlotsChildren
-              );
-              if (updated) return true;
-            }
-          }
-        }
-      }
-      return false;
-    };
-
-    const success = updateSettingsRecursive(designTreeData.value.nodeData);
-    ensure(success, "更新节点设置失败。");
   },
 };
