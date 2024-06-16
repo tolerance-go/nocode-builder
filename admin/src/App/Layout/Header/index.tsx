@@ -1,3 +1,4 @@
+import { getSearchParams } from "@/utils/getSearchParams";
 import { PlayCircleTwoTone } from "@ant-design/icons";
 import { Button, Flex, Space } from "antd";
 import { LngSwitcher } from "./LngSwitcher";
@@ -12,7 +13,9 @@ export const Header = () => {
         <Button
           type="text"
           icon={<PlayCircleTwoTone />}
-          onClick={() => window.open("/preview")}
+          onClick={() =>
+            window.open(`/preview${getSearchParams().get("pathname")}`)
+          }
         >
           预览
         </Button>
