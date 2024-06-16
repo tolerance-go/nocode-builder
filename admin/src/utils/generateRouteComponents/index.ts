@@ -1,12 +1,10 @@
-import { NodeData, RouteNodeData, SlotsChildren } from "@/types";
+import {
+  NodeData,
+  RouteComponentData,
+  RouteNodeData,
+  SlotsChildren,
+} from "@/types";
 import { isPlainObject } from "../isPlainObject";
-
-export interface RouteComponentData {
-  type: "Route";
-  path: string;
-  element: NodeData["children"];
-  children?: RouteComponentData[];
-}
 
 function generateRouteComponents(
   nodeDatas: RouteNodeData[]

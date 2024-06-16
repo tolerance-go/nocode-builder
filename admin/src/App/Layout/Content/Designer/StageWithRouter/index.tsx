@@ -6,6 +6,7 @@ import { useEffect, useRef } from "react";
 import { To, useSearchParams } from "react-router-dom";
 import { Stage } from "./Stage";
 import { defaultConfig } from "antd/es/theme/context";
+
 export const StageWithRouter = () => {
   const [searchParams, setSearchParams] = useSearchParams({
     pathname: "/",

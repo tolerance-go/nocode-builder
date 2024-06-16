@@ -1,6 +1,13 @@
 import { SettingConfig } from "@/components/SettingsForm";
 import { DeepReadonly } from "@/utils/types";
 
+export interface RouteComponentData {
+  type: "Route";
+  path: string;
+  element: NodeData['children'];
+  children?: RouteComponentData[];
+}
+
 // 路由节点的接口定义
 export interface RouteNode {
   id: string;
