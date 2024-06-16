@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* https://github.com/ant-design/ant-design-pro/issues/9713 */
+svg {
+  vertical-align: initial;
+}
