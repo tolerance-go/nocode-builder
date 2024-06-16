@@ -55,14 +55,14 @@ const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
 
       graph.use(
         new Selection({
-          enabled: true,
-          multiple: true,
-          rubberband: true,
-          movable: true,
-          showNodeSelectionBox: true,
-          eventTypes: ["leftMouseDown"],
+          enabled: true, // 启用选择插件
+          multiple: true, // 允许多选
+          rubberband: true, // 允许使用橡皮筋（框选）选择节点
+          movable: true, // 允许移动选中的节点
+          showNodeSelectionBox: true, // 显示节点选择框
+          eventTypes: ["leftMouseDown"], // 触发选择操作的事件类型，这里设置为鼠标左键按下
           filter(cell) {
-            return cell.shape !== "search-node";
+            return cell.shape !== "search-node"; // 过滤器，排除 shape 类型为 "search-node" 的节点不被选择
           },
         })
       );
