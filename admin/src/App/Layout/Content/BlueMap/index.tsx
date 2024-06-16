@@ -11,6 +11,8 @@ register({
 });
 
 const BlueMap = () => {
+  let lastSearchNodeId: string | null = null;
+
   const handleGraphInit = (graph: Graph) => {
     // 在这里初始化图表，例如添加节点和边
     const rect = graph.addNode({
@@ -30,11 +32,22 @@ const BlueMap = () => {
       e.preventDefault();
       const rect = graph.container.getBoundingClientRect();
 
-      graph.addNode({
+      // 先取消上个 search-node
+      if (lastSearchNodeId) {
+        const lastNode = graph.getCellById(lastSearchNodeId);
+        if (lastNode) {
+          graph.removeCell(lastNode);
+        }
+      }
+
+      // 创建新的 search-node
+      const newNode = graph.addNode({
         shape: "search-node",
         x: e.clientX - rect.left,
         y: e.clientY - rect.top,
       });
+
+      lastSearchNodeId = newNode.id;
     });
   };
 
