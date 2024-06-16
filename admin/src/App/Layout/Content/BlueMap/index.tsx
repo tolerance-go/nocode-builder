@@ -2,7 +2,9 @@ import X6Graph from "@/components/x6/X6Graph";
 import { Graph } from "@antv/x6";
 import { register } from "@antv/x6-react-shape";
 import { SearchNode } from "./SearchNode";
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
+import { ZoomInOutlined, ZoomOutOutlined } from "@ant-design/icons";
+import { Button } from "antd";
 
 register({
   shape: "search-node",
@@ -14,6 +16,7 @@ register({
 let lastSearchNodeId: string | null = null;
 
 const BlueMap = () => {
+  const graphRef = useRef<Graph>(null);
   const handleGraphInit = useCallback((graph: Graph) => {
     // 在这里初始化图表，例如添加节点和边
     const rect = graph.addNode({
@@ -77,9 +80,21 @@ const BlueMap = () => {
     });
   }, []);
 
+  const handleZoomIn = () => {
+    graphRef.current?.zoom(0.1);
+  };
+
+  const handleZoomOut = () => {
+    graphRef.current?.zoom(-0.1);
+  };
+
   return (
-    <div className="h-[100%]">
-      <X6Graph onGraphInit={handleGraphInit}></X6Graph>
+    <div className="h-[100%] relative">
+      <div className="absolute top-2 right-2 z-10 flex space-x-2">
+        <Button icon={<ZoomInOutlined />} onClick={handleZoomIn} />
+        <Button icon={<ZoomOutOutlined />} onClick={handleZoomOut} />
+      </div>
+      <X6Graph ref={graphRef} onGraphInit={handleGraphInit}></X6Graph>
     </div>
   );
 };

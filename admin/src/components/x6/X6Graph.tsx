@@ -1,13 +1,15 @@
-import React, { useEffect, useRef } from "react";
 import { Graph } from "@antv/x6";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
 }
 
-const X6Graph: React.FC<X6GraphProps> = ({ onGraphInit }) => {
+const X6Graph = forwardRef<Graph, X6GraphProps>(({ onGraphInit }, ref) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<Graph | null>(null);
+
+  useImperativeHandle(ref, () => graphRef.current as Graph);
 
   useEffect(() => {
     const resizeGraph = () => {
@@ -44,6 +46,6 @@ const X6Graph: React.FC<X6GraphProps> = ({ onGraphInit }) => {
   return (
     <div ref={containerRef} style={{ width: "100%", height: "100%" }}></div>
   );
-};
+});
 
 export default X6Graph;
