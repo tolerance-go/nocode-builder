@@ -1,5 +1,15 @@
 import X6Graph from "@/components/x6/X6Graph";
 import { Graph } from "@antv/x6";
+import "./SearchNode";
+import { register } from "@antv/x6-react-shape";
+import { SearchNode } from "./SearchNode";
+
+register({
+  shape: "search-node",
+  width: 300,
+  height: 400,
+  component: SearchNode,
+});
 
 const BlueMap = () => {
   const handleGraphInit = (graph: Graph) => {
@@ -15,6 +25,17 @@ const BlueMap = () => {
     graph.addEdge({
       source: { cell: rect.id },
       target: { x: 160, y: 60 },
+    });
+
+    graph.on("blank:contextmenu", ({ e }) => {
+      e.preventDefault();
+      const rect = graph.container.getBoundingClientRect();
+
+      graph.addNode({
+        shape: "search-node",
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      });
     });
   };
 
