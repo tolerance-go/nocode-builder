@@ -1,9 +1,4 @@
-import {
-  NodeData,
-  NodePlainChild,
-  RouteNodeData,
-  SlotsChildren,
-} from "@/types";
+import { NodeData, RouteNodeData, SlotsChildren } from "@/types";
 import { isPlainObject } from "../isPlainObject";
 
 interface RouteComponentData {
@@ -13,7 +8,9 @@ interface RouteComponentData {
   children?: RouteComponentData[];
 }
 
-function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
+function generateRouterComponent(
+  nodeDatas: RouteNodeData[]
+): RouteComponentData[] {
   function replaceRoutesWithOutlet(
     children: NodeData["children"],
     parentId: string
@@ -122,7 +119,7 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
         routes.map((route) => `${route.parent?.id}${route.slot}`)
       );
       if (uniqueParents.size > 1) {
-        throw new Error("Invalid structure: Routes are not sibling nodes.");
+        throw new Error("结构无效：Route 节点不是兄弟节点。");
       }
 
       // 检查 Route 节点是否是紧邻的兄弟节点
@@ -137,9 +134,7 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
           : [];
 
         if (!Array.isArray(parentChildren)) {
-          throw new Error(
-            "Invalid structure: Parent children should be an array."
-          );
+          throw new Error("结构无效：父节点的子节点应为数组。");
         }
 
         const routeIndexes = routes.map((route) =>
@@ -150,7 +145,7 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
 
         for (let i = 1; i < routeIndexes.length; i++) {
           if (routeIndexes[i] !== routeIndexes[i - 1] + 1) {
-            throw new Error("Invalid structure: Routes are not adjacent.");
+            throw new Error("结构无效：Route 节点不是紧邻的。");
           }
         }
       }
@@ -160,7 +155,9 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
   };
 
   /** 他处理 Route 类型的节点数据，然后进行包装后返回 */
-  const xxx = (routeNodeData: RouteNodeData): RouteComponentData => {
+  const processRouteNode = (
+    routeNodeData: RouteNodeData
+  ): RouteComponentData => {
     const routes = validateAndCollectRoutes(
       routeNodeData.children,
       routeNodeData
@@ -173,26 +170,17 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
         routeNodeData.children,
         routeNodeData.id
       ),
-      children: routes.map((route) => xxx(route.node)),
+      children: routes.map((route) => processRouteNode(route.node)),
     };
   };
 
-  function traverseNodes(nodes: NodeData[]): (NodeData | RouteComponentData)[] {
+  function traverseNodes(nodes: RouteNodeData[]): RouteComponentData[] {
     return nodes.map((node) => {
       if (node.elementType === "Route") {
-        return xxx(node as RouteNodeData);
+        return processRouteNode(node);
       }
-      return {
-        ...node,
-        children: Array.isArray(node.children)
-          ? traverseNodes(node.children)
-          : Object.fromEntries(
-              Object.entries(node.children || {}).map(([key, value]) => [
-                key,
-                traverseNodes(value),
-              ])
-            ),
-      };
+
+      throw new Error("节点不是 Route 类型。");
     });
   }
 

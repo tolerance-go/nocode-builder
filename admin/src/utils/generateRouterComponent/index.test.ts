@@ -1,4 +1,4 @@
-import { NodeData } from "@/types";
+import { NodeData, RouteNodeData } from "@/types";
 import { describe, expect, it } from "vitest";
 import { generateRouterComponent } from ".";
 
@@ -45,7 +45,7 @@ describe("generateRouterComponent", () => {
   });
 
   it("test2", () => {
-    const nodeDatas: NodeData[] = [
+    const nodeDatas: RouteNodeData[] = [
       {
         id: "1",
         elementType: "Route",
@@ -228,7 +228,7 @@ describe("generateRouterComponent", () => {
   });
 
   it("同个父节点下面存在多个不同父节点的 Route", () => {
-    const nodeDatas: NodeData[] = [
+    const nodeDatas: RouteNodeData[] = [
       {
         id: "1",
         elementType: "Route",
@@ -314,12 +314,12 @@ describe("generateRouterComponent", () => {
     expect(() =>
       generateRouterComponent(nodeDatas)
     ).toThrowErrorMatchingInlineSnapshot(
-      `[Error: Invalid structure: Routes are not sibling nodes.]`
+      `[Error: 结构无效：Route 节点不是兄弟节点。]`
     );
   });
 
   it("同一个父节点下的 Route 不是相邻的", () => {
-    const nodeDatas: NodeData[] = [
+    const nodeDatas: RouteNodeData[] = [
       {
         id: "1",
         elementType: "Route",
@@ -383,7 +383,76 @@ describe("generateRouterComponent", () => {
     expect(() =>
       generateRouterComponent(nodeDatas)
     ).toThrowErrorMatchingInlineSnapshot(
-      `[Error: Invalid structure: Routes are not adjacent.]`
+      `[Error: 结构无效：Route 节点不是紧邻的。]`
+    );
+  });
+
+  it("同一个父节点下的 Route 不是相邻的", () => {
+    const nodeDatas: RouteNodeData[] = [
+      {
+        id: "1",
+        elementType: "Route",
+        staticProps: {},
+        settings: {
+          path: "/",
+        },
+        fromWidgetId: "",
+        children: [
+          {
+            id: "1-1",
+            elementType: "Layout",
+            staticProps: {},
+            fromWidgetId: "",
+            settings: {},
+            children: {
+              content: [
+                {
+                  id: "1-1-0",
+                  elementType: "div",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {},
+                  children: [],
+                },
+                {
+                  id: "1-1-1",
+                  elementType: "Route",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {
+                    path: "route1",
+                  },
+                  children: [],
+                },
+                {
+                  id: "1-1-2",
+                  elementType: "div",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {},
+                  children: [],
+                },
+                {
+                  id: "1-1-3",
+                  elementType: "Route",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {
+                    path: "route1",
+                  },
+                  children: [],
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ];
+
+    expect(() =>
+      generateRouterComponent(nodeDatas)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: 结构无效：Route 节点不是紧邻的。]`
     );
   });
 });
