@@ -3,45 +3,46 @@ import { describe, expect, it } from "vitest";
 import { generateRouterComponent } from ".";
 
 describe("generateRouterComponent", () => {
-  // it("test1", () => {
-  //   const nodeDatas: NodeData[] = [
-  //     {
-  //       id: "1",
-  //       elementType: "Route",
-  //       staticProps: {},
-  //       settings: {
-  //         path: "/",
-  //       },
-  //       fromWidgetId: "",
-  //       children: [
-  //         {
-  //           id: "1-1",
-  //           elementType: "div",
-  //           staticProps: {},
-  //           fromWidgetId: "",
-  //           settings: {},
-  //           children: [],
-  //         },
-  //       ],
-  //     },
-  //   ];
-  //   expect(generateRouterComponent(nodeDatas)).toEqual([
-  //     {
-  //       type: "Route",
-  //       path: "/",
-  //       element: [
-  //         {
-  //           id: "1-1",
-  //           elementType: "div",
-  //           staticProps: {},
-  //           fromWidgetId: "",
-  //           settings: {},
-  //           children: [],
-  //         },
-  //       ],
-  //     },
-  //   ]);
-  // });
+  it("test1", () => {
+    const nodeDatas: NodeData[] = [
+      {
+        id: "1",
+        elementType: "Route",
+        staticProps: {},
+        settings: {
+          path: "/",
+        },
+        fromWidgetId: "",
+        children: [
+          {
+            id: "1-1",
+            elementType: "div",
+            staticProps: {},
+            fromWidgetId: "",
+            settings: {},
+            children: [],
+          },
+        ],
+      },
+    ];
+    expect(generateRouterComponent(nodeDatas)).toEqual([
+      {
+        type: "Route",
+        path: "/",
+        element: [
+          {
+            id: "1-1",
+            elementType: "div",
+            staticProps: {},
+            fromWidgetId: "",
+            settings: {},
+            children: [],
+          },
+        ],
+        children: [],
+      },
+    ]);
+  });
 
   it("test2", () => {
     const nodeDatas: NodeData[] = [
@@ -224,5 +225,165 @@ describe("generateRouterComponent", () => {
         ],
       },
     ]);
+  });
+
+  it("同个父节点下面存在多个不同父节点的 Route", () => {
+    const nodeDatas: NodeData[] = [
+      {
+        id: "1",
+        elementType: "Route",
+        staticProps: {},
+        settings: {
+          path: "/",
+        },
+        fromWidgetId: "",
+        children: [
+          {
+            id: "1-1",
+            elementType: "Layout",
+            staticProps: {},
+            fromWidgetId: "",
+            settings: {},
+            children: {
+              sidebar: [
+                {
+                  id: "1-1-2",
+                  elementType: "Sidebar",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {},
+                  children: [
+                    {
+                      id: "1-1-2-1",
+                      elementType: "Route",
+                      staticProps: {},
+                      fromWidgetId: "",
+                      settings: {
+                        path: "route1",
+                      },
+                      children: [
+                        {
+                          id: "1-1-2-1-1",
+                          elementType: "div",
+                          staticProps: {},
+                          fromWidgetId: "",
+                          settings: {},
+                          children: [],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+              content: [
+                {
+                  id: "1-1-3",
+                  elementType: "Content",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {},
+                  children: [
+                    {
+                      id: "1-1-3-1",
+                      elementType: "Route",
+                      staticProps: {},
+                      fromWidgetId: "",
+                      settings: {
+                        path: "route1",
+                      },
+                      children: [
+                        {
+                          id: "1-1-3-1-1",
+                          elementType: "div",
+                          staticProps: {},
+                          fromWidgetId: "",
+                          settings: {},
+                          children: [],
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ];
+
+    expect(() =>
+      generateRouterComponent(nodeDatas)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: Invalid structure: Routes are not sibling nodes.]`
+    );
+  });
+
+  it("同一个父节点下的 Route 不是相邻的", () => {
+    const nodeDatas: NodeData[] = [
+      {
+        id: "1",
+        elementType: "Route",
+        staticProps: {},
+        settings: {
+          path: "/",
+        },
+        fromWidgetId: "",
+        children: [
+          {
+            id: "1-1",
+            elementType: "Layout",
+            staticProps: {},
+            fromWidgetId: "",
+            settings: {},
+            children: {
+              content: [
+                {
+                  id: "1-1-0",
+                  elementType: "div",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {},
+                  children: [],
+                },
+                {
+                  id: "1-1-1",
+                  elementType: "Route",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {
+                    path: "route1",
+                  },
+                  children: [],
+                },
+                {
+                  id: "1-1-2",
+                  elementType: "div",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {},
+                  children: [],
+                },
+                {
+                  id: "1-1-3",
+                  elementType: "Route",
+                  staticProps: {},
+                  fromWidgetId: "",
+                  settings: {
+                    path: "route1",
+                  },
+                  children: [],
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ];
+
+    expect(() =>
+      generateRouterComponent(nodeDatas)
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: Invalid structure: Routes are not adjacent.]`
+    );
   });
 });

@@ -15,7 +15,8 @@ interface RouteComponentData {
 
 function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
   function replaceRoutesWithOutlet(
-    children: NodeData["children"]
+    children: NodeData["children"],
+    parentId: string
   ): NodeData["children"] {
     if (Array.isArray(children)) {
       const newChildren: NodeData[] = [];
@@ -28,8 +29,11 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
         ) {
           // 如果发现了紧邻的 Route 节点，将它们一起替换为 Outlet
           newChildren.push({
-            ...children[i],
+            staticProps: {},
+            fromWidgetId: "",
+            settings: {},
             elementType: "Outlet",
+            id: `${parentId}_outlet`, // 设置 Outlet 的 id
             children: [], // Outlet 没有子节点
           });
           i += 2; // 跳过紧邻的 Route 节点
@@ -38,7 +42,10 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
             children[i].children
               ? {
                   ...children[i],
-                  children: replaceRoutesWithOutlet(children[i].children),
+                  children: replaceRoutesWithOutlet(
+                    children[i].children,
+                    children[i].id
+                  ),
                 }
               : children[i]
           );
@@ -50,7 +57,10 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
       const newChildren: SlotsChildren = {};
       Object.entries(children).forEach(([key, childArray]) => {
         if (Array.isArray(childArray)) {
-          newChildren[key] = replaceRoutesWithOutlet(childArray) as NodeData[];
+          newChildren[key] = replaceRoutesWithOutlet(
+            childArray,
+            parentId
+          ) as NodeData[];
         } else {
           newChildren[key] = childArray;
         }
@@ -159,7 +169,10 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
     return {
       type: "Route",
       path: routeNodeData.settings.path as string,
-      element: replaceRoutesWithOutlet(routeNodeData.children),
+      element: replaceRoutesWithOutlet(
+        routeNodeData.children,
+        routeNodeData.id
+      ),
       children: routes.map((route) => xxx(route.node)),
     };
   };
