@@ -6,7 +6,7 @@ const BlueMap = () => {
     <div className="h-[100%]">
       <XFlow>
         <XFlowGraph zoomable minScale={0.5} />
-        <Grid type="dot" />
+        <Grid type="dot" options={{ color: "#ccc", thickness: 1 }} />
         <Background color="#F2F7FA" />
         <Snapline sharp />
         <InitNode />
