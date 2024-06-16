@@ -8,7 +8,7 @@ interface RouteComponentData {
   children?: RouteComponentData[];
 }
 
-function generateRouterComponent(
+function generateRouteComponents(
   nodeDatas: RouteNodeData[]
 ): RouteComponentData[] {
   function replaceRoutesWithOutlet(
@@ -188,4 +188,4 @@ function generateRouterComponent(
   return traverseNodes(nodeDatas);
 }
 
-export { generateRouterComponent };
+export { generateRouteComponents };

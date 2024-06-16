@@ -1,6 +1,6 @@
 import { NodeData, RouteNodeData } from "@/types";
 import { describe, expect, it } from "vitest";
-import { generateRouterComponent } from ".";
+import { generateRouteComponents } from ".";
 
 describe("generateRouterComponent", () => {
   it("test1", () => {
@@ -25,7 +25,7 @@ describe("generateRouterComponent", () => {
         ],
       },
     ];
-    expect(generateRouterComponent(nodeDatas)).toEqual([
+    expect(generateRouteComponents(nodeDatas)).toEqual([
       {
         type: "Route",
         path: "/",
@@ -137,7 +137,7 @@ describe("generateRouterComponent", () => {
       },
     ];
 
-    expect(generateRouterComponent(nodeDatas)).toEqual([
+    expect(generateRouteComponents(nodeDatas)).toEqual([
       {
         type: "Route",
         path: "/",
@@ -312,7 +312,7 @@ describe("generateRouterComponent", () => {
     ];
 
     expect(() =>
-      generateRouterComponent(nodeDatas)
+      generateRouteComponents(nodeDatas)
     ).toThrowErrorMatchingInlineSnapshot(
       `[Error: 结构无效：Route 节点不是兄弟节点。]`
     );
@@ -381,7 +381,7 @@ describe("generateRouterComponent", () => {
     ];
 
     expect(() =>
-      generateRouterComponent(nodeDatas)
+      generateRouteComponents(nodeDatas)
     ).toThrowErrorMatchingInlineSnapshot(
       `[Error: 结构无效：Route 节点不是紧邻的。]`
     );
@@ -450,7 +450,7 @@ describe("generateRouterComponent", () => {
     ];
 
     expect(() =>
-      generateRouterComponent(nodeDatas)
+      generateRouteComponents(nodeDatas)
     ).toThrowErrorMatchingInlineSnapshot(
       `[Error: 结构无效：Route 节点不是紧邻的。]`
     );
