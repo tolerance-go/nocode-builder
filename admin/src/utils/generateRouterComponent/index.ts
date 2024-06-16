@@ -14,45 +14,43 @@ interface RouteComponentData {
 }
 
 function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
-
   function replaceRoutesWithOutlet(
     children: NodeData["children"]
   ): NodeData["children"] {
     if (Array.isArray(children)) {
-      return children.map((child) => {
-        if (child.elementType === "Route") {
-          return {
-            ...child,
+      const newChildren: NodeData[] = [];
+      let i = 0;
+      while (i < children.length) {
+        if (
+          children[i].elementType === "Route" &&
+          i < children.length - 1 &&
+          children[i + 1].elementType === "Route"
+        ) {
+          // 如果发现了紧邻的 Route 节点，将它们一起替换为 Outlet
+          newChildren.push({
+            ...children[i],
             elementType: "Outlet",
             children: [], // Outlet 没有子节点
-          };
-        } else if (child.children) {
-          return {
-            ...child,
-            children: replaceRoutesWithOutlet(child.children),
-          };
+          });
+          i += 2; // 跳过紧邻的 Route 节点
+        } else {
+          newChildren.push(
+            children[i].children
+              ? {
+                  ...children[i],
+                  children: replaceRoutesWithOutlet(children[i].children),
+                }
+              : children[i]
+          );
+          i++;
         }
-        return child;
-      });
+      }
+      return newChildren;
     } else if (isPlainObject(children)) {
       const newChildren: SlotsChildren = {};
       Object.entries(children).forEach(([key, childArray]) => {
         if (Array.isArray(childArray)) {
-          newChildren[key] = childArray.map((child) => {
-            if (child.elementType === "Route") {
-              return {
-                ...child,
-                elementType: "Outlet",
-                children: [], // Outlet 没有子节点
-              };
-            } else if (child.children) {
-              return {
-                ...child,
-                children: replaceRoutesWithOutlet(child.children),
-              };
-            }
-            return child;
-          });
+          newChildren[key] = replaceRoutesWithOutlet(childArray) as NodeData[];
         } else {
           newChildren[key] = childArray;
         }
@@ -66,14 +64,18 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
    * 这个函数检查数据合法性
    * 他遍历所有分支，直到最后或者遇到 elementType 为 Route 的时候停止
    * 遍历完成后，把遇到的所有 Route 整理起来进行判断，
-   * 如果 Route 存在，并且所有 Route 都是兄弟节点表示数据合法
+   * 如果 Route 存在，并且所有 Route 都是紧邻的兄弟节点表示数据合法
    * @param nodeChildren
    */
   const validateAndCollectRoutes = (
     nodeChildren: NodeData["children"],
     parentNode: NodeData | null
   ) => {
-    const routes: { node: RouteNodeData; parent: NodeData | null }[] = [];
+    const routes: {
+      node: RouteNodeData;
+      parent: NodeData | null;
+      slot?: string;
+    }[] = [];
 
     function collectRoutes(
       children: NodeData["children"],
@@ -88,28 +90,59 @@ function generateRouterComponent(nodeDatas: NodeData[]): RouteComponentData[] {
           }
         });
       } else if (isPlainObject(children)) {
-        Object.values(children).forEach(
-          (childArray: NodeData[] | NodePlainChild) => {
-            if (Array.isArray(childArray)) {
-              childArray.forEach((child: NodeData) => {
-                if (child.elementType === "Route") {
-                  routes.push({ node: child as RouteNodeData, parent });
-                } else if (child.children) {
-                  collectRoutes(child.children, child);
-                }
-              });
-            }
+        Object.entries(children).forEach(([slot, childArray]) => {
+          console.log(slot);
+          if (Array.isArray(childArray)) {
+            childArray.forEach((child: NodeData) => {
+              if (child.elementType === "Route") {
+                routes.push({ node: child as RouteNodeData, parent, slot });
+              } else if (child.children) {
+                collectRoutes(child.children, child);
+              }
+            });
           }
-        );
+        });
       }
     }
 
     collectRoutes(nodeChildren, parentNode);
 
     if (routes.length > 1) {
-      const uniqueParents = new Set(routes.map((route) => route.parent?.id));
+      const uniqueParents = new Set(
+        routes.map((route) => `${route.parent?.id}${route.slot}`)
+      );
       if (uniqueParents.size > 1) {
         throw new Error("Invalid structure: Routes are not sibling nodes.");
+      }
+
+      // 检查 Route 节点是否是紧邻的兄弟节点
+      const parent = routes[0].parent;
+      const slot = routes[0].slot;
+
+      if (parent) {
+        const parentChildren = slot
+          ? (parent.children as SlotsChildren)[slot]
+          : Array.isArray(parent.children)
+          ? parent.children
+          : [];
+
+        if (!Array.isArray(parentChildren)) {
+          throw new Error(
+            "Invalid structure: Parent children should be an array."
+          );
+        }
+
+        const routeIndexes = routes.map((route) =>
+          parentChildren.findIndex((child) => child.id === route.node.id)
+        );
+
+        routeIndexes.sort((a, b) => a - b);
+
+        for (let i = 1; i < routeIndexes.length; i++) {
+          if (routeIndexes[i] !== routeIndexes[i - 1] + 1) {
+            throw new Error("Invalid structure: Routes are not adjacent.");
+          }
+        }
       }
     }
 
