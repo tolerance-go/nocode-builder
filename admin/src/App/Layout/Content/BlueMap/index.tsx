@@ -2,7 +2,7 @@ import X6Graph from "@/components/x6/X6Graph";
 import { Graph } from "@antv/x6";
 import { register } from "@antv/x6-react-shape";
 import { SearchNode } from "./SearchNode";
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ZoomInOutlined, ZoomOutOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 
@@ -16,8 +16,11 @@ register({
 let lastSearchNodeId: string | null = null;
 
 const BlueMap = () => {
-  const graphRef = useRef<Graph>(null);
+  const [graph, setGraph] = useState<Graph | null>(null);
+
   const handleGraphInit = useCallback((graph: Graph) => {
+    setGraph(graph);
+
     // 在这里初始化图表，例如添加节点和边
     const rect = graph.addNode({
       x: 40,
@@ -31,6 +34,16 @@ const BlueMap = () => {
       source: { cell: rect.id },
       target: { x: 160, y: 60 },
     });
+
+    const removeSearchNode = () => {
+      if (lastSearchNodeId) {
+        const lastNode = graph.getCellById(lastSearchNodeId);
+        if (lastNode) {
+          graph.removeCell(lastNode);
+          lastSearchNodeId = null;
+        }
+      }
+    };
 
     graph.on("blank:contextmenu", ({ e }) => {
       e.preventDefault();
@@ -54,16 +67,6 @@ const BlueMap = () => {
       lastSearchNodeId = newNode.id;
     });
 
-    const removeSearchNode = () => {
-      if (lastSearchNodeId) {
-        const lastNode = graph.getCellById(lastSearchNodeId);
-        if (lastNode) {
-          graph.removeCell(lastNode);
-          lastSearchNodeId = null;
-        }
-      }
-    };
-
     graph.on("edge:mouseup", () => {
       removeSearchNode();
     });
@@ -81,11 +84,11 @@ const BlueMap = () => {
   }, []);
 
   const handleZoomIn = () => {
-    graphRef.current?.zoom(0.1);
+    graph?.zoom(0.1);
   };
 
   const handleZoomOut = () => {
-    graphRef.current?.zoom(-0.1);
+    graph?.zoom(-0.1);
   };
 
   return (
@@ -94,7 +97,7 @@ const BlueMap = () => {
         <Button icon={<ZoomInOutlined />} onClick={handleZoomIn} />
         <Button icon={<ZoomOutOutlined />} onClick={handleZoomOut} />
       </div>
-      <X6Graph ref={graphRef} onGraphInit={handleGraphInit}></X6Graph>
+      <X6Graph onGraphInit={handleGraphInit}></X6Graph>
     </div>
   );
 };

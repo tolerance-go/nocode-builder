@@ -1,15 +1,13 @@
 import { Graph } from "@antv/x6";
-import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+import { memo, useEffect, useRef } from "react";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
 }
 
-const X6Graph = forwardRef<Graph, X6GraphProps>(({ onGraphInit }, ref) => {
+const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<Graph | null>(null);
-
-  useImperativeHandle(ref, () => graphRef.current as Graph);
 
   useEffect(() => {
     const resizeGraph = () => {
