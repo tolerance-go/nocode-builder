@@ -53,7 +53,9 @@ const BlueMap = () => {
 
     graph.on("blank:contextmenu", ({ e }) => {
       e.preventDefault();
-      const rect = graph.container.getBoundingClientRect();
+
+      // 将屏幕坐标转换为图形的局部坐标
+      const { x, y } = graph.clientToLocal({ x: e.clientX, y: e.clientY });
 
       // 先取消上个 search-node
       if (lastSearchNodeId) {
@@ -66,8 +68,8 @@ const BlueMap = () => {
       // 创建新的 search-node
       const newNode = graph.addNode({
         shape: "search-node",
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
+        x,
+        y,
       });
 
       lastSearchNodeId = newNode.id;
@@ -105,7 +107,7 @@ const BlueMap = () => {
   };
 
   const handleZoomToFit = () => {
-    graph?.zoomToFit({ maxScale: 1 });
+    graph?.zoomToFit();
   };
 
   const handleCenterContent = () => {
@@ -114,7 +116,7 @@ const BlueMap = () => {
 
   return (
     <div className="h-[100%] relative">
-      <div className="absolute top-2 right-2 z-10 flex space-x-2">
+      <div className="absolute bottom-5 right-5 z-10 flex space-x-2">
         <Button icon={<ZoomInOutlined />} onClick={handleZoomIn} />
         <Button icon={<ZoomOutOutlined />} onClick={handleZoomOut} />
         <Button icon={<ShrinkOutlined />} onClick={handleZoomTo} />
