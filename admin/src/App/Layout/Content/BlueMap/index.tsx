@@ -1,6 +1,5 @@
 import X6Graph from "@/components/x6/X6Graph";
 import { Graph } from "@antv/x6";
-import "./SearchNode";
 import { register } from "@antv/x6-react-shape";
 import { SearchNode } from "./SearchNode";
 

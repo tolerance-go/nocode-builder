@@ -1,34 +1,145 @@
-import { Input, List, Typography } from "antd";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import { Input, Tree, Typography } from "antd";
+import type { TreeDataNode } from "antd";
 
-export const SearchNode = () => {
+const { Search } = Input;
+
+const x = 3;
+const y = 2;
+const z = 1;
+const defaultData: TreeDataNode[] = [];
+
+const generateData = (
+  _level: number,
+  _preKey?: React.Key,
+  _tns?: TreeDataNode[]
+) => {
+  const preKey = _preKey || "0";
+  const tns = _tns || defaultData;
+
+  const children: React.Key[] = [];
+  for (let i = 0; i < x; i++) {
+    const key = `${preKey}-${i}`;
+    tns.push({ title: key, key });
+    if (i < y) {
+      children.push(key);
+    }
+  }
+  if (_level < 0) {
+    return tns;
+  }
+  const level = _level - 1;
+  children.forEach((key, index) => {
+    tns[index].children = [];
+    return generateData(level, key, tns[index].children);
+  });
+};
+generateData(z);
+
+const dataList: { key: React.Key; title: string }[] = [];
+const generateList = (data: TreeDataNode[]) => {
+  for (let i = 0; i < data.length; i++) {
+    const node = data[i];
+    const { key } = node;
+    dataList.push({ key, title: key as string });
+    if (node.children) {
+      generateList(node.children);
+    }
+  }
+};
+generateList(defaultData);
+
+const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
+  let parentKey: React.Key;
+  for (let i = 0; i < tree.length; i++) {
+    const node = tree[i];
+    if (node.children) {
+      if (node.children.some((item) => item.key === key)) {
+        parentKey = node.key;
+      } else if (getParentKey(key, node.children)) {
+        parentKey = getParentKey(key, node.children);
+      }
+    }
+  }
+  return parentKey!;
+};
+
+export const SearchNode: React.FC = () => {
+  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState("");
-  const [listItems, setListItems] = useState<string[]>([]);
+  const [autoExpandParent, setAutoExpandParent] = useState(true);
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-    // 根据搜索内容更新列表
-    setListItems([e.target.value, "Item 1", "Item 2", "Item 3"]); // 示例数据
+  const onExpand = (newExpandedKeys: React.Key[]) => {
+    setExpandedKeys(newExpandedKeys);
+    setAutoExpandParent(false);
   };
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    const newExpandedKeys = dataList
+      .map((item) => {
+        if (item.title.indexOf(value) > -1) {
+          return getParentKey(item.key, defaultData);
+        }
+        return null;
+      })
+      .filter(
+        (item, i, self): item is React.Key =>
+          !!(item && self.indexOf(item) === i)
+      );
+    setExpandedKeys(newExpandedKeys);
+    setSearchValue(value);
+    setAutoExpandParent(true);
+  };
+
+  const treeData = useMemo(() => {
+    const loop = (data: TreeDataNode[]): TreeDataNode[] =>
+      data.map((item) => {
+        const strTitle = item.title as string;
+        const index = strTitle.indexOf(searchValue);
+        const beforeStr = strTitle.substring(0, index);
+        const afterStr = strTitle.slice(index + searchValue.length);
+        const title =
+          index > -1 ? (
+            <span>
+              {beforeStr}
+              <span className="site-tree-search-value">{searchValue}</span>
+              {afterStr}
+            </span>
+          ) : (
+            <span>{strTitle}</span>
+          );
+        if (item.children) {
+          return { title, key: item.key, children: loop(item.children) };
+        }
+
+        return {
+          title,
+          key: item.key,
+        };
+      });
+
+    return loop(defaultData);
+  }, [searchValue]);
+
   return (
-    <div className="bg-white border px-2 py-1 rounded-md h-[100%]">
-      <div className="mb-1">
+    <div className="bg-white border px-1.5 py-1 rounded-md h-[100%]">
+      <div className="mb-1.5">
         <Typography.Text>此蓝图的所有操作</Typography.Text>
       </div>
-      <Input.Search
+      <Search
+        placeholder="输入搜索内容"
+        onChange={onChange}
         autoFocus
         size="small"
-        placeholder="输入搜索内容"
-        value={searchValue}
-        onChange={handleSearchChange}
+        className="mb-1"
       />
-      <List
-        size="small"
-        bordered
-        dataSource={listItems}
-        renderItem={(item) => <List.Item>{item}</List.Item>}
-        style={{ marginTop: "10px" }}
+      <Tree
+        blockNode
+        onExpand={onExpand}
+        expandedKeys={expandedKeys}
+        autoExpandParent={autoExpandParent}
+        treeData={treeData}
       />
     </div>
   );
