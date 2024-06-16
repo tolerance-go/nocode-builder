@@ -19,7 +19,7 @@ const designTreeData = proxyWithHistory<{
     {
       id: "1",
       elementType: "Root",
-      staticProps: {},
+      styles: {},
       fromWidgetId: "component-general-Root",
       settings: {},
     },

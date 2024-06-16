@@ -147,13 +147,6 @@ const RenderNode: React.FC<{
     return node.children as NodePlainChild;
   }
 
-  const nodeStyle = node.staticProps.style;
-
-  ensure(
-    nodeStyle === undefined || typeof nodeStyle === "object",
-    "node.staticProps.style 存在但是类型不是对象。"
-  );
-
   const getChildren = () => {
     if (isPrimitive(node.children)) {
       return node.children;
@@ -192,16 +185,15 @@ const RenderNode: React.FC<{
   };
 
   return React.createElement(Component, {
-    ...node.staticProps,
     style: {
-      ...nodeStyle,
+      ...node.styles,
       userSelect: "none",
-      background: isDragging ? "#eee" : (nodeStyle?.background as string),
+      background: isDragging ? "#eee" : (node.styles?.background as string),
       border: isHighlighted
         ? isSelected
           ? "2px solid blue"
           : "1px solid blue"
-        : (nodeStyle?.border as string), // 这里使用简单的边框来高亮，可以根据需求调整
+        : (node.styles?.border as string), // 这里使用简单的边框来高亮，可以根据需求调整
     },
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,

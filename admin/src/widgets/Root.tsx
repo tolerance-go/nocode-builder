@@ -11,7 +11,7 @@ export const RootWidget: ComponentWidget = {
   elementType: "Root",
   name: "Root",
   tags: [],
-  defaultStaticProps: {},
+  defaultStyles: {},
   settingsForm: [],
 };
 

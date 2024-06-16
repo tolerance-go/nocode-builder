@@ -4,15 +4,17 @@ export const exampleNodeData: NodeData[] = [
   {
     id: "1",
     elementType: "div",
-    staticProps: { style: { background: "lightblue", padding: "20px" } },
+    styles: { background: "lightblue", padding: "20px" },
     fromWidgetId: "component-test-Custom",
     settings: {},
     children: [
       {
         id: "1-1",
         elementType: "div",
-        staticProps: {
-          style: { background: "blue", width: "100px", height: "100px" },
+        styles: {
+          background: "blue",
+          width: "100px",
+          height: "100px",
         },
         fromWidgetId: "component-test-Custom",
         settings: {},
@@ -20,13 +22,11 @@ export const exampleNodeData: NodeData[] = [
       {
         id: "1-2",
         elementType: "div",
-        staticProps: {
-          style: {
-            background: "white",
-            width: "300px",
-            height: "500px",
-            padding: "30px",
-          },
+        styles: {
+          background: "white",
+          width: "300px",
+          height: "500px",
+          padding: "30px",
         },
         fromWidgetId: "component-test-Custom",
         settings: {},
@@ -34,8 +34,10 @@ export const exampleNodeData: NodeData[] = [
           {
             id: "1-2-1",
             elementType: "div",
-            staticProps: {
-              style: { background: "yellow", width: "100px", height: "100px" },
+            styles: {
+              background: "yellow",
+              width: "100px",
+              height: "100px",
             },
             fromWidgetId: "component-test-Custom",
             settings: {},
@@ -43,8 +45,10 @@ export const exampleNodeData: NodeData[] = [
           {
             id: "1-2-2",
             elementType: "div",
-            staticProps: {
-              style: { background: "red", width: "100px", height: "100px" },
+            styles: {
+              background: "red",
+              width: "100px",
+              height: "100px",
             },
             fromWidgetId: "component-test-Custom",
             settings: {},
@@ -52,13 +56,11 @@ export const exampleNodeData: NodeData[] = [
           {
             id: "1-2-3",
             elementType: "Custom",
-            staticProps: {
-              style: {
-                background: "green",
-                width: "150px",
-                height: "150px",
-                padding: "10px",
-              },
+            styles: {
+              background: "green",
+              width: "150px",
+              height: "150px",
+              padding: "10px",
             },
             fromWidgetId: "component-test-Custom",
             settings: {},
@@ -66,12 +68,10 @@ export const exampleNodeData: NodeData[] = [
               {
                 id: "1-2-3-1",
                 elementType: "div",
-                staticProps: {
-                  style: {
-                    background: "blue",
-                    width: "100px",
-                    height: "100px",
-                  },
+                styles: {
+                  background: "blue",
+                  width: "100px",
+                  height: "100px",
                 },
                 fromWidgetId: "component-test-Custom",
                 settings: {},
@@ -81,13 +81,11 @@ export const exampleNodeData: NodeData[] = [
           {
             id: "1-2-4",
             elementType: "CustomWithSlots",
-            staticProps: {
-              style: {
-                background: "#91caff",
-                width: "350px",
-                height: "350px",
-                padding: "10px",
-              },
+            styles: {
+              background: "#91caff",
+              width: "350px",
+              height: "350px",
+              padding: "10px",
             },
             fromWidgetId: "component-test-Custom",
             settings: {},
@@ -95,12 +93,10 @@ export const exampleNodeData: NodeData[] = [
               slot0: {
                 id: "1-2-4-1",
                 elementType: "div",
-                staticProps: {
-                  style: {
-                    background: "blue",
-                    width: "100px",
-                    height: "100px",
-                  },
+                styles: {
+                  background: "blue",
+                  width: "100px",
+                  height: "100px",
                 },
                 fromWidgetId: "component-test-Custom",
                 settings: {},

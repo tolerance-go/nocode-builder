@@ -12,7 +12,7 @@ export const RouteWidget: ComponentWidget = {
   elementType: "Route",
   name: "Route",
   tags: [],
-  defaultStaticProps: {},
+  defaultStyles: {},
   settingsForm: [
     { type: "text", label: "路径", name: "path", defaultValue: "/" },
   ],

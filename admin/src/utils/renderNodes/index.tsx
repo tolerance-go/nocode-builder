@@ -28,13 +28,11 @@ function renderNodes(nodeDataArray: NodeData[]): React.ReactNode {
       children = nodeData.children as React.ReactNode;
     }
 
-    const nodeStyle = nodeData.staticProps.style;
-
     return (
       <Component
         key={nodeData.id}
         node={nodeData}
-        style={(nodeStyle as React.CSSProperties | undefined) || {}}
+        style={nodeData.styles}
         onMouseEnter={() => {}}
         onMouseLeave={() => {}}
         onMouseDown={() => {}}

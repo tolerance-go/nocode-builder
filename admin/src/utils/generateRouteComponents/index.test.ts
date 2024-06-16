@@ -1,14 +1,14 @@
-import { NodeData, RouteNodeData } from "@/types";
+import { RouteNodeData } from "@/types";
 import { describe, expect, it } from "vitest";
 import { generateRouteComponents } from ".";
 
 describe("generateRouterComponent", () => {
   it("test1", () => {
-    const nodeDatas: NodeData[] = [
+    const nodeDatas: RouteNodeData[] = [
       {
         id: "1",
         elementType: "Route",
-        staticProps: {},
+        styles: {},
         settings: {
           path: "/",
         },
@@ -17,7 +17,7 @@ describe("generateRouterComponent", () => {
           {
             id: "1-1",
             elementType: "div",
-            staticProps: {},
+            styles: {},
             fromWidgetId: "",
             settings: {},
             children: [],
@@ -33,7 +33,7 @@ describe("generateRouterComponent", () => {
           {
             id: "1-1",
             elementType: "div",
-            staticProps: {},
+            styles: {},
             fromWidgetId: "",
             settings: {},
             children: [],
@@ -49,7 +49,7 @@ describe("generateRouterComponent", () => {
       {
         id: "1",
         elementType: "Route",
-        staticProps: {},
+        styles: {},
         settings: {
           path: "/",
         },
@@ -58,7 +58,7 @@ describe("generateRouterComponent", () => {
           {
             id: "1-1",
             elementType: "Layout",
-            staticProps: {},
+            styles: {},
             fromWidgetId: "",
             settings: {},
             children: {
@@ -66,7 +66,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-1",
                   elementType: "Header",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [],
@@ -76,7 +76,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-2",
                   elementType: "Sidebar",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [],
@@ -86,14 +86,14 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-3",
                   elementType: "Content",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [
                     {
                       id: "1-1-3-1",
                       elementType: "Route",
-                      staticProps: {},
+                      styles: {},
                       fromWidgetId: "",
                       settings: {
                         path: "route1",
@@ -102,7 +102,7 @@ describe("generateRouterComponent", () => {
                         {
                           id: "1-1-3-1-1",
                           elementType: "div",
-                          staticProps: {},
+                          styles: {},
                           fromWidgetId: "",
                           settings: {},
                           children: [],
@@ -112,7 +112,7 @@ describe("generateRouterComponent", () => {
                     {
                       id: "1-1-3-2",
                       elementType: "Route",
-                      staticProps: {},
+                      styles: {},
                       fromWidgetId: "",
                       settings: {
                         path: "route2",
@@ -121,7 +121,7 @@ describe("generateRouterComponent", () => {
                         {
                           id: "1-1-3-2-1",
                           elementType: "div",
-                          staticProps: {},
+                          styles: {},
                           fromWidgetId: "",
                           settings: {},
                           children: [],
@@ -145,7 +145,7 @@ describe("generateRouterComponent", () => {
           {
             id: "1-1",
             elementType: "Layout",
-            staticProps: {},
+            styles: {},
             fromWidgetId: "",
             settings: {},
             children: {
@@ -153,7 +153,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-1",
                   elementType: "Header",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [],
@@ -163,7 +163,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-2",
                   elementType: "Sidebar",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [],
@@ -173,14 +173,14 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-3",
                   elementType: "Content",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [
                     {
                       id: "1-1-3_outlet",
                       elementType: "Outlet",
-                      staticProps: {},
+                      styles: {},
                       fromWidgetId: "",
                       settings: {},
                       children: [],
@@ -199,7 +199,7 @@ describe("generateRouterComponent", () => {
               {
                 id: "1-1-3-1-1",
                 elementType: "div",
-                staticProps: {},
+                styles: {},
                 fromWidgetId: "",
                 settings: {},
                 children: [],
@@ -214,7 +214,7 @@ describe("generateRouterComponent", () => {
               {
                 id: "1-1-3-2-1",
                 elementType: "div",
-                staticProps: {},
+                styles: {},
                 fromWidgetId: "",
                 settings: {},
                 children: [],
@@ -232,7 +232,7 @@ describe("generateRouterComponent", () => {
       {
         id: "1",
         elementType: "Route",
-        staticProps: {},
+        styles: {},
         settings: {
           path: "/",
         },
@@ -241,7 +241,7 @@ describe("generateRouterComponent", () => {
           {
             id: "1-1",
             elementType: "Layout",
-            staticProps: {},
+            styles: {},
             fromWidgetId: "",
             settings: {},
             children: {
@@ -249,14 +249,14 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-2",
                   elementType: "Sidebar",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [
                     {
                       id: "1-1-2-1",
                       elementType: "Route",
-                      staticProps: {},
+                      styles: {},
                       fromWidgetId: "",
                       settings: {
                         path: "route1",
@@ -265,7 +265,7 @@ describe("generateRouterComponent", () => {
                         {
                           id: "1-1-2-1-1",
                           elementType: "div",
-                          staticProps: {},
+                          styles: {},
                           fromWidgetId: "",
                           settings: {},
                           children: [],
@@ -279,14 +279,14 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-3",
                   elementType: "Content",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [
                     {
                       id: "1-1-3-1",
                       elementType: "Route",
-                      staticProps: {},
+                      styles: {},
                       fromWidgetId: "",
                       settings: {
                         path: "route1",
@@ -295,7 +295,7 @@ describe("generateRouterComponent", () => {
                         {
                           id: "1-1-3-1-1",
                           elementType: "div",
-                          staticProps: {},
+                          styles: {},
                           fromWidgetId: "",
                           settings: {},
                           children: [],
@@ -323,7 +323,7 @@ describe("generateRouterComponent", () => {
       {
         id: "1",
         elementType: "Route",
-        staticProps: {},
+        styles: {},
         settings: {
           path: "/",
         },
@@ -332,7 +332,7 @@ describe("generateRouterComponent", () => {
           {
             id: "1-1",
             elementType: "Layout",
-            staticProps: {},
+            styles: {},
             fromWidgetId: "",
             settings: {},
             children: {
@@ -340,7 +340,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-0",
                   elementType: "div",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [],
@@ -348,7 +348,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-1",
                   elementType: "Route",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {
                     path: "route1",
@@ -358,7 +358,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-2",
                   elementType: "div",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [],
@@ -366,7 +366,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-3",
                   elementType: "Route",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {
                     path: "route1",
@@ -392,7 +392,7 @@ describe("generateRouterComponent", () => {
       {
         id: "1",
         elementType: "Route",
-        staticProps: {},
+        styles: {},
         settings: {
           path: "/",
         },
@@ -401,7 +401,7 @@ describe("generateRouterComponent", () => {
           {
             id: "1-1",
             elementType: "Layout",
-            staticProps: {},
+            styles: {},
             fromWidgetId: "",
             settings: {},
             children: {
@@ -409,7 +409,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-0",
                   elementType: "div",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [],
@@ -417,7 +417,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-1",
                   elementType: "Route",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {
                     path: "route1",
@@ -427,7 +427,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-2",
                   elementType: "div",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {},
                   children: [],
@@ -435,7 +435,7 @@ describe("generateRouterComponent", () => {
                 {
                   id: "1-1-3",
                   elementType: "Route",
-                  staticProps: {},
+                  styles: {},
                   fromWidgetId: "",
                   settings: {
                     path: "route1",

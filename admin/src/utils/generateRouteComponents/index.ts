@@ -26,7 +26,7 @@ function generateRouteComponents(
         ) {
           // 如果发现了紧邻的 Route 节点，将它们一起替换为 Outlet
           newChildren.push({
-            staticProps: {},
+            styles: {},
             fromWidgetId: "",
             settings: {},
             elementType: "Outlet",

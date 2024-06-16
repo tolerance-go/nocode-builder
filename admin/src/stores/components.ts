@@ -32,7 +32,7 @@ const windowDisplayComponents = proxy<{
       elementType: "Custom",
       name: "Custom",
       tags: [],
-      defaultStaticProps: {},
+      defaultStyles: {},
       settingsForm: [
         { type: "text", label: "Name", name: "name", defaultValue: "John Doe" },
         {
@@ -69,7 +69,7 @@ const windowDisplayComponents = proxy<{
       elementType: "Button",
       name: "Button",
       tags: [],
-      defaultStaticProps: {},
+      defaultStyles: {},
       settingsForm: [
         { type: "text", label: "文字", name: "text", defaultValue: "按钮" },
         {
@@ -96,7 +96,7 @@ const windowDisplayComponents = proxy<{
       elementType: "Flex",
       name: "Flex",
       tags: [],
-      defaultStaticProps: {
+      defaultStyles: {
         style: {
           padding: 10,
         },

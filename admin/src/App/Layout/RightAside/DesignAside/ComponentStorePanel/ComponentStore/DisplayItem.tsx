@@ -7,10 +7,8 @@ import { useEffect, useState } from "react";
 import { useSnapshot } from "valtio";
 
 const nodeDataTpl = {
-  staticProps: {
-    style: {
-      // background: "lightblue",
-    },
+  styles: {
+    // background: "lightblue",
   },
 };
 
@@ -32,15 +30,9 @@ const createNodeData = (component: DeepReadonly<ComponentWidget>): NodeData => {
     fromWidgetId: component.id,
     elementType: component.elementType,
     id: Math.random() + "",
-    staticProps: {
-      ...nodeDataTpl.staticProps,
-      ...component.defaultStaticProps,
-      style: {
-        ...nodeDataTpl.staticProps.style,
-        ...(typeof component.defaultStaticProps?.style === "object"
-          ? component.defaultStaticProps?.style
-          : undefined),
-      },
+    styles: {
+      ...nodeDataTpl.styles,
+      ...component.defaultStyles,
     },
     /** 收集所有 component.settingsForm 内的 defaultValue 设置一次 settings */
     settings: collectDefaultSettings(component.settingsForm ?? []),

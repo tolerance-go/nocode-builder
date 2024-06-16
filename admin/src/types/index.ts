@@ -26,7 +26,7 @@ export type NodeData<Settings = StaticProps> = {
   id: string;
   elementType: string;
   children?: SlotsChildren | NodeData[] | NodePlainChild;
-  staticProps: StaticProps;
+  styles: StaticProps;
   /**
    * 从哪个 widget 创建
    */
@@ -127,7 +127,7 @@ type WidgetBase<T extends string> = {
   /** 标签 */
   tags: string[];
   /** 默认静态配置 */
-  defaultStaticProps?: StaticProps;
+  defaultStyles?: StaticProps;
   /** 表单配置 */
   settingsForm?: SettingConfig[];
 };
