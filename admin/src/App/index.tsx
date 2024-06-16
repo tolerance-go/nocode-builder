@@ -3,9 +3,14 @@ import { BrowserRouter } from "react-router-dom";
 import { Layout } from "./Layout";
 import "./index.css";
 import { ConfigProvider } from "antd";
+import { useCurrentPathname } from "@/hooks/useCurrentPathname";
+import { Preview } from "./Preview";
 
 function App() {
-  return (
+  const pathname = useCurrentPathname();
+  return pathname.startsWith("/preview") ? (
+    <Preview />
+  ) : (
     <BrowserRouter>
       <ConfigProvider
         theme={{
