@@ -60,7 +60,10 @@ const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
           rubberband: true,
           movable: true,
           showNodeSelectionBox: true,
-          eventTypes: ['leftMouseDown']
+          eventTypes: ["leftMouseDown"],
+          filter(cell) {
+            return cell.shape !== "search-node";
+          },
         })
       );
 
@@ -68,10 +71,32 @@ const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
         onGraphInit(graph);
       }
 
+      const container = containerRef.current;
+
+      const handleMouseDown = (e: MouseEvent) => {
+        if (e.button === 1) {
+          // 检查是否按下鼠标中键
+          container.style.cursor = "grabbing";
+        }
+      };
+
+      const handleMouseUp = (e: MouseEvent) => {
+        if (e.button === 1) {
+          // 检查是否松开鼠标中键
+          container.style.cursor = "default";
+        }
+      };
+
+      container.addEventListener("mousedown", handleMouseDown);
+      container.addEventListener("mouseup", handleMouseUp);
+
       const resizeObserver = new ResizeObserver(resizeGraph);
       resizeObserver.observe(containerRef.current);
 
       return () => {
+        container.removeEventListener("mousedown", handleMouseDown);
+        container.removeEventListener("mouseup", handleMouseUp);
+
         resizeObserver.disconnect();
         graph.dispose();
         graphRef.current = null;
@@ -80,7 +105,10 @@ const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
   }, [onGraphInit]);
 
   return (
-    <div ref={containerRef} style={{ width: "100%", height: "100%" }}></div>
+    <div
+      ref={containerRef}
+      style={{ width: "100%", height: "100%", cursor: "default" }}
+    ></div>
   );
 });
 
