@@ -2,8 +2,14 @@ import X6Graph from "@/components/x6/X6Graph";
 import { Graph } from "@antv/x6";
 import { register } from "@antv/x6-react-shape";
 import { SearchNode } from "./SearchNode";
-import { useCallback, useRef, useState } from "react";
-import { ZoomInOutlined, ZoomOutOutlined } from "@ant-design/icons";
+import { useCallback, useState } from "react";
+import {
+  ZoomInOutlined,
+  ZoomOutOutlined,
+  ShrinkOutlined,
+  FullscreenOutlined,
+  AimOutlined,
+} from "@ant-design/icons";
 import { Button } from "antd";
 
 register({
@@ -81,6 +87,9 @@ const BlueMap = () => {
       // 在空白处点击时，删除当前存在的 search-node
       removeSearchNode();
     });
+
+    // 启用画布拖拽
+    graph.enablePanning();
   }, []);
 
   const handleZoomIn = () => {
@@ -91,11 +100,26 @@ const BlueMap = () => {
     graph?.zoom(-0.1);
   };
 
+  const handleZoomTo = () => {
+    graph?.zoomTo(1);
+  };
+
+  const handleZoomToFit = () => {
+    graph?.zoomToFit({ maxScale: 1 });
+  };
+
+  const handleCenterContent = () => {
+    graph?.centerContent();
+  };
+
   return (
     <div className="h-[100%] relative">
       <div className="absolute top-2 right-2 z-10 flex space-x-2">
         <Button icon={<ZoomInOutlined />} onClick={handleZoomIn} />
         <Button icon={<ZoomOutOutlined />} onClick={handleZoomOut} />
+        <Button icon={<ShrinkOutlined />} onClick={handleZoomTo} />
+        <Button icon={<FullscreenOutlined />} onClick={handleZoomToFit} />
+        <Button icon={<AimOutlined />} onClick={handleCenterContent} />
       </div>
       <X6Graph onGraphInit={handleGraphInit}></X6Graph>
     </div>
