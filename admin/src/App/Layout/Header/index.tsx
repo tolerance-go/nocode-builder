@@ -9,7 +9,7 @@ import { useMatch } from "react-router-dom";
 export const Header = () => {
   const match = useMatch("/apps/:id/design");
   return (
-    <Flex justify="space-between" align="center">
+    <Flex justify="space-between" align="center" className="h-[100%]">
       <Navs />
       <Space>
         {match && (

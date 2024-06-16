@@ -1,6 +1,9 @@
 import { NavItem } from "@/types";
 
-export const appSubNavs = [
+/**
+ * 约定 key 就是 url item
+ */
+export const appSubNavs: NavItem[] = [
   {
     key: "data",
     label: "数据",
@@ -10,7 +13,7 @@ export const appSubNavs = [
     label: "设计",
   },
   {
-    key: "bluemap",
+    key: "blue-map",
     label: "蓝图",
   },
   {

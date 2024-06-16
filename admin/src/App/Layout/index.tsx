@@ -14,16 +14,16 @@ export const Layout = () => {
     if (location.pathname === "/") {
       navigate("/apps");
     }
-  }, []);
+  }, [location, navigate]);
 
   return (
     <div className="bg-gray-100 overflow-hidden">
       {/* 顶部导航栏 */}
-      <header className="text-white px-4 border-b">
+      <header className="text-white px-4 border-b h-[46px]">
         <Header />
       </header>
 
-      <div className="flex flex-row h-screen">
+      <div className="flex flex-row" style={{ height: "calc(100vh - 46px)" }}>
         {/* 左侧边栏 */}
         <aside className="bg-gray-200 w-[400px] border-r">
           <LeftAside />
