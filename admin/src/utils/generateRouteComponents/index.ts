@@ -1,7 +1,7 @@
 import { NodeData, RouteNodeData, SlotsChildren } from "@/types";
 import { isPlainObject } from "../isPlainObject";
 
-interface RouteComponentData {
+export interface RouteComponentData {
   type: "Route";
   path: string;
   element: NodeData["children"];
