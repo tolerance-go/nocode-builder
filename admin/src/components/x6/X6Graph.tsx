@@ -24,7 +24,21 @@ const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
         container: containerRef.current,
         width: containerRef.current.clientWidth,
         height: containerRef.current.clientHeight,
-        grid: true,
+        grid: {
+          visible: true,
+          type: "doubleMesh",
+          args: [
+            {
+              color: "#eee", // 主网格线颜色
+              thickness: 1, // 主网格线宽度
+            },
+            {
+              color: "#ddd", // 次网格线颜色
+              thickness: 1, // 次网格线宽度
+              factor: 4, // 主次网格线间隔
+            },
+          ],
+        },
       });
 
       graphRef.current = graph;
@@ -37,6 +51,8 @@ const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
 
       return () => {
         resizeObserver.disconnect();
+        graph.dispose();
+        graphRef.current = null;
       };
     }
   }, [onGraphInit]);
