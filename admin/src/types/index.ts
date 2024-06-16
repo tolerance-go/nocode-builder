@@ -45,7 +45,7 @@ export type DesignableComponentProps<
     | Record<string, React.ReactNode>,
   Settings extends StaticProps = StaticProps
 > = {
-  style: React.CSSProperties;
+  style: StaticProps;
   onMouseEnter: React.MouseEventHandler;
   onMouseLeave: React.MouseEventHandler;
   onMouseDown: React.MouseEventHandler;

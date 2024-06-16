@@ -1,8 +1,11 @@
 import { components } from "@/configs/components";
-import { NodeData, SlotsChildren } from "@/types";
+import { NodeData } from "@/types";
 import React from "react";
+import { DeepReadonly } from "../types";
 
-function renderNodes(nodeDataArray: NodeData[]): React.ReactNode {
+export function renderNodes(
+  nodeDataArray: DeepReadonly<NodeData[]>
+): React.ReactNode {
   return nodeDataArray.map((nodeData) => {
     const Component = components[nodeData.elementType];
 
@@ -11,21 +14,22 @@ function renderNodes(nodeDataArray: NodeData[]): React.ReactNode {
       return null;
     }
 
-    let children: React.ReactNode;
+    let children: React.ReactNode | Record<string, React.ReactNode>;
     if (Array.isArray(nodeData.children)) {
       children = renderNodes(nodeData.children as NodeData[]);
-    } else if (nodeData.children && typeof nodeData.children === "object") {
+    } else if (
+      nodeData.children &&
+      typeof nodeData.children === "object" &&
+      nodeData.children !== null
+    ) {
       // Handle SlotsChildren type
-      children = Object.entries(nodeData.children as SlotsChildren).flatMap(
-        ([, value]) => {
-          if (Array.isArray(value)) {
-            return renderNodes(value as NodeData[]);
-          }
-          return value;
-        }
+      children = Object.fromEntries(
+        Object.entries(nodeData.children).map(([key, value]) => {
+          return [key, Array.isArray(value) ? renderNodes(value) : value];
+        })
       );
     } else {
-      children = nodeData.children as React.ReactNode;
+      children = nodeData.children;
     }
 
     return (
@@ -47,5 +51,3 @@ function renderNodes(nodeDataArray: NodeData[]): React.ReactNode {
     );
   });
 }
-
-export default renderNodes;
