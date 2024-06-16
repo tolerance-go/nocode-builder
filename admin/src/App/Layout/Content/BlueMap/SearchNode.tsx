@@ -132,7 +132,7 @@ export const SearchNode: React.FC = () => {
         onChange={onChange}
         autoFocus
         size="small"
-        className="mb-1"
+        className="mb-1.5"
       />
       <Tree
         blockNode

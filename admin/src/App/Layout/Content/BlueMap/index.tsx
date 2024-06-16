@@ -2,6 +2,7 @@ import X6Graph from "@/components/x6/X6Graph";
 import { Graph } from "@antv/x6";
 import { register } from "@antv/x6-react-shape";
 import { SearchNode } from "./SearchNode";
+import { useCallback } from "react";
 
 register({
   shape: "search-node",
@@ -10,10 +11,10 @@ register({
   component: SearchNode,
 });
 
-const BlueMap = () => {
-  let lastSearchNodeId: string | null = null;
+let lastSearchNodeId: string | null = null;
 
-  const handleGraphInit = (graph: Graph) => {
+const BlueMap = () => {
+  const handleGraphInit = useCallback((graph: Graph) => {
     // 在这里初始化图表，例如添加节点和边
     const rect = graph.addNode({
       x: 40,
@@ -49,7 +50,32 @@ const BlueMap = () => {
 
       lastSearchNodeId = newNode.id;
     });
-  };
+
+    const removeSearchNode = () => {
+      if (lastSearchNodeId) {
+        const lastNode = graph.getCellById(lastSearchNodeId);
+        if (lastNode) {
+          graph.removeCell(lastNode);
+          lastSearchNodeId = null;
+        }
+      }
+    };
+
+    graph.on("edge:mouseup", () => {
+      removeSearchNode();
+    });
+
+    graph.on("node:mouseup", ({ node }) => {
+      if (node.shape !== "search-node") {
+        removeSearchNode();
+      }
+    });
+
+    graph.on("blank:mouseup", () => {
+      // 在空白处点击时，删除当前存在的 search-node
+      removeSearchNode();
+    });
+  }, []);
 
   return (
     <div className="h-[100%]">

@@ -39,7 +39,7 @@ const X6Graph: React.FC<X6GraphProps> = ({ onGraphInit }) => {
         resizeObserver.disconnect();
       };
     }
-  }, []);
+  }, [onGraphInit]);
 
   return (
     <div ref={containerRef} style={{ width: "100%", height: "100%" }}></div>
