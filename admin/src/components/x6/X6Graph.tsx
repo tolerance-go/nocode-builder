@@ -1,5 +1,6 @@
 import { Graph } from "@antv/x6";
 import { memo, useEffect, useRef } from "react";
+import { Selection } from "@antv/x6-plugin-selection";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -39,9 +40,30 @@ const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
             },
           ],
         },
+        mousewheel: {
+          enabled: true,
+          factor: 1.1,
+          zoomAtMousePosition: true,
+        },
+        panning: {
+          enabled: true,
+          eventTypes: ["mouseWheelDown"],
+        },
       });
 
       graphRef.current = graph;
+
+      graph.use(
+        new Selection({
+          enabled: true,
+          multiple: true,
+          rubberband: true,
+          movable: true,
+          showNodeSelectionBox: true,
+          eventTypes: ['leftMouseDown']
+        })
+      );
+
       if (onGraphInit) {
         onGraphInit(graph);
       }

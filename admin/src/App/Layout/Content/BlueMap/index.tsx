@@ -85,13 +85,14 @@ const BlueMap = () => {
       }
     });
 
+    // 在空白处点击时，删除当前存在的 search-node
     graph.on("blank:mouseup", () => {
-      // 在空白处点击时，删除当前存在的 search-node
       removeSearchNode();
     });
 
-    // 启用画布拖拽
-    graph.enablePanning();
+    return () => {
+      graph.dispose();
+    };
   }, []);
 
   const handleZoomIn = () => {
