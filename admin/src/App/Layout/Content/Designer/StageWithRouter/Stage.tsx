@@ -17,20 +17,8 @@ import { DeepReadonly } from "@/utils/types";
 import { updateSearchParams } from "@/utils/updateSearchParams";
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
+import { isPrimitive } from "@/utils/isPrimitive";
 import { useSnapshot } from "valtio";
-
-// 类型断言函数
-const isPrimitiveOrNull = (
-  value: unknown
-): value is string | number | boolean | undefined | null => {
-  return (
-    typeof value === "string" ||
-    typeof value === "number" ||
-    typeof value === "boolean" ||
-    value === undefined ||
-    value === null
-  );
-};
 
 const RenderNode: React.FC<{
   node: DeepReadonly<NodeData>;
@@ -155,10 +143,7 @@ const RenderNode: React.FC<{
   ensure(!!Component, "未知组件类型。");
 
   if (Component === components.text) {
-    ensure(
-      isPrimitiveOrNull(node.children),
-      "text 类型的元素的 child 不合法。"
-    );
+    ensure(isPrimitive(node.children), "text 类型的元素的 child 不合法。");
     return node.children as NodePlainChild;
   }
 
@@ -170,7 +155,7 @@ const RenderNode: React.FC<{
   );
 
   const getChildren = () => {
-    if (isPrimitiveOrNull(node.children)) {
+    if (isPrimitive(node.children)) {
       return node.children;
     }
 
