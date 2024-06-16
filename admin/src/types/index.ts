@@ -55,6 +55,7 @@ export type DesignableComponentProps<
   node: DeepReadonly<NodeData<Settings>>;
   ["data-node-id"]: string;
   ["data-type"]: string;
+  _preview?: boolean;
 };
 
 export type ComponentType = React.FC<DesignableComponentProps> | string;
