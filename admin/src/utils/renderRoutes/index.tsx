@@ -3,7 +3,7 @@ import { NodeData, RouteComponentData } from "@/types";
 
 export const renderRoutes = (
   data: RouteComponentData[],
-  renderElement: (nodeData: NodeData["children"]) => React.ReactNode
+  renderElement: (nodeData: NodeData[]) => React.ReactNode
 ) => {
   const convertRoute = (routeData: RouteComponentData) => {
     const { path, element, children } = routeData;

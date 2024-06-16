@@ -2,14 +2,15 @@ import { components } from "@/configs/components";
 import { NodeData, RouteNodeData } from "@/types";
 import React from "react";
 import { DeepReadonly } from "../types";
+import { isRouteNodeData } from "../isRouteNodeData";
 
 export function renderNodes(
   nodeDataArray: DeepReadonly<NodeData[]>,
   renderRouteNode: (routeNodeData: RouteNodeData) => React.ReactNode
 ): React.ReactNode {
   return nodeDataArray.map((nodeData) => {
-    if (nodeData.elementType === "Route") {
-      return renderRouteNode(nodeData as RouteNodeData);
+    if (isRouteNodeData(nodeData)) {
+      return renderRouteNode(nodeData);
     }
 
     const Component = components[nodeData.elementType];

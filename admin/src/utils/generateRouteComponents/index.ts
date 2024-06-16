@@ -9,10 +9,10 @@ import { isPlainObject } from "../isPlainObject";
 function generateRouteComponents(
   nodeDatas: RouteNodeData[]
 ): RouteComponentData[] {
-  function replaceRoutesWithOutlet(
-    children: NodeData["children"],
+  function replaceRoutesWithOutlet<T extends NodeData[] | SlotsChildren>(
+    children: T,
     parentId: string
-  ): NodeData["children"] {
+  ): T extends NodeData[] ? NodeData[] : SlotsChildren {
     if (Array.isArray(children)) {
       const newChildren: NodeData[] = [];
       let i = 0;
@@ -38,7 +38,7 @@ function generateRouteComponents(
               ? {
                   ...children[i],
                   children: replaceRoutesWithOutlet(
-                    children[i].children,
+                    children[i].children || [],
                     children[i].id
                   ),
                 }
@@ -47,22 +47,14 @@ function generateRouteComponents(
           i++;
         }
       }
-      return newChildren;
-    } else if (isPlainObject(children)) {
-      const newChildren: SlotsChildren = {};
-      Object.entries(children).forEach(([key, childArray]) => {
-        if (Array.isArray(childArray)) {
-          newChildren[key] = replaceRoutesWithOutlet(
-            childArray,
-            parentId
-          ) as NodeData[];
-        } else {
-          newChildren[key] = childArray;
-        }
-      });
-      return newChildren;
+      return newChildren as T extends NodeData[] ? NodeData[] : SlotsChildren;
     }
-    return children;
+
+    return Object.fromEntries(
+      Object.entries(children).map(([key, childArray]) => {
+        return [key, replaceRoutesWithOutlet(childArray, parentId)];
+      })
+    ) as T extends NodeData[] ? NodeData[] : SlotsChildren;
   }
 
   /**
@@ -165,7 +157,7 @@ function generateRouteComponents(
       type: "Route",
       path: routeNodeData.settings.path as string,
       element: replaceRoutesWithOutlet(
-        routeNodeData.children,
+        routeNodeData.children ?? [],
         routeNodeData.id
       ),
       children: routes.map((route) => processRouteNode(route.node)),

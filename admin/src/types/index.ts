@@ -4,7 +4,7 @@ import { DeepReadonly } from "@/utils/types";
 export interface RouteComponentData {
   type: "Route";
   path: string;
-  element: NodeData['children'];
+  element: NodeData[];
   children?: RouteComponentData[];
 }
 
@@ -23,16 +23,14 @@ export type StaticProps = {
   [key: string]: StaticPropsValue | StaticProps;
 };
 
-export type NodePlainChild = string | number | boolean | null | undefined;
-
 export type SlotsChildren = {
-  [key: string]: NodeData[] | NodePlainChild;
+  [key: string]: NodeData[];
 };
 
 export type NodeData<Settings = StaticProps> = {
   id: string;
   elementType: string;
-  children?: SlotsChildren | NodeData[] | NodePlainChild;
+  children?: SlotsChildren | NodeData[];
   styles: StaticProps;
   /**
    * 从哪个 widget 创建
@@ -42,9 +40,10 @@ export type NodeData<Settings = StaticProps> = {
   settings: Settings;
 };
 
-export type RouteNodeData = NodeData & {
+export interface RouteNodeData extends NodeData {
   elementType: "Route";
-};
+  children?: NodeData[];
+}
 
 export type DesignableComponentProps<
   Children extends React.ReactNode | Record<string, React.ReactNode> =
