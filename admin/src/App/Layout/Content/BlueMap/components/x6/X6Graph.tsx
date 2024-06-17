@@ -32,7 +32,7 @@ function randomRouter(
   return points;
 }
 
-Graph.registerRouter('random', randomRouter)
+Graph.registerRouter("random", randomRouter);
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -76,14 +76,11 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           router: {
             name: "er",
             args: {
-              offset: 24,
+              direction: "H",
             },
           },
           connector: {
-            name: 'rounded',
-            args: {
-              radius: 10,
-            },
+            name: "rounded",
           },
         },
         mousewheel: {
