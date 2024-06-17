@@ -9,14 +9,13 @@ import {
   ZoomInOutlined,
   ZoomOutOutlined,
 } from "@ant-design/icons";
-import { Graph, Markup } from "@antv/x6";
+import { Cell, Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import "./components/register";
 import X6Graph from "./components/x6/X6Graph";
 import { findNodeConfig } from "./utils/findNodeConfig";
-
-let lastSearchNodeId: string | null = null;
+import { ensure } from "@/utils/ensure";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -24,13 +23,12 @@ const BlueMap = () => {
   const [canRedo, setCanRedo] = useState(false);
 
   const removeSearchNode = () => {
-    if (lastSearchNodeId) {
-      const lastNode = graph?.getCellById(lastSearchNodeId);
-      if (lastNode) {
-        graph?.removeCell(lastNode);
-        lastSearchNodeId = null;
+    const allNodes = graph?.getNodes();
+    allNodes?.forEach((node) => {
+      if (node.shape === "search-node") {
+        graph?.removeCell(node);
       }
-    }
+    });
   };
 
   const removeSearchNodeRef = useLatest(removeSearchNode);
@@ -40,66 +38,6 @@ const BlueMap = () => {
     (graph: Graph) => {
       setGraph(graph);
 
-      // 在这里初始化图表，例如添加节点和边
-      const rect = graph.addNode({
-        x: 40,
-        y: 40,
-        width: 100,
-        height: 40,
-        label: "Hello",
-        ports: {
-          groups: {
-            in: {
-              position: "top",
-              attrs: {
-                circle: {
-                  magnet: true,
-                  stroke: "#8f8f8f",
-                  r: 5,
-                },
-              },
-            },
-            out: {
-              position: "bottom",
-              attrs: {
-                circle: {
-                  magnet: true,
-                  stroke: "#8f8f8f",
-                  r: 5,
-                },
-              },
-            },
-          },
-          items: [
-            {
-              id: "port1",
-              group: "in",
-            },
-            {
-              id: "port2",
-              group: "in",
-            },
-            {
-              id: "port3",
-              group: "in",
-            },
-            {
-              id: "port4",
-              group: "out",
-            },
-            {
-              id: "port5",
-              group: "out",
-            },
-          ],
-        },
-      });
-
-      graph.addEdge({
-        source: { cell: rect.id },
-        target: { x: 160, y: 60 },
-      });
-
       graph.on("blank:contextmenu", ({ e }) => {
         e.preventDefault();
 
@@ -107,21 +45,14 @@ const BlueMap = () => {
         const { x, y } = graph.clientToLocal({ x: e.clientX, y: e.clientY });
 
         // 先取消上个 search-node
-        if (lastSearchNodeId) {
-          const lastNode = graph.getCellById(lastSearchNodeId);
-          if (lastNode) {
-            graph.removeCell(lastNode);
-          }
-        }
+        removeSearchNodeRef.current();
 
         // 创建新的 search-node
-        const newNode = graph.addNode({
+        graph.addNode({
           shape: "search-node",
           x,
           y,
         });
-
-        lastSearchNodeId = newNode.id;
       });
 
       graph.on("edge:mouseup", () => {
@@ -140,12 +71,14 @@ const BlueMap = () => {
       });
 
       graph.on("history:change", () => {
+        console.log("history:change");
         setCanUndo(graph.canUndo());
         setCanRedo(graph.canRedo());
       });
 
       // 绑定撤销和重做快捷键
       graph.bindKey(["ctrl+z", "command+z"], () => {
+        console.log("ctrl+z");
         graph.undo();
       });
 
@@ -190,11 +123,16 @@ const BlueMap = () => {
 
   useEffect(() => {
     return globalEventBus.on("selectBlueMapSearchPanelItem", ({ configId }) => {
-      if (lastSearchNodeId && graphRef.current) {
+      if (graphRef.current) {
         const config = findNodeConfig(configId);
+        const allNodes = graphRef.current.getNodes();
+        const searchNode = allNodes?.find(
+          (node) => node.shape === "search-node"
+        );
 
-        const lastNode = graphRef.current.getCellById(lastSearchNodeId);
-        const { x, y } = lastNode.getProp("position");
+        ensure(!!searchNode, "searchNode 必须存在。");
+
+        const { x, y } = (searchNode as Cell).getProp("position");
 
         removeSearchNodeRef.current();
 
