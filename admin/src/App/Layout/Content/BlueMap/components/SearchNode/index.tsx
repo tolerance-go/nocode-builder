@@ -6,6 +6,7 @@ import { SearchTreeNode, X6ReactComponentProps } from "../../types";
 import { getExpandedKeys } from "../../utils/getExpandedKeys";
 import { highlightMatch } from "../../utils/highlightMatch";
 import { BaseNode } from "../BaseNode";
+import { css, cx } from "@emotion/css";
 
 const { Search } = Input;
 
@@ -61,7 +62,14 @@ export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
         onChange={onChange}
         autoFocus
         size="small"
-        className="mb-2"
+        className={cx(
+          "mb-2",
+          css`
+            .ant-input {
+              height: 24px;
+            }
+          `
+        )}
       />
       <Tree<SearchTreeNode>
         blockNode

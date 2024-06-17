@@ -96,7 +96,7 @@ export const ComponentStorePanel = () => {
             );
           }}
         />
-        <div className="px-2 pb-2 pt-3">
+        <div className="px-2 pb-2.5 pt-4">
           <div className="flex items-center gap-2">
             <div className="flex-grow">
               {isSearching ? (
