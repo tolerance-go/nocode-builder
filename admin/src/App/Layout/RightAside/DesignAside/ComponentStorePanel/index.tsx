@@ -65,7 +65,7 @@ export const ComponentStorePanel = () => {
             <div className="flex-grow">
               {isSearching ? (
                 <Input
-                  placeholder="搜索组件"
+                  placeholder="搜索"
                   onBlur={() => setIsSearching(false)} // 当搜索框失去焦点时恢复原状
                   autoFocus
                 />
