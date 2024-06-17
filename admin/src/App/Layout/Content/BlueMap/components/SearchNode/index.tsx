@@ -2,9 +2,10 @@ import { globalEventBus } from "@/globals/eventBus";
 import { Input, Tree, Typography } from "antd";
 import React, { useMemo, useState } from "react";
 import { defaultData } from "../../treeData";
-import { SearchTreeNode } from "../../types";
+import { SearchTreeNode, X6ReactComponentProps } from "../../types";
 import { getExpandedKeys } from "../../utils/getExpandedKeys";
 import { highlightMatch } from "../../utils/highlightMatch";
+import { BaseNode } from "../BaseNode";
 
 const { Search } = Input;
 
@@ -31,7 +32,7 @@ const processTreeData = (
     } as SearchTreeNode;
   });
 };
-export const SearchNode: React.FC = () => {
+export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
@@ -54,10 +55,7 @@ export const SearchNode: React.FC = () => {
   }, [searchValue]);
 
   return (
-    <div className="bg-white border px-2 py-1 rounded-md h-[100%]">
-      <div className="mb-2">
-        <Typography.Text>此蓝图的所有操作</Typography.Text>
-      </div>
+    <BaseNode title="此蓝图的所有操作" {...props}>
       <Search
         placeholder="输入搜索内容"
         onChange={onChange}
@@ -79,6 +77,6 @@ export const SearchNode: React.FC = () => {
           }
         }}
       />
-    </div>
+    </BaseNode>
   );
 };
