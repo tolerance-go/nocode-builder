@@ -76,13 +76,13 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           router: {
             name: "er",
             args: {
-              offset: 28,
+              offset: 24,
             },
           },
           connector: {
             name: 'rounded',
             args: {
-              radius: 18,
+              radius: 10,
             },
           },
         },
