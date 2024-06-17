@@ -60,7 +60,7 @@ export type EventMaps = {
    * 选中蓝图搜索节点中的项
    */
   selectBlueMapSearchPanelItem: {
-    id: React.Key;
+    configId: string;
   };
 };
 

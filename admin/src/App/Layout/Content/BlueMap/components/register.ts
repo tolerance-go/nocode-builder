@@ -1,6 +1,6 @@
 import { register } from "@antv/x6-react-shape";
-import { BaseNodeShape } from "./BaseNode/shape";
-import { SearchNodeShape } from "./SearchNode/shape";
+import { shapes } from "./shapes";
 
-register(SearchNodeShape);
-register(BaseNodeShape);
+Object.values(shapes).forEach((shape) => {
+  register(shape);
+});

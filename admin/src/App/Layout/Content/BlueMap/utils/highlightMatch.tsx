@@ -1,5 +1,5 @@
 import React from "react";
-import type { TreeDataNode } from "antd";
+import { SearchTreeNode } from "../types";
 
 // 高亮匹配文本的函数
 export const highlightMatch = (
@@ -23,17 +23,22 @@ export const highlightMatch = (
 
 // 递归处理树节点
 export const processTreeData = (
-  data: TreeDataNode[],
+  data: SearchTreeNode[],
   searchValue: string
-): TreeDataNode[] =>
+): SearchTreeNode[] =>
   data.map((item) => {
     const title = highlightMatch(item.title as string, searchValue);
     if (item.children) {
       return {
         title,
+        configId: item.configId,
         key: item.key,
         children: processTreeData(item.children, searchValue),
       };
     }
-    return { title, key: item.key };
+    return {
+      title,
+      key: item.key,
+      configId: item.configId,
+    };
   });

@@ -1,9 +1,11 @@
-import React, { useMemo, useState } from "react";
-import { Input, Tree, Typography } from "antd";
-import { defaultData } from "../../treeData";
-import { processTreeData } from "../../utils/highlightMatch";
-import { getExpandedKeys } from "../../utils/getExpandedKeys";
 import { globalEventBus } from "@/globals/eventBus";
+import { Input, Tree, Typography } from "antd";
+import React, { useMemo, useState } from "react";
+import { defaultData } from "../../treeData";
+import { SearchTreeNode } from "../../types";
+import { getExpandedKeys } from "../../utils/getExpandedKeys";
+import { processTreeData } from "../../utils/highlightMatch";
+import { ensure } from "@/utils/ensure";
 
 const { Search } = Input;
 
@@ -41,15 +43,16 @@ export const SearchNode: React.FC = () => {
         size="small"
         className="mb-1.5"
       />
-      <Tree
+      <Tree<SearchTreeNode>
         blockNode
         onExpand={onExpand}
         expandedKeys={expandedKeys}
         autoExpandParent={autoExpandParent}
         treeData={treeData}
         onClick={(_e, node) => {
+          ensure(!!node.configId, 'node.configId 必须存在。')
           globalEventBus.emit("selectBlueMapSearchPanelItem", {
-            id: node.key,
+            configId: node.configId,
           });
         }}
       />
