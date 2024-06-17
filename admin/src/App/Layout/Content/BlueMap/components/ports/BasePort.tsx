@@ -1,3 +1,4 @@
+import { Select } from "antd";
 import { BasePortProps } from "../../types";
 
 export const BasePort = ({
@@ -18,8 +19,20 @@ export const BasePort = ({
         height,
       }}
       className="bg-gray-300 absolute top-0 -translate-y-[50%] cursor-pointer"
-      onClick={() => alert(1)}
     >
+      <Select
+        onMouseDown={(e) => e.stopPropagation()}
+        options={[
+          {
+            label: "sldfj",
+            value: "asdfasdf",
+          },
+          {
+            label: "sasdfasdfldfj",
+            value: "asdasdffasdf",
+          },
+        ]}
+      ></Select>
       {position}
     </div>
   );

@@ -7,7 +7,7 @@ import {
   ZoomInOutlined,
   ZoomOutOutlined,
 } from "@ant-design/icons";
-import { Graph } from "@antv/x6";
+import { Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import "./components/register";
@@ -131,6 +131,7 @@ const BlueMap = () => {
           x,
           y,
           ports: config.ports,
+          portMarkup: [Markup.getForeignObjectMarkup()],
         });
       }
     });

@@ -54,21 +54,21 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           eventTypes: ["mouseWheelDown"],
         },
         onPortRendered(args) {
-          const container = args.labelSelectors?.foContent;
+          const container = args.contentSelectors?.foContent;
           if (container) {
-            const type = args.port.attrs?.portLabel.type;
+            const type = args.port.attrs?.port.type;
 
             ensure(
               typeof type === "string",
-              "port.attrs.portLabel.type 必须存在。"
+              "port.attrs.port.type 必须存在。"
             );
 
-            const portLabelComp = portLabels[type];
+            const portComp = ports[type];
 
-            ensure(!!portLabelComp, "portLabelComp 没有对应组件。");
+            ensure(!!portComp, "portComp 没有对应组件。");
 
             ReactDOM.createRoot(container as HTMLElement).render(
-              React.createElement(portLabelComp, {
+              React.createElement(portComp, {
                 node: args.node,
                 port: args.port,
               })
