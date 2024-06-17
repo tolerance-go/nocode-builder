@@ -64,7 +64,7 @@ export const ComponentStorePanel = () => {
           <div className="flex items-center gap-1.5">
             <Select
               variant='borderless'
-              defaultValue={"H5"}
+              defaultValue={"后台管理系统"}
               options={[
                 {
                   label: "后台管理系统",
