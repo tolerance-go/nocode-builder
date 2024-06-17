@@ -1,12 +1,12 @@
 import { Graph } from "@antv/x6";
-import { memo, useEffect, useRef } from "react";
 import { Selection } from "@antv/x6-plugin-selection";
+import { useEffect, useRef } from "react";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
 }
 
-const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
+const X6Graph = ({ onGraphInit }: X6GraphProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<Graph | null>(null);
 
@@ -110,6 +110,6 @@ const X6Graph = memo(({ onGraphInit }: X6GraphProps) => {
       style={{ width: "100%", height: "100%", cursor: "default" }}
     ></div>
   );
-});
+};
 
 export default X6Graph;
