@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { Input, Tree, Typography } from "antd";
-import { defaultData, getParentKey } from "./treeData";
+import { defaultData } from "./treeData";
 import type { TreeDataNode } from "antd";
+import { getExpandedKeys } from "./getExpandedKeys";
 
 const { Search } = Input;
 
@@ -17,17 +18,7 @@ export const SearchNode: React.FC = () => {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    const newExpandedKeys = defaultData
-      .map((item) => {
-        if (typeof item.title === 'string' && item.title.indexOf(value) > -1) {
-          return getParentKey(item.key, defaultData);
-        }
-        return null;
-      })
-      .filter(
-        (item, i, self): item is React.Key =>
-          !!(item && self.indexOf(item) === i)
-      );
+    const newExpandedKeys = getExpandedKeys(value, defaultData);
     setExpandedKeys(newExpandedKeys);
     setSearchValue(value);
     setAutoExpandParent(true);
@@ -37,9 +28,14 @@ export const SearchNode: React.FC = () => {
     const loop = (data: TreeDataNode[]): TreeDataNode[] =>
       data.map((item) => {
         const strTitle = item.title as string;
-        const index = typeof strTitle === 'string' ? strTitle.indexOf(searchValue) : -1;
-        const beforeStr = typeof strTitle === 'string' ? strTitle.substring(0, index) : '';
-        const afterStr = typeof strTitle === 'string' ? strTitle.slice(index + searchValue.length) : '';
+        const index =
+          typeof strTitle === "string" ? strTitle.indexOf(searchValue) : -1;
+        const beforeStr =
+          typeof strTitle === "string" ? strTitle.substring(0, index) : "";
+        const afterStr =
+          typeof strTitle === "string"
+            ? strTitle.slice(index + searchValue.length)
+            : "";
         const title =
           index > -1 ? (
             <span>

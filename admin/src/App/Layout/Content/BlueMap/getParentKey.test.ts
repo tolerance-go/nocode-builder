@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getParentKey, defaultData } from "./treeData";
+import { defaultData, getParentKey } from "./treeData";
 
 describe("getParentKey", () => {
   it("应该返回第三级节点的正确父节点键", () => {
