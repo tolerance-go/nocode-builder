@@ -87,6 +87,22 @@ const BlueMap = () => {
         graph.redo();
       });
 
+      // 监听 edge:connected 事件
+      graph.on("edge:mouseup", ({ edge, e }) => {
+        const targetPort = edge.getTargetPortId();
+        const targetCell = edge.getTargetCell();
+
+        // 如果没有连接到任何目标节点，则创建一个 search-node
+        if (!targetPort && !targetCell) {
+          const { x, y } = graph.clientToLocal({ x: e.clientX, y: e.clientY });
+          graph.addNode({
+            shape: "search-node",
+            x,
+            y,
+          });
+        }
+      });
+
       return () => {
         graph.dispose();
       };

@@ -56,6 +56,14 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             name: "rounded",
           },
         },
+        interacting: {
+          nodeMovable(cellView) {
+            if (cellView.cell.shape === "search-node") {
+              return false;
+            }
+            return true;
+          },
+        },
         mousewheel: {
           enabled: true,
           factor: 1.1,
