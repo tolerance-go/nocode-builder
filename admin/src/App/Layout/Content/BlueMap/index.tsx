@@ -122,17 +122,15 @@ const BlueMap = () => {
         const config = findNodeConfig(configId);
 
         const lastNode = graphRef.current.getCellById(lastSearchNodeId);
-        if (lastNode) {
-          const { x, y } = lastNode.getProp("position");
+        const { x, y } = lastNode.getProp("position");
 
-          removeSearchNodeRef.current();
+        removeSearchNodeRef.current();
 
-          graphRef.current.addNode({
-            shape: config.shape,
-            x,
-            y,
-          });
-        }
+        graphRef.current.addNode({
+          shape: config.shape,
+          x,
+          y,
+        });
       }
     });
   }, [removeSearchNodeRef, graphRef]);
