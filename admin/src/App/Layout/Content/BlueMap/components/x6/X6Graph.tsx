@@ -4,7 +4,9 @@ import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { ports } from "../ports";
-import { History } from '@antv/x6-plugin-history'
+import { Keyboard } from "@antv/x6-plugin-keyboard";
+import { History } from "@antv/x6-plugin-history";
+
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
 }
@@ -102,6 +104,12 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
 
       graph.use(
         new History({
+          enabled: true,
+        })
+      );
+
+      graph.use(
+        new Keyboard({
           enabled: true,
         })
       );

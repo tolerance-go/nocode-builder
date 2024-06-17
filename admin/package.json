@@ -17,6 +17,7 @@
     "@antv/x6": "^2.18.1",
     "@antv/x6-plugin-export": "^2.1.6",
     "@antv/x6-plugin-history": "^2.2.4",
+    "@antv/x6-plugin-keyboard": "^2.2.3",
     "@antv/x6-plugin-selection": "^2.2.2",
     "@antv/x6-react-shape": "^2.2.3",
     "@emotion/css": "^11.11.2",

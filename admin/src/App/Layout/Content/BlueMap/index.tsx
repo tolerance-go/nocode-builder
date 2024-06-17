@@ -144,6 +144,15 @@ const BlueMap = () => {
         setCanRedo(graph.canRedo());
       });
 
+      // 绑定撤销和重做快捷键
+      graph.bindKey(["ctrl+z", "command+z"], () => {
+        graph.undo();
+      });
+
+      graph.bindKey(["ctrl+shift+z", "command+shift+z"], () => {
+        graph.redo();
+      });
+
       return () => {
         graph.dispose();
       };
