@@ -1,6 +1,7 @@
 import { Button, Flex, Input, Select, Typography } from "antd";
 import ItemList from "./ItemList";
 import CreateAppModal from "./CreateAppModal";
+import { css, cx } from "@emotion/css";
 
 export const AppList = () => {
   const selectBefore = (
@@ -24,7 +25,14 @@ export const AppList = () => {
             </CreateAppModal>
             <Input.Search
               addonBefore={selectBefore}
-              className="max-w-[300px]"
+              className={cx(
+                "max-w-[300px]",
+                css`
+                  .ant-input {
+                    height: 32px;
+                  }
+                `
+              )}
             ></Input.Search>
           </Flex>
           <ItemList />
