@@ -1,38 +1,9 @@
 import { ensure } from "@/utils/ensure";
-import { EdgeView, Graph, Point } from "@antv/x6";
+import { Graph } from "@antv/x6";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { ports } from "../ports";
-
-interface RandomRouterArgs {
-  bounces?: number;
-}
-
-function randomRouter(
-  vertices: Point.PointLike[],
-  args: RandomRouterArgs,
-  view: EdgeView
-) {
-  const bounces = args.bounces || 20;
-  const points = vertices.map((p) => Point.create(p));
-
-  for (var i = 0; i < bounces; i++) {
-    const sourceCorner = view.sourceBBox.getCenter();
-    const targetCorner = view.targetBBox.getCenter();
-    const randomPoint = Point.random(
-      sourceCorner.x,
-      targetCorner.x,
-      sourceCorner.y,
-      targetCorner.y
-    );
-    points.push(randomPoint);
-  }
-
-  return points;
-}
-
-Graph.registerRouter("random", randomRouter);
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
