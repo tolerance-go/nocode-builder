@@ -1,9 +1,10 @@
-import { NavTabs } from "@/components/NavTabs";
 import { updateSearchParams } from "@/utils/updateSearchParams";
-import { SearchOutlined } from "@ant-design/icons";
-import { Button, Segmented, Space } from "antd";
+import { Button, Input, Segmented, Space } from "antd";
 import { useSearchParams } from "react-router-dom";
+import { useState } from "react";
 import { ComponentStore } from "./ComponentStore";
+import { NavTabs } from "@/components/NavTabs";
+import { SearchOutlined } from "@ant-design/icons";
 
 type SegmentedType = "component" | "section" | "template";
 type StoreLib = "pc" | "mobile";
@@ -14,8 +15,11 @@ export const ComponentStorePanel = () => {
     storeLib: "pc",
   });
 
+  const [isSearching, setIsSearching] = useState(false); // 新增状态
+
   const segmented = searchParams.get("segmented") as SegmentedType;
   const storeLib = searchParams.get("storeLib") as StoreLib;
+
   return (
     <div className="animate-slideInRight absolute inset-0 z-50 bg-white">
       <div className="flex flex-col h-[100%]">
@@ -58,33 +62,46 @@ export const ComponentStorePanel = () => {
         />
         <div className="px-1.5 py-3">
           <div className="flex items-center gap-2">
-            <Segmented<SegmentedType>
-              options={[
-                {
-                  label: "组件",
-                  value: "component",
-                },
-                {
-                  label: "区块",
-                  value: "section",
-                },
-                {
-                  label: "模板",
-                  value: "template",
-                },
-              ]}
-              className="flex-grow"
-              block
-              value={segmented}
-              onChange={(val) => {
-                setSearchParams(
-                  updateSearchParams(searchParams, {
-                    segmented: val,
-                  })
-                );
-              }}
+            <div className="flex-grow">
+              {isSearching ? (
+                <Input
+                  placeholder="搜索组件"
+                  onBlur={() => setIsSearching(false)} // 当搜索框失去焦点时恢复原状
+                  autoFocus
+                />
+              ) : (
+                <Segmented<SegmentedType>
+                  options={[
+                    {
+                      label: "组件",
+                      value: "component",
+                    },
+                    {
+                      label: "区块",
+                      value: "section",
+                    },
+                    {
+                      label: "模板",
+                      value: "template",
+                    },
+                  ]}
+                  block
+                  value={segmented}
+                  onChange={(val) => {
+                    setSearchParams(
+                      updateSearchParams(searchParams, {
+                        segmented: val,
+                      })
+                    );
+                  }}
+                />
+              )}
+            </div>
+            <Button
+              type="text"
+              icon={<SearchOutlined />}
+              onClick={() => setIsSearching(true)} // 点击搜索按钮时显示搜索框
             />
-            <Button type="text" icon={<SearchOutlined />}></Button>
           </div>
         </div>
         <div className="flex-grow">
