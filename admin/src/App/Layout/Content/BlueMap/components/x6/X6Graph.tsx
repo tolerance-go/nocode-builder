@@ -4,6 +4,7 @@ import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { ports } from "../ports";
+import { portLabels } from "../portLabels";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -53,21 +54,21 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           eventTypes: ["mouseWheelDown"],
         },
         onPortRendered(args) {
-          const container = args.contentSelectors?.foContent;
+          const container = args.labelSelectors?.foContent;
           if (container) {
-            const type = args.port.attrs?.port.type;
+            const type = args.port.attrs?.portLabel.type;
 
             ensure(
               typeof type === "string",
-              "port.attrs.port.type 必须存在。"
+              "port.attrs.portLabel.type 必须存在。"
             );
 
-            const portComp = ports[type];
+            const portLabelComp = portLabels[type];
 
-            ensure(!!portComp, "portComp 没有对应组件。");
+            ensure(!!portLabelComp, "portLabelComp 没有对应组件。");
 
             ReactDOM.createRoot(container as HTMLElement).render(
-              React.createElement(portComp, {
+              React.createElement(portLabelComp, {
                 node: args.node,
                 port: args.port,
               })

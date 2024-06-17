@@ -12,20 +12,40 @@ export const BaseNodeShape: ReactShapeConfig = {
     groups: {
       left: {
         position: "left",
-        markup: Markup.getForeignObjectMarkup(),
         attrs: {
-          port: {
-            type: "BasePort",
+          circle: {
+            r: 6,
+            magnet: true,
+            stroke: "#31d0c6",
+            fill: "#fff",
+            strokeWidth: 2,
           },
+          portLabel: {
+            type: "BasePortLabel",
+          },
+        },
+        label: {
+          position: "right",
+          markup: Markup.getForeignObjectMarkup(),
         },
       },
       right: {
         position: "right",
-        markup: Markup.getForeignObjectMarkup(),
         attrs: {
-          port: {
-            type: "BasePort",
+          circle: {
+            r: 6,
+            magnet: true,
+            stroke: "#31d0c6",
+            fill: "#fff",
+            strokeWidth: 2,
           },
+          portLabel: {
+            type: "BasePortLabel",
+          },
+        },
+        label: {
+          position: "left",
+          markup: Markup.getForeignObjectMarkup(),
         },
       },
     },
@@ -41,8 +61,11 @@ export const BaseNodeConfig: NodeConfig = {
         id: "port_3",
         group: "left",
         attrs: {
-          port: {
-            type: "BasePort",
+          text: {
+            text: "text1",
+          },
+          portLabel: {
+            type: "BasePortLabel",
           },
         },
       },
@@ -50,8 +73,11 @@ export const BaseNodeConfig: NodeConfig = {
         id: "port_34",
         group: "left",
         attrs: {
-          port: {
-            type: "BasePort",
+          text: {
+            text: "text1",
+          },
+          portLabel: {
+            type: "BasePortLabel",
           },
         },
       },
@@ -59,8 +85,11 @@ export const BaseNodeConfig: NodeConfig = {
         id: "port_4",
         group: "right",
         attrs: {
-          port: {
-            type: "BasePort",
+          text: {
+            text: "text1",
+          },
+          portLabel: {
+            type: "BasePortLabel",
           },
         },
       },
