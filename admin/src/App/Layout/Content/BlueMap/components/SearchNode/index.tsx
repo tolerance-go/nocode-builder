@@ -1,5 +1,4 @@
 import { globalEventBus } from "@/globals/eventBus";
-import { ensure } from "@/utils/ensure";
 import { Input, Tree, Typography } from "antd";
 import React, { useMemo, useState } from "react";
 import { defaultData } from "../../treeData";
@@ -55,8 +54,8 @@ export const SearchNode: React.FC = () => {
   }, [searchValue]);
 
   return (
-    <div className="bg-white border px-1.5 py-1 rounded-md h-[100%]">
-      <div className="mb-1.5">
+    <div className="bg-white border px-2 py-1 rounded-md h-[100%]">
+      <div className="mb-2">
         <Typography.Text>此蓝图的所有操作</Typography.Text>
       </div>
       <Search
@@ -64,7 +63,7 @@ export const SearchNode: React.FC = () => {
         onChange={onChange}
         autoFocus
         size="small"
-        className="mb-1.5"
+        className="mb-2"
       />
       <Tree<SearchTreeNode>
         blockNode

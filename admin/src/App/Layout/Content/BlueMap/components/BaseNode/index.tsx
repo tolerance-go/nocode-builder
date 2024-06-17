@@ -8,8 +8,8 @@ export const BaseNode: React.FC<
   }
 > = ({ title }) => {
   return (
-    <div className="bg-white border px-1.5 py-1 rounded-md h-[100%]">
-      <div className="mb-1.5">
+    <div className="bg-white border px-2 py-1 rounded-md h-[100%]">
+      <div className="mb-2">
         <Typography.Text>{title ?? "节点名称"}</Typography.Text>
       </div>
     </div>

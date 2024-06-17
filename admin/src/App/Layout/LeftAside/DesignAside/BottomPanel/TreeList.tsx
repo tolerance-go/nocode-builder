@@ -58,7 +58,7 @@ const TreeList: React.FC = () => {
   }, [designTreeData]);
 
   return (
-    <div className="py-1.5 px-1.5">
+    <div className="p-2">
       <Tree
         className={css`
           & {
