@@ -14,9 +14,6 @@ export const BaseNodeShape: ReactShapeConfig = {
         position: "left",
         markup: Markup.getForeignObjectMarkup(),
         attrs: {
-          label: {
-            type: "BasePortLabel",
-          },
           port: {
             type: "BasePort",
           },
@@ -28,9 +25,6 @@ export const BaseNodeShape: ReactShapeConfig = {
         attrs: {
           port: {
             type: "BasePort",
-          },
-          label: {
-            type: "BasePortLabel",
           },
         },
       },
@@ -47,9 +41,6 @@ export const BaseNodeConfig: NodeConfig = {
         id: "port_3",
         group: "left",
         attrs: {
-          label: {
-            type: "BasePortLabel",
-          },
           port: {
             type: "BasePort",
           },
@@ -59,9 +50,6 @@ export const BaseNodeConfig: NodeConfig = {
         id: "port_34",
         group: "left",
         attrs: {
-          label: {
-            type: "BasePortLabel",
-          },
           port: {
             type: "BasePort",
           },
@@ -71,9 +59,6 @@ export const BaseNodeConfig: NodeConfig = {
         id: "port_4",
         group: "right",
         attrs: {
-          label: {
-            type: "BasePortLabel",
-          },
           port: {
             type: "BasePort",
           },
