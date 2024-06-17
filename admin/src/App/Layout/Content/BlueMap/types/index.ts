@@ -4,6 +4,7 @@ import { DataNode } from "antd/es/tree";
 export type NodeConfig = {
   id: string;
   shape: string;
+  ports?: Node.Defaults["ports"];
 };
 
 export interface SearchTreeNode extends DataNode {

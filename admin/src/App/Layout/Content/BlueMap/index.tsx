@@ -130,6 +130,7 @@ const BlueMap = () => {
           shape: config.shape,
           x,
           y,
+          ports: config.ports,
         });
       }
     });
