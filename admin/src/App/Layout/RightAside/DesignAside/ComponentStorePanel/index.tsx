@@ -1,10 +1,9 @@
+import { NavTabs } from "@/components/NavTabs";
 import { updateSearchParams } from "@/utils/updateSearchParams";
-import { Button, Input, Segmented, Space } from "antd";
+import { SearchOutlined } from "@ant-design/icons";
+import { Button, Segmented, Space } from "antd";
 import { useSearchParams } from "react-router-dom";
 import { ComponentStore } from "./ComponentStore";
-import { NavTabs } from "@/components/NavTabs";
-import { css } from "@emotion/css";
-import { SearchOutlined } from "@ant-design/icons";
 
 type SegmentedType = "component" | "section" | "template";
 type StoreLib = "pc" | "mobile";
