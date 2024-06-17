@@ -8,14 +8,9 @@ import {
   ZoomOutOutlined,
 } from "@ant-design/icons";
 import { Graph } from "@antv/x6";
-import { register } from "@antv/x6-react-shape";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import { BaseNodeShape } from "./components/BaseNode/shape";
-import { SearchNodeShape } from "./components/SearchNode/shape";
-
-register(SearchNodeShape);
-register(BaseNodeShape);
+import "./components/register";
 
 let lastSearchNodeId: string | null = null;
 
