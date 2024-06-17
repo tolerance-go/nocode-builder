@@ -3,6 +3,7 @@ import { Input, Tree, Typography } from "antd";
 import { defaultData } from "./treeData";
 import { processTreeData } from "./utils/highlightMatch";
 import { getExpandedKeys } from "./utils/getExpandedKeys";
+import { globalEventBus } from "@/globals/eventBus";
 
 const { Search } = Input;
 
@@ -46,6 +47,11 @@ export const SearchNode: React.FC = () => {
         expandedKeys={expandedKeys}
         autoExpandParent={autoExpandParent}
         treeData={treeData}
+        onClick={(_e, node) => {
+          globalEventBus.emit("selectBlueMapSearchPanelItem", {
+            id: node.key,
+          });
+        }}
       />
     </div>
   );

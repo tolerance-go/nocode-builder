@@ -2,7 +2,7 @@ import X6Graph from "@/components/x6/X6Graph";
 import { Graph } from "@antv/x6";
 import { register } from "@antv/x6-react-shape";
 import { SearchNode } from "./SearchNode";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ZoomInOutlined,
   ZoomOutOutlined,
@@ -11,6 +11,7 @@ import {
   AimOutlined,
 } from "@ant-design/icons";
 import { Button } from "antd";
+import { globalEventBus } from "@/globals/eventBus";
 
 register({
   shape: "search-node",
@@ -114,6 +115,11 @@ const BlueMap = () => {
   const handleCenterContent = () => {
     graph?.centerContent();
   };
+
+  useEffect(() => {
+    return globalEventBus.on("selectBlueMapSearchPanelItem", () => {
+    });
+  }, []);
 
   return (
     <div className="h-[100%] relative">

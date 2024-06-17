@@ -56,6 +56,12 @@ export type EventMaps = {
   stageNavigate: {
     to: string;
   };
+  /**
+   * 选中蓝图搜索节点中的项
+   */
+  selectBlueMapSearchPanelItem: {
+    id: React.Key;
+  };
 };
 
 export const globalEventBus = new EventBus<EventMaps>();
