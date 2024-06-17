@@ -1,6 +1,6 @@
 import { ReactShapeConfig } from "@antv/x6-react-shape";
-import { BaseNodeShape } from "./BaseNode/config";
-import { SearchNodeShape } from "./SearchNode/config";
+import { BaseNodeShape } from "./nodes/BaseNode/config";
+import { SearchNodeShape } from "./nodes/SearchNode/config";
 
 /**
  * shape 到组件的 map

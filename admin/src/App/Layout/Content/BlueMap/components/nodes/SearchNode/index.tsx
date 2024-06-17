@@ -1,12 +1,12 @@
 import { globalEventBus } from "@/globals/eventBus";
-import { Input, Tree, Typography } from "antd";
-import React, { useMemo, useState } from "react";
-import { defaultData } from "../../treeData";
-import { SearchTreeNode, X6ReactComponentProps } from "../../types";
-import { getExpandedKeys } from "../../utils/getExpandedKeys";
-import { highlightMatch } from "../../utils/highlightMatch";
-import { BaseNode } from "../BaseNode";
 import { css, cx } from "@emotion/css";
+import { Input, Tree } from "antd";
+import React, { useMemo, useState } from "react";
+import { defaultData } from "../../../treeData";
+import { SearchTreeNode, X6ReactComponentProps } from "../../../types";
+import { getExpandedKeys } from "../../../utils/getExpandedKeys";
+import { highlightMatch } from "../../../utils/highlightMatch";
+import { BaseNode } from "../BaseNode";
 
 const { Search } = Input;
 

@@ -1,6 +1,6 @@
 import { X6ReactComponentProps } from "../types";
-import { BaseNode } from "./BaseNode";
-import { SearchNode } from "./SearchNode";
+import { BaseNode } from "./nodes/BaseNode";
+import { SearchNode } from "./nodes/SearchNode";
 
 /**
  * shape 到组件的 map

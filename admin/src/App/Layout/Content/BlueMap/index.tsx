@@ -1,4 +1,3 @@
-import X6Graph from "@/components/x6/X6Graph";
 import { globalEventBus } from "@/globals/eventBus";
 import useLatest from "@/hooks/useLatest";
 import {
@@ -8,10 +7,11 @@ import {
   ZoomInOutlined,
   ZoomOutOutlined,
 } from "@ant-design/icons";
-import { Graph, Markup } from "@antv/x6";
+import { Graph } from "@antv/x6";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import "./components/register";
+import X6Graph from "./components/x6/X6Graph";
 import { findNodeConfig } from "./utils/findNodeConfig";
 
 let lastSearchNodeId: string | null = null;

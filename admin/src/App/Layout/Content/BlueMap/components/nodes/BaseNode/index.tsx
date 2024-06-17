@@ -1,6 +1,6 @@
 import { Typography } from "antd";
 import React from "react";
-import { X6ReactComponentProps } from "../../types";
+import { X6ReactComponentProps } from "../../../types";
 
 export const BaseNode: React.FC<
   X6ReactComponentProps & {

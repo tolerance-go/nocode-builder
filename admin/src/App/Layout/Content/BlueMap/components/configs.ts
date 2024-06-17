@@ -1,4 +1,4 @@
-import { BaseNodeConfig } from "./BaseNode/config";
-import { SearchNodeConfig } from "./SearchNode/config";
+import { BaseNodeConfig } from "./nodes/BaseNode/config";
+import { SearchNodeConfig } from "./nodes/SearchNode/config";
 
 export const nodeConfigs = [BaseNodeConfig, SearchNodeConfig];

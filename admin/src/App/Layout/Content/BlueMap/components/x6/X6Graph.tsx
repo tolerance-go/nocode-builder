@@ -2,7 +2,6 @@ import { portLabels } from "@/App/Layout/Content/BlueMap/components/portLabels";
 import { ensure } from "@/utils/ensure";
 import { Graph } from "@antv/x6";
 import { Selection } from "@antv/x6-plugin-selection";
-import { Tooltip } from "antd";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 
