@@ -1,68 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { Input, Tree, Typography } from "antd";
+import { defaultData, getParentKey } from "./treeData";
 import type { TreeDataNode } from "antd";
 
 const { Search } = Input;
-
-const x = 3;
-const y = 2;
-const z = 1;
-const defaultData: TreeDataNode[] = [];
-
-const generateData = (
-  _level: number,
-  _preKey?: React.Key,
-  _tns?: TreeDataNode[]
-) => {
-  const preKey = _preKey || "0";
-  const tns = _tns || defaultData;
-
-  const children: React.Key[] = [];
-  for (let i = 0; i < x; i++) {
-    const key = `${preKey}-${i}`;
-    tns.push({ title: key, key });
-    if (i < y) {
-      children.push(key);
-    }
-  }
-  if (_level < 0) {
-    return tns;
-  }
-  const level = _level - 1;
-  children.forEach((key, index) => {
-    tns[index].children = [];
-    return generateData(level, key, tns[index].children);
-  });
-};
-generateData(z);
-
-const dataList: { key: React.Key; title: string }[] = [];
-const generateList = (data: TreeDataNode[]) => {
-  for (let i = 0; i < data.length; i++) {
-    const node = data[i];
-    const { key } = node;
-    dataList.push({ key, title: key as string });
-    if (node.children) {
-      generateList(node.children);
-    }
-  }
-};
-generateList(defaultData);
-
-const getParentKey = (key: React.Key, tree: TreeDataNode[]): React.Key => {
-  let parentKey: React.Key;
-  for (let i = 0; i < tree.length; i++) {
-    const node = tree[i];
-    if (node.children) {
-      if (node.children.some((item) => item.key === key)) {
-        parentKey = node.key;
-      } else if (getParentKey(key, node.children)) {
-        parentKey = getParentKey(key, node.children);
-      }
-    }
-  }
-  return parentKey!;
-};
 
 export const SearchNode: React.FC = () => {
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
@@ -76,9 +17,9 @@ export const SearchNode: React.FC = () => {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    const newExpandedKeys = dataList
+    const newExpandedKeys = defaultData
       .map((item) => {
-        if (item.title.indexOf(value) > -1) {
+        if (typeof item.title === "string" && item.title.indexOf(value) > -1) {
           return getParentKey(item.key, defaultData);
         }
         return null;
@@ -96,9 +37,14 @@ export const SearchNode: React.FC = () => {
     const loop = (data: TreeDataNode[]): TreeDataNode[] =>
       data.map((item) => {
         const strTitle = item.title as string;
-        const index = strTitle.indexOf(searchValue);
-        const beforeStr = strTitle.substring(0, index);
-        const afterStr = strTitle.slice(index + searchValue.length);
+        const index =
+          typeof strTitle === "string" ? strTitle.indexOf(searchValue) : -1;
+        const beforeStr =
+          typeof strTitle === "string" ? strTitle.substring(0, index) : "";
+        const afterStr =
+          typeof strTitle === "string"
+            ? strTitle.slice(index + searchValue.length)
+            : "";
         const title =
           index > -1 ? (
             <span>
