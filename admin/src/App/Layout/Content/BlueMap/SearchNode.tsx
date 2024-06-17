@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { Input, Tree, Typography } from "antd";
 import { defaultData } from "./treeData";
-import type { TreeDataNode } from "antd";
-import { getExpandedKeys } from "./getExpandedKeys";
+import { processTreeData } from "./utils/highlightMatch";
+import { getExpandedKeys } from "./utils/getExpandedKeys";
 
 const { Search } = Input;
 
@@ -25,38 +25,7 @@ export const SearchNode: React.FC = () => {
   };
 
   const treeData = useMemo(() => {
-    const loop = (data: TreeDataNode[]): TreeDataNode[] =>
-      data.map((item) => {
-        const strTitle = item.title as string;
-        const index =
-          typeof strTitle === "string" ? strTitle.indexOf(searchValue) : -1;
-        const beforeStr =
-          typeof strTitle === "string" ? strTitle.substring(0, index) : "";
-        const afterStr =
-          typeof strTitle === "string"
-            ? strTitle.slice(index + searchValue.length)
-            : "";
-        const title =
-          index > -1 ? (
-            <span>
-              {beforeStr}
-              <span className="site-tree-search-value">{searchValue}</span>
-              {afterStr}
-            </span>
-          ) : (
-            <span>{strTitle}</span>
-          );
-        if (item.children) {
-          return { title, key: item.key, children: loop(item.children) };
-        }
-
-        return {
-          title,
-          key: item.key,
-        };
-      });
-
-    return loop(defaultData);
+    return processTreeData(defaultData, searchValue);
   }, [searchValue]);
 
   return (

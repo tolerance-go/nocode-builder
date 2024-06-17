@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
-import { defaultData } from "./treeData";
 import { getExpandedKeys } from "./getExpandedKeys";
+import { defaultData } from "../treeData";
 
 describe("getExpandedKeys", () => {
   it('应该返回正确的展开节点键数组 - 搜索 "0-0-0-0"', () => {
