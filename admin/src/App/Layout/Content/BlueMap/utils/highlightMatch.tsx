@@ -20,25 +20,3 @@ export const highlightMatch = (
     </span>
   );
 };
-
-// 递归处理树节点
-export const processTreeData = (
-  data: SearchTreeNode[],
-  searchValue: string
-): SearchTreeNode[] =>
-  data.map((item) => {
-    const title = highlightMatch(item.title as string, searchValue);
-    if (item.children) {
-      return {
-        title,
-        configId: item.configId,
-        key: item.key,
-        children: processTreeData(item.children, searchValue),
-      };
-    }
-    return {
-      title,
-      key: item.key,
-      configId: item.configId,
-    };
-  });

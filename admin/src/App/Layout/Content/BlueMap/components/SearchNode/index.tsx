@@ -1,14 +1,37 @@
 import { globalEventBus } from "@/globals/eventBus";
+import { ensure } from "@/utils/ensure";
 import { Input, Tree, Typography } from "antd";
 import React, { useMemo, useState } from "react";
 import { defaultData } from "../../treeData";
 import { SearchTreeNode } from "../../types";
 import { getExpandedKeys } from "../../utils/getExpandedKeys";
-import { processTreeData } from "../../utils/highlightMatch";
-import { ensure } from "@/utils/ensure";
+import { highlightMatch } from "../../utils/highlightMatch";
 
 const { Search } = Input;
 
+const processTreeData = (
+  data: SearchTreeNode[],
+  searchValue: string
+): SearchTreeNode[] => {
+  return data.map((item) => {
+    const title = highlightMatch(item.title as string, searchValue);
+    if (item.children) {
+      return {
+        title,
+        key: item.key,
+        configId: item.configId,
+        selectable: false, // 父节点不可选择
+        children: processTreeData(item.children, searchValue),
+      };
+    }
+    return {
+      title,
+      key: item.key,
+      configId: item.configId,
+      selectable: true, // 叶子节点可选择
+    };
+  });
+};
 export const SearchNode: React.FC = () => {
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -50,7 +73,7 @@ export const SearchNode: React.FC = () => {
         autoExpandParent={autoExpandParent}
         treeData={treeData}
         onClick={(_e, node) => {
-          ensure(!!node.configId, 'node.configId 必须存在。')
+          ensure(!!node.configId, "node.configId 必须存在。");
           globalEventBus.emit("selectBlueMapSearchPanelItem", {
             configId: node.configId,
           });

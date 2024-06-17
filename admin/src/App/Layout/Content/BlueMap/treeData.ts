@@ -5,10 +5,12 @@ export const defaultData: SearchTreeNode[] = [
   {
     title: "0-0",
     key: "0-0",
+    selectable: false,
     children: [
       {
         title: "0-0-0",
         key: "0-0-0",
+        selectable: false,
         children: [
           {
             configId: "BaseNode",
@@ -26,6 +28,7 @@ export const defaultData: SearchTreeNode[] = [
       {
         title: "0-0-1",
         key: "0-0-1",
+        selectable: false,
         children: [
           {
             configId: "BaseNode",
@@ -44,6 +47,7 @@ export const defaultData: SearchTreeNode[] = [
   {
     title: "0-1",
     key: "0-1",
+    selectable: false,
     children: [
       {
         configId: "BaseNode",
