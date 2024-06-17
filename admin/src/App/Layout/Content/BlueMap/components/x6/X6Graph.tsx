@@ -111,6 +111,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
       graph.use(
         new Keyboard({
           enabled: true,
+          global: true,
         })
       );
 

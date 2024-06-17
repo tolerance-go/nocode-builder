@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import { Cell, Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import "./components/register";
 import X6Graph from "./components/x6/X6Graph";
 import { findNodeConfig } from "./utils/findNodeConfig";

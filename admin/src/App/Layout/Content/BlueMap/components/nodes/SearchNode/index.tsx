@@ -34,6 +34,8 @@ const processTreeData = (
   });
 };
 export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
+  const { graph } = props;
+
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const [autoExpandParent, setAutoExpandParent] = useState(true);
@@ -55,12 +57,32 @@ export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
     return processTreeData(defaultData, searchValue);
   }, [searchValue]);
 
+  /**
+   * input 聚焦的时候，全局的 Keyboard 插件监听不到，要手动处理
+   *
+   * @param e
+   */
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (
+      (e.ctrlKey || e.metaKey) &&
+      e.key.toLowerCase() /** shift 按下的时候，z 是大写 */ === "z"
+    ) {
+      e.preventDefault();
+      if (e.shiftKey) {
+        graph.redo();
+      } else {
+        graph.undo();
+      }
+    }
+  };
+
   return (
     <BaseNode title="此蓝图的所有操作" {...props}>
       <Search
         placeholder="输入搜索内容"
         onChange={onChange}
         autoFocus
+        onKeyDown={handleKeyDown}
         size="small"
         className={cx(
           "mb-2",
