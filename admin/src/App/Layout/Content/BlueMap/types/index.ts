@@ -1,4 +1,4 @@
-import { Graph } from "@antv/x6";
+import { Graph, Node } from "@antv/x6";
 import { DataNode } from "antd/es/tree";
 
 export type NodeConfig = {
