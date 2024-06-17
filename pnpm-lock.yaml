@@ -22,6 +22,9 @@ importers:
       '@antv/x6':
         specifier: ^2.18.1
         version: 2.18.1
+      '@antv/x6-plugin-export':
+        specifier: ^2.1.6
+        version: 2.1.6(@antv/x6@2.18.1)
       '@antv/x6-plugin-selection':
         specifier: ^2.2.2
         version: 2.2.2(@antv/x6@2.18.1)
@@ -221,6 +224,11 @@ packages:
 
   '@antv/x6-geometry@2.0.5':
     resolution: {integrity: sha512-MId6riEQkxphBpVeTcL4ZNXL4lScyvDEPLyIafvWMcWNTGK0jgkK7N20XSzqt8ltJb0mGUso5s56mrk8ysHu2A==}
+
+  '@antv/x6-plugin-export@2.1.6':
+    resolution: {integrity: sha512-m0ukMmZhrFE5n7uCR43DVQBdiUfpjGN+vm1mc+6RTZdHK8pa6Mxr0RZztaxPy34YA4tli+bGY3ePslsNPfh6PQ==}
+    peerDependencies:
+      '@antv/x6': ^2.x
 
   '@antv/x6-plugin-selection@2.2.2':
     resolution: {integrity: sha512-s2gtR9Onlhr7HOHqyqg0d+4sG76JCcQEbvrZZ64XmSChlvieIPlC3YtH4dg1KMNhYIuBmBmpSum6S0eVTEiPQw==}
@@ -2872,6 +2880,10 @@ snapshots:
       utility-types: 3.11.0
 
   '@antv/x6-geometry@2.0.5': {}
+
+  '@antv/x6-plugin-export@2.1.6(@antv/x6@2.18.1)':
+    dependencies:
+      '@antv/x6': 2.18.1
 
   '@antv/x6-plugin-selection@2.2.2(@antv/x6@2.18.1)':
     dependencies:
