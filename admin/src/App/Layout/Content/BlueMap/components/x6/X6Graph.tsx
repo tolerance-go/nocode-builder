@@ -1,10 +1,38 @@
 import { ensure } from "@/utils/ensure";
-import { Graph } from "@antv/x6";
+import { EdgeView, Graph, Point } from "@antv/x6";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { ports } from "../ports";
-import { portLabels } from "../portLabels";
+
+interface RandomRouterArgs {
+  bounces?: number;
+}
+
+function randomRouter(
+  vertices: Point.PointLike[],
+  args: RandomRouterArgs,
+  view: EdgeView
+) {
+  const bounces = args.bounces || 20;
+  const points = vertices.map((p) => Point.create(p));
+
+  for (var i = 0; i < bounces; i++) {
+    const sourceCorner = view.sourceBBox.getCenter();
+    const targetCorner = view.targetBBox.getCenter();
+    const randomPoint = Point.random(
+      sourceCorner.x,
+      targetCorner.x,
+      sourceCorner.y,
+      targetCorner.y
+    );
+    points.push(randomPoint);
+  }
+
+  return points;
+}
+
+Graph.registerRouter('random', randomRouter)
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -44,6 +72,20 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             },
           ],
         },
+        connecting: {
+          router: {
+            name: "er",
+            args: {
+              offset: 24,
+            },
+          },
+          connector: {
+            name: 'rounded',
+            args: {
+              radius: 20,
+            },
+          },
+        },
         mousewheel: {
           enabled: true,
           factor: 1.1,
@@ -58,10 +100,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           if (container) {
             const type = args.port.attrs?.port.type;
 
-            ensure(
-              typeof type === "string",
-              "port.attrs.port.type 必须存在。"
-            );
+            ensure(typeof type === "string", "port.attrs.port.type 必须存在。");
 
             const portComp = ports[type];
 

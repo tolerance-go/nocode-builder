@@ -12,6 +12,12 @@ export const BaseNodeShape: ReactShapeConfig = {
       left: {
         position: "left",
         attrs: {
+          fo: {
+            magnet: "true",
+            width: 50,
+            height: 50,
+            y: -25,
+          },
           port: {
             type: "BasePort",
           },
@@ -21,10 +27,18 @@ export const BaseNodeShape: ReactShapeConfig = {
       right: {
         position: "right",
         attrs: {
+          fo: {
+            magnet: "true",
+            width: 50,
+            height: 50,
+            y: -25,
+            x: -50,
+          },
           port: {
             type: "BasePort",
           },
         },
+        zIndex: 1,
       },
     },
   },
@@ -38,38 +52,17 @@ export const BaseNodeConfig: NodeConfig = {
       {
         id: "port_3",
         group: "left",
-        attrs: {
-          fo: {
-            magnet: "true",
-          },
-          port: {
-            type: "BasePort",
-          },
-        },
+        attrs: {},
       },
       {
         id: "port_34",
         group: "left",
-        attrs: {
-          fo: {
-            magnet: "true",
-          },
-          port: {
-            type: "BasePort",
-          },
-        },
+        attrs: {},
       },
       {
         id: "port_4",
         group: "right",
-        attrs: {
-          fo: {
-            magnet: "true",
-          },
-          port: {
-            type: "BasePort",
-          },
-        },
+        attrs: {},
       },
     ],
   },

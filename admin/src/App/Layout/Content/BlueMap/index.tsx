@@ -43,6 +43,52 @@ const BlueMap = () => {
         width: 100,
         height: 40,
         label: "Hello",
+        ports: {
+          groups: {
+            in: {
+              position: "top",
+              attrs: {
+                circle: {
+                  magnet: true,
+                  stroke: "#8f8f8f",
+                  r: 5,
+                },
+              },
+            },
+            out: {
+              position: "bottom",
+              attrs: {
+                circle: {
+                  magnet: true,
+                  stroke: "#8f8f8f",
+                  r: 5,
+                },
+              },
+            },
+          },
+          items: [
+            {
+              id: "port1",
+              group: "in",
+            },
+            {
+              id: "port2",
+              group: "in",
+            },
+            {
+              id: "port3",
+              group: "in",
+            },
+            {
+              id: "port4",
+              group: "out",
+            },
+            {
+              id: "port5",
+              group: "out",
+            },
+          ],
+        },
       });
 
       graph.addEdge({
