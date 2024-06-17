@@ -76,7 +76,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           router: {
             name: "er",
             args: {
-              offset: 24,
+              offset: 30,
             },
           },
           connector: {
