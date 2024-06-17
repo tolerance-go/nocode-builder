@@ -1,5 +1,6 @@
 import { globalEventBus } from "@/globals/eventBus";
 import useLatest from "@/hooks/useLatest";
+import { ensure } from "@/utils/ensure";
 import {
   AimOutlined,
   FullscreenOutlined,
@@ -11,11 +12,10 @@ import {
 } from "@ant-design/icons";
 import { Cell, Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./components/register";
 import X6Graph from "./components/x6/X6Graph";
 import { findNodeConfig } from "./utils/findNodeConfig";
-import { ensure } from "@/utils/ensure";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -23,6 +23,7 @@ const BlueMap = () => {
   const [canRedo, setCanRedo] = useState(false);
 
   const removeSearchNode = () => {
+    /** 回撤的过程中，可能出现多个 search node 同时出现的情况 */
     const allNodes = graph?.getNodes();
     allNodes?.forEach((node) => {
       if (node.shape === "search-node") {
