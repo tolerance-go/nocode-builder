@@ -118,18 +118,16 @@ const BlueMap = () => {
 
   useEffect(() => {
     return globalEventBus.on("selectBlueMapSearchPanelItem", ({ configId }) => {
-      if (lastSearchNodeId) {
+      if (lastSearchNodeId && graphRef.current) {
         const config = findNodeConfig(configId);
 
-        const lastNode = graphRef.current?.getCellById(lastSearchNodeId);
+        const lastNode = graphRef.current.getCellById(lastSearchNodeId);
         if (lastNode) {
-          const { x, y } = lastNode.getProp("location");
-          
-          debugger
+          const { x, y } = lastNode.getProp("position");
 
           removeSearchNodeRef.current();
 
-          const newNode = graphRef.current?.addNode({
+          graphRef.current.addNode({
             shape: config.shape,
             x,
             y,
