@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from "react";
 import { Input, Tree, Typography } from "antd";
-import { defaultData } from "./treeData";
-import { processTreeData } from "./utils/highlightMatch";
-import { getExpandedKeys } from "./utils/getExpandedKeys";
+import { defaultData } from "../../treeData";
+import { processTreeData } from "../../utils/highlightMatch";
+import { getExpandedKeys } from "../../utils/getExpandedKeys";
 import { globalEventBus } from "@/globals/eventBus";
 
 const { Search } = Input;

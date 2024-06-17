@@ -1,24 +1,21 @@
 import X6Graph from "@/components/x6/X6Graph";
-import { Graph } from "@antv/x6";
-import { register } from "@antv/x6-react-shape";
-import { SearchNode } from "./SearchNode";
-import { useCallback, useEffect, useState } from "react";
+import { globalEventBus } from "@/globals/eventBus";
 import {
+  AimOutlined,
+  FullscreenOutlined,
+  ShrinkOutlined,
   ZoomInOutlined,
   ZoomOutOutlined,
-  ShrinkOutlined,
-  FullscreenOutlined,
-  AimOutlined,
 } from "@ant-design/icons";
+import { Graph } from "@antv/x6";
+import { register } from "@antv/x6-react-shape";
 import { Button } from "antd";
-import { globalEventBus } from "@/globals/eventBus";
+import { useCallback, useEffect, useState } from "react";
+import { BaseNodeShape } from "./components/BaseNode/shape";
+import { SearchNodeShape } from "./components/SearchNode/shape";
 
-register({
-  shape: "search-node",
-  width: 300,
-  height: 400,
-  component: SearchNode,
-});
+register(SearchNodeShape);
+register(BaseNodeShape);
 
 let lastSearchNodeId: string | null = null;
 
@@ -117,8 +114,7 @@ const BlueMap = () => {
   };
 
   useEffect(() => {
-    return globalEventBus.on("selectBlueMapSearchPanelItem", () => {
-    });
+    return globalEventBus.on("selectBlueMapSearchPanelItem", () => {});
   }, []);
 
   return (
