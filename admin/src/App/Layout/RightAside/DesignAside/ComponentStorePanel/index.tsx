@@ -1,5 +1,5 @@
 import { updateSearchParams } from "@/utils/updateSearchParams";
-import { Button, Input, Segmented, Space } from "antd";
+import { Button, Input, Segmented, Select, Space } from "antd";
 import { useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { ComponentStore } from "./ComponentStore";
@@ -61,7 +61,23 @@ export const ComponentStorePanel = () => {
           }}
         />
         <div className="px-1.5 py-3">
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            <Select
+              variant='borderless'
+              defaultValue={"H5"}
+              options={[
+                {
+                  label: "后台管理系统",
+                  value: "后台管理系统",
+                },
+                {
+                  label: "问卷调查页",
+                  value: "问卷调查页",
+                },
+              ]}
+              className="max-w-[80px]"
+              popupMatchSelectWidth={false}
+            ></Select>
             <div className="flex-grow">
               {isSearching ? (
                 <Input
