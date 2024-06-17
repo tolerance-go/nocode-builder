@@ -1,8 +1,8 @@
 import { BasePortLabelProps } from "../types";
-import { TextPortLabel } from "./portLabels/TextPortLabel";
+import { BasePortLabel } from "./portLabels/BasePortLabel";
 
 export const portLabels: {
   [key: string]: React.FC<BasePortLabelProps>;
 } = {
-  TextPortLabel,
+  BasePortLabel,
 };

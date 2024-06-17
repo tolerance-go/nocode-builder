@@ -1,9 +1,9 @@
-import { portLabels } from "@/App/Layout/Content/BlueMap/components/portLabels";
 import { ensure } from "@/utils/ensure";
 import { Graph } from "@antv/x6";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
+import { ports } from "../ports";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -53,22 +53,21 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           eventTypes: ["mouseWheelDown"],
         },
         onPortRendered(args) {
-          const selectors = args.labelSelectors;
-          const container = selectors && selectors.foContent;
+          const container = args.contentSelectors?.foContent;
           if (container) {
-            const type = args.port.attrs?.label.type;
+            const type = args.port.attrs?.port.type;
 
             ensure(
               typeof type === "string",
-              "args.port.attrs.label.type 必须存在。"
+              "port.attrs.port.type 必须存在。"
             );
 
-            const labelComp = portLabels[type];
+            const portComp = ports[type];
 
-            ensure(!!labelComp, "labelComp 没有对应组件。");
+            ensure(!!portComp, "portComp 没有对应组件。");
 
             ReactDOM.createRoot(container as HTMLElement).render(
-              React.createElement(labelComp, {
+              React.createElement(portComp, {
                 node: args.node,
                 port: args.port,
               })
@@ -85,7 +84,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           multiple: true, // 允许多选
           rubberband: true, // 允许使用橡皮筋（框选）选择节点
           movable: true, // 允许移动选中的节点
-          showNodeSelectionBox: true, // 显示节点选择框
+          showNodeSelectionBox: false, // 显示节点选择框
           eventTypes: ["leftMouseDown"], // 触发选择操作的事件类型，这里设置为鼠标左键按下
           filter(cell) {
             return cell.shape !== "search-node"; // 过滤器，排除 shape 类型为 "search-node" 的节点不被选择

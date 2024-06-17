@@ -1,7 +1,7 @@
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { BaseNode } from ".";
-import { NodeConfig } from "../../types";
 import { Markup } from "@antv/x6";
+import { NodeConfig } from "../../../types";
 
 export const BaseNodeShape: ReactShapeConfig = {
   shape: "base-node",
@@ -12,36 +12,26 @@ export const BaseNodeShape: ReactShapeConfig = {
     groups: {
       left: {
         position: "left",
+        markup: Markup.getForeignObjectMarkup(),
         attrs: {
-          circle: {
-            magnet: true,
-            stroke: "#8f8f8f",
-            r: 5,
-          },
           label: {
-            type: "TextPortLabel",
+            type: "BasePortLabel",
           },
-        },
-        label: {
-          position: "right",
-          markup: Markup.getForeignObjectMarkup(),
+          port: {
+            type: "BasePort",
+          },
         },
       },
       right: {
         position: "right",
+        markup: Markup.getForeignObjectMarkup(),
         attrs: {
-          circle: {
-            magnet: true,
-            stroke: "#8f8f8f",
-            r: 5,
+          port: {
+            type: "BasePort",
           },
           label: {
-            type: "TextPortLabel",
+            type: "BasePortLabel",
           },
-        },
-        label: {
-          position: "left",
-          markup: Markup.getForeignObjectMarkup(),
         },
       },
     },
@@ -57,11 +47,11 @@ export const BaseNodeConfig: NodeConfig = {
         id: "port_3",
         group: "left",
         attrs: {
-          text: {
-            text: "1",
-          },
           label: {
-            type: "TextPortLabel",
+            type: "BasePortLabel",
+          },
+          port: {
+            type: "BasePort",
           },
         },
       },
@@ -69,11 +59,11 @@ export const BaseNodeConfig: NodeConfig = {
         id: "port_34",
         group: "left",
         attrs: {
-          text: {
-            text: "1",
-          },
           label: {
-            type: "TextPortLabel",
+            type: "BasePortLabel",
+          },
+          port: {
+            type: "BasePort",
           },
         },
       },
@@ -81,11 +71,11 @@ export const BaseNodeConfig: NodeConfig = {
         id: "port_4",
         group: "right",
         attrs: {
-          text: {
-            text: "1",
-          },
           label: {
-            type: "TextPortLabel",
+            type: "BasePortLabel",
+          },
+          port: {
+            type: "BasePort",
           },
         },
       },

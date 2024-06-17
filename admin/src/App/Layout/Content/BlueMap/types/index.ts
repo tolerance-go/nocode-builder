@@ -22,3 +22,8 @@ export type BasePortLabelProps = {
   node: Node;
   port: PortManager.Port;
 };
+
+export type BasePortProps = {
+  node: Node;
+  port: PortManager.Port;
+};
