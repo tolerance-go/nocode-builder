@@ -22,14 +22,14 @@ const processTreeData = (
         configId: item.configId,
         selectable: false, // 父节点不可选择
         children: processTreeData(item.children, searchValue),
-      };
+      } as SearchTreeNode;
     }
     return {
       title,
       key: item.key,
       configId: item.configId,
       selectable: true, // 叶子节点可选择
-    };
+    } as SearchTreeNode;
   });
 };
 export const SearchNode: React.FC = () => {
@@ -73,10 +73,11 @@ export const SearchNode: React.FC = () => {
         autoExpandParent={autoExpandParent}
         treeData={treeData}
         onClick={(_e, node) => {
-          ensure(!!node.configId, "node.configId 必须存在。");
-          globalEventBus.emit("selectBlueMapSearchPanelItem", {
-            configId: node.configId,
-          });
+          if (node.configId) {
+            globalEventBus.emit("selectBlueMapSearchPanelItem", {
+              configId: node.configId,
+            });
+          }
         }}
       />
     </div>
