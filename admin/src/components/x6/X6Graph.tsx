@@ -69,12 +69,10 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             ensure(!!labelComp, "labelComp 没有对应组件。");
 
             ReactDOM.createRoot(container as HTMLElement).render(
-              <Tooltip title="port">
-                {React.createElement(labelComp, {
-                  node: args.node,
-                  port: args.port,
-                })}
-              </Tooltip>
+              React.createElement(labelComp, {
+                node: args.node,
+                port: args.port,
+              })
             );
           }
         },
