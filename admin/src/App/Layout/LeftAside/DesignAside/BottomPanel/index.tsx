@@ -1,9 +1,9 @@
-import { Button, Space, Tabs } from "antd";
-import TreeList from "./TreeList";
-import { css } from "@emotion/css";
-import Editor from "./Editor";
-import { useSearchParams } from "react-router-dom";
+import { NavTabs } from "@/components/NavTabs";
 import { updateSearchParams } from "@/utils/updateSearchParams";
+import { Button, Space } from "antd";
+import { useSearchParams } from "react-router-dom";
+import Editor from "./Editor";
+import TreeList from "./TreeList";
 
 type TreePanel = "tree" | "editor";
 
@@ -25,7 +25,7 @@ export const BottomPanel = () => {
 
   return (
     <div className="flex-grow bg-white">
-      <Tabs
+      <NavTabs
         tabBarExtraContent={
           <Space className="px-2">
             <Button
@@ -43,19 +43,7 @@ export const BottomPanel = () => {
             </Button>
           </Space>
         }
-        className={css`
-          .ant-tabs-nav {
-            margin-bottom: 0;
-            height: 34px;
-          }
-          .ant-tabs-nav .ant-tabs-tab {
-            border-top: 0;
-            border-left: 0;
-          }
-        `}
         activeKey={treePanel}
-        type="card"
-        size={"small"}
         items={[
           {
             label: "节点树",
