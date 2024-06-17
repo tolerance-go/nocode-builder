@@ -22,7 +22,6 @@ export const BaseNodeShape: ReactShapeConfig = {
             type: "BasePort",
           },
         },
-        zIndex: 1,
       },
       right: {
         position: "right",
@@ -38,7 +37,6 @@ export const BaseNodeShape: ReactShapeConfig = {
             type: "BasePort",
           },
         },
-        zIndex: 1,
       },
     },
   },
