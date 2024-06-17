@@ -1,6 +1,7 @@
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { BaseNode } from ".";
 import { NodeConfig } from "../../types";
+import { Markup } from "@antv/x6";
 
 export const BaseNodeShape: ReactShapeConfig = {
   shape: "base-node",
@@ -17,9 +18,13 @@ export const BaseNodeShape: ReactShapeConfig = {
             stroke: "#8f8f8f",
             r: 5,
           },
+          label: {
+            type: "TextPortLabel",
+          },
         },
         label: {
           position: "right",
+          markup: Markup.getForeignObjectMarkup(),
         },
       },
       right: {
@@ -30,6 +35,13 @@ export const BaseNodeShape: ReactShapeConfig = {
             stroke: "#8f8f8f",
             r: 5,
           },
+          label: {
+            type: "TextPortLabel",
+          },
+        },
+        label: {
+          position: "left",
+          markup: Markup.getForeignObjectMarkup(),
         },
       },
     },
@@ -48,6 +60,9 @@ export const BaseNodeConfig: NodeConfig = {
           text: {
             text: "1",
           },
+          label: {
+            type: "TextPortLabel",
+          },
         },
       },
       {
@@ -57,6 +72,9 @@ export const BaseNodeConfig: NodeConfig = {
           text: {
             text: "1",
           },
+          label: {
+            type: "TextPortLabel",
+          },
         },
       },
       {
@@ -65,6 +83,9 @@ export const BaseNodeConfig: NodeConfig = {
         attrs: {
           text: {
             text: "1",
+          },
+          label: {
+            type: "TextPortLabel",
           },
         },
       },

@@ -1,6 +1,10 @@
+import { portLabels } from "@/App/Layout/Content/BlueMap/components/portLabels";
+import { ensure } from "@/utils/ensure";
 import { Graph } from "@antv/x6";
 import { Selection } from "@antv/x6-plugin-selection";
-import { useEffect, useRef } from "react";
+import { Tooltip } from "antd";
+import React, { useEffect, useRef } from "react";
+import ReactDOM from "react-dom/client";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -48,6 +52,31 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
         panning: {
           enabled: true,
           eventTypes: ["mouseWheelDown"],
+        },
+        onPortRendered(args) {
+          const selectors = args.labelSelectors;
+          const container = selectors && selectors.foContent;
+          if (container) {
+            const type = args.port.attrs?.label.type;
+
+            ensure(
+              typeof type === "string",
+              "args.port.attrs.label.type 必须存在。"
+            );
+
+            const labelComp = portLabels[type];
+
+            ensure(!!labelComp, "labelComp 没有对应组件。");
+
+            ReactDOM.createRoot(container as HTMLElement).render(
+              <Tooltip title="port">
+                {React.createElement(labelComp, {
+                  node: args.node,
+                  port: args.port,
+                })}
+              </Tooltip>
+            );
+          }
         },
       });
 
