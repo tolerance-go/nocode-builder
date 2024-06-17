@@ -19,7 +19,7 @@ export const SearchNode: React.FC = () => {
     const { value } = e.target;
     const newExpandedKeys = defaultData
       .map((item) => {
-        if (typeof item.title === "string" && item.title.indexOf(value) > -1) {
+        if (typeof item.title === 'string' && item.title.indexOf(value) > -1) {
           return getParentKey(item.key, defaultData);
         }
         return null;
@@ -37,14 +37,9 @@ export const SearchNode: React.FC = () => {
     const loop = (data: TreeDataNode[]): TreeDataNode[] =>
       data.map((item) => {
         const strTitle = item.title as string;
-        const index =
-          typeof strTitle === "string" ? strTitle.indexOf(searchValue) : -1;
-        const beforeStr =
-          typeof strTitle === "string" ? strTitle.substring(0, index) : "";
-        const afterStr =
-          typeof strTitle === "string"
-            ? strTitle.slice(index + searchValue.length)
-            : "";
+        const index = typeof strTitle === 'string' ? strTitle.indexOf(searchValue) : -1;
+        const beforeStr = typeof strTitle === 'string' ? strTitle.substring(0, index) : '';
+        const afterStr = typeof strTitle === 'string' ? strTitle.slice(index + searchValue.length) : '';
         const title =
           index > -1 ? (
             <span>
