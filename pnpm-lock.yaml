@@ -25,6 +25,9 @@ importers:
       '@antv/x6-plugin-export':
         specifier: ^2.1.6
         version: 2.1.6(@antv/x6@2.18.1)
+      '@antv/x6-plugin-history':
+        specifier: ^2.2.4
+        version: 2.2.4(@antv/x6@2.18.1)
       '@antv/x6-plugin-selection':
         specifier: ^2.2.2
         version: 2.2.2(@antv/x6@2.18.1)
@@ -227,6 +230,11 @@ packages:
 
   '@antv/x6-plugin-export@2.1.6':
     resolution: {integrity: sha512-m0ukMmZhrFE5n7uCR43DVQBdiUfpjGN+vm1mc+6RTZdHK8pa6Mxr0RZztaxPy34YA4tli+bGY3ePslsNPfh6PQ==}
+    peerDependencies:
+      '@antv/x6': ^2.x
+
+  '@antv/x6-plugin-history@2.2.4':
+    resolution: {integrity: sha512-9gHHvEW4Fla+1hxUV49zNgJyIMoV9CjVM52MrFgAJcvyRn1Kvxz4MfxiKlG+DEZUs+/zvfjl9pS6gJOd8laRkg==}
     peerDependencies:
       '@antv/x6': ^2.x
 
@@ -2882,6 +2890,10 @@ snapshots:
   '@antv/x6-geometry@2.0.5': {}
 
   '@antv/x6-plugin-export@2.1.6(@antv/x6@2.18.1)':
+    dependencies:
+      '@antv/x6': 2.18.1
+
+  '@antv/x6-plugin-history@2.2.4(@antv/x6@2.18.1)':
     dependencies:
       '@antv/x6': 2.18.1
 

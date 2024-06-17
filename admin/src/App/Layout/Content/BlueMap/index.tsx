@@ -3,7 +3,9 @@ import useLatest from "@/hooks/useLatest";
 import {
   AimOutlined,
   FullscreenOutlined,
+  RedoOutlined,
   ShrinkOutlined,
+  UndoOutlined,
   ZoomInOutlined,
   ZoomOutOutlined,
 } from "@ant-design/icons";
@@ -18,6 +20,8 @@ let lastSearchNodeId: string | null = null;
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
+  const [canUndo, setCanUndo] = useState(false);
+  const [canRedo, setCanRedo] = useState(false);
 
   const removeSearchNode = () => {
     if (lastSearchNodeId) {
@@ -135,6 +139,11 @@ const BlueMap = () => {
         removeSearchNodeRef.current();
       });
 
+      graph.on("history:change", () => {
+        setCanUndo(graph.canUndo());
+        setCanRedo(graph.canRedo());
+      });
+
       return () => {
         graph.dispose();
       };
@@ -160,6 +169,14 @@ const BlueMap = () => {
 
   const handleCenterContent = () => {
     graph?.centerContent();
+  };
+
+  const handleUndo = () => {
+    graph?.undo();
+  };
+
+  const handleRedo = () => {
+    graph?.redo();
   };
 
   useEffect(() => {
@@ -191,6 +208,16 @@ const BlueMap = () => {
         <Button icon={<ShrinkOutlined />} onClick={handleZoomTo} />
         <Button icon={<FullscreenOutlined />} onClick={handleZoomToFit} />
         <Button icon={<AimOutlined />} onClick={handleCenterContent} />
+        <Button
+          icon={<UndoOutlined />}
+          onClick={handleUndo}
+          disabled={!canUndo}
+        />
+        <Button
+          icon={<RedoOutlined />}
+          onClick={handleRedo}
+          disabled={!canRedo}
+        />
       </div>
       <X6Graph onGraphInit={handleGraphInit}></X6Graph>
     </div>

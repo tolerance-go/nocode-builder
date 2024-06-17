@@ -4,7 +4,7 @@ import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { ports } from "../ports";
-
+import { History } from '@antv/x6-plugin-history'
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
 }
@@ -97,6 +97,12 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           filter(cell) {
             return cell.shape !== "search-node"; // 过滤器，排除 shape 类型为 "search-node" 的节点不被选择
           },
+        })
+      );
+
+      graph.use(
+        new History({
+          enabled: true,
         })
       );
 
