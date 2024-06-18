@@ -1,6 +1,6 @@
 import { register } from "@antv/x6-react-shape";
-import { shapes } from "../configs/shapes";
+import { nodeConfigs } from "../configs/configs";
 
-Object.values(shapes).forEach((shape) => {
-  register(shape);
+nodeConfigs.forEach((config) => {
+  register(config.shape);
 });

@@ -183,7 +183,7 @@ const BlueMap = () => {
         removeSearchNodeRef.current();
 
         graphRef.current.addNode({
-          shape: config.shape,
+          shape: config.shapeName,
           x,
           y,
           ports: config.ports,

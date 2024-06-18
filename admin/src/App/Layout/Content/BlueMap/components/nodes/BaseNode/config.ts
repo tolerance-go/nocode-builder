@@ -44,7 +44,8 @@ export const BaseNodeShape: ReactShapeConfig = {
 
 export const BaseNodeConfig: NodeConfig<BaseNodeAttrs> = {
   id: "BaseNode",
-  shape: BaseNodeShape.shape,
+  shapeName: BaseNodeShape.shape,
+  shape: BaseNodeShape,
   ports: {
     items: [
       {

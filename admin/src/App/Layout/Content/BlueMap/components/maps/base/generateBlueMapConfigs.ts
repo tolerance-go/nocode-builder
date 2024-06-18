@@ -71,7 +71,8 @@ export function generateBlueMapConfigs<
 
   const nodeConfig: NodeConfig<Attrs> = {
     id: config.id,
-    shape: shapeConfig.shape,
+    shapeName: shapeConfig.shape,
+    shape: shapeConfig,
     ports: {
       items: convertConnectionsToPorts(config.connections),
     },

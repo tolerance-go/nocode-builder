@@ -11,5 +11,6 @@ export const SearchNodeShape: ReactShapeConfig = {
 
 export const SearchNodeConfig: NodeConfig = {
   id: "SearchNode",
-  shape: SearchNodeShape.shape,
+  shapeName: SearchNodeShape.shape,
+  shape: SearchNodeShape,
 };

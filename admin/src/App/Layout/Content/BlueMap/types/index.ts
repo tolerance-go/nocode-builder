@@ -1,6 +1,7 @@
 import { Cell, Graph, Node } from "@antv/x6";
 import { DataNode } from "antd/es/tree";
 import { PortManager } from "@antv/x6/es/model/port";
+import { ReactShapeConfig } from "@antv/x6-react-shape";
 
 export type BlueMapConnectPort = {
   /**
@@ -38,7 +39,8 @@ export type NodeConfig<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
 > = {
   id: string;
-  shape: string;
+  shapeName: string;
+  shape: ReactShapeConfig;
   ports?: Node.Defaults["ports"];
   attrs?: Attrs;
 };
