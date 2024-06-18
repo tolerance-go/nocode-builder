@@ -102,7 +102,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           multiple: true, // 允许多选
           rubberband: true, // 允许使用橡皮筋（框选）选择节点
           movable: true, // 允许移动选中的节点
-          showNodeSelectionBox: false, // 显示节点选择框
+          showNodeSelectionBox: true, // 显示节点选择框
           eventTypes: ["leftMouseDown"], // 触发选择操作的事件类型，这里设置为鼠标左键按下
           filter(cell) {
             return cell.shape !== "search-node"; // 过滤器，排除 shape 类型为 "search-node" 的节点不被选择

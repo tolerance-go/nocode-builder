@@ -103,6 +103,10 @@ const BlueMap = () => {
         graph.redo();
       });
 
+      graph.bindKey(["delete", "backspace"], () => {
+        graph.getSelectedCells().forEach((cell) => cell.remove());
+      });
+
       // 监听 edge:connected 事件
       graph.on("edge:mouseup", ({ edge, e }) => {
         const targetPort = edge.getTargetPortId();
@@ -122,8 +126,8 @@ const BlueMap = () => {
       graph.on("cell:change", saveGraphData);
       graph.on("cell:added", saveGraphData);
       graph.on("cell:removed", saveGraphData);
-      graph.on('node:moved', saveGraphData);
-      graph.on('edge:moved', saveGraphData);
+      graph.on("node:moved", saveGraphData);
+      graph.on("edge:moved", saveGraphData);
 
       loadGraphData();
 
