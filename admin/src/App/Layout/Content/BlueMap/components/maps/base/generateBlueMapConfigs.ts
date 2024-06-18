@@ -2,6 +2,7 @@ import { typedKeys } from "@/utils/typedKeys";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
 import { BlueMapNodeConfig, NodeConfig } from "../../../types";
+import { BaseNodeAttrs } from "../../nodes/BaseNode";
 
 function convertConnectionsToPorts(
   connections: BlueMapNodeConfig["connections"]
@@ -20,9 +21,13 @@ function convertConnectionsToPorts(
 
   return ports;
 }
-export function generateBlueMapConfigs(config: BlueMapNodeConfig): {
+export function generateBlueMapConfigs<
+  Attrs extends BaseNodeAttrs = BaseNodeAttrs
+>(
+  config: BlueMapNodeConfig<Attrs>
+): {
   shapeConfig: ReactShapeConfig;
-  nodeConfig: NodeConfig;
+  nodeConfig: NodeConfig<Attrs>;
 } {
   const shapeConfig: ReactShapeConfig = {
     shape: config.shapeName,
@@ -64,7 +69,7 @@ export function generateBlueMapConfigs(config: BlueMapNodeConfig): {
     },
   };
 
-  const nodeConfig: NodeConfig = {
+  const nodeConfig: NodeConfig<Attrs> = {
     id: config.id,
     shape: shapeConfig.shape,
     ports: {
