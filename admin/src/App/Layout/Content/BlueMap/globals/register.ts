@@ -3,12 +3,16 @@ import { nodeConfigs, portConfigs } from "../configs/configs";
 import { checkDuplicateIds } from "../utils/checkDuplicateIds";
 import { Graph } from "@antv/x6";
 
+/**
+ * 不希望在本地存储树数据中存储样式信息
+ */
+
 // 注册 leftTop 布局算法
 Graph.registerPortLayout(
   "leftTop",
-  (portsPositionArgs, elemBBox, args) => {
-    const paddingTop = args.y || 0; // 默认上间距为10
-    const paddingBottom = args.dy || 0; // 默认下间距为10
+  (portsPositionArgs, elemBBox) => {
+    const paddingTop = 70;
+    const paddingBottom = 40;
     const step =
       portsPositionArgs.length > 1
         ? (elemBBox.height - paddingTop - paddingBottom) /
@@ -31,9 +35,9 @@ Graph.registerPortLayout(
 // 注册 rightTop 布局算法
 Graph.registerPortLayout(
   "rightTop",
-  (portsPositionArgs, elemBBox, args) => {
-    const paddingTop = args.y || 0; // 默认上间距为10
-    const paddingBottom = args.dy || 0; // 默认下间距为10
+  (portsPositionArgs, elemBBox) => {
+    const paddingTop = 70;
+    const paddingBottom = 40;
     const step =
       portsPositionArgs.length > 1
         ? (elemBBox.height - paddingTop - paddingBottom) /

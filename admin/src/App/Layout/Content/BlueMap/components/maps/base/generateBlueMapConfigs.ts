@@ -56,10 +56,6 @@ export function generateBlueMapConfigs<
         left: {
           position: {
             name: "leftTop",
-            args: {
-              y: 70,
-              dy: 40,
-            },
           },
           attrs: {
             fo: {
@@ -76,10 +72,6 @@ export function generateBlueMapConfigs<
         right: {
           position: {
             name: "rightTop",
-            args: {
-              y: 70,
-              dy: 40,
-            },
           },
           attrs: {
             fo: {
