@@ -9,34 +9,39 @@ export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNode
     type: "flowControl",
     component: BranchControlNode,
     connections: {
-      left: [
-        {
-          id: "entry",
-          type: "exec",
-          width: 100,
-          height: 100,
-        },
-      ],
-      right: [
-        {
-          id: "truth",
-          type: "exec",
-          args: {
-            text: "为真",
+      left: {
+        offsetTop: 500,
+        ports: [
+          {
+            id: "entry",
+            type: "exec",
+            width: 100,
+            height: 100,
           },
-          width: 100,
-          height: 100,
-        },
-        {
-          id: "false",
-          type: "exec",
-          args: {
-            text: "为假",
+        ],
+      },
+      right: {
+        ports: [
+          {
+            id: "truth",
+            type: "exec",
+            args: {
+              text: "为真",
+            },
+            width: 100,
+            height: 100,
           },
-          width: 100,
-          height: 100,
-        },
-      ],
+          {
+            id: "false",
+            type: "exec",
+            args: {
+              text: "为假",
+            },
+            width: 100,
+            height: 100,
+          },
+        ],
+      },
     },
   };
 

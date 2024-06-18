@@ -23,6 +23,14 @@ export type BlueMapConnectPort = {
   height?: number;
 };
 
+export type Connection = {
+  /** 连接桩一侧距离开始的距离 */
+  offsetTop?: number;
+  /** 连接桩一侧距离结束的距离 */
+  offsetBottom?: number;
+  ports: BlueMapConnectPort[];
+};
+
 export interface BlueMapNodeConfig<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
 > {
@@ -35,8 +43,8 @@ export interface BlueMapNodeConfig<
    */
   type: "flowControl" | "function";
   connections: {
-    left?: BlueMapConnectPort[];
-    right?: BlueMapConnectPort[];
+    left?: Connection;
+    right?: Connection;
   };
   component: React.FC<X6ReactComponentProps>;
   attrs?: Attrs;

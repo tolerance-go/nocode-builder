@@ -1,5 +1,6 @@
 import { typedKeys } from "@/utils/typedKeys";
 import { Cell } from "@antv/x6";
+import { PortLayout } from "@antv/x6/es/registry/port-layout";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
 import { BlueMapConnectPort, BlueMapNodeConfig, NodeConfig } from "../types";
@@ -19,7 +20,7 @@ function convertConnectionsToPorts(
   const ports: PortManager.PortMetadata[] = [];
 
   typedKeys(connections).forEach((group) => {
-    connections[group]?.forEach((connection) => {
+    connections[group]?.ports.forEach((connection) => {
       ports.push({
         id: connection.id,
         group,
@@ -60,6 +61,9 @@ export function generateBlueMapConfigs<
         left: {
           position: {
             name: "leftTop",
+            args: {
+              offsetTop: config.connections.left?.offsetTop,
+            } as PortLayout.CommonArgs,
           },
           attrs: {
             fo: {
