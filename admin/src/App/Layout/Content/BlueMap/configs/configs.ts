@@ -1,4 +1,4 @@
-import { BranchControlNodeConfigs } from "../components/maps/nodes/BranchControlNode/config";
+import { BranchControlNodeConfigs } from "../components/maps/BranchControlNode/config";
 import { BaseNodeConfig } from "../components/nodes/BaseNode/config";
 import { SearchNodeConfig } from "../components/nodes/SearchNode/config";
 import { ArrowPortConfig } from "../components/ports/ArrowPort/config";

@@ -1,4 +1,4 @@
-import { BranchControlNodeConfigs } from "./components/maps/nodes/BranchControlNode/config";
+import { BranchControlNodeConfigs } from "./components/maps/BranchControlNode/config";
 import { SearchTreeNode } from "./types";
 
 // 静态数据

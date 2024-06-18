@@ -6,9 +6,9 @@ import {
   BlueMapConnectPort,
   BlueMapNodeConfig,
   NodeConfig,
-} from "../../../types";
-import { ArrowPortConfig } from "../../ports/ArrowPort/config";
-import { BasePortConfig } from "../../ports/BasePort/config";
+} from "../types";
+import { ArrowPortConfig } from "../components/ports/ArrowPort/config";
+import { BasePortConfig } from "../components/ports/BasePort/config";
 
 const getPort = (connection: BlueMapConnectPort) => {
   if (connection.type === "exec") {
