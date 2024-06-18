@@ -1,8 +1,8 @@
 import { typedKeys } from "@/utils/typedKeys";
+import { Cell } from "@antv/x6";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
 import { BlueMapNodeConfig, NodeConfig } from "../../../types";
-import { BaseNodeAttrs } from "../../nodes/BaseNode";
 
 function convertConnectionsToPorts(
   connections: BlueMapNodeConfig["connections"]
@@ -22,7 +22,7 @@ function convertConnectionsToPorts(
   return ports;
 }
 export function generateBlueMapConfigs<
-  Attrs extends BaseNodeAttrs = BaseNodeAttrs
+  Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
 >(
   config: BlueMapNodeConfig<Attrs>
 ): {
