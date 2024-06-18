@@ -11,7 +11,7 @@ import { ArrowPortConfig } from "../../ports/ArrowPort/config";
 import { BasePortConfig } from "../../ports/BasePort/config";
 
 const getPort = (connection: BlueMapConnectPort) => {
-  if (connection.type === 'exec') {
+  if (connection.type === "exec") {
     return ArrowPortConfig.id;
   }
   return BasePortConfig.id;
@@ -54,7 +54,13 @@ export function generateBlueMapConfigs<
     ports: {
       groups: {
         left: {
-          position: "left",
+          position: {
+            name: "leftTop",
+            args: {
+              y: 70,
+              dy: 40,
+            },
+          },
           attrs: {
             fo: {
               magnet: "true",
@@ -68,7 +74,13 @@ export function generateBlueMapConfigs<
           },
         },
         right: {
-          position: "right",
+          position: {
+            name: "rightTop",
+            args: {
+              y: 70,
+              dy: 40,
+            },
+          },
           attrs: {
             fo: {
               magnet: "true",
