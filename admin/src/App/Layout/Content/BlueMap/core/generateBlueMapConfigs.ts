@@ -7,6 +7,15 @@ import { BlueMapConnectPort, BlueMapNodeConfig, NodeConfig } from "../types";
 import { ArrowPortConfig } from "../components/ports/ArrowPort/config";
 import { BasePortConfig } from "../components/ports/BasePort/config";
 
+// 提取间距常量
+const PORT_SPACING = 20;
+const HEADER_HEIGHT = 50;
+const MIN_HEIGHT = 400;
+const PORT_GROUP_SPACING = 10;
+const DEFAULT_FO_WIDTH = 50;
+const DEFAULT_FO_HEIGHT = 50;
+const PADDING_X = 10;
+
 const getPort = (connection: BlueMapConnectPort) => {
   if (connection.type === "exec") {
     return ArrowPortConfig.id;
@@ -27,10 +36,12 @@ function convertConnectionsToPorts(
         attrs: {
           fo: {
             magnet: "true",
-            width: connection.width ?? 50,
-            height: connection.height ?? 50,
-            // y: -((connection.height ?? 50) / 2),
-            x: group === "right" ? -(connection.width ?? 50) - 10 : 10,
+            width: connection.width ?? DEFAULT_FO_WIDTH,
+            height: connection.height ?? DEFAULT_FO_HEIGHT,
+            x:
+              group === "right"
+                ? -(connection.width ?? DEFAULT_FO_WIDTH) - PADDING_X
+                : PADDING_X,
           },
           port: {
             id: getPort(connection),
@@ -44,9 +55,6 @@ function convertConnectionsToPorts(
   return ports;
 }
 
-// 提取间距常量
-const PORT_SPACING = 20;
-
 export function generateBlueMapConfigs<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
 >(
@@ -55,18 +63,34 @@ export function generateBlueMapConfigs<
   shapeConfig: ReactShapeConfig;
   nodeConfig: NodeConfig<Attrs>;
 } {
+  // 修改 shapeConfig 的宽度和高度计算逻辑
+  const maxPortWidth = Math.max(
+    config.connections.left?.ports[0]?.width ?? DEFAULT_FO_WIDTH,
+    config.connections.right?.ports.reduce(
+      (max, port) => Math.max(max, port.width ?? DEFAULT_FO_WIDTH),
+      0
+    ) ?? 0
+  );
+
+  const leftPortHeightSum =
+    config.connections.left?.ports.reduce(
+      (sum, port) =>
+        sum + (port.height ?? DEFAULT_FO_HEIGHT) + PORT_GROUP_SPACING,
+      0
+    ) ?? 0;
+  const rightPortHeightSum =
+    config.connections.right?.ports.reduce(
+      (sum, port) =>
+        sum + (port.height ?? DEFAULT_FO_HEIGHT) + PORT_GROUP_SPACING,
+      0
+    ) ?? 0;
+
+  const maxPortHeightSum = Math.max(leftPortHeightSum, rightPortHeightSum);
+
   const shapeConfig: ReactShapeConfig = {
     shape: config.shapeName,
-    width: Math.max(
-      300,
-      (config.connections.left?.ports[0]?.width ?? 0) +
-        (config.connections.right?.ports.reduce(
-          (max, port) => Math.max(max, port.width ?? 0),
-          0
-        ) ?? 0) +
-        PORT_SPACING
-    ),
-    height: 400,
+    width: Math.max(300, maxPortWidth + PADDING_X * 2 + PORT_SPACING),
+    height: Math.max(MIN_HEIGHT, maxPortHeightSum + HEADER_HEIGHT),
     component: config.component,
     ports: {
       groups: {
@@ -80,9 +104,8 @@ export function generateBlueMapConfigs<
           attrs: {
             fo: {
               magnet: "true",
-              width: 50,
-              height: 50,
-              // y: -25,
+              width: DEFAULT_FO_WIDTH,
+              height: DEFAULT_FO_HEIGHT,
             },
             port: {
               id: BasePortConfig.id,
@@ -96,10 +119,9 @@ export function generateBlueMapConfigs<
           attrs: {
             fo: {
               magnet: "true",
-              width: 50,
-              height: 50,
-              // y: -25,
-              x: -50,
+              width: DEFAULT_FO_WIDTH,
+              height: DEFAULT_FO_HEIGHT,
+              x: -DEFAULT_FO_WIDTH,
             },
             port: {
               id: BasePortConfig.id,
