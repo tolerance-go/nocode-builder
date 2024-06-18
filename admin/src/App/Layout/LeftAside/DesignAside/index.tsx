@@ -1,10 +1,10 @@
 import { BottomPanel } from "./BottomPanel";
-import { TopPanel } from "./TopPanel";
+// import { TopPanel } from "./TopPanel";
 
 export const DesignAside = () => {
   return (
     <div className="flex flex-col h-[100%]">
-      <TopPanel></TopPanel>
+      {/* <TopPanel></TopPanel> */}
       <BottomPanel></BottomPanel>
     </div>
   );

@@ -44,19 +44,19 @@ export const ComponentStorePanel = () => {
               ></Button>
             </Space>
           }
-          className={css`
-            .ant-tabs-tab-btn {
-              font-size: 13px;
-            }
-          `}
+          // className={css`
+          //   .ant-tabs-tab-btn {
+          //     font-size: 13px;
+          //   }
+          // `}
           activeKey={storeLib}
           items={[
             {
-              label: "桌面",
+              label: "桌面端",
               key: "pc",
             },
             {
-              label: "移动",
+              label: "移动端",
               key: "mobile",
             },
           ]}
@@ -83,11 +83,11 @@ export const ComponentStorePanel = () => {
             </Space>
           }
           activeKey={storeSubLib}
-          className={css`
-            .ant-tabs-tab-btn {
-              font-size: 13px;
-            }
-          `}
+          // className={css`
+          //   .ant-tabs-tab-btn {
+          //     font-size: 13px;
+          //   }
+          // `}
           items={[
             {
               label: "基础",
@@ -119,7 +119,7 @@ export const ComponentStorePanel = () => {
               autoFocus
               className={"pl-4 pr-3 py-1.5"}
               allowClear
-              style={{ fontSize: "13px" }}
+              // style={{ fontSize: "13px" }}
             />
           </div>
         ) : null}
