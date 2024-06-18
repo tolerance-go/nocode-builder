@@ -1,3 +1,5 @@
+import { X6ReactComponentProps } from "../../../types";
+
 export type BlueMapConnectPort = {
   /**
    * exec - 执行
@@ -8,6 +10,7 @@ export type BlueMapConnectPort = {
    * int - 整数
    */
   type: "exec" | "ref" | "returnValue" | "condition" | "string" | "int";
+  id: string;
 };
 
 export interface BlueMapNodeConfig {
@@ -20,4 +23,5 @@ export interface BlueMapNodeConfig {
     left?: BlueMapConnectPort[];
     right?: BlueMapConnectPort[];
   };
+  component: React.FC<X6ReactComponentProps>;
 }

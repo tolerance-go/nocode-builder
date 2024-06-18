@@ -1,5 +1,5 @@
 import { ReactShapeConfig } from "@antv/x6-react-shape";
-import { FlowControlNodeShape } from "../components/maps/nodes/FlowControlNode/config";
+import { FlowControlNodeConfigs } from "../components/maps/nodes/FlowControlNode/config";
 import { BaseNodeShape } from "../components/nodes/BaseNode/config";
 import { SearchNodeShape } from "../components/nodes/SearchNode/config";
 
@@ -11,5 +11,6 @@ export const shapes: {
 } = {
   [BaseNodeShape.shape]: BaseNodeShape,
   [SearchNodeShape.shape]: SearchNodeShape,
-  [FlowControlNodeShape.shape]: FlowControlNodeShape,
+  [FlowControlNodeConfigs.shapeConfig.shape]:
+    FlowControlNodeConfigs.shapeConfig,
 };
