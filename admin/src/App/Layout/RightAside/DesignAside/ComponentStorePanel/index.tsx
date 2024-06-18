@@ -122,7 +122,7 @@ export const ComponentStorePanel = () => {
             />
           </div>
         ) : null}
-        <div className="px-3 py-3">
+        <div className="px-3 pb-2.5 pt-3.5">
           <Segmented<SegmentedType>
             options={[
               {
