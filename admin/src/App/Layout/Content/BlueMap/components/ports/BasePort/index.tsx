@@ -5,5 +5,5 @@ export const BasePort = ({
 }: ReactPortComponentProps & {
   children?: React.ReactNode;
 }) => {
-  return <div className="bg-gray-200 h-[100%]">{children}</div>;
+  return <div className="h-[100%] hover:bg-gray-50">{children}</div>;
 };
