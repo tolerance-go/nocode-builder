@@ -84,7 +84,9 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
               "port.attrs.port.id 必须存在。"
             );
 
-            const portConfig = portConfigsById[id];
+            const portConfig = portConfigsById.get(id);
+
+            ensure(portConfig, "portConfig 必须存在。");
 
             ReactDOM.createRoot(container as HTMLElement).render(
               React.createElement(portConfig.component, {

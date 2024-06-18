@@ -170,13 +170,16 @@ const BlueMap = () => {
   useEffect(() => {
     return globalEventBus.on("selectBlueMapSearchPanelItem", ({ configId }) => {
       if (graphRef.current) {
-        const config = nodeConfigsById[configId];
+        const config = nodeConfigsById.get(configId);
+
+        ensure(config, "config 必须存在。");
+
         const allNodes = graphRef.current.getNodes();
         const searchNode = allNodes?.find(
           (node) => node.shape === SearchNodeShape.shape
         );
 
-        ensure(!!searchNode, "searchNode 必须存在。");
+        ensure(searchNode, "searchNode 必须存在。");
 
         const { x, y } = (searchNode as Cell).getProp("position");
 

@@ -1,9 +1,9 @@
-// 将配置转化为以 id 为键的对象
+// 将配置转化为以 id 为键的 Map 对象
 export const createConfigMapById = <T extends { id: string }>(
   configs: T[]
-): { [key: string]: T } => {
+): Map<string, T> => {
   return configs.reduce((acc, config) => {
-    acc[config.id] = config;
+    acc.set(config.id, config);
     return acc;
-  }, {} as { [key: string]: T });
+  }, new Map<string, T>());
 };
