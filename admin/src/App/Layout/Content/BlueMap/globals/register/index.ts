@@ -1,6 +1,6 @@
 import { register } from "@antv/x6-react-shape";
-import { nodeConfigs, portConfigs } from "../configs/configs";
-import { checkDuplicateIds } from "../utils/checkDuplicateIds";
+import { nodeConfigs, portConfigs } from "../../configs/configs";
+import { checkDuplicateIds } from "../../utils/checkDuplicateIds";
 
 import "./registerPortLayout";
 
