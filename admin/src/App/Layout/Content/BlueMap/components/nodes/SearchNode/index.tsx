@@ -30,6 +30,7 @@ const processTreeData = (
       key: item.key,
       configId: item.configId,
       selectable: true, // 叶子节点可选择
+      isLeaf: true,
     } as SearchTreeNode;
   });
 };
@@ -94,12 +95,13 @@ export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
             `
           )}
         />
-        <Tree<SearchTreeNode>
+        <Tree.DirectoryTree<SearchTreeNode>
           blockNode
           onExpand={onExpand}
           expandedKeys={expandedKeys}
           autoExpandParent={autoExpandParent}
           treeData={treeData}
+          showIcon={false}
           onClick={(_e, node) => {
             if (node.configId) {
               globalEventBus.emit("selectBlueMapSearchPanelItem", {
