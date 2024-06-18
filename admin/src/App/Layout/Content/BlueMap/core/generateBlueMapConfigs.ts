@@ -9,11 +9,12 @@ import { BasePortConfig } from "../components/ports/BasePort/config";
 
 // 提取间距常量
 const PORT_SPACING = 20;
-const HEADER_HEIGHT = 50;
-const MIN_WIDTH = 100;
-const MIN_HEIGHT = 100;
+const HEADER_HEIGHT = 40;
+const MIN_WIDTH = 50;
+const MIN_HEIGHT = 50;
+/** 纵向连接桩的间距 */
 const PORT_GROUP_SPACING = 10;
-const DEFAULT_FO_WIDTH = 50;
+const DEFAULT_FO_WIDTH = 100;
 const DEFAULT_FO_HEIGHT = 50;
 const PADDING_X = 10;
 
@@ -48,6 +49,9 @@ function convertConnectionsToPorts(
             id: getPort(connection),
             args: connection.args ?? {},
           },
+        },
+        args: {
+          height: connection.height ?? DEFAULT_FO_HEIGHT,
         },
       });
     });
@@ -102,9 +106,11 @@ export function generateBlueMapConfigs<
       groups: {
         left: {
           position: {
-            name: "leftTop",
+            name: "fromTopToBottom",
             args: {
-              offsetTop: config.connections.left?.offsetTop,
+              position: "left",
+              offsetTop: HEADER_HEIGHT,
+              gap: PORT_GROUP_SPACING,
             } as PortLayout.CommonArgs,
           },
           attrs: {
@@ -120,7 +126,12 @@ export function generateBlueMapConfigs<
         },
         right: {
           position: {
-            name: "rightTop",
+            name: "fromTopToBottom",
+            args: {
+              position: "right",
+              offsetTop: HEADER_HEIGHT,
+              gap: PORT_GROUP_SPACING,
+            } as PortLayout.CommonArgs,
           },
           attrs: {
             fo: {

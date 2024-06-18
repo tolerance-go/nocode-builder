@@ -1,44 +1,19 @@
 import { Graph } from "@antv/x6";
 
-// 注册 leftTop 布局算法
+// 注册 fromTopToBottom 布局算法
 Graph.registerPortLayout(
-  "leftTop",
+  "fromTopToBottom",
   (portsPositionArgs, elemBBox, args) => {
+    const position = args.position || "left"; // 默认位置为左边
     const offsetTop = args.offsetTop || 0;
-    const step =
-      portsPositionArgs.length > 1
-        ? (elemBBox.height - offsetTop) / (portsPositionArgs.length - 1)
-        : 0;
-    return portsPositionArgs.map((_, index) => {
-      const portHeight = _.size ? _.size.height : 0; // 假设 _ 中包含 size 信息
-      const distance = offsetTop + index * (portHeight + step);
-      return {
-        position: {
-          x: 0,
-          y: distance,
-        },
-        angle: 0,
-      };
-    });
-  },
-  true
-);
+    const gap = args.gap || 0;
 
-// 注册 rightTop 布局算法
-Graph.registerPortLayout(
-  "rightTop",
-  (portsPositionArgs, elemBBox, args) => {
-    const offsetTop = args.offsetTop || 0;
-    const step =
-      portsPositionArgs.length > 1
-        ? (elemBBox.height - offsetTop) / (portsPositionArgs.length - 1)
-        : 0;
-    return portsPositionArgs.map((_, index) => {
-      const portHeight = _.size ? _.size.height : 0; // 假设 _ 中包含 size 信息
-      const distance = offsetTop + index * (portHeight + step);
+    return portsPositionArgs.map((port, index) => {
+      const portHeight = port.height ? port.height : 0; // 假设 port 中包含 size 信息
+      const distance = offsetTop + index * (portHeight + gap);
       return {
         position: {
-          x: elemBBox.width,
+          x: position === "left" ? 0 : elemBBox.width,
           y: distance,
         },
         angle: 0,
