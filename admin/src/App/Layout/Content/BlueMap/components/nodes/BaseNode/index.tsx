@@ -1,9 +1,10 @@
+import { Cell } from "@antv/x6";
+import { cx } from "@emotion/css";
 import { Typography } from "antd";
 import React from "react";
 import { X6ReactComponentProps } from "../../../types";
-import { cx } from "@emotion/css";
 
-export interface BaseNodeAttrs {}
+export type BaseNodeAttrs = Cell.Common["attrs"];
 
 export type BaseNodeComponentProps = X6ReactComponentProps & {
   title?: string;
