@@ -10,7 +10,6 @@ export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNode
     component: BranchControlNode,
     connections: {
       left: {
-        offsetTop: 500,
         ports: [
           {
             id: "entry",

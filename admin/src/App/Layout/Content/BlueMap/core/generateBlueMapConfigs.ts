@@ -29,8 +29,8 @@ function convertConnectionsToPorts(
             magnet: "true",
             width: connection.width ?? 50,
             height: connection.height ?? 50,
-            y: -((connection.height ?? 50) / 2),
-            x: group === "right" ? -(connection.width ?? 50) : 0,
+            // y: -((connection.height ?? 50) / 2),
+            x: group === "right" ? -(connection.width ?? 50) - 10 : 10,
           },
           port: {
             id: getPort(connection),
@@ -43,6 +43,10 @@ function convertConnectionsToPorts(
 
   return ports;
 }
+
+// 提取间距常量
+const PORT_SPACING = 20;
+
 export function generateBlueMapConfigs<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
 >(
@@ -53,7 +57,15 @@ export function generateBlueMapConfigs<
 } {
   const shapeConfig: ReactShapeConfig = {
     shape: config.shapeName,
-    width: 300,
+    width: Math.max(
+      300,
+      (config.connections.left?.ports[0]?.width ?? 0) +
+        (config.connections.right?.ports.reduce(
+          (max, port) => Math.max(max, port.width ?? 0),
+          0
+        ) ?? 0) +
+        PORT_SPACING
+    ),
     height: 400,
     component: config.component,
     ports: {
@@ -70,7 +82,7 @@ export function generateBlueMapConfigs<
               magnet: "true",
               width: 50,
               height: 50,
-              y: -25,
+              // y: -25,
             },
             port: {
               id: BasePortConfig.id,
@@ -86,7 +98,7 @@ export function generateBlueMapConfigs<
               magnet: "true",
               width: 50,
               height: 50,
-              y: -25,
+              // y: -25,
               x: -50,
             },
             port: {

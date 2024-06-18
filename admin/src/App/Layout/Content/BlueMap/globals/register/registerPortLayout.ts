@@ -4,19 +4,18 @@ import { Graph } from "@antv/x6";
 Graph.registerPortLayout(
   "leftTop",
   (portsPositionArgs, elemBBox, args) => {
-    const offsetTop = args.offsetTop || 70;
-    const offsetBottom = args.offsetBottom || 40;
+    const offsetTop = args.offsetTop || 0;
     const step =
       portsPositionArgs.length > 1
-        ? (elemBBox.height - offsetTop - offsetBottom) /
-          (portsPositionArgs.length - 1)
+        ? (elemBBox.height - offsetTop) / (portsPositionArgs.length - 1)
         : 0;
     return portsPositionArgs.map((_, index) => {
-      console.log(_);
+      const portHeight = _.size ? _.size.height : 0; // 假设 _ 中包含 size 信息
+      const distance = offsetTop + index * (portHeight + step);
       return {
         position: {
           x: 0,
-          y: offsetTop + index * step,
+          y: distance,
         },
         angle: 0,
       };
@@ -29,18 +28,18 @@ Graph.registerPortLayout(
 Graph.registerPortLayout(
   "rightTop",
   (portsPositionArgs, elemBBox, args) => {
-    const offsetTop = args.offsetTop || 70;
-    const offsetBottom = args.offsetBottom || 40;
+    const offsetTop = args.offsetTop || 0;
     const step =
       portsPositionArgs.length > 1
-        ? (elemBBox.height - offsetTop - offsetBottom) /
-          (portsPositionArgs.length - 1)
+        ? (elemBBox.height - offsetTop) / (portsPositionArgs.length - 1)
         : 0;
     return portsPositionArgs.map((_, index) => {
+      const portHeight = _.size ? _.size.height : 0; // 假设 _ 中包含 size 信息
+      const distance = offsetTop + index * (portHeight + step);
       return {
         position: {
           x: elemBBox.width,
-          y: offsetTop + index * step,
+          y: distance,
         },
         angle: 0,
       };
