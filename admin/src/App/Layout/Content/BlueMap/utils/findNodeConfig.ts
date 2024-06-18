@@ -1,5 +1,5 @@
 import { ensure } from "@/utils/ensure";
-import { nodeConfigs } from "../components/configs";
+import { nodeConfigs } from "../configs/configs";
 
 export const findNodeConfig = (id: string) => {
   const item = nodeConfigs.find((item) => item.id === id);

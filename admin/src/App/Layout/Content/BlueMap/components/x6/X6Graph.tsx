@@ -3,7 +3,7 @@ import { Graph } from "@antv/x6";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
-import { ports } from "../ports";
+import { ports } from "../../configs/ports";
 import { Keyboard } from "@antv/x6-plugin-keyboard";
 import { History } from "@antv/x6-plugin-history";
 

@@ -13,7 +13,7 @@ import {
 import { Cell, Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import "./components/register";
+import "./globals/register";
 import X6Graph from "./components/x6/X6Graph";
 import { findNodeConfig } from "./utils/findNodeConfig";
 
@@ -72,7 +72,6 @@ const BlueMap = () => {
       });
 
       graph.on("history:change", () => {
-        console.log("history:change");
         setCanUndo(graph.canUndo());
         setCanRedo(graph.canRedo());
       });

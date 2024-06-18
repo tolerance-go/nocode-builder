@@ -3,27 +3,14 @@ import { SearchTreeNode } from "./types";
 // 静态数据
 export const defaultData: SearchTreeNode[] = [
   {
-    title: "0-0",
-    key: "0-0",
+    title: "控制流",
+    key: "flow-control",
     selectable: false,
     children: [
       {
-        title: "0-0-0",
-        key: "0-0-0",
-        selectable: false,
-        children: [
-          {
-            configId: "BaseNode",
-            title: "0-0-0-0",
-            key: "0-0-0-0",
-          },
-          {
-            configId: "BaseNode",
-
-            title: "0-0-0-1",
-            key: "0-0-0-1",
-          },
-        ],
+        title: "分支",
+        key: "branch",
+        configId: "FlowControlNode",
       },
       {
         title: "0-0-1",
