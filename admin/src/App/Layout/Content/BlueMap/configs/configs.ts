@@ -1,4 +1,4 @@
-import { FlowControlNodeConfigs } from "../components/maps/nodes/FlowControlNode/config";
+import { BranchControlNodeConfigs } from "../components/maps/nodes/BranchControlNode/config";
 import { BaseNodeConfig } from "../components/nodes/BaseNode/config";
 import { SearchNodeConfig } from "../components/nodes/SearchNode/config";
 import { ArrowPortConfig } from "../components/ports/ArrowPort/config";
@@ -8,7 +8,7 @@ import { createConfigMapById } from "../utils/createConfigMapById";
 export const nodeConfigs = [
   BaseNodeConfig,
   SearchNodeConfig,
-  FlowControlNodeConfigs.nodeConfig,
+  BranchControlNodeConfigs.nodeConfig,
 ];
 
 export const portConfigs = [BasePortConfig, ArrowPortConfig];

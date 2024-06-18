@@ -1,3 +1,4 @@
+import { BranchControlNodeConfigs } from "./components/maps/nodes/BranchControlNode/config";
 import { SearchTreeNode } from "./types";
 
 // 静态数据
@@ -10,7 +11,7 @@ export const defaultData: SearchTreeNode[] = [
       {
         title: "分支",
         key: "branch",
-        configId: "FlowControlNode",
+        configId: BranchControlNodeConfigs.nodeConfig.id,
       },
       {
         title: "0-0-1",
