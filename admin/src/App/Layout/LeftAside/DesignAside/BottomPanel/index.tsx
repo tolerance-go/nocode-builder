@@ -4,6 +4,7 @@ import { Button, Space } from "antd";
 import { useSearchParams } from "react-router-dom";
 import Editor from "./Editor";
 import TreeList from "./TreeList";
+import { PlusOutlined } from "@ant-design/icons";
 
 type TreePanel = "tree" | "editor";
 
@@ -31,6 +32,10 @@ export const BottomPanel = () => {
             <Button
               type="text"
               size="small"
+              className="group"
+              icon={
+                <PlusOutlined className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+              }
               onClick={() => {
                 setSearchParams(
                   updateSearchParams(searchParams, {
@@ -38,9 +43,7 @@ export const BottomPanel = () => {
                   })
                 );
               }}
-            >
-              添加
-            </Button>
+            ></Button>
           </Space>
         }
         activeKey={treePanel}

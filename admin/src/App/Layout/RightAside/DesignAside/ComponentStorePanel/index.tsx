@@ -1,7 +1,7 @@
 import { NavTabs } from "@/components/NavTabs";
 import { updateSearchParams } from "@/utils/updateSearchParams";
-import { SearchOutlined } from "@ant-design/icons";
-import { css } from "@emotion/css";
+import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
+import { css, cx } from "@emotion/css";
 import { Button, Input, Segmented, Space } from "antd";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
@@ -32,7 +32,11 @@ export const ComponentStorePanel = () => {
             <Space className="px-2">
               <Button
                 size="small"
+                className="group"
                 type="text"
+                icon={
+                  <CloseOutlined className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+                }
                 onClick={() => {
                   setSearchParams(
                     updateSearchParams(searchParams, {
@@ -40,11 +44,14 @@ export const ComponentStorePanel = () => {
                     })
                   );
                 }}
-              >
-                关闭
-              </Button>
+              ></Button>
             </Space>
           }
+          className={css`
+            .ant-tabs-tab-btn {
+              font-size: 13px;
+            }
+          `}
           activeKey={storeLib}
           items={[
             {
@@ -67,9 +74,15 @@ export const ComponentStorePanel = () => {
         <NavTabs
           tabBarExtraContent={
             <Space className="px-2">
-              <Button size="small" type="text">
-                新增
-              </Button>
+              <Button
+                type="text"
+                className="group"
+                size="small"
+                icon={
+                  <SearchOutlined className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+                }
+                onClick={() => setIsSearching(true)} // 点击搜索按钮时显示搜索框
+              />
             </Space>
           }
           activeKey={storeSubLib}
@@ -96,51 +109,48 @@ export const ComponentStorePanel = () => {
             );
           }}
         />
-        <div className="px-2 pb-2.5 pt-4">
+        {isSearching ? (
+          <div className="border-b">
+            <Input
+              variant="borderless"
+              placeholder="搜索"
+              onBlur={() => setIsSearching(false)} // 当搜索框失去焦点时恢复原状
+              autoFocus
+              className={"pl-4 pr-3 py-1.5"}
+              allowClear
+              style={{ fontSize: "13px" }}
+            />
+          </div>
+        ) : null}
+        <div className="px-4 pb-2.5 pt-4">
           <div className="flex items-center gap-2">
             <div className="flex-grow">
-              {isSearching ? (
-                <Input
-                  placeholder="搜索"
-                  onBlur={() => setIsSearching(false)} // 当搜索框失去焦点时恢复原状
-                  autoFocus
-                />
-              ) : (
-                <Segmented<SegmentedType>
-                  options={[
-                    {
-                      label: "组件",
-                      value: "component",
-                    },
-                    {
-                      label: "区块",
-                      value: "section",
-                    },
-                    {
-                      label: "模板",
-                      value: "template",
-                    },
-                  ]}
-                  block
-                  value={segmented}
-                  onChange={(val) => {
-                    setSearchParams(
-                      updateSearchParams(searchParams, {
-                        segmented: val,
-                      })
-                    );
-                  }}
-                />
-              )}
+              <Segmented<SegmentedType>
+                options={[
+                  {
+                    label: "组件",
+                    value: "component",
+                  },
+                  {
+                    label: "区块",
+                    value: "section",
+                  },
+                  {
+                    label: "模板",
+                    value: "template",
+                  },
+                ]}
+                block
+                value={segmented}
+                onChange={(val) => {
+                  setSearchParams(
+                    updateSearchParams(searchParams, {
+                      segmented: val,
+                    })
+                  );
+                }}
+              />
             </div>
-            <Button
-              type="text"
-              className="group"
-              icon={
-                <SearchOutlined className="text-gray-500 group-hover:text-gray-900 transition-colors" />
-              }
-              onClick={() => setIsSearching(true)} // 点击搜索按钮时显示搜索框
-            />
           </div>
         </div>
         <div className="flex-grow">

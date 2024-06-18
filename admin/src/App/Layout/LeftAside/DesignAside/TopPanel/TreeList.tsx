@@ -268,15 +268,17 @@ const TreeList: React.FC = () => {
     <div className="bg-white border-b h-[400px]">
       <div className="flex items-center justify-between py-1 border-b h-[34px]">
         <Typography.Text className="ml-[16px]">页面路由</Typography.Text>
-        <Space className="px-2">
+        {/* <Space className="px-2">
           <Button
             type="text"
             size="small"
+            className="group"
+            icon={
+              <PlusOutlined className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+            }
             onClick={() => latestAddNode.current(null)}
-          >
-            新增
-          </Button>
-        </Space>
+          ></Button>
+        </Space> */}
       </div>
       <div className="p-2">
         <Tree
