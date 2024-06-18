@@ -54,14 +54,14 @@ export const ArrowPort = (props: ReactPortComponentProps) => {
     <BasePort {...props}>
       <div
         className={cx(
-          "h-[100%] flex items-center justify-start gap-2",
+          "h-[100%] flex items-center justify-start gap-1",
           port.group === "left" ? "flex-row" : "flex-row-reverse"
         )}
       >
         <CaretRightFilled
           className={cx(
             !isConnected ? "text-gray-400" : "text-green-600",
-            'text-3xl'
+            "text-3xl"
           )}
         />
         {args.text && <span>{args.text}</span>}
