@@ -122,36 +122,32 @@ export const ComponentStorePanel = () => {
             />
           </div>
         ) : null}
-        <div className="px-4 pb-2.5 pt-4">
-          <div className="flex items-center gap-2">
-            <div className="flex-grow">
-              <Segmented<SegmentedType>
-                options={[
-                  {
-                    label: "组件",
-                    value: "component",
-                  },
-                  {
-                    label: "区块",
-                    value: "section",
-                  },
-                  {
-                    label: "模板",
-                    value: "template",
-                  },
-                ]}
-                block
-                value={segmented}
-                onChange={(val) => {
-                  setSearchParams(
-                    updateSearchParams(searchParams, {
-                      segmented: val,
-                    })
-                  );
-                }}
-              />
-            </div>
-          </div>
+        <div className="px-3 py-3">
+          <Segmented<SegmentedType>
+            options={[
+              {
+                label: "组件",
+                value: "component",
+              },
+              {
+                label: "区块",
+                value: "section",
+              },
+              {
+                label: "模板",
+                value: "template",
+              },
+            ]}
+            block
+            value={segmented}
+            onChange={(val) => {
+              setSearchParams(
+                updateSearchParams(searchParams, {
+                  segmented: val,
+                })
+              );
+            }}
+          />
         </div>
         <div className="flex-grow">
           {segmented === "component" && <ComponentStore />}

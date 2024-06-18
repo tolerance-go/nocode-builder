@@ -21,7 +21,7 @@ export const ComponentStore: React.FC = () => {
     <Collapse
       className={css`
         .ant-collapse-content-box {
-          padding: 0 !important;
+          padding: 0px !important;
         }
       `}
       items={items}
