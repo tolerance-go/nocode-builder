@@ -52,11 +52,11 @@ export const ComponentStorePanel = () => {
           activeKey={storeLib}
           items={[
             {
-              label: "桌面端",
+              label: "桌面",
               key: "pc",
             },
             {
-              label: "移动端",
+              label: "移动",
               key: "mobile",
             },
           ]}
@@ -123,7 +123,7 @@ export const ComponentStorePanel = () => {
             />
           </div>
         ) : null}
-        <div className="flex-grow">
+        <div className="flex-grow pt-1">
           <ComponentStore />
         </div>
       </div>
