@@ -11,7 +11,7 @@ import { ArrowPortConfig } from "../../ports/ArrowPort/config";
 import { BasePortConfig } from "../../ports/BasePort/config";
 
 const getPort = (connection: BlueMapConnectPort) => {
-  if (connection.id === ArrowPortConfig.id) {
+  if (connection.type === 'exec') {
     return ArrowPortConfig.id;
   }
   return BasePortConfig.id;

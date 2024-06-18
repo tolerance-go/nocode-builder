@@ -80,7 +80,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             const id = args.port.attrs?.port.id;
 
             ensure(
-              id && typeof id === "string",
+              typeof id === "string" && id,
               "port.attrs.port.id 必须存在。"
             );
 
