@@ -1,5 +1,5 @@
 import { ReactShapeConfig } from "@antv/x6-react-shape";
-import { BaseNode } from ".";
+import { BaseNode, BaseNodeAttrs } from ".";
 import { NodeConfig } from "../../../types";
 
 export const BaseNodeShape: ReactShapeConfig = {
@@ -42,7 +42,7 @@ export const BaseNodeShape: ReactShapeConfig = {
   },
 };
 
-export const BaseNodeConfig: NodeConfig = {
+export const BaseNodeConfig: NodeConfig<BaseNodeAttrs> = {
   id: "BaseNode",
   shape: BaseNodeShape.shape,
   ports: {

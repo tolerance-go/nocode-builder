@@ -6,6 +6,7 @@ import ReactDOM from "react-dom/client";
 import { ports } from "../../configs/ports";
 import { Keyboard } from "@antv/x6-plugin-keyboard";
 import { History } from "@antv/x6-plugin-history";
+import { SearchNodeShape } from "../nodes/SearchNode/config";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -58,7 +59,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
         },
         interacting: {
           nodeMovable(cellView) {
-            if (cellView.cell.shape === "search-node") {
+            if (cellView.cell.shape === SearchNodeShape.shape) {
               return false;
             }
             return true;
@@ -105,7 +106,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           showNodeSelectionBox: true, // 显示节点选择框
           eventTypes: ["leftMouseDown"], // 触发选择操作的事件类型，这里设置为鼠标左键按下
           filter(cell) {
-            return cell.shape !== "search-node"; // 过滤器，排除 shape 类型为 "search-node" 的节点不被选择
+            return cell.shape !== SearchNodeShape.shape; // 过滤器，排除 shape 类型为 "search-node" 的节点不被选择
           },
         })
       );

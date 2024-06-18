@@ -16,6 +16,7 @@ import { useCallback, useEffect, useState } from "react";
 import "./globals/register";
 import X6Graph from "./components/x6/X6Graph";
 import { findNodeConfig } from "./utils/findNodeConfig";
+import { SearchNodeShape } from "./components/nodes/SearchNode/config";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -26,7 +27,7 @@ const BlueMap = () => {
     /** 回撤的过程中，可能出现多个 search node 同时出现的情况 */
     const allNodes = graph?.getNodes();
     allNodes?.forEach((node) => {
-      if (node.shape === "search-node") {
+      if (node.shape === SearchNodeShape.shape) {
         graph?.removeCell(node);
       }
     });
@@ -67,7 +68,7 @@ const BlueMap = () => {
 
         // 创建新的 search-node
         graph.addNode({
-          shape: "search-node",
+          shape: SearchNodeShape.shape,
           x,
           y,
         });
@@ -78,7 +79,7 @@ const BlueMap = () => {
       });
 
       graph.on("node:mouseup", ({ node }) => {
-        if (node.shape !== "search-node") {
+        if (node.shape !== SearchNodeShape.shape) {
           removeSearchNodeRef.current();
         }
       });
@@ -116,7 +117,7 @@ const BlueMap = () => {
         if (!targetPort && !targetCell) {
           const { x, y } = graph.clientToLocal({ x: e.clientX, y: e.clientY });
           graph.addNode({
-            shape: "search-node",
+            shape: SearchNodeShape.shape,
             x,
             y,
           });
@@ -172,7 +173,7 @@ const BlueMap = () => {
         const config = findNodeConfig(configId);
         const allNodes = graphRef.current.getNodes();
         const searchNode = allNodes?.find(
-          (node) => node.shape === "search-node"
+          (node) => node.shape === SearchNodeShape.shape
         );
 
         ensure(!!searchNode, "searchNode 必须存在。");
@@ -187,6 +188,7 @@ const BlueMap = () => {
           y,
           ports: config.ports,
           portMarkup: [Markup.getForeignObjectMarkup()],
+          attrs: config.attrs,
         });
       }
     });

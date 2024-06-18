@@ -1,8 +1,10 @@
-import { FlowControlNode } from ".";
+import { FlowControlNode, FlowControlNodeAttrs } from ".";
+import { BlueMapNodeConfig } from "../../../../types";
 import { generateBlueMapConfigs } from "../../base/generateBlueMapConfigs";
-import { BlueMapNodeConfig } from "../../base/types";
 
-export const _FlowControlNodeConfig: BlueMapNodeConfig = {
+export const _FlowControlNodeConfig: BlueMapNodeConfig<FlowControlNodeAttrs> = {
+  id: "FlowControlNode",
+  shapeName: "flow-control-node",
   type: "flowControl",
   component: FlowControlNode,
   connections: {
@@ -22,6 +24,11 @@ export const _FlowControlNodeConfig: BlueMapNodeConfig = {
         type: "exec",
       },
     ],
+  },
+  attrs: {
+    style: {
+      titleBgColor: "red",
+    },
   },
 };
 
