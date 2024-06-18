@@ -1,11 +1,13 @@
-import { RightCircleFilled } from "@ant-design/icons";
-import { ReactPortComponentProps } from "../../../types";
-import { BasePort } from "../BasePort";
-import { useEffect, useState } from "react";
+import { RightSquareFilled } from "@ant-design/icons";
 import { Edge } from "@antv/x6";
+import { useEffect, useState } from "react";
+import { ReactPortCommonArgs, ReactPortComponentProps } from "../../../types";
+import { BasePort } from "../BasePort";
 
 export const ArrowPort = (props: ReactPortComponentProps) => {
   const { node, port, graph } = props;
+  const args = port.attrs?.port.args as ReactPortCommonArgs;
+
   const [isConnected, setIsConnected] = useState(false);
 
   useEffect(() => {
@@ -36,7 +38,12 @@ export const ArrowPort = (props: ReactPortComponentProps) => {
 
   return (
     <BasePort {...props}>
-      <RightCircleFilled style={{ color: isConnected ? "green" : "red" }} />
+      <div className="h-[100%] flex justify-center items-center">
+        {args.text}
+        <RightSquareFilled
+          style={{ color: isConnected ? "green" : "red", fontSize: 32 }}
+        />
+      </div>
     </BasePort>
   );
 };

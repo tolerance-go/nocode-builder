@@ -1,7 +1,11 @@
 import { Cell, Graph, Node } from "@antv/x6";
-import { DataNode } from "antd/es/tree";
-import { PortManager } from "@antv/x6/es/model/port";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
+import { PortManager } from "@antv/x6/es/model/port";
+import { DataNode } from "antd/es/tree";
+
+export type ReactPortCommonArgs = {
+  text?: string;
+};
 
 export type BlueMapConnectPort = {
   /**
@@ -14,6 +18,9 @@ export type BlueMapConnectPort = {
    */
   type: "exec" | "ref" | "returnValue" | "condition" | "string" | "int";
   id: string;
+  args?: ReactPortCommonArgs;
+  width?: number;
+  height?: number;
 };
 
 export interface BlueMapNodeConfig<

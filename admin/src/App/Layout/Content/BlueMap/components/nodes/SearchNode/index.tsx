@@ -78,35 +78,37 @@ export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
 
   return (
     <BaseNode title="此蓝图的所有操作" {...props}>
-      <Search
-        placeholder="输入搜索内容"
-        onChange={onChange}
-        autoFocus
-        onKeyDown={handleKeyDown}
-        size="small"
-        className={cx(
-          "mb-2",
-          css`
-            .ant-input {
-              height: 24px;
+      <div className="p-2">
+        <Search
+          placeholder="输入搜索内容"
+          onChange={onChange}
+          autoFocus
+          onKeyDown={handleKeyDown}
+          size="small"
+          className={cx(
+            "mb-2",
+            css`
+              .ant-input {
+                height: 24px;
+              }
+            `
+          )}
+        />
+        <Tree<SearchTreeNode>
+          blockNode
+          onExpand={onExpand}
+          expandedKeys={expandedKeys}
+          autoExpandParent={autoExpandParent}
+          treeData={treeData}
+          onClick={(_e, node) => {
+            if (node.configId) {
+              globalEventBus.emit("selectBlueMapSearchPanelItem", {
+                configId: node.configId,
+              });
             }
-          `
-        )}
-      />
-      <Tree<SearchTreeNode>
-        blockNode
-        onExpand={onExpand}
-        expandedKeys={expandedKeys}
-        autoExpandParent={autoExpandParent}
-        treeData={treeData}
-        onClick={(_e, node) => {
-          if (node.configId) {
-            globalEventBus.emit("selectBlueMapSearchPanelItem", {
-              configId: node.configId,
-            });
-          }
-        }}
-      />
+          }}
+        />
+      </div>
     </BaseNode>
   );
 };

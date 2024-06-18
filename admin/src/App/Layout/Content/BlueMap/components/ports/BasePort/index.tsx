@@ -5,5 +5,5 @@ export const BasePort = ({
 }: ReactPortComponentProps & {
   children?: React.ReactNode;
 }) => {
-  return <div className="bg-gray-300 cursor-pointer h-[100%]">{children}</div>;
+  return <div className="bg-gray-200 h-[100%]">{children}</div>;
 };

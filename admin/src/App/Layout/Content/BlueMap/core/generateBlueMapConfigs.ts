@@ -2,11 +2,7 @@ import { typedKeys } from "@/utils/typedKeys";
 import { Cell } from "@antv/x6";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
-import {
-  BlueMapConnectPort,
-  BlueMapNodeConfig,
-  NodeConfig,
-} from "../types";
+import { BlueMapConnectPort, BlueMapNodeConfig, NodeConfig } from "../types";
 import { ArrowPortConfig } from "../components/ports/ArrowPort/config";
 import { BasePortConfig } from "../components/ports/BasePort/config";
 
@@ -28,8 +24,16 @@ function convertConnectionsToPorts(
         id: connection.id,
         group,
         attrs: {
+          fo: {
+            magnet: "true",
+            width: connection.width ?? 50,
+            height: connection.height ?? 50,
+            y: -((connection.height ?? 50) / 2),
+            x: group === "right" ? -(connection.width ?? 50) : 0,
+          },
           port: {
             id: getPort(connection),
+            args: connection.args ?? {},
           },
         },
       });
