@@ -7,7 +7,7 @@ import { BlueMapConnectPort, BlueMapNodeConfig, NodeConfig } from "../types";
 import { ArrowPortConfig } from "../components/ports/ArrowPort/config";
 import { BasePortConfig } from "../components/ports/BasePort/config";
 
-// 提取间距常量
+// 左右中间的间距
 const PORT_SPACING = 20;
 const HEADER_HEIGHT = 40;
 const MIN_WIDTH = 50;
