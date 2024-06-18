@@ -39,6 +39,23 @@ const BlueMap = () => {
     (graph: Graph) => {
       setGraph(graph);
 
+      // 加载图表数据
+      function loadGraphData() {
+        const data = localStorage.getItem("graphData");
+        if (data) {
+          graph.fromJSON(JSON.parse(data));
+          console.log("Graph data loaded:", JSON.parse(data));
+        } else {
+          console.log("No graph data found.");
+        }
+      }
+
+      function saveGraphData() {
+        const data = graph.toJSON();
+        localStorage.setItem("graphData", JSON.stringify(data));
+        console.log("Graph data saved:", data);
+      }
+
       graph.on("blank:contextmenu", ({ e }) => {
         e.preventDefault();
 
@@ -101,6 +118,14 @@ const BlueMap = () => {
           });
         }
       });
+
+      graph.on("cell:change", saveGraphData);
+      graph.on("cell:added", saveGraphData);
+      graph.on("cell:removed", saveGraphData);
+      graph.on('node:moved', saveGraphData);
+      graph.on('edge:moved', saveGraphData);
+
+      loadGraphData();
 
       return () => {
         graph.dispose();
