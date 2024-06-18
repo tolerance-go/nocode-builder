@@ -1,12 +1,13 @@
 import { ensure } from "@/utils/ensure";
-import { Graph } from "@antv/x6";
+import { Graph, Shape } from "@antv/x6";
 import { History } from "@antv/x6-plugin-history";
 import { Keyboard } from "@antv/x6-plugin-keyboard";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
-import { SearchNodeShape } from "../nodes/SearchNode/config";
 import { portConfigsById } from "../../configs/configs";
+import { SearchNodeShape } from "../nodes/SearchNode/config";
+import colors from "tailwindcss/colors";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -58,7 +59,22 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           },
           // allowPort() {
           //   return false;
-          // }, 
+          // },
+          // validateMagnet() {
+          //   return false;
+          // }
+          createEdge() {
+            return new Shape.Edge({
+              attrs: {
+                line: {
+                  targetMarker: null,
+                  strokeLinecap: 'round',
+                  stroke: colors.green[600], // 设置线的颜色为黑色
+                  strokeWidth: 2,
+                },
+              },
+            });
+          },
         },
         interacting: {
           nodeMovable(cellView) {

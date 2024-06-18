@@ -67,6 +67,9 @@ importers:
       store2:
         specifier: ^2.14.3
         version: 2.14.3
+      tailwindcss:
+        specifier: ^3.4.4
+        version: 3.4.4
       valtio:
         specifier: ^1.13.2
         version: 1.13.2(@types/react@18.3.3)(react@18.3.1)
@@ -122,9 +125,6 @@ importers:
       postcss:
         specifier: ^8.4.38
         version: 8.4.38
-      tailwindcss:
-        specifier: ^3.4.4
-        version: 3.4.4
       typescript:
         specifier: ^5.2.2
         version: 5.4.5
