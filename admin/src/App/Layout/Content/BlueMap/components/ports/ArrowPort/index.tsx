@@ -59,8 +59,10 @@ export const ArrowPort = (props: ReactPortComponentProps) => {
         )}
       >
         <CaretRightFilled
-          style={{ fontSize: 32 }}
-          className={!isConnected ? "text-gray-400" : "text-green-600"}
+          className={cx(
+            !isConnected ? "text-gray-400" : "text-green-600",
+            'text-3xl'
+          )}
         />
         {args.text && <span>{args.text}</span>}
       </div>
