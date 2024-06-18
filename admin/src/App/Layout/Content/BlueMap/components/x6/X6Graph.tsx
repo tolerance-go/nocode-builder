@@ -56,6 +56,9 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           connector: {
             name: "rounded",
           },
+          // allowPort() {
+          //   return false;
+          // }, 
         },
         interacting: {
           nodeMovable(cellView) {
@@ -64,6 +67,9 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             }
             return true;
           },
+          // magnetConnectable(cellView) {
+          //   return false;
+          // },
         },
         mousewheel: {
           enabled: true,
