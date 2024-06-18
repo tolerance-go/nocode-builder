@@ -45,6 +45,11 @@ export type NodeConfig<
   attrs?: Attrs;
 };
 
+export type PortConfig = {
+  id: string;
+  component: React.FC<ReactPortComponentProps>;
+};
+
 export interface SearchTreeNode extends DataNode {
   configId?: string;
   children?: SearchTreeNode[];
@@ -55,12 +60,8 @@ export interface X6ReactComponentProps {
   graph: Graph;
 }
 
-export type BasePortLabelProps = {
+export type ReactPortComponentProps = {
   node: Node;
   port: PortManager.Port;
-};
-
-export type BasePortProps = {
-  node: Node;
-  port: PortManager.Port;
+  graph: Graph;
 };

@@ -1,12 +1,12 @@
 import { ensure } from "@/utils/ensure";
 import { Graph } from "@antv/x6";
+import { History } from "@antv/x6-plugin-history";
+import { Keyboard } from "@antv/x6-plugin-keyboard";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
-import { ports } from "../../configs/ports";
-import { Keyboard } from "@antv/x6-plugin-keyboard";
-import { History } from "@antv/x6-plugin-history";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
+import { portConfigsById } from "../../configs/configs";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -77,18 +77,20 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
         onPortRendered(args) {
           const container = args.contentSelectors?.foContent;
           if (container) {
-            const type = args.port.attrs?.port.type;
+            const id = args.port.attrs?.port.id;
 
-            ensure(typeof type === "string", "port.attrs.port.type 必须存在。");
+            ensure(
+              id && typeof id === "string",
+              "port.attrs.port.id 必须存在。"
+            );
 
-            const portComp = ports[type];
-
-            ensure(!!portComp, "portComp 没有对应组件。");
+            const portConfig = portConfigsById[id];
 
             ReactDOM.createRoot(container as HTMLElement).render(
-              React.createElement(portComp, {
+              React.createElement(portConfig.component, {
                 node: args.node,
                 port: args.port,
+                graph,
               })
             );
           }

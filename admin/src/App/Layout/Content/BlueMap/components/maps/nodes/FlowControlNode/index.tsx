@@ -1,7 +1,8 @@
+import { Cell } from "@antv/x6";
 import { X6ReactComponentProps } from "../../../../types";
-import { BaseNode, BaseNodeAttrs } from "../../../nodes/BaseNode";
+import { BaseNode } from "../../../nodes/BaseNode";
 
-export type FlowControlNodeAttrs = BaseNodeAttrs;
+export type FlowControlNodeAttrs = Cell.Common["attrs"];
 
 export const FlowControlNode = (props: X6ReactComponentProps) => {
   return (

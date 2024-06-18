@@ -1,6 +1,6 @@
 export function ensure(
-  condition: boolean,
-  ...messages: unknown[]
+  condition: unknown,
+  ...messages: string[]
 ): asserts condition {
   if (!condition) {
     const formattedMessages = messages

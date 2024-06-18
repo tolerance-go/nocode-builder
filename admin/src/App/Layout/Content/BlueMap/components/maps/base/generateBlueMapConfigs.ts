@@ -2,7 +2,20 @@ import { typedKeys } from "@/utils/typedKeys";
 import { Cell } from "@antv/x6";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
-import { BlueMapNodeConfig, NodeConfig } from "../../../types";
+import {
+  BlueMapConnectPort,
+  BlueMapNodeConfig,
+  NodeConfig,
+} from "../../../types";
+import { ArrowPortConfig } from "../../ports/ArrowPort/config";
+import { BasePortConfig } from "../../ports/BasePort/config";
+
+const getPort = (connection: BlueMapConnectPort) => {
+  if (connection.id === ArrowPortConfig.id) {
+    return ArrowPortConfig.id;
+  }
+  return BasePortConfig.id;
+};
 
 function convertConnectionsToPorts(
   connections: BlueMapNodeConfig["connections"]
@@ -13,8 +26,12 @@ function convertConnectionsToPorts(
     connections[group]?.forEach((connection) => {
       ports.push({
         id: connection.id,
-        group: group,
-        attrs: {},
+        group,
+        attrs: {
+          port: {
+            id: getPort(connection),
+          },
+        },
       });
     });
   });
@@ -46,7 +63,7 @@ export function generateBlueMapConfigs<
               y: -25,
             },
             port: {
-              type: "BasePort",
+              id: BasePortConfig.id,
             },
           },
         },
@@ -61,7 +78,7 @@ export function generateBlueMapConfigs<
               x: -50,
             },
             port: {
-              type: "BasePort",
+              id: BasePortConfig.id,
             },
           },
         },

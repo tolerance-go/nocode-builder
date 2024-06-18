@@ -13,10 +13,10 @@ import {
 import { Cell, Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import "./globals/register";
-import X6Graph from "./components/x6/X6Graph";
-import { findNodeConfig } from "./utils/findNodeConfig";
 import { SearchNodeShape } from "./components/nodes/SearchNode/config";
+import X6Graph from "./components/x6/X6Graph";
+import { nodeConfigsById } from "./configs/configs";
+import "./globals/register";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -170,7 +170,7 @@ const BlueMap = () => {
   useEffect(() => {
     return globalEventBus.on("selectBlueMapSearchPanelItem", ({ configId }) => {
       if (graphRef.current) {
-        const config = findNodeConfig(configId);
+        const config = nodeConfigsById[configId];
         const allNodes = graphRef.current.getNodes();
         const searchNode = allNodes?.find(
           (node) => node.shape === SearchNodeShape.shape

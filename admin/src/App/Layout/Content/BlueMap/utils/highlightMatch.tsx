@@ -1,5 +1,4 @@
 import React from "react";
-import { SearchTreeNode } from "../types";
 
 // 高亮匹配文本的函数
 export const highlightMatch = (
