@@ -190,9 +190,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
 
             const strokeColor = config.edgeConfig.color;
 
-            const group = portTypeElement.getAttribute(
-              "data-port-group"
-            );
+            const group = portTypeElement.getAttribute("data-port-group");
 
             ensure(typeof group === "string", "group 必须存在。");
 
@@ -202,7 +200,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                   targetMarker: null,
                   strokeLinecap: "round",
                   stroke: strokeColor, // 根据 portType 设置线的颜色
-                  strokeWidth: 2,
+                  strokeWidth: config.edgeConfig.strokeWidth,
                 },
               },
               router: {

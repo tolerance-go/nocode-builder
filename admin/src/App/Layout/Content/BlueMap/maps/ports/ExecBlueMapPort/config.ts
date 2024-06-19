@@ -8,6 +8,7 @@ export const ExecBlueMapPortConfig: BlueMapPortConfig = {
   component: ExecBlueMapPort,
   portConfigId: ArrowPortConfig.id,
   edgeConfig: {
+    strokeWidth: 2.5,
     color: colors.gray[900],
   },
   constraints: {
