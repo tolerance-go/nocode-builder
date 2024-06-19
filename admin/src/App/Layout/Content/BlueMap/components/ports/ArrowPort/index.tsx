@@ -2,12 +2,11 @@ import { CaretRightFilled } from "@ant-design/icons";
 import { Edge } from "@antv/x6";
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
-import { ReactPortCommonArgs, ReactPortComponentProps } from "../../../types";
+import { ReactPortComponentProps } from "../../../types";
 import { BasePort } from "../BasePort";
 
 export const ArrowPort = (props: ReactPortComponentProps) => {
-  const { node, port, graph } = props;
-  const args = port.attrs?.port.args as ReactPortCommonArgs;
+  const { node, port, graph, blueMapPort } = props;
 
   const [isConnected, setIsConnected] = useState(false);
 
@@ -51,7 +50,7 @@ export const ArrowPort = (props: ReactPortComponentProps) => {
   }, [graph, node, port.id, port.group]);
 
   return (
-    <BasePort {...props}>
+    <BasePort {...props} type={blueMapPort.config.type}>
       <div
         className={cx(
           "h-[100%] flex items-center justify-start gap-1",
@@ -64,7 +63,7 @@ export const ArrowPort = (props: ReactPortComponentProps) => {
             "text-3xl"
           )}
         />
-        {args.text && <span>{args.text}</span>}
+        {blueMapPort.args?.text && <span>{blueMapPort.args?.text}</span>}
       </div>
     </BasePort>
   );

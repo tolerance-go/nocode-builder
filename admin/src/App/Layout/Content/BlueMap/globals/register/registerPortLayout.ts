@@ -8,8 +8,8 @@ Graph.registerPortLayout(
     const offsetTop = args.offsetTop || 0;
     const gap = args.gap || 0;
 
-    return portsPositionArgs.map((port, index) => {
-      const portHeight = port.height ? port.height : 0; // 假设 port 中包含 size 信息
+    return portsPositionArgs.map((portArgs, index) => {
+      const portHeight = portArgs.height ? portArgs.height : 0; // 假设 port 中包含 size 信息
       const distance = offsetTop + index * (portHeight + gap);
       return {
         position: {

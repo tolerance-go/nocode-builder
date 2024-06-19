@@ -3,11 +3,17 @@ import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
 import { DataNode } from "antd/es/tree";
 
-export type ReactPortCommonArgs = {
+export type BlueMapPortCommonArgs = {
   text?: string;
+  type?: string;
 };
 
-export type BlueMapConnectPort = {
+export type BlueMapPortConfig = {
+  type: "exec" | "ref" | "returnValue" | "condition" | "string" | "int";
+  portConfig: PortConfig;
+};
+
+export type BlueMapPort = {
   /**
    * exec - 执行
    * ref - 对象引用
@@ -16,9 +22,9 @@ export type BlueMapConnectPort = {
    * string - 字符串
    * int - 整数
    */
-  type: "exec" | "ref" | "returnValue" | "condition" | "string" | "int";
+  type: BlueMapPortConfig["type"];
   id: string;
-  args?: ReactPortCommonArgs;
+  args?: BlueMapPortCommonArgs;
   width?: number;
   height?: number;
 };
@@ -28,7 +34,7 @@ export type Connection = {
   offsetTop?: number;
   /** 连接桩一侧距离结束的距离 */
   offsetBottom?: number;
-  ports: BlueMapConnectPort[];
+  ports: BlueMapPort[];
 };
 
 export interface BlueMapNodeConfig<
@@ -79,4 +85,8 @@ export type ReactPortComponentProps = {
   node: Node;
   port: PortManager.Port;
   graph: Graph;
+  blueMapPort: {
+    config: BlueMapPortConfig;
+    args?: BlueMapPortCommonArgs;
+  };
 };

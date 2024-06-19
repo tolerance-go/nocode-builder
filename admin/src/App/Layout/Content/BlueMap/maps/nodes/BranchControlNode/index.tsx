@@ -1,6 +1,6 @@
 import { Cell } from "@antv/x6";
 import { X6ReactComponentProps } from "../../../types";
-import { BaseNode } from "../../nodes/BaseNode";
+import { BaseNode } from "../../../components/nodes/BaseNode";
 
 export type BranchControlNodeAttrs = Cell.Common["attrs"];
 

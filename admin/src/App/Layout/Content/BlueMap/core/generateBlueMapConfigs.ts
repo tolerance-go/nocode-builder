@@ -1,11 +1,10 @@
 import { typedKeys } from "@/utils/typedKeys";
 import { Cell } from "@antv/x6";
-import { PortLayout } from "@antv/x6/es/registry/port-layout";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
-import { BlueMapConnectPort, BlueMapNodeConfig, NodeConfig } from "../types";
-import { ArrowPortConfig } from "../components/ports/ArrowPort/config";
+import { PortLayout } from "@antv/x6/es/registry/port-layout";
 import { BasePortConfig } from "../components/ports/BasePort/config";
+import { BlueMapNodeConfig, NodeConfig } from "../types";
 
 // 左右中间的间距
 const PORT_SPACING = 20;
@@ -18,40 +17,33 @@ const DEFAULT_FO_WIDTH = 100;
 const DEFAULT_FO_HEIGHT = 50;
 const PADDING_X = 10;
 
-const getPort = (connection: BlueMapConnectPort) => {
-  if (connection.type === "exec") {
-    return ArrowPortConfig.id;
-  }
-  return BasePortConfig.id;
-};
-
 function convertConnectionsToPorts(
   connections: BlueMapNodeConfig["connections"]
 ): PortManager.PortMetadata[] {
   const ports: PortManager.PortMetadata[] = [];
 
   typedKeys(connections).forEach((group) => {
-    connections[group]?.ports.forEach((connection) => {
+    connections[group]?.ports.forEach((blueMapPort) => {
       ports.push({
-        id: connection.id,
+        id: blueMapPort.id,
         group,
         attrs: {
           fo: {
             magnet: "true",
-            width: connection.width ?? DEFAULT_FO_WIDTH,
-            height: connection.height ?? DEFAULT_FO_HEIGHT,
+            width: blueMapPort.width ?? DEFAULT_FO_WIDTH,
+            height: blueMapPort.height ?? DEFAULT_FO_HEIGHT,
             x:
               group === "right"
-                ? -(connection.width ?? DEFAULT_FO_WIDTH) - PADDING_X
+                ? -(blueMapPort.width ?? DEFAULT_FO_WIDTH) - PADDING_X
                 : PADDING_X,
           },
-          port: {
-            id: getPort(connection),
-            args: connection.args ?? {},
+          blueMapPort: {
+            type: blueMapPort.type,
+            args: blueMapPort.args,
           },
         },
         args: {
-          height: connection.height ?? DEFAULT_FO_HEIGHT,
+          height: blueMapPort.height ?? DEFAULT_FO_HEIGHT,
         },
       });
     });

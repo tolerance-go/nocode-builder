@@ -5,9 +5,13 @@ import { Keyboard } from "@antv/x6-plugin-keyboard";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
-import { portConfigsById } from "../../configs/configs";
+import {
+  blueMapPortConfigsByType,
+  portConfigsById,
+} from "../../configs/configs";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
 import colors from "tailwindcss/colors";
+import { BlueMapPortCommonArgs } from "../../types";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -63,13 +67,34 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           // validateMagnet() {
           //   return false;
           // }
-          createEdge() {
+          createEdge({ sourceMagnet }) {
+            const portTypeElements =
+              sourceMagnet.querySelectorAll("[data-port-type]");
+
+            if (!portTypeElements.length || portTypeElements.length > 1) {
+              throw new Error(
+                "Invalid number of elements with data-port-type."
+              );
+            }
+
+            const portType = portTypeElements[0].getAttribute("data-port-type");
+            let strokeColor;
+
+            switch (portType) {
+              case "exec":
+                strokeColor = colors.green[600];
+                break;
+              default:
+                strokeColor = colors.black[600];
+                break;
+            }
+
             return new Shape.Edge({
               attrs: {
                 line: {
                   targetMarker: null,
-                  strokeLinecap: 'round',
-                  stroke: colors.green[600], // 设置线的颜色为黑色
+                  strokeLinecap: "round",
+                  stroke: strokeColor, // 根据 portType 设置线的颜色
                   strokeWidth: 2,
                 },
               },
@@ -99,22 +124,33 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
         onPortRendered(args) {
           const container = args.contentSelectors?.foContent;
           if (container) {
-            const id = args.port.attrs?.port.id;
+            const blueMapPort = args.port.attrs?.blueMapPort;
+            ensure(blueMapPort, "blueMapPort 必须存在。");
+            const blueMapPortType = blueMapPort.type;
 
             ensure(
-              typeof id === "string" && id,
-              "port.attrs.port.id 必须存在。"
+              typeof blueMapPortType === "string",
+              "blueMapPortType 必须存在。"
             );
+            const blueMapPortConfig =
+              blueMapPortConfigsByType.get(blueMapPortType);
+            ensure(blueMapPortConfig, "blueMapPortConfig 必须存在。");
 
-            const portConfig = portConfigsById.get(id);
+            const portConfig = blueMapPortConfig.portConfig;
 
-            ensure(portConfig, "portConfig 必须存在。");
+            const blueMapPortArgs = blueMapPort.args as
+              | BlueMapPortCommonArgs
+              | undefined;
 
             ReactDOM.createRoot(container as HTMLElement).render(
               React.createElement(portConfig.component, {
                 node: args.node,
                 port: args.port,
                 graph,
+                blueMapPort: {
+                  config: blueMapPortConfig,
+                  args: blueMapPortArgs,
+                },
               })
             );
           }
