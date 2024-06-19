@@ -15,8 +15,8 @@ interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
 }
 
-const getBlueMapPortConfig = (portId: string, cell: Node) => {
-  const ports = cell.getPorts();
+const getBlueMapPortConfig = (portId: string, node: Node) => {
+  const ports = node.getPorts();
   const port = ports.find((p) => p.id === portId);
   ensure(port, "port 必须存在。");
   const portBlueMapAttrs = port.attrs?.blueMapPort as PortBlueMapAttrs;
@@ -24,7 +24,7 @@ const getBlueMapPortConfig = (portId: string, cell: Node) => {
   const portType = portBlueMapAttrs.type;
   const blueMapPortConfig = blueMapPortConfigsByType.get(portType);
   ensure(blueMapPortConfig, "blueMapPortConfig 必须存在。");
-  return { port, portBlueMapAttrs, blueMapPortConfig };
+  return { node, port, portBlueMapAttrs, blueMapPortConfig };
 };
 
 const X6Graph = ({ onGraphInit }: X6GraphProps) => {
@@ -122,11 +122,16 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                           sourceMeta.blueMapPortConfig.constraints.connecting.to.prohibit
                             .filter((item) => item.selfIoType === selfIoType)
                             .some((item) => {
+                              const args = {
+                                source: { node: sourceMeta.node },
+                                target: { node: targetMeta.node },
+                              };
                               return (
                                 item.portType ===
                                   targetMeta.blueMapPortConfig.type &&
                                 item.ioType ===
-                                  targetMeta.portBlueMapAttrs.ioType
+                                  targetMeta.portBlueMapAttrs.ioType &&
+                                (!item.validate || item.validate(args))
                               );
                             });
 
@@ -142,10 +147,16 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                         return sourceMeta.blueMapPortConfig.constraints.connecting.to.allow
                           .filter((item) => item.selfIoType === selfIoType)
                           .every((item) => {
+                            const args = {
+                              source: { node: sourceMeta.node },
+                              target: { node: targetMeta.node },
+                            };
                             return (
                               item.portType ===
                                 targetMeta.blueMapPortConfig.type &&
-                              item.ioType === targetMeta.portBlueMapAttrs.ioType
+                              item.ioType ===
+                                targetMeta.portBlueMapAttrs.ioType &&
+                              (!item.validate || item.validate(args))
                             );
                           });
                       }
