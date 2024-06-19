@@ -5,12 +5,15 @@ import { DataNode } from "antd/es/tree";
 
 export type BlueMapPortCommonArgs = {
   text?: string;
-  type?: string;
 };
 
 export type BlueMapPortConfig = {
   type: "exec" | "ref" | "returnValue" | "condition" | "string" | "int";
   portConfig: PortConfig;
+  component: React.FC<BlueMapPortComponentProps>;
+  edgeConfig: {
+    color: string;
+  };
 };
 
 export type BlueMapPort = {
@@ -82,6 +85,12 @@ export interface X6ReactComponentProps {
 }
 
 export type ReactPortComponentProps = {
+  node: Node;
+  port: PortManager.Port;
+  graph: Graph;
+};
+
+export type BlueMapPortComponentProps = {
   node: Node;
   port: PortManager.Port;
   graph: Graph;

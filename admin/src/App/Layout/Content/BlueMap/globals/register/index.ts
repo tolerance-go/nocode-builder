@@ -4,17 +4,17 @@ import {
   nodeConfigs,
   portConfigs,
 } from "../../configs/configs";
-import { checkDuplicateIds } from "../../utils/checkDuplicateIds";
+import { checkDuplicateKeys } from "../../utils/checkDuplicateIds";
 
 import "./registerPortLayout";
 
 // 检查节点配置的 id 是否重复
-checkDuplicateIds(nodeConfigs);
+checkDuplicateKeys(nodeConfigs, "id");
 
 // 检查端口配置的 id 是否重复
-checkDuplicateIds(portConfigs);
+checkDuplicateKeys(portConfigs, "id");
 
-checkDuplicateIds(blueMapPortConfigs);
+checkDuplicateKeys(blueMapPortConfigs, "type");
 
 nodeConfigs.forEach((config) => {
   register(config.shape);

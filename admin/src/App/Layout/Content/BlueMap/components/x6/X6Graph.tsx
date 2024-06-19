@@ -5,10 +5,7 @@ import { Keyboard } from "@antv/x6-plugin-keyboard";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
-import {
-  blueMapPortConfigsByType,
-  portConfigsById,
-} from "../../configs/configs";
+import { blueMapPortConfigsByType } from "../../configs/configs";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
 import colors from "tailwindcss/colors";
 import { BlueMapPortCommonArgs } from "../../types";
@@ -68,26 +65,26 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           //   return false;
           // }
           createEdge({ sourceMagnet }) {
-            const portTypeElements =
-              sourceMagnet.querySelectorAll("[data-port-type]");
+            const portTypeElements = sourceMagnet.querySelectorAll(
+              "[data-blue-map-port-type]"
+            );
 
-            if (!portTypeElements.length || portTypeElements.length > 1) {
-              throw new Error(
-                "Invalid number of elements with data-port-type."
-              );
-            }
+            ensure(
+              portTypeElements.length && portTypeElements.length < 2,
+              "[data-blue-map-port-type] 标记不正确。"
+            );
 
-            const portType = portTypeElements[0].getAttribute("data-port-type");
-            let strokeColor;
+            const portType = portTypeElements[0].getAttribute(
+              "data-blue-map-port-type"
+            );
 
-            switch (portType) {
-              case "exec":
-                strokeColor = colors.green[600];
-                break;
-              default:
-                strokeColor = colors.black[600];
-                break;
-            }
+            ensure(typeof portType === "string", "portType 必须存在。");
+
+            const config = blueMapPortConfigsByType.get(portType);
+
+            ensure(config, "config 必须存在。");
+
+            const strokeColor = config.edgeConfig.color;
 
             return new Shape.Edge({
               attrs: {
@@ -136,14 +133,12 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
               blueMapPortConfigsByType.get(blueMapPortType);
             ensure(blueMapPortConfig, "blueMapPortConfig 必须存在。");
 
-            const portConfig = blueMapPortConfig.portConfig;
-
             const blueMapPortArgs = blueMapPort.args as
               | BlueMapPortCommonArgs
               | undefined;
 
             ReactDOM.createRoot(container as HTMLElement).render(
-              React.createElement(portConfig.component, {
+              React.createElement(blueMapPortConfig.component, {
                 node: args.node,
                 port: args.port,
                 graph,

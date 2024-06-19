@@ -5,8 +5,12 @@ import { useEffect, useState } from "react";
 import { ReactPortComponentProps } from "../../../types";
 import { BasePort } from "../BasePort";
 
-export const ArrowPort = (props: ReactPortComponentProps) => {
-  const { node, port, graph, blueMapPort } = props;
+export const ArrowPort = (
+  props: ReactPortComponentProps & {
+    label?: string;
+  }
+) => {
+  const { node, port, graph, label } = props;
 
   const [isConnected, setIsConnected] = useState(false);
 
@@ -50,7 +54,7 @@ export const ArrowPort = (props: ReactPortComponentProps) => {
   }, [graph, node, port.id, port.group]);
 
   return (
-    <BasePort {...props} type={blueMapPort.config.type}>
+    <BasePort {...props}>
       <div
         className={cx(
           "h-[100%] flex items-center justify-start gap-1",
@@ -63,7 +67,7 @@ export const ArrowPort = (props: ReactPortComponentProps) => {
             "text-3xl"
           )}
         />
-        {blueMapPort.args?.text && <span>{blueMapPort.args?.text}</span>}
+        {label && <span>{label}</span>}
       </div>
     </BasePort>
   );

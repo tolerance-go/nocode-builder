@@ -3,7 +3,7 @@ import { SearchNodeConfig } from "../components/nodes/SearchNode/config";
 import { ArrowPortConfig } from "../components/ports/ArrowPort/config";
 import { BasePortConfig } from "../components/ports/BasePort/config";
 import { BranchControlNodeConfigs } from "../maps/nodes/BranchControlNode/config";
-import { ExecBlueMapPortConfig } from "../maps/ports/exec/config";
+import { ExecBlueMapPortConfig } from "../maps/ports/ExecBlueMapPort/config";
 import { createConfigMapByKey } from "../utils/createConfigMapById";
 
 export const nodeConfigs = [

@@ -1,10 +1,15 @@
-// 检查 id 是否重复
-export const checkDuplicateIds = (configs: { id: string }[]) => {
+export const checkDuplicateKeys = <T>(configs: T[], key: keyof T) => {
   const ids = new Set<string>();
   configs.forEach((config) => {
-    if (ids.has(config.id)) {
-      throw new Error(`Duplicate id found: ${config.id}`);
+    const keyValue = config[key] as unknown as string;
+    if (typeof keyValue !== "string") {
+      throw new Error(
+        `The specified key '${String(key)}' does not contain a string value.`
+      );
     }
-    ids.add(config.id);
+    if (ids.has(keyValue)) {
+      throw new Error(`Duplicate ${String(key)} found: ${keyValue}`);
+    }
+    ids.add(keyValue);
   });
 };
