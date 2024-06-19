@@ -8,9 +8,12 @@ import { BasePort } from "../BasePort";
 export const ArrowPort = (
   props: ReactPortComponentProps & {
     label?: string;
+    connectedIconColor: string;
+    unConnectedIconColor: string;
   }
 ) => {
-  const { node, port, graph, label } = props;
+  const { node, port, graph, label, connectedIconColor, unConnectedIconColor } =
+    props;
 
   const [isConnected, setIsConnected] = useState(false);
 
@@ -62,12 +65,12 @@ export const ArrowPort = (
         )}
       >
         <CaretRightFilled
-          className={cx(
-            !isConnected ? "text-gray-400" : "text-green-600",
-            "text-3xl"
-          )}
+          className={cx("text-3xl")}
+          style={{
+            color: !isConnected ? unConnectedIconColor : connectedIconColor,
+          }}
         />
-        {label && <span>{label}</span>}
+        {label && <span className="text-lg">{label}</span>}
       </div>
     </BasePort>
   );
