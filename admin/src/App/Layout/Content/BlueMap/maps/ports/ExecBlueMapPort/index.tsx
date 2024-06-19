@@ -6,7 +6,7 @@ export const ExecBlueMapPort = (props: BlueMapPortComponentProps) => {
   const { blueMapPort, ...portProps } = props;
   return (
     <BaseBlueMapPort {...props}>
-      <ArrowPort {...portProps} label={blueMapPort.args?.text} />;
+      <ArrowPort {...portProps} label={blueMapPort.args?.text} />
     </BaseBlueMapPort>
   );
 };
