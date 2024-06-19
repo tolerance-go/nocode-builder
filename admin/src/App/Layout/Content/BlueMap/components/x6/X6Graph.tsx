@@ -113,6 +113,28 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                         targetCell
                       );
 
+                      // 检查 prohibit 条件
+                      if (
+                        sourceMeta.blueMapPortConfig.constraints.connecting.to
+                          .prohibit?.length
+                      ) {
+                        const isProhibited =
+                          sourceMeta.blueMapPortConfig.constraints.connecting.to.prohibit
+                            .filter((item) => item.selfIoType === selfIoType)
+                            .some((item) => {
+                              return (
+                                item.portType ===
+                                  targetMeta.blueMapPortConfig.type &&
+                                item.ioType ===
+                                  targetMeta.portBlueMapAttrs.ioType
+                              );
+                            });
+
+                        if (isProhibited) {
+                          return false;
+                        }
+                      }
+
                       if (
                         sourceMeta.blueMapPortConfig.constraints.connecting.to
                           .allow?.length

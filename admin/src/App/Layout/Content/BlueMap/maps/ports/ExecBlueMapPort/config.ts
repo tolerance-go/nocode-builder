@@ -28,15 +28,6 @@ export const ExecBlueMapPortConfig: BlueMapPortConfig = {
           },
         ],
       },
-      from: {
-        allow: [
-          {
-            selfIoType: "input",
-            portType: "exec",
-            ioType: "output",
-          },
-        ],
-      },
     },
   },
 };
