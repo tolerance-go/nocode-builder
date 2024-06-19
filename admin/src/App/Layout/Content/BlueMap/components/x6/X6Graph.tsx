@@ -190,11 +190,11 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
 
             const strokeColor = config.edgeConfig.color;
 
-            const ioType = portTypeElement.getAttribute(
-              "data-blue-map-port-io-type"
+            const group = portTypeElement.getAttribute(
+              "data-blue-map-port-group-type"
             );
 
-            ensure(typeof ioType === "string", "ioType 必须存在。");
+            ensure(typeof group === "string", "group 必须存在。");
 
             return new Shape.Edge({
               attrs: {
@@ -208,21 +208,15 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
               router: {
                 name: "custom",
                 args: {
-                  sourceSide: ioType === "right" ? "right" : "left",
-                  targetSide: ioType === "right" ? "left" : "right",
+                  sourceSide: group === "right" ? "right" : "left",
+                  targetSide: group === "right" ? "left" : "right",
                   // offset: 50, // 自定义的偏移值
                   // verticalOffset: 10, // 自定义的纵向偏移值
                 } as CustomRouterArgs,
               },
               source: {
                 anchor: {
-                  name: ioType === "right" ? "right" : "left",
-                  args: {},
-                },
-              },
-              target: {
-                anchor: {
-                  name: ioType === "right" ? "left" : "right",
+                  name: group === "right" ? "right" : "left",
                   args: {},
                 },
               },
@@ -315,6 +309,32 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
       //     sharp: true,
       //   })
       // );
+
+      graph.on(
+        "edge:connected",
+        ({ type, isNew, currentCell, currentPort, edge }) => {
+          /**
+           * 当从 port 拉出新的连线，连接到目标 port 时候
+           */
+          if (type === "target") {
+            if (isNew && currentPort && currentCell?.isNode()) {
+              const ports = currentCell.getPorts();
+
+              const port = ports.find((port) => port.id === currentPort);
+
+              if (port?.group) {
+                edge.setTarget({
+                  port: currentPort,
+                  cell: currentCell.id,
+                  anchor: {
+                    name: port?.group === "right" ? "right" : "left",
+                  },
+                });
+              }
+            }
+          }
+        }
+      );
 
       if (onGraphInit) {
         onGraphInit(graph);

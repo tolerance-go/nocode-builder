@@ -24,17 +24,19 @@ const BlueMap = () => {
   const [canRedo, setCanRedo] = useState(false);
 
   const removeSearchNode = () => {
+    ensure(graph, "graph 必须存在。");
     /** 回撤的过程中，可能出现多个 search node 同时出现的情况 */
-    const allNodes = graph?.getNodes();
+    const allNodes = graph.getNodes();
     allNodes?.forEach((node) => {
       if (node.shape === SearchNodeShape.shape) {
-        graph?.removeCell(node);
-        const edgeId = node.getAttrByPath("edge/id");
-
-        if (typeof edgeId === "string") {
-          // 删除关联的线
-          graph?.removeEdge(edgeId);
-        }
+        graph.batchUpdate(() => {
+          graph.removeCell(node);
+          const edgeId = node.getAttrByPath("edge/id");
+          if (typeof edgeId === "string") {
+            // 删除关联的线
+            graph.removeEdge(edgeId);
+          }
+        });
       }
     });
   };
@@ -142,10 +144,6 @@ const BlueMap = () => {
       graph.on("edge:moved", saveGraphData);
 
       loadGraphData();
-
-      return () => {
-        graph.dispose();
-      };
     },
     [removeSearchNodeRef]
   );

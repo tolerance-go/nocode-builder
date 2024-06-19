@@ -9,7 +9,7 @@ export const ExecBlueMapPort = (props: BlueMapPortComponentProps) => {
     <BaseBlueMapPort {...props}>
       <ArrowPort
         connectedIconColor={colors.gray[900]}
-        unConnectedIconColor={colors.gray[400]}
+        unConnectedIconColor={colors.gray[300]}
         {...portProps}
         label={blueMapPort.args?.text}
       />

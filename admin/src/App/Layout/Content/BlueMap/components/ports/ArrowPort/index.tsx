@@ -28,12 +28,18 @@ export const ArrowPort = (
 
         // 如果 port.group 是 left，检查 edge 的 target 是不是这个 id，并且 sourceNode 不是当前 node
         if (port.group === "left") {
-          return targetPortId === port.id && sourceNode?.id !== node.id;
+          return (
+            (targetPortId === port.id && sourceNode?.id !== node.id) ||
+            (sourcePortId === port.id && targetNode?.id !== node.id)
+          );
         }
 
         // 如果 port.group 是 right，检查 edge 的 source 是不是这个 id，并且 targetNode 不是当前 node
         if (port.group === "right") {
-          return sourcePortId === port.id && targetNode?.id !== node.id;
+          return (
+            (sourcePortId === port.id && targetNode?.id !== node.id) ||
+            (targetPortId === port.id && sourceNode?.id !== node.id)
+          );
         }
 
         return false;
@@ -48,10 +54,12 @@ export const ArrowPort = (
 
     graph
       .on("edge:connected", handleChange)
+      .on("edge:removed", handleChange)
       .on("edge:disconnected", handleChange);
     return () => {
       graph
         .off("edge:connected", handleChange)
+        .off("edge:removed", handleChange)
         .off("edge:disconnected", handleChange);
     };
   }, [graph, node, port.id, port.group]);

@@ -16,7 +16,7 @@ export const BaseBlueMapPort = ({
       datasets={{
         "data-blue-map-port": true,
         "data-blue-map-port-type": blueMapPort.config.type,
-        "data-blue-map-port-io-type": port.group,
+        "data-blue-map-port-group-type": port.group,
       }}
     >
       {children}

@@ -37,6 +37,14 @@ export const ExecBlueMapPortConfig: BlueMapPortConfig = {
               return source.node.id === target.node.id;
             },
           },
+          {
+            selfIoType: "input",
+            portType: "exec",
+            ioType: "output",
+            validate: ({ source, target }) => {
+              return source.node.id === target.node.id;
+            },
+          },
         ],
       },
     },

@@ -23,14 +23,14 @@ export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNode
             id: "truth",
             type: "exec",
             args: {
-              text: "为真",
+              text: "真",
             },
           },
           {
             id: "false",
             type: "exec",
             args: {
-              text: "为假",
+              text: "假",
             },
           },
         ],
