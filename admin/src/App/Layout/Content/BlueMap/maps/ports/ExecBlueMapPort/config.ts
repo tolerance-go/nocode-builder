@@ -10,4 +10,26 @@ export const ExecBlueMapPortConfig: BlueMapPortConfig = {
   edgeConfig: {
     color: colors.green[600],
   },
+  constraints: {
+    connecting: {
+      to: {
+        include: [
+          {
+            selfIoType: "output",
+            portType: "exec",
+            ioType: "input",
+          },
+        ],
+      },
+      from: {
+        include: [
+          {
+            selfIoType: "input",
+            portType: "exec", 
+            ioType: "output",
+          },
+        ],
+      },
+    },
+  },
 };

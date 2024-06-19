@@ -6,7 +6,7 @@ import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { blueMapPortConfigsByType } from "../../configs/configs";
-import { BlueMapPortCommonArgs } from "../../types";
+import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../types";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
 import { CustomRouterArgs } from "../../globals/register/registerRouter";
 // import { Snapline } from "@antv/x6-plugin-snapline";
@@ -71,9 +71,56 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           // allowPort() {
           //   return false;
           // },
-          // validateMagnet() {
-          //   return false;
-          // }
+          validateMagnet({ cell, magnet, e }) {
+            console.log(magnet);
+            return true;
+          },
+          // 是否允许边链接到连接桩，默认为 true 。
+          allowPort({
+            type,
+            targetPort,
+            targetCell,
+            sourceCell,
+            sourcePort: sourcePortId,
+          }) {
+            if (sourceCell) {
+              if (sourceCell.isNode()) {
+                const ports = sourceCell.getPorts();
+                const sourcePort = ports.find(
+                  (port) => port.id === sourcePortId
+                );
+                const portBlueMapAttrs = sourcePort?.attrs
+                  ?.blueMapPort as PortBlueMapAttrs;
+
+                ensure(portBlueMapAttrs, "portBlueMapAttrs 必须存在。");
+
+                const sourceBlueMapPortType = portBlueMapAttrs.type;
+                console.log("sourceBlueMapPortType", sourceBlueMapPortType);
+
+                const blueMapPortConfig = blueMapPortConfigsByType.get(
+                  sourceBlueMapPortType
+                );
+
+                ensure(blueMapPortConfig, "blueMapPortConfig 必须存在。");
+
+                if (blueMapPortConfig.constraints) {
+                  if (
+                    type === "target" &&
+                    blueMapPortConfig.constraints.connecting?.to
+                  ) {
+                    const group = sourcePort?.group;
+                    ensure(
+                      typeof group === "string" &&
+                        (group === "left" || group === "right"),
+                      "group 非法。"
+                    );
+                    const selfIoType = group === "left" ? "input" : "output";
+                  }
+                }
+              }
+            }
+            return true;
+          },
           createEdge({ sourceMagnet }) {
             const portTypeElement = sourceMagnet.querySelector(
               "[data-blue-map-port]"
@@ -141,9 +188,6 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             }
             return true;
           },
-          // magnetConnectable(cellView) {
-          //   return false;
-          // },
         },
         mousewheel: {
           enabled: true,

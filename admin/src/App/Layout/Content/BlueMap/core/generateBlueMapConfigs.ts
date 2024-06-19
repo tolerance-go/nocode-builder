@@ -4,7 +4,7 @@ import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
 import { PortLayout } from "@antv/x6/es/registry/port-layout";
 import { BasePortConfig } from "../components/ports/BasePort/config";
-import { BlueMapNodeConfig, NodeConfig } from "../types";
+import { BlueMapNodeConfig, NodeConfig, PortBlueMapAttrs } from "../types";
 
 // 左右中间的间距
 const PORT_SPACING = 20;
@@ -40,7 +40,7 @@ function convertConnectionsToPorts(
           blueMapPort: {
             type: blueMapPort.type,
             args: blueMapPort.args,
-          },
+          } as PortBlueMapAttrs,
         },
         args: {
           height: blueMapPort.height ?? DEFAULT_FO_HEIGHT,

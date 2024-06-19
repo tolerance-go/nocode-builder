@@ -7,13 +7,44 @@ export type BlueMapPortCommonArgs = {
   text?: string;
 };
 
+export type BlueMapPortType =
+  | "exec"
+  | "ref"
+  | "returnValue"
+  | "condition"
+  | "string"
+  | "int";
+
 export type BlueMapPortConfig = {
-  type: "exec" | "ref" | "returnValue" | "condition" | "string" | "int";
+  type: BlueMapPortType;
   portConfigId: string;
   component: React.FC<BlueMapPortComponentProps>;
   edgeConfig: {
     color: string;
   };
+  constraints?: {
+    connecting?: {
+      to: {
+        include?: {
+          selfIoType: "input" | "output";
+          ioType: "input" | "output";
+          portType: BlueMapPortType;
+        }[];
+      };
+      from: {
+        include?: {
+          selfIoType: "input" | "output";
+          ioType: "input" | "output";
+          portType: BlueMapPortType;
+        }[];
+      };
+    };
+  };
+};
+
+export type PortBlueMapAttrs = {
+  args?: BlueMapPortCommonArgs;
+  type: BlueMapPortType;
 };
 
 export type BlueMapPort = {
