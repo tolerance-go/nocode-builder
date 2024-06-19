@@ -29,6 +29,12 @@ const BlueMap = () => {
     allNodes?.forEach((node) => {
       if (node.shape === SearchNodeShape.shape) {
         graph?.removeCell(node);
+        const edgeId = node.getAttrByPath("edge/id");
+
+        if (typeof edgeId === "string") {
+          // 删除关联的线
+          graph?.removeEdge(edgeId);
+        }
       }
     });
   };
@@ -120,6 +126,11 @@ const BlueMap = () => {
             shape: SearchNodeShape.shape,
             x,
             y,
+            attrs: {
+              edge: {
+                id: edge.id,
+              },
+            },
           });
         }
       });

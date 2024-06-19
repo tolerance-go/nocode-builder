@@ -80,6 +80,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
               radius: 20,
             },
           },
+          allowNode: false,
           // allowPort() {
           //   return false;
           // },
