@@ -7,6 +7,7 @@ import {
 import { checkDuplicateKeys } from "../../utils/checkDuplicateIds";
 
 import "./registerPortLayout";
+import "./registerRouter";
 
 // 检查节点配置的 id 是否重复
 checkDuplicateKeys(nodeConfigs, "id");

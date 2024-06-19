@@ -6,9 +6,10 @@ import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { blueMapPortConfigsByType } from "../../configs/configs";
-import { SearchNodeShape } from "../nodes/SearchNode/config";
-import colors from "tailwindcss/colors";
 import { BlueMapPortCommonArgs } from "../../types";
+import { SearchNodeShape } from "../nodes/SearchNode/config";
+import { CustomRouterArgs } from "../../globals/register/registerRouter";
+// import { Snapline } from "@antv/x6-plugin-snapline";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -49,14 +50,23 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           ],
         },
         connecting: {
+          sourceAnchor: {
+            name: "right",
+            args: {},
+          },
+          targetAnchor: {
+            name: "left",
+            args: {},
+          },
+          connectionPoint: "anchor",
           router: {
-            name: "er",
-            args: {
-              direction: "H",
-            },
+            name: "custom",
           },
           connector: {
             name: "rounded",
+            args: {
+              radius: 20,
+            },
           },
           // allowPort() {
           //   return false;
@@ -65,16 +75,13 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           //   return false;
           // }
           createEdge({ sourceMagnet }) {
-            const portTypeElements = sourceMagnet.querySelectorAll(
-              "[data-blue-map-port-type]"
+            const portTypeElement = sourceMagnet.querySelector(
+              "[data-blue-map-port]"
             );
 
-            ensure(
-              portTypeElements.length && portTypeElements.length < 2,
-              "[data-blue-map-port-type] 标记不正确。"
-            );
+            ensure(portTypeElement, "[data-blue-map-port] 标记不正确。");
 
-            const portType = portTypeElements[0].getAttribute(
+            const portType = portTypeElement.getAttribute(
               "data-blue-map-port-type"
             );
 
@@ -86,6 +93,14 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
 
             const strokeColor = config.edgeConfig.color;
 
+            const ioType = portTypeElement.getAttribute(
+              "data-blue-map-port-io-type"
+            );
+
+            ensure(typeof ioType === "string", "ioType 必须存在。");
+
+            console.log("ioType", ioType);
+
             return new Shape.Edge({
               attrs: {
                 line: {
@@ -93,6 +108,27 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                   strokeLinecap: "round",
                   stroke: strokeColor, // 根据 portType 设置线的颜色
                   strokeWidth: 2,
+                },
+              },
+              router: {
+                name: "custom",
+                args: {
+                  sourceSide: ioType === "right" ? "right" : "left",
+                  targetSide: ioType === "right" ? "left" : "right",
+                  // offset: 50, // 自定义的偏移值
+                  // verticalOffset: 10, // 自定义的纵向偏移值
+                } as CustomRouterArgs,
+              },
+              source: {
+                anchor: {
+                  name: ioType === "right" ? "right" : "left",
+                  args: {},
+                },
+              },
+              target: {
+                anchor: {
+                  name: ioType === "right" ? "left" : "right",
+                  args: {},
                 },
               },
             });
@@ -180,6 +216,13 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           global: true,
         })
       );
+
+      // graph.use(
+      //   new Snapline({
+      //     enabled: true,
+      //     sharp: true,
+      //   })
+      // );
 
       if (onGraphInit) {
         onGraphInit(graph);

@@ -34,6 +34,9 @@ importers:
       '@antv/x6-plugin-selection':
         specifier: ^2.2.2
         version: 2.2.2(@antv/x6@2.18.1)
+      '@antv/x6-plugin-snapline':
+        specifier: ^2.1.7
+        version: 2.1.7(@antv/x6@2.18.1)
       '@antv/x6-react-shape':
         specifier: ^2.2.3
         version: 2.2.3(@antv/x6@2.18.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -248,6 +251,11 @@ packages:
 
   '@antv/x6-plugin-selection@2.2.2':
     resolution: {integrity: sha512-s2gtR9Onlhr7HOHqyqg0d+4sG76JCcQEbvrZZ64XmSChlvieIPlC3YtH4dg1KMNhYIuBmBmpSum6S0eVTEiPQw==}
+    peerDependencies:
+      '@antv/x6': ^2.x
+
+  '@antv/x6-plugin-snapline@2.1.7':
+    resolution: {integrity: sha512-AsysoCb9vES0U2USNhEpYuO/W8I0aYfkhlbee5Kt4NYiMfQfZKQyqW/YjDVaS2pm38C1NKu1LdPVk/BBr4CasA==}
     peerDependencies:
       '@antv/x6': ^2.x
 
@@ -2914,6 +2922,10 @@ snapshots:
       mousetrap: 1.6.5
 
   '@antv/x6-plugin-selection@2.2.2(@antv/x6@2.18.1)':
+    dependencies:
+      '@antv/x6': 2.18.1
+
+  '@antv/x6-plugin-snapline@2.1.7(@antv/x6@2.18.1)':
     dependencies:
       '@antv/x6': 2.18.1
 
