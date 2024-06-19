@@ -18,6 +18,9 @@ export const ExecBlueMapPortConfig: BlueMapPortConfig = {
             selfIoType: "output",
             portType: "exec",
             ioType: "input",
+            validate: ({ source, target }) => {
+              return source.node.id !== target.node.id;
+            },
           },
         ],
         prohibit: [
@@ -25,6 +28,14 @@ export const ExecBlueMapPortConfig: BlueMapPortConfig = {
             selfIoType: "input",
             portType: "exec",
             ioType: "input",
+          },
+          {
+            selfIoType: "output",
+            portType: "exec",
+            ioType: "input",
+            validate: ({ source, target }) => {
+              return source.node.id === target.node.id;
+            },
           },
         ],
       },

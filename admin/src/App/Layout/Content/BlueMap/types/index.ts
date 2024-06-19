@@ -19,6 +19,14 @@ export type ConnectionConstraint = {
   selfIoType: "input" | "output";
   ioType: "input" | "output";
   portType: BlueMapPortType;
+  validate?: (args: {
+    source: {
+      node: Node;
+    };
+    target: {
+      node: Node;
+    };
+  }) => boolean;
 };
 
 export type ConnectingConstraints = {
