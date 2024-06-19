@@ -191,7 +191,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             const strokeColor = config.edgeConfig.color;
 
             const group = portTypeElement.getAttribute(
-              "data-blue-map-port-group-type"
+              "data-port-group"
             );
 
             ensure(typeof group === "string", "group 必须存在。");
