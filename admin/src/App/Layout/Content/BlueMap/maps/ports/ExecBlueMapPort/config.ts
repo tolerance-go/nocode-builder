@@ -13,19 +13,26 @@ export const ExecBlueMapPortConfig: BlueMapPortConfig = {
   constraints: {
     connecting: {
       to: {
-        include: [
+        allow: [
           {
             selfIoType: "output",
             portType: "exec",
             ioType: "input",
           },
         ],
-      },
-      from: {
-        include: [
+        prohibit: [
           {
             selfIoType: "input",
-            portType: "exec", 
+            portType: "exec",
+            ioType: "input",
+          },
+        ],
+      },
+      from: {
+        allow: [
+          {
+            selfIoType: "input",
+            portType: "exec",
             ioType: "output",
           },
         ],

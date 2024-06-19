@@ -15,6 +15,23 @@ export type BlueMapPortType =
   | "string"
   | "int";
 
+export type ConnectionConstraint = {
+  selfIoType: "input" | "output";
+  ioType: "input" | "output";
+  portType: BlueMapPortType;
+};
+
+export type ConnectingConstraints = {
+  to?: {
+    allow?: ConnectionConstraint[];
+    prohibit?: ConnectionConstraint[];
+  };
+  from?: {
+    allow?: ConnectionConstraint[];
+    prohibit?: ConnectionConstraint[];
+  };
+};
+
 export type BlueMapPortConfig = {
   type: BlueMapPortType;
   portConfigId: string;
@@ -23,28 +40,14 @@ export type BlueMapPortConfig = {
     color: string;
   };
   constraints?: {
-    connecting?: {
-      to: {
-        include?: {
-          selfIoType: "input" | "output";
-          ioType: "input" | "output";
-          portType: BlueMapPortType;
-        }[];
-      };
-      from: {
-        include?: {
-          selfIoType: "input" | "output";
-          ioType: "input" | "output";
-          portType: BlueMapPortType;
-        }[];
-      };
-    };
+    connecting?: ConnectingConstraints;
   };
 };
 
 export type PortBlueMapAttrs = {
   args?: BlueMapPortCommonArgs;
   type: BlueMapPortType;
+  ioType: "input" | "output";
 };
 
 export type BlueMapPort = {

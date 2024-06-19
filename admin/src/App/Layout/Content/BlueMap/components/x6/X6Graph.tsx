@@ -1,19 +1,31 @@
 import { ensure } from "@/utils/ensure";
-import { Graph, Shape } from "@antv/x6";
+import { Graph, Node, Shape } from "@antv/x6";
 import { History } from "@antv/x6-plugin-history";
 import { Keyboard } from "@antv/x6-plugin-keyboard";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { blueMapPortConfigsByType } from "../../configs/configs";
+import { CustomRouterArgs } from "../../globals/register/registerRouter";
 import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../types";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
-import { CustomRouterArgs } from "../../globals/register/registerRouter";
 // import { Snapline } from "@antv/x6-plugin-snapline";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
 }
+
+const getBlueMapPortConfig = (portId: string, cell: Node) => {
+  const ports = cell.getPorts();
+  const port = ports.find((p) => p.id === portId);
+  ensure(port, "port 必须存在。");
+  const portBlueMapAttrs = port.attrs?.blueMapPort as PortBlueMapAttrs;
+  ensure(portBlueMapAttrs, "portBlueMapAttrs 必须存在。");
+  const portType = portBlueMapAttrs.type;
+  const blueMapPortConfig = blueMapPortConfigsByType.get(portType);
+  ensure(blueMapPortConfig, "blueMapPortConfig 必须存在。");
+  return { port, portBlueMapAttrs, blueMapPortConfig };
+};
 
 const X6Graph = ({ onGraphInit }: X6GraphProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -71,54 +83,58 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           // allowPort() {
           //   return false;
           // },
-          validateMagnet({ cell, magnet, e }) {
-            console.log(magnet);
-            return true;
-          },
+          // validateMagnet({ cell, magnet, e }) {
+          //   console.log(magnet);
+          //   return true;
+          // },
           // 是否允许边链接到连接桩，默认为 true 。
           allowPort({
             type,
-            targetPort,
+            targetPort: targetPortId,
             targetCell,
             sourceCell,
             sourcePort: sourcePortId,
           }) {
-            if (sourceCell) {
-              if (sourceCell.isNode()) {
-                const ports = sourceCell.getPorts();
-                const sourcePort = ports.find(
-                  (port) => port.id === sourcePortId
-                );
-                const portBlueMapAttrs = sourcePort?.attrs
-                  ?.blueMapPort as PortBlueMapAttrs;
-
-                ensure(portBlueMapAttrs, "portBlueMapAttrs 必须存在。");
-
-                const sourceBlueMapPortType = portBlueMapAttrs.type;
-                console.log("sourceBlueMapPortType", sourceBlueMapPortType);
-
-                const blueMapPortConfig = blueMapPortConfigsByType.get(
-                  sourceBlueMapPortType
+            /** 从 port 创建连线向外寻找目标连接触发 */
+            if (type === "target") {
+              if (sourceCell?.isNode() && sourcePortId) {
+                const sourceMeta = getBlueMapPortConfig(
+                  sourcePortId,
+                  sourceCell
                 );
 
-                ensure(blueMapPortConfig, "blueMapPortConfig 必须存在。");
+                if (sourceMeta.blueMapPortConfig.constraints) {
+                  if (sourceMeta.blueMapPortConfig.constraints.connecting?.to) {
+                    const selfIoType = sourceMeta.portBlueMapAttrs.ioType;
 
-                if (blueMapPortConfig.constraints) {
-                  if (
-                    type === "target" &&
-                    blueMapPortConfig.constraints.connecting?.to
-                  ) {
-                    const group = sourcePort?.group;
-                    ensure(
-                      typeof group === "string" &&
-                        (group === "left" || group === "right"),
-                      "group 非法。"
-                    );
-                    const selfIoType = group === "left" ? "input" : "output";
+                    if (targetPortId && targetCell?.isNode()) {
+                      const targetMeta = getBlueMapPortConfig(
+                        targetPortId,
+                        targetCell
+                      );
+
+                      if (
+                        sourceMeta.blueMapPortConfig.constraints.connecting.to
+                          .allow?.length
+                      ) {
+                        return sourceMeta.blueMapPortConfig.constraints.connecting.to.allow
+                          .filter((item) => item.selfIoType === selfIoType)
+                          .every((item) => {
+                            return (
+                              item.portType ===
+                                targetMeta.blueMapPortConfig.type &&
+                              item.ioType === targetMeta.portBlueMapAttrs.ioType
+                            );
+                          });
+                      }
+
+                      return true;
+                    }
                   }
                 }
               }
             }
+
             return true;
           },
           createEdge({ sourceMagnet }) {
@@ -145,8 +161,6 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             );
 
             ensure(typeof ioType === "string", "ioType 必须存在。");
-
-            console.log("ioType", ioType);
 
             return new Shape.Edge({
               attrs: {
