@@ -9,7 +9,7 @@ export type BlueMapPortCommonArgs = {
 
 export type BlueMapPortConfig = {
   type: "exec" | "ref" | "returnValue" | "condition" | "string" | "int";
-  portConfig: PortConfig;
+  portConfigId: string;
   component: React.FC<BlueMapPortComponentProps>;
   edgeConfig: {
     color: string;
@@ -33,10 +33,6 @@ export type BlueMapPort = {
 };
 
 export type Connection = {
-  /** 连接桩一侧距离开始的距离 */
-  offsetTop?: number;
-  /** 连接桩一侧距离结束的距离 */
-  offsetBottom?: number;
   ports: BlueMapPort[];
 };
 

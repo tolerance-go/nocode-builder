@@ -6,7 +6,7 @@ import colors from "tailwindcss/colors";
 export const ExecBlueMapPortConfig: BlueMapPortConfig = {
   type: "exec",
   component: ExecBlueMapPort,
-  portConfig: ArrowPortConfig,
+  portConfigId: ArrowPortConfig.id,
   edgeConfig: {
     color: colors.green[600],
   },
