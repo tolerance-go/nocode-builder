@@ -1,13 +1,10 @@
 import { ensure } from "@/utils/ensure";
 import { Graph } from "@antv/x6";
 import { blueMapNodeConfigsByShape } from "../configs/configs";
+import { getNodeById } from "./getNodeById";
 
-export const getBlueMapConfigByNodeId = (graph: Graph, nodeId: string) => {
-  const cell = graph.getCellById(nodeId);
-
-  ensure(cell.isNode(), "nodeId 对应的 cell 不是 Node。");
-
-  const node = cell;
+export const getBlueMapNodeConfigByNodeId = (nodeId: string, graph: Graph) => {
+  const node = getNodeById(graph, nodeId);
 
   const blueMapNodeConfig = blueMapNodeConfigsByShape.get(node.shape);
 

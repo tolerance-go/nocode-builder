@@ -24,7 +24,7 @@ function convertConnectionsToPorts(
 
   typedKeys(connections).forEach((group) => {
     connections[group]?.ports.forEach((blueMapPort) => {
-      const blueMapPortAttrs: PortBlueMapAttrs = {
+      const portBlueMapAttrs: PortBlueMapAttrs = {
         type: blueMapPort.type,
         args: blueMapPort.args,
         ioType: group === "left" ? "input" : "output",
@@ -42,7 +42,7 @@ function convertConnectionsToPorts(
                 ? -(blueMapPort.width ?? DEFAULT_FO_WIDTH) - PADDING_X
                 : PADDING_X,
           },
-          blueMapPort: blueMapPortAttrs,
+          blueMapPort: portBlueMapAttrs,
         },
         args: {
           height: blueMapPort.height ?? DEFAULT_FO_HEIGHT,

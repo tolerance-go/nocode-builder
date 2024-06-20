@@ -18,6 +18,10 @@ import X6Graph from "./components/x6/X6Graph";
 import { blueMapNodeConfigsById } from "./configs/configs";
 import "./globals/register";
 import stores from "./stores";
+import { getBlueMapNodeConfigByNodeId } from "./utils/getBlueMapNodeConfigByNodeId";
+import { getBlueMapPortConfigByPortId } from "./utils/getBlueMapPortConfigByPortId";
+import { getNodeById } from "./utils/getNodeById";
+import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -206,7 +210,7 @@ const BlueMap = () => {
 
         removeSearchNodeRef.current();
 
-        graphRef.current.addNode({
+        const target = graphRef.current.addNode({
           shape: config.shapeName,
           x,
           y,
@@ -214,6 +218,25 @@ const BlueMap = () => {
           portMarkup: [Markup.getForeignObjectMarkup()],
           attrs: config.attrs,
         });
+
+        const source = stores.search.states.searchNodeSourcePort.source;
+
+        if (source) {
+          const { nodeId, portId } = source;
+          // 找到源节点的蓝图配置和蓝图 port 配置
+          const sourceNode = getNodeById(graphRef.current, nodeId);
+          const sourceBlueMapNodeConfig = getBlueMapNodeConfigByNodeId(
+            nodeId,
+            graphRef.current
+          );
+          const {
+            blueMapPortConfig: sourceBlueMapPortConfig,
+            portBlueMapAttrs: sourcePortBlueMapAttrs,
+          } = getBlueMapPortMetaByPortId(portId, sourceNode);
+
+
+          /** 准备往 target 上连线 */
+        }
       }
     });
   }, [removeSearchNodeRef, graphRef]);

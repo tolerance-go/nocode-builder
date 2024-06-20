@@ -1,5 +1,5 @@
 import { ensure } from "@/utils/ensure";
-import { Graph, Node, Shape } from "@antv/x6";
+import { Graph, Shape } from "@antv/x6";
 import { History } from "@antv/x6-plugin-history";
 import { Keyboard } from "@antv/x6-plugin-keyboard";
 import { Selection } from "@antv/x6-plugin-selection";
@@ -7,24 +7,13 @@ import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { blueMapPortConfigsByType } from "../../configs/configs";
 import { CustomRouterArgs } from "../../globals/register/registerRouter";
-import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../types";
+import { BlueMapPortCommonArgs } from "../../types";
+import { getBlueMapPortMetaByPortId } from "../../utils/getBlueMapPortMetaByPortId";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
 }
-
-const getBlueMapPortConfig = (portId: string, node: Node) => {
-  const ports = node.getPorts();
-  const port = ports.find((p) => p.id === portId);
-  ensure(port, "port 必须存在。");
-  const portBlueMapAttrs = port.attrs?.blueMapPort as PortBlueMapAttrs;
-  ensure(portBlueMapAttrs, "portBlueMapAttrs 必须存在。");
-  const portType = portBlueMapAttrs.type;
-  const blueMapPortConfig = blueMapPortConfigsByType.get(portType);
-  ensure(blueMapPortConfig, "blueMapPortConfig 必须存在。");
-  return { node, port, portBlueMapAttrs, blueMapPortConfig };
-};
 
 const X6Graph = ({ onGraphInit }: X6GraphProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -98,7 +87,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             /** 从 port 创建连线向外寻找目标连接触发 */
             if (type === "target") {
               if (sourceCell?.isNode() && sourcePortId) {
-                const sourceMeta = getBlueMapPortConfig(
+                const sourceMeta = getBlueMapPortMetaByPortId(
                   sourcePortId,
                   sourceCell
                 );
@@ -108,7 +97,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                     const selfIoType = sourceMeta.portBlueMapAttrs.ioType;
 
                     if (targetPortId && targetCell?.isNode()) {
-                      const targetMeta = getBlueMapPortConfig(
+                      const targetMeta = getBlueMapPortMetaByPortId(
                         targetPortId,
                         targetCell
                       );
@@ -123,8 +112,8 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                             .filter((item) => item.selfIoType === selfIoType)
                             .some((item) => {
                               const args = {
-                                source: { node: sourceMeta.node },
-                                target: { node: targetMeta.node },
+                                source: { node: sourceCell },
+                                target: { node: targetCell },
                               };
                               return (
                                 item.portType ===
@@ -148,8 +137,8 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                           .filter((item) => item.selfIoType === selfIoType)
                           .every((item) => {
                             const args = {
-                              source: { node: sourceMeta.node },
-                              target: { node: targetMeta.node },
+                              source: { node: sourceCell },
+                              target: { node: targetCell },
                             };
                             return (
                               item.portType ===
@@ -168,7 +157,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
               }
             }
 
-            return true;
+            return false;
           },
           createEdge({ sourceMagnet }) {
             const portTypeElement = sourceMagnet.querySelector(
