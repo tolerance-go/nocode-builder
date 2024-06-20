@@ -31,7 +31,7 @@ const BlueMap = () => {
       if (node.shape === SearchNodeShape.shape) {
         graph.batchUpdate(() => {
           graph.removeCell(node);
-          const edgeId = node.getAttrByPath("edge/id");
+          const edgeId = node.getPropByPath("edge/id");
           if (typeof edgeId === "string") {
             // 删除关联的线
             graph.removeEdge(edgeId);
@@ -124,15 +124,15 @@ const BlueMap = () => {
         // 如果没有连接到任何目标节点，则创建一个 search-node
         if (!targetPort && !targetCell) {
           const { x, y } = graph.clientToLocal({ x: e.clientX, y: e.clientY });
-          graph.addNode({
+          const searchNode = graph.addNode({
             shape: SearchNodeShape.shape,
             x,
             y,
-            attrs: {
-              edge: {
-                id: edge.id,
-              },
-            },
+          });
+          searchNode.setPropByPath("edge/id", edge.id);
+          searchNode.setPropByPath("source", {
+            nodeId: edge.getSourceNode()?.id,
+            portId: edge.getSourcePortId(),
           });
         }
       });
