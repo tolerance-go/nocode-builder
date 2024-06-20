@@ -1,8 +1,8 @@
 import { register } from "@antv/x6-react-shape";
-import { baseNodeConfigs } from "../../configs/configs";
+import { allNodeConfigs } from "../../configs/configs";
 import "./registerPortLayout";
 import "./registerRouter";
 
-baseNodeConfigs.forEach((config) => {
+allNodeConfigs.forEach((config) => {
   register(config.shape);
 });

@@ -4,6 +4,7 @@ import { ExecBlueMapPort } from ".";
 import colors from "tailwindcss/colors";
 
 export const ExecBlueMapPortConfig: BlueMapPortConfig = {
+  id: "exec",
   type: "exec",
   component: ExecBlueMapPort,
   portConfigId: ArrowPortConfig.id,
