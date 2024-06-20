@@ -17,11 +17,10 @@ import { SearchNodeShape } from "./components/nodes/SearchNode/config";
 import X6Graph from "./components/x6/X6Graph";
 import { blueMapNodeConfigsById } from "./configs/configs";
 import "./globals/register";
+import { CustomRouterArgs } from "./globals/register/registerRouter";
 import stores from "./stores";
 import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
 import { getNodeById } from "./utils/getNodeById";
-import group from "antd/es/avatar/group";
-import { CustomRouterArgs } from "./globals/register/registerRouter";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -354,6 +353,8 @@ const BlueMap = () => {
                   },
                 },
               });
+
+              stores.search.actions.clearSearchNodeSourcePort();
             }
           }
         });

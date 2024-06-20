@@ -23,7 +23,7 @@ export const actions = {
       portId,
     };
   },
-  removeSearchNodeSourcePort: () => {
+  clearSearchNodeSourcePort: () => {
     searchNodeSourcePort.source = undefined;
   },
 };
