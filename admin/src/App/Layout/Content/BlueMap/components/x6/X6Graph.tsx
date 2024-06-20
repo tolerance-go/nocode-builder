@@ -9,7 +9,6 @@ import { blueMapPortConfigsByType } from "../../configs/configs";
 import { CustomRouterArgs } from "../../globals/register/registerRouter";
 import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../types";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
-// import { Snapline } from "@antv/x6-plugin-snapline";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -194,6 +193,13 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
 
             ensure(typeof group === "string", "group 必须存在。");
 
+            const routerArgs: CustomRouterArgs = {
+              sourceSide: group === "right" ? "right" : "left",
+              targetSide: group === "right" ? "left" : "right",
+              // offset: 50, // 自定义的偏移值
+              // verticalOffset: 10, // 自定义的纵向偏移值
+            };
+
             return new Shape.Edge({
               attrs: {
                 line: {
@@ -205,12 +211,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
               },
               router: {
                 name: "custom",
-                args: {
-                  sourceSide: group === "right" ? "right" : "left",
-                  targetSide: group === "right" ? "left" : "right",
-                  // offset: 50, // 自定义的偏移值
-                  // verticalOffset: 10, // 自定义的纵向偏移值
-                } as CustomRouterArgs,
+                args: routerArgs,
               },
               source: {
                 anchor: {
