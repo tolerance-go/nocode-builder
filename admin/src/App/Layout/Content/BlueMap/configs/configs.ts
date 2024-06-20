@@ -4,7 +4,7 @@ import { ArrowPortConfig } from "../components/ports/ArrowPort/config";
 import { BasePortConfig } from "../components/ports/BasePort/config";
 import { BranchControlNodeConfigs } from "../maps/nodes/BranchControlNode/config";
 import { ExecBlueMapPortConfig } from "../maps/ports/ExecBlueMapPort/config";
-import { createConfigMapByKey } from "../utils/createConfigMapById";
+import { validateAndCreateConfigMap } from "../utils/validateAndCreateConfigMap";
 
 export const baseNodeConfigs = [BaseNodeConfig, SearchNodeConfig];
 
@@ -18,18 +18,16 @@ export const blueMapPortConfigs = [ExecBlueMapPortConfig];
 
 export const allPortConfigs = [...basePortConfigs, ...blueMapPortConfigs];
 
-// 导出以 id 为键的对象
-export const baseNodeConfigsById = createConfigMapByKey(baseNodeConfigs, "id");
-export const blueMapNodeConfigsById = createConfigMapByKey(
+export const blueMapNodeConfigsById = validateAndCreateConfigMap(
   blueMapNodeConfigs,
   "id"
 );
 
-export const blueMapNodeConfigsByShape = createConfigMapByKey(
+export const blueMapNodeConfigsByShape = validateAndCreateConfigMap(
   blueMapNodeConfigs,
   "shapeName"
 );
-export const blueMapPortConfigsByType = createConfigMapByKey(
+export const blueMapPortConfigsByType = validateAndCreateConfigMap(
   blueMapPortConfigs,
   "type"
 );

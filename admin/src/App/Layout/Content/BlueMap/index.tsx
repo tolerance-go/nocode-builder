@@ -16,7 +16,6 @@ import { useCallback, useEffect, useState } from "react";
 import { SearchNodeShape } from "./components/nodes/SearchNode/config";
 import X6Graph from "./components/x6/X6Graph";
 import { blueMapNodeConfigsById } from "./configs/configs";
-import "./globals/checks";
 import "./globals/register";
 import stores from "./stores";
 
