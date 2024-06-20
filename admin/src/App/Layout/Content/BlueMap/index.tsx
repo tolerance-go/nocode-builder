@@ -10,7 +10,7 @@ import {
   ZoomInOutlined,
   ZoomOutOutlined,
 } from "@ant-design/icons";
-import { Cell, Graph, Markup } from "@antv/x6";
+import { Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { SearchNodeShape } from "./components/nodes/SearchNode/config";
