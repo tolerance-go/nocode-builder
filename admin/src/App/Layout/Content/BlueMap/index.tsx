@@ -18,10 +18,10 @@ import X6Graph from "./components/x6/X6Graph";
 import { blueMapNodeConfigsById } from "./configs/configs";
 import "./globals/register";
 import stores from "./stores";
-import { getBlueMapNodeConfigByNodeId } from "./utils/getBlueMapNodeConfigByNodeId";
-import { getBlueMapPortConfigByPortId } from "./utils/getBlueMapPortConfigByPortId";
-import { getNodeById } from "./utils/getNodeById";
 import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
+import { getNodeById } from "./utils/getNodeById";
+import group from "antd/es/avatar/group";
+import { CustomRouterArgs } from "./globals/register/registerRouter";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -312,9 +312,47 @@ const BlueMap = () => {
             });
 
             if (validPorts.length > 0) {
+              const routerArgs: CustomRouterArgs = {
+                sourceSide:
+                  sourcePortBlueMapAttrs.ioType === "output" ? "right" : "left",
+                targetSide:
+                  sourcePortBlueMapAttrs.ioType === "output" ? "left" : "right",
+                // offset: 50, // 自定义的偏移值
+                // verticalOffset: 10, // 自定义的纵向偏移值
+              };
+
               graph.addEdge({
-                source: { cell: sourceNode.id, port: portId },
-                target: { cell: target.id, port: validPorts[0].id },
+                attrs: {
+                  line: {
+                    targetMarker: null,
+                    strokeLinecap: "round",
+                    stroke: sourceBlueMapPortConfig.edgeConfig.color, // 根据 portType 设置线的颜色
+                    strokeWidth: sourceBlueMapPortConfig.edgeConfig.strokeWidth,
+                  },
+                },
+                router: {
+                  name: "custom",
+                  args: routerArgs,
+                },
+                source: {
+                  cell: sourceNode.id,
+                  port: portId,
+                  anchor: {
+                    name:
+                      sourcePortBlueMapAttrs.ioType === "output"
+                        ? "right"
+                        : "left",
+                    args: {},
+                  },
+                },
+                target: {
+                  cell: target.id,
+                  port: validPorts[0].id,
+                  anchor: {
+                    name: validPorts[0].group === "right" ? "right" : "left",
+                    args: {},
+                  },
+                },
               });
             }
           }

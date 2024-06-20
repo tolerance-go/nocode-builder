@@ -53,11 +53,13 @@ export const ArrowPort = (
     const handleChange = () => checkConnections();
 
     graph
+      .on("edge:added", handleChange)
       .on("edge:connected", handleChange)
       .on("edge:removed", handleChange)
       .on("edge:disconnected", handleChange);
     return () => {
       graph
+        .off("edge:added", handleChange)
         .off("edge:connected", handleChange)
         .off("edge:removed", handleChange)
         .off("edge:disconnected", handleChange);
