@@ -17,6 +17,7 @@ import { SearchNodeShape } from "./components/nodes/SearchNode/config";
 import X6Graph from "./components/x6/X6Graph";
 import { nodeConfigsById } from "./configs/configs";
 import "./globals/register";
+import stores from "./stores";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -27,17 +28,17 @@ const BlueMap = () => {
     ensure(graph, "graph 必须存在。");
     /** 回撤的过程中，可能出现多个 search node 同时出现的情况 */
     const allNodes = graph.getNodes();
-    allNodes?.forEach((node) => {
-      if (node.shape === SearchNodeShape.shape) {
-        graph.batchUpdate(() => {
+    graph.batchUpdate(() => {
+      allNodes?.forEach((node) => {
+        if (node.shape === SearchNodeShape.shape) {
           graph.removeCell(node);
           const edgeId = node.getPropByPath("edge/id");
           if (typeof edgeId === "string") {
             // 删除关联的线
             graph.removeEdge(edgeId);
           }
-        });
-      }
+        }
+      });
     });
   };
 
@@ -123,17 +124,28 @@ const BlueMap = () => {
 
         // 如果没有连接到任何目标节点，则创建一个 search-node
         if (!targetPort && !targetCell) {
-          const { x, y } = graph.clientToLocal({ x: e.clientX, y: e.clientY });
+          const sourceNode = edge.getSourceNode();
+          const sourcePortId = edge.getSourcePortId();
+
+          ensure(
+            sourceNode && sourcePortId,
+            "sourceNode && sourcePortId 参数必须存在。"
+          );
+
+          const { x, y } = graph.clientToLocal({
+            x: e.clientX,
+            y: e.clientY,
+          });
           const searchNode = graph.addNode({
             shape: SearchNodeShape.shape,
             x,
             y,
           });
           searchNode.setPropByPath("edge/id", edge.id);
-          searchNode.setPropByPath("source", {
-            nodeId: edge.getSourceNode()?.id,
-            portId: edge.getSourcePortId(),
-          });
+          stores.search.actions.setSearchNodeSourcePort(
+            sourceNode.id,
+            sourcePortId
+          );
         }
       });
 
@@ -190,7 +202,7 @@ const BlueMap = () => {
 
         ensure(searchNode, "searchNode 必须存在。");
 
-        const { x, y } = (searchNode as Cell).getProp("position");
+        const { x, y } = searchNode.getPosition();
 
         removeSearchNodeRef.current();
 
