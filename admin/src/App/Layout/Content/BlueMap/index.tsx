@@ -194,12 +194,13 @@ const BlueMap = () => {
 
   useEffect(() => {
     return globalEventBus.on("selectBlueMapSearchPanelItem", ({ configId }) => {
-      if (graphRef.current) {
+      const graph = graphRef.current;
+      if (graph) {
         const config = blueMapNodeConfigsById.get(configId);
 
         ensure(config, "config 必须存在。");
 
-        const allNodes = graphRef.current.getNodes();
+        const allNodes = graph.getNodes();
         const searchNode = allNodes?.find(
           (node) => node.shape === SearchNodeShape.shape
         );
@@ -210,33 +211,114 @@ const BlueMap = () => {
 
         removeSearchNodeRef.current();
 
-        const target = graphRef.current.addNode({
-          shape: config.shapeName,
-          x,
-          y,
-          ports: config.ports,
-          portMarkup: [Markup.getForeignObjectMarkup()],
-          attrs: config.attrs,
+        graph.batchUpdate(() => {
+          const target = graph.addNode({
+            shape: config.shapeName,
+            x,
+            y,
+            ports: config.ports,
+            portMarkup: [Markup.getForeignObjectMarkup()],
+            attrs: config.attrs,
+          });
+
+          const source = stores.search.states.searchNodeSourcePort.source;
+
+          if (source) {
+            const { nodeId, portId } = source;
+            // 找到源节点的蓝图配置和蓝图 port 配置
+            const sourceNode = getNodeById(graph, nodeId);
+            // const sourceBlueMapNodeConfig = getBlueMapNodeConfigByNodeId(
+            //   nodeId,
+            //   graph
+            // );
+            const {
+              blueMapPortConfig: sourceBlueMapPortConfig,
+              portBlueMapAttrs: sourcePortBlueMapAttrs,
+            } = getBlueMapPortMetaByPortId(portId, sourceNode);
+
+            /**
+             * 准备往 target 上连线
+             * 找到 target 上所有的 port
+             * 然后根据 source 的 to 的约束
+             * 找到所有合法的 port，然后取第一个，创建一个连线从 source 到 target
+             */
+
+            const targetPorts = target.getPorts();
+            const validPorts = targetPorts.filter((targetPort) => {
+              const {
+                blueMapPortConfig: targetBlueMapPortConfig,
+                portBlueMapAttrs: targetPortBlueMapAttrs,
+              } = getBlueMapPortMetaByPortId(targetPort.id!, target);
+
+              const ioTypeMatch =
+                (sourcePortBlueMapAttrs.ioType === "output" &&
+                  targetPortBlueMapAttrs.ioType === "input") ||
+                (sourcePortBlueMapAttrs.ioType === "input" &&
+                  targetPortBlueMapAttrs.ioType === "output");
+
+              if (!ioTypeMatch) {
+                return false;
+              }
+
+              if (
+                sourceBlueMapPortConfig.constraints?.connecting?.to?.prohibit
+                  ?.length
+              ) {
+                const isProhibited =
+                  sourceBlueMapPortConfig.constraints.connecting.to.prohibit
+                    .filter(
+                      (item) =>
+                        item.selfIoType === sourcePortBlueMapAttrs.ioType
+                    )
+                    .some((item) => {
+                      const args = {
+                        source: { node: sourceNode },
+                        target: { node: target },
+                      };
+                      return (
+                        item.portType === targetBlueMapPortConfig.type &&
+                        item.ioType === targetPortBlueMapAttrs.ioType &&
+                        (!item.validate || item.validate(args))
+                      );
+                    });
+
+                if (isProhibited) {
+                  return false;
+                }
+              }
+
+              if (
+                sourceBlueMapPortConfig.constraints?.connecting?.to?.allow
+                  ?.length
+              ) {
+                return sourceBlueMapPortConfig.constraints.connecting.to.allow
+                  .filter(
+                    (item) => item.selfIoType === sourcePortBlueMapAttrs.ioType
+                  )
+                  .every((item) => {
+                    const args = {
+                      source: { node: sourceNode },
+                      target: { node: target },
+                    };
+                    return (
+                      item.portType === targetBlueMapPortConfig.type &&
+                      item.ioType === targetPortBlueMapAttrs.ioType &&
+                      (!item.validate || item.validate(args))
+                    );
+                  });
+              }
+
+              return true;
+            });
+
+            if (validPorts.length > 0) {
+              graph.addEdge({
+                source: { cell: sourceNode.id, port: portId },
+                target: { cell: target.id, port: validPorts[0].id },
+              });
+            }
+          }
         });
-
-        const source = stores.search.states.searchNodeSourcePort.source;
-
-        if (source) {
-          const { nodeId, portId } = source;
-          // 找到源节点的蓝图配置和蓝图 port 配置
-          const sourceNode = getNodeById(graphRef.current, nodeId);
-          const sourceBlueMapNodeConfig = getBlueMapNodeConfigByNodeId(
-            nodeId,
-            graphRef.current
-          );
-          const {
-            blueMapPortConfig: sourceBlueMapPortConfig,
-            portBlueMapAttrs: sourcePortBlueMapAttrs,
-          } = getBlueMapPortMetaByPortId(portId, sourceNode);
-
-
-          /** 准备往 target 上连线 */
-        }
       }
     });
   }, [removeSearchNodeRef, graphRef]);
