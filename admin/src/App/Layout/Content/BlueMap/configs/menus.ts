@@ -1,7 +1,5 @@
-import { MenuGroups, SearchTreeNode } from "../types";
-import { generateDefaultData } from "../utils/generateDefaultData";
+import { MenuGroups } from "../types";
 import { validateAndCreateConfigMap } from "../utils/validateAndCreateConfigMap";
-import { blueMapNodeConfigs } from "./blueMapNodeConfigs";
 
 export const menuGroups: MenuGroups = [
   {
@@ -11,7 +9,3 @@ export const menuGroups: MenuGroups = [
 ];
 
 export const menuGroupsByType = validateAndCreateConfigMap(menuGroups, "type");
-
-// 使用这个函数生成 defaultData
-export const defaultData: SearchTreeNode[] =
-  generateDefaultData(blueMapNodeConfigs);

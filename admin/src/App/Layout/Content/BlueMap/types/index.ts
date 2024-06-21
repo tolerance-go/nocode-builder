@@ -83,9 +83,10 @@ export type Connection = {
 export type MenuGroups = {
   type: MenuGroupType;
   title: string;
+  parentType?: MenuGroupType;
 }[];
 
-export type MenuGroupType = "flow-control";
+export type MenuGroupType = "flow-control" | 'all';
 
 export interface BlueMapNodeConfig<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
