@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { BasePortContext } from "../../../components/flows/ports/BasePort";
-import { BlueMapPortComponentProps } from "../../../types";
+import { BasePortContext } from "../../../flows/ports/BasePort";
+import { BlueMapPortComponentProps } from "../../../../types";
 import { globalEventBus } from "@/globals/eventBus";
 import { cx } from "@emotion/css";
-import { validatePortConnection } from "../../../utils/validatePortConnection";
-import { getNodeById } from "../../../utils/getNodeById";
+import { validatePortConnection } from "../../../../utils/validatePortConnection";
+import { getNodeById } from "../../../../utils/getNodeById";
 
 export const BaseBlueMapPort = ({
   blueMapPort,

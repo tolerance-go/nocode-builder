@@ -1,6 +1,6 @@
 import colors from "tailwindcss/colors";
-import { ArrowPort } from "../../../components/flows/ports/ArrowPort";
-import { BlueMapPortComponentProps } from "../../../types";
+import { ArrowPort } from "../../../flows/ports/ArrowPort";
+import { BlueMapPortComponentProps } from "../../../../types";
 import { BaseBlueMapPort } from "../BaseBlueMapPort";
 import { ExecBlueMapPortConfig } from "./config";
 

@@ -1,4 +1,4 @@
-import { ExecBlueMapPortConfig } from "../maps/ports/ExecBlueMapPort/config";
+import { ExecBlueMapPortConfig } from "../components/maps/ports/ExecBlueMapPort/config";
 import { validateAndCreateConfigMap } from "../utils/validateAndCreateConfigMap";
 
 export const blueMapPortConfigs = [ExecBlueMapPortConfig];
