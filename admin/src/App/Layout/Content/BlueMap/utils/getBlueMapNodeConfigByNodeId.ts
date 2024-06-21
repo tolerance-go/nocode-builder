@@ -4,7 +4,7 @@ import { blueMapRawNodeConfigsByShape } from "../configs/configs";
 import { getNodeById } from "./getNodeById";
 
 export const getBlueMapNodeConfigByNodeId = (nodeId: string, graph: Graph) => {
-  const node = getNodeById(graph, nodeId);
+  const node = getNodeById(nodeId, graph);
 
   const blueMapNodeConfig = blueMapRawNodeConfigsByShape.get(node.shape);
 

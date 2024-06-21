@@ -20,8 +20,22 @@ export const ExecBlueMapPortConfig: BlueMapPortConfig = {
             selfIoType: "output",
             portType: "exec",
             ioType: "input",
-            validate: ({ source, target }) => {
-              return source.node.id !== target.node.id;
+            validate: ({ scene, source, target }) => {
+              if (scene === "connect") {
+                return source.node.id !== target.node.id;
+              }
+              return true;
+            },
+          },
+          {
+            selfIoType: "input",
+            portType: "exec",
+            ioType: "output",
+            validate: ({ scene, source, target }) => {
+              if (scene === "connect") {
+                return source.node.id !== target.node.id;
+              }
+              return true;
             },
           },
         ],
@@ -35,16 +49,22 @@ export const ExecBlueMapPortConfig: BlueMapPortConfig = {
             selfIoType: "output",
             portType: "exec",
             ioType: "input",
-            validate: ({ source, target }) => {
-              return source.node.id === target.node.id;
+            validate: ({ scene, source, target }) => {
+              if (scene === "connect") {
+                return source.node.id === target.node.id;
+              }
+              return false;
             },
           },
           {
             selfIoType: "input",
             portType: "exec",
             ioType: "output",
-            validate: ({ source, target }) => {
-              return source.node.id === target.node.id;
+            validate: ({ scene, source, target }) => {
+              if (scene === "connect") {
+                return source.node.id === target.node.id;
+              }
+              return false;
             },
           },
         ],

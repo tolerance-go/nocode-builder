@@ -1,7 +1,7 @@
 import { ensure } from "@/utils/ensure";
-import { blueMapPortConfigsByType } from "../configs/configs";
 import { PortBlueMapAttrs } from "../types";
 import { Node } from "@antv/x6";
+import { blueMapPortConfigsByType } from "../configs/blueMapPortConfigs";
 
 export const getBlueMapPortMetaByPortId = (portId: string, node: Node) => {
   const ports = node.getPorts();

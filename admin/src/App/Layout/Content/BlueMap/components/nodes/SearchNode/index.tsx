@@ -15,6 +15,9 @@ import { highlightMatch } from "../../../utils/highlightMatch";
 import { BaseNode } from "../BaseNode";
 import { ensure } from "@/utils/ensure";
 import { menuGroups, menuGroupsByType } from "../../../configs/menus";
+import { Graph } from "@antv/x6";
+import { getNodeById } from "../../../utils/getNodeById";
+import { validatePortConnectionWithTargetBlueMapPortType } from "../../../utils/validatePortConnectionWithTargetBlueMapPortType";
 
 const { Search } = Input;
 
@@ -112,10 +115,52 @@ const processTreeData = (
   });
 };
 
+const filterConfigsBySource = (
+  configs: BlueMapNodeConfig[],
+  source: SearchNodeSourceData,
+  graph: Graph
+) => {
+  const sourceNode = getNodeById(source.nodeId, graph);
+  return configs.filter((targetBlueMapConfig) => {
+    return (
+      (targetBlueMapConfig.connections.input?.ports.some(
+        (targetBlueMapPortConfig) => {
+          const targetBlueMapPortIoType = "input";
+          const targetBlueMapPortType = targetBlueMapPortConfig.type;
+
+          return validatePortConnectionWithTargetBlueMapPortType({
+            sourceNode,
+            sourcePortId: source.portId,
+            targetBlueMapPortIoType,
+            targetBlueMapPortType,
+          });
+        }
+      ) ??
+        true) ||
+      (targetBlueMapConfig.connections.output?.ports.some(
+        (targetBlueMapPortConfig) => {
+          const targetBlueMapPortIoType = "output";
+          const targetBlueMapPortType = targetBlueMapPortConfig.type;
+
+          return validatePortConnectionWithTargetBlueMapPortType({
+            sourceNode,
+            sourcePortId: source.portId,
+            targetBlueMapPortIoType,
+            targetBlueMapPortType,
+          });
+        }
+      ) ??
+        true)
+    );
+  });
+};
+
 export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
   const { graph, node } = props;
 
-  const source = node.getPropByPath("source") as SearchNodeSourceData;
+  const source = node.getPropByPath("source") as
+    | SearchNodeSourceData
+    | undefined;
 
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState("");
@@ -135,8 +180,15 @@ export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
   };
 
   const defaultData: SearchTreeNode[] = useMemo(() => {
-    return generateTreeData(blueMapNodeConfigs, menuGroups);
-  }, []);
+    if (!source) return generateTreeData(blueMapNodeConfigs, menuGroups);
+
+    const filteredConfigs = filterConfigsBySource(
+      blueMapNodeConfigs,
+      source,
+      graph
+    );
+    return generateTreeData(filteredConfigs, menuGroups);
+  }, [source, graph]);
 
   const treeData = useMemo(() => {
     return processTreeData(defaultData, searchValue);

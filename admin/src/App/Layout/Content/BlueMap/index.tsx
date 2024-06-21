@@ -232,7 +232,7 @@ const BlueMap = () => {
           if (source) {
             const { nodeId, portId } = source;
             // 找到源节点的蓝图配置和蓝图 port 配置
-            const sourceNode = getNodeById(graph, nodeId);
+            const sourceNode = getNodeById(nodeId, graph);
             // const sourceBlueMapNodeConfig = getBlueMapNodeConfigByNodeId(
             //   nodeId,
             //   graph

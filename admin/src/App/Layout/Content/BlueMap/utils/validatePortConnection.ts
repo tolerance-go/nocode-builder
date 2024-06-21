@@ -1,5 +1,6 @@
 import { Node } from "@antv/x6";
 import { getBlueMapPortMetaByPortId } from "./getBlueMapPortMetaByPortId";
+import { ConnectionConstraintValidateParams } from "../types";
 
 interface ValidatePortConnectionArgs {
   sourceNode: Node;
@@ -43,7 +44,8 @@ export function validatePortConnection({
             sourceMeta.blueMapPortConfig.constraints.connecting.to.prohibit
               .filter((item) => item.selfIoType === selfIoType)
               .some((item) => {
-                const args = {
+                const args: ConnectionConstraintValidateParams = {
+                  scene: "connect",
                   source: { node: sourceNode },
                   target: { node: targetNode },
                 };
@@ -64,8 +66,9 @@ export function validatePortConnection({
         ) {
           return sourceMeta.blueMapPortConfig.constraints.connecting.to.allow
             .filter((item) => item.selfIoType === selfIoType)
-            .every((item) => {
-              const args = {
+            .some((item) => {
+              const args: ConnectionConstraintValidateParams = {
+                scene: "connect",
                 source: { node: sourceNode },
                 target: { node: targetNode },
               };
@@ -76,8 +79,6 @@ export function validatePortConnection({
               );
             });
         }
-
-        return true;
       }
     }
   }

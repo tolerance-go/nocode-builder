@@ -20,18 +20,33 @@ export type BlueMapPortType =
   | "string"
   | "int";
 
+export type ConnectionConstraintValidateParams =
+  | {
+      /** 连接 2 个节点场景 */
+      scene: "connect";
+      source: {
+        node: Node;
+      };
+      target: {
+        node: Node;
+      };
+    }
+  | {
+      /** 查询搜索节点菜单场景下 */
+      scene: "search";
+      source: {
+        node: Node;
+      };
+      target?: {
+        node: Node;
+      };
+    };
+
 export type ConnectionConstraint = {
   selfIoType: "input" | "output";
   ioType: "input" | "output";
   portType: BlueMapPortType;
-  validate?: (args: {
-    source: {
-      node: Node;
-    };
-    target: {
-      node: Node;
-    };
-  }) => boolean;
+  validate?: (args: ConnectionConstraintValidateParams) => boolean;
 };
 
 export type ConnectingConstraints = {
@@ -105,8 +120,8 @@ export interface BlueMapNodeConfig<
    */
   type: "flowControl" | "function";
   connections: {
-    left?: Connection;
-    right?: Connection;
+    input?: Connection;
+    output?: Connection;
   };
   component: React.FC<X6ReactComponentProps>;
   attrs?: Attrs;

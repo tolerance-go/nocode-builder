@@ -22,23 +22,23 @@ function convertConnectionsToPorts(
 ): PortManager.PortMetadata[] {
   const ports: PortManager.PortMetadata[] = [];
 
-  typedKeys(connections).forEach((group) => {
-    connections[group]?.ports.forEach((blueMapPort) => {
+  typedKeys(connections).forEach((ioType) => {
+    connections[ioType]?.ports.forEach((blueMapPort) => {
       const portBlueMapAttrs: PortBlueMapAttrs = {
         type: blueMapPort.type,
         args: blueMapPort.args,
-        ioType: group === "left" ? "input" : "output",
+        ioType,
       };
       ports.push({
         id: blueMapPort.id,
-        group,
+        group: ioType === "input" ? "left" : "right",
         attrs: {
           fo: {
             magnet: "true",
             width: blueMapPort.width ?? DEFAULT_FO_WIDTH,
             height: blueMapPort.height ?? DEFAULT_FO_HEIGHT,
             x:
-              group === "right"
+              ioType === "output"
                 ? -(blueMapPort.width ?? DEFAULT_FO_WIDTH) - PADDING_X
                 : PADDING_X,
           },
@@ -63,13 +63,13 @@ export function generateBlueMapConfigMeta<
   nodeConfig: NodeConfig<Attrs>;
 } {
   const leftPortWidthSum =
-    config.connections.left?.ports.reduce(
+    config.connections.input?.ports.reduce(
       (max, port) => Math.max(max, port.width ?? DEFAULT_FO_WIDTH),
       0
     ) ?? 0;
 
   const rightPortWidthSum =
-    config.connections.right?.ports.reduce(
+    config.connections.output?.ports.reduce(
       (max, port) => Math.max(max, port.width ?? DEFAULT_FO_WIDTH),
       0
     ) ?? 0;
@@ -77,13 +77,13 @@ export function generateBlueMapConfigMeta<
   const portWidthSum = leftPortWidthSum + rightPortWidthSum;
 
   const leftPortHeightSum =
-    config.connections.left?.ports.reduce(
+    config.connections.input?.ports.reduce(
       (sum, port) =>
         sum + (port.height ?? DEFAULT_FO_HEIGHT) + PORT_GROUP_SPACING,
       0
     ) ?? 0;
   const rightPortHeightSum =
-    config.connections.right?.ports.reduce(
+    config.connections.output?.ports.reduce(
       (sum, port) =>
         sum + (port.height ?? DEFAULT_FO_HEIGHT) + PORT_GROUP_SPACING,
       0

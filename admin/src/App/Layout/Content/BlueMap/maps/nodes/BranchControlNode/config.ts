@@ -14,7 +14,7 @@ export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNode
     type: "flowControl",
     component: BranchControlNode,
     connections: {
-      left: {
+      input: {
         ports: [
           {
             id: "entry",
@@ -22,7 +22,7 @@ export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNode
           },
         ],
       },
-      right: {
+      output: {
         ports: [
           {
             id: "truth",
