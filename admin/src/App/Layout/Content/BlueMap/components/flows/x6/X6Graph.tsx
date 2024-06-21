@@ -283,6 +283,39 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
         }
       );
 
+      graph.on("edge:connected", ({ type, isNew, edge }) => {
+        if (type === "target" && isNew) {
+          const targetNode = edge.getTargetNode();
+          const targetPortId = edge.getTargetPortId();
+          const sourceNode = edge.getSourceNode();
+          const sourcePortId = edge.getSourcePortId();
+
+          if (targetNode && targetPortId && sourceNode && sourcePortId) {
+            const existingEdges = graph.getEdges().filter((existingEdge) => {
+              const existingTargetNode = existingEdge.getTargetNode();
+              const existingTargetPortId = existingEdge.getTargetPortId();
+              const existingSourceNode = existingEdge.getSourceNode();
+              const existingSourcePortId = existingEdge.getSourcePortId();
+
+              return (
+                existingEdge !== edge &&
+                ((existingTargetNode === targetNode &&
+                  existingTargetPortId === targetPortId &&
+                  existingSourceNode === sourceNode &&
+                  existingSourcePortId === sourcePortId) ||
+                  (existingTargetNode === sourceNode &&
+                    existingTargetPortId === sourcePortId &&
+                    existingSourceNode === targetNode &&
+                    existingSourcePortId === targetPortId))
+              );
+            });
+
+            // 删除已存在的其他连接
+            existingEdges.forEach((existingEdge) => existingEdge.remove());
+          }
+        }
+      });
+
       if (onGraphInit) {
         onGraphInit(graph);
       }
