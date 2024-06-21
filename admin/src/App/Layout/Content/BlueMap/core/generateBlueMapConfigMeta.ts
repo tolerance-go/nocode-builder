@@ -54,7 +54,7 @@ function convertConnectionsToPorts(
   return ports;
 }
 
-export function generateBlueMapConfigs<
+export function generateBlueMapConfigMeta<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
 >(
   config: BlueMapNodeConfig<Attrs>

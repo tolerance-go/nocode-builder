@@ -80,6 +80,13 @@ export type Connection = {
   ports: BlueMapPort[];
 };
 
+export type MenuGroups = {
+  type: MenuGroupType;
+  title: string;
+}[];
+
+export type MenuGroupType = "flow-control";
+
 export interface BlueMapNodeConfig<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
 > {
@@ -97,6 +104,11 @@ export interface BlueMapNodeConfig<
   };
   component: React.FC<X6ReactComponentProps>;
   attrs?: Attrs;
+  menu: {
+    groupType: MenuGroupType[];
+    title: string;
+    key: string;
+  };
 }
 
 export type NodeConfig<

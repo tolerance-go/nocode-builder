@@ -15,7 +15,7 @@ import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { SearchNodeShape } from "./components/nodes/SearchNode/config";
 import X6Graph from "./components/x6/X6Graph";
-import { blueMapNodeConfigsById } from "./configs/configs";
+import { blueMapRawNodeConfigsById } from "./configs/configs";
 import "./globals/register";
 import { CustomRouterArgs } from "./globals/register/registerRouter";
 import stores from "./stores";
@@ -195,7 +195,7 @@ const BlueMap = () => {
     return globalEventBus.on("selectBlueMapSearchPanelItem", ({ configId }) => {
       const graph = graphRef.current;
       if (graph) {
-        const config = blueMapNodeConfigsById.get(configId);
+        const config = blueMapRawNodeConfigsById.get(configId);
 
         ensure(config, "config 必须存在。");
 

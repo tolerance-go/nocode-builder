@@ -1,9 +1,14 @@
 import { BranchControlNode, BranchControlNodeAttrs } from ".";
+import { generateBlueMapConfigMeta } from "../../../core/generateBlueMapConfigMeta";
 import { BlueMapNodeConfig } from "../../../types";
-import { generateBlueMapConfigs } from "../../../core/generateBlueMapConfigs";
 
 export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNodeAttrs> =
   {
+    menu: {
+      groupType: ["flow-control"],
+      title: "分支",
+      key: "branch",
+    },
     id: "BranchControlNode",
     shapeName: "branch-control-node",
     type: "flowControl",
@@ -38,6 +43,6 @@ export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNode
     },
   };
 
-export const BranchControlNodeConfigs = generateBlueMapConfigs(
+export const BranchControlNodeConfigMeta = generateBlueMapConfigMeta(
   BranchControlBlueMapNodeConfig
 );

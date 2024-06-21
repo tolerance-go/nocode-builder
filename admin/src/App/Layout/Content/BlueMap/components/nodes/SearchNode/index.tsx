@@ -2,11 +2,11 @@ import { globalEventBus } from "@/globals/eventBus";
 import { css, cx } from "@emotion/css";
 import { Input, Tree } from "antd";
 import React, { useMemo, useState } from "react";
-import { defaultData } from "../../../treeData";
 import { SearchTreeNode, X6ReactComponentProps } from "../../../types";
 import { getExpandedKeys } from "../../../utils/getExpandedKeys";
 import { highlightMatch } from "../../../utils/highlightMatch";
 import { BaseNode } from "../BaseNode";
+import { defaultData } from "../../../configs/menus";
 
 const { Search } = Input;
 
@@ -102,7 +102,7 @@ export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
           autoExpandParent={autoExpandParent}
           treeData={treeData}
           showIcon={false}
-          expandAction='doubleClick'
+          expandAction="doubleClick"
           onClick={(_e, node) => {
             if (node.configId) {
               globalEventBus.emit("selectBlueMapSearchPanelItem", {
