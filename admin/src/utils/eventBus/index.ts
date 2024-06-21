@@ -2,19 +2,26 @@ interface OnOptions {
   immediate?: boolean;
 }
 
-// 用于生成嵌套对象路径的类型
-type EventPath<T, Prefix extends string = ''> = T extends object
+// 用于生成嵌套对象路径的类型，过滤掉带下标的路径
+type EventPath<T, Prefix extends string = ""> = T extends object
   ? {
       [K in keyof T]: T[K] extends object
-        ? `${Prefix}${Prefix extends '' ? '' : '.'}${K & string}` | EventPath<T[K], `${Prefix}${Prefix extends '' ? '' : '.'}${K & string}`>
-        : `${Prefix}${Prefix extends '' ? '' : '.'}${K & string}`
+        ? T[K] extends unknown[]
+          ? `${Prefix}${Prefix extends "" ? "" : "."}${K & string}`
+          :
+              | `${Prefix}${Prefix extends "" ? "" : "."}${K & string}`
+              | EventPath<
+                  T[K],
+                  `${Prefix}${Prefix extends "" ? "" : "."}${K & string}`
+                >
+        : `${Prefix}${Prefix extends "" ? "" : "."}${K & string}`;
     }[keyof T]
   : never;
 
 // 用于获取事件负载类型的类型
 type EventPayload<T, P extends string> = P extends `${infer K}.${infer Rest}`
   ? K extends keyof T
-    ? Rest extends ''
+    ? Rest extends ""
       ? T[K] extends unknown[]
         ? T[K]
         : [T[K]]
@@ -30,7 +37,9 @@ type EventPayload<T, P extends string> = P extends `${infer K}.${infer Rest}`
 
 export class EventBus<TEvents extends Record<string, unknown>> {
   private listeners: {
-    [K in EventPath<TEvents>]?: ((...params: EventPayload<TEvents, K>) => void)[];
+    [K in EventPath<TEvents>]?: ((
+      ...params: EventPayload<TEvents, K>
+    ) => void)[];
   } = {};
 
   private eventHistory: {
@@ -69,7 +78,10 @@ export class EventBus<TEvents extends Record<string, unknown>> {
     }
   }
 
-  emit<K extends EventPath<TEvents>>(eventType: K, ...params: EventPayload<TEvents, K>): void {
+  emit<K extends EventPath<TEvents>>(
+    eventType: K,
+    ...params: EventPayload<TEvents, K>
+  ): void {
     console.log("eventType:", eventType, "params:", params);
     const listeners = this.listeners[eventType];
     this.eventHistory[eventType] = params as EventPayload<TEvents, K>;
@@ -79,33 +91,3 @@ export class EventBus<TEvents extends Record<string, unknown>> {
     }
   }
 }
-
-// 示例类型定义
-type Events = {
-  user: {
-    login: {
-      success: [userId: string];
-      failure: [error: string];
-    };
-    logout: [];
-  };
-  system: {
-    update: [version: string];
-  };
-};
-
-// 创建 EventBus 实例
-const eventBus = new EventBus<Events>();
-
-// 注册监听器
-eventBus.on("user.login.success", (userId) => {
-  console.log("User logged in with ID:", userId);
-}, { immediate: true });
-
-eventBus.on("system.update", (version) => {
-  console.log("System updated to version:", version);
-});
-
-// 触发事件
-eventBus.emit("user.login.success", "12345");
-eventBus.emit("system.update", "1.0.1");
