@@ -143,7 +143,7 @@ const RenderNode: React.FC<{
 
   if (Component === components.text) {
     ensure(isPrimitive(node.children), "text 类型的元素的 child 不合法。");
-    return node.children as NodePlainChild;
+    return node.children;
   }
 
   const getChildren = () => {
