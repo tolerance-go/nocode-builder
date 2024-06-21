@@ -21,6 +21,7 @@ import { CustomRouterArgs } from "./globals/register/registerRouter";
 import stores from "./stores";
 import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
 import { getNodeById } from "./utils/getNodeById";
+import { validatePortConnection } from "./utils/validatePortConnection";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -244,70 +245,12 @@ const BlueMap = () => {
 
             const targetPorts = target.getPorts();
             const validPorts = targetPorts.filter((targetPort) => {
-              const {
-                blueMapPortConfig: targetBlueMapPortConfig,
-                portBlueMapAttrs: targetPortBlueMapAttrs,
-              } = getBlueMapPortMetaByPortId(targetPort.id!, target);
-
-              const ioTypeMatch =
-                (sourcePortBlueMapAttrs.ioType === "output" &&
-                  targetPortBlueMapAttrs.ioType === "input") ||
-                (sourcePortBlueMapAttrs.ioType === "input" &&
-                  targetPortBlueMapAttrs.ioType === "output");
-
-              if (!ioTypeMatch) {
-                return false;
-              }
-
-              if (
-                sourceBlueMapPortConfig.constraints?.connecting?.to?.prohibit
-                  ?.length
-              ) {
-                const isProhibited =
-                  sourceBlueMapPortConfig.constraints.connecting.to.prohibit
-                    .filter(
-                      (item) =>
-                        item.selfIoType === sourcePortBlueMapAttrs.ioType
-                    )
-                    .some((item) => {
-                      const args = {
-                        source: { node: sourceNode },
-                        target: { node: target },
-                      };
-                      return (
-                        item.portType === targetBlueMapPortConfig.type &&
-                        item.ioType === targetPortBlueMapAttrs.ioType &&
-                        (!item.validate || item.validate(args))
-                      );
-                    });
-
-                if (isProhibited) {
-                  return false;
-                }
-              }
-
-              if (
-                sourceBlueMapPortConfig.constraints?.connecting?.to?.allow
-                  ?.length
-              ) {
-                return sourceBlueMapPortConfig.constraints.connecting.to.allow
-                  .filter(
-                    (item) => item.selfIoType === sourcePortBlueMapAttrs.ioType
-                  )
-                  .every((item) => {
-                    const args = {
-                      source: { node: sourceNode },
-                      target: { node: target },
-                    };
-                    return (
-                      item.portType === targetBlueMapPortConfig.type &&
-                      item.ioType === targetPortBlueMapAttrs.ioType &&
-                      (!item.validate || item.validate(args))
-                    );
-                  });
-              }
-
-              return true;
+              return validatePortConnection({
+                sourceNode: sourceNode,
+                sourcePortId: portId,
+                targetPortId: targetPort.id!,
+                targetNode: target,
+              });
             });
 
             if (validPorts.length > 0) {

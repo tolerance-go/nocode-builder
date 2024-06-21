@@ -10,6 +10,7 @@ import { CustomRouterArgs } from "../../globals/register/registerRouter";
 import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../types";
 import { getBlueMapPortMetaByPortId } from "../../utils/getBlueMapPortMetaByPortId";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
+import { validatePortConnection } from "../../utils/validatePortConnection";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -86,74 +87,18 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
           }) {
             /** 从 port 创建连线向外寻找目标连接触发 */
             if (type === "target") {
-              if (sourceCell?.isNode() && sourcePortId) {
-                const sourceMeta = getBlueMapPortMetaByPortId(
+              if (
+                sourceCell?.isNode() &&
+                targetCell?.isNode() &&
+                targetPortId &&
+                sourcePortId
+              ) {
+                return validatePortConnection({
+                  sourceNode: sourceCell,
                   sourcePortId,
-                  sourceCell
-                );
-
-                if (sourceMeta.blueMapPortConfig.constraints) {
-                  if (sourceMeta.blueMapPortConfig.constraints.connecting?.to) {
-                    const selfIoType = sourceMeta.portBlueMapAttrs.ioType;
-
-                    if (targetPortId && targetCell?.isNode()) {
-                      const targetMeta = getBlueMapPortMetaByPortId(
-                        targetPortId,
-                        targetCell
-                      );
-
-                      // 检查 prohibit 条件
-                      if (
-                        sourceMeta.blueMapPortConfig.constraints.connecting.to
-                          .prohibit?.length
-                      ) {
-                        const isProhibited =
-                          sourceMeta.blueMapPortConfig.constraints.connecting.to.prohibit
-                            .filter((item) => item.selfIoType === selfIoType)
-                            .some((item) => {
-                              const args = {
-                                source: { node: sourceCell },
-                                target: { node: targetCell },
-                              };
-                              return (
-                                item.portType ===
-                                  targetMeta.blueMapPortConfig.type &&
-                                item.ioType ===
-                                  targetMeta.portBlueMapAttrs.ioType &&
-                                (!item.validate || item.validate(args))
-                              );
-                            });
-
-                        if (isProhibited) {
-                          return false;
-                        }
-                      }
-
-                      if (
-                        sourceMeta.blueMapPortConfig.constraints.connecting.to
-                          .allow?.length
-                      ) {
-                        return sourceMeta.blueMapPortConfig.constraints.connecting.to.allow
-                          .filter((item) => item.selfIoType === selfIoType)
-                          .every((item) => {
-                            const args = {
-                              source: { node: sourceCell },
-                              target: { node: targetCell },
-                            };
-                            return (
-                              item.portType ===
-                                targetMeta.blueMapPortConfig.type &&
-                              item.ioType ===
-                                targetMeta.portBlueMapAttrs.ioType &&
-                              (!item.validate || item.validate(args))
-                            );
-                          });
-                      }
-
-                      return true;
-                    }
-                  }
-                }
+                  targetPortId,
+                  targetNode: targetCell,
+                });
               }
             }
 
