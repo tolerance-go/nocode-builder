@@ -2,55 +2,22 @@ interface OnOptions {
   immediate?: boolean;
 }
 
-// 用于生成嵌套对象路径的类型，过滤掉带下标的路径
-type EventPath<T, Prefix extends string = ""> = T extends object
-  ? {
-      [K in keyof T]: T[K] extends object
-        ? T[K] extends unknown[]
-          ? `${Prefix}${Prefix extends "" ? "" : "."}${K & string}`
-          :
-              | `${Prefix}${Prefix extends "" ? "" : "."}${K & string}`
-              | EventPath<
-                  T[K],
-                  `${Prefix}${Prefix extends "" ? "" : "."}${K & string}`
-                >
-        : `${Prefix}${Prefix extends "" ? "" : "."}${K & string}`;
-    }[keyof T]
-  : never;
-
-// 用于获取事件负载类型的类型
-type EventPayload<T, P extends string> = P extends `${infer K}.${infer Rest}`
-  ? K extends keyof T
-    ? Rest extends ""
-      ? T[K] extends unknown[]
-        ? T[K]
-        : [T[K]]
-      : T[K] extends object
-      ? EventPayload<T[K], Rest>
-      : never
-    : never
-  : P extends keyof T
-  ? T[P] extends unknown[]
-    ? T[P]
-    : [T[P]]
-  : never;
-
 export class EventBus<TEvents extends Record<string, unknown>> {
   private listeners: {
-    [K in EventPath<TEvents>]?: ((
-      ...params: EventPayload<TEvents, K>
-    ) => void)[];
+    [K in keyof TEvents]?: ((payload: TEvents[K]) => void)[];
   } = {};
 
   private eventHistory: {
-    [K in EventPath<TEvents>]?: EventPayload<TEvents, K>;
+    [K in keyof TEvents]?: TEvents[K];
   } = {};
 
+  // 在构造函数中接受一个参数来设置是否开启调试模式
   constructor() {}
 
-  on<K extends EventPath<TEvents>>(
+  // 注册事件监听器
+  on<K extends keyof TEvents>(
     eventType: K,
-    listener: (...params: EventPayload<TEvents, K>) => void,
+    listener: (payload: TEvents[K]) => void,
     options?: OnOptions
   ): () => void {
     if (!this.listeners[eventType]) {
@@ -58,16 +25,18 @@ export class EventBus<TEvents extends Record<string, unknown>> {
     }
     this.listeners[eventType]!.push(listener);
 
+    // 如果选项中 immediate 为 true，并且该事件已触发过，则立即调用监听器
     if (options?.immediate && this.eventHistory[eventType] !== undefined) {
-      listener(...(this.eventHistory[eventType] as EventPayload<TEvents, K>));
+      listener(this.eventHistory[eventType]!);
     }
 
     return () => this.off(eventType, listener);
   }
 
-  off<K extends EventPath<TEvents>>(
+  // 移除事件监听器
+  off<K extends keyof TEvents>(
     eventType: K,
-    listener: (...params: EventPayload<TEvents, K>) => void
+    listener: (payload: TEvents[K]) => void
   ): void {
     const listeners = this.listeners[eventType];
     if (listeners) {
@@ -78,41 +47,15 @@ export class EventBus<TEvents extends Record<string, unknown>> {
     }
   }
 
-  emit<K extends EventPath<TEvents>>(
-    eventType: K,
-    ...params: EventPayload<TEvents, K>
-  ): void {
-    console.log("eventType:", eventType, "params:", params);
-    this.eventHistory[eventType] = params as EventPayload<TEvents, K>;
-
-    this.triggerListeners(eventType, ...params);
-  }
-
-  private triggerListeners<K extends EventPath<TEvents>>(
-    eventType: K,
-    ...params: EventPayload<TEvents, K>
-  ): void {
+  // 触发事件
+  emit<K extends keyof TEvents>(eventType: K, payload: TEvents[K]): void {
+    console.log("eventType:", eventType, "payload:", payload);
     const listeners = this.listeners[eventType];
-    if (listeners) {
-      listeners.forEach((listener) => listener(...params));
-    }
+    // 存储已触发的事件及其数据
+    this.eventHistory[eventType] = payload;
 
-    // 递归触发子路径
-    const eventTypePrefix = `${eventType}.`;
-    Object.keys(this.listeners).forEach((key) => {
-      if (key.startsWith(eventTypePrefix)) {
-        const subEventType = key as EventPath<TEvents>;
-        const subParams = this.eventHistory[subEventType] as EventPayload<
-          TEvents,
-          typeof subEventType
-        >;
-        if (subParams) {
-          const subListeners = this.listeners[subEventType];
-          if (subListeners) {
-            subListeners.forEach((listener) => listener(...subParams));
-          }
-        }
-      }
-    });
+    if (listeners) {
+      listeners.forEach((listener) => listener(payload));
+    }
   }
 }
