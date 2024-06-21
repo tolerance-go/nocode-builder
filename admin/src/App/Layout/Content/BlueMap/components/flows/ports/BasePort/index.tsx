@@ -1,5 +1,5 @@
 import { css } from "@emotion/css";
-import { ReactPortComponentProps } from "../../../types";
+import { ReactPortComponentProps } from "../../../../types";
 import colors from "tailwindcss/colors";
 import { createContext, useContext } from "react";
 

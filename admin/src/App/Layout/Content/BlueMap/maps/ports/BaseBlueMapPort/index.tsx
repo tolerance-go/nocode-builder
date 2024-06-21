@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { BasePortContext } from "../../../components/ports/BasePort";
+import { BasePortContext } from "../../../components/flows/ports/BasePort";
 import { BlueMapPortComponentProps } from "../../../types";
 import { globalEventBus } from "@/globals/eventBus";
 import { cx } from "@emotion/css";
