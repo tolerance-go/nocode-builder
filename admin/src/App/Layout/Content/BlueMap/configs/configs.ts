@@ -1,7 +1,7 @@
 import { BaseNodeConfig } from "../components/flows/nodes/BaseNode/config";
 import { SearchNodeConfig } from "../components/flows/nodes/SearchNode/config";
 import { ArrowPortConfig } from "../components/flows/ports/ArrowPort/config";
-import { BasePortConfig } from "../components/ports/BasePort/config";
+import { BasePortConfig } from "../components/flows/ports/BasePort/config";
 import { BranchControlNodeConfigMeta } from "../maps/nodes/BranchControlNode/config";
 import { validateAndCreateConfigMap } from "../utils/validateAndCreateConfigMap";
 import { blueMapPortConfigs } from "./blueMapPortConfigs";
