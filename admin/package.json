@@ -9,7 +9,7 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest",
-    "everyDay": "pnpm test && pnpm build"
+    "everyDay": "vitest run && pnpm build"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
