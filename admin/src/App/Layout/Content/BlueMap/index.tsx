@@ -44,6 +44,8 @@ const BlueMap = () => {
           }
         }
       });
+
+      stores.search.actions.clearSearchNodeSourcePort();
     });
   };
 
@@ -221,6 +223,9 @@ const BlueMap = () => {
 
         const { x, y } = searchNode.getPosition();
 
+        /** 先取出来缓存 */
+        const source = stores.search.states.searchNodeSourcePort.source;
+
         removeSearchNodeRef.current();
 
         graph.batchUpdate(() => {
@@ -232,8 +237,6 @@ const BlueMap = () => {
             portMarkup: [Markup.getForeignObjectMarkup()],
             attrs: config.attrs,
           });
-
-          const source = stores.search.states.searchNodeSourcePort.source;
 
           if (source) {
             const { nodeId, portId } = source;
@@ -308,8 +311,6 @@ const BlueMap = () => {
                   },
                 },
               });
-
-              stores.search.actions.clearSearchNodeSourcePort();
             }
           }
         });

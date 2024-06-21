@@ -50,7 +50,7 @@ export const BaseBlueMapPort = ({
           return (
             <span
               className={cx("inline-flex", {
-                "opacity-15": !connectable,
+                "opacity-40": !connectable,
               })}
             >
               {icon}
