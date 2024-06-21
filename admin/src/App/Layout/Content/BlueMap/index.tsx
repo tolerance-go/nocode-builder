@@ -156,6 +156,8 @@ const BlueMap = () => {
             sourceNode.id,
             sourcePortId
           );
+
+          globalEventBus.emit("dragBlueMapPortEnd", undefined);
         }
       });
 
@@ -164,6 +166,10 @@ const BlueMap = () => {
       graph.on("cell:removed", saveGraphData);
       graph.on("node:moved", saveGraphData);
       graph.on("edge:moved", saveGraphData);
+
+      graph.on("edge:connected", () => {
+        globalEventBus.emit("dragBlueMapPortEnd", undefined);
+      });
 
       loadGraphData();
     },

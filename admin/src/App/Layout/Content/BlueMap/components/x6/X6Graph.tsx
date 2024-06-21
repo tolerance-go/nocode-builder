@@ -10,6 +10,7 @@ import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../types";
 import { validatePortConnection } from "../../utils/validatePortConnection";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
 import { blueMapPortConfigsByType } from "../../configs/blueMapPortConfigs";
+import { globalEventBus } from "@/globals/eventBus";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -103,56 +104,70 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
 
             return false;
           },
-          createEdge({ sourceMagnet }) {
-            const portTypeElement = sourceMagnet.querySelector(
-              "[data-blue-map-port]"
-            );
+          createEdge({ sourceMagnet, sourceCell }) {
+            if (sourceCell.isNode()) {
+              const sourceNode = sourceCell;
+              const portTypeElement = sourceMagnet.querySelector(
+                "[data-blue-map-port]"
+              );
 
-            ensure(portTypeElement, "[data-blue-map-port] 标记不正确。");
+              ensure(portTypeElement, "[data-blue-map-port] 标记不正确。");
 
-            const portType = portTypeElement.getAttribute(
-              "data-blue-map-port-type"
-            );
+              const blueMapPortType = portTypeElement.getAttribute(
+                "data-blue-map-port-type"
+              );
 
-            ensure(typeof portType === "string", "portType 必须存在。");
+              const portId = portTypeElement.getAttribute("data-port-id");
 
-            const config = blueMapPortConfigsByType.get(portType);
+              ensure(
+                typeof blueMapPortType === "string",
+                "blueMapPortType 必须存在。"
+              );
+              ensure(typeof portId === "string", "portId 必须存在。");
 
-            ensure(config, "config 必须存在。");
+              const config = blueMapPortConfigsByType.get(blueMapPortType);
 
-            const strokeColor = config.edgeConfig.color;
+              ensure(config, "config 必须存在。");
 
-            const group = portTypeElement.getAttribute("data-port-group");
+              const strokeColor = config.edgeConfig.color;
 
-            ensure(typeof group === "string", "group 必须存在。");
+              const group = portTypeElement.getAttribute("data-port-group");
 
-            const routerArgs: CustomRouterArgs = {
-              sourceSide: group === "right" ? "right" : "left",
-              targetSide: group === "right" ? "left" : "right",
-              // offset: 50, // 自定义的偏移值
-              // verticalOffset: 10, // 自定义的纵向偏移值
-            };
+              ensure(typeof group === "string", "group 必须存在。");
 
-            return new Shape.Edge({
-              attrs: {
-                line: {
-                  targetMarker: null,
-                  strokeLinecap: "round",
-                  stroke: strokeColor, // 根据 portType 设置线的颜色
-                  strokeWidth: config.edgeConfig.strokeWidth,
+              globalEventBus.emit("draggingBlueMapPort", {
+                sourceNodeId: sourceNode.id,
+                sourcePortId: portId,
+              });
+
+              const routerArgs: CustomRouterArgs = {
+                sourceSide: group === "right" ? "right" : "left",
+                targetSide: group === "right" ? "left" : "right",
+                // offset: 50, // 自定义的偏移值
+                // verticalOffset: 10, // 自定义的纵向偏移值
+              };
+
+              return new Shape.Edge({
+                attrs: {
+                  line: {
+                    targetMarker: null,
+                    strokeLinecap: "round",
+                    stroke: strokeColor, // 根据 portType 设置线的颜色
+                    strokeWidth: config.edgeConfig.strokeWidth,
+                  },
                 },
-              },
-              router: {
-                name: "custom",
-                args: routerArgs,
-              },
-              source: {
-                anchor: {
-                  name: group === "right" ? "right" : "left",
-                  args: {},
+                router: {
+                  name: "custom",
+                  args: routerArgs,
                 },
-              },
-            });
+                source: {
+                  anchor: {
+                    name: group === "right" ? "right" : "left",
+                    args: {},
+                  },
+                },
+              });
+            }
           },
         },
         interacting: {

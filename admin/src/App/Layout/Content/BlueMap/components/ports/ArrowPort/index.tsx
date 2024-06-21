@@ -75,13 +75,9 @@ export const ArrowPort = (
   }, [graph, node, port.id, port.group]);
 
   return (
-    <BasePort {...props}>
-      <div
-        className={cx(
-          "h-[100%] flex items-center justify-start gap-1",
-          port.group === "left" ? "flex-row" : "flex-row-reverse"
-        )}
-      >
+    <BasePort
+      {...props}
+      icon={
         <CaretRightFilled
           className={cx("text-3xl")}
           style={{
@@ -91,8 +87,21 @@ export const ArrowPort = (
             // right: port.group === "right" ? "-10px" : undefined,
           }}
         />
-        {label && <span className="text-lg">{label}</span>}
-      </div>
+      }
+    >
+      {({ icon }) => {
+        return (
+          <div
+            className={cx(
+              "h-[100%] flex items-center justify-start gap-1",
+              port.group === "left" ? "flex-row" : "flex-row-reverse"
+            )}
+          >
+            {icon}
+            {label && <span className="text-lg">{label}</span>}
+          </div>
+        );
+      }}
     </BasePort>
   );
 };

@@ -1,4 +1,5 @@
 import { NodeData } from "@/types";
+import { EventBus } from "@/utils/eventBus";
 import { DeepReadonly } from "@/utils/types";
 
 export type EventMaps = {
@@ -61,4 +62,17 @@ export type EventMaps = {
   selectBlueMapSearchPanelItem: {
     configId: string;
   };
+  /**
+   * 当拖拽蓝图 port 准备连接时
+   */
+  draggingBlueMapPort: {
+    sourceNodeId: string;
+    sourcePortId: string;
+  };
+  /**
+   * 当拖拽蓝图 port 准备连接时
+   */
+  dragBlueMapPortEnd: undefined
 };
+
+export const globalEventBus = new EventBus<EventMaps>();
