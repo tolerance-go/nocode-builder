@@ -82,9 +82,6 @@ export const ArrowPort = (
           className={cx("text-3xl")}
           style={{
             color: !isConnected ? unConnectedIconColor : connectedIconColor,
-            // position: 'relative',
-            // left: port.group === "left" ? "-10px" : undefined,
-            // right: port.group === "right" ? "-10px" : undefined,
           }}
         />
       }
