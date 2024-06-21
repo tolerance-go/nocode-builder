@@ -231,11 +231,11 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
         onPortRendered(args) {
           const container = args.contentSelectors?.foContent;
           if (container) {
-            const blueMapPort = args.port.attrs?.blueMap as
+            const portBlueMapAttrs = args.port.attrs?.blueMap as
               | PortBlueMapAttrs
               | undefined;
-            ensure(blueMapPort, "blueMapPort 必须存在。");
-            const blueMapPortType = blueMapPort.type;
+            ensure(portBlueMapAttrs, "portBlueMapAttrs 必须存在。");
+            const blueMapPortType = portBlueMapAttrs.type;
 
             ensure(
               typeof blueMapPortType === "string",
@@ -245,7 +245,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
               blueMapPortConfigsByType.get(blueMapPortType);
             ensure(blueMapPortConfig, "blueMapPortConfig 必须存在。");
 
-            const blueMapPortArgs = blueMapPort.args as
+            const blueMapPortArgs = portBlueMapAttrs.args as
               | BlueMapPortCommonArgs
               | undefined;
 
