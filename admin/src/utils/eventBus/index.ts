@@ -83,11 +83,36 @@ export class EventBus<TEvents extends Record<string, unknown>> {
     ...params: EventPayload<TEvents, K>
   ): void {
     console.log("eventType:", eventType, "params:", params);
-    const listeners = this.listeners[eventType];
     this.eventHistory[eventType] = params as EventPayload<TEvents, K>;
 
+    this.triggerListeners(eventType, ...params);
+  }
+
+  private triggerListeners<K extends EventPath<TEvents>>(
+    eventType: K,
+    ...params: EventPayload<TEvents, K>
+  ): void {
+    const listeners = this.listeners[eventType];
     if (listeners) {
       listeners.forEach((listener) => listener(...params));
     }
+
+    // 递归触发子路径
+    const eventTypePrefix = `${eventType}.`;
+    Object.keys(this.listeners).forEach((key) => {
+      if (key.startsWith(eventTypePrefix)) {
+        const subEventType = key as EventPath<TEvents>;
+        const subParams = this.eventHistory[subEventType] as EventPayload<
+          TEvents,
+          typeof subEventType
+        >;
+        if (subParams) {
+          const subListeners = this.listeners[subEventType];
+          if (subListeners) {
+            subListeners.forEach((listener) => listener(...subParams));
+          }
+        }
+      }
+    });
   }
 }
