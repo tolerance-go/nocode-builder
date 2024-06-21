@@ -6,7 +6,7 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { ComponentStore } from "./ComponentStore";
 
-type StoreLib = "pc" | "mobile";
+// type StoreLib = "pc" | "mobile";
 type StoreSubLib = "base" | "pro" | "template";
 
 export const ComponentStorePanel = () => {
@@ -17,13 +17,13 @@ export const ComponentStorePanel = () => {
 
   const [isSearching, setIsSearching] = useState(false); // 新增状态
 
-  const storeLib = searchParams.get("storeLib") as StoreLib;
+  // const storeLib = searchParams.get("storeLib") as StoreLib;
   const storeSubLib = searchParams.get("storeSubLib") as StoreSubLib;
 
   return (
     <div className="animate-slideInRight absolute inset-0 z-50 bg-white">
       <div className="flex flex-col h-[100%]">
-        <NavTabs
+        {/* <NavTabs
           tabBarExtraContent={
             <Space className="px-2">
               <Button
@@ -66,7 +66,7 @@ export const ComponentStorePanel = () => {
               })
             );
           }}
-        />
+        /> */}
         <NavTabs
           tabBarExtraContent={
             <Space className="px-2">
@@ -79,6 +79,21 @@ export const ComponentStorePanel = () => {
                 }
                 onClick={() => setIsSearching(true)} // 点击搜索按钮时显示搜索框
               />
+              <Button
+                size="small"
+                className="group"
+                type="text"
+                icon={
+                  <CloseOutlined className="text-gray-400 group-hover:text-gray-900 transition-colors" />
+                }
+                onClick={() => {
+                  setSearchParams(
+                    updateSearchParams(searchParams, {
+                      designAsideStore: "false",
+                    })
+                  );
+                }}
+              ></Button>
             </Space>
           }
           activeKey={storeSubLib}
