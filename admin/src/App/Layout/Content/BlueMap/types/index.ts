@@ -86,7 +86,7 @@ export type MenuGroups = {
   parentType?: MenuGroupType;
 }[];
 
-export type MenuGroupType = "flow-control" | 'all';
+export type MenuGroupType = "flow-control" | "all";
 
 export interface BlueMapNodeConfig<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
@@ -128,6 +128,7 @@ export type PortConfig = {
 };
 
 export interface SearchTreeNode extends DataNode {
+  key: string;
   configId?: string;
   children?: SearchTreeNode[];
 }

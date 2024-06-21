@@ -8,9 +8,8 @@ import ReactDOM from "react-dom/client";
 import { blueMapPortConfigsByType } from "../../configs/configs";
 import { CustomRouterArgs } from "../../globals/register/registerRouter";
 import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../types";
-import { getBlueMapPortMetaByPortId } from "../../utils/getBlueMapPortMetaByPortId";
-import { SearchNodeShape } from "../nodes/SearchNode/config";
 import { validatePortConnection } from "../../utils/validatePortConnection";
+import { SearchNodeShape } from "../nodes/SearchNode/config";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;

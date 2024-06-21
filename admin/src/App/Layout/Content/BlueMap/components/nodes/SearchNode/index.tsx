@@ -4,40 +4,52 @@ import { Input, Tree } from "antd";
 import React, { useMemo, useState } from "react";
 import { blueMapNodeConfigs } from "../../../configs/blueMapNodeConfigs";
 import {
-  BlueMapNodeConfig,
   SearchTreeNode,
   X6ReactComponentProps,
+  MenuGroups,
+  BlueMapNodeConfig,
 } from "../../../types";
 import { getExpandedKeys } from "../../../utils/getExpandedKeys";
 import { highlightMatch } from "../../../utils/highlightMatch";
 import { BaseNode } from "../BaseNode";
 import { ensure } from "@/utils/ensure";
-import { menuGroupsByType } from "../../../configs/menus";
+import { menuGroups, menuGroupsByType } from "../../../configs/menus";
 
 const { Search } = Input;
 
-// 构建组树
-const buildGroupTree = (): { [key: string]: SearchTreeNode } => {
-  const groups: { [key: string]: SearchTreeNode } = {};
+const filterMenuGroupsByConfigs = (
+  configs: BlueMapNodeConfig[],
+  allGroups: MenuGroups
+) => {
+  const usedGroupTypes = new Set(
+    configs.flatMap((config) => config.menu.groupType)
+  );
+  return allGroups.filter((group) => usedGroupTypes.has(group.type));
+};
 
-  menuGroupsByType.forEach((group, groupType) => {
-    groups[groupType] = {
+// 构建组树
+const buildGroupTree = (
+  groups: MenuGroups
+): { [key: string]: SearchTreeNode } => {
+  const groupTree: { [key: string]: SearchTreeNode } = {};
+
+  groups.forEach((group) => {
+    groupTree[group.type] = {
       title: group.title,
-      key: groupType,
+      key: group.type,
       children: [],
     };
   });
 
-  Object.entries(groups).forEach(([groupType, node]) => {
-    const group = menuGroupsByType.get(groupType);
-    if (group?.parentType) {
-      const parentNode = groups[group.parentType];
+  groups.forEach((group) => {
+    if (group.parentType) {
+      const parentNode = groupTree[group.parentType];
       ensure(parentNode, `Parent group type ${group.parentType} must exist.`);
-      parentNode.children?.push(node);
+      parentNode.children?.push(groupTree[group.type]);
     }
   });
 
-  return groups;
+  return groupTree;
 };
 
 // 将配置挂在组树上
@@ -59,20 +71,20 @@ const attachConfigsToTree = (
   });
 };
 
-const transformBlueMapNodeConfigsToTree = (
-  configs: BlueMapNodeConfig[]
+// 生成最终的树结构
+const generateTreeData = (
+  configs: BlueMapNodeConfig[],
+  menuGroups: MenuGroups
 ): SearchTreeNode[] => {
-  const groups = buildGroupTree();
+  const filteredGroups = filterMenuGroupsByConfigs(configs, menuGroups);
+  const groups = buildGroupTree(filteredGroups);
   attachConfigsToTree(groups, configs);
 
   // 过滤出根节点
-  return Object.entries(groups)
-    .filter(([groupType]) => !menuGroupsByType.get(groupType)?.parentType)
-    .map(([, node]) => node);
+  return Object.values(groups).filter(
+    (node) => !menuGroupsByType.get(node.key)?.parentType
+  );
 };
-
-const defaultData: SearchTreeNode[] =
-  transformBlueMapNodeConfigsToTree(blueMapNodeConfigs);
 
 const processTreeData = (
   data: SearchTreeNode[],
@@ -119,9 +131,13 @@ export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
     setAutoExpandParent(true);
   };
 
+  const defaultData: SearchTreeNode[] = useMemo(() => {
+    return generateTreeData(blueMapNodeConfigs, menuGroups);
+  }, []);
+
   const treeData = useMemo(() => {
     return processTreeData(defaultData, searchValue);
-  }, [searchValue]);
+  }, [searchValue, defaultData]);
 
   /**
    * input 聚焦的时候，全局的 Keyboard 插件监听不到，要手动处理
