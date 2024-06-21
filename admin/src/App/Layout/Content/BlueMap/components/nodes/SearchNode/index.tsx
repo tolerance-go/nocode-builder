@@ -8,13 +8,13 @@ import {
   X6ReactComponentProps,
   MenuGroups,
   BlueMapNodeConfig,
+  SearchNodeSourceData,
 } from "../../../types";
 import { getExpandedKeys } from "../../../utils/getExpandedKeys";
 import { highlightMatch } from "../../../utils/highlightMatch";
 import { BaseNode } from "../BaseNode";
 import { ensure } from "@/utils/ensure";
 import { menuGroups, menuGroupsByType } from "../../../configs/menus";
-import { SearchNodeSourceData } from "../../../stores/search";
 
 const { Search } = Input;
 

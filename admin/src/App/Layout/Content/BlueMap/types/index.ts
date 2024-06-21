@@ -3,6 +3,11 @@ import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
 import { DataNode } from "antd/es/tree";
 
+export type SearchNodeSourceData = {
+  nodeId: string;
+  portId: string;
+};
+
 export type BlueMapPortCommonArgs = {
   text?: string;
 };

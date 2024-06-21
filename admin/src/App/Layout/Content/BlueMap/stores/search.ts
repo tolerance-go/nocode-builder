@@ -1,9 +1,5 @@
 import { proxy } from "valtio";
-
-export type SearchNodeSourceData = {
-  nodeId: string;
-  portId: string;
-};
+import { SearchNodeSourceData } from "../types";
 
 /**
  * 搜索节点从哪个 port 拖出来的
