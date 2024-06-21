@@ -53,7 +53,6 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
         connecting: {
           sourceAnchor: {
             name: "right",
-            args: {},
           },
           targetAnchor: {
             name: "left",
@@ -163,7 +162,6 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                 source: {
                   anchor: {
                     name: group === "right" ? "right" : "left",
-                    args: {},
                   },
                 },
               });

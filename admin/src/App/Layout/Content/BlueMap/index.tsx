@@ -299,7 +299,9 @@ const BlueMap = () => {
                       sourcePortBlueMapAttrs.ioType === "output"
                         ? "right"
                         : "left",
-                    args: {},
+                    args: {
+                      // dx: sourcePortBlueMapAttrs.ioType === "output" ? -10 : 0,
+                    },
                   },
                 },
                 target: {
@@ -307,7 +309,9 @@ const BlueMap = () => {
                   port: validPorts[0].id,
                   anchor: {
                     name: validPorts[0].group === "right" ? "right" : "left",
-                    args: {},
+                    args: {
+                      // dx: validPorts[0].group === "right" ? 10 : 10,
+                    },
                   },
                 },
               });
