@@ -23,6 +23,17 @@ export function validatePortConnection({
       if (targetPortId && targetNode?.isNode()) {
         const targetMeta = getBlueMapPortMetaByPortId(targetPortId, targetNode);
 
+        // 检查 ioType 匹配条件
+        const ioTypeMatch =
+          (sourceMeta.portBlueMapAttrs.ioType === "output" &&
+            targetMeta.portBlueMapAttrs.ioType === "input") ||
+          (sourceMeta.portBlueMapAttrs.ioType === "input" &&
+            targetMeta.portBlueMapAttrs.ioType === "output");
+
+        if (!ioTypeMatch) {
+          return false;
+        }
+
         // 检查 prohibit 条件
         if (
           sourceMeta.blueMapPortConfig.constraints.connecting.to.prohibit
