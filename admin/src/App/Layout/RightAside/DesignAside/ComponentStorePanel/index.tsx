@@ -1,7 +1,6 @@
 import { NavTabs } from "@/components/NavTabs";
 import { updateSearchParams } from "@/utils/updateSearchParams";
 import { CloseOutlined, SearchOutlined } from "@ant-design/icons";
-import { css } from "@emotion/css";
 import { Button, Input, Space } from "antd";
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";

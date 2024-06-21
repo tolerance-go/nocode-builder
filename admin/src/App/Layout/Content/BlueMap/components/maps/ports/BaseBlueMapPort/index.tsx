@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import { BasePortContext } from "../../../flows/ports/BasePort";
-import { BlueMapPortComponentProps } from "../../../../types";
-import { globalEventBus } from "@/globals/eventBus";
 import { cx } from "@emotion/css";
-import { validatePortConnection } from "../../../../utils/validatePortConnection";
+import { useEffect, useState } from "react";
+import { blueMapEventBus } from "../../../../globals/eventBus";
+import { BlueMapPortComponentProps } from "../../../../types";
 import { getNodeById } from "../../../../utils/getNodeById";
+import { validatePortConnection } from "../../../../utils/validatePortConnection";
+import { BasePortContext } from "../../../flows/ports/BasePort";
 
 export const BaseBlueMapPort = ({
   blueMapPort,
@@ -18,7 +18,7 @@ export const BaseBlueMapPort = ({
   const [connectable, setConnectable] = useState(true);
 
   useEffect(() => {
-    return globalEventBus.on(
+    return blueMapEventBus.on(
       "draggingBlueMapPort",
       ({ sourceNodeId, sourcePortId }) => {
         setConnectable(
@@ -34,7 +34,7 @@ export const BaseBlueMapPort = ({
   }, [graph, node, port.id]);
 
   useEffect(() => {
-    return globalEventBus.on("dragBlueMapPortEnd", () => {
+    return blueMapEventBus.on("dragBlueMapPortEnd", () => {
       setConnectable(true);
     });
   }, [graph, node, port.id]);

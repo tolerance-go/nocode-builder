@@ -6,18 +6,17 @@ import stores from "@/stores";
 import {
   InsertionPositions,
   NodeData,
-  NodePlainChild,
   RectVisualPosition,
   VisualPosition,
 } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { InsertionAnalyzer } from "@/utils/insertionAnalyzer";
 import { isPlainObject } from "@/utils/isPlainObject";
+import { isPrimitive } from "@/utils/isPrimitive";
 import { DeepReadonly } from "@/utils/types";
 import { updateSearchParams } from "@/utils/updateSearchParams";
 import React, { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { isPrimitive } from "@/utils/isPrimitive";
 import { useSnapshot } from "valtio";
 
 const RenderNode: React.FC<{
