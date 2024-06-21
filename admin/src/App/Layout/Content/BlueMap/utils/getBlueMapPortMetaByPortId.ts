@@ -1,9 +1,12 @@
 import { ensure } from "@/utils/ensure";
-import { PortBlueMapAttrs } from "../types";
 import { Node } from "@antv/x6";
 import { blueMapPortConfigsByType } from "../configs/blueMapPortConfigs";
+import { BlueMapPortMeta, PortBlueMapAttrs } from "../types";
 
-export const getBlueMapPortMetaByPortId = (portId: string, node: Node) => {
+export const getBlueMapPortMetaByPortId = (
+  portId: string,
+  node: Node
+): BlueMapPortMeta => {
   const ports = node.getPorts();
   const port = ports.find((p) => p.id === portId);
   ensure(port, "port 必须存在。");
