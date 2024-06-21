@@ -78,10 +78,10 @@ export const ArrowPort = (props: ArrowPortProps) => {
       {...props}
       icon={
         isConnected ? (
-          <CaretRightFilled className={cx("text-3xl relative")} />
+          <CaretRightFilled className={cx("text-2xl relative")} />
         ) : (
           <svg
-            className={cx("text-3xl relative")}
+            className={cx("text-2xl relative")}
             viewBox="0 0 1024 1024"
             focusable="false"
             data-icon="caret-right"
