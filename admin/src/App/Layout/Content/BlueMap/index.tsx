@@ -1,4 +1,3 @@
-import { globalEventBus } from "@/globals/eventBus";
 import useLatest from "@/hooks/useLatest";
 import { ensure } from "@/utils/ensure";
 import {
@@ -16,13 +15,14 @@ import { useCallback, useEffect, useState } from "react";
 import { SearchNodeShape } from "./components/flows/nodes/SearchNode/config";
 import X6Graph from "./components/flows/x6/X6Graph";
 import { blueMapRawNodeConfigsById } from "./configs/configs";
+import { blueMapEventBus } from "./globals/eventBus";
 import "./globals/register";
 import { CustomRouterArgs } from "./globals/register/registerRouter";
 import stores from "./stores";
+import { SearchNodeSourceData } from "./types";
 import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
 import { getNodeById } from "./utils/getNodeById";
 import { validatePortConnection } from "./utils/validatePortConnection";
-import { SearchNodeSourceData } from "./types";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -159,7 +159,7 @@ const BlueMap = () => {
             sourcePortId
           );
 
-          globalEventBus.emit("dragBlueMapPortEnd", undefined);
+          blueMapEventBus.emit("dragBlueMapPortEnd", undefined);
         }
       });
 
@@ -170,7 +170,7 @@ const BlueMap = () => {
       graph.on("edge:moved", saveGraphData);
 
       graph.on("edge:connected", () => {
-        globalEventBus.emit("dragBlueMapPortEnd", undefined);
+        blueMapEventBus.emit("dragBlueMapPortEnd", undefined);
       });
 
       loadGraphData();
@@ -207,119 +207,127 @@ const BlueMap = () => {
   };
 
   useEffect(() => {
-    return globalEventBus.on("selectBlueMapSearchPanelItem", ({ configId }) => {
-      const graph = graphRef.current;
-      if (graph) {
-        const config = blueMapRawNodeConfigsById.get(configId);
+    return blueMapEventBus.on(
+      "selectBlueMapSearchPanelItem",
+      ({ configId }) => {
+        const graph = graphRef.current;
+        if (graph) {
+          const config = blueMapRawNodeConfigsById.get(configId);
 
-        ensure(config, "config 必须存在。");
+          ensure(config, "config 必须存在。");
 
-        const allNodes = graph.getNodes();
-        const searchNode = allNodes?.find(
-          (node) => node.shape === SearchNodeShape.shape
-        );
+          const allNodes = graph.getNodes();
+          const searchNode = allNodes?.find(
+            (node) => node.shape === SearchNodeShape.shape
+          );
 
-        ensure(searchNode, "searchNode 必须存在。");
+          ensure(searchNode, "searchNode 必须存在。");
 
-        const { x, y } = searchNode.getPosition();
+          const { x, y } = searchNode.getPosition();
 
-        /** 先取出来缓存 */
-        const source = stores.search.states.searchNodeSourcePort.source;
+          /** 先取出来缓存 */
+          const source = stores.search.states.searchNodeSourcePort.source;
 
-        removeSearchNodeRef.current();
+          removeSearchNodeRef.current();
 
-        graph.batchUpdate(() => {
-          const target = graph.addNode({
-            shape: config.shapeName,
-            x,
-            y,
-            ports: config.ports,
-            portMarkup: [Markup.getForeignObjectMarkup()],
-            attrs: config.attrs,
-          });
-
-          if (source) {
-            const { nodeId, portId } = source;
-            // 找到源节点的蓝图配置和蓝图 port 配置
-            const sourceNode = getNodeById(nodeId, graph);
-            // const sourceBlueMapNodeConfig = getBlueMapNodeConfigByNodeId(
-            //   nodeId,
-            //   graph
-            // );
-            const {
-              blueMapPortConfig: sourceBlueMapPortConfig,
-              portBlueMapAttrs: sourcePortBlueMapAttrs,
-            } = getBlueMapPortMetaByPortId(portId, sourceNode);
-
-            /**
-             * 准备往 target 上连线
-             * 找到 target 上所有的 port
-             * 然后根据 source 的 to 的约束
-             * 找到所有合法的 port，然后取第一个，创建一个连线从 source 到 target
-             */
-
-            const targetPorts = target.getPorts();
-            const validPorts = targetPorts.filter((targetPort) => {
-              return validatePortConnection({
-                sourceNode: sourceNode,
-                sourcePortId: portId,
-                targetPortId: targetPort.id!,
-                targetNode: target,
-              });
+          graph.batchUpdate(() => {
+            const target = graph.addNode({
+              shape: config.shapeName,
+              x,
+              y,
+              ports: config.ports,
+              portMarkup: [Markup.getForeignObjectMarkup()],
+              attrs: config.attrs,
             });
 
-            if (validPorts.length > 0) {
-              const routerArgs: CustomRouterArgs = {
-                sourceSide:
-                  sourcePortBlueMapAttrs.ioType === "output" ? "right" : "left",
-                targetSide:
-                  sourcePortBlueMapAttrs.ioType === "output" ? "left" : "right",
-                // offset: 50, // 自定义的偏移值
-                // verticalOffset: 10, // 自定义的纵向偏移值
-              };
+            if (source) {
+              const { nodeId, portId } = source;
+              // 找到源节点的蓝图配置和蓝图 port 配置
+              const sourceNode = getNodeById(nodeId, graph);
+              // const sourceBlueMapNodeConfig = getBlueMapNodeConfigByNodeId(
+              //   nodeId,
+              //   graph
+              // );
+              const {
+                blueMapPortConfig: sourceBlueMapPortConfig,
+                portBlueMapAttrs: sourcePortBlueMapAttrs,
+              } = getBlueMapPortMetaByPortId(portId, sourceNode);
 
-              graph.addEdge({
-                attrs: {
-                  line: {
-                    targetMarker: null,
-                    strokeLinecap: "round",
-                    stroke: sourceBlueMapPortConfig.edgeConfig.color, // 根据 portType 设置线的颜色
-                    strokeWidth: sourceBlueMapPortConfig.edgeConfig.strokeWidth,
-                  },
-                },
-                router: {
-                  name: "custom",
-                  args: routerArgs,
-                },
-                source: {
-                  cell: sourceNode.id,
-                  port: portId,
-                  anchor: {
-                    name:
-                      sourcePortBlueMapAttrs.ioType === "output"
-                        ? "right"
-                        : "left",
-                    args: {
-                      // dx: sourcePortBlueMapAttrs.ioType === "output" ? -10 : 0,
-                    },
-                  },
-                },
-                target: {
-                  cell: target.id,
-                  port: validPorts[0].id,
-                  anchor: {
-                    name: validPorts[0].group === "right" ? "right" : "left",
-                    args: {
-                      // dx: validPorts[0].group === "right" ? 10 : 10,
-                    },
-                  },
-                },
+              /**
+               * 准备往 target 上连线
+               * 找到 target 上所有的 port
+               * 然后根据 source 的 to 的约束
+               * 找到所有合法的 port，然后取第一个，创建一个连线从 source 到 target
+               */
+
+              const targetPorts = target.getPorts();
+              const validPorts = targetPorts.filter((targetPort) => {
+                return validatePortConnection({
+                  sourceNode: sourceNode,
+                  sourcePortId: portId,
+                  targetPortId: targetPort.id!,
+                  targetNode: target,
+                });
               });
+
+              if (validPorts.length > 0) {
+                const routerArgs: CustomRouterArgs = {
+                  sourceSide:
+                    sourcePortBlueMapAttrs.ioType === "output"
+                      ? "right"
+                      : "left",
+                  targetSide:
+                    sourcePortBlueMapAttrs.ioType === "output"
+                      ? "left"
+                      : "right",
+                  // offset: 50, // 自定义的偏移值
+                  // verticalOffset: 10, // 自定义的纵向偏移值
+                };
+
+                graph.addEdge({
+                  attrs: {
+                    line: {
+                      targetMarker: null,
+                      strokeLinecap: "round",
+                      stroke: sourceBlueMapPortConfig.edgeConfig.color, // 根据 portType 设置线的颜色
+                      strokeWidth:
+                        sourceBlueMapPortConfig.edgeConfig.strokeWidth,
+                    },
+                  },
+                  router: {
+                    name: "custom",
+                    args: routerArgs,
+                  },
+                  source: {
+                    cell: sourceNode.id,
+                    port: portId,
+                    anchor: {
+                      name:
+                        sourcePortBlueMapAttrs.ioType === "output"
+                          ? "right"
+                          : "left",
+                      args: {
+                        // dx: sourcePortBlueMapAttrs.ioType === "output" ? -10 : 0,
+                      },
+                    },
+                  },
+                  target: {
+                    cell: target.id,
+                    port: validPorts[0].id,
+                    anchor: {
+                      name: validPorts[0].group === "right" ? "right" : "left",
+                      args: {
+                        // dx: validPorts[0].group === "right" ? 10 : 10,
+                      },
+                    },
+                  },
+                });
+              }
             }
-          }
-        });
+          });
+        }
       }
-    });
+    );
   }, [removeSearchNodeRef, graphRef]);
 
   return (
