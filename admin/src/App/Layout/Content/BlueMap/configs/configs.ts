@@ -1,5 +1,5 @@
-import { BaseNodeConfig } from "../components/nodes/BaseNode/config";
-import { SearchNodeConfig } from "../components/nodes/SearchNode/config";
+import { BaseNodeConfig } from "../components/flows/nodes/BaseNode/config";
+import { SearchNodeConfig } from "../components/flows/nodes/SearchNode/config";
 import { ArrowPortConfig } from "../components/ports/ArrowPort/config";
 import { BasePortConfig } from "../components/ports/BasePort/config";
 import { BranchControlNodeConfigMeta } from "../maps/nodes/BranchControlNode/config";

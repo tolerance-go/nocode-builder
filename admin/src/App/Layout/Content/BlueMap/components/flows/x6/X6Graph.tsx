@@ -8,7 +8,7 @@ import ReactDOM from "react-dom/client";
 import { CustomRouterArgs } from "../../../globals/register/registerRouter";
 import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../../types";
 import { validatePortConnection } from "../../../utils/validatePortConnection";
-import { SearchNodeShape } from "../../nodes/SearchNode/config";
+import { SearchNodeShape } from "../nodes/SearchNode/config";
 import { blueMapPortConfigsByType } from "../../../configs/blueMapPortConfigs";
 import { globalEventBus } from "@/globals/eventBus";
 
