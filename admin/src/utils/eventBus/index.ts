@@ -2,22 +2,46 @@ interface OnOptions {
   immediate?: boolean;
 }
 
+// 用于生成嵌套对象路径的类型
+type EventPath<T, Prefix extends string = ''> = T extends object
+  ? {
+      [K in keyof T]: T[K] extends object
+        ? `${Prefix}${Prefix extends '' ? '' : '.'}${K & string}` | EventPath<T[K], `${Prefix}${Prefix extends '' ? '' : '.'}${K & string}`>
+        : `${Prefix}${Prefix extends '' ? '' : '.'}${K & string}`
+    }[keyof T]
+  : never;
+
+// 用于获取事件负载类型的类型
+type EventPayload<T, P extends string> = P extends `${infer K}.${infer Rest}`
+  ? K extends keyof T
+    ? Rest extends ''
+      ? T[K] extends unknown[]
+        ? T[K]
+        : [T[K]]
+      : T[K] extends object
+      ? EventPayload<T[K], Rest>
+      : never
+    : never
+  : P extends keyof T
+  ? T[P] extends unknown[]
+    ? T[P]
+    : [T[P]]
+  : never;
+
 export class EventBus<TEvents extends Record<string, unknown>> {
   private listeners: {
-    [K in keyof TEvents]?: ((payload: TEvents[K]) => void)[];
+    [K in EventPath<TEvents>]?: ((...params: EventPayload<TEvents, K>) => void)[];
   } = {};
 
   private eventHistory: {
-    [K in keyof TEvents]?: TEvents[K];
+    [K in EventPath<TEvents>]?: EventPayload<TEvents, K>;
   } = {};
 
-  // 在构造函数中接受一个参数来设置是否开启调试模式
   constructor() {}
 
-  // 注册事件监听器
-  on<K extends keyof TEvents>(
+  on<K extends EventPath<TEvents>>(
     eventType: K,
-    listener: (payload: TEvents[K]) => void,
+    listener: (...params: EventPayload<TEvents, K>) => void,
     options?: OnOptions
   ): () => void {
     if (!this.listeners[eventType]) {
@@ -25,18 +49,16 @@ export class EventBus<TEvents extends Record<string, unknown>> {
     }
     this.listeners[eventType]!.push(listener);
 
-    // 如果选项中 immediate 为 true，并且该事件已触发过，则立即调用监听器
     if (options?.immediate && this.eventHistory[eventType] !== undefined) {
-      listener(this.eventHistory[eventType]!);
+      listener(...(this.eventHistory[eventType] as EventPayload<TEvents, K>));
     }
 
     return () => this.off(eventType, listener);
   }
 
-  // 移除事件监听器
-  off<K extends keyof TEvents>(
+  off<K extends EventPath<TEvents>>(
     eventType: K,
-    listener: (payload: TEvents[K]) => void
+    listener: (...params: EventPayload<TEvents, K>) => void
   ): void {
     const listeners = this.listeners[eventType];
     if (listeners) {
@@ -47,15 +69,43 @@ export class EventBus<TEvents extends Record<string, unknown>> {
     }
   }
 
-  // 触发事件
-  emit<K extends keyof TEvents>(eventType: K, payload: TEvents[K]): void {
-    console.log("eventType:", eventType, "payload:", payload);
+  emit<K extends EventPath<TEvents>>(eventType: K, ...params: EventPayload<TEvents, K>): void {
+    console.log("eventType:", eventType, "params:", params);
     const listeners = this.listeners[eventType];
-    // 存储已触发的事件及其数据
-    this.eventHistory[eventType] = payload;
+    this.eventHistory[eventType] = params as EventPayload<TEvents, K>;
 
     if (listeners) {
-      listeners.forEach((listener) => listener(payload));
+      listeners.forEach((listener) => listener(...params));
     }
   }
 }
+
+// 示例类型定义
+type Events = {
+  user: {
+    login: {
+      success: [userId: string];
+      failure: [error: string];
+    };
+    logout: [];
+  };
+  system: {
+    update: [version: string];
+  };
+};
+
+// 创建 EventBus 实例
+const eventBus = new EventBus<Events>();
+
+// 注册监听器
+eventBus.on("user.login.success", (userId) => {
+  console.log("User logged in with ID:", userId);
+}, { immediate: true });
+
+eventBus.on("system.update", (version) => {
+  console.log("System updated to version:", version);
+});
+
+// 触发事件
+eventBus.emit("user.login.success", "12345");
+eventBus.emit("system.update", "1.0.1");
