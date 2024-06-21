@@ -106,7 +106,7 @@ export const ArrowPort = (props: ArrowPortProps) => {
             )}
           >
             {icon}
-            {label && <span className="text-lg">{label}</span>}
+            {label && <span className='text-base'>{label}</span>}
           </div>
         );
       }}
