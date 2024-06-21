@@ -14,6 +14,7 @@ import { highlightMatch } from "../../../utils/highlightMatch";
 import { BaseNode } from "../BaseNode";
 import { ensure } from "@/utils/ensure";
 import { menuGroups, menuGroupsByType } from "../../../configs/menus";
+import { SearchNodeSourceData } from "../../../stores/search";
 
 const { Search } = Input;
 
@@ -112,7 +113,9 @@ const processTreeData = (
 };
 
 export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
-  const { graph } = props;
+  const { graph, node } = props;
+
+  const source = node.getPropByPath("source") as SearchNodeSourceData;
 
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const [searchValue, setSearchValue] = useState("");

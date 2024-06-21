@@ -1,13 +1,15 @@
 import { proxy } from "valtio";
 
+export type SearchNodeSourceData = {
+  nodeId: string;
+  portId: string;
+};
+
 /**
  * 搜索节点从哪个 port 拖出来的
  */
 const searchNodeSourcePort = proxy<{
-  source?: {
-    nodeId: string;
-    portId: string;
-  };
+  source?: SearchNodeSourceData;
 }>({
   source: undefined,
 });

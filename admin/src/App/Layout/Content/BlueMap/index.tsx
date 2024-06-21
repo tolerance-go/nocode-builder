@@ -22,6 +22,7 @@ import stores from "./stores";
 import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
 import { getNodeById } from "./utils/getNodeById";
 import { validatePortConnection } from "./utils/validatePortConnection";
+import { SearchNodeSourceData } from "./stores/search";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -146,6 +147,11 @@ const BlueMap = () => {
             y,
           });
           searchNode.setPropByPath("edge/id", edge.id);
+          const searchNodeSourceData: SearchNodeSourceData = {
+            nodeId: sourceNode.id,
+            portId: sourcePortId,
+          };
+          searchNode.setPropByPath("source", searchNodeSourceData);
           stores.search.actions.setSearchNodeSourcePort(
             sourceNode.id,
             sourcePortId
