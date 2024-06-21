@@ -59,7 +59,7 @@ export type EventMaps = {
    *
    * 因为 手动调用 window.history.pushState 不会触发 window 的 popstate
    */
-  popstate: [undefined];
+  popstate: [];
   /**
    * 触发舞台路由变化
    */
@@ -76,6 +76,15 @@ export type EventMaps = {
       configId: string;
     }
   ];
+  blueMap: {
+    /** 从 port 拖拽准备连接其他的 port */
+    draggingPortToOtherPort: [
+      {
+        sourceNodeId: string;
+        sourcePortId: string;
+      }
+    ];
+  };
 };
 
 export const globalEventBus = new EventBus<EventMaps>();
