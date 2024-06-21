@@ -42,7 +42,7 @@ function convertConnectionsToPorts(
                 ? -(blueMapPort.width ?? DEFAULT_FO_WIDTH) - PADDING_X
                 : PADDING_X,
           },
-          blueMapPort: portBlueMapAttrs,
+          blueMap: portBlueMapAttrs,
         },
         args: {
           height: blueMapPort.height ?? DEFAULT_FO_HEIGHT,

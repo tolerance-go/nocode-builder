@@ -7,7 +7,7 @@ import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { blueMapPortConfigsByType } from "../../configs/configs";
 import { CustomRouterArgs } from "../../globals/register/registerRouter";
-import { BlueMapPortCommonArgs } from "../../types";
+import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../types";
 import { getBlueMapPortMetaByPortId } from "../../utils/getBlueMapPortMetaByPortId";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
 
@@ -231,7 +231,9 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
         onPortRendered(args) {
           const container = args.contentSelectors?.foContent;
           if (container) {
-            const blueMapPort = args.port.attrs?.blueMapPort;
+            const blueMapPort = args.port.attrs?.blueMap as
+              | PortBlueMapAttrs
+              | undefined;
             ensure(blueMapPort, "blueMapPort 必须存在。");
             const blueMapPortType = blueMapPort.type;
 
