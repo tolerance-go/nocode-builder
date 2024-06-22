@@ -13,7 +13,6 @@ import { Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { SearchNodeShape } from "./components/nodes/SearchNode/config";
-import X6Graph from "./components/Graph";
 import { blueMapRawNodeConfigsById } from "./configs/configs";
 import { blueMapEventBus } from "./globals/eventBus";
 import "./globals/register";
@@ -25,6 +24,7 @@ import { getNodeById } from "./utils/getNodeById";
 import { validatePortConnection } from "./utils/validatePortConnection";
 import { removePortConnections } from "./utils/removePortConnections";
 import { connectAnchorOffset } from "./constants";
+import X6Graph from "./Graph";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -317,7 +317,10 @@ const BlueMap = () => {
                           ? "right"
                           : "left",
                       args: {
-                        dx: sourcePortBlueMapAttrs.ioType === "output" ? -connectAnchorOffset : connectAnchorOffset,
+                        dx:
+                          sourcePortBlueMapAttrs.ioType === "output"
+                            ? -connectAnchorOffset
+                            : connectAnchorOffset,
                       },
                     },
                   },
@@ -327,7 +330,10 @@ const BlueMap = () => {
                     anchor: {
                       name: validPorts[0].group === "right" ? "right" : "left",
                       args: {
-                        dx: validPorts[0].group === "right" ? -connectAnchorOffset : connectAnchorOffset,
+                        dx:
+                          validPorts[0].group === "right"
+                            ? -connectAnchorOffset
+                            : connectAnchorOffset,
                       },
                     },
                   },
