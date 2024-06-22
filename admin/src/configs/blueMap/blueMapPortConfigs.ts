@@ -1,8 +1,8 @@
-import { ConditionPortConfig } from "@/components/blueMap/ports/ConditionPort/config";
-import { ExecPortConfig } from "@/components/blueMap/ports/ExecPort/config";
+import { ConditionBlueMapPortConfig } from "@/components/blueMap/ports/ConditionBlueMapPort/config";
+import { ExecBlueMapPortConfig } from "@/components/blueMap/ports/ExecBlueMapPort/config";
 import { validateAndCreateConfigMap } from "@/utils/blueMap/validateAndCreateConfigMap";
 
-export const blueMapPortConfigs = [ExecPortConfig, ConditionPortConfig];
+export const blueMapPortConfigs = [ExecBlueMapPortConfig, ConditionBlueMapPortConfig];
 
 export const blueMapPortConfigsByType = validateAndCreateConfigMap(
   blueMapPortConfigs,
