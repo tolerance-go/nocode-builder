@@ -2,3 +2,4 @@ packages:
   - "admin"
   - "server"
   - "home"
+  - "docs"
