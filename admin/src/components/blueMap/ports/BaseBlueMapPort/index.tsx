@@ -6,6 +6,7 @@ import { removePortConnections } from "@/utils/blueMap/removePortConnections";
 import { validatePortConnection } from "@/utils/blueMap/validatePortConnection";
 import { blueMapEventBus } from "@/globals/blueMapEventBus";
 import { BlueMapPortComponentProps } from "@/types/blueMap";
+import "./index.less";
 
 export const BaseBlueMapPort = ({
   blueMapPort,
@@ -22,14 +23,14 @@ export const BaseBlueMapPort = ({
     return blueMapEventBus.on(
       "draggingBlueMapPort",
       ({ sourceNodeId, sourcePortId }) => {
-        setConnectable(
-          validatePortConnection({
-            sourceNode: getNodeById(sourceNodeId, graph),
-            sourcePortId,
-            targetNode: node,
-            targetPortId: port.id,
-          })
-        );
+        const connectable = validatePortConnection({
+          sourceNode: getNodeById(sourceNodeId, graph),
+          sourcePortId,
+          targetNode: node,
+          targetPortId: port.id,
+        });
+
+        setConnectable(connectable);
       }
     );
   }, [graph, node, port.id]);

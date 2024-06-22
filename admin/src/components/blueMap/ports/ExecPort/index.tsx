@@ -16,7 +16,7 @@ export const ExecPort = (props: BlueMapPortComponentProps) => {
             style={{
               color: ExecPortConfig.edgeConfig.color,
             }}
-            className={"text-2xl relative"}
+            className={"text-xl relative"}
             focusable="false"
             data-icon="caret-right"
             width="1em"
@@ -36,7 +36,7 @@ export const ExecPort = (props: BlueMapPortComponentProps) => {
             style={{
               color: ExecPortConfig.edgeConfig.color,
             }}
-            className={"text-2xl relative"}
+            className={"text-xl relative"}
             focusable="false"
             data-icon="caret-right"
             width="1em"

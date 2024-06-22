@@ -13,7 +13,7 @@ export const ConditionPort = (props: BlueMapPortComponentProps) => {
         iconColor={ConditionPortConfig.edgeConfig.color}
         connectedIcon={
           <svg
-            className={"text-2xl relative"}
+            className={"text-xl relative"}
             width="1em"
             height="1em"
             viewBox="0 0 24 24"
@@ -32,7 +32,7 @@ export const ConditionPort = (props: BlueMapPortComponentProps) => {
         }
         unconnectedIcon={
           <svg
-            className={"text-2xl relative"}
+            className={"text-xl relative"}
             width="1em"
             height="1em"
             viewBox="0 0 24 24"

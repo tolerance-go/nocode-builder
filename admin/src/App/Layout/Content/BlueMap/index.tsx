@@ -33,6 +33,7 @@ import {
 } from "../../../../types/blueMap";
 import { blueMapPortConfigsByType } from "@/configs/blueMap/blueMapPortConfigs";
 import "@/globals/register";
+import "./index.less";
 
 const BlueMap = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -116,11 +117,11 @@ const BlueMap = () => {
           type: "doubleMesh",
           args: [
             {
-              color: "#eee", // 主网格线颜色
+              color: "#efefef", // 主网格线颜色
               thickness: 1, // 主网格线宽度
             },
             {
-              color: "#ddd", // 次网格线颜色
+              color: "#dfdfdf", // 次网格线颜色
               thickness: 1, // 次网格线宽度
               factor: 4, // 主次网格线间隔
             },
@@ -701,6 +702,49 @@ const BlueMap = () => {
       }
     );
   }, [removeSearchNodeRef, graphRef]);
+
+  useEffect(() => {
+    return blueMapEventBus.on("draggingBlueMapPort", () => {
+      const graph = graphRef.current!;
+
+      /**
+       * 找到从 port 开始连接出去的线，
+       * 如果不可连接，将线设置为半透明
+       *
+       * 这里实现是增加 class，动态修改样式，避免属性操作进入历史纪录
+       *
+       * 注意：这里只处理连接出去的，因为 source 端也会处理一样的逻辑
+       */
+      const edges = graph.getEdges();
+      edges.forEach((edge) => {
+        const edgeElement = document.querySelector(
+          `g[data-cell-id="${edge.id}"]`
+        );
+        if (edgeElement) {
+          edgeElement.classList.add("semi-transparent-edge");
+        }
+      });
+    });
+  }, [graphRef]);
+
+  useEffect(() => {
+    return blueMapEventBus.on("dragBlueMapPortEnd", () => {
+      const graph = graphRef.current!;
+
+      /**
+       * 清除类名
+       */
+      const edges = graph.getEdges();
+      edges.forEach((edge) => {
+        const edgeElement = document.querySelector(
+          `g[data-cell-id="${edge.id}"]`
+        );
+        if (edgeElement) {
+          edgeElement.classList.remove("semi-transparent-edge");
+        }
+      });
+    });
+  }, [graphRef]);
 
   return (
     <div className="h-[100%] relative">
