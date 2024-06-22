@@ -4,8 +4,6 @@ FROM node:21.6.1-alpine AS builder
 # 安装 pnpm
 RUN npm install -g pnpm@9
 
-COPY ../pnpm-lock.yaml ../pnpm-workspace.yaml ./temp/
-
 WORKDIR /
 
 # 复制 package.json 和 pnpm-lock.yaml 以及上级目录的 pnpm-workspace.yaml
