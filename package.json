@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "everyDay": "pnpm recursive run everyDay",
+    "deploy": "docker-compose up --build -d",
+    "everyDay": "pnpm recursive run everyDay && pnpm deploy",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
