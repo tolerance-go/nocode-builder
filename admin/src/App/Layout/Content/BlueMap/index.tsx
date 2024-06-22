@@ -23,6 +23,7 @@ import { SearchNodeSourceData } from "./types";
 import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
 import { getNodeById } from "./utils/getNodeById";
 import { validatePortConnection } from "./utils/validatePortConnection";
+import { removePortConnections } from "./utils/removePortConnections";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -271,6 +272,14 @@ const BlueMap = () => {
               });
 
               if (validPorts.length > 0) {
+                // 删除之前存在的连线
+                if (
+                  sourceBlueMapPortConfig.type === "exec" &&
+                  sourcePortBlueMapAttrs.ioType === "output"
+                ) {
+                  removePortConnections(source.nodeId, source.portId, graph);
+                }
+
                 const routerArgs: CustomRouterArgs = {
                   sourceSide:
                     sourcePortBlueMapAttrs.ioType === "output"
