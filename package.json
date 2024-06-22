@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "everyDay": "pnpm recursive run everyDay",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

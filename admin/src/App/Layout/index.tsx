@@ -4,7 +4,6 @@ import { Header } from "./Header";
 import { LeftAside } from "./LeftAside";
 import { RightAside } from "./RightAside";
 import { useEffect } from "react";
-import MouseFollower from "@/components/MouseFollower";
 import MouseFollowerManager from "./MouseFollowerManager";
 
 export const Layout = () => {

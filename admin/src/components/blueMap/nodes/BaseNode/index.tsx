@@ -1,8 +1,8 @@
+import { X6ReactComponentProps } from "@/types/blueMap";
 import { Cell } from "@antv/x6";
 import { cx } from "@emotion/css";
 import { Typography } from "antd";
 import React from "react";
-import { X6ReactComponentProps } from "../../../../types";
 
 export type BaseNodeAttrs = Cell.Common["attrs"];
 
