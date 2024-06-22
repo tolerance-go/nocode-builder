@@ -63,10 +63,10 @@ export const BottomPanel = () => {
             label: "组件树",
             key: "tree",
           },
-          {
-            label: "编辑器",
-            key: "editor",
-          },
+          // {
+          //   label: "编辑器",
+          //   key: "editor",
+          // },
         ]}
         onChange={(key) => {
           setSearchParams(
