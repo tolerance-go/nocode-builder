@@ -1,6 +1,6 @@
 import { components } from "@/configs/components";
 import { slotBackground } from "@/configs/styles";
-import { globalEventBus } from "@/globals/eventBus";
+import { globalEventBus } from "@/globals/globalEventBus";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import {

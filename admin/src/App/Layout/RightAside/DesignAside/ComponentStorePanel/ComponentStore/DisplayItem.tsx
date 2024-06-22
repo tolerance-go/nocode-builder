@@ -1,5 +1,5 @@
 import { SettingConfig } from "@/components/SettingsForm";
-import { globalEventBus } from "@/globals/eventBus";
+import { globalEventBus } from "@/globals/globalEventBus";
 import stores from "@/stores";
 import { ComponentWidget, NodeData, StaticProps } from "@/types";
 import { DeepReadonly } from "@/utils/types";

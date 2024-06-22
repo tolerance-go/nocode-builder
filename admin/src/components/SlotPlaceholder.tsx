@@ -1,5 +1,5 @@
 import { slotBackground } from "@/configs/styles";
-import { globalEventBus } from "@/globals/eventBus";
+import { globalEventBus } from "@/globals/globalEventBus";
 import { NodeData } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { useState, useEffect } from "react";

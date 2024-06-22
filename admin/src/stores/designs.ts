@@ -1,4 +1,4 @@
-import { globalEventBus } from "@/globals/eventBus";
+import { globalEventBus } from "@/globals/globalEventBus";
 import {
   DocumentInsertionPosition,
   NodeData,
