@@ -1,14 +1,14 @@
 import colors from "tailwindcss/colors";
-import { ExecBlueMapPort } from ".";
+import { ConditionPort } from ".";
 import { BlueMapPortConfig } from "@/types/blueMap";
 
-export const ExecBlueMapPortConfig: BlueMapPortConfig = {
+export const ConditionPortConfig: BlueMapPortConfig = {
   id: "exec",
-  type: "exec",
-  component: ExecBlueMapPort,
+  type: "condition",
+  component: ConditionPort,
   edgeConfig: {
     strokeWidth: 2.5,
-    color: colors.gray[900],
+    color: colors.sky[400],
   },
   constraints: {
     connecting: {

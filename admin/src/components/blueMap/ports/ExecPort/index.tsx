@@ -1,20 +1,20 @@
 import { FlowPort } from "../FlowPort";
 import { BaseBlueMapPort } from "../BaseBlueMapPort";
-import { ExecBlueMapPortConfig } from "./config";
+import { ExecPortConfig } from "./config";
 import { BlueMapPortComponentProps } from "@/types/blueMap";
 
-export const ExecBlueMapPort = (props: BlueMapPortComponentProps) => {
+export const ExecPort = (props: BlueMapPortComponentProps) => {
   const { blueMapPort, ...portProps } = props;
   return (
     <BaseBlueMapPort {...props}>
       <FlowPort
-        iconColor={ExecBlueMapPortConfig.edgeConfig.color}
+        iconColor={ExecPortConfig.edgeConfig.color}
         {...portProps}
         label={blueMapPort.args?.text}
         connectedIcon={
           <svg
             style={{
-              color: ExecBlueMapPortConfig.edgeConfig.color,
+              color: ExecPortConfig.edgeConfig.color,
             }}
             className={"text-2xl relative"}
             focusable="false"
@@ -34,7 +34,7 @@ export const ExecBlueMapPort = (props: BlueMapPortComponentProps) => {
         unconnectedIcon={
           <svg
             style={{
-              color: ExecBlueMapPortConfig.edgeConfig.color,
+              color: ExecPortConfig.edgeConfig.color,
             }}
             className={"text-2xl relative"}
             focusable="false"
