@@ -20,7 +20,7 @@ export const SlotPlaceholder: React.FC<SlotPlaceholderProps> = ({
     return coreEventBus.on("draggingHoveringNode", ({ node }) => {
       setIsHovering(node?.id === parentNode.id);
     });
-  }, []);
+  }, [parentNode.id]);
 
   useEffect(() => {
     return coreEventBus.on("draggingNestHoveringNodeSlot", ({ nodeMeta }) => {
@@ -30,7 +30,7 @@ export const SlotPlaceholder: React.FC<SlotPlaceholderProps> = ({
           : false
       );
     });
-  }, []);
+  }, [parentNode.id, slotName]);
 
   return isHovering ? (
     <div

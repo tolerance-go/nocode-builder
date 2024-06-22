@@ -1,5 +1,6 @@
 import { SettingConfig } from "@/components/SettingsForm";
 import { coreEventBus } from "@/globals/coreEventBus";
+import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { ComponentWidget, NodeData, StaticProps } from "@/types";
 import { DeepReadonly } from "@/utils/types";
@@ -50,6 +51,8 @@ export const DisplayItem: React.FC<{
 
   const handleMouseMove = () => {};
 
+  const handleMouseMoveRef = useLatest(handleMouseMove);
+
   const handleMouseUp = () => {
     stores.designs.actions.stopDragging();
 
@@ -58,8 +61,11 @@ export const DisplayItem: React.FC<{
     // 更新下一次拖拽的 id
     setNodeData(createNodeData(component));
   };
+  const handleMouseUpRef = useLatest(handleMouseUp);
 
   useEffect(() => {
+    const handleMouseMove = handleMouseMoveRef.current;
+    const handleMouseUp = handleMouseUpRef.current;
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
@@ -72,7 +78,7 @@ export const DisplayItem: React.FC<{
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, handleMouseMoveRef, handleMouseUpRef]);
 
   return (
     <div

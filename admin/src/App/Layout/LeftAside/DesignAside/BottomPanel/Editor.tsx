@@ -1,6 +1,5 @@
 import * as monaco from "monaco-editor";
 import { useEffect, useRef } from "react";
-
 import stores from "@/stores";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
@@ -9,6 +8,7 @@ import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
 import { useSnapshot } from "valtio";
 import { coreEventBus } from "@/globals/coreEventBus";
+import useLatest from "@/hooks/useLatest";
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -70,10 +70,16 @@ const Editor = () => {
     });
   }, []);
 
+  const designTreeDataRef = useLatest(designTreeData);
+
   useEffect(() => {
     if (editorRef.current) {
       editorInstance.current = monaco.editor.create(editorRef.current, {
-        value: JSON.stringify(designTreeData.value.nodeData, null, 2),
+        value: JSON.stringify(
+          designTreeDataRef.current.value.nodeData,
+          null,
+          2
+        ),
         language: "json", // 使用自定义DSL语言
         theme: "vs-dark",
       });
@@ -113,7 +119,7 @@ const Editor = () => {
     return () => {
       editorInstance.current?.dispose();
     };
-  }, []);
+  }, [designTreeDataRef]);
 
   return <div ref={editorRef} style={{ height: "100%", width: "100%" }}></div>;
 };

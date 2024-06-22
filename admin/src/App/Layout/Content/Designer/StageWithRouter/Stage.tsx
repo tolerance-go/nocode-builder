@@ -109,8 +109,11 @@ const RenderNode: React.FC<{
 
     onDraggingEnd();
   };
+  const handleMouseUpRef = useLatest(handleMouseUp);
 
   const handleMouseMove = () => {};
+
+  const handleMouseMoveRef = useLatest(handleMouseMove);
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -123,6 +126,9 @@ const RenderNode: React.FC<{
   };
 
   useEffect(() => {
+    const handleMouseMove = handleMouseMoveRef.current;
+    const handleMouseUp = handleMouseUpRef.current;
+
     if (isDragging) {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
@@ -135,7 +141,7 @@ const RenderNode: React.FC<{
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isDragging]);
+  }, [isDragging, handleMouseMoveRef, handleMouseUpRef]);
 
   const Component = components[node.elementType]; // Default to div if elementType is not found
 
@@ -220,7 +226,7 @@ export const Stage: React.FC = () => {
   const [draggingNode, setDraggingNode] = useState<
     | [
         DeepReadonly<NodeData>,
-        HTMLElement | null /** 如果为 null 表示拖拽的是外部创建的，不在组件树中 */
+        HTMLElement | null /** 如果为 null 表示拖拽的是外部创建的，不在组件树中 */,
       ]
     | null
   >(null);
@@ -315,6 +321,8 @@ export const Stage: React.FC = () => {
     setDraggingNode(null);
     setHighlightedSlot(null);
   };
+
+  const handleDraggingEndRef = useLatest(handleDraggingEnd);
 
   const handleDraggingStart = (
     node: [DeepReadonly<NodeData>, HTMLElement | null]
@@ -418,6 +426,8 @@ export const Stage: React.FC = () => {
     setHighlightedSlot(newHighlightedSlot);
   };
 
+  const handleMouseMoveRef = useLatest(handleMouseMove);
+
   const renderFloatingDivs = () => {
     if (draggingHoveredOtherNode) {
       const insertionPositions = InsertionAnalyzer.analyzeVisualPositions(
@@ -505,12 +515,13 @@ export const Stage: React.FC = () => {
   };
 
   useEffect(() => {
+    const handleMouseMove = handleMouseMoveRef.current;
     window.addEventListener("mousemove", handleMouseMove);
 
     return () => {
       window.removeEventListener("mousemove", handleMouseMove);
     };
-  }, [draggingHoveredOtherNode]);
+  }, [draggingHoveredOtherNode, handleMouseMoveRef]);
 
   useEffect(() => {
     coreEventBus.emit("draggingHoveringNode", {
@@ -541,9 +552,9 @@ export const Stage: React.FC = () => {
 
   useEffect(() => {
     return coreEventBus.on("externalDragEnd", () => {
-      handleDraggingEnd();
+      handleDraggingEndRef.current();
     });
-  }, []);
+  }, [handleDraggingEndRef]);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {

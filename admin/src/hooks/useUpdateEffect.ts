@@ -12,6 +12,7 @@ function useUpdateEffect(
       return;
     }
     return effect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, dependencies);
 }
 
