@@ -1,5 +1,5 @@
 services:
-  vite-app:
+  admin:
     build:
       context: .
       dockerfile: ./admin/Dockerfile
