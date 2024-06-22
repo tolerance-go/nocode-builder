@@ -44,16 +44,18 @@ const BlueMap = () => {
 
   const removeSearchNode = () => {
     const graph = graphRef.current;
+    ensure(graph, "graph 必须存在。");
+
     /** 回撤的过程中，可能出现多个 search node 同时出现的情况 */
-    const allNodes = graph?.getNodes();
-    graph?.batchUpdate(() => {
+    const allNodes = graph.getNodes();
+    graph.batchUpdate(() => {
       allNodes?.forEach((node) => {
         if (node.shape === SearchNodeShape.shape) {
-          graph?.removeCell(node);
+          graph.removeCell(node);
           const edgeId = node.getPropByPath("edge/id");
           if (typeof edgeId === "string") {
             // 删除关联的线
-            graph?.removeEdge(edgeId);
+            graph.removeEdge(edgeId);
           }
         }
       });
