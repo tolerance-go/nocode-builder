@@ -12,15 +12,20 @@ export type BaseNodeComponentProps = X6ReactComponentProps & {
   classNames?: {
     header?: string;
   };
+  backgroundColor?: string;
 };
 
 export const BaseNode: React.FC<BaseNodeComponentProps> = ({
   title,
   children,
   classNames,
+  backgroundColor,
 }) => {
   return (
-    <div className="bg-white border border-gray-900 overflow-hidden rounded-md h-[100%]">
+    <div
+      style={{ backgroundColor: backgroundColor ?? "rgba(255, 255, 255, 0.5)" }}
+      className="border border-gray-900 overflow-hidden rounded-md h-[100%]"
+    >
       <div className={cx("bg-gray-200 px-2 py-1", classNames?.header)}>
         <Typography.Text strong>{title ?? "节点名称"}</Typography.Text>
       </div>

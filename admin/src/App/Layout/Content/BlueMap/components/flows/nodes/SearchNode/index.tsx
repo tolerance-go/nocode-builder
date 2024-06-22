@@ -214,7 +214,7 @@ export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
   };
 
   return (
-    <BaseNode title="此蓝图的所有操作" {...props}>
+    <BaseNode title="此蓝图的所有操作" {...props} backgroundColor="white">
       <div className="p-2">
         <Search
           placeholder="输入搜索内容"

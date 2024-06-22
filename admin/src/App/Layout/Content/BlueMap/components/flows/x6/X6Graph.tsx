@@ -11,6 +11,7 @@ import { CustomRouterArgs } from "../../../globals/register/registerRouter";
 import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../../types";
 import { validatePortConnection } from "../../../utils/validatePortConnection";
 import { SearchNodeShape } from "../nodes/SearchNode/config";
+import { connectAnchorOffset } from "../../../constants";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
@@ -162,6 +163,9 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                 source: {
                   anchor: {
                     name: group === "right" ? "right" : "left",
+                    args: {
+                      dx: group === "right" ? -connectAnchorOffset : connectAnchorOffset,
+                    },
                   },
                 },
               });
@@ -275,6 +279,9 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                   cell: currentCell.id,
                   anchor: {
                     name: port?.group === "right" ? "right" : "left",
+                    args: {
+                      dx: port?.group === "right" ? -connectAnchorOffset : connectAnchorOffset,
+                    },
                   },
                 });
               }
@@ -283,6 +290,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
         }
       );
 
+      /** 重复连线删除 */
       graph.on("edge:connected", ({ type, isNew, edge }) => {
         if (type === "target" && isNew) {
           const targetNode = edge.getTargetNode();
@@ -314,6 +322,14 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
             existingEdges.forEach((existingEdge) => existingEdge.remove());
           }
         }
+      });
+
+      graph.on("node:added", ({ node }) => {
+        node.setZIndex(10);
+      });
+
+      graph.on("edge:added", ({ edge }) => {
+        edge.setZIndex(1);
       });
 
       if (onGraphInit) {

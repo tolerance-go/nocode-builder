@@ -24,6 +24,7 @@ import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
 import { getNodeById } from "./utils/getNodeById";
 import { validatePortConnection } from "./utils/validatePortConnection";
 import { removePortConnections } from "./utils/removePortConnections";
+import { connectAnchorOffset } from "./constants";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
@@ -316,7 +317,7 @@ const BlueMap = () => {
                           ? "right"
                           : "left",
                       args: {
-                        // dx: sourcePortBlueMapAttrs.ioType === "output" ? -10 : 0,
+                        dx: sourcePortBlueMapAttrs.ioType === "output" ? -connectAnchorOffset : connectAnchorOffset,
                       },
                     },
                   },
@@ -326,7 +327,7 @@ const BlueMap = () => {
                     anchor: {
                       name: validPorts[0].group === "right" ? "right" : "left",
                       args: {
-                        // dx: validPorts[0].group === "right" ? 10 : 10,
+                        dx: validPorts[0].group === "right" ? -connectAnchorOffset : connectAnchorOffset,
                       },
                     },
                   },
