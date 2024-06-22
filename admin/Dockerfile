@@ -28,7 +28,7 @@ RUN pnpm run build
 FROM nginx:alpine
 
 # 复制 Nginx 配置文件到镜像中
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
 # 复制构建后的文件到 Nginx 静态文件目录
 COPY --from=builder /admin/dist /usr/share/nginx/html
