@@ -3,8 +3,8 @@ import { Graph } from "@antv/x6";
 import { css, cx } from "@emotion/css";
 import { Input, Tree } from "antd";
 import React, { useMemo, useState } from "react";
-import { blueMapNodeConfigs } from "../../../configs/blueMapNodeConfigs";
-import { menuGroups, menuGroupsByType } from "../../../configs/menus";
+import { blueMapNodeConfigs } from "../../../../../../../configs/blueMap/blueMapNodeConfigs";
+import { menuGroups, menuGroupsByType } from "../../../../../../../configs/blueMap/menus";
 import { blueMapEventBus } from "../../../../../../../globals/blueMapEventBus";
 import {
   BlueMapNodeConfig,

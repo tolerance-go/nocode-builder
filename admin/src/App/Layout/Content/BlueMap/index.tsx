@@ -13,7 +13,7 @@ import { Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { SearchNodeShape } from "./components/nodes/SearchNode/config";
-import { blueMapRawNodeConfigsById } from "./configs/configs";
+import { blueMapRawNodeConfigsById } from "../../../../configs/blueMap/configs";
 import { blueMapEventBus } from "../../../../globals/blueMapEventBus";
 import stores from "../../../../stores/blueMap";
 import { SearchNodeSourceData } from "../../../../types/blueMap";

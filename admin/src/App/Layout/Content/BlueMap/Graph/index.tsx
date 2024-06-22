@@ -6,7 +6,7 @@ import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { SearchNodeShape } from "../components/nodes/SearchNode/config";
-import { blueMapPortConfigsByType } from "../configs/blueMapPortConfigs";
+import { blueMapPortConfigsByType } from "../../../../../configs/blueMap/blueMapPortConfigs";
 import { connectAnchorOffset } from "../../../../../constants/blueMap";
 import { blueMapEventBus } from "../../../../../globals/blueMapEventBus";
 import { PortBlueMapAttrs, BlueMapPortCommonArgs } from "../../../../../types/blueMap";
