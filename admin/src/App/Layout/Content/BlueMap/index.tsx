@@ -22,7 +22,7 @@ import { Selection } from "@antv/x6-plugin-selection";
 import { Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { blueMapRawNodeConfigsById } from "../../../../configs/blueMap/configs";
+import { nodeConfigsById } from "../../../../configs/blueMap/configs";
 import { connectAnchorOffset } from "../../../../constants/blueMap";
 import { blueMapEventBus } from "../../../../globals/blueMapEventBus";
 import stores from "../../../../stores/blueMap";
@@ -570,7 +570,7 @@ const BlueMap = () => {
       ({ configId }) => {
         const graph = graphRef.current;
         if (graph) {
-          const config = blueMapRawNodeConfigsById.get(configId);
+          const config = nodeConfigsById.get(configId);
 
           ensure(config, "config 必须存在。");
 

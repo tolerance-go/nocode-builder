@@ -1,6 +1,6 @@
-import { allNodeConfigs } from "@/configs/blueMap/configs";
+import { nodeConfigs } from "@/configs/blueMap/configs";
 import { register } from "@antv/x6-react-shape";
 
-allNodeConfigs.forEach((config) => {
+nodeConfigs.forEach((config) => {
   register(config.shape);
 });

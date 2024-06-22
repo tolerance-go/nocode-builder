@@ -110,7 +110,7 @@ export type MenuGroups = {
   parentType?: MenuGroupType;
 }[];
 
-export type MenuGroupType = "flow-control" | "all";
+export type MenuGroupType = "flow-control" | "event";
 
 export interface BlueMapNodeConfig<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
@@ -122,7 +122,7 @@ export interface BlueMapNodeConfig<
    * flowControl - 控制流节点
    * function - 函数调用节点
    */
-  type: "flowControl" | "function";
+  type: "flowControl" | "function" | "event";
   connections: {
     input?: Connection;
     output?: Connection;

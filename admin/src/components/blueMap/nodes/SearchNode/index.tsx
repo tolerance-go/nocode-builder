@@ -1,159 +1,23 @@
-import { ensure } from "@/utils/ensure";
-import { Graph } from "@antv/x6";
+import { blueMapNodeConfigs } from "@/configs/blueMap/blueMapNodeConfigs";
+import { menuGroups } from "@/configs/blueMap/menus";
+import { blueMapEventBus } from "@/globals/blueMapEventBus";
+import {
+  SearchNodeSourceData,
+  SearchTreeNode,
+  X6ReactComponentProps,
+} from "@/types/blueMap";
+import {
+  filterConfigsBySource,
+  generateTreeData,
+  processTreeData,
+} from "@/utils/blueMap/generateTreeData";
+import { getExpandedKeys } from "@/utils/blueMap/getExpandedKeys";
 import { css, cx } from "@emotion/css";
 import { Input, Tree } from "antd";
 import React, { useMemo, useState } from "react";
 import { BaseNode } from "../BaseNode";
-import { getExpandedKeys } from "@/utils/blueMap/getExpandedKeys";
-import { getNodeById } from "@/utils/blueMap/getNodeById";
-import { highlightMatch } from "@/utils/blueMap/highlightMatch";
-import { validatePortConnectionWithTargetBlueMapPortType } from "@/utils/blueMap/validatePortConnectionWithTargetBlueMapPortType";
-import { blueMapNodeConfigs } from "@/configs/blueMap/blueMapNodeConfigs";
-import { menuGroupsByType, menuGroups } from "@/configs/blueMap/menus";
-import { blueMapEventBus } from "@/globals/blueMapEventBus";
-import {
-  BlueMapNodeConfig,
-  MenuGroups,
-  SearchTreeNode,
-  SearchNodeSourceData,
-  X6ReactComponentProps,
-} from "@/types/blueMap";
 
 const { Search } = Input;
-
-const filterMenuGroupsByConfigs = (
-  configs: BlueMapNodeConfig[],
-  allGroups: MenuGroups
-) => {
-  const usedGroupTypes = new Set(
-    configs.flatMap((config) => config.menu.groupType)
-  );
-  return allGroups.filter((group) => usedGroupTypes.has(group.type));
-};
-
-// 构建组树
-const buildGroupTree = (
-  groups: MenuGroups
-): { [key: string]: SearchTreeNode } => {
-  const groupTree: { [key: string]: SearchTreeNode } = {};
-
-  groups.forEach((group) => {
-    groupTree[group.type] = {
-      title: group.title,
-      key: group.type,
-      children: [],
-    };
-  });
-
-  groups.forEach((group) => {
-    if (group.parentType) {
-      const parentNode = groupTree[group.parentType];
-      ensure(parentNode, `Parent group type ${group.parentType} must exist.`);
-      parentNode.children?.push(groupTree[group.type]);
-    }
-  });
-
-  return groupTree;
-};
-
-// 将配置挂在组树上
-const attachConfigsToTree = (
-  groups: { [key: string]: SearchTreeNode },
-  configs: BlueMapNodeConfig[]
-): void => {
-  configs.forEach((config) => {
-    config.menu.groupType.forEach((groupType) => {
-      const groupNode = groups[groupType];
-      ensure(groupNode, `Group type ${groupType} must exist in groups.`);
-      groupNode.children?.push({
-        title: config.menu.title,
-        key: config.menu.key,
-        configId: config.id,
-        isLeaf: true,
-      });
-    });
-  });
-};
-
-// 生成最终的树结构
-const generateTreeData = (
-  configs: BlueMapNodeConfig[],
-  menuGroups: MenuGroups
-): SearchTreeNode[] => {
-  const filteredGroups = filterMenuGroupsByConfigs(configs, menuGroups);
-  const groups = buildGroupTree(filteredGroups);
-  attachConfigsToTree(groups, configs);
-
-  // 过滤出根节点
-  return Object.values(groups).filter(
-    (node) => !menuGroupsByType.get(node.key)?.parentType
-  );
-};
-
-const processTreeData = (
-  data: SearchTreeNode[],
-  searchValue: string
-): SearchTreeNode[] => {
-  return data.map((item) => {
-    const title = highlightMatch(item.title as string, searchValue);
-    if (item.children) {
-      return {
-        title,
-        key: item.key,
-        configId: item.configId,
-        selectable: false, // 父节点不可选择
-        children: processTreeData(item.children, searchValue),
-      } as SearchTreeNode;
-    }
-    return {
-      title,
-      key: item.key,
-      configId: item.configId,
-      selectable: true, // 叶子节点可选择
-      isLeaf: true,
-    } as SearchTreeNode;
-  });
-};
-
-const filterConfigsBySource = (
-  configs: BlueMapNodeConfig[],
-  source: SearchNodeSourceData,
-  graph: Graph
-) => {
-  const sourceNode = getNodeById(source.nodeId, graph);
-  return configs.filter((targetBlueMapConfig) => {
-    return (
-      (targetBlueMapConfig.connections.input?.ports.some(
-        (targetBlueMapPortConfig) => {
-          const targetBlueMapPortIoType = "input";
-          const targetBlueMapPortType = targetBlueMapPortConfig.type;
-
-          return validatePortConnectionWithTargetBlueMapPortType({
-            sourceNode,
-            sourcePortId: source.portId,
-            targetBlueMapPortIoType,
-            targetBlueMapPortType,
-          });
-        }
-      ) ??
-        true) ||
-      (targetBlueMapConfig.connections.output?.ports.some(
-        (targetBlueMapPortConfig) => {
-          const targetBlueMapPortIoType = "output";
-          const targetBlueMapPortType = targetBlueMapPortConfig.type;
-
-          return validatePortConnectionWithTargetBlueMapPortType({
-            sourceNode,
-            sourcePortId: source.portId,
-            targetBlueMapPortIoType,
-            targetBlueMapPortType,
-          });
-        }
-      ) ??
-        true)
-    );
-  });
-};
 
 export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
   const { graph, node } = props;
