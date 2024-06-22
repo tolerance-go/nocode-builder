@@ -2,9 +2,9 @@ import { Edge } from "@antv/x6";
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
 import { BasePort } from "../BasePort";
-import { ReactPortComponentProps } from "@/types/blueMap";
+import { PortComponentProps } from "@/types/blueMap";
 
-type FlowPortProps = ReactPortComponentProps & {
+type FlowPortProps = PortComponentProps & {
   label?: string;
   iconColor?: string;
   connectedIcon?: React.ReactNode;

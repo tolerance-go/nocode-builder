@@ -3,7 +3,7 @@ import { Dropdown } from "antd";
 import { useContext } from "react";
 import colors from "tailwindcss/colors";
 import { BasePortContext } from "./hooks";
-import { ReactPortComponentProps } from "@/types/blueMap";
+import { PortComponentProps } from "@/types/blueMap";
 
 const gradientHoverStyle = css`
   position: relative;
@@ -31,7 +31,7 @@ export const BasePort = ({
   datasets,
   port,
   icon,
-}: ReactPortComponentProps & BasePortProps) => {
+}: PortComponentProps & BasePortProps) => {
   const basePortContext = useContext(BasePortContext);
   return (
     <Dropdown

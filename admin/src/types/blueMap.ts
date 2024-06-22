@@ -148,7 +148,7 @@ export type NodeConfig<
 
 export type PortConfig = {
   id: string;
-  component: React.FC<ReactPortComponentProps>;
+  component: React.FC<PortComponentProps>;
 };
 
 export interface SearchTreeNode extends DataNode {
@@ -162,16 +162,13 @@ export interface X6ReactComponentProps {
   graph: Graph;
 }
 
-export type ReactPortComponentProps = {
+export type PortComponentProps = {
   node: Node;
   port: PortManager.Port;
   graph: Graph;
 };
 
-export type BlueMapPortComponentProps = {
-  node: Node;
-  port: PortManager.Port;
-  graph: Graph;
+export type BlueMapPortComponentProps = PortComponentProps & {
   blueMapPort: {
     config: BlueMapPortConfig;
     args?: BlueMapPortCommonArgs;
