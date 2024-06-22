@@ -3,21 +3,21 @@ import { Graph } from "@antv/x6";
 import { css, cx } from "@emotion/css";
 import { Input, Tree } from "antd";
 import React, { useMemo, useState } from "react";
-import { blueMapNodeConfigs } from "../../../../../../../configs/blueMap/blueMapNodeConfigs";
-import { menuGroups, menuGroupsByType } from "../../../../../../../configs/blueMap/menus";
-import { blueMapEventBus } from "../../../../../../../globals/blueMapEventBus";
-import {
-  BlueMapNodeConfig,
-  MenuGroups,
-  SearchNodeSourceData,
-  SearchTreeNode,
-  X6ReactComponentProps,
-} from "../../../../../../../types/blueMap";
 import { BaseNode } from "../BaseNode";
 import { getExpandedKeys } from "@/utils/blueMap/getExpandedKeys";
 import { getNodeById } from "@/utils/blueMap/getNodeById";
 import { highlightMatch } from "@/utils/blueMap/highlightMatch";
 import { validatePortConnectionWithTargetBlueMapPortType } from "@/utils/blueMap/validatePortConnectionWithTargetBlueMapPortType";
+import { blueMapNodeConfigs } from "@/configs/blueMap/blueMapNodeConfigs";
+import { menuGroupsByType, menuGroups } from "@/configs/blueMap/menus";
+import { blueMapEventBus } from "@/globals/blueMapEventBus";
+import {
+  BlueMapNodeConfig,
+  MenuGroups,
+  SearchTreeNode,
+  SearchNodeSourceData,
+  X6ReactComponentProps,
+} from "@/types/blueMap";
 
 const { Search } = Input;
 

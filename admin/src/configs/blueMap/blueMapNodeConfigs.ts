@@ -1,3 +1,3 @@
-import { BranchControlBlueMapNodeConfig } from "../../App/Layout/Content/BlueMap/components/nodes/BranchControlNode/config";
+import { BranchControlBlueMapNodeConfig } from "@/components/blueMap/nodes/BranchControlNode/config";
 
 export const blueMapNodeConfigs = [BranchControlBlueMapNodeConfig];

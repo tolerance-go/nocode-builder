@@ -1,11 +1,11 @@
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
-import { blueMapEventBus } from "../../../../../../../globals/blueMapEventBus";
-import { BlueMapPortComponentProps } from "../../../../../../../types/blueMap";
 import { BasePortContext } from "../BasePort/hooks";
 import { getNodeById } from "@/utils/blueMap/getNodeById";
 import { removePortConnections } from "@/utils/blueMap/removePortConnections";
 import { validatePortConnection } from "@/utils/blueMap/validatePortConnection";
+import { blueMapEventBus } from "@/globals/blueMapEventBus";
+import { BlueMapPortComponentProps } from "@/types/blueMap";
 
 export const BaseBlueMapPort = ({
   blueMapPort,

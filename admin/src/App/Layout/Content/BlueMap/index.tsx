@@ -12,7 +12,6 @@ import {
 import { Graph, Markup } from "@antv/x6";
 import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
-import { SearchNodeShape } from "./components/nodes/SearchNode/config";
 import { blueMapRawNodeConfigsById } from "../../../../configs/blueMap/configs";
 import { blueMapEventBus } from "../../../../globals/blueMapEventBus";
 import stores from "../../../../stores/blueMap";
@@ -25,6 +24,7 @@ import { getBlueMapPortMetaByPortId } from "@/utils/blueMap/getBlueMapPortMetaBy
 import { getNodeById } from "@/utils/blueMap/getNodeById";
 import { removePortConnections } from "@/utils/blueMap/removePortConnections";
 import { validatePortConnection } from "@/utils/blueMap/validatePortConnection";
+import { SearchNodeShape } from "@/components/blueMap/nodes/SearchNode/config";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);

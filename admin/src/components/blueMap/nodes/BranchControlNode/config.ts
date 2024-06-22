@@ -1,6 +1,6 @@
+import { generateBlueMapConfigMeta } from "@/core/generateBlueMapConfigMeta";
+import { BlueMapNodeConfig } from "@/types/blueMap";
 import { BranchControlNode, BranchControlNodeAttrs } from ".";
-import { generateBlueMapConfigMeta } from "../../../../../../../core/generateBlueMapConfigMeta";
-import { BlueMapNodeConfig } from "../../../../../../../types/blueMap";
 
 export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNodeAttrs> =
   {

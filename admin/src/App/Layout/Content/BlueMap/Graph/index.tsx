@@ -5,13 +5,13 @@ import { Keyboard } from "@antv/x6-plugin-keyboard";
 import { Selection } from "@antv/x6-plugin-selection";
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
-import { SearchNodeShape } from "../components/nodes/SearchNode/config";
 import { blueMapPortConfigsByType } from "../../../../../configs/blueMap/blueMapPortConfigs";
 import { connectAnchorOffset } from "../../../../../constants/blueMap";
 import { blueMapEventBus } from "../../../../../globals/blueMapEventBus";
 import { PortBlueMapAttrs, BlueMapPortCommonArgs } from "../../../../../types/blueMap";
 import { CustomRouterArgs } from "@/globals/register/registerRouter";
 import { validatePortConnection } from "@/utils/blueMap/validatePortConnection";
+import { SearchNodeShape } from "@/components/blueMap/nodes/SearchNode/config";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;
