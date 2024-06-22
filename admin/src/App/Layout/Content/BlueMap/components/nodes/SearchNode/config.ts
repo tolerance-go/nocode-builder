@@ -1,6 +1,6 @@
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { SearchNode } from ".";
-import { NodeConfig } from "../../../types/blueMap";
+import { NodeConfig } from "../../../../../../../types/blueMap";
 
 export const SearchNodeShape: ReactShapeConfig = {
   shape: "search-node",

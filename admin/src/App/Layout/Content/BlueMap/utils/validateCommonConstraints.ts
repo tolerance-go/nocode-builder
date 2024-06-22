@@ -1,4 +1,4 @@
-import { ConnectionConstraintValidateParams, BlueMapPortMeta } from "../types/blueMap";
+import { ConnectionConstraintValidateParams, BlueMapPortMeta } from "../../../../../types/blueMap";
 
 export function validateCommonConstraints(
   sourceMeta: BlueMapPortMeta,

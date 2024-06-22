@@ -12,7 +12,7 @@ import {
   SearchNodeSourceData,
   SearchTreeNode,
   X6ReactComponentProps,
-} from "../../../types/blueMap";
+} from "../../../../../../../types/blueMap";
 import { getExpandedKeys } from "../../../utils/getExpandedKeys";
 import { getNodeById } from "../../../utils/getNodeById";
 import { highlightMatch } from "../../../utils/highlightMatch";
