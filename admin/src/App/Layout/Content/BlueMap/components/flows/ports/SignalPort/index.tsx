@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import { ReactPortComponentProps } from "../../../../types";
 import { BasePort } from "../BasePort";
 
-type AttrPortProps = ReactPortComponentProps & {
+type SignalPortProps = ReactPortComponentProps & {
   label?: string;
 };
 
-export const AttrPort = (props: AttrPortProps) => {
+export const SignalPort = (props: SignalPortProps) => {
   const { node, port, graph, label } = props;
 
   const [isConnected, setIsConnected] = useState(false);
