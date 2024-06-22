@@ -17,7 +17,7 @@ import { blueMapRawNodeConfigsById } from "./configs/configs";
 import { blueMapEventBus } from "../../../../globals/blueMapEventBus";
 import stores from "../../../../stores/blueMap";
 import { SearchNodeSourceData } from "../../../../types/blueMap";
-import { connectAnchorOffset } from "./constants";
+import { connectAnchorOffset } from "../../../../constants/blueMap";
 import X6Graph from "./Graph";
 import { CustomRouterArgs } from "@/globals/register/registerRouter";
 import "@/globals/register";

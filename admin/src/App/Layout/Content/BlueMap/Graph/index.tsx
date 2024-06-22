@@ -7,7 +7,7 @@ import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom/client";
 import { SearchNodeShape } from "../components/nodes/SearchNode/config";
 import { blueMapPortConfigsByType } from "../configs/blueMapPortConfigs";
-import { connectAnchorOffset } from "../constants";
+import { connectAnchorOffset } from "../../../../../constants/blueMap";
 import { blueMapEventBus } from "../../../../../globals/blueMapEventBus";
 import { PortBlueMapAttrs, BlueMapPortCommonArgs } from "../../../../../types/blueMap";
 import { CustomRouterArgs } from "@/globals/register/registerRouter";
