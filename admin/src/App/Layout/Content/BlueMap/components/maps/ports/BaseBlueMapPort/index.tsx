@@ -5,6 +5,7 @@ import { BlueMapPortComponentProps } from "../../../../types";
 import { getNodeById } from "../../../../utils/getNodeById";
 import { validatePortConnection } from "../../../../utils/validatePortConnection";
 import { BasePortContext } from "../../../flows/ports/BasePort/hooks";
+import { removePortConnections } from "../../../../utils/removePortConnections";
 
 export const BaseBlueMapPort = ({
   blueMapPort,
@@ -51,8 +52,8 @@ export const BaseBlueMapPort = ({
             key: "1",
             label: "断开该连线",
             onClick: () => {
-              
-            }
+              removePortConnections(node.id, port.id, graph);
+            },
           },
         ],
         renderIcon(icon) {
