@@ -4,7 +4,7 @@ import { blueMapEventBus } from "../../../../globals/eventBus";
 import { BlueMapPortComponentProps } from "../../../../types";
 import { getNodeById } from "../../../../utils/getNodeById";
 import { validatePortConnection } from "../../../../utils/validatePortConnection";
-import { BasePortContext } from "../../../flows/ports/BasePort";
+import { BasePortContext } from "../../../flows/ports/BasePort/hooks";
 
 export const BaseBlueMapPort = ({
   blueMapPort,

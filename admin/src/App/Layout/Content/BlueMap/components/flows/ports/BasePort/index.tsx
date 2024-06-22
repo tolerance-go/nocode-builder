@@ -1,7 +1,8 @@
 import { css } from "@emotion/css";
-import { ReactPortComponentProps } from "../../../../types";
+import { useContext } from "react";
 import colors from "tailwindcss/colors";
-import { createContext, useContext } from "react";
+import { ReactPortComponentProps } from "../../../../types";
+import { BasePortContext } from "./hooks";
 
 const gradientHoverStyle = css`
   position: relative;
@@ -23,11 +24,6 @@ export type BasePortProps = {
   datasets?: object;
   icon?: React.ReactNode;
 };
-
-export const BasePortContext = createContext<{
-  datasets?: object;
-  renderIcon?: (icon: React.ReactNode) => React.ReactNode;
-} | null>(null);
 
 export const BasePort = ({
   children,
