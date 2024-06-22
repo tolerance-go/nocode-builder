@@ -3,20 +3,20 @@ import { Graph } from "@antv/x6";
 import { css, cx } from "@emotion/css";
 import { Input, Tree } from "antd";
 import React, { useMemo, useState } from "react";
-import { blueMapNodeConfigs } from "../../../../configs/blueMapNodeConfigs";
-import { menuGroups, menuGroupsByType } from "../../../../configs/menus";
-import { blueMapEventBus } from "../../../../globals/eventBus";
+import { blueMapNodeConfigs } from "../../../configs/blueMapNodeConfigs";
+import { menuGroups, menuGroupsByType } from "../../../configs/menus";
+import { blueMapEventBus } from "../../../globals/eventBus";
 import {
   BlueMapNodeConfig,
   MenuGroups,
   SearchNodeSourceData,
   SearchTreeNode,
   X6ReactComponentProps,
-} from "../../../../types";
-import { getExpandedKeys } from "../../../../utils/getExpandedKeys";
-import { getNodeById } from "../../../../utils/getNodeById";
-import { highlightMatch } from "../../../../utils/highlightMatch";
-import { validatePortConnectionWithTargetBlueMapPortType } from "../../../../utils/validatePortConnectionWithTargetBlueMapPortType";
+} from "../../../types";
+import { getExpandedKeys } from "../../../utils/getExpandedKeys";
+import { getNodeById } from "../../../utils/getNodeById";
+import { highlightMatch } from "../../../utils/highlightMatch";
+import { validatePortConnectionWithTargetBlueMapPortType } from "../../../utils/validatePortConnectionWithTargetBlueMapPortType";
 import { BaseNode } from "../BaseNode";
 
 const { Search } = Input;

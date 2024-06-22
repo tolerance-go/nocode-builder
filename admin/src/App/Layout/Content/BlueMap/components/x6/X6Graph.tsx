@@ -10,7 +10,7 @@ import { blueMapEventBus } from "../../globals/eventBus";
 import { CustomRouterArgs } from "../../globals/register/registerRouter";
 import { BlueMapPortCommonArgs, PortBlueMapAttrs } from "../../types";
 import { validatePortConnection } from "../../utils/validatePortConnection";
-import { SearchNodeShape } from "../flows/nodes/SearchNode/config";
+import { SearchNodeShape } from "../nodes/SearchNode/config";
 import { connectAnchorOffset } from "../../constants";
 
 interface X6GraphProps {

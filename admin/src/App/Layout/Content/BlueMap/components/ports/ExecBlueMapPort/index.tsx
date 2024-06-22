@@ -1,5 +1,5 @@
-import { BlueMapPortComponentProps } from "../../../../types";
-import { FlowPort } from "../../../flows/ports/FlowPort";
+import { BlueMapPortComponentProps } from "../../../types";
+import { FlowPort } from "../FlowPort";
 import { BaseBlueMapPort } from "../BaseBlueMapPort";
 import { ExecBlueMapPortConfig } from "./config";
 

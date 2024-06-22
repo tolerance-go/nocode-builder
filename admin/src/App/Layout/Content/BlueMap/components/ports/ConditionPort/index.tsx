@@ -1,5 +1,5 @@
-import { BlueMapPortComponentProps } from "../../../../types";
-import { DataPort } from "../../../flows/ports/DataPort";
+import { BlueMapPortComponentProps } from "../../../types";
+import { DataPort } from "../DataPort";
 import { BaseBlueMapPort } from "../BaseBlueMapPort";
 import { ConditionPortConfig } from "./config";
 

@@ -1,9 +1,9 @@
 import { BaseNodeConfig } from "../components/flows/nodes/BaseNode/config";
-import { SearchNodeConfig } from "../components/flows/nodes/SearchNode/config";
-import { FlowPortConfig } from "../components/flows/ports/FlowPort/config";
-import { DataPortConfig } from "../components/flows/ports/DataPort/config";
-import { BasePortConfig } from "../components/flows/ports/BasePort/config";
-import { BranchControlNodeConfigMeta } from "../components/maps/nodes/BranchControlNode/config";
+import { SearchNodeConfig } from "../components/nodes/SearchNode/config";
+import { FlowPortConfig } from "../components/ports/FlowPort/config";
+import { DataPortConfig } from "../components/ports/DataPort/config";
+import { BasePortConfig } from "../components/ports/BasePort/config";
+import { BranchControlNodeConfigMeta } from "../components/nodes/BranchControlNode/config";
 import { validateAndCreateConfigMap } from "../utils/validateAndCreateConfigMap";
 import { blueMapPortConfigs } from "./blueMapPortConfigs";
 
