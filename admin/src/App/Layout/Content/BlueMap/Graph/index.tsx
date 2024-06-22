@@ -9,9 +9,9 @@ import { SearchNodeShape } from "../components/nodes/SearchNode/config";
 import { blueMapPortConfigsByType } from "../configs/blueMapPortConfigs";
 import { connectAnchorOffset } from "../constants";
 import { blueMapEventBus } from "../../../../../globals/blueMapEventBus";
-import { CustomRouterArgs } from "../globals/register/registerRouter";
 import { PortBlueMapAttrs, BlueMapPortCommonArgs } from "../../../../../types/blueMap";
-import { validatePortConnection } from "../utils/validatePortConnection";
+import { CustomRouterArgs } from "@/globals/register/registerRouter";
+import { validatePortConnection } from "@/utils/blueMap/validatePortConnection";
 
 interface X6GraphProps {
   onGraphInit?: (graph: Graph) => void;

@@ -3,9 +3,9 @@ import { FlowPortConfig } from "../components/ports/FlowPort/config";
 import { DataPortConfig } from "../components/ports/DataPort/config";
 import { BasePortConfig } from "../components/ports/BasePort/config";
 import { BranchControlNodeConfigMeta } from "../components/nodes/BranchControlNode/config";
-import { validateAndCreateConfigMap } from "../utils/validateAndCreateConfigMap";
 import { blueMapPortConfigs } from "./blueMapPortConfigs";
 import { BaseNodeConfig } from "../components/nodes/BaseNode/config";
+import { validateAndCreateConfigMap } from "@/utils/blueMap/validateAndCreateConfigMap";
 
 export const baseNodeConfigs = [BaseNodeConfig, SearchNodeConfig];
 

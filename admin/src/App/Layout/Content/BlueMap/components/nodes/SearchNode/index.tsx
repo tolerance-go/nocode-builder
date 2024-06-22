@@ -13,11 +13,11 @@ import {
   SearchTreeNode,
   X6ReactComponentProps,
 } from "../../../../../../../types/blueMap";
-import { getExpandedKeys } from "../../../utils/getExpandedKeys";
-import { getNodeById } from "../../../utils/getNodeById";
-import { highlightMatch } from "../../../utils/highlightMatch";
-import { validatePortConnectionWithTargetBlueMapPortType } from "../../../utils/validatePortConnectionWithTargetBlueMapPortType";
 import { BaseNode } from "../BaseNode";
+import { getExpandedKeys } from "@/utils/blueMap/getExpandedKeys";
+import { getNodeById } from "@/utils/blueMap/getNodeById";
+import { highlightMatch } from "@/utils/blueMap/highlightMatch";
+import { validatePortConnectionWithTargetBlueMapPortType } from "@/utils/blueMap/validatePortConnectionWithTargetBlueMapPortType";
 
 const { Search } = Input;
 

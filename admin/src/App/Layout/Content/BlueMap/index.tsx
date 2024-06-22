@@ -17,14 +17,14 @@ import { blueMapRawNodeConfigsById } from "./configs/configs";
 import { blueMapEventBus } from "../../../../globals/blueMapEventBus";
 import stores from "../../../../stores/blueMap";
 import { SearchNodeSourceData } from "../../../../types/blueMap";
-import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
-import { getNodeById } from "./utils/getNodeById";
-import { validatePortConnection } from "./utils/validatePortConnection";
-import { removePortConnections } from "./utils/removePortConnections";
 import { connectAnchorOffset } from "./constants";
 import X6Graph from "./Graph";
 import { CustomRouterArgs } from "@/globals/register/registerRouter";
 import "@/globals/register";
+import { getBlueMapPortMetaByPortId } from "@/utils/blueMap/getBlueMapPortMetaByPortId";
+import { getNodeById } from "@/utils/blueMap/getNodeById";
+import { removePortConnections } from "@/utils/blueMap/removePortConnections";
+import { validatePortConnection } from "@/utils/blueMap/validatePortConnection";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);

@@ -2,10 +2,10 @@ import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
 import { blueMapEventBus } from "../../../../../../../globals/blueMapEventBus";
 import { BlueMapPortComponentProps } from "../../../../../../../types/blueMap";
-import { getNodeById } from "../../../utils/getNodeById";
-import { validatePortConnection } from "../../../utils/validatePortConnection";
 import { BasePortContext } from "../BasePort/hooks";
-import { removePortConnections } from "../../../utils/removePortConnections";
+import { getNodeById } from "@/utils/blueMap/getNodeById";
+import { removePortConnections } from "@/utils/blueMap/removePortConnections";
+import { validatePortConnection } from "@/utils/blueMap/validatePortConnection";
 
 export const BaseBlueMapPort = ({
   blueMapPort,
