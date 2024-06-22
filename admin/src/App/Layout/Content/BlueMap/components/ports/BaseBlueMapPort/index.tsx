@@ -1,6 +1,6 @@
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
-import { blueMapEventBus } from "../../../globals/eventBus";
+import { blueMapEventBus } from "../../../../../../../globals/blueMapEventBus";
 import { BlueMapPortComponentProps } from "../../../types";
 import { getNodeById } from "../../../utils/getNodeById";
 import { validatePortConnection } from "../../../utils/validatePortConnection";

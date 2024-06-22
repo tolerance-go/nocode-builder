@@ -14,7 +14,7 @@ import { Button } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { SearchNodeShape } from "./components/nodes/SearchNode/config";
 import { blueMapRawNodeConfigsById } from "./configs/configs";
-import { blueMapEventBus } from "./globals/eventBus";
+import { blueMapEventBus } from "../../../../globals/blueMapEventBus";
 import "./globals/register";
 import { CustomRouterArgs } from "./globals/register/registerRouter";
 import stores from "./stores";

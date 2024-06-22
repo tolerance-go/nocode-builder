@@ -5,7 +5,7 @@ import { Input, Tree } from "antd";
 import React, { useMemo, useState } from "react";
 import { blueMapNodeConfigs } from "../../../configs/blueMapNodeConfigs";
 import { menuGroups, menuGroupsByType } from "../../../configs/menus";
-import { blueMapEventBus } from "../../../globals/eventBus";
+import { blueMapEventBus } from "../../../../../../../globals/blueMapEventBus";
 import {
   BlueMapNodeConfig,
   MenuGroups,
