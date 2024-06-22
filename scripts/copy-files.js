@@ -5,6 +5,7 @@ import { glob } from "glob";
 
 const workspaceFile = path.resolve("./pnpm-workspace.yaml");
 const lockFile = path.resolve("./pnpm-lock.yaml");
+const npmrcFile = path.resolve("./.npmrc");
 
 async function readYaml(file) {
   const content = await fs.readFile(file, "utf8");
@@ -16,6 +17,7 @@ async function copyFiles(packageDir) {
   await fs.mkdir(tempDir, { recursive: true });
   await fs.copyFile(lockFile, path.join(tempDir, "pnpm-lock.yaml"));
   await fs.copyFile(workspaceFile, path.join(tempDir, "pnpm-workspace.yaml"));
+  await fs.copyFile(npmrcFile, path.join(tempDir, ".npmrc"));
   console.log(`Copied files to ${tempDir}`);
 }
 

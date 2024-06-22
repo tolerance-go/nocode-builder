@@ -7,7 +7,7 @@ RUN npm install -g pnpm@9
 WORKDIR /
 
 # 复制 package.json 和 pnpm-lock.yaml 以及上级目录的 pnpm-workspace.yaml
-COPY ./temp/pnpm-lock.yaml ./temp/pnpm-workspace.yaml ../.npmrc ./
+COPY ./temp/pnpm-lock.yaml ./temp/pnpm-workspace.yaml ./temp/.npmrc ./
 
 # 设置工作目录
 WORKDIR /admin
