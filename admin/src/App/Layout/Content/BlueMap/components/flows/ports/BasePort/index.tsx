@@ -1,4 +1,5 @@
 import { css } from "@emotion/css";
+import { Dropdown } from "antd";
 import { useContext } from "react";
 import colors from "tailwindcss/colors";
 import { ReactPortComponentProps } from "../../../../types";
@@ -33,19 +34,24 @@ export const BasePort = ({
 }: ReactPortComponentProps & BasePortProps) => {
   const basePortContext = useContext(BasePortContext);
   return (
-    <div
-      {...{
-        ...basePortContext?.datasets,
-        ...datasets,
-        "data-port": true,
-        "data-port-id": port.id,
-        "data-port-group": port.group,
-      }}
-      className={gradientHoverStyle}
+    <Dropdown
+      menu={{ items: basePortContext?.menuItems }}
+      trigger={["contextMenu"]}
     >
-      {children?.({
-        icon: icon ? basePortContext?.renderIcon?.(icon) ?? icon : null,
-      })}
-    </div>
+      <div
+        {...{
+          ...basePortContext?.datasets,
+          ...datasets,
+          "data-port": true,
+          "data-port-id": port.id,
+          "data-port-group": port.group,
+        }}
+        className={gradientHoverStyle}
+      >
+        {children?.({
+          icon: icon ? basePortContext?.renderIcon?.(icon) ?? icon : null,
+        })}
+      </div>
+    </Dropdown>
   );
 };

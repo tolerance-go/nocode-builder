@@ -46,6 +46,15 @@ export const BaseBlueMapPort = ({
           "data-blue-map-port": true,
           "data-blue-map-port-type": blueMapPort.config.type,
         },
+        menuItems: [
+          {
+            key: "1",
+            label: "断开该连线",
+            onClick: () => {
+              
+            }
+          },
+        ],
         renderIcon(icon) {
           return (
             <span

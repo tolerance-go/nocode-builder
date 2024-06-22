@@ -4,6 +4,8 @@ import { Header } from "./Header";
 import { LeftAside } from "./LeftAside";
 import { RightAside } from "./RightAside";
 import { useEffect } from "react";
+import MouseFollower from "@/components/MouseFollower";
+import MouseFollowerManager from "./MouseFollowerManager";
 
 export const Layout = () => {
   const rightAsideMatch = useMatch("/apps/:id/design");
@@ -37,6 +39,8 @@ export const Layout = () => {
         {/* 右侧边栏 */}
         {rightAsideMatch && <RightAside />}
       </div>
+
+      <MouseFollowerManager></MouseFollowerManager>
     </div>
   );
 };
