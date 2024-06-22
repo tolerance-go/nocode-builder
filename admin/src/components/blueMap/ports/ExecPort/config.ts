@@ -1,11 +1,11 @@
 import colors from "tailwindcss/colors";
-import { ExecBlueMapPort } from ".";
-import { BlueMapPortConfig } from "../../../../../../../types/blueMap";
+import { ExecPort } from ".";
+import { BlueMapPortConfig } from "@/types/blueMap";
 
-export const ExecBlueMapPortConfig: BlueMapPortConfig = {
+export const ExecPortConfig: BlueMapPortConfig = {
   id: "exec",
   type: "exec",
-  component: ExecBlueMapPort,
+  component: ExecPort,
   edgeConfig: {
     strokeWidth: 2.5,
     color: colors.gray[900],
