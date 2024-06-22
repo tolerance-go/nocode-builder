@@ -7,8 +7,6 @@ import { BasePort } from "../BasePort";
 
 type ArrowPortProps = ReactPortComponentProps & {
   label?: string;
-  connectedIconColor?: string;
-  unConnectedIconColor?: string;
 };
 
 export const ArrowPort = (props: ArrowPortProps) => {
