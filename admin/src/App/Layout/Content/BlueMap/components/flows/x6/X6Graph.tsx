@@ -148,6 +148,7 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
               };
 
               return new Shape.Edge({
+                zIndex: -1,
                 attrs: {
                   line: {
                     targetMarker: null,
@@ -164,7 +165,10 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                   anchor: {
                     name: group === "right" ? "right" : "left",
                     args: {
-                      dx: group === "right" ? -connectAnchorOffset : connectAnchorOffset,
+                      dx:
+                        group === "right"
+                          ? -connectAnchorOffset
+                          : connectAnchorOffset,
                     },
                   },
                 },
@@ -280,7 +284,10 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
                   anchor: {
                     name: port?.group === "right" ? "right" : "left",
                     args: {
-                      dx: port?.group === "right" ? -connectAnchorOffset : connectAnchorOffset,
+                      dx:
+                        port?.group === "right"
+                          ? -connectAnchorOffset
+                          : connectAnchorOffset,
                     },
                   },
                 });
@@ -325,11 +332,11 @@ const X6Graph = ({ onGraphInit }: X6GraphProps) => {
       });
 
       graph.on("node:added", ({ node }) => {
-        node.setZIndex(10);
+        node.setZIndex(1);
       });
 
       graph.on("edge:added", ({ edge }) => {
-        edge.setZIndex(1);
+        edge.setZIndex(-1);
       });
 
       if (onGraphInit) {
