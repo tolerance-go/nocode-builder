@@ -1,4 +1,3 @@
-import { BaseNodeConfig } from "../components/flows/nodes/BaseNode/config";
 import { SearchNodeConfig } from "../components/nodes/SearchNode/config";
 import { FlowPortConfig } from "../components/ports/FlowPort/config";
 import { DataPortConfig } from "../components/ports/DataPort/config";
@@ -6,6 +5,7 @@ import { BasePortConfig } from "../components/ports/BasePort/config";
 import { BranchControlNodeConfigMeta } from "../components/nodes/BranchControlNode/config";
 import { validateAndCreateConfigMap } from "../utils/validateAndCreateConfigMap";
 import { blueMapPortConfigs } from "./blueMapPortConfigs";
+import { BaseNodeConfig } from "../components/nodes/BaseNode/config";
 
 export const baseNodeConfigs = [BaseNodeConfig, SearchNodeConfig];
 
@@ -13,11 +13,7 @@ export const blueMapRawNodeConfigs = [BranchControlNodeConfigMeta.nodeConfig];
 
 export const allNodeConfigs = [...baseNodeConfigs, ...blueMapRawNodeConfigs];
 
-export const basePortConfigs = [
-  BasePortConfig,
-  FlowPortConfig,
-  DataPortConfig,
-];
+export const basePortConfigs = [BasePortConfig, FlowPortConfig, DataPortConfig];
 
 export const allPortConfigs = [...basePortConfigs, ...blueMapPortConfigs];
 
