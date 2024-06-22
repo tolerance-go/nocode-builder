@@ -23,6 +23,9 @@ export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNode
           {
             id: "condition",
             type: "condition",
+            args: {
+              text: "表达式",
+            },
           },
         ],
       },

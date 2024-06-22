@@ -8,7 +8,7 @@ export const ConditionPortConfig: BlueMapPortConfig = {
   component: ConditionPort,
   edgeConfig: {
     strokeWidth: 2.5,
-    color: colors.gray[900],
+    color: colors.sky[400],
   },
   constraints: {
     connecting: {

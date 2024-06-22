@@ -4,8 +4,9 @@ import { useEffect, useState } from "react";
 import { ReactPortComponentProps } from "../../../../types";
 import { BasePort } from "../BasePort";
 
-type DataPortProps = ReactPortComponentProps & {
+export type DataPortProps = ReactPortComponentProps & {
   label?: string;
+  iconColor?: string;
 };
 
 export const DataPort = (props: DataPortProps) => {
@@ -85,11 +86,11 @@ export const DataPort = (props: DataPortProps) => {
           >
             <path
               d="M9.42593 18.8519C12.9749 18.8519 15.8519 15.9749 15.8519 12.4259C15.8519 8.87698 12.9749 6 9.42593 6C5.87698 6 3 8.87698 3 12.4259C3 15.9749 5.87698 18.8519 9.42593 18.8519Z"
-              fill="#00BFFF"
+              fill={props.iconColor}
             />
             <path
               d="M20.35 12.4259L15.8518 8.57038L16.4944 12.4259L15.8518 16.2815L20.35 12.4259Z"
-              fill="#00BFFF"
+              fill={props.iconColor}
             />
           </svg>
         ) : (
@@ -103,11 +104,11 @@ export const DataPort = (props: DataPortProps) => {
           >
             <path
               d="M9.42593 18.8519C12.9749 18.8519 15.8519 15.9749 15.8519 12.4259C15.8519 8.87698 12.9749 6 9.42593 6C5.87698 6 3 8.87698 3 12.4259C3 15.9749 5.87698 18.8519 9.42593 18.8519Z"
-              fill="#00BFFF"
+              fill={props.iconColor}
             />
             <path
               d="M20.35 12.4259L15.8518 8.57038L16.4944 12.4259L15.8518 16.2815L20.35 12.4259Z"
-              fill="#00BFFF"
+              fill={props.iconColor}
             />
           </svg>
         )
