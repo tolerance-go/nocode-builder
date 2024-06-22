@@ -1,8 +1,8 @@
-import { generateBlueMapConfigMeta } from "@/core/generateBlueMapConfigMeta";
 import { BlueMapNodeConfig } from "@/types/blueMap";
 import { EventNodeAttrs, EventNode } from ".";
+import { generateNodeConfigMetaFromBlueMap } from "@/core/generateNodeConfigMetaFromBlueMap";
 
-export const EventNodeConfig: BlueMapNodeConfig<EventNodeAttrs> = {
+export const EventBlueMapNodeConfig: BlueMapNodeConfig<EventNodeAttrs> = {
   menu: {
     groupType: ["event"],
     title: "事件",
@@ -27,4 +27,6 @@ export const EventNodeConfig: BlueMapNodeConfig<EventNodeAttrs> = {
   },
 };
 
-export const EventNodeConfigMeta = generateBlueMapConfigMeta(EventNodeConfig);
+export const EventNodeConfigMeta = generateNodeConfigMetaFromBlueMap(
+  EventBlueMapNodeConfig
+);

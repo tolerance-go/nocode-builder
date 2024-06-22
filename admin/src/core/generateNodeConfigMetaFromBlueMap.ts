@@ -3,7 +3,11 @@ import { Cell } from "@antv/x6";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
 import { PortLayout } from "@antv/x6/es/registry/port-layout";
-import { BlueMapNodeConfig, NodeConfig, PortBlueMapAttrs } from "../types/blueMap";
+import {
+  BlueMapNodeConfig,
+  NodeConfig,
+  PortBlueMapAttrs,
+} from "../types/blueMap";
 import { BasePortConfig } from "@/components/blueMap/ports/BasePort/config";
 
 // 左右中间的间距
@@ -54,7 +58,7 @@ function convertConnectionsToPorts(
   return ports;
 }
 
-export function generateBlueMapConfigMeta<
+export function generateNodeConfigMetaFromBlueMap<
   Attrs extends Cell.Common["attrs"] = Cell.Common["attrs"]
 >(
   config: BlueMapNodeConfig<Attrs>
