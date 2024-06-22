@@ -7,6 +7,7 @@ import { BasePort } from "../BasePort";
 
 type ArrowPortProps = ReactPortComponentProps & {
   label?: string;
+  iconColor?: string;
 };
 
 export const ArrowPort = (props: ArrowPortProps) => {
@@ -76,21 +77,43 @@ export const ArrowPort = (props: ArrowPortProps) => {
       {...props}
       icon={
         isConnected ? (
-          <CaretRightFilled className={cx("text-2xl relative")} />
-        ) : (
           <svg
-            className={cx("text-2xl relative")}
-            viewBox="0 0 1024 1024"
+            style={{
+              color: props.iconColor,
+            }}
+            className={"text-2xl relative"}
             focusable="false"
             data-icon="caret-right"
             width="1em"
             height="1em"
+            viewBox="0 0 24 24"
             fill="none"
-            stroke="currentColor"
-            stroke-width="60"
-            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M715.8 493.5L335 165.1c-14.2-12.2-35-1.2-35 18.5v656.8c0 19.7 20.8 30.7 35 18.5l380.8-328.4c10.9-9.4 10.9-27.6 0-37z"></path>
+            <path
+              d="M20.6529 11.4219L8.55392 1.45625C8.19582 1.16129 7.74631 1 7.28237 1H4C3.5 1 3 1.6875 3 2.375V21.625C3 22.3125 3.5 23 4 23H7.28237C7.74631 23 8.19582 22.8387 8.55392 22.5438L20.6529 12.5781C21.1157 12.2844 21.1157 11.7157 20.6529 11.4219Z"
+              fill="black"
+            />
+          </svg>
+        ) : (
+          <svg
+            style={{
+              color: props.iconColor,
+            }}
+            className={"text-2xl relative"}
+            focusable="false"
+            data-icon="caret-right"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M20.6529 11.4219L8.55392 1.45625C8.19582 1.16129 7.74631 1 7.28237 1H4C3.5 1 3 1.6875 3 2.375V21.625C3 22.3125 3.5 23 4 23H7.28237C7.74631 23 8.19582 22.8387 8.55392 22.5438L20.6529 12.5781C21.1157 12.2844 21.1157 11.7157 20.6529 11.4219Z"
+              stroke="black"
+              stroke-width="1.5"
+            />
           </svg>
         )
       }
@@ -104,7 +127,7 @@ export const ArrowPort = (props: ArrowPortProps) => {
             )}
           >
             {icon}
-            {label && <span className='text-base'>{label}</span>}
+            {label && <span className="text-base">{label}</span>}
           </div>
         );
       }}

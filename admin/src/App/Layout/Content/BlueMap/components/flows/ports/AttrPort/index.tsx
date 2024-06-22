@@ -1,15 +1,14 @@
-import { CaretRightFilled } from "@ant-design/icons";
 import { Edge } from "@antv/x6";
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
 import { ReactPortComponentProps } from "../../../../types";
 import { BasePort } from "../BasePort";
 
-type ArrowPortProps = ReactPortComponentProps & {
+type AttrPortProps = ReactPortComponentProps & {
   label?: string;
 };
 
-export const ArrowPort = (props: ArrowPortProps) => {
+export const AttrPort = (props: AttrPortProps) => {
   const { node, port, graph, label } = props;
 
   const [isConnected, setIsConnected] = useState(false);
@@ -76,21 +75,40 @@ export const ArrowPort = (props: ArrowPortProps) => {
       {...props}
       icon={
         isConnected ? (
-          <CaretRightFilled className={cx("text-2xl relative")} />
-        ) : (
           <svg
-            className={cx("text-2xl relative")}
-            viewBox="0 0 1024 1024"
-            focusable="false"
-            data-icon="caret-right"
+            className={"text-2xl relative"}
             width="1em"
             height="1em"
+            viewBox="0 0 24 24"
             fill="none"
-            stroke="currentColor"
-            stroke-width="60"
-            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
           >
-            <path d="M715.8 493.5L335 165.1c-14.2-12.2-35-1.2-35 18.5v656.8c0 19.7 20.8 30.7 35 18.5l380.8-328.4c10.9-9.4 10.9-27.6 0-37z"></path>
+            <path
+              d="M9.42593 18.8519C12.9749 18.8519 15.8519 15.9749 15.8519 12.4259C15.8519 8.87698 12.9749 6 9.42593 6C5.87698 6 3 8.87698 3 12.4259C3 15.9749 5.87698 18.8519 9.42593 18.8519Z"
+              fill="#00BFFF"
+            />
+            <path
+              d="M20.35 12.4259L15.8518 8.57038L16.4944 12.4259L15.8518 16.2815L20.35 12.4259Z"
+              fill="#00BFFF"
+            />
+          </svg>
+        ) : (
+          <svg
+            className={"text-2xl relative"}
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M9.42593 18.8519C12.9749 18.8519 15.8519 15.9749 15.8519 12.4259C15.8519 8.87698 12.9749 6 9.42593 6C5.87698 6 3 8.87698 3 12.4259C3 15.9749 5.87698 18.8519 9.42593 18.8519Z"
+              fill="#00BFFF"
+            />
+            <path
+              d="M20.35 12.4259L15.8518 8.57038L16.4944 12.4259L15.8518 16.2815L20.35 12.4259Z"
+              fill="#00BFFF"
+            />
           </svg>
         )
       }
@@ -104,7 +122,7 @@ export const ArrowPort = (props: ArrowPortProps) => {
             )}
           >
             {icon}
-            {label && <span className='text-base'>{label}</span>}
+            {label && <span className="text-base">{label}</span>}
           </div>
         );
       }}

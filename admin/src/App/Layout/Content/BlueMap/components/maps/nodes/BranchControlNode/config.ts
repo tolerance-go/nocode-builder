@@ -20,6 +20,10 @@ export const BranchControlBlueMapNodeConfig: BlueMapNodeConfig<BranchControlNode
             id: "entry",
             type: "exec",
           },
+          {
+            id: "condition",
+            type: "condition",
+          },
         ],
       },
       output: {

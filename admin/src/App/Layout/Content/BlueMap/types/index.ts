@@ -68,7 +68,6 @@ export type ConnectingConstraints = {
 export type BlueMapPortConfig = {
   id: string;
   type: BlueMapPortType;
-  portConfigId: string;
   component: React.FC<BlueMapPortComponentProps>;
   edgeConfig: {
     strokeWidth: number;
