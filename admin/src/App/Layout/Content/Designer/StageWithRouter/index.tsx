@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 import { To, useSearchParams } from "react-router-dom";
 import { Stage } from "./Stage";
 import { defaultConfig } from "antd/es/theme/context";
-import { globalEventBus } from "@/globals/globalEventBus";
+import { coreEventBus } from "@/globals/coreEventBus";
 
 export const StageWithRouter = () => {
   const [searchParams, setSearchParams] = useSearchParams({
@@ -24,7 +24,7 @@ export const StageWithRouter = () => {
   };
 
   useEffect(() => {
-    return globalEventBus.on("stageNavigate", (payload) => {
+    return coreEventBus.on("stageNavigate", (payload) => {
       if (navigateRef.current) {
         navigateRef.current.navigate(payload.to);
       }

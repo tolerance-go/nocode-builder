@@ -1,5 +1,5 @@
 import { SettingConfig } from "@/components/SettingsForm";
-import { globalEventBus } from "@/globals/globalEventBus";
+import { coreEventBus } from "@/globals/coreEventBus";
 import stores from "@/stores";
 import { ComponentWidget, NodeData, StaticProps } from "@/types";
 import { DeepReadonly } from "@/utils/types";
@@ -53,7 +53,7 @@ export const DisplayItem: React.FC<{
   const handleMouseUp = () => {
     stores.designs.actions.stopDragging();
 
-    globalEventBus.emit("externalDragEnd", { nodeData });
+    coreEventBus.emit("externalDragEnd", { nodeData });
 
     // 更新下一次拖拽的 id
     setNodeData(createNodeData(component));
@@ -78,7 +78,7 @@ export const DisplayItem: React.FC<{
     <div
       className="cursor-move select-none"
       onMouseDown={() => {
-        globalEventBus.emit("externalDragStart", {
+        coreEventBus.emit("externalDragStart", {
           nodeData,
         });
       }}

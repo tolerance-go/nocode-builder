@@ -1,4 +1,4 @@
-import { globalEventBus } from "@/globals/globalEventBus";
+import { coreEventBus } from "@/globals/coreEventBus";
 import {
   DocumentInsertionPosition,
   NodeData,
@@ -27,7 +27,7 @@ const designTreeData = proxyWithHistory<{
 });
 
 subscribe(designTreeData, () => {
-  globalEventBus.emit("nodeTreeChange", designTreeData.value.nodeData);
+  coreEventBus.emit("nodeTreeChange", designTreeData.value.nodeData);
   store.set("designTreeData", designTreeData.value.nodeData);
 });
 

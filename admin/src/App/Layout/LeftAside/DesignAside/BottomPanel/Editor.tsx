@@ -8,7 +8,7 @@ import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
 import jsonWorker from "monaco-editor/esm/vs/language/json/json.worker?worker";
 import tsWorker from "monaco-editor/esm/vs/language/typescript/ts.worker?worker";
 import { useSnapshot } from "valtio";
-import { globalEventBus } from "@/globals/globalEventBus";
+import { coreEventBus } from "@/globals/coreEventBus";
 
 self.MonacoEnvironment = {
   getWorker(_, label) {
@@ -38,7 +38,7 @@ const Editor = () => {
   const isSyncingNodeTree = useRef(false);
 
   useEffect(() => {
-    return globalEventBus.on("editTextChange", ({ text, reason }) => {
+    return coreEventBus.on("editTextChange", ({ text, reason }) => {
       if (reason === "userEdit") {
         stores.designs.actions.replaceNodeData(JSON.parse(text));
       }
@@ -46,7 +46,7 @@ const Editor = () => {
   }, []);
 
   useEffect(() => {
-    return globalEventBus.on("nodeTreeChange", (nodeTree) => {
+    return coreEventBus.on("nodeTreeChange", (nodeTree) => {
       if (editorInstance.current) {
         /**
          * 刚刚编辑完，会马上触发 treeNode 更新，此时不需要同步 treeNode 到编辑文本
@@ -83,7 +83,7 @@ const Editor = () => {
         if (isSyncingNodeTree.current) {
           isSyncingNodeTree.current = false;
           const value = editorInstance.current?.getValue() || "";
-          globalEventBus.emit("editTextChange", {
+          coreEventBus.emit("editTextChange", {
             text: value,
             reason: "syncNodeTree",
           });
@@ -91,7 +91,7 @@ const Editor = () => {
         }
 
         const value = editorInstance.current?.getValue() || "";
-        globalEventBus.emit("editTextChange", {
+        coreEventBus.emit("editTextChange", {
           text: value,
           reason: "userEdit",
         });

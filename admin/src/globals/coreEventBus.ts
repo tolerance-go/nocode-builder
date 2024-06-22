@@ -58,4 +58,4 @@ export type EventMaps = {
   };
 };
 
-export const globalEventBus = new EventBus<EventMaps>();
+export const coreEventBus = new EventBus<EventMaps>();

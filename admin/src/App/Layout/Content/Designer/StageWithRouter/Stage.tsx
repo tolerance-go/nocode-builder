@@ -1,6 +1,6 @@
 import { components } from "@/configs/components";
 import { slotBackground } from "@/configs/styles";
-import { globalEventBus } from "@/globals/globalEventBus";
+import { coreEventBus } from "@/globals/coreEventBus";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import {
@@ -513,13 +513,13 @@ export const Stage: React.FC = () => {
   }, [draggingHoveredOtherNode]);
 
   useEffect(() => {
-    globalEventBus.emit("draggingHoveringNode", {
+    coreEventBus.emit("draggingHoveringNode", {
       node: draggingHoveredOtherNode ? draggingHoveredOtherNode[0] : null,
     });
   }, [draggingHoveredOtherNode]);
 
   useEffect(() => {
-    globalEventBus.emit("draggingNestHoveringNodeSlot", {
+    coreEventBus.emit("draggingNestHoveringNodeSlot", {
       nodeMeta: highlightedSlot
         ? {
             nodeId: highlightedSlot.nodeId,
@@ -530,7 +530,7 @@ export const Stage: React.FC = () => {
   }, [highlightedSlot]);
 
   useEffect(() => {
-    return globalEventBus.on(
+    return coreEventBus.on(
       "externalDragStart",
       ({ nodeData }: { nodeData: NodeData }) => {
         stores.designs.actions.startDragging(nodeData.id);
@@ -540,7 +540,7 @@ export const Stage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    return globalEventBus.on("externalDragEnd", () => {
+    return coreEventBus.on("externalDragEnd", () => {
       handleDraggingEnd();
     });
   }, []);

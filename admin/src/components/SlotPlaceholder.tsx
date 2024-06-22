@@ -1,5 +1,5 @@
 import { slotBackground } from "@/configs/styles";
-import { globalEventBus } from "@/globals/globalEventBus";
+import { coreEventBus } from "@/globals/coreEventBus";
 import { NodeData } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { useState, useEffect } from "react";
@@ -17,13 +17,13 @@ export const SlotPlaceholder: React.FC<SlotPlaceholderProps> = ({
   const [isHovering, setIsHovering] = useState(false);
 
   useEffect(() => {
-    return globalEventBus.on("draggingHoveringNode", ({ node }) => {
+    return coreEventBus.on("draggingHoveringNode", ({ node }) => {
       setIsHovering(node?.id === parentNode.id);
     });
   }, []);
 
   useEffect(() => {
-    return globalEventBus.on("draggingNestHoveringNodeSlot", ({ nodeMeta }) => {
+    return coreEventBus.on("draggingNestHoveringNodeSlot", ({ nodeMeta }) => {
       setIsHighlighted(
         nodeMeta
           ? nodeMeta.nodeId === parentNode.id && slotName === nodeMeta.slotName

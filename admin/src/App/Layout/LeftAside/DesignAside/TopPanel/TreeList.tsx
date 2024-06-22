@@ -1,4 +1,4 @@
-import { globalEventBus } from "@/globals/eventBus";
+import { coreEventBus } from "@/globals/coreEventBus";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
 import { RouteNode } from "@/types";
@@ -134,7 +134,7 @@ const TreeList: React.FC = () => {
       const nodeId = selectedKeys[0] as string;
       const fullPath = stores.routes.actions.getNodeFullPath(nodeId);
       if (fullPath) {
-        globalEventBus.emit("stageNavigate", { to: fullPath });
+        coreEventBus.emit("stageNavigate", { to: fullPath });
       }
     }
 
