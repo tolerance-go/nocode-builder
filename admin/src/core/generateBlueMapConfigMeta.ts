@@ -3,7 +3,7 @@ import { Cell } from "@antv/x6";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
 import { PortLayout } from "@antv/x6/es/registry/port-layout";
-import { BlueMapNodeConfig, NodeConfig, PortBlueMapAttrs } from "../App/Layout/Content/BlueMap/types";
+import { BlueMapNodeConfig, NodeConfig, PortBlueMapAttrs } from "../App/Layout/Content/BlueMap/types/blueMap";
 import { BasePortConfig } from "../App/Layout/Content/BlueMap/components/ports/BasePort/config";
 
 // 左右中间的间距

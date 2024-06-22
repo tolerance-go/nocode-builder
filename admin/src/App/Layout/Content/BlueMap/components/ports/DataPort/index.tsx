@@ -1,7 +1,7 @@
 import { Edge } from "@antv/x6";
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
-import { ReactPortComponentProps } from "../../../types";
+import { ReactPortComponentProps } from "../../../types/blueMap";
 import { BasePort } from "../BasePort";
 
 export type DataPortProps = ReactPortComponentProps & {

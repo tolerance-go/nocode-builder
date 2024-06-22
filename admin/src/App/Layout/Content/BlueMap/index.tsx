@@ -16,7 +16,7 @@ import { SearchNodeShape } from "./components/nodes/SearchNode/config";
 import { blueMapRawNodeConfigsById } from "./configs/configs";
 import { blueMapEventBus } from "../../../../globals/blueMapEventBus";
 import stores from "../../../../stores/blueMap";
-import { SearchNodeSourceData } from "./types";
+import { SearchNodeSourceData } from "./types/blueMap";
 import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
 import { getNodeById } from "./utils/getNodeById";
 import { validatePortConnection } from "./utils/validatePortConnection";

@@ -10,7 +10,7 @@ import { blueMapPortConfigsByType } from "../configs/blueMapPortConfigs";
 import { connectAnchorOffset } from "../constants";
 import { blueMapEventBus } from "../../../../../globals/blueMapEventBus";
 import { CustomRouterArgs } from "../globals/register/registerRouter";
-import { PortBlueMapAttrs, BlueMapPortCommonArgs } from "../types";
+import { PortBlueMapAttrs, BlueMapPortCommonArgs } from "../types/blueMap";
 import { validatePortConnection } from "../utils/validatePortConnection";
 
 interface X6GraphProps {

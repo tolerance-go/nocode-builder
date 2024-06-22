@@ -2,7 +2,7 @@ import { css } from "@emotion/css";
 import { Dropdown } from "antd";
 import { useContext } from "react";
 import colors from "tailwindcss/colors";
-import { ReactPortComponentProps } from "../../../types";
+import { ReactPortComponentProps } from "../../../types/blueMap";
 import { BasePortContext } from "./hooks";
 
 const gradientHoverStyle = css`
