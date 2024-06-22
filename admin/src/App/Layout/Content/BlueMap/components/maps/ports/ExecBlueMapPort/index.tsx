@@ -1,5 +1,5 @@
 import { BlueMapPortComponentProps } from "../../../../types";
-import { ArrowPort } from "../../../flows/ports/ArrowPort";
+import { FlowPort } from "../../../flows/ports/FlowPort";
 import { BaseBlueMapPort } from "../BaseBlueMapPort";
 import { ExecBlueMapPortConfig } from "./config";
 
@@ -7,7 +7,7 @@ export const ExecBlueMapPort = (props: BlueMapPortComponentProps) => {
   const { blueMapPort, ...portProps } = props;
   return (
     <BaseBlueMapPort {...props}>
-      <ArrowPort
+      <FlowPort
         iconColor={ExecBlueMapPortConfig.edgeConfig.color}
         {...portProps}
         label={blueMapPort.args?.text}

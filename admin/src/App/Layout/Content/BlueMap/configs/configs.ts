@@ -1,6 +1,6 @@
 import { BaseNodeConfig } from "../components/flows/nodes/BaseNode/config";
 import { SearchNodeConfig } from "../components/flows/nodes/SearchNode/config";
-import { ArrowPortConfig } from "../components/flows/ports/ArrowPort/config";
+import { FlowPortConfig } from "../components/flows/ports/FlowPort/config";
 import { AttrPortConfig } from "../components/flows/ports/AttrPort/config";
 import { BasePortConfig } from "../components/flows/ports/BasePort/config";
 import { BranchControlNodeConfigMeta } from "../components/maps/nodes/BranchControlNode/config";
@@ -15,7 +15,7 @@ export const allNodeConfigs = [...baseNodeConfigs, ...blueMapRawNodeConfigs];
 
 export const basePortConfigs = [
   BasePortConfig,
-  ArrowPortConfig,
+  FlowPortConfig,
   AttrPortConfig,
 ];
 

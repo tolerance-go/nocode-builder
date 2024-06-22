@@ -1,16 +1,15 @@
-import { CaretRightFilled } from "@ant-design/icons";
 import { Edge } from "@antv/x6";
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
 import { ReactPortComponentProps } from "../../../../types";
 import { BasePort } from "../BasePort";
 
-type ArrowPortProps = ReactPortComponentProps & {
+type FlowPortProps = ReactPortComponentProps & {
   label?: string;
   iconColor?: string;
 };
 
-export const ArrowPort = (props: ArrowPortProps) => {
+export const FlowPort = (props: FlowPortProps) => {
   const { node, port, graph, label } = props;
 
   const [isConnected, setIsConnected] = useState(false);
