@@ -1,5 +1,5 @@
 import { proxy } from "valtio";
-import { SearchNodeSourceData } from "../types";
+import { SearchNodeSourceData } from "../../App/Layout/Content/BlueMap/types";
 
 /**
  * 搜索节点从哪个 port 拖出来的

@@ -15,9 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 import { SearchNodeShape } from "./components/nodes/SearchNode/config";
 import { blueMapRawNodeConfigsById } from "./configs/configs";
 import { blueMapEventBus } from "../../../../globals/blueMapEventBus";
-import "./globals/register";
-import { CustomRouterArgs } from "./globals/register/registerRouter";
-import stores from "./stores";
+import stores from "../../../../stores/blueMap";
 import { SearchNodeSourceData } from "./types";
 import { getBlueMapPortMetaByPortId } from "./utils/getBlueMapPortMetaByPortId";
 import { getNodeById } from "./utils/getNodeById";
@@ -25,6 +23,8 @@ import { validatePortConnection } from "./utils/validatePortConnection";
 import { removePortConnections } from "./utils/removePortConnections";
 import { connectAnchorOffset } from "./constants";
 import X6Graph from "./Graph";
+import { CustomRouterArgs } from "@/globals/register/registerRouter";
+import "@/globals/register";
 
 const BlueMap = () => {
   const [graph, setGraph] = useState<Graph | null>(null);
