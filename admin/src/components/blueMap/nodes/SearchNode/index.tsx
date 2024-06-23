@@ -102,7 +102,6 @@ export const SearchNode: React.FC<X6ReactComponentProps> = (props) => {
           autoExpandParent={autoExpandParent}
           treeData={treeData}
           showIcon={false}
-          expandAction="doubleClick"
           onClick={(_e, node) => {
             if (node.configId) {
               blueMapEventBus.emit("selectBlueMapSearchPanelItem", {

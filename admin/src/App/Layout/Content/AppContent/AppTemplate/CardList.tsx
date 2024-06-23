@@ -31,6 +31,21 @@ const cardData = [
     description: "www.instagram.com",
     imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
   },
+  {
+    title: "Europe Street beat",
+    description: "www.instagram.com",
+    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
+  },
+  {
+    title: "Europe Street beat",
+    description: "www.instagram.com",
+    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
+  },
+  {
+    title: "Europe Street beat",
+    description: "www.instagram.com",
+    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
+  },
 ];
 
 export const CardList: React.FC = () => (

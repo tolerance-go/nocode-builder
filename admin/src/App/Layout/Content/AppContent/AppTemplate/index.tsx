@@ -1,7 +1,7 @@
 import { appTemplateGroups } from "@/configs/apps";
 import { scrollbarCls } from "@/styles/class";
 import { cx } from "@emotion/css";
-import { Affix, Breadcrumb, Menu, Typography } from "antd";
+import { Affix, Breadcrumb, Button, Menu, Space, Typography } from "antd";
 import React, { useRef } from "react";
 import { CardList } from "./CardList";
 
@@ -17,27 +17,9 @@ export const AppTemplate: React.FC = () => {
         )}
         ref={containerRef}
       >
-        <div className="w-[1400px] mx-auto flex gap-5">
-          <div className="w-[210px] pt-32 flex-shrink-0">
-            <Affix offsetTop={40} target={() => containerRef.current}>
-              <div>
-                <Typography.Title level={4} className="ml-4 pb-1">
-                  推荐模板
-                </Typography.Title>
-                <Menu
-                  mode="inline"
-                  items={appTemplateGroups}
-                  // className={css`
-                  //   & {
-                  //     border-right: none !important;
-                  //   }
-                  // `}
-                />
-              </div>
-            </Affix>
-          </div>
-          <div>
-            <div className="mb-12">
+        <div className="w-[1500px] mx-auto px-10">
+          <div className="pl-1 mb-5">
+            <div className="mb-5">
               <Breadcrumb
                 items={[
                   {
@@ -49,24 +31,48 @@ export const AppTemplate: React.FC = () => {
                 ]}
               />
             </div>
-            <div className="flex flex-col gap-12">
-              <div>
-                <Typography.Title level={3} className="pb-4">
-                  客户关系管理 (CRM)
-                </Typography.Title>
-                <CardList />
-              </div>
-              <div>
-                <Typography.Title level={3} className="pb-4">
-                  客户关系管理 (CRM)
-                </Typography.Title>
-                <CardList />
-              </div>
-              <div>
-                <Typography.Title level={3} className="pb-4">
-                  客户关系管理 (CRM)
-                </Typography.Title>
-                <CardList />
+            <div className="flex justify-between">
+              <Typography.Title level={3}>创建新应用程序</Typography.Title>
+              <Space>
+                <Button size="large" shape="round">
+                  导入程序
+                </Button>
+                <Button size="large" shape="round" type="primary">
+                  空白模板
+                </Button>
+              </Space>
+            </div>
+          </div>
+          <div className="flex gap-10">
+            <div className="w-[210px] flex-shrink-0">
+              <Affix offsetTop={20} target={() => containerRef.current}>
+                <div>
+                  <Menu
+                    mode="inline"
+                    items={appTemplateGroups}
+                    // className={css`
+                    //   & {
+                    //     border-right: none !important;
+                    //   }
+                    // `}
+                  />
+                </div>
+              </Affix>
+            </div>
+            <div>
+              <div className="flex flex-col gap-12">
+                <div>
+                  <Typography.Title level={4} className="pb-4">
+                    桌面端
+                  </Typography.Title>
+                  <CardList />
+                </div>
+                <div>
+                  <Typography.Title level={4} className="pb-4">
+                    移动端
+                  </Typography.Title>
+                  <CardList />
+                </div>
               </div>
             </div>
           </div>
