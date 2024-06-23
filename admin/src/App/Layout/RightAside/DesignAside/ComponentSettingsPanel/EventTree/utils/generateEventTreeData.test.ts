@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { generateEventTreeData } from "./generateEventTreeData";
-import { WidgetEventItem, WidgetEventGroupItem } from "@/types";
+import { WidgetEventItem, WidgetEventGroupItem, DataKey } from "@/types";
 import { validateAndCreateConfigMap } from "@/utils/blueMap/validateAndCreateConfigMap";
 
 // 交互事件类型
@@ -37,7 +37,7 @@ const widgetEventGroupsByType = validateAndCreateConfigMap(
 
 describe("generateEventTreeData", () => {
   it("应正确生成树数据", () => {
-    const eventGroups = new Map<string, WidgetEventGroupItem>(
+    const eventGroups = new Map<DataKey, WidgetEventGroupItem>(
       widgetEventGroupsByType
     );
     const supportEvents = widgetEvents;

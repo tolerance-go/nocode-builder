@@ -1,6 +1,8 @@
 import { SettingConfig } from "@/components/SettingsForm";
 import { DeepReadonly } from "@/utils/types";
 
+export type DataKey = React.Key;
+
 export interface RouteComponentData {
   type: "Route";
   path: string;

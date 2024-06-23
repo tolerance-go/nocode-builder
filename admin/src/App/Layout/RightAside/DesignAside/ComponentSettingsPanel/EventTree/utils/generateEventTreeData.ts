@@ -1,10 +1,10 @@
-import { WidgetEventItem, WidgetEventGroupItem } from "@/types";
+import { WidgetEventItem, WidgetEventGroupItem, DataKey } from "@/types";
 import { TreeDataNode } from "antd";
 
 // 工具方法，用于生成树结构
 export const generateEventTreeData = (
   supportEvents: WidgetEventItem[],
-  eventGroups: Map<string, WidgetEventGroupItem>
+  eventGroups: Map<DataKey, WidgetEventGroupItem>
 ): TreeDataNode[] => {
   const buildTree = (group: WidgetEventGroupItem): TreeDataNode => {
     const children: TreeDataNode[] = [];

@@ -1,10 +1,11 @@
+import { DataKey } from "@/types";
 import { checkDuplicateKeys } from "./checkDuplicateIds";
 import { createConfigMapByKey } from "./createConfigMapById";
 
 export const validateAndCreateConfigMap = <T>(
   configs: T[],
   key: keyof T
-): Map<string | number, T> => {
+): Map<DataKey, T> => {
   // 先调用 checkDuplicateKeys
   checkDuplicateKeys(configs, key);
 
