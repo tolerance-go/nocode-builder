@@ -3,24 +3,25 @@ import {
   widgetEventsByType,
 } from "@/configs/widgetEvent";
 import stores from "@/stores";
+import { SearchParams } from "@/types";
 import { ensure } from "@/utils/ensure";
+import { useSearchData } from "@/utils/useSearchData";
 import type { GetProps } from "antd";
 import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { generateEventTreeData } from "./utils/generateEventTreeData";
-import { SearchParams } from "@/types";
-import { useSearchData } from "@/utils/useSearchData";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
 const { DirectoryTree } = Tree;
 
 const EventTree: React.FC = () => {
-  const { updateSearchData } = useSearchData<{
-    contentType: SearchParams["/apps/:id/design"]["contentType"];
-  }>({
+  const { searchData, updateSearchData } = useSearchData<
+    Pick<SearchParams["/apps/:id/design"], "contentType" | "selectedEvent">
+  >({
     contentType: "design",
+    selectedEvent: "",
   });
 
   const uniqueSelectedNodeData = useSnapshot(
@@ -44,11 +45,15 @@ const EventTree: React.FC = () => {
     widgetEventGroupsByType
   );
 
-  const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
-    console.log("Trigger Select", keys, info);
+  const onSelect: DirectoryTreeProps["onSelect"] = (_keys, info) => {
     if (info.node.isLeaf) {
       updateSearchData({
         contentType: "blueMap",
+        selectedEvent: info.node.key as string,
+      });
+    } else {
+      updateSearchData({
+        selectedEvent: info.node.key as string,
       });
     }
   };
@@ -66,6 +71,10 @@ const EventTree: React.FC = () => {
         onExpand={onExpand}
         expandAction="doubleClick"
         treeData={treeData}
+        activeKey={searchData.selectedEvent || undefined}
+        selectedKeys={
+          searchData.selectedEvent ? [searchData.selectedEvent] : undefined
+        }
       />
     </div>
   );

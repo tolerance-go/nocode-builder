@@ -48,10 +48,12 @@ describe("generateEventTreeData", () => {
       {
         title: "界面交互",
         key: "viewWidgetEventGroup",
+        selectable: false,
         children: [
           {
             title: "鼠标事件",
             key: "mouseWidgetEventGroup",
+            selectable: false,
             children: [
               {
                 title: "点击事件",
@@ -96,6 +98,7 @@ describe("generateEventTreeData", () => {
       {
         title: "界面交互",
         key: "viewWidgetEventGroup",
+        selectable: false,
         children: [
           {
             title: "点击事件",
@@ -145,14 +148,17 @@ describe("generateEventTreeData", () => {
       {
         title: "界面交互",
         key: "viewWidgetEventGroup",
+        selectable: false,
         children: [
           {
             title: "鼠标事件",
             key: "mouseWidgetEventGroup",
+            selectable: false,
             children: [
               {
                 title: "键盘事件",
                 key: "keyboardWidgetEventGroup",
+                selectable: false,
                 children: [
                   {
                     title: "按键事件",

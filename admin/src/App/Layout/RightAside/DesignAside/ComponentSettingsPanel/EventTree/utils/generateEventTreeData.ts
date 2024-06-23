@@ -31,6 +31,7 @@ export const generateEventTreeData = (
       title: group.menuTitle,
       key: group.type,
       children,
+      selectable: false,
     };
   };
 

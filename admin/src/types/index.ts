@@ -168,5 +168,6 @@ export type GroupWidget = WidgetBase<"group">;
 export type SearchParams = {
   "/apps/:id/design": {
     contentType: "design" | "blueMap";
+    selectedEvent: string;
   };
 };

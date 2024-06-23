@@ -4,7 +4,9 @@ import { updateSearchParams } from "./updateSearchParams";
 export const useSearchData = <T extends Record<string, string>>(data: T) => {
   const [searchParams, setSearchParams] = useSearchParams(data);
 
-  const updateSearchData = (next: Partial<T>) => {
+  const updateSearchData = (
+    next: Partial<T> & Record<string, string | undefined>
+  ) => {
     setSearchParams(updateSearchParams(searchParams, next));
   };
 

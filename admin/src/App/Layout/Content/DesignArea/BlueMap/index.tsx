@@ -20,6 +20,7 @@ export const BlueMap = () => {
             onClick={() => {
               updateSearchData({
                 contentType: "design",
+                selectedEvent: undefined,
               });
             }}
           >
