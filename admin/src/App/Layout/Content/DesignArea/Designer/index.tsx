@@ -3,13 +3,14 @@ import { Button, Space } from "antd";
 import { useSnapshot } from "valtio";
 import { Location } from "./Location";
 import { StageWithRouter } from "./StageWithRouter";
+import { ContentToolBar } from "@/components/ContentToolBar";
 
 export const Designer = () => {
   const designTreeData = useSnapshot(stores.designs.states.designTreeData);
 
   return (
     <div>
-      <div className="flex justify-between items-center h-[34px] px-2 py-1 border-b">
+      <ContentToolBar>
         <Space>
           <Location />
         </Space>
@@ -33,7 +34,7 @@ export const Designer = () => {
             重做
           </Button>
         </Space>
-      </div>
+      </ContentToolBar>
       <StageWithRouter />
     </div>
   );

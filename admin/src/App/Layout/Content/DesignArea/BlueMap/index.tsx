@@ -496,7 +496,7 @@ const BlueMap = () => {
             portId: sourcePortId,
           };
           searchNode.setPropByPath("source", searchNodeSourceData);
-          stores.search.actions.setSearchNodeSourcePort(
+          stores.blueMap.search.actions.setSearchNodeSourcePort(
             sourceNode.id,
             sourcePortId
           );
@@ -585,7 +585,8 @@ const BlueMap = () => {
           const { x, y } = searchNode.getPosition();
 
           /** 先取出来缓存 */
-          const source = stores.search.states.searchNodeSourcePort.source;
+          const source =
+            stores.blueMap.search.states.searchNodeSourcePort.source;
 
           removeSearchNodeRef.current();
 
