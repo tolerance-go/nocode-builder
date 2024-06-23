@@ -1,7 +1,7 @@
-import React from "react";
-import { Card } from "antd";
-import { EyeOutlined, DownloadOutlined, CopyOutlined } from "@ant-design/icons";
+import { CopyOutlined, EyeOutlined } from "@ant-design/icons";
 import { css, cx } from "@emotion/css";
+import { Card } from "antd";
+import React from "react";
 
 const { Meta } = Card;
 
