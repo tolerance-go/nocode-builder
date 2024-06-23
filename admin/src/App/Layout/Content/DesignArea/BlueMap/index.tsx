@@ -22,16 +22,16 @@ import { Selection } from "@antv/x6-plugin-selection";
 import { Button } from "antd";
 import React, { useEffect, useRef, useState } from "react";
 import ReactDOM from "react-dom/client";
-import { nodeConfigsById } from "../../../../configs/blueMap/configs";
-import { connectAnchorOffset } from "../../../../constants/blueMap";
-import { blueMapEventBus } from "../../../../globals/blueMapEventBus";
-import stores from "../../../../stores/blueMap";
-import {
-  BlueMapPortCommonArgs,
-  PortBlueMapAttrs,
-  SearchNodeSourceData,
-} from "../../../../types/blueMap";
 import { blueMapPortConfigsByType } from "@/configs/blueMap/blueMapPortConfigs";
+import { nodeConfigsById } from "@/configs/blueMap/configs";
+import { connectAnchorOffset } from "@/constants/blueMap";
+import { blueMapEventBus } from "@/globals/blueMapEventBus";
+import stores from "@/stores";
+import {
+  PortBlueMapAttrs,
+  BlueMapPortCommonArgs,
+  SearchNodeSourceData,
+} from "@/types/blueMap";
 import "@/globals/register";
 import "./index.less";
 
@@ -61,7 +61,7 @@ const BlueMap = () => {
         }
       });
 
-      stores.search.actions.clearSearchNodeSourcePort();
+      stores.blueMap.search.actions.clearSearchNodeSourcePort();
     });
   };
 
