@@ -3,20 +3,32 @@ import { NavTabs } from "@/components/NavTabs";
 import { SearchBtn } from "@/components/SearchBtn";
 import { Space } from "antd";
 import AppTreeList from "./AppTreeList";
+import { updateSearchParams } from "@/utils/updateSearchParams";
+import { SEARCH_PARAMS } from "@/constants";
+import { useSearchParams } from "react-router-dom";
 
 export const AppAside = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   return (
     <div className="bg-white">
       <NavTabs
         tabBarExtraContent={
           <Space className="px-2">
             <SearchBtn />
-            <AddBtn></AddBtn>
+            <AddBtn
+              onClick={() => {
+                setSearchParams(
+                  updateSearchParams(searchParams, {
+                    [SEARCH_PARAMS.APP.IS_TEMPLATE]: "true",
+                  })
+                );
+              }}
+            />
           </Space>
         }
         items={[
           {
-            label: "组件树",
+            label: "我的",
             key: "tree",
           },
           // {

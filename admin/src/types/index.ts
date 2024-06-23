@@ -166,6 +166,9 @@ export type ComponentWidget = WidgetBase<"component">;
 export type GroupWidget = WidgetBase<"group">;
 
 export type SearchParams = {
+  "/apps": {
+    isTemplate: string;
+  };
   "/apps/:id/design": {
     contentType: "design" | "blueMap";
     selectedEvent: string;

@@ -1,5 +1,5 @@
 import { matchPath, useLocation } from "react-router-dom";
-import { AppList } from "./AppList";
+import { AppContent } from "./AppContent";
 import { DataTable } from "./DataTable";
 import { DesignArea } from "./DesignArea";
 
@@ -7,7 +7,7 @@ export const Content = () => {
   const location = useLocation();
 
   if (matchPath("/apps", location.pathname)) {
-    return <AppList />;
+    return <AppContent />;
   }
   if (matchPath("/apps/:id/data", location.pathname)) {
     return <DataTable />;

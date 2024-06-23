@@ -40,13 +40,7 @@ const MouseFollowerManager: React.FC = () => {
     };
   }, [handleShow, handleHide]);
 
-  return (
-    <div>
-      <h1>鼠标跟随组件管理器</h1>
-      <MouseFollower visible={visible}>{content}</MouseFollower>
-      <p>按 's' 键显示鼠标跟随组件，按 'h' 键隐藏。</p>
-    </div>
-  );
+  return <MouseFollower visible={visible}>{content}</MouseFollower>;
 };
 
 export default MouseFollowerManager;

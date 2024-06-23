@@ -26,7 +26,7 @@ export const Layout = () => {
 
       <div className="flex flex-row" style={{ height: "calc(100vh - 46px)" }}>
         {/* 左侧边栏 */}
-        <aside className="bg-gray-200 w-[400px] border-r">
+        <aside className="bg-gray-200 w-[400px] flex-shrink-0 border-r">
           <LeftAside />
         </aside>
 
