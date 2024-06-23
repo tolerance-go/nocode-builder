@@ -13,10 +13,6 @@ export const appSubNavs: NavItem[] = [
     label: "设计",
   },
   {
-    key: "blue-map",
-    label: "蓝图",
-  },
-  {
     key: "dashboard",
     label: "仪表板",
   },

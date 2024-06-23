@@ -164,3 +164,9 @@ type WidgetEventType = string; // 为事件名称添加别名
 export type ComponentWidget = WidgetBase<"component">;
 
 export type GroupWidget = WidgetBase<"group">;
+
+export type SearchParams = {
+  "/apps/:id/design": {
+    contentType: "design" | "blueMap";
+  };
+};

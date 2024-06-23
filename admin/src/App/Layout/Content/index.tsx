@@ -1,8 +1,7 @@
 import { matchPath, useLocation } from "react-router-dom";
 import { AppList } from "./AppList";
 import { DataTable } from "./DataTable";
-import { Designer } from "./Designer";
-import BlueMap from "./BlueMap";
+import { DesignArea } from "./DesignArea";
 
 export const Content = () => {
   const location = useLocation();
@@ -14,10 +13,7 @@ export const Content = () => {
     return <DataTable />;
   }
   if (matchPath("/apps/:id/design", location.pathname)) {
-    return <Designer />;
-  }
-  if (matchPath("/apps/:id/blue-map", location.pathname)) {
-    return <BlueMap />;
+    return <DesignArea />;
   }
   return null;
 };

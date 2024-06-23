@@ -1,6 +1,5 @@
 import {
   widgetEventGroupsByType,
-  widgetEvents,
   widgetEventsByType,
 } from "@/configs/widgetEvent";
 import stores from "@/stores";
@@ -10,12 +9,20 @@ import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { generateEventTreeData } from "./utils/generateEventTreeData";
+import { SearchParams } from "@/types";
+import { useSearchData } from "@/utils/useSearchData";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
 const { DirectoryTree } = Tree;
 
 const EventTree: React.FC = () => {
+  const { updateSearchData } = useSearchData<{
+    contentType: SearchParams["/apps/:id/design"]["contentType"];
+  }>({
+    contentType: "design",
+  });
+
   const uniqueSelectedNodeData = useSnapshot(
     stores.designs.states.uniqueSelectedNodeData
   );
@@ -39,6 +46,9 @@ const EventTree: React.FC = () => {
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
     console.log("Trigger Select", keys, info);
+    updateSearchData({
+      contentType: "blueMap",
+    });
   };
 
   const onExpand: DirectoryTreeProps["onExpand"] = (keys, info) => {
