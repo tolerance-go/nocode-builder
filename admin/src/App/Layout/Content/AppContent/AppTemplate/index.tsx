@@ -20,6 +20,7 @@ import React, { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CardList } from "./CardList";
 import { ensure } from "@/utils/ensure";
+import CreateAppModal, { CreateAppModalRef } from "./CreateAppModal";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -30,6 +31,7 @@ const appTemplateGroups: MenuItem[] = templateUseCases.map((useCase) => ({
 }));
 
 export const AppTemplate: React.FC = () => {
+  const createAppModalRef = useRef<CreateAppModalRef>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [searchParams, setSearchParams] = useSearchParams({});
 
@@ -57,87 +59,97 @@ export const AppTemplate: React.FC = () => {
   const mobileTpls = tpls.filter((tpl) => tpl.type === "mobile");
 
   return (
-    <div className="h-[100%]">
-      <div
-        className={cx(
-          "flex-grow pt-8 pb-20 flex flex-col gap-12 pr-2 overflow-y-auto h-[100%]",
-          scrollbarCls
-        )}
-        ref={containerRef}
-      >
-        <div className="w-[1500px] mx-auto px-10">
-          <div className="pl-1 mb-5">
-            <div className="mb-5">
-              <Breadcrumb
-                items={[
-                  {
-                    title: "应用",
-                  },
-                  {
-                    title: "模板创建",
-                  },
-                ]}
-              />
+    <>
+      <div className="h-[100%]">
+        <div
+          className={cx(
+            "flex-grow pt-8 pb-20 flex flex-col gap-12 pr-2 overflow-y-auto h-[100%]",
+            scrollbarCls
+          )}
+          ref={containerRef}
+        >
+          <div className="w-[1500px] mx-auto px-10">
+            <div className="pl-1 mb-5">
+              <div className="mb-5">
+                <Breadcrumb
+                  items={[
+                    {
+                      title: "应用",
+                    },
+                    {
+                      title: "模板创建",
+                    },
+                  ]}
+                />
+              </div>
+              <div className="flex justify-between">
+                <Typography.Title level={3}>创建新应用程序</Typography.Title>
+                <Space>
+                  <Button size="large" shape="round">
+                    导入程序
+                  </Button>
+                  <Button
+                    size="large"
+                    shape="round"
+                    type="primary"
+                    onClick={() => {
+                      createAppModalRef.current?.showModal();
+                    }}
+                  >
+                    空白模板
+                  </Button>
+                </Space>
+              </div>
             </div>
-            <div className="flex justify-between">
-              <Typography.Title level={3}>创建新应用程序</Typography.Title>
-              <Space>
-                <Button size="large" shape="round">
-                  导入程序
-                </Button>
-                <Button size="large" shape="round" type="primary">
-                  空白模板
-                </Button>
-              </Space>
-            </div>
-          </div>
-          <div className="flex gap-10">
-            <div className="w-[210px] flex-shrink-0">
-              <Affix offsetTop={20} target={() => containerRef.current}>
-                <div>
-                  <Menu
-                    mode="inline"
-                    selectedKeys={
-                      selectedUseCaseType ? [selectedUseCaseType] : undefined
-                    }
-                    items={appTemplateGroups}
-                    onSelect={handleMenuSelect}
-                    // className={css`
-                    //   & {
-                    //     border-right: none !important;
-                    //   }
-                    // `}
-                  />
+            <div className="flex gap-10">
+              <div className="w-[210px] flex-shrink-0">
+                <Affix offsetTop={20} target={() => containerRef.current}>
+                  <div>
+                    <Menu
+                      mode="inline"
+                      selectedKeys={
+                        selectedUseCaseType ? [selectedUseCaseType] : undefined
+                      }
+                      items={appTemplateGroups}
+                      onSelect={handleMenuSelect}
+                      // className={css`
+                      //   & {
+                      //     border-right: none !important;
+                      //   }
+                      // `}
+                    />
+                  </div>
+                </Affix>
+              </div>
+              {tpls.length ? (
+                <div className="flex flex-col gap-12">
+                  {desktopTpls.length ? (
+                    <div>
+                      <Typography.Title level={4} className="pb-4">
+                        桌面端
+                      </Typography.Title>
+                      <CardList templates={desktopTpls} />
+                    </div>
+                  ) : null}
+                  {mobileTpls.length ? (
+                    <div>
+                      <Typography.Title level={4} className="pb-4">
+                        移动端
+                      </Typography.Title>
+                      <CardList templates={mobileTpls} />
+                    </div>
+                  ) : null}
                 </div>
-              </Affix>
+              ) : (
+                <div className="flex-grow flex justify-center items-center">
+                  <Empty description="暂无匹配"></Empty>
+                </div>
+              )}
             </div>
-            {tpls.length ? (
-              <div className="flex flex-col gap-12">
-                {desktopTpls.length ? (
-                  <div>
-                    <Typography.Title level={4} className="pb-4">
-                      桌面端
-                    </Typography.Title>
-                    <CardList templates={desktopTpls} />
-                  </div>
-                ) : null}
-                {mobileTpls.length ? (
-                  <div>
-                    <Typography.Title level={4} className="pb-4">
-                      移动端
-                    </Typography.Title>
-                    <CardList templates={mobileTpls} />
-                  </div>
-                ) : null}
-              </div>
-            ) : (
-              <div className="flex-grow flex justify-center items-center">
-                <Empty description="暂无匹配"></Empty>
-              </div>
-            )}
           </div>
         </div>
       </div>
-    </div>
+      <CreateAppModal ref={createAppModalRef} />
+    </>
   );
 };
