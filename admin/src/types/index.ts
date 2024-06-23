@@ -187,6 +187,28 @@ export type App = {
   groupId: number;
 };
 
+export type TemplateUseCase = {
+  id: number;
+  title: string;
+  type:
+    | "crm"
+    | "erp"
+    | "hrm"
+    | "form"
+    | "e-commerce"
+    | "project-management"
+    | "finance";
+};
+
+export type Template = {
+  id: number;
+  title: string;
+  previewImgSrc: string;
+  type: "mobile" | "tablet" | "desktop";
+  /** 场景 */
+  useCasId: number;
+};
+
 import { Cell, Graph, Node } from "@antv/x6";
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { PortManager } from "@antv/x6/es/model/port";
