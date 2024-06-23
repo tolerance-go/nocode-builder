@@ -1,9 +1,9 @@
-import { css } from "@emotion/css";
-import { Tabs, Space, Button } from "antd";
-import ComponentSettingsForm from "./ComponentSettingsForm";
-import { PlusOutlined } from "@ant-design/icons";
-import { useSearchParams } from "react-router-dom";
+import { AddBtn } from "@/components/AddBtn";
 import { updateSearchParams } from "@/utils/updateSearchParams";
+import { css } from "@emotion/css";
+import { Space, Tabs } from "antd";
+import { useSearchParams } from "react-router-dom";
+import ComponentSettingsForm from "./ComponentSettingsForm";
 import EventTree from "./EventTree";
 
 type NodeSettingPanel = "setting" | "style" | "event";
@@ -31,14 +31,7 @@ export const ComponentSettingsPanel = () => {
       <Tabs
         tabBarExtraContent={
           <Space className="px-2">
-            <Button
-              type="text"
-              size="small"
-              className="group"
-              icon={
-                <PlusOutlined className="text-gray-400 group-hover:text-gray-900 transition-colors" />
-              }
-            ></Button>
+            <AddBtn></AddBtn>
           </Space>
         }
         className={css`

@@ -1,11 +1,12 @@
+import { AddBtn } from "@/components/AddBtn";
 import { NavTabs } from "@/components/NavTabs";
 import { updateSearchParams } from "@/utils/updateSearchParams";
+import { SearchOutlined } from "@ant-design/icons";
 import { Button, Input, Space } from "antd";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Editor from "./Editor";
 import TreeList from "./TreeList";
-import { PlusOutlined, SearchOutlined } from "@ant-design/icons";
-import { useState } from "react";
 
 type TreePanel = "tree" | "editor";
 
@@ -40,13 +41,7 @@ export const BottomPanel = () => {
               }
               onClick={() => setIsSearching(true)} // 点击搜索按钮时显示搜索框
             />
-            <Button
-              type="text"
-              size="small"
-              className="group"
-              icon={
-                <PlusOutlined className="text-gray-400 group-hover:text-gray-900 transition-colors" />
-              }
+            <AddBtn
               onClick={() => {
                 setSearchParams(
                   updateSearchParams(searchParams, {
@@ -54,7 +49,7 @@ export const BottomPanel = () => {
                   })
                 );
               }}
-            ></Button>
+            ></AddBtn>
           </Space>
         }
         activeKey={treePanel}
