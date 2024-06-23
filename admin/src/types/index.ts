@@ -180,10 +180,10 @@ export type SearchParams = {
 export type AppGroup = {
   id: number;
   menuTitle: string;
-  parentGroupId: number;
+  parentGroupId?: number;
 };
 
-export type App = {
+export type AppData = {
   id: number;
   menuTitle: string;
   groupId?: number;

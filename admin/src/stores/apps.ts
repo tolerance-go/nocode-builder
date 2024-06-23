@@ -1,8 +1,8 @@
-import { App, AppGroup } from "@/types";
+import { AppData, AppGroup } from "@/types";
 import { proxy } from "valtio";
 
 const apps = proxy<{
-  list: App[];
+  list: AppData[];
 }>({
   list: [],
 });
@@ -19,7 +19,7 @@ export const states = proxy({
 });
 
 export const actions = {
-  addApp: (newApp: App) => {
+  addApp: (newApp: AppData) => {
     states.apps.list.push(newApp);
   },
 };

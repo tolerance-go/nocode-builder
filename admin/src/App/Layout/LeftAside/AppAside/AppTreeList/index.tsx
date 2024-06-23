@@ -1,37 +1,24 @@
-import React from "react";
-import { Tree } from "antd";
-import type { GetProps, TreeDataNode } from "antd";
-import { useSearchParams } from "react-router-dom";
-import { updateSearchParams } from "@/utils/updateSearchParams";
 import { SEARCH_PARAMS } from "@/constants";
+import stores from "@/stores";
+import { updateSearchParams } from "@/utils/updateSearchParams";
+import type { GetProps } from "antd";
+import { Tree } from "antd";
+import React from "react";
+import { useSearchParams } from "react-router-dom";
+import { useSnapshot } from "valtio";
+import { buildTreeData } from "./utils/buildTreeData";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
 const { DirectoryTree } = Tree;
 
-const treeData: TreeDataNode[] = [
-  {
-    title: "parent33333 0",
-    key: "0-0",
-    selectable: false,
-    children: [
-      { title: "leaf 0-0", key: "0-0-0", isLeaf: true },
-      { title: "leaf 0-1", key: "0-0-1", isLeaf: true },
-    ],
-  },
-  {
-    title: "parent 1",
-    key: "0-1",
-    selectable: false,
-    children: [
-      { title: "leaf 1-0", key: "0-1-0", isLeaf: true },
-      { title: "leaf 1-1", key: "0-1-1", isLeaf: true },
-    ],
-  },
-];
-
 const AppTreeList: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const appsSnapshot = useSnapshot(stores.apps.states.apps);
+  const appGroupsSnapshot = useSnapshot(stores.apps.states.appGroups);
+
+  // 将 apps 和 appGroups 转换为 treeData
+  const treeData = buildTreeData(appsSnapshot.list, appGroupsSnapshot.list);
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
     console.log("Trigger Select", keys, info);
