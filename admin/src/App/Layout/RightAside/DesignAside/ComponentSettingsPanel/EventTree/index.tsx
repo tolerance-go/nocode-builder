@@ -11,6 +11,7 @@ import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { generateEventTreeData } from "./utils/generateEventTreeData";
+import { PickAndOptional } from "@/utils/types";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
@@ -18,10 +19,13 @@ const { DirectoryTree } = Tree;
 
 const EventTree: React.FC = () => {
   const { searchData, updateSearchData } = useSearchData<
-    Pick<SearchParams["/apps/:id/design"], "contentType" | "selectedEvent">
+    PickAndOptional<
+      SearchParams["/apps/:id/design"],
+      "contentType" | "selectedEvent",
+      "selectedEvent"
+    >
   >({
     contentType: "design",
-    selectedEvent: "",
   });
 
   const uniqueSelectedNodeData = useSnapshot(
@@ -69,9 +73,8 @@ const EventTree: React.FC = () => {
         defaultExpandAll
         onSelect={onSelect}
         onExpand={onExpand}
-        expandAction="doubleClick"
         treeData={treeData}
-        activeKey={searchData.selectedEvent || undefined}
+        activeKey={searchData.selectedEvent}
         selectedKeys={
           searchData.selectedEvent ? [searchData.selectedEvent] : undefined
         }
