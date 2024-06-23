@@ -186,7 +186,7 @@ export type AppGroup = {
 export type App = {
   id: number;
   menuTitle: string;
-  groupId: number;
+  groupId?: number;
 };
 
 export type TemplateUseCase = {

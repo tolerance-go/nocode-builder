@@ -1,3 +1,4 @@
+import stores from "@/stores";
 import { Button, Form, FormProps, Input, Modal, Space } from "antd";
 import React, { useImperativeHandle, useState } from "react";
 
@@ -14,6 +15,7 @@ export interface CreateAppModalRef {
 const CreateAppModal = React.forwardRef<CreateAppModalRef, CreateAppModalProps>(
   (props, ref) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [form] = Form.useForm();
 
     useImperativeHandle(ref, () => ({
       showModal: () => setIsModalOpen(true),
@@ -35,13 +37,17 @@ const CreateAppModal = React.forwardRef<CreateAppModalRef, CreateAppModalProps>(
     };
 
     type FieldType = {
-      username?: string;
+      name?: string;
       password?: string;
       remember?: string;
     };
 
     const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
-      console.log("Success:", values);
+      stores.apps.actions.addApp({
+        id: new Date().getTime(),
+        menuTitle: values.name!,
+      });
+      handleCancel();
     };
 
     const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
@@ -57,12 +63,13 @@ const CreateAppModal = React.forwardRef<CreateAppModalRef, CreateAppModalProps>(
         onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
-        destroyOnClose
+        afterClose={() => {
+          form.resetFields();
+        }}
       >
         <Form
-          name="basic"
+          form={form}
           style={{ maxWidth: 600 }}
-          initialValues={{ remember: true }}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
@@ -71,10 +78,8 @@ const CreateAppModal = React.forwardRef<CreateAppModalRef, CreateAppModalProps>(
           <div className="pt-4 pb-8">
             <Form.Item<FieldType>
               label="名称"
-              name="username"
-              rules={[
-                { required: true, message: "Please input your username!" },
-              ]}
+              name="name"
+              rules={[{ required: true, message: "Please input your name!" }]}
             >
               <Input />
             </Form.Item>
