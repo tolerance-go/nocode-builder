@@ -39,10 +39,11 @@ export const CardList: React.FC = () => (
       <Card
         size="small"
         key={index}
+        className="overflow-hidden"
         cover={
           <div
             className={cx(
-              "relative overflow-hidden hover:cursor-pointer",
+              "relative hover:cursor-pointer",
               css`
                 border-radius: 8px 8px 0 0;
               `
