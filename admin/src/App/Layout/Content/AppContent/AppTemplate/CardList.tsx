@@ -1,5 +1,5 @@
 import React from "react";
-import { Card } from "antd";
+import { Button, Card, Flex, Space } from "antd";
 
 const { Meta } = Card;
 
@@ -35,10 +35,12 @@ export const CardList: React.FC = () => (
   <div className="grid grid-cols-3 gap-5">
     {cardData.map((card, index) => (
       <Card
+        size="small"
         key={index}
-        cover={<img className='w-[400px] h-[150px] bg-gray-400' />}
+        hoverable
+        cover={<img className="w-[400px] h-[150px] bg-gray-400" />}
       >
-        <Meta title={card.title} description={card.description} />
+        <Meta title={card.title} />
       </Card>
     ))}
   </div>

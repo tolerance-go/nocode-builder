@@ -2,6 +2,7 @@ import type { MenuProps } from "antd";
 import { Menu, Typography } from "antd";
 import React from "react";
 import { CardList } from "./CardList";
+import { css } from "@emotion/css";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -46,13 +47,21 @@ const items: MenuItem[] = [
 
 export const AppTemplate: React.FC = () => {
   return (
-    <div className="mx-auto p-10 w-[1200px]">
-      <Typography.Title level={3} className="ml-4 pb-1">
-        推荐模板
-      </Typography.Title>
-      <div className="flex gap-5">
-        <div className="w-[256px] flex-shrink-0">
-          <Menu mode="inline" items={items} />
+    <div className="mx-auto p-10 w-[1400px]">
+      <div className="flex gap-10">
+        <div className="w-[210px] flex-shrink-0">
+          <Typography.Title level={3} className="ml-4 pb-1">
+            推荐模板
+          </Typography.Title>
+          <Menu
+            mode="inline"
+            items={items}
+            className={css`
+              & {
+                border-right: none !important;
+              }
+            `}
+          />
         </div>
         <div className="flex-grow">
           <CardList />
