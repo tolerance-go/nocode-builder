@@ -46,9 +46,11 @@ const EventTree: React.FC = () => {
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
     console.log("Trigger Select", keys, info);
-    updateSearchData({
-      contentType: "blueMap",
-    });
+    if (info.node.isLeaf) {
+      updateSearchData({
+        contentType: "blueMap",
+      });
+    }
   };
 
   const onExpand: DirectoryTreeProps["onExpand"] = (keys, info) => {
@@ -62,6 +64,7 @@ const EventTree: React.FC = () => {
         defaultExpandAll
         onSelect={onSelect}
         onExpand={onExpand}
+        expandAction="doubleClick"
         treeData={treeData}
       />
     </div>

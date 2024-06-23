@@ -1,7 +1,7 @@
 import { SearchParams } from "@/types";
 import { useSearchData } from "@/utils/useSearchData";
 import { Designer } from "./Designer";
-import BlueMap from "./BlueMap";
+import { BlueMap } from "./BlueMap";
 
 export const DesignArea = () => {
   const { searchData } = useSearchData<{
@@ -10,8 +10,14 @@ export const DesignArea = () => {
     contentType: "design",
   });
 
-  if (searchData.contentType === "blueMap") {
-    return <BlueMap />;
-  }
-  return <Designer />;
+  return (
+    <div className="relative h-[100%]">
+      <Designer />
+      {searchData.contentType === "blueMap" && (
+        <div className='absolute inset-0 bg-white'>
+          <BlueMap />
+        </div>
+      )}
+    </div>
+  );
 };
