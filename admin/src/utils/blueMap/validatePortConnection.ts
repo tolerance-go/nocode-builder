@@ -1,7 +1,7 @@
 import { Node } from "@antv/x6";
 import { getBlueMapPortMetaByPortId } from "./getBlueMapPortMetaByPortId";
 import { validateCommonConstraints } from "./validateCommonConstraints";
-import { ConnectionConstraintValidateParams } from "@/types/blueMap";
+import { ConnectionConstraintValidateParams } from "@/types";
 
 interface ValidatePortConnectionArgs {
   sourceNode: Node;

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { BlueMapNodeConfig, MenuGroups } from "@/types/blueMap";
+import { BlueMapNodeConfig, MenuGroups } from "@/types";
 import { generateTreeData } from ".";
 
 // 测试数据

@@ -1,4 +1,4 @@
-import { PortConfig } from "@/types/blueMap";
+import { PortConfig } from "@/types";
 import { FlowPort } from ".";
 
 export const FlowPortConfig: PortConfig = {

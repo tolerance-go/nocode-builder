@@ -3,7 +3,7 @@ import { Dropdown } from "antd";
 import { useContext } from "react";
 import colors from "tailwindcss/colors";
 import { BasePortContext } from "./hooks";
-import { PortComponentProps } from "@/types/blueMap";
+import { PortComponentProps } from "@/types";
 
 const gradientHoverStyle = css`
   position: relative;

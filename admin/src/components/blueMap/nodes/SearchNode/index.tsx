@@ -5,7 +5,7 @@ import {
   SearchNodeSourceData,
   SearchTreeNode,
   X6ReactComponentProps,
-} from "@/types/blueMap";
+} from "@/types";
 import {
   filterConfigsBySource,
   generateTreeData,

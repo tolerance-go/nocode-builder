@@ -31,7 +31,7 @@ import {
   PortBlueMapAttrs,
   BlueMapPortCommonArgs,
   SearchNodeSourceData,
-} from "@/types/blueMap";
+} from "@/types";
 import "@/globals/register";
 import "./index.less";
 
