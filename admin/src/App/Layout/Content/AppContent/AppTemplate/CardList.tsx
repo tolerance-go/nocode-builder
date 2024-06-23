@@ -1,7 +1,7 @@
 import { Template } from "@/types";
 import { CopyOutlined, EyeOutlined } from "@ant-design/icons";
 import { css, cx } from "@emotion/css";
-import { Button, Card, Space, Typography } from "antd";
+import { Button, Card } from "antd";
 import React from "react";
 
 const { Meta } = Card;
@@ -11,7 +11,7 @@ interface CardListProps {
 }
 
 export const CardList: React.FC<CardListProps> = ({ templates }) => (
-  <div className="grid grid-cols-3 gap-5">
+  <div className="grid gap-5">
     {templates.map((template, index) => (
       <Card
         size="small"
@@ -29,10 +29,14 @@ export const CardList: React.FC<CardListProps> = ({ templates }) => (
             <img
               src={template.previewImgSrc}
               alt={template.title}
-              className="w-[400px] h-[200px] object-cover"
+              className="object-cover"
+              style={{
+                width: template.type === "desktop" ? 400 : 200,
+                height: template.type === "desktop" ? 200 : 400,
+              }}
             />
-            <div className="absolute inset-0 flex opacity-0 hover:opacity-100 transition-opacity duration-300">
-              <div className="w-full flex flex-col gap-2 items-center justify-center bg-gray-900 bg-opacity-50 hover:bg-opacity-75 transition-all">
+            <div className="absolute inset-0 flex opacity-0 hover:opacity-100 transition-opacity duration-200">
+              <div className="w-full flex flex-col gap-2 items-center justify-center bg-gray-900 bg-opacity-50 hover:bg-opacity-85 transition-all">
                 <Button ghost icon={<EyeOutlined />}>
                   预览
                 </Button>
