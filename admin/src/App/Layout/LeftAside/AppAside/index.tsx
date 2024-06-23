@@ -2,6 +2,7 @@ import { AddBtn } from "@/components/AddBtn";
 import { NavTabs } from "@/components/NavTabs";
 import { SearchBtn } from "@/components/SearchBtn";
 import { Space } from "antd";
+import AppTreeList from "./AppTreeList";
 
 export const AppAside = () => {
   return (
@@ -24,6 +25,9 @@ export const AppAside = () => {
           // },
         ]}
       />
+      <div className="py-2">
+        <AppTreeList />
+      </div>
     </div>
   );
 };

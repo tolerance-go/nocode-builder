@@ -171,3 +171,15 @@ export type SearchParams = {
     selectedEvent: string;
   };
 };
+
+export type AppGroup = {
+  id: number;
+  menuTitle: string;
+  parentGroupId: number;
+};
+
+export type App = {
+  id: number;
+  menuTitle: string;
+  groupId: number;
+};

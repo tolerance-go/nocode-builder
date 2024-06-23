@@ -1,6 +1,7 @@
 import * as designs from "./designs";
 import * as components from "./components";
 import * as routes from "./routes";
+import * as apps from "./apps";
 import blueMap from "./blueMap";
 
 import { devtools } from "valtio/utils";
@@ -11,11 +12,12 @@ const states = proxy({
   designs,
   components,
   blueMap,
+  apps,
 });
 
 devtools(states, {
   name: "states",
-  enabled: true,
+  enabled: import.meta.env.DEV,
 });
 
-export default { designs, components, routes, blueMap };
+export default states;

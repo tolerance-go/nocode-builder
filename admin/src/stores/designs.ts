@@ -26,11 +26,6 @@ const designTreeData = proxyWithHistory<{
   ]),
 });
 
-subscribe(designTreeData, () => {
-  coreEventBus.emit("nodeTreeChange", designTreeData.value.nodeData);
-  store.set("designTreeData", designTreeData.value.nodeData);
-});
-
 /** 当前悬停的组件 id 集合 */
 const hoveredComponents = proxy<{
   ids: string[];
@@ -59,10 +54,6 @@ const selectedNodeIds = proxy<{
   get uniqueSelectedId() {
     return this.selectedIds[0];
   },
-});
-
-subscribe(selectedNodeIds, () => {
-  store.set("selectedIds", selectedNodeIds.selectedIds);
 });
 
 const findNodeById = (
@@ -474,3 +465,12 @@ export const actions = {
     return null;
   },
 };
+
+subscribe(designTreeData, () => {
+  coreEventBus.emit("nodeTreeChange", designTreeData.value.nodeData);
+  store.set("designTreeData", designTreeData.value.nodeData);
+});
+
+subscribe(selectedNodeIds, () => {
+  store.set("selectedIds", selectedNodeIds.selectedIds);
+});

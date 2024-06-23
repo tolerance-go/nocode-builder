@@ -1,3 +1,8 @@
+import { proxy } from "valtio";
 import * as search from "./search";
 
-export default { search };
+export const states = proxy({
+  search,
+});
+
+export default states;
