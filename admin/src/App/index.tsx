@@ -5,9 +5,15 @@ import { BrowserRouter } from "react-router-dom";
 import { Layout } from "./Layout";
 import { Preview } from "./Preview";
 import "./index.css";
+import { Login } from "./Login";
 
 function App() {
   const pathname = useCurrentPathname();
+
+  if (pathname.startsWith("/login")) {
+    return <Login />;
+  }
+
   return pathname.startsWith("/preview") ? (
     <Preview />
   ) : (
