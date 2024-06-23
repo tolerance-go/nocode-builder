@@ -2,8 +2,26 @@ import { css } from "@emotion/css";
 import { Tabs, Space, Button } from "antd";
 import ComponentSettingsForm from "./ComponentSettingsForm";
 import { PlusOutlined } from "@ant-design/icons";
+import { useSearchParams } from "react-router-dom";
+import { updateSearchParams } from "@/utils/updateSearchParams";
+
+type NodeSettingPanel = "setting" | "style" | "event";
 
 export const ComponentSettingsPanel = () => {
+  const [searchParams, setSearchParams] = useSearchParams({
+    nodeSettingPanel: "tree" as NodeSettingPanel,
+  });
+
+  const nodeSettingPanel = searchParams.get(
+    "nodeSettingPanel"
+  ) as NodeSettingPanel;
+
+  const renderContent = () => {
+    if (nodeSettingPanel === "setting") {
+      return <ComponentSettingsForm />;
+    }
+  };
+
   return (
     <div>
       <Tabs
@@ -16,8 +34,7 @@ export const ComponentSettingsPanel = () => {
               icon={
                 <PlusOutlined className="text-gray-400 group-hover:text-gray-900 transition-colors" />
               }
-            >
-            </Button>
+            ></Button>
           </Space>
         }
         className={css`
@@ -32,6 +49,7 @@ export const ComponentSettingsPanel = () => {
         `}
         type="card"
         size={"small"}
+        activeKey={nodeSettingPanel}
         items={[
           {
             label: "配置",
@@ -42,12 +60,19 @@ export const ComponentSettingsPanel = () => {
             key: "style",
           },
           {
-            label: "蓝图",
-            key: "bluemap",
+            label: "事件",
+            key: "event",
           },
         ]}
+        onChange={(key) => {
+          setSearchParams(
+            updateSearchParams(searchParams, {
+              nodeSettingPanel: key,
+            })
+          );
+        }}
       />
-      <ComponentSettingsForm />
+      {renderContent()}
     </div>
   );
 };
