@@ -1,10 +1,11 @@
 import { AppData, AppGroup } from "@/types";
-import { proxy } from "valtio";
+import store from "store2";
+import { proxy, subscribe } from "valtio";
 
 const apps = proxy<{
   list: AppData[];
 }>({
-  list: [],
+  list: store.get("apps")?.list || [],
 });
 
 const appGroups = proxy<{
@@ -24,3 +25,6 @@ export const actions = {
   },
 };
 
+subscribe(apps, () => {
+  store.set("apps", apps);
+});
