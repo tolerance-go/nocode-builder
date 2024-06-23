@@ -22,11 +22,11 @@ export const Login = () => {
         </div>
       </div>
       <div className="flex-grow min-w-[500px] flex justify-center items-center">
-        <div className="w-[400px] -translate-y-1/4 flex flex-col gap-2">
-          <div className="mb-0.5">
-            <Avatar size={"large"} />
-          </div>
-          <Typography.Paragraph>
+        <div className="w-[400px] -translate-y-1/4 flex flex-col gap-5">
+          <div>
+            <div className="mb-2">
+              <Avatar size={"large"} />
+            </div>
             <Typography.Text className="text-lg">
               “
               <Typography.Text italic>
@@ -35,12 +35,13 @@ export const Login = () => {
               </Typography.Text>
               ”
             </Typography.Text>
-          </Typography.Paragraph>
-          <Typography.Paragraph>
+          </div>
+
+          <Typography.Text>
             <Typography.Text strong>周天宇</Typography.Text>
             <br />
             光大证券高级产品经理
-          </Typography.Paragraph>
+          </Typography.Text>
         </div>
       </div>
     </div>
