@@ -27,7 +27,9 @@ export const AppTemplate: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [searchParams, setSearchParams] = useSearchParams({});
 
-  const selectedUseCaseType = searchParams.get("selectedUseCaseType");
+  const selectedUseCaseType =
+    searchParams.get("selectedUseCaseType") ||
+    (appTemplateGroups[0]?.key as string | undefined);
 
   // 处理菜单项选择事件
   const handleMenuSelect = ({ key }: { key: string }) => {
