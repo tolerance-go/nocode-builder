@@ -18,7 +18,7 @@ export const AppTemplate: React.FC = () => {
         ref={containerRef}
       >
         <div className="w-[1400px] mx-auto flex gap-5">
-          <div className="w-[210px] pt-16 flex-shrink-0">
+          <div className="w-[210px] pt-14 flex-shrink-0">
             <Affix offsetTop={40} target={() => containerRef.current}>
               <div>
                 <Typography.Title level={4} className="ml-4 pb-1">
