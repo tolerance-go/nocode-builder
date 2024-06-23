@@ -1,7 +1,5 @@
 import { Template, TemplateUseCase } from "@/types";
-import { MenuProps } from "antd";
-
-type MenuItem = Required<MenuProps>["items"][number];
+import { createConfigMapByKey } from "@/utils/blueMap/createConfigMapById";
 
 // 定义一个 TemplateUseCase 类型的数组
 export const templateUseCases: TemplateUseCase[] = [
@@ -11,15 +9,12 @@ export const templateUseCases: TemplateUseCase[] = [
   { id: 4, title: "财务管理", type: "finance" },
   { id: 5, title: "项目管理", type: "project-management" },
   { id: 6, title: "电子商务", type: "e-commerce" },
-  { id: 7, title: "问卷调查", type: 'form' },
+  { id: 7, title: "问卷调查", type: "form" },
 ];
 
-// 从 TemplateUseCase 数组中生成 MenuItem 数组
-export const appTemplateGroups: MenuItem[] = templateUseCases.map(
-  (useCase) => ({
-    key: useCase.type,
-    label: useCase.title,
-  })
+export const templateUseCasesById = createConfigMapByKey(
+  templateUseCases,
+  "id"
 );
 
 export const templates: Template[] = [

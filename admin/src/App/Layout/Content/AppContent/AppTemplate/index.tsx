@@ -1,13 +1,43 @@
-import { appTemplateGroups } from "@/configs/apps";
+import { templateUseCases } from "@/configs/apps";
 import { scrollbarCls } from "@/styles/class";
+import { updateSearchParams } from "@/utils/updateSearchParams";
 import { cx } from "@emotion/css";
-import { Affix, Breadcrumb, Button, Menu, Space, Typography } from "antd";
+import {
+  Affix,
+  Breadcrumb,
+  Button,
+  Menu,
+  MenuProps,
+  Space,
+  Typography,
+} from "antd";
 import React, { useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 import { CardList } from "./CardList";
 
-// mx-auto p-10 pt-10
+type MenuItem = Required<MenuProps>["items"][number];
+
+// 从 TemplateUseCase 数组中生成 MenuItem 数组
+const appTemplateGroups: MenuItem[] = templateUseCases.map((useCase) => ({
+  key: useCase.type,
+  label: useCase.title,
+}));
+
 export const AppTemplate: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams({});
+
+  const selectedUseCaseType = searchParams.get("selectedUseCaseType");
+
+  // 处理菜单项选择事件
+  const handleMenuSelect = ({ key }: { key: string }) => {
+    setSearchParams(
+      updateSearchParams(searchParams, {
+        selectedUseCaseType: key,
+      })
+    );
+  };
+
   return (
     <div className="h-[100%]">
       <div
@@ -49,7 +79,11 @@ export const AppTemplate: React.FC = () => {
                 <div>
                   <Menu
                     mode="inline"
+                    selectedKeys={
+                      selectedUseCaseType ? [selectedUseCaseType] : undefined
+                    }
                     items={appTemplateGroups}
+                    onSelect={handleMenuSelect}
                     // className={css`
                     //   & {
                     //     border-right: none !important;
