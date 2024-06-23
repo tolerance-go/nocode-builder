@@ -1,5 +1,7 @@
 import React from "react";
 import { Button, Card, Flex, Space } from "antd";
+import { EyeOutlined, DownloadOutlined } from "@ant-design/icons";
+import { css, cx } from "@emotion/css";
 
 const { Meta } = Card;
 
@@ -38,7 +40,32 @@ export const CardList: React.FC = () => (
         size="small"
         key={index}
         hoverable
-        cover={<img className="w-[400px] h-[150px] bg-gray-400" />}
+        cover={
+          <div
+            className={cx(
+              "relative overflow-hidden",
+              css`
+                & {
+                  border-radius: 8px 8px 0 0;
+                }
+              `
+            )}
+          >
+            <img
+              src={card.imgSrc}
+              alt={card.title}
+              className="w-[400px] h-[150px] object-cover"
+            />
+            <div className="absolute inset-0 flex">
+              <div className="w-1/2 flex items-center justify-center bg-gray-900 bg-opacity-50 hover:bg-opacity-75 transition-all">
+                <EyeOutlined className="text-2xl text-white" />
+              </div>
+              <div className="w-1/2 flex items-center justify-center bg-gray-900 bg-opacity-50 hover:bg-opacity-75 transition-all">
+                <DownloadOutlined className="text-2xl text-white" />
+              </div>
+            </div>
+          </div>
+        }
       >
         <Meta title={card.title} />
       </Card>
