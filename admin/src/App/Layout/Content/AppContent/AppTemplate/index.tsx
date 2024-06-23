@@ -1,4 +1,8 @@
-import { templateUseCases } from "@/configs/apps";
+import {
+  templateUseCases,
+  templateUseCasesById,
+  templates,
+} from "@/configs/apps";
 import { scrollbarCls } from "@/styles/class";
 import { updateSearchParams } from "@/utils/updateSearchParams";
 import { cx } from "@emotion/css";
@@ -6,6 +10,7 @@ import {
   Affix,
   Breadcrumb,
   Button,
+  Empty,
   Menu,
   MenuProps,
   Space,
@@ -14,6 +19,7 @@ import {
 import React, { useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { CardList } from "./CardList";
+import { ensure } from "@/utils/ensure";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -39,6 +45,16 @@ export const AppTemplate: React.FC = () => {
       })
     );
   };
+
+  const tpls = templates.filter((tpl) => {
+    const templateUseCase = templateUseCasesById.get(tpl.useCasId);
+    ensure(templateUseCase, "templateUseCase 必须存在。");
+
+    return templateUseCase.type == selectedUseCaseType;
+  });
+
+  const desktopTpls = tpls.filter((tpl) => tpl.type === "desktop");
+  const mobileTpls = tpls.filter((tpl) => tpl.type === "mobile");
 
   return (
     <div className="h-[100%]">
@@ -95,22 +111,30 @@ export const AppTemplate: React.FC = () => {
                 </div>
               </Affix>
             </div>
-            <div>
+            {tpls.length ? (
               <div className="flex flex-col gap-12">
-                <div>
-                  <Typography.Title level={4} className="pb-4">
-                    桌面端
-                  </Typography.Title>
-                  <CardList />
-                </div>
-                <div>
-                  <Typography.Title level={4} className="pb-4">
-                    移动端
-                  </Typography.Title>
-                  <CardList />
-                </div>
+                {desktopTpls.length ? (
+                  <div>
+                    <Typography.Title level={4} className="pb-4">
+                      桌面端
+                    </Typography.Title>
+                    <CardList templates={desktopTpls} />
+                  </div>
+                ) : null}
+                {mobileTpls.length ? (
+                  <div>
+                    <Typography.Title level={4} className="pb-4">
+                      移动端
+                    </Typography.Title>
+                    <CardList templates={mobileTpls} />
+                  </div>
+                ) : null}
               </div>
-            </div>
+            ) : (
+              <div className="flex-grow flex justify-center items-center">
+                <Empty description="暂无匹配"></Empty>
+              </div>
+            )}
           </div>
         </div>
       </div>

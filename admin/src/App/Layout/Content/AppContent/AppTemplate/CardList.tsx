@@ -1,56 +1,18 @@
+import { Template } from "@/types";
 import { CopyOutlined, EyeOutlined } from "@ant-design/icons";
 import { css, cx } from "@emotion/css";
-import { Card } from "antd";
+import { Button, Card, Space, Typography } from "antd";
 import React from "react";
 
 const { Meta } = Card;
 
-const cardData = [
-  {
-    title: "Europe Street beat",
-    description: "www.instagram.com",
-    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-  },
-  {
-    title: "Europe Street beat",
-    description: "www.instagram.com",
-    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-  },
-  {
-    title: "Europe Street beat",
-    description: "www.instagram.com",
-    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-  },
-  {
-    title: "Europe Street beat",
-    description: "www.instagram.com",
-    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-  },
-  {
-    title: "Europe Street beat",
-    description: "www.instagram.com",
-    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-  },
-  {
-    title: "Europe Street beat",
-    description: "www.instagram.com",
-    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-  },
-  {
-    title: "Europe Street beat",
-    description: "www.instagram.com",
-    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-  },
-  {
-    title: "Europe Street beat",
-    description: "www.instagram.com",
-    imgSrc: "https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png",
-  },
-];
+interface CardListProps {
+  templates: Template[];
+}
 
-export const CardList: React.FC = () => (
+export const CardList: React.FC<CardListProps> = ({ templates }) => (
   <div className="grid grid-cols-3 gap-5">
-    {cardData.map((card, index) => (
+    {templates.map((template, index) => (
       <Card
         size="small"
         key={index}
@@ -65,22 +27,24 @@ export const CardList: React.FC = () => (
             )}
           >
             <img
-              src={card.imgSrc}
-              alt={card.title}
+              src={template.previewImgSrc}
+              alt={template.title}
               className="w-[400px] h-[200px] object-cover"
             />
             <div className="absolute inset-0 flex opacity-0 hover:opacity-100 transition-opacity duration-300">
-              <div className="w-1/2 flex items-center justify-center bg-gray-900 bg-opacity-50 hover:bg-opacity-75 transition-all">
-                <EyeOutlined className="text-2xl text-white" />
-              </div>
-              <div className="w-1/2 flex items-center justify-center bg-gray-900 bg-opacity-50 hover:bg-opacity-75 transition-all">
-                <CopyOutlined className="text-2xl text-white" />
+              <div className="w-full flex flex-col gap-2 items-center justify-center bg-gray-900 bg-opacity-50 hover:bg-opacity-75 transition-all">
+                <Button ghost icon={<EyeOutlined />}>
+                  预览
+                </Button>
+                <Button ghost icon={<CopyOutlined />}>
+                  选用
+                </Button>
               </div>
             </div>
           </div>
         }
       >
-        <Meta title={card.title} />
+        <Meta title={template.title} />
       </Card>
     ))}
   </div>
