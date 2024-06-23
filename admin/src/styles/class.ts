@@ -2,21 +2,19 @@ import { css } from "@emotion/css";
 
 export const scrollbarCls = css`
   &:hover::-webkit-scrollbar-thumb {
-    background: #d4d4d4;
+    background: #999999;
   }
   &:hover::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: #ffffff;
   }
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 12px;
   }
   &::-webkit-scrollbar-track {
-    background: #fff;
-    border-radius: 10px;
+    background: #ffffff;
   }
   &::-webkit-scrollbar-thumb {
-    background: #fff;
-    border-radius: 10px;
+    background: #ffffff;
   }
   &::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
