@@ -1,6 +1,6 @@
 import React from "react";
 import { Card } from "antd";
-import { EyeOutlined, DownloadOutlined } from "@ant-design/icons";
+import { EyeOutlined, DownloadOutlined, CopyOutlined } from "@ant-design/icons";
 import { css, cx } from "@emotion/css";
 
 const { Meta } = Card;
@@ -59,7 +59,7 @@ export const CardList: React.FC = () => (
                 <EyeOutlined className="text-2xl text-white" />
               </div>
               <div className="w-1/2 flex items-center justify-center bg-gray-900 bg-opacity-50 hover:bg-opacity-75 transition-all">
-                <DownloadOutlined className="text-2xl text-white" />
+                <CopyOutlined className="text-2xl text-white" />
               </div>
             </div>
           </div>
