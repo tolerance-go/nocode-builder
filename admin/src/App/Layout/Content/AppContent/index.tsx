@@ -1,5 +1,5 @@
 import { useSearchParams } from "react-router-dom";
-import { AppList } from "./AppList";
+import { AppDetail } from "./AppDetail";
 import { AppTemplate } from "./AppTemplate";
 import { SEARCH_PARAMS } from "@/constants";
 
@@ -10,5 +10,5 @@ export const AppContent = () => {
     return <AppTemplate />;
   }
 
-  return <AppList />;
+  return <AppDetail />;
 };
