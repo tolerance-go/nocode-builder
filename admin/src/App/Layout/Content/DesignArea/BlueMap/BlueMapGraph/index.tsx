@@ -61,7 +61,7 @@ const BlueMapGraph = () => {
         }
       });
 
-      stores.blueMap.search.actions.clearSearchNodeSourcePort();
+      stores.blueMap.states.search.actions.clearSearchNodeSourcePort();
     });
   };
 
@@ -496,7 +496,7 @@ const BlueMapGraph = () => {
             portId: sourcePortId,
           };
           searchNode.setPropByPath("source", searchNodeSourceData);
-          stores.blueMap.search.actions.setSearchNodeSourcePort(
+          stores.blueMap.states.search.actions.setSearchNodeSourcePort(
             sourceNode.id,
             sourcePortId
           );
@@ -586,7 +586,7 @@ const BlueMapGraph = () => {
 
           /** 先取出来缓存 */
           const source =
-            stores.blueMap.search.states.searchNodeSourcePort.source;
+            stores.blueMap.states.search.states.searchNodeSourcePort.source;
 
           removeSearchNodeRef.current();
 

@@ -2,7 +2,7 @@ import * as designs from "./designs";
 import * as components from "./components";
 import * as routes from "./routes";
 import * as apps from "./apps";
-import blueMap from "./blueMap";
+import * as blueMap from "./blueMap";
 
 import { devtools } from "valtio/utils";
 import { proxy } from "valtio";

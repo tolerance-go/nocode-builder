@@ -4,5 +4,3 @@ import * as search from "./search";
 export const states = proxy({
   search,
 });
-
-export default states;
