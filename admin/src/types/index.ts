@@ -49,7 +49,7 @@ export type DesignableComponentProps<
   Children extends React.ReactNode | Record<string, React.ReactNode> =
     | React.ReactNode
     | Record<string, React.ReactNode>,
-  Settings extends StaticProps = StaticProps
+  Settings extends StaticProps = StaticProps,
 > = {
   style: StaticProps;
   onMouseEnter: React.MouseEventHandler;
@@ -119,6 +119,25 @@ export type DocumentInsertionPosition =
  */
 export type Widget = ComponentWidget | GroupWidget;
 
+/**
+ * 部件事件描述项
+ */
+export type WidgetEventItem = {
+  /** 组类型 */
+  groupType: string;
+  /** 显示菜单名称 */
+  menuTitle: string;
+  type: string;
+};
+
+export type WidgetEventGroupItem = {
+  type: string;
+  /** 显示菜单名称 */
+  menuTitle: string;
+  /** 父组的类型 */
+  parentGroupType?: string;
+};
+
 type WidgetBase<T extends string> = {
   /** 唯一标识 */
   id: string;
@@ -136,7 +155,11 @@ type WidgetBase<T extends string> = {
   defaultStyles?: StaticProps;
   /** 表单配置 */
   settingsForm?: SettingConfig[];
+  /** 支持的事件列表 */
+  supportEvents?: WidgetEventType[];
 };
+
+type WidgetEventType = string; // 为事件名称添加别名
 
 export type ComponentWidget = WidgetBase<"component">;
 

@@ -4,6 +4,7 @@ import ComponentSettingsForm from "./ComponentSettingsForm";
 import { PlusOutlined } from "@ant-design/icons";
 import { useSearchParams } from "react-router-dom";
 import { updateSearchParams } from "@/utils/updateSearchParams";
+import EventTree from "./EventTree";
 
 type NodeSettingPanel = "setting" | "style" | "event";
 
@@ -19,6 +20,9 @@ export const ComponentSettingsPanel = () => {
   const renderContent = () => {
     if (nodeSettingPanel === "setting") {
       return <ComponentSettingsForm />;
+    }
+    if (nodeSettingPanel === "event") {
+      return <EventTree />;
     }
   };
 

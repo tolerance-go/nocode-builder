@@ -1,3 +1,4 @@
+import { clickWidgetEvent } from "@/configs/widgetEvent";
 import { ComponentWidget, GroupWidget } from "@/types";
 import { RootWidget } from "@/widgets/Root";
 import { RouteWidget } from "@/widgets/Route";
@@ -80,6 +81,7 @@ const windowDisplayComponents = proxy<{
           options: ["primary", "dashed", "link", "text", "default"],
         },
       ],
+      supportEvents: [clickWidgetEvent.type],
     },
     {
       id: "component-dataDisplay-Table",
