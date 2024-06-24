@@ -1,6 +1,8 @@
+import { IconHoverableButton } from "@/components/BaseButton";
 import { appSubNavs, navTabs } from "@/configs/navs";
+import { ArrowLeftOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";
-import { Button, Divider, Space, Tabs, Typography } from "antd";
+import { Divider, Space, Tabs, Typography } from "antd";
 import { useMatch, useNavigate } from "react-router-dom";
 
 export const Navs = () => {
@@ -13,9 +15,11 @@ export const Navs = () => {
   return (
     <Space split={<Divider type="vertical" />}>
       {featureIdMatch?.params.id && (
-        <Button type="text" onClick={() => navigate("/apps")}>
-          回退
-        </Button>
+        <IconHoverableButton
+          icon={<ArrowLeftOutlined />}
+          type="text"
+          onClick={() => navigate("/apps")}
+        ></IconHoverableButton>
       )}
       {featureIdMatch?.params.id && (
         <Typography.Text type="secondary">
