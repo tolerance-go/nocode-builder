@@ -1,6 +1,4 @@
-import { IconHoverableButton } from "@/components/BaseButton";
 import stores from "@/stores";
-import { AppData } from "@/types";
 import {
   EditOutlined,
   EllipsisOutlined,
@@ -15,10 +13,16 @@ import { useSnapshot } from "valtio";
 export const AppList: React.FC = () => {
   const apps = useSnapshot(stores.apps.states.apps);
   const nav = useNavigate();
+  // 按照是否收藏排序，收藏的项目排在前面
+  const sortedApps = [...apps.list].sort((a, b) => {
+    const aFavorite = a.ifFavorite ? 1 : 0;
+    const bFavorite = b.ifFavorite ? 1 : 0;
+    return bFavorite - aFavorite;
+  });
   return (
     <List
       itemLayout="horizontal"
-      dataSource={apps.list as AppData[]}
+      dataSource={sortedApps}
       renderItem={(item) => (
         <List.Item
           key={item.id}
@@ -37,7 +41,6 @@ export const AppList: React.FC = () => {
           <Space className="px-2" onClick={(e) => e.stopPropagation()}>
             <Space className="group-hover:opacity-100 opacity-0 transition-opacity">
               <Button
-                
                 icon={<EditOutlined />}
                 onClick={() => {
                   nav(`/apps/${item.id}/data`);
