@@ -1,11 +1,16 @@
 import { css } from "@emotion/css";
 import { Button, Input, Segmented, Select, Space, Typography } from "antd";
 import { AppList } from "./AppList";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { BarsOutlined, AppstoreOutlined } from "@ant-design/icons";
+import { getValidParam } from "@/utils/getValidType";
+import { updateSearchParams } from "@/utils/updateSearchParams";
 
 export const AppAll = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams({
+    searchType: "list",
+  });
   return (
     <div className="py-8 px-10">
       <div className="w-[1500px] mx-auto px-10">
@@ -56,17 +61,35 @@ export const AppAll = () => {
               ></Input.Search>
             </Space.Compact>
             <Segmented
+              value={getValidParam(
+                searchParams.get("searchType"),
+                ["list", "card"],
+                "list"
+              )}
+              onChange={(type) => {
+                setSearchParams(
+                  updateSearchParams(searchParams, {
+                    searchType: type,
+                  })
+                );
+              }}
               options={[
-                { value: "List", icon: <BarsOutlined /> },
+                { value: "list", icon: <BarsOutlined /> },
                 {
-                  value: "Kanban",
+                  value: "card",
                   icon: <AppstoreOutlined />,
                 },
               ]}
             />
           </Space>
         </div>
-        <AppList />
+        <AppList
+          type={getValidParam(
+            searchParams.get("searchType"),
+            ["list", "card"],
+            "list"
+          )}
+        />
       </div>
     </div>
   );

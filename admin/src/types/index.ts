@@ -189,6 +189,8 @@ export type AppData = {
   groupId?: number;
   // 是否收藏
   ifFavorite?: boolean
+  // 端类型
+  terminalType: "mobile" | "tablet" | "desktop";
 };
 
 export type TemplateUseCase = {
