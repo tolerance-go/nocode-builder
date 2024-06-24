@@ -17,8 +17,10 @@ export const IconHoverableButton = ({
       icon={
         isValidElement(icon)
           ? cloneElement(icon, {
-              className:
+              className: cx(
                 "text-gray-400 group-hover:text-gray-900 transition-colors",
+                icon.props.className
+              ),
             })
           : icon
       }
