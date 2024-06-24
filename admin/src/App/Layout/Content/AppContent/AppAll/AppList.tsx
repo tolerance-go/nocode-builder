@@ -1,7 +1,7 @@
 import { PreviewCard } from "@/components/PreviewCard";
 import stores from "@/stores";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
-import { css } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import { Button, List, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
@@ -22,6 +22,11 @@ export const AppList = (props: { type: "list" | "card" }) => {
     <List
       itemLayout="horizontal"
       dataSource={sortedApps}
+      className={css`
+        .ant-list-header {
+          border-bottom: 1px solid ${colors.gray[200]};
+        }
+      `}
       grid={
         props.type === "card"
           ? {
@@ -41,7 +46,7 @@ export const AppList = (props: { type: "list" | "card" }) => {
             <Typography.Text
               className="flex-1"
               style={{
-                fontSize: 13,
+                fontSize: 12,
               }}
             >
               应用名称
@@ -49,7 +54,7 @@ export const AppList = (props: { type: "list" | "card" }) => {
             <Typography.Text
               className="flex-1"
               style={{
-                fontSize: 13,
+                fontSize: 12,
               }}
             >
               更新时间
@@ -57,14 +62,14 @@ export const AppList = (props: { type: "list" | "card" }) => {
             <Typography.Text
               className="flex-1"
               style={{
-                fontSize: 13,
+                fontSize: 12,
               }}
             >
               状态
             </Typography.Text>
             <Typography.Text
               style={{
-                fontSize: 13,
+                fontSize: 12,
               }}
             >
               <Button
@@ -76,25 +81,31 @@ export const AppList = (props: { type: "list" | "card" }) => {
           </div>
         ) : undefined
       }
-      renderItem={(item) =>
+      split={false}
+      rowKey={(item) => item.id}
+      renderItem={(item, index) =>
         props.type === "list" ? (
           <List.Item
             key={item.id}
-            className={css`
-              /* group hover:bg-slate-50 hover:cursor-pointer */
-              &:hover {
-                background-color: ${colors.slate[50]};
-                cursor: pointer;
+            className={cx(
+              "duration-200 border-b",
+              index === sortedApps.length - 1 ? "border-b-0" : undefined,
+              css`
+                /* group hover:bg-slate-50 hover:cursor-pointer */
+                &:hover {
+                  background-color: ${colors.slate[50]};
+                  cursor: pointer;
+
+                  .unstar-btn {
+                    opacity: 100;
+                  }
+                }
 
                 .unstar-btn {
-                  opacity: 100;
+                  opacity: 0;
                 }
-              }
-
-              .unstar-btn {
-                opacity: 0;
-              }
-            `}
+              `
+            )}
             onClick={() => {
               nav(`/apps/${item.id}/data`);
             }}
