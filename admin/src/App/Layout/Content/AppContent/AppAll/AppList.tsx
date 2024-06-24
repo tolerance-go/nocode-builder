@@ -78,7 +78,7 @@ export const AppList = (props: { type: "list" | "card" }) => {
         props.type === "list" ? (
           <List.Item
             key={item.id}
-            className="group hover:bg-slate-50 hover:cursor-pointer"
+            className="group hover:bg-slate-50 hover:cursor-pointer transition-colors duration-200"
             onClick={() => {
               nav(`/apps/${item.id}/data`);
             }}
@@ -105,7 +105,7 @@ export const AppList = (props: { type: "list" | "card" }) => {
                   ></Button>
                 ) : (
                   <Button
-                    className="group-hover:opacity-100 opacity-0 transition-opacity"
+                    className="group-hover:opacity-100 opacity-0"
                     type="text"
                     icon={<StarOutlined />}
                     onClick={() => {
