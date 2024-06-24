@@ -5,7 +5,7 @@ import {
 } from "@/configs/apps";
 import { scrollbarCls } from "@/styles/class";
 import { updateSearchParams } from "@/utils/updateSearchParams";
-import { cx } from "@emotion/css";
+import { css, cx } from "@emotion/css";
 import {
   Affix,
   Breadcrumb,
@@ -69,7 +69,7 @@ export const AppTemplate: React.FC = () => {
           ref={containerRef}
         >
           <div className="w-[1500px] mx-auto px-10">
-            <div className="pl-1 mb-5">
+            <div className="mb-5">
               <div className="mb-5">
                 <Breadcrumb
                   items={[
@@ -112,11 +112,13 @@ export const AppTemplate: React.FC = () => {
                       }
                       items={appTemplateGroups}
                       onSelect={handleMenuSelect}
-                      // className={css`
-                      //   & {
-                      //     border-right: none !important;
-                      //   }
-                      // `}
+                      className={css`
+                        border-right: none !important;
+
+                        .ant-menu-item {
+                          margin-inline: 0;
+                        }
+                      `}
                     />
                   </div>
                 </Affix>
