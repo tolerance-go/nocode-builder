@@ -1,6 +1,7 @@
 import stores from "@/stores";
 import { Button, Form, FormProps, Input, Modal, Space } from "antd";
 import React, { useImperativeHandle, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface CreateAppModalProps {
   onOk?: () => void;
@@ -16,6 +17,7 @@ const CreateAppModal = React.forwardRef<CreateAppModalRef, CreateAppModalProps>(
   (props, ref) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [form] = Form.useForm();
+    const nav = useNavigate();
 
     useImperativeHandle(ref, () => ({
       showModal: () => setIsModalOpen(true),
@@ -43,11 +45,13 @@ const CreateAppModal = React.forwardRef<CreateAppModalRef, CreateAppModalProps>(
     };
 
     const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
+      const id = new Date().getTime();
       stores.apps.actions.addApp({
-        id: new Date().getTime(),
+        id,
         menuTitle: values.name!,
       });
       handleCancel();
+      nav(`/apps/${id}/data`);
     };
 
     const onFinishFailed: FormProps<FieldType>["onFinishFailed"] = (
