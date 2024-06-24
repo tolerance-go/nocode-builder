@@ -6,7 +6,7 @@ import { DesignArea } from "./DesignArea";
 export const Content = () => {
   const location = useLocation();
 
-  if (matchPath("/apps", location.pathname)) {
+  if (matchPath("/apps/:id?", location.pathname)) {
     return <AppContent />;
   }
   if (matchPath("/apps/:id/data", location.pathname)) {

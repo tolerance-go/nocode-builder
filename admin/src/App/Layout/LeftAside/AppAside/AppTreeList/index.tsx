@@ -4,7 +4,7 @@ import { updateSearchParams } from "@/utils/updateSearchParams";
 import type { GetProps } from "antd";
 import { Tree } from "antd";
 import React from "react";
-import { useSearchParams } from "react-router-dom";
+import { useMatch, useNavigate, useSearchParams } from "react-router-dom";
 import { useSnapshot } from "valtio";
 import { buildTreeData } from "./utils/buildTreeData";
 
@@ -13,20 +13,20 @@ type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 const { DirectoryTree } = Tree;
 
 const AppTreeList: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
   const appsSnapshot = useSnapshot(stores.apps.states.apps);
   const appGroupsSnapshot = useSnapshot(stores.apps.states.appGroups);
+  const navigate = useNavigate();
+  const match = useMatch("/apps/:id?");
+
+  console.log("match", match);
 
   // 将 apps 和 appGroups 转换为 treeData
   const treeData = buildTreeData(appsSnapshot.list, appGroupsSnapshot.list);
 
-  const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
-    console.log("Trigger Select", keys, info);
-    setSearchParams(
-      updateSearchParams(searchParams, {
-        [SEARCH_PARAMS.APP.IS_TEMPLATE]: undefined,
-      })
-    );
+  const onSelect: DirectoryTreeProps["onSelect"] = (_keys, info) => {
+    if (info.selected) {
+      navigate(`/apps/${info.node.key}`);
+    }
   };
 
   const onExpand: DirectoryTreeProps["onExpand"] = (keys, info) => {
@@ -37,6 +37,7 @@ const AppTreeList: React.FC = () => {
     <DirectoryTree
       multiple
       defaultExpandAll
+      selectedKeys={match?.params.id ? [match?.params.id] : undefined}
       onSelect={onSelect}
       onExpand={onExpand}
       treeData={treeData}

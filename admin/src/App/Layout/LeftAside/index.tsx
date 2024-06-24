@@ -6,7 +6,7 @@ export const LeftAside = () => {
   const location = useLocation();
 
   const render = () => {
-    if (matchPath("/apps", location.pathname)) {
+    if (matchPath("/apps/:id?", location.pathname)) {
       return <AppAside />;
     }
 

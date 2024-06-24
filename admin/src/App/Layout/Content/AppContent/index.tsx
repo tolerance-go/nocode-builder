@@ -1,12 +1,11 @@
-import { useSearchParams } from "react-router-dom";
+import { useMatch } from "react-router-dom";
 import { AppDetail } from "./AppDetail";
 import { AppTemplate } from "./AppTemplate";
-import { SEARCH_PARAMS } from "@/constants";
 
 export const AppContent = () => {
-  const [searchParams] = useSearchParams();
+  const match = useMatch("/apps/templates");
 
-  if (searchParams.get(SEARCH_PARAMS.APP.IS_TEMPLATE)) {
+  if (match) {
     return <AppTemplate />;
   }
 

@@ -2,13 +2,11 @@ import { AddBtn } from "@/components/AddBtn";
 import { NavTabs } from "@/components/NavTabs";
 import { SearchBtn } from "@/components/SearchBtn";
 import { Space } from "antd";
+import { useNavigate } from "react-router-dom";
 import AppTreeList from "./AppTreeList";
-import { updateSearchParams } from "@/utils/updateSearchParams";
-import { SEARCH_PARAMS } from "@/constants";
-import { useSearchParams } from "react-router-dom";
 
 export const AppAside = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const nav = useNavigate();
   return (
     <div className="bg-white">
       <NavTabs
@@ -17,11 +15,7 @@ export const AppAside = () => {
             <SearchBtn />
             <AddBtn
               onClick={() => {
-                setSearchParams(
-                  updateSearchParams(searchParams, {
-                    [SEARCH_PARAMS.APP.IS_TEMPLATE]: "true",
-                  })
-                );
+                nav("/apps/templates");
               }}
             />
           </Space>

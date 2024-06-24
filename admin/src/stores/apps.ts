@@ -1,4 +1,4 @@
-import { AppData, AppGroup } from "@/types";
+import { AppData, AppGroup, DataKey } from "@/types";
 import store from "store2";
 import { proxy, subscribe } from "valtio";
 

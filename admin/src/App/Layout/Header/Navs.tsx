@@ -4,7 +4,7 @@ import { Button, Divider, Space, Tabs, Typography } from "antd";
 import { useMatch, useNavigate } from "react-router-dom";
 
 export const Navs = () => {
-  const featureMatch = useMatch("/:feature");
+  const featureMatch = useMatch("/:feature/:id?");
   const featureIdSubMatch = useMatch("/:feature/:id/:sub");
   const featureIdMatch = useMatch("/:feature/:id/:sub");
 
