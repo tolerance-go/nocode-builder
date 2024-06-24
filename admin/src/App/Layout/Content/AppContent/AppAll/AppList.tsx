@@ -71,11 +71,18 @@ export const AppList = (props: { type: "list" | "card" }) => {
                 fontSize: 12,
               }}
             >
-              <Button
-                type="text"
-                className="invisible"
-                icon={<StarFilled className="text-yellow-400" />}
-              ></Button>
+              <Space>
+                <Button
+                  type="text"
+                  className="invisible"
+                  icon={<StarFilled />}
+                ></Button>
+                <Button
+                  type="text"
+                  className="invisible"
+                  icon={<StarFilled />}
+                ></Button>
+              </Space>
             </Typography.Text>
           </div>
         ) : undefined
