@@ -1,9 +1,8 @@
 import { PreviewCard } from "@/components/PreviewCard";
 import stores from "@/stores";
-import { StarFilled, StarOutlined } from "@ant-design/icons";
+import { EllipsisOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 import { css, cx } from "@emotion/css";
-import { Button, List, Typography } from "antd";
-import React from "react";
+import { Button, List, Space, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import colors from "tailwindcss/colors";
 import { useSnapshot } from "valtio";
@@ -118,10 +117,14 @@ export const AppList = (props: { type: "list" | "card" }) => {
                 13 小时前更新
               </Typography.Text>
               <Typography.Text className="flex-1">未发布</Typography.Text>
-              <div
-                onClick={(e) => e.stopPropagation()}
-                className="flex items-center justify-center"
-              >
+              <Space onClick={(e) => e.stopPropagation()}>
+                <Button
+                  className="unstar-btn group"
+                  type="text"
+                  icon={
+                    <EllipsisOutlined className="text-gray-400 group-hover:text-gray-900 duration-200" />
+                  }
+                ></Button>
                 {item.ifFavorite ? (
                   <Button
                     type="text"
@@ -142,7 +145,7 @@ export const AppList = (props: { type: "list" | "card" }) => {
                     }}
                   ></Button>
                 )}
-              </div>
+              </Space>
             </div>
           </List.Item>
         ) : (

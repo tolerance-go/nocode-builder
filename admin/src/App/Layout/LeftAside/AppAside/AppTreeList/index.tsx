@@ -80,16 +80,6 @@ const AppTreeList: React.FC = () => {
           <div className="flex justify-between pr-1">
             {typeof data.title === "function" ? data.title(data) : data.title}
             <Space>
-              <Button
-                className="more-btn star-btn opacity-0"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  stores.apps.actions.favoriteApp(data.key);
-                }}
-                size="small"
-                type="text"
-                icon={<StarOutlined />}
-              ></Button>
               <Dropdown
                 trigger={["click"]}
                 menu={{
@@ -112,6 +102,16 @@ const AppTreeList: React.FC = () => {
                   icon={<EllipsisOutlined />}
                 ></Button>
               </Dropdown>
+              <Button
+                className="more-btn star-btn opacity-0"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  stores.apps.actions.favoriteApp(data.key);
+                }}
+                size="small"
+                type="text"
+                icon={<StarOutlined />}
+              ></Button>
             </Space>
           </div>
         );
