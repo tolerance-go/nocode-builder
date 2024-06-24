@@ -21,6 +21,11 @@ export const states = proxy({
 });
 
 export const actions = {
+  getAppById: (id: AppData["id"]) => {
+    const app = states.apps.list.find((item) => item.id === id);
+    ensure(app, "app 不存在。");
+    return app;
+  },
   addApp: (newApp: AppData) => {
     states.apps.list.push(newApp);
   },

@@ -3,10 +3,11 @@ import {
   AppstoreOutlined,
   EllipsisOutlined,
   MoreOutlined,
+  StarOutlined,
 } from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { GetProps, TreeDataNode } from "antd";
-import { Button, Dropdown, Tree } from "antd";
+import { Button, Dropdown, Space, Tree } from "antd";
 import React from "react";
 import { useMatch, useNavigate } from "react-router-dom";
 import { useSnapshot } from "valtio";
@@ -51,6 +52,12 @@ const AppTreeList: React.FC = () => {
               &:hover {
                 color: ${colors.gray[900]};
               }
+
+              &.star-btn {
+                &:hover {
+                  color: ${colors.yellow[500]};
+                }
+              }
             }
           }
 
@@ -67,28 +74,40 @@ const AppTreeList: React.FC = () => {
         return (
           <div className="flex justify-between pr-1">
             {typeof data.title === "function" ? data.title(data) : data.title}
-            <Dropdown
-              trigger={["click"]}
-              menu={{
-                items: [
-                  {
-                    key: "1",
-                    label: "删除",
-                    onClick: () => {
-                      stores.apps.actions.removeApp(data.key);
-                    },
-                  },
-                ],
-              }}
-            >
+            <Space>
               <Button
-                className="more-btn opacity-0"
-                onClick={(e) => e.stopPropagation()}
+                className="more-btn star-btn opacity-0"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  stores.apps.actions.favoriteApp(data.key);
+                }}
                 size="small"
                 type="text"
-                icon={<EllipsisOutlined />}
+                icon={<StarOutlined />}
               ></Button>
-            </Dropdown>
+              <Dropdown
+                trigger={["click"]}
+                menu={{
+                  items: [
+                    {
+                      key: "1",
+                      label: "删除",
+                      onClick: () => {
+                        stores.apps.actions.removeApp(data.key);
+                      },
+                    },
+                  ],
+                }}
+              >
+                <Button
+                  className="more-btn opacity-0"
+                  onClick={(e) => e.stopPropagation()}
+                  size="small"
+                  type="text"
+                  icon={<EllipsisOutlined />}
+                ></Button>
+              </Dropdown>
+            </Space>
           </div>
         );
       }}
