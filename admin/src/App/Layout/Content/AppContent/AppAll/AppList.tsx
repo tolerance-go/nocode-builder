@@ -1,11 +1,6 @@
 import stores from "@/stores";
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  StarFilled,
-  StarOutlined,
-} from "@ant-design/icons";
-import { Button, List, Space, Typography } from "antd";
+import { StarFilled, StarOutlined } from "@ant-design/icons";
+import { Button, List, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useSnapshot } from "valtio";
@@ -19,10 +14,50 @@ export const AppList: React.FC = () => {
     const bFavorite = b.ifFavorite ? 1 : 0;
     return bFavorite - aFavorite;
   });
+
   return (
     <List
       itemLayout="horizontal"
       dataSource={sortedApps}
+      header={
+        <div className="flex justify-between items-center px-2">
+          <Typography.Text
+            className="flex-1"
+            style={{
+              fontSize: 13,
+            }}
+          >
+            应用名称
+          </Typography.Text>
+          <Typography.Text
+            className="flex-1"
+            style={{
+              fontSize: 13,
+            }}
+          >
+            更新时间
+          </Typography.Text>
+          <Typography.Text
+            className="flex-1"
+            style={{
+              fontSize: 13,
+            }}
+          >
+            状态
+          </Typography.Text>
+          <Typography.Text
+            style={{
+              fontSize: 13,
+            }}
+          >
+            <Button
+              type="text"
+              className="invisible"
+              icon={<StarFilled className="text-yellow-400" />}
+            ></Button>
+          </Typography.Text>
+        </div>
+      }
       renderItem={(item) => (
         <List.Item
           key={item.id}
@@ -31,44 +66,36 @@ export const AppList: React.FC = () => {
             nav(`/apps/${item.id}/data`);
           }}
         >
-          <Typography.Text strong className="px-2 flex-1">
-            {item.menuTitle}
-          </Typography.Text>
-          <Typography.Text className="px-2 flex-1">
-            13 小时前更新
-          </Typography.Text>
-          <Typography.Text className="px-2 flex-1">未发布</Typography.Text>
-          <Space className="px-2" onClick={(e) => e.stopPropagation()}>
-            <Space className="group-hover:opacity-100 opacity-0 transition-opacity">
-              <Button
-                icon={<EditOutlined />}
-                onClick={() => {
-                  nav(`/apps/${item.id}/data`);
-                }}
-              >
-                编辑
-              </Button>
-              <Button icon={<EllipsisOutlined />} type="text"></Button>
-            </Space>
-            {item.ifFavorite ? (
-              <Button
-                type="text"
-                icon={<StarFilled className="text-yellow-400" />}
-                onClick={() => {
-                  stores.apps.actions.unfavoriteApp(item.id);
-                }}
-              ></Button>
-            ) : (
-              <Button
-                className="group-hover:opacity-100 opacity-0 transition-opacity"
-                type="text"
-                icon={<StarOutlined />}
-                onClick={() => {
-                  stores.apps.actions.favoriteApp(item.id);
-                }}
-              ></Button>
-            )}
-          </Space>
+          <div className="flex h-[100%] items-center justify-between px-2 w-full">
+            <Typography.Text strong className="flex-1">
+              {item.menuTitle}
+            </Typography.Text>
+            <Typography.Text className="flex-1">13 小时前更新</Typography.Text>
+            <Typography.Text className="flex-1">未发布</Typography.Text>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="flex items-center justify-center"
+            >
+              {item.ifFavorite ? (
+                <Button
+                  type="text"
+                  icon={<StarFilled className="text-yellow-400" />}
+                  onClick={() => {
+                    stores.apps.actions.unfavoriteApp(item.id);
+                  }}
+                ></Button>
+              ) : (
+                <Button
+                  className="group-hover:opacity-100 opacity-0 transition-opacity"
+                  type="text"
+                  icon={<StarOutlined />}
+                  onClick={() => {
+                    stores.apps.actions.favoriteApp(item.id);
+                  }}
+                ></Button>
+              )}
+            </div>
+          </div>
         </List.Item>
       )}
     />

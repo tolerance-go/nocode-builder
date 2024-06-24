@@ -1,6 +1,7 @@
 import { Button, Space } from "antd";
 import {
   EditOutlined,
+  EllipsisOutlined,
   ShareAltOutlined,
   StarOutlined,
 } from "@ant-design/icons";
@@ -13,22 +14,31 @@ export const AppDetail = () => {
     <div className="">
       <div className="flex border-b px-2 h-[34px] items-center justify-between">
         <Space>
-          <IconHoverableButton
+          <Button
             size="small"
-            type="text"
-            icon={<EditOutlined />}
+            type="default"
+            autoInsertSpace={false}
             onClick={() => {
               navigate(`/apps/${0}/data`);
             }}
           >
             编辑
-          </IconHoverableButton>
-          <IconHoverableButton size="small" type="text" icon={<ShareAltOutlined />}>
-            分享
-          </IconHoverableButton>
-          <IconHoverableButton size="small" type="text" icon={<StarOutlined />}>
-            收藏
-          </IconHoverableButton>
+          </Button>
+          <IconHoverableButton
+            size="small"
+            type="text"
+            icon={<ShareAltOutlined />}
+          ></IconHoverableButton>
+          <IconHoverableButton
+            size="small"
+            type="text"
+            icon={<StarOutlined />}
+          ></IconHoverableButton>
+          <IconHoverableButton
+            size="small"
+            type="text"
+            icon={<EllipsisOutlined />}
+          ></IconHoverableButton>
         </Space>
       </div>
       <div>

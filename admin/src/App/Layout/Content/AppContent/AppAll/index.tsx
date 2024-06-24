@@ -1,14 +1,14 @@
-import { PlusOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";
-import { Button, Input, Select, Space, Typography } from "antd";
+import { Button, Input, Segmented, Select, Space, Typography } from "antd";
 import { AppList } from "./AppList";
 import { useNavigate } from "react-router-dom";
+import { BarsOutlined, AppstoreOutlined } from "@ant-design/icons";
 
 export const AppAll = () => {
   const navigate = useNavigate();
   return (
     <div className="py-8 px-10">
-      <div className="w-[1500px] mx-auto">
+      <div className="w-[1500px] mx-auto px-10">
         <div className="mb-5">
           <div className="flex justify-between">
             <div>
@@ -22,8 +22,6 @@ export const AppAll = () => {
         <div className="flex justify-between mb-5">
           <Space>
             <Button
-              icon={<PlusOutlined />}
-              
               type="primary"
               onClick={() => {
                 navigate("/apps/templates");
@@ -32,30 +30,41 @@ export const AppAll = () => {
               新建
             </Button>
           </Space>
-          <Space.Compact>
-            <Select
-              variant="filled"
-              defaultValue={"time"}
+          <Space>
+            <Space.Compact>
+              <Select
+                variant="filled"
+                defaultValue={"time"}
+                options={[
+                  {
+                    label: "按更新时间排序",
+                    value: "time",
+                  },
+                  {
+                    label: "按状态排序",
+                    value: "state",
+                  },
+                ]}
+              />
+              <Input.Search
+                allowClear
+                className={css`
+                  .ant-input-affix-wrapper {
+                    height: 32px;
+                  }
+                `}
+              ></Input.Search>
+            </Space.Compact>
+            <Segmented
               options={[
+                { value: "List", icon: <BarsOutlined /> },
                 {
-                  label: "按更新时间排序",
-                  value: "time",
-                },
-                {
-                  label: "按状态排序",
-                  value: "state",
+                  value: "Kanban",
+                  icon: <AppstoreOutlined />,
                 },
               ]}
             />
-            <Input.Search
-              allowClear
-              className={css`
-                .ant-input-affix-wrapper {
-                  height: 32px;
-                }
-              `}
-            ></Input.Search>
-          </Space.Compact>
+          </Space>
         </div>
         <AppList />
       </div>
