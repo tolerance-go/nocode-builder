@@ -35,13 +35,13 @@ export const CardList: React.FC<CardListProps> = ({ templates }) => (
                 height: template.type === "desktop" ? 200 : 400,
               }}
             />
-            <div className="absolute inset-0 flex opacity-0 hover:opacity-100 transition-opacity duration-100">
+            <div className="absolute inset-0 flex opacity-0 hover:opacity-100 transition-opacity duration-200">
               <div className="w-full flex flex-col gap-2 items-center justify-center bg-gray-900 bg-opacity-50 hover:bg-opacity-75 transition-all">
+                <Button type="primary" icon={<CopyOutlined />}>
+                  使用
+                </Button>
                 <Button ghost icon={<EyeOutlined />}>
                   预览
-                </Button>
-                <Button ghost icon={<CopyOutlined />}>
-                  选用
                 </Button>
               </div>
             </div>
