@@ -63,7 +63,13 @@ const AppTreeList: React.FC = () => {
           &.ant-tree-treenode-selected {
             &:hover {
               .more-btn {
-                color: white !important;
+                color: white;
+
+                &.star-btn {
+                  &:hover {
+                    color: ${colors.yellow[400]};
+                  }
+                }
               }
             }
           }
