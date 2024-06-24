@@ -5,6 +5,7 @@ import {
   StarOutlined,
 } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import { IconHoverableButton } from "@/components/BaseButton";
 
 export const AppDetail = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ export const AppDetail = () => {
     <div className="">
       <div className="flex border-b px-2 h-[34px] items-center justify-between">
         <Space>
-          <Button
+          <IconHoverableButton
             size="small"
             type="text"
             icon={<EditOutlined />}
@@ -21,13 +22,13 @@ export const AppDetail = () => {
             }}
           >
             编辑
-          </Button>
-          <Button size="small" type="text" icon={<ShareAltOutlined />}>
+          </IconHoverableButton>
+          <IconHoverableButton size="small" type="text" icon={<ShareAltOutlined />}>
             分享
-          </Button>
-          <Button size="small" type="text" icon={<StarOutlined />}>
+          </IconHoverableButton>
+          <IconHoverableButton size="small" type="text" icon={<StarOutlined />}>
             收藏
-          </Button>
+          </IconHoverableButton>
         </Space>
       </div>
       <div>

@@ -1,11 +1,6 @@
+import { cx } from "@emotion/css";
 import { Button, ButtonProps } from "antd";
-import {
-  FC,
-  FunctionComponent,
-  FunctionComponentElement,
-  cloneElement,
-  isValidElement,
-} from "react";
+import { FunctionComponentElement, cloneElement, isValidElement } from "react";
 
 export const IconHoverableButton = ({
   icon,
@@ -18,7 +13,7 @@ export const IconHoverableButton = ({
   return (
     <Button
       {...props}
-      className="group"
+      className={cx(props.className, "group")}
       icon={
         isValidElement(icon)
           ? cloneElement(icon, {

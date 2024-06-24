@@ -187,6 +187,8 @@ export type AppData = {
   id: number;
   menuTitle: string;
   groupId?: number;
+  // 是否收藏
+  ifFavorite?: boolean
 };
 
 export type TemplateUseCase = {

@@ -14,7 +14,7 @@ export const AppAll = () => {
             <div>
               <Typography.Title level={3}>欢迎，Yarnb</Typography.Title>
               <Typography.Paragraph>
-                Below you'll find the list of apps that you have access to
+                以下是您可以访问的应用程序列表
               </Typography.Paragraph>
             </div>
           </div>

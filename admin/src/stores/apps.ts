@@ -1,4 +1,5 @@
 import { AppData, AppGroup, DataKey } from "@/types";
+import { ensure } from "@/utils/ensure";
 import store from "store2";
 import { proxy, subscribe } from "valtio";
 
@@ -22,6 +23,16 @@ export const states = proxy({
 export const actions = {
   addApp: (newApp: AppData) => {
     states.apps.list.push(newApp);
+  },
+  favoriteApp: (id: AppData["id"]) => {
+    const app = states.apps.list.find((item) => item.id === id);
+    ensure(app, "app 不存在。");
+    app.ifFavorite = true;
+  },
+  unfavoriteApp: (id: AppData["id"]) => {
+    const app = states.apps.list.find((item) => item.id === id);
+    ensure(app, "app 不存在。");
+    app.ifFavorite = false;
   },
 };
 
