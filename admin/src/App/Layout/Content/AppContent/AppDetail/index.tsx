@@ -16,7 +16,7 @@ export const AppDetail = () => {
         <Space>
           <Button
             size="small"
-            type="default"
+            type="text"
             autoInsertSpace={false}
             onClick={() => {
               navigate(`/apps/${0}/data`);
