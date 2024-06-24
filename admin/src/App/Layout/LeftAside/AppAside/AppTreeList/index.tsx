@@ -1,5 +1,9 @@
 import stores from "@/stores";
-import { AppstoreOutlined, MoreOutlined } from "@ant-design/icons";
+import {
+  AppstoreOutlined,
+  EllipsisOutlined,
+  MoreOutlined,
+} from "@ant-design/icons";
 import { css } from "@emotion/css";
 import type { GetProps, TreeDataNode } from "antd";
 import { Button, Dropdown, Tree } from "antd";
@@ -43,7 +47,7 @@ const AppTreeList: React.FC = () => {
           &:hover {
             .more-btn {
               opacity: 100;
-              color: ${colors.gray[400]};
+              color: ${colors.gray[500]};
               &:hover {
                 color: ${colors.gray[900]};
               }
@@ -82,7 +86,7 @@ const AppTreeList: React.FC = () => {
                 onClick={(e) => e.stopPropagation()}
                 size="small"
                 type="text"
-                icon={<MoreOutlined />}
+                icon={<EllipsisOutlined />}
               ></Button>
             </Dropdown>
           </div>
