@@ -20,7 +20,7 @@ function App() {
     <BrowserRouter>
       <ConfigProvider
         theme={{
-          algorithm: [theme.darkAlgorithm],
+          // algorithm: [theme.darkAlgorithm],
           components: {
             Tabs: {
               cardGutter: 0,
