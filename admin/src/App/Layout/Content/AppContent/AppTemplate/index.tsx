@@ -85,11 +85,8 @@ export const AppTemplate: React.FC = () => {
               <div className="flex justify-between">
                 <Typography.Title level={3}>创建新应用程序</Typography.Title>
                 <Space>
-                  <Button size="large" shape="round">
-                    导入程序
-                  </Button>
+                  <Button shape="round">导入程序</Button>
                   <Button
-                    size="large"
                     shape="round"
                     type="primary"
                     onClick={() => {
