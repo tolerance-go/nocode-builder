@@ -20,7 +20,7 @@ export const Layout = () => {
   return (
     <div className="overflow-hidden">
       {/* 顶部导航栏 */}
-      <header className="text-white bg-gray-50 px-4 border-b h-[46px]">
+      <header className="text-white dark:text-black bg-gray-50 px-4 border-b h-[46px]">
         <Header />
       </header>
 
@@ -31,7 +31,7 @@ export const Layout = () => {
         </aside>
 
         {/* 中间内容区域 */}
-        <main className="flex-1 bg-white">
+        <main className="flex-1 bg-white dark:bg-black">
           <Content />
         </main>
 
