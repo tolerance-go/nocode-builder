@@ -32,7 +32,14 @@ export const AppAll = () => {
                 navigate("/apps/templates");
               }}
             >
-              新建
+              创建新项目
+            </Button>
+            <Button
+              onClick={() => {
+                navigate("/apps/templates");
+              }}
+            >
+              选用模板
             </Button>
           </Space>
           <Space>
