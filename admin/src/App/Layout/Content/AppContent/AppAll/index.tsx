@@ -23,7 +23,7 @@ export const AppAll = () => {
           <Space>
             <Button
               icon={<PlusOutlined />}
-              shape="round"
+              
               type="primary"
               onClick={() => {
                 navigate("/apps/templates");

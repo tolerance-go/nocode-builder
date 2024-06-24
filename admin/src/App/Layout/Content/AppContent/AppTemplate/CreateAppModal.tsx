@@ -101,8 +101,8 @@ const CreateAppModal = React.forwardRef<CreateAppModalRef, CreateAppModalProps>(
           </div>
 
           <Space style={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button shape='round' onClick={() => handleCancel()}>取消</Button>
-            <Button shape='round' type="primary" htmlType="submit">
+            <Button  onClick={() => handleCancel()}>取消</Button>
+            <Button  type="primary" htmlType="submit">
               创建
             </Button>
           </Space>

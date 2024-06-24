@@ -15,10 +15,8 @@ import { useSnapshot } from "valtio";
 export const AppList: React.FC = () => {
   const apps = useSnapshot(stores.apps.states.apps);
   const nav = useNavigate();
-  const size = "small";
   return (
     <List
-      size={size}
       itemLayout="horizontal"
       dataSource={apps.list as AppData[]}
       renderItem={(item) => (
@@ -39,8 +37,7 @@ export const AppList: React.FC = () => {
           <Space className="px-2" onClick={(e) => e.stopPropagation()}>
             <Space className="group-hover:opacity-100 opacity-0 transition-opacity">
               <Button
-                size={size}
-                shape="round"
+                
                 icon={<EditOutlined />}
                 onClick={() => {
                   nav(`/apps/${item.id}/data`);
@@ -48,15 +45,10 @@ export const AppList: React.FC = () => {
               >
                 编辑
               </Button>
-              <Button
-                size={size}
-                icon={<EllipsisOutlined />}
-                type="text"
-              ></Button>
+              <Button icon={<EllipsisOutlined />} type="text"></Button>
             </Space>
             {item.ifFavorite ? (
               <Button
-                size={size}
                 type="text"
                 icon={<StarFilled className="text-yellow-400" />}
                 onClick={() => {
@@ -65,7 +57,6 @@ export const AppList: React.FC = () => {
               ></Button>
             ) : (
               <Button
-                size={size}
                 className="group-hover:opacity-100 opacity-0 transition-opacity"
                 type="text"
                 icon={<StarOutlined />}
