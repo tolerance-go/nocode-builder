@@ -1,4 +1,4 @@
-import { AppData, AppGroup, DataKey } from "@/types";
+import { AppData, AppGroup } from "@/types";
 import { ensure } from "@/utils/ensure";
 import store from "store2";
 import { proxy, subscribe } from "valtio";
@@ -33,6 +33,11 @@ export const actions = {
     const app = states.apps.list.find((item) => item.id === id);
     ensure(app, "app 不存在。");
     app.ifFavorite = false;
+  },
+  removeApp: (id: AppData["id"]) => {
+    const index = states.apps.list.findIndex((item) => item.id === id);
+    ensure(index !== -1, "app 不存在。");
+    states.apps.list.splice(index, 1);
   },
 };
 

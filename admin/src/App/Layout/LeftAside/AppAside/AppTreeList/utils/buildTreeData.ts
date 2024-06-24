@@ -14,7 +14,7 @@ export const buildTreeData = (
   groups.forEach((group) => {
     groupMap.set(group.id, {
       title: group.menuTitle,
-      key: `group-${group.id}`,
+      key: group.id,
       selectable: false,
       children: [],
     });
@@ -24,7 +24,7 @@ export const buildTreeData = (
   apps.forEach((app) => {
     const appNode: TreeDataNode = {
       title: app.menuTitle,
-      key: `app-${app.id}`,
+      key: app.id,
       isLeaf: true,
     };
     if (app.groupId) {

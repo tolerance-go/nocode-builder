@@ -184,11 +184,11 @@ export type AppGroup = {
 };
 
 export type AppData = {
-  id: number;
+  id: DataKey;
   menuTitle: string;
   groupId?: number;
   // 是否收藏
-  ifFavorite?: boolean
+  ifFavorite?: boolean;
   // 端类型
   terminalType: "mobile" | "tablet" | "desktop";
 };
