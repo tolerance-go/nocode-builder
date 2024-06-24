@@ -1,9 +1,11 @@
 import { PreviewCard } from "@/components/PreviewCard";
 import stores from "@/stores";
 import { StarFilled, StarOutlined } from "@ant-design/icons";
+import { css } from "@emotion/css";
 import { Button, List, Typography } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import colors from "tailwindcss/colors";
 import { useSnapshot } from "valtio";
 
 export const AppList = (props: { type: "list" | "card" }) => {
@@ -78,7 +80,21 @@ export const AppList = (props: { type: "list" | "card" }) => {
         props.type === "list" ? (
           <List.Item
             key={item.id}
-            className="group hover:bg-slate-50 hover:cursor-pointer"
+            className={css`
+              /* group hover:bg-slate-50 hover:cursor-pointer */
+              &:hover {
+                background-color: ${colors.slate[50]};
+                cursor: pointer;
+
+                .unstar-btn {
+                  opacity: 100;
+                }
+              }
+
+              .unstar-btn {
+                opacity: 0;
+              }
+            `}
             onClick={() => {
               nav(`/apps/${item.id}/data`);
             }}
@@ -105,9 +121,11 @@ export const AppList = (props: { type: "list" | "card" }) => {
                   ></Button>
                 ) : (
                   <Button
-                    className="group-hover:opacity-100 opacity-0"
+                    className="unstar-btn group"
                     type="text"
-                    icon={<StarOutlined />}
+                    icon={
+                      <StarOutlined className="text-gray-400 group-hover:text-yellow-400 duration-200" />
+                    }
                     onClick={() => {
                       stores.apps.actions.favoriteApp(item.id);
                     }}
