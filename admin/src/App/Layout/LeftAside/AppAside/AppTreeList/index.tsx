@@ -2,7 +2,6 @@ import stores from "@/stores";
 import {
   AppstoreOutlined,
   EllipsisOutlined,
-  MoreOutlined,
   StarOutlined,
 } from "@ant-design/icons";
 import { css } from "@emotion/css";

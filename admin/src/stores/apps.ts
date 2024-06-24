@@ -1,5 +1,7 @@
 import { AppData, AppGroup } from "@/types";
+import { createConfigMapByKey } from "@/utils/blueMap/createConfigMapById";
 import { ensure } from "@/utils/ensure";
+import { derive } from "derive-valtio";
 import store from "store2";
 import { proxy, subscribe } from "valtio";
 
@@ -7,6 +9,10 @@ const apps = proxy<{
   list: AppData[];
 }>({
   list: store.get("apps")?.list || [],
+});
+
+const appsById = derive({
+  ids: (get) => createConfigMapByKey(get(apps).list, "id"),
 });
 
 const appGroups = proxy<{
@@ -18,6 +24,7 @@ const appGroups = proxy<{
 export const states = proxy({
   apps,
   appGroups,
+  appsById,
 });
 
 export const actions = {
