@@ -8,6 +8,7 @@ import { useMatch, useNavigate } from "react-router-dom";
 import { useSnapshot } from "valtio";
 import { buildTreeData } from "./utils/buildTreeData";
 import colors from "tailwindcss/colors";
+import { parseParamToNumber } from "@/utils/parseParamToNumber";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
@@ -88,7 +89,9 @@ const AppTreeList: React.FC = () => {
         );
       }}
       defaultExpandAll
-      selectedKeys={match?.params.id ? [Number(match.params.id)] : undefined}
+      selectedKeys={
+        match?.params.id ? [parseParamToNumber(match.params.id)] : undefined
+      }
       onSelect={onSelect}
       treeData={[
         {
