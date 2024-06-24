@@ -1,8 +1,8 @@
-import { IconHoverableButton } from "@/components/BaseButton";
+import { IconHoverableButton } from "@/components/IconHoverableButton";
 import { appSubNavs, navTabs } from "@/configs/navs";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";
-import { Button, Divider, Space, Tabs, Typography } from "antd";
+import { Divider, Space, Tabs, Typography } from "antd";
 import { useMatch, useNavigate } from "react-router-dom";
 
 export const Navs = () => {

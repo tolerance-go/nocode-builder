@@ -1,12 +1,11 @@
-import { Button, Space } from "antd";
+import { IconHoverableButton } from "@/components/IconHoverableButton";
 import {
-  EditOutlined,
   EllipsisOutlined,
   ShareAltOutlined,
   StarOutlined,
 } from "@ant-design/icons";
+import { Button, Space } from "antd";
 import { useNavigate } from "react-router-dom";
-import { IconHoverableButton } from "@/components/BaseButton";
 
 export const AppDetail = () => {
   const navigate = useNavigate();
