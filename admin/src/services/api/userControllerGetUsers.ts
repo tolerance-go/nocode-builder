@@ -8,7 +8,7 @@ export async function userControllerGetUsers(
   params: API.UserControllerGetUsersParams,
   options?: { [key: string]: any },
 ) {
-  return request<any>('/users', {
+  return request<API.UserDto[]>('/users', {
     method: 'GET',
     params: {
       ...params,

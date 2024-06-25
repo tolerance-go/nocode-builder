@@ -5,7 +5,7 @@ export class UserCreateDto {
   name: string;
 
   @ApiProperty({ required: false })
-  email: string;
+  email?: string;
 
   @ApiProperty()
   password: string;

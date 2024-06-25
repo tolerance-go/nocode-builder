@@ -26,9 +26,10 @@ declare namespace API {
   };
 
   type UserControllerGetUsersParams = {
-    skip: string;
-    take: string;
-    cursor: string;
+    skip?: number;
+    take?: number;
+    orderBy?: string;
+    filter?: string;
   };
 
   type UserControllerUpdateUserParams = {
@@ -40,6 +41,21 @@ declare namespace API {
     email?: string;
     password: string;
     createdAt?: string;
+    updatedAt?: string;
+  };
+
+  type UserDto = {
+    id: number;
+    name: string;
+    email?: Record<string, any>;
+    createdAt: string;
+    updatedAt: string;
+  };
+
+  type UserUpdateDto = {
+    name?: string;
+    email?: string;
+    password?: string;
     updatedAt?: string;
   };
 }

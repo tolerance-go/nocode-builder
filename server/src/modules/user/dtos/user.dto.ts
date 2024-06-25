@@ -7,12 +7,12 @@ export class UserDto {
   @ApiProperty()
   name: string;
 
-  @ApiProperty({ required: false })
-  email: string;
+  @ApiProperty({ required: false, nullable: true })
+  email?: string | null;
 
   @ApiProperty()
-  createdAt: string;
+  createdAt: Date;
 
   @ApiProperty()
-  updatedAt: string;
+  updatedAt: Date;
 }

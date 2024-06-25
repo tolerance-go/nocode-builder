@@ -9,7 +9,7 @@ export async function userControllerGetUser(
   options?: { [key: string]: any },
 ) {
   const { id: param0, ...queryParams } = params;
-  return request<any>(`/users/${param0}`, {
+  return request<API.UserDto>(`/users/${param0}`, {
     method: 'GET',
     params: { ...queryParams },
     ...(options || {}),

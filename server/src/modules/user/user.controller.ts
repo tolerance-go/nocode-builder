@@ -1,55 +1,72 @@
 import {
+  Body,
   Controller,
+  Delete,
   Get,
   Param,
-  Query,
-  Post,
-  Body,
   Patch,
-  Delete,
+  Post,
+  Query,
 } from '@nestjs/common';
-import { UserService } from './user.service';
-import { Prisma, User } from '@prisma/client';
-import { ApiBody } from '@nestjs/swagger';
+import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { UserCreateDto } from './dtos/user-create.dto';
+import { UserQueryDto } from './dtos/user-query.dto';
+import { UserUpdateDto } from './dtos/user-update.dto';
+import { UserDto } from './dtos/user.dto';
+import { UserService } from './user.service';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get(':id')
-  async getUser(@Param('id') id: string) {
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully fetched.',
+    type: UserDto,
+  })
+  async getUser(@Param('id') id: string): Promise<UserDto | null> {
     return this.userService.user({ id: Number(id) });
   }
 
   @Get()
-  async getUsers(
-    @Query('skip') skip?: string,
-    @Query('take') take?: string,
-    @Query('cursor') cursor?: string,
-    @Query('where') where?: Prisma.UserWhereInput,
-    @Query('orderBy') orderBy?: Prisma.UserOrderByWithRelationInput,
-  ) {
+  @ApiResponse({
+    status: 200,
+    description: 'The users have been successfully fetched.',
+    type: [UserDto],
+  })
+  async getUsers(@Query() query: UserQueryDto): Promise<UserDto[]> {
     return this.userService.users({
-      skip: skip ? Number(skip) : undefined,
-      take: take ? Number(take) : undefined,
-      cursor: cursor ? { id: Number(cursor) } : undefined,
-      where,
-      orderBy,
+      skip: query.skip,
+      take: query.take,
+      cursor: query.filter ? { id: Number(query.filter) } : undefined,
+      orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
     });
   }
 
   @Post()
   @ApiBody({ type: UserCreateDto })
-  async createUser(@Body() data: Prisma.UserCreateInput): Promise<User> {
+  @ApiResponse({
+    status: 201,
+    description: 'The user has been successfully created.',
+    type: UserDto,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  async createUser(@Body() data: UserCreateDto): Promise<UserDto> {
     return this.userService.createUser(data);
   }
 
   @Patch(':id')
+  @ApiBody({ type: UserUpdateDto })
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully updated.',
+    type: UserDto,
+  })
   async updateUser(
     @Param('id') id: string,
-    @Body() data: Prisma.UserUpdateInput,
-  ) {
+    @Body() data: UserUpdateDto,
+  ): Promise<UserDto> {
     return this.userService.updateUser({
       where: { id: Number(id) },
       data,
@@ -57,7 +74,12 @@ export class UserController {
   }
 
   @Delete(':id')
-  async deleteUser(@Param('id') id: string) {
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully deleted.',
+    type: UserDto,
+  })
+  async deleteUser(@Param('id') id: string): Promise<UserDto> {
     return this.userService.deleteUser({ id: Number(id) });
   }
 }
