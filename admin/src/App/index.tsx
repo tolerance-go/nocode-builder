@@ -1,11 +1,11 @@
 import { useCurrentPathname } from "@/hooks/useCurrentPathname";
 import "@antv/s2-react/dist/style.min.css";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider } from "antd";
 import { BrowserRouter } from "react-router-dom";
 import { Layout } from "./Layout";
+import { Login } from "./Login";
 import { Preview } from "./Preview";
 import "./index.css";
-import { Login } from "./Login";
 
 function App() {
   const pathname = useCurrentPathname();
