@@ -84,6 +84,21 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
     setExpandedKeys(keys); // 更新展开状态
   };
 
+  /**
+   * 在指定节点位置尝试插入新节点
+   *
+   * 如果没有指定，那么使用当前 selectedKey，否则为不指定
+   *  - 如果指定
+   *    - 如果指定的是文件夹
+   *      - 在文件夹下的所有文件夹之后插入，如果文件夹下没有文件夹，在最前面插入，如果为空，也在最前面插入
+   *    - 如果指定的是文件
+   *      - 在文件的父文件夹下的所有文件夹之后插入，如果文件没有父文件夹，那么在最外层的所有文件夹之后插入，没有文件夹就在最前面
+   *
+   * 如果不指定，则在最外层的，所有文件夹之后插入
+   *
+   * 注意：这样处理后，同层的所有文件都应该位于文件夹之后
+   *
+   */
   const addFile = (key?: React.Key) => {
     const newKey = Date.now();
     const addNode = (
@@ -153,6 +168,8 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
         });
       };
 
+      const result = insertNode(data);
+
       // 如果是最外层的文件
       if (!isInserted) {
         const folderIndex = data.findLastIndex((item) => item.children);
@@ -169,7 +186,7 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
         ];
       }
 
-      return insertNode(data);
+      return result;
     };
 
     setTreeData((prevData) =>
@@ -316,23 +333,22 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
         });
       };
 
+      const result = insertNode(data);
+
       // 如果是最外层的文件
       if (!isInserted) {
-        const folderIndex = data.findLastIndex((item) => item.children);
-        const insertIndex = folderIndex === -1 ? 0 : folderIndex + 1;
         return [
-          ...data.slice(0, insertIndex),
           {
             title: "",
             key: newKey,
             isEditing: true,
             children: [],
           },
-          ...data.slice(insertIndex),
+          ...data,
         ];
       }
 
-      return insertNode(data);
+      return result;
     };
 
     setTreeData((prevData) =>
