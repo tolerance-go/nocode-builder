@@ -1,3 +1,5 @@
+// @ts-ignore
+/* eslint-disable */
 // API 更新时间：
 // API 唯一标识：
 import * as appControllerGetHello from './appControllerGetHello';
@@ -12,6 +14,11 @@ import * as projectControllerDeleteProject from './projectControllerDeleteProjec
 import * as projectControllerUpdateProject from './projectControllerUpdateProject';
 import * as projectControllerGetProjects from './projectControllerGetProjects';
 import * as projectControllerCreateProject from './projectControllerCreateProject';
+import * as projectGroupControllerGetProjectGroup from './projectGroupControllerGetProjectGroup';
+import * as projectGroupControllerDeleteProjectGroup from './projectGroupControllerDeleteProjectGroup';
+import * as projectGroupControllerUpdateProjectGroup from './projectGroupControllerUpdateProjectGroup';
+import * as projectGroupControllerGetProjectGroups from './projectGroupControllerGetProjectGroups';
+import * as projectGroupControllerCreateProjectGroup from './projectGroupControllerCreateProjectGroup';
 export default {
   appControllerGetHello,
   authControllerLogin,
@@ -25,4 +32,9 @@ export default {
   projectControllerUpdateProject,
   projectControllerGetProjects,
   projectControllerCreateProject,
+  projectGroupControllerGetProjectGroup,
+  projectGroupControllerDeleteProjectGroup,
+  projectGroupControllerUpdateProjectGroup,
+  projectGroupControllerGetProjectGroups,
+  projectGroupControllerCreateProjectGroup,
 };

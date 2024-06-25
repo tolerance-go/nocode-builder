@@ -1,6 +1,7 @@
-import React from "react";
-import { Tree } from "antd";
+import { FolderAddOutlined } from "@ant-design/icons";
 import type { GetProps, TreeDataNode } from "antd";
+import { Button, Flex, Tree, theme } from "antd";
+import React from "react";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
@@ -26,6 +27,7 @@ const treeData: TreeDataNode[] = [
 ];
 
 export const TreeMenu: React.FC = () => {
+  const { token } = theme.useToken();
   const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
     console.log("Trigger Select", keys, info);
   };
@@ -35,12 +37,27 @@ export const TreeMenu: React.FC = () => {
   };
 
   return (
-    <DirectoryTree
-      multiple
-      defaultExpandAll
-      onSelect={onSelect}
-      onExpand={onExpand}
-      treeData={treeData}
-    />
+    <div
+      style={{
+        backgroundColor: token.colorBgContainer,
+      }}
+    >
+      <Flex
+        justify="end"
+        style={{
+          padding: `${token.sizeXXS}px ${token.sizeXS}px`,
+          border: `1px solid ${token.colorBorderSecondary}`,
+        }}
+      >
+        <Button size="small" type="text" icon={<FolderAddOutlined />}></Button>
+      </Flex>
+      <DirectoryTree
+        multiple
+        defaultExpandAll
+        onSelect={onSelect}
+        onExpand={onExpand}
+        treeData={treeData}
+      />
+    </div>
   );
 };
