@@ -7,3 +7,11 @@ services:
       - "80:80"
     environment:
       - NODE_ENV=production
+    depends_on:
+      - postgres
+  postgres:
+    build:
+      context: .
+      dockerfile: ./db/postgres/Dockerfile
+    ports:
+      - "5432:5432"
