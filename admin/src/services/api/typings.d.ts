@@ -17,13 +17,40 @@ declare namespace API {
   };
 
   type ProjectControllerGetProjectsParams = {
-    skip: string;
-    take: string;
-    cursor: string;
+    /** Number of records to skip for pagination */
+    skip?: number;
+    /** Number of records to take for pagination */
+    take?: number;
+    /** Field by which to order the results */
+    orderBy?: string;
+    /** Filter condition */
+    filter?: string;
   };
 
   type ProjectControllerUpdateProjectParams = {
     id: string;
+  };
+
+  type ProjectCreateDto = {
+    name: string;
+    projectGroupId?: number;
+    createdAt?: string;
+    updatedAt?: string;
+  };
+
+  type ProjectDto = {
+    /** The unique identifier of the project */
+    id: number;
+    /** The name of the project */
+    name: string;
+    /** The project group ID of the project */
+    projectGroupId?: Record<string, any>;
+    /** The owner ID of the project */
+    ownerId: number;
+    /** The date and time when the project was created */
+    createdAt: string;
+    /** The date and time when the project was last updated */
+    updatedAt: string;
   };
 
   type ProjectGroupControllerDeleteProjectGroupParams = {
@@ -76,6 +103,13 @@ declare namespace API {
     name?: string;
     /** The parent group ID of the project group */
     parentGroupId?: number;
+  };
+
+  type ProjectUpdateDto = {
+    /** The name of the project */
+    name?: string;
+    /** The project group ID of the project */
+    projectGroupId?: number;
   };
 
   type UserControllerDeleteUserParams = {

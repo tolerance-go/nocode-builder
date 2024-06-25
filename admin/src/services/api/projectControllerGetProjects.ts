@@ -8,7 +8,7 @@ export async function projectControllerGetProjects(
   params: API.ProjectControllerGetProjectsParams,
   options?: { [key: string]: any },
 ) {
-  return request<any>('/projects', {
+  return request<API.ProjectDto[]>('/projects', {
     method: 'GET',
     params: {
       ...params,

@@ -5,9 +5,11 @@ import { useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import store from "store2";
 import { TreeMenu, TreeMenuRef } from "./TreeMenu";
+import { projectControllerCreateProject } from "@/services/api/projectControllerCreateProject";
 
 export const Admin = () => {
-  const [loading, setLoading] = useState(false);
+  const [addFolderLoading, setAddFolderLoading] = useState(false);
+  const [addFileLoading, setAddFileLoading] = useState(false);
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const treeMenuRef = useRef<TreeMenuRef>(null);
@@ -75,7 +77,7 @@ export const Admin = () => {
             >
               <Button
                 type="text"
-                loading={loading}
+                loading={addFileLoading}
                 icon={<FileAddOutlined />}
                 onClick={async () => {
                   treeMenuRef.current?.addFile();
@@ -83,7 +85,7 @@ export const Admin = () => {
               ></Button>
               <Button
                 type="text"
-                loading={loading}
+                loading={addFolderLoading}
                 icon={<FolderAddOutlined />}
                 onClick={async () => {
                   treeMenuRef.current?.addFolder();
@@ -96,34 +98,31 @@ export const Admin = () => {
               }}
             >
               <TreeMenu
-                initialTreeData={[
-                  {
-                    title: "parent 0",
-                    key: "0-0",
-                    children: [
-                      { title: "leaf 0-0", key: "0-0-0", isLeaf: true },
-                      { title: "leaf 0-1", key: "0-0-1", isLeaf: true },
-                    ],
-                  },
-                  {
-                    title: "parent 1",
-                    key: "0-1",
-                    children: [
-                      { title: "leaf 1-0", key: "0-1-0", isLeaf: true },
-                      { title: "leaf 1-1", key: "0-1-1", isLeaf: true },
-                    ],
-                  },
-                ]}
+                initialTreeData={[]}
                 ref={treeMenuRef}
-                onFolderAdd={async (_key, title) => {
+                onFolderAdd={async ({ title, parentKey }) => {
                   try {
-                    setLoading(true);
-                    await projectGroupControllerCreateProjectGroup({
-                      name: title,
-                    });
-                    return true;
+                    setAddFolderLoading(true);
+                    const result =
+                      await projectGroupControllerCreateProjectGroup({
+                        name: title,
+                        parentGroupId: parentKey as number,
+                      });
+                    return result.id;
                   } finally {
-                    setLoading(false);
+                    setAddFolderLoading(false);
+                  }
+                }}
+                onFileAdd={async ({ title, parentKey }) => {
+                  try {
+                    setAddFileLoading(true);
+                    const result = await projectControllerCreateProject({
+                      name: title,
+                      projectGroupId: parentKey as number,
+                    });
+                    return result.id;
+                  } finally {
+                    setAddFileLoading(false);
                   }
                 }}
               />

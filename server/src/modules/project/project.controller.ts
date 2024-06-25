@@ -64,17 +64,24 @@ export class ProjectController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async createProject(
-    @Body() data: ProjectCreateDto,
+    @Body() { projectGroupId, ...rest }: ProjectCreateDto,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<ProjectDto> {
     const userId = req.user.id;
     const project = await this.projectService.createProject({
-      ...data,
+      ...rest,
       owner: {
         connect: {
           id: userId,
         },
       },
+      projectGroup: projectGroupId
+        ? {
+            connect: {
+              id: projectGroupId,
+            },
+          }
+        : undefined,
     });
     return toProjectDto(project);
   }

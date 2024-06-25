@@ -10,8 +10,16 @@ const { DirectoryTree } = Tree;
 interface TreeMenuProps {
   initialTreeData: TreeDataNode[]; // 初始化数据从上层传入
   ref: React.Ref<TreeMenuRef>;
-  onFileAdd?: (key: React.Key, title: string) => Promise<boolean>; // 新增文件回调属性，返回 Promise<boolean>
-  onFolderAdd?: (key: React.Key, title: string) => Promise<boolean>; // 增加回调属性，返回 Promise<boolean>
+  onFileAdd: (params: {
+    parentKey?: React.Key;
+    key: React.Key;
+    title: string;
+  }) => Promise<number>; // 新增文件回调属性，返回 Promise<number>
+  onFolderAdd: (params: {
+    parentKey?: React.Key;
+    key: React.Key;
+    title: string;
+  }) => Promise<number>; // 增加回调属性，返回 Promise<number>
 }
 
 export interface TreeMenuRef {
@@ -54,9 +62,10 @@ const TitleComponent = ({
 };
 
 export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
-  const { initialTreeData, onFolderAdd } = props; // 获取初始化数据和回调属性
+  const { initialTreeData, onFolderAdd, onFileAdd } = props; // 获取初始化数据和回调属性
   const [treeData, setTreeData] =
     useState<CustomTreeDataNode[]>(initialTreeData);
+  console.log("treeData", treeData);
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]); // 维护展开状态
   const [selectedKey, setSelectedKey] = useState<React.Key | null>(null); // 维护选中节点的状态
 
@@ -76,7 +85,7 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
   };
 
   const addFile = (key?: React.Key) => {
-    const newKey = `${key || "root"}-file-${Date.now()}`;
+    const newKey = Date.now();
     const addNode = (
       data: CustomTreeDataNode[],
       parentKey?: React.Key,
@@ -159,21 +168,21 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
     key: React.Key,
   ) => {
     const value = (e.target as HTMLInputElement).value || "New File";
-    if (props.onFileAdd) {
-      const result = await props.onFileAdd(key, value); // 等待回调结果
-      if (result) {
-        updateNodeTitle(key, value); // 只有当回调返回 true 时才更新节点标题
-      } else {
-        // 如果回调返回 false，则删除临时添加的节点
-        setTreeData((prevData) => deleteNode(prevData, key));
-      }
-    } else {
-      updateNodeTitle(key, value);
+    try {
+      const result = await onFileAdd({
+        parentKey: selectedKey ?? undefined,
+        key,
+        title: value,
+      }); // 等待回调结果
+      updateNodeTitle(key, value, result); // 只有当回调返回 true 时才更新节点标题
+    } catch {
+      // 如果回调返回 false，则删除临时添加的节点
+      setTreeData((prevData) => deleteNode(prevData, key));
     }
   };
 
   const addFolder = (key?: React.Key) => {
-    const newKey = `${key || "root"}-${Date.now()}`;
+    const newKey = Date.now();
     const addNode = (
       data: CustomTreeDataNode[],
       parentKey?: React.Key,
@@ -286,24 +295,24 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
     key: React.Key,
   ) => {
     const value = (e.target as HTMLInputElement).value || "New Folder";
-    if (onFolderAdd) {
-      const result = await onFolderAdd(key, value); // 等待回调结果
-      if (result) {
-        updateNodeTitle(key, value); // 只有当回调返回 true 时才更新节点标题
-      } else {
-        // 如果回调返回 false，则删除临时添加的节点
-        setTreeData((prevData) => deleteNode(prevData, key));
-      }
-    } else {
-      updateNodeTitle(key, value);
+    try {
+      const result = await onFolderAdd({
+        parentKey: selectedKey ?? undefined,
+        key,
+        title: value,
+      }); // 等待回调结果
+      updateNodeTitle(key, value, result); // 只有当回调返回 true 时才更新节点标题
+    } catch {
+      // 如果回调返回 false，则删除临时添加的节点
+      setTreeData((prevData) => deleteNode(prevData, key));
     }
   };
 
-  const updateNodeTitle = (key: React.Key, title: string) => {
+  const updateNodeTitle = (key: React.Key, title: string, newKey: number) => {
     const updateNode = (data: CustomTreeDataNode[]): CustomTreeDataNode[] => {
       return data.map((item) => {
         if (item.key === key) {
-          return { ...item, title, isEditing: false };
+          return { ...item, key: newKey, title, isEditing: false };
         }
         if (item.children) {
           return {
