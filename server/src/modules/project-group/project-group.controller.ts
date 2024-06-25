@@ -60,7 +60,6 @@ export class ProjectGroupController {
 
   @Post()
   @UseGuards(JwtAuthGuard)
-  @ApiBody({ type: ProjectGroupCreateDto })
   @ApiResponse({
     status: 201,
     description: 'The project group has been successfully created.',
@@ -84,7 +83,6 @@ export class ProjectGroupController {
   }
 
   @Patch(':id')
-  @ApiBody({ type: ProjectGroupUpdateDto })
   @ApiResponse({
     status: 200,
     description: 'The project group has been successfully updated.',

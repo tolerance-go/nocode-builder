@@ -19,13 +19,4 @@ export class ProjectGroupUpdateDto {
   @IsOptional()
   @IsInt()
   parentGroupId?: number;
-
-  @ApiProperty({
-    description: 'The last update date of the project group record',
-    example: '2024-01-02T00:00:00Z',
-    required: false,
-  })
-  @IsOptional()
-  @IsDateString()
-  updatedAt?: string;
 }
