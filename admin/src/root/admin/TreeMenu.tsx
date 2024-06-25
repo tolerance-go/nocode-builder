@@ -153,6 +153,22 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
         });
       };
 
+      // 如果是最外层的文件
+      if (!isInserted) {
+        const folderIndex = data.findLastIndex((item) => item.children);
+        const insertIndex = folderIndex === -1 ? 0 : folderIndex + 1;
+        return [
+          ...data.slice(0, insertIndex),
+          {
+            title: "",
+            key: newKey,
+            isEditing: true,
+            isLeaf: true, // 标记为文件
+          },
+          ...data.slice(insertIndex),
+        ];
+      }
+
       return insertNode(data);
     };
 
@@ -168,17 +184,58 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
     key: React.Key,
   ) => {
     const value = (e.target as HTMLInputElement).value || "New File";
+    const parentNode = findParentNode(treeData, key); // 找到当前节点的父节点
     try {
       const result = await onFileAdd({
-        parentKey: selectedKey ?? undefined,
+        parentKey: parentNode ? parentNode.key : undefined, // 使用父节点的 key 作为 parentKey
         key,
         title: value,
-      }); // 等待回调结果
-      updateNodeTitle(key, value, result); // 只有当回调返回 true 时才更新节点标题
+      });
+      updateNodeTitle(key, value, result);
     } catch {
-      // 如果回调返回 false，则删除临时添加的节点
       setTreeData((prevData) => deleteNode(prevData, key));
     }
+  };
+
+  const handleFinish = async (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.FocusEvent<HTMLInputElement>,
+    key: React.Key,
+  ) => {
+    const value = (e.target as HTMLInputElement).value || "New Folder";
+    const parentNode = findParentNode(treeData, key); // 找到当前节点的父节点
+    try {
+      const result = await onFolderAdd({
+        parentKey: parentNode ? parentNode.key : undefined, // 使用父节点的 key 作为 parentKey
+        key,
+        title: value,
+      });
+      updateNodeTitle(key, value, result);
+    } catch {
+      setTreeData((prevData) => deleteNode(prevData, key));
+    }
+  };
+
+  const findParentNode = (
+    data: CustomTreeDataNode[],
+    childKey: React.Key,
+  ): CustomTreeDataNode | null => {
+    for (const item of data) {
+      if (
+        item.children &&
+        item.children.some((child) => child.key === childKey)
+      ) {
+        return item;
+      }
+      if (item.children) {
+        const parent = findParentNode(item.children, childKey);
+        if (parent) {
+          return parent;
+        }
+      }
+    }
+    return null;
   };
 
   const addFolder = (key?: React.Key) => {
@@ -259,6 +316,22 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
         });
       };
 
+      // 如果是最外层的文件
+      if (!isInserted) {
+        const folderIndex = data.findLastIndex((item) => item.children);
+        const insertIndex = folderIndex === -1 ? 0 : folderIndex + 1;
+        return [
+          ...data.slice(0, insertIndex),
+          {
+            title: "",
+            key: newKey,
+            isEditing: true,
+            children: [],
+          },
+          ...data.slice(insertIndex),
+        ];
+      }
+
       return insertNode(data);
     };
 
@@ -286,26 +359,6 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
       }
     }
     return null;
-  };
-
-  const handleFinish = async (
-    e:
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.FocusEvent<HTMLInputElement>,
-    key: React.Key,
-  ) => {
-    const value = (e.target as HTMLInputElement).value || "New Folder";
-    try {
-      const result = await onFolderAdd({
-        parentKey: selectedKey ?? undefined,
-        key,
-        title: value,
-      }); // 等待回调结果
-      updateNodeTitle(key, value, result); // 只有当回调返回 true 时才更新节点标题
-    } catch {
-      // 如果回调返回 false，则删除临时添加的节点
-      setTreeData((prevData) => deleteNode(prevData, key));
-    }
   };
 
   const updateNodeTitle = (key: React.Key, title: string, newKey: number) => {
