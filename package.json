@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "docker:db": "docker-compose down && docker-compose up postgres --build -d --remove-orphans",
     "docker": "docker-compose down && docker-compose up --build -d --remove-orphans",
     "everyDay": "pnpm recursive run everyDay && pnpm docker",
     "test": "echo \"Error: no test specified\" && exit 1"
