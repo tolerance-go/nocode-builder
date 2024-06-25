@@ -1,5 +1,5 @@
 import { projectGroupControllerCreateProjectGroup } from "@/services/api/projectGroupControllerCreateProjectGroup";
-import { FolderAddOutlined } from "@ant-design/icons";
+import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Flex, Layout, theme } from "antd";
 import { useRef, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -73,6 +73,14 @@ export const Admin = () => {
                 borderBottom: `1px solid ${token.colorBorderSecondary}`,
               }}
             >
+              <Button
+                type="text"
+                loading={loading}
+                icon={<FileAddOutlined />}
+                onClick={async () => {
+                  treeMenuRef.current?.addFile();
+                }}
+              ></Button>
               <Button
                 type="text"
                 loading={loading}

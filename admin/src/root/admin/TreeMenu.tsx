@@ -10,11 +10,13 @@ const { DirectoryTree } = Tree;
 interface TreeMenuProps {
   initialTreeData: TreeDataNode[]; // 初始化数据从上层传入
   ref: React.Ref<TreeMenuRef>;
+  onFileAdd?: (key: React.Key, title: string) => Promise<boolean>; // 新增文件回调属性，返回 Promise<boolean>
   onFolderAdd?: (key: React.Key, title: string) => Promise<boolean>; // 增加回调属性，返回 Promise<boolean>
 }
 
 export interface TreeMenuRef {
   addFolder: (key?: React.Key) => void;
+  addFile: (key?: React.Key) => void; // 新增 addFile 方法
 }
 
 interface CustomTreeDataNode extends Omit<TreeDataNode, "children"> {
@@ -53,12 +55,14 @@ const TitleComponent = ({
 
 export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
   const { initialTreeData, onFolderAdd } = props; // 获取初始化数据和回调属性
-  const [treeData, setTreeData] = useState<CustomTreeDataNode[]>(initialTreeData);
+  const [treeData, setTreeData] =
+    useState<CustomTreeDataNode[]>(initialTreeData);
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]); // 维护展开状态
   const [selectedKey, setSelectedKey] = useState<React.Key | null>(null); // 维护选中节点的状态
 
   useImperativeHandle(ref, () => ({
     addFolder,
+    addFile, // 暴露 addFile 方法
   }));
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
@@ -69,6 +73,103 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
   const onExpand: DirectoryTreeProps["onExpand"] = (keys, info) => {
     console.log("Trigger Expand", keys, info);
     setExpandedKeys(keys); // 更新展开状态
+  };
+
+  const addFile = (key?: React.Key) => {
+    const newKey = `${key || "root"}-file-${Date.now()}`;
+    const addNode = (
+      data: CustomTreeDataNode[],
+      parentKey?: React.Key,
+    ): CustomTreeDataNode[] => {
+      if (!parentKey) {
+        // 如果没有指定位置，就在所有文件夹后面插入文件，并设置为编辑状态
+        const folderIndex = data.findLastIndex((item) => item.children);
+        const insertIndex = folderIndex === -1 ? 0 : folderIndex + 1;
+        return [
+          ...data.slice(0, insertIndex),
+          {
+            title: "",
+            key: newKey,
+            isEditing: true,
+            isLeaf: true, // 标记为文件
+          },
+          ...data.slice(insertIndex),
+        ];
+      }
+
+      let isInserted = false;
+      const insertNode = (
+        items: CustomTreeDataNode[],
+      ): CustomTreeDataNode[] => {
+        return items.map((item) => {
+          if (item.key === parentKey) {
+            const parentFolder = item;
+            if (parentFolder.children) {
+              // 判断文件夹是否已经展开，如果未展开，则展开它
+              if (!expandedKeys.includes(parentFolder.key)) {
+                setExpandedKeys((prevKeys) => [...prevKeys, parentFolder.key]);
+              }
+              isInserted = true;
+              // 找到所有文件夹后的第一个文件位置插入文件
+              const indexToInsert = parentFolder.children.findIndex(
+                (child) => !child.children,
+              );
+              const insertIndex =
+                indexToInsert === -1
+                  ? parentFolder.children.length
+                  : indexToInsert;
+              const newChildren = [
+                ...parentFolder.children.slice(0, insertIndex),
+                {
+                  title: "",
+                  key: newKey,
+                  isEditing: true,
+                  isLeaf: true, // 标记为文件
+                },
+                ...parentFolder.children.slice(insertIndex),
+              ];
+              return {
+                ...item,
+                children: newChildren,
+              };
+            }
+          }
+          if (item.children && !isInserted) {
+            return {
+              ...item,
+              children: insertNode(item.children),
+            };
+          }
+          return item;
+        });
+      };
+
+      return insertNode(data);
+    };
+
+    setTreeData((prevData) =>
+      addNode(prevData, selectedKey ?? key ?? undefined),
+    ); // 使用选中节点作为默认位置
+  };
+
+  const handleFileFinish = async (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.FocusEvent<HTMLInputElement>,
+    key: React.Key,
+  ) => {
+    const value = (e.target as HTMLInputElement).value || "New File";
+    if (props.onFileAdd) {
+      const result = await props.onFileAdd(key, value); // 等待回调结果
+      if (result) {
+        updateNodeTitle(key, value); // 只有当回调返回 true 时才更新节点标题
+      } else {
+        // 如果回调返回 false，则删除临时添加的节点
+        setTreeData((prevData) => deleteNode(prevData, key));
+      }
+    } else {
+      updateNodeTitle(key, value);
+    }
   };
 
   const addFolder = (key?: React.Key) => {
@@ -122,7 +223,10 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
                 isInserted = true;
                 // 判断文件夹是否已经展开，如果未展开，则展开它
                 if (!expandedKeys.includes(parentFolder.key)) {
-                  setExpandedKeys((prevKeys) => [...prevKeys, parentFolder.key]);
+                  setExpandedKeys((prevKeys) => [
+                    ...prevKeys,
+                    parentFolder.key,
+                  ]);
                 }
                 parentFolder.children = [
                   {
@@ -149,7 +253,9 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
       return insertNode(data);
     };
 
-    setTreeData((prevData) => addNode(prevData, selectedKey ?? key ?? undefined)); // 使用选中节点作为默认位置
+    setTreeData((prevData) =>
+      addNode(prevData, selectedKey ?? key ?? undefined),
+    ); // 使用选中节点作为默认位置
   };
 
   const findParentFolder = (
@@ -248,7 +354,7 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
           <TitleComponent
             title={nodeData.title as string}
             isEditing={(nodeData as CustomTreeDataNode).isEditing}
-            onFinish={handleFinish}
+            onFinish={nodeData.isLeaf ? handleFileFinish : handleFinish}
             newKey={nodeData.key}
           />
         )}
