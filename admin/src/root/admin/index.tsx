@@ -1,9 +1,10 @@
-import { Layout } from "antd";
+import { Layout, theme } from "antd";
 import { Navigate } from "react-router-dom";
 import store from "store2";
 import { TreeMenu } from "./TreeMenu";
 
 export const Admin = () => {
+  const { token } = theme.useToken();
   if (!store.get("token")) {
     return <Navigate to={"/entry/login"} />;
   }
@@ -15,7 +16,12 @@ export const Admin = () => {
         height: "100vh",
       }}
     >
-      <Layout.Sider width={400}>
+      <Layout.Sider
+        width={400}
+        style={{
+          borderRight: `1px solid ${token.colorBorderSecondary}`,
+        }}
+      >
         <TreeMenu />
       </Layout.Sider>
     </Layout>

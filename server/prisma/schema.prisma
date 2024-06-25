@@ -14,20 +14,36 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  email     String?   @unique
-  password  String
-  projects  Project[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  id           Int            @id @default(autoincrement())
+  name         String         @unique
+  email        String?        @unique
+  password     String
+  projects     Project[]
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  projectGroup ProjectGroup[]
 }
 
 model Project {
-  id        Int      @id @default(autoincrement())
-  name      String
-  ownerId   Int
-  owner     User     @relation(fields: [ownerId], references: [id])
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             Int           @id @default(autoincrement())
+  name           String
+  ownerId        Int
+  owner          User          @relation(fields: [ownerId], references: [id])
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  projectGroup   ProjectGroup? @relation(fields: [projectGroupId], references: [id])
+  projectGroupId Int?
+}
+
+model ProjectGroup {
+  id            Int            @id @default(autoincrement())
+  name          String
+  parentGroupId Int?
+  parentGroup   ProjectGroup?  @relation("ChildGroups", fields: [parentGroupId], references: [id])
+  childGroups   ProjectGroup[] @relation("ChildGroups")
+  ownerId       Int
+  owner         User           @relation(fields: [ownerId], references: [id])
+  projects      Project[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
