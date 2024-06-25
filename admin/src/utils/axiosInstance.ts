@@ -1,5 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { notification } from "antd";
+import store from "store2";
 
 // 创建一个 axios 实例
 const axiosInstance = axios.create({
@@ -15,7 +16,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
     // 比如可以在这里添加认证 token
-    const token = localStorage.getItem("token");
+    const token = store.get("token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }

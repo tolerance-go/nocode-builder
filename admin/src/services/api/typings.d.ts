@@ -52,7 +52,6 @@ declare namespace API {
   type ProjectGroupCreateDto = {
     name: string;
     parentGroupId?: number;
-    ownerId: number;
     createdAt?: string;
     updatedAt?: string;
   };
@@ -77,8 +76,6 @@ declare namespace API {
     name?: string;
     /** The parent group ID of the project group */
     parentGroupId?: number;
-    /** The last update date of the project group record */
-    updatedAt?: string;
   };
 
   type UserControllerDeleteUserParams = {
