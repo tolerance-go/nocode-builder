@@ -14,7 +14,7 @@ export class AppService {
     });
   }
 
-  async posts(params: {
+  async apps(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.AppWhereUniqueInput;
