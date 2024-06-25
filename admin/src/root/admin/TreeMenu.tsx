@@ -1,12 +1,18 @@
+import { css } from "@emotion/css";
 import type { GetProps, TreeDataNode } from "antd";
-import { Tree, theme } from "antd";
-import React from "react";
+import { Input, Tree } from "antd";
+import React, {
+  forwardRef,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
 const { DirectoryTree } = Tree;
 
-const treeData: TreeDataNode[] = [
+const initialTreeData: TreeDataNode[] = [
   {
     title: "parent 0",
     key: "0-0",
@@ -25,8 +31,21 @@ const treeData: TreeDataNode[] = [
   },
 ];
 
-export const TreeMenu: React.FC = () => {
-  const { token } = theme.useToken();
+interface TreeMenuProps {
+  ref: React.Ref<TreeMenuRef>;
+}
+
+export interface TreeMenuRef {
+  addFolder: (key?: React.Key) => void;
+}
+
+export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
+  const [treeData, setTreeData] = useState<TreeDataNode[]>(initialTreeData);
+
+  useImperativeHandle(ref, () => ({
+    addFolder,
+  }));
+
   const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
     console.log("Trigger Select", keys, info);
   };
@@ -35,9 +54,102 @@ export const TreeMenu: React.FC = () => {
     console.log("Trigger Expand", keys, info);
   };
 
+  const addFolder = (key?: React.Key) => {
+    const newKey = `${key || "root"}-${Date.now()}`;
+    const addNode = (
+      data: TreeDataNode[],
+      parentKey?: React.Key,
+    ): TreeDataNode[] => {
+      if (!parentKey) {
+        return [
+          ...data,
+          {
+            title: (
+              <Input
+                autoFocus
+                onBlur={(e) => handleFinish(e, newKey)}
+                onPressEnter={(e) => handleFinish(e, newKey)}
+              />
+            ),
+            key: newKey,
+            children: [],
+          },
+        ];
+      }
+      return data.map((item) => {
+        if (item.key === parentKey) {
+          const newFolder = {
+            title: (
+              <Input
+                autoFocus
+                onBlur={(e) => handleFinish(e, newKey)}
+                onPressEnter={(e) => handleFinish(e, newKey)}
+                style={{
+                  width: "100%",
+                }}
+              />
+            ),
+            key: newKey,
+            children: [],
+          };
+          return {
+            ...item,
+            children: [...(item.children || []), newFolder],
+          };
+        }
+        if (item.children) {
+          return {
+            ...item,
+            children: addNode(item.children, parentKey),
+          };
+        }
+        return item;
+      });
+    };
+    setTreeData(addNode(treeData, key));
+  };
+
+  const handleFinish = (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.FocusEvent<HTMLInputElement>,
+    key: React.Key,
+  ) => {
+    const value = (e.target as HTMLInputElement).value || "New Folder";
+    updateNodeTitle(key, value);
+  };
+
+  const updateNodeTitle = (key: React.Key, title: string) => {
+    const updateNode = (data: TreeDataNode[]): TreeDataNode[] => {
+      return data.map((item) => {
+        if (item.key === key) {
+          return { ...item, title };
+        }
+        if (item.children) {
+          return {
+            ...item,
+            children: updateNode(item.children),
+          };
+        }
+        return item;
+      });
+    };
+    setTreeData(updateNode(treeData));
+  };
+
   return (
-    <div style={{}}>
+    <div>
+      <button onClick={() => addFolder("0-0")}>Add Folder to 0-0</button>
+      <button onClick={() => addFolder()}>Add Folder to Root</button>
       <DirectoryTree
+        className={css`
+          .ant-tree-node-content-wrapper {
+            display: inline-flex;
+            .ant-tree-title {
+              flex-grow: 1;
+            }
+          }
+        `}
         multiple
         defaultExpandAll
         onSelect={onSelect}
@@ -46,4 +158,4 @@ export const TreeMenu: React.FC = () => {
       />
     </div>
   );
-};
+});

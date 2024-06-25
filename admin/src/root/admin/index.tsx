@@ -1,15 +1,16 @@
-import { Avatar, Button, Dropdown, Flex, Layout, Popover, theme } from "antd";
-import { Navigate, useNavigate } from "react-router-dom";
-import store from "store2";
-import { TreeMenu } from "./TreeMenu";
 import { projectGroupControllerCreateProjectGroup } from "@/services/api/projectGroupControllerCreateProjectGroup";
 import { FolderAddOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { Avatar, Button, Dropdown, Flex, Layout, theme } from "antd";
+import { useRef, useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+import store from "store2";
+import { TreeMenu, TreeMenuRef } from "./TreeMenu";
 
 export const Admin = () => {
   const [loading, setLoading] = useState(false);
   const { token } = theme.useToken();
   const navigate = useNavigate();
+  const treeMenuRef = useRef<TreeMenuRef>(null);
   if (!store.get("token")) {
     return <Navigate to={"/entry/login"} />;
   }
@@ -56,11 +57,10 @@ export const Admin = () => {
               placement="topRight"
             >
               <Button
-                size="small"
                 type="text"
                 shape="circle"
                 loading={loading}
-                icon={<Avatar size="small" />}
+                icon={<Avatar />}
               ></Button>
             </Dropdown>
           </Flex>
@@ -79,19 +79,19 @@ export const Admin = () => {
               }}
             >
               <Button
-                size="small"
                 type="text"
                 loading={loading}
                 icon={<FolderAddOutlined />}
                 onClick={async () => {
-                  try {
-                    setLoading(true);
-                    await projectGroupControllerCreateProjectGroup({
-                      name: "test",
-                    });
-                  } finally {
-                    setLoading(false);
-                  }
+                  treeMenuRef.current?.addFolder()
+                  // try {
+                  //   setLoading(true);
+                  //   await projectGroupControllerCreateProjectGroup({
+                  //     name: "test",
+                  //   });
+                  // } finally {
+                  //   setLoading(false);
+                  // }
                 }}
               ></Button>
             </Flex>
@@ -100,7 +100,7 @@ export const Admin = () => {
                 flexGrow: 1,
               }}
             >
-              <TreeMenu />
+              <TreeMenu ref={treeMenuRef} />
             </div>
           </Flex>
         </Flex>
