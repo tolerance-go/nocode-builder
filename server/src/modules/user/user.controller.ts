@@ -15,6 +15,7 @@ import { UserUpdateDto } from './dtos/user-update.dto';
 import { UserDto } from './dtos/user.dto';
 import { UserService } from './user.service';
 import bcrypt from 'bcrypt';
+import { toUserDto } from './utils/toUserDto';
 
 @Controller('users')
 export class UserController {
@@ -27,7 +28,8 @@ export class UserController {
     type: UserDto,
   })
   async getUser(@Param('id') id: string): Promise<UserDto | null> {
-    return this.userService.user({ id: Number(id) });
+    const user = await this.userService.user({ id: Number(id) });
+    return user ? toUserDto(user) : null;
   }
 
   @Get()
@@ -37,12 +39,13 @@ export class UserController {
     type: [UserDto],
   })
   async getUsers(@Query() query: UserQueryDto): Promise<UserDto[]> {
-    return this.userService.users({
+    const users = await this.userService.users({
       skip: query.skip,
       take: query.take,
       cursor: query.filter ? { id: Number(query.filter) } : undefined,
       orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
     });
+    return users.map(toUserDto);
   }
 
   @Post()
@@ -57,7 +60,8 @@ export class UserController {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(data.password, salt);
     const newData = { ...data, password: hashedPassword };
-    return this.userService.createUser(newData);
+    const user = await this.userService.createUser(newData);
+    return toUserDto(user);
   }
 
   @Patch(':id')
@@ -71,10 +75,11 @@ export class UserController {
     @Param('id') id: string,
     @Body() data: UserUpdateDto,
   ): Promise<UserDto> {
-    return this.userService.updateUser({
+    const user = await this.userService.updateUser({
       where: { id: Number(id) },
       data,
     });
+    return toUserDto(user);
   }
 
   @Delete(':id')
@@ -84,6 +89,7 @@ export class UserController {
     type: UserDto,
   })
   async deleteUser(@Param('id') id: string): Promise<UserDto> {
-    return this.userService.deleteUser({ id: Number(id) });
+    const user = await this.userService.deleteUser({ id: Number(id) });
+    return toUserDto(user);
   }
 }

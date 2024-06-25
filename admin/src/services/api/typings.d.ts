@@ -1,4 +1,9 @@
 declare namespace API {
+  type LoginDto = {
+    username: string;
+    password: string;
+  };
+
   type ProjectControllerDeleteProjectParams = {
     id: string;
   };
@@ -26,9 +31,13 @@ declare namespace API {
   };
 
   type UserControllerGetUsersParams = {
+    /** Number of records to skip for pagination */
     skip?: number;
+    /** Number of records to take for pagination */
     take?: number;
+    /** Field by which to order the results */
     orderBy?: string;
+    /** Filter condition */
     filter?: string;
   };
 
@@ -45,17 +54,26 @@ declare namespace API {
   };
 
   type UserDto = {
+    /** The unique identifier of the user */
     id: number;
+    /** The name of the user */
     name: string;
+    /** The email address of the user */
     email?: Record<string, any>;
+    /** The date and time when the user was created */
     createdAt: string;
+    /** The date and time when the user was last updated */
     updatedAt: string;
   };
 
   type UserUpdateDto = {
+    /** The name of the user */
     name?: string;
+    /** The email address of the user */
     email?: string;
+    /** The password for the user */
     password?: string;
+    /** The last update date of the user record */
     updatedAt?: string;
   };
 }

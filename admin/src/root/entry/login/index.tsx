@@ -1,16 +1,28 @@
+import { authControllerLogin } from "@/services/api/authControllerLogin";
+import { LoginFormValues } from "@/types/form";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
-  const onFinish = (values: unknown) => {
-    console.log("Received values of form: ", values);
+  const [loading, setLoading] = useState(false);
+  const onFinish = async (values: LoginFormValues) => {
+    try {
+      setLoading(true);
+      await authControllerLogin({
+        username: values.username,
+        password: values.password,
+      });
+      navigate("/admin");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <Form onFinish={onFinish}>
+    <Form<LoginFormValues> onFinish={onFinish}>
       <Form.Item
         name="username"
         rules={[{ required: true, message: "Please input your Username!" }]}
@@ -28,7 +40,7 @@ export const Login: React.FC = () => {
         <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
       </Form.Item>
       <Form.Item>
-        <Button block type="primary" htmlType="submit">
+        <Button loading={loading} block type="primary" htmlType="submit">
           登录
         </Button>
       </Form.Item>
