@@ -18,12 +18,12 @@ model User {
   name      String
   email     String   @unique
   password  String
-  apps      App[]
+  apps      Project[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model App {
+model Project {
   id        Int      @id @default(autoincrement())
   name      String
   ownerId   Int

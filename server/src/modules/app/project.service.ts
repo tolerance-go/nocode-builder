@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { App, Prisma } from '@prisma/client';
+import { Project, Prisma } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
-export class AppService {
+export class ProjectService {
   constructor(private prisma: PrismaService) {}
 
   async app(
-    postWhereUniqueInput: Prisma.AppWhereUniqueInput,
-  ): Promise<App | null> {
+    postWhereUniqueInput: Prisma.ProjectWhereUniqueInput,
+  ): Promise<Project | null> {
     return this.prisma.app.findUnique({
       where: postWhereUniqueInput,
     });
@@ -17,10 +17,10 @@ export class AppService {
   async apps(params: {
     skip?: number;
     take?: number;
-    cursor?: Prisma.AppWhereUniqueInput;
-    where?: Prisma.AppWhereInput;
-    orderBy?: Prisma.AppOrderByWithRelationInput;
-  }): Promise<App[]> {
+    cursor?: Prisma.ProjectWhereUniqueInput;
+    where?: Prisma.ProjectWhereInput;
+    orderBy?: Prisma.ProjectOrderByWithRelationInput;
+  }): Promise<Project[]> {
     const { skip, take, cursor, where, orderBy } = params;
     return this.prisma.app.findMany({
       skip,
@@ -31,16 +31,16 @@ export class AppService {
     });
   }
 
-  async createApp(data: Prisma.AppCreateInput): Promise<App> {
+  async createProject(data: Prisma.ProjectCreateInput): Promise<Project> {
     return this.prisma.app.create({
       data,
     });
   }
 
-  async updateApp(params: {
-    where: Prisma.AppWhereUniqueInput;
-    data: Prisma.AppUpdateInput;
-  }): Promise<App> {
+  async updateProject(params: {
+    where: Prisma.ProjectWhereUniqueInput;
+    data: Prisma.ProjectUpdateInput;
+  }): Promise<Project> {
     const { data, where } = params;
     return this.prisma.app.update({
       data,
@@ -48,7 +48,7 @@ export class AppService {
     });
   }
 
-  async deleteApp(where: Prisma.AppWhereUniqueInput): Promise<App> {
+  async deleteProject(where: Prisma.ProjectWhereUniqueInput): Promise<Project> {
     return this.prisma.app.delete({
       where,
     });

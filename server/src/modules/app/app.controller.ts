@@ -8,7 +8,7 @@ import {
   Patch,
   Delete,
 } from '@nestjs/common';
-import { AppService } from './app.service';
+import { AppService } from './project.service';
 import { Prisma } from '@prisma/client';
 
 @Controller('apps')
