@@ -1,4 +1,4 @@
-import { authControllerLogin } from "@/services/api/authControllerLogin";
+import { login } from "@/services/api/login";
 import { LoginFormValues } from "@/types/form";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
@@ -12,7 +12,7 @@ export const Login: React.FC = () => {
   const onFinish = async (values: LoginFormValues) => {
     try {
       setLoading(true);
-      const { accessToken } = await authControllerLogin({
+      const { accessToken } = await login({
         username: values.username,
         password: values.password,
       });

@@ -1,8 +1,8 @@
-import { projectControllerCreateProject } from "@/services/api/projectControllerCreateProject";
-import { projectGroupControllerCreateProjectGroup } from "@/services/api/projectGroupControllerCreateProjectGroup";
 import { useRef, forwardRef, useImperativeHandle } from "react";
 import { TreeMenuRef, TreeMenu } from "./TreeMenu";
 import store from "@/store";
+import { createProjectGroup } from "@/services/api/createProjectGroup";
+import { createProject } from "@/services/api/createProject";
 
 export const ProjectTree = forwardRef((props, ref) => {
   const treeMenuRef = useRef<TreeMenuRef>(null);
@@ -23,7 +23,7 @@ export const ProjectTree = forwardRef((props, ref) => {
       onFolderAdd={async ({ title, parentKey }) => {
         try {
           store.projects.states.addFolderLoading = true;
-          const result = await projectGroupControllerCreateProjectGroup({
+          const result = await createProjectGroup({
             name: title,
             parentGroupId: parentKey as number,
           });
@@ -35,7 +35,7 @@ export const ProjectTree = forwardRef((props, ref) => {
       onFileAdd={async ({ title, parentKey }) => {
         try {
           store.projects.states.addFileLoading = true;
-          const result = await projectControllerCreateProject({
+          const result = await createProject({
             name: title,
             projectGroupId: parentKey as number,
           });
