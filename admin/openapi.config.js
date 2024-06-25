@@ -7,7 +7,7 @@ generateService({
   hook: {
     /** 自定义函数名称 */
     customFunctionName: (data) => {
-      return data.operationId.split('_')[1];
+      return data.operationId.split("_")[1];
     },
     customFileNames: (operationObject, apiPath) => {
       const operationId = operationObject.operationId;

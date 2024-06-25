@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "exec:remove-ts-ignore": "node scripts/remove-ts-ignore.js",
+    "exec:remove-openapi-unused": "node scripts/remove-openapi-unused.js",
     "openapi": "node openapi.config.js",
     "dev": "vite",
     "build": "tsc && vite build",
