@@ -15,11 +15,13 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Root />}>
+          <Route index element={<Admin />}></Route>
+          <Route path="admin" element={<Admin />}></Route>
           <Route path="entry" element={<Entry />}>
+            <Route index element={<Login />}></Route>
             <Route path="login" element={<Login />}></Route>
             <Route path="register" element={<Register />}></Route>
           </Route>
-          <Route path="admin" element={<Admin />}></Route>
         </Route>
       </Routes>
     </BrowserRouter>

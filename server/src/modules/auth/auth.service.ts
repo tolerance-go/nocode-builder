@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
@@ -17,12 +17,15 @@ export class AuthService {
     const user = await this.usersService.user({
       name: username,
     });
-    if (user && (await bcrypt.compare(pass, user.password))) {
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { password, ...result } = user;
-      return result;
+    if (!user) {
+      throw new UnauthorizedException('用户不存在');
     }
-    return null;
+    if (!(await bcrypt.compare(pass, user.password))) {
+      throw new UnauthorizedException('密码错误');
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = user;
+    return result;
   }
 
   async login(user: User): Promise<LoginResponseDto> {

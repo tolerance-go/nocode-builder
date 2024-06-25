@@ -9,7 +9,6 @@ export const Entry = () => {
   return (
     <Layout
       style={{
-        borderRadius: 8,
         overflow: "hidden",
         height: "100vh",
       }}

@@ -4,6 +4,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import store from "store2";
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ export const Login: React.FC = () => {
         username: values.username,
         password: values.password,
       });
-      localStorage.setItem("token", accessToken);
+      store.set("token", accessToken);
       navigate("/admin");
     } finally {
       setLoading(false);
