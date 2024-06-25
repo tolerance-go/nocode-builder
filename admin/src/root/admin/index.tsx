@@ -1,12 +1,10 @@
-import { addFileLoading, addFolderLoading } from "@/store/projects";
-import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Flex, Layout, theme } from "antd";
 import { useRef } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
-import store from "store2";
+import { AsideHeader } from "./AsideHeader";
 import { ProjectTree } from "./ProjectTree";
 import { TreeMenuRef } from "./ProjectTree/TreeMenu";
-import { AsideHeader } from "./AsideHeader";
+import store from "store2";
 
 export const Admin = () => {
   const { token } = theme.useToken();
