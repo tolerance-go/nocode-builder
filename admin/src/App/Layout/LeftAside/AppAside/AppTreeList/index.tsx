@@ -1,4 +1,4 @@
-import store from "@/stores";
+import store from "@/store";
 import {
   AppstoreOutlined,
   EllipsisOutlined,

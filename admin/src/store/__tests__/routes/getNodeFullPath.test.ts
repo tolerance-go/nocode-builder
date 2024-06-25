@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { states, actions } from "@/stores/routes"; // 替换为实际路径
+import { states, actions } from "@/store/routes"; // 替换为实际路径
 import { RouteNode } from "@/types";
 
 describe("getNodeFullPath", () => {

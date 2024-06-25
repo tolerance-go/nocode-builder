@@ -1,4 +1,4 @@
-import store from "@/stores";
+import store from "@/store";
 import { Button, Form, FormProps, Input, Modal, Space } from "antd";
 import React, { useImperativeHandle, useState } from "react";
 import { useNavigate } from "react-router-dom";

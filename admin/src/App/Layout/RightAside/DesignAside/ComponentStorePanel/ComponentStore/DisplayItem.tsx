@@ -1,7 +1,7 @@
 import { SettingConfig } from "@/components/SettingsForm";
 import { coreEventBus } from "@/globals/coreEventBus";
 import useLatest from "@/hooks/useLatest";
-import store from "@/stores";
+import store from "@/store";
 import { ComponentWidget, NodeData, StaticProps } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { useEffect, useState } from "react";

@@ -1,4 +1,4 @@
-import store from "@/stores";
+import store from "@/store";
 import { Button, Space } from "antd";
 import { useSnapshot } from "valtio";
 import { Location } from "./Location";

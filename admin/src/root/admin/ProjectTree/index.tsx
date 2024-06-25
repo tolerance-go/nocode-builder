@@ -2,7 +2,7 @@ import { projectControllerCreateProject } from "@/services/api/projectController
 import { projectGroupControllerCreateProjectGroup } from "@/services/api/projectGroupControllerCreateProjectGroup";
 import { useRef, forwardRef, useImperativeHandle } from "react";
 import { TreeMenuRef, TreeMenu } from "./TreeMenu";
-import store from "@/stores";
+import store from "@/store";
 
 export const ProjectTree = forwardRef((props, ref) => {
   const treeMenuRef = useRef<TreeMenuRef>(null);

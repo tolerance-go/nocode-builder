@@ -1,4 +1,4 @@
-import store from "@/stores";
+import store from "@/store";
 import { css } from "@emotion/css";
 import type { GetProps, TreeDataNode } from "antd";
 import { Input, Tree } from "antd";

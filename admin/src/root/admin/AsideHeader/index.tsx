@@ -1,4 +1,4 @@
-import store from "@/stores";
+import store from "@/store";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
 import { RefObject } from "react";

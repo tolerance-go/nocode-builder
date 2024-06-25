@@ -1,4 +1,4 @@
-import { addFileLoading, addFolderLoading } from "@/stores/projects";
+import { addFileLoading, addFolderLoading } from "@/store/projects";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Flex, Layout, theme } from "antd";
 import { useRef } from "react";

@@ -2,7 +2,7 @@ import { components } from "@/configs/components";
 import { slotBackground } from "@/configs/styles";
 import { coreEventBus } from "@/globals/coreEventBus";
 import useLatest from "@/hooks/useLatest";
-import store from "@/stores";
+import store from "@/store";
 import {
   InsertionPositions,
   NodeData,

@@ -8,7 +8,7 @@ import * as projects from "./projects";
 import { devtools } from "valtio/utils";
 import { proxy } from "valtio";
 
-const stores = proxy({
+const store = proxy({
   routes,
   designs,
   components,
@@ -17,9 +17,9 @@ const stores = proxy({
   projects,
 });
 
-devtools(stores, {
+devtools(store, {
   name: "stores",
   enabled: import.meta.env.DEV,
 });
 
-export default stores;
+export default store;

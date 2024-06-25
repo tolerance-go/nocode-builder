@@ -1,5 +1,5 @@
 import { PreviewCard } from "@/components/PreviewCard";
-import store from "@/stores";
+import store from "@/store";
 import { EllipsisOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 import { css, cx } from "@emotion/css";
 import { Button, List, Space, Typography } from "antd";
