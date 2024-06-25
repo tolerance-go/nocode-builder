@@ -10,6 +10,8 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Prisma } from '@prisma/client';
+import { ApiBody } from '@nestjs/swagger';
+import { UserCreateDto } from './dtos/user-create.dto';
 
 @Controller('users')
 export class UserController {
@@ -38,6 +40,7 @@ export class UserController {
   }
 
   @Post()
+  @ApiBody({ type: UserCreateDto })
   async createUser(@Body() data: Prisma.UserCreateInput) {
     return this.userService.createUser(data);
   }

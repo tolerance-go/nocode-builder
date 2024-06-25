@@ -34,4 +34,12 @@ declare namespace API {
   type UserControllerUpdateUserParams = {
     id: string;
   };
+
+  type UserCreateDto = {
+    name: string;
+    email?: string;
+    password: string;
+    createdAt?: string;
+    updatedAt?: string;
+  };
 }
