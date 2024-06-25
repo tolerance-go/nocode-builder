@@ -1,11 +1,10 @@
-import { Avatar, Flex, Layout, Space, Typography, theme } from "antd";
-import React from "react";
-import { LoginForm } from "./LoginForm";
 import { css } from "@emotion/css";
+import { Avatar, Flex, Layout, Space, Typography, theme } from "antd";
+import Sider from "antd/es/layout/Sider";
+import { Content } from "antd/es/layout/layout";
+import { Outlet } from "react-router-dom";
 
-const { Sider, Content } = Layout;
-
-export const Login: React.FC = () => {
+export const Entry = () => {
   const { token } = theme.useToken();
   return (
     <Layout
@@ -44,7 +43,7 @@ export const Login: React.FC = () => {
                   下一代无代码开发平台
                 </Typography.Title>
               </Flex>
-              <LoginForm />
+              <Outlet />
             </Flex>
           </div>
         </Flex>

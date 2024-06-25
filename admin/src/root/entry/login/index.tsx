@@ -1,13 +1,14 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Flex, Form, Input, theme } from "antd";
+import { Button, Flex, Form, Input, Layout, theme } from "antd";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-export const LoginForm: React.FC = () => {
+export const Login: React.FC = () => {
+  const { token } = theme.useToken();
+  const navigate = useNavigate();
   const onFinish = (values: unknown) => {
     console.log("Received values of form: ", values);
   };
-
-  const { token } = theme.useToken();
 
   return (
     <Form onFinish={onFinish}>
@@ -27,15 +28,25 @@ export const LoginForm: React.FC = () => {
         <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
       </Form.Item>
       <Form.Item>
-        <Flex vertical gap={token.sizeUnit * 2}>
-          <Button block type="primary" htmlType="submit">
-            登录
-          </Button>
-          <Button block>立即注册</Button>
-          <Button block type="link">
-            忘记密码
-          </Button>
-        </Flex>
+        <Button block type="primary" htmlType="submit">
+          登录
+        </Button>
+      </Form.Item>
+      <Form.Item>
+        <Button
+          block
+          type="link"
+          onClick={() => {
+            navigate("/entry/register");
+          }}
+        >
+          立即注册
+        </Button>
+      </Form.Item>
+      <Form.Item>
+        <Button block type="link">
+          忘记密码
+        </Button>
       </Form.Item>
     </Form>
   );
