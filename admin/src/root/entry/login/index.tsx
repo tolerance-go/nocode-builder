@@ -11,10 +11,11 @@ export const Login: React.FC = () => {
   const onFinish = async (values: LoginFormValues) => {
     try {
       setLoading(true);
-      await authControllerLogin({
+      const { accessToken } = await authControllerLogin({
         username: values.username,
         password: values.password,
       });
+      localStorage.setItem("token", accessToken);
       navigate("/admin");
     } finally {
       setLoading(false);
@@ -25,7 +26,7 @@ export const Login: React.FC = () => {
     <Form<LoginFormValues> onFinish={onFinish}>
       <Form.Item
         name="username"
-        rules={[{ required: true, message: "Please input your Username!" }]}
+        rules={[{ required: true, message: "请输入你的用户名!" }]}
       >
         <Input
           autoFocus
@@ -35,7 +36,7 @@ export const Login: React.FC = () => {
       </Form.Item>
       <Form.Item
         name="password"
-        rules={[{ required: true, message: "Please input your Password!" }]}
+        rules={[{ required: true, message: "请输入你的密码!" }]}
       >
         <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
       </Form.Item>

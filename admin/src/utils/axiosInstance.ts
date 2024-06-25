@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosRequestConfig } from "axios";
 import { notification } from "antd";
 
 // 创建一个 axios 实例
@@ -44,4 +44,13 @@ axiosInstance.interceptors.response.use(
   },
 );
 
-export default axiosInstance;
+// 包装 request 方法
+const request = async <T = unknown>(
+  url: string,
+  config?: AxiosRequestConfig,
+): Promise<T> => {
+  const response = await axiosInstance(url, config);
+  return response as T;
+};
+
+export default request;

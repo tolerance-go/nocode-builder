@@ -14,7 +14,7 @@ import { UserQueryDto } from './dtos/user-query.dto';
 import { UserUpdateDto } from './dtos/user-update.dto';
 import { UserDto } from './dtos/user.dto';
 import { UserService } from './user.service';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { toUserDto } from './utils/toUserDto';
 
 @Controller('users')

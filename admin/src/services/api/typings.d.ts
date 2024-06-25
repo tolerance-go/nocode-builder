@@ -4,6 +4,10 @@ declare namespace API {
     password: string;
   };
 
+  type LoginResponseDto = {
+    accessToken: string;
+  };
+
   type ProjectControllerDeleteProjectParams = {
     id: string;
   };
