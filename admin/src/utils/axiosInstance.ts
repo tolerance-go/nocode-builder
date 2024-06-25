@@ -1,4 +1,5 @@
 import axios from "axios";
+import { notification } from "antd";
 
 // 创建一个 axios 实例
 const axiosInstance = axios.create({
@@ -35,6 +36,10 @@ axiosInstance.interceptors.response.use(
   (error) => {
     // 对响应错误做些什么
     // 可以统一处理错误信息，比如显示通知
+    notification.error({
+      message: "请求错误",
+      description: error.response?.data?.message || error.message || "未知错误",
+    });
     return Promise.reject(error);
   },
 );
