@@ -63,7 +63,7 @@ declare namespace API {
     /** The name of the user */
     name: string;
     /** The email address of the user */
-    email?: Record<string, any>;
+    email?: Record<string, unknown>;
     /** The date and time when the user was created */
     createdAt: string;
     /** The date and time when the user was last updated */

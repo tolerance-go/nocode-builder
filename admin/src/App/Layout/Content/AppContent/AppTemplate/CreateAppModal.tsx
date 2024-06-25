@@ -49,6 +49,7 @@ const CreateAppModal = React.forwardRef<CreateAppModalRef, CreateAppModalProps>(
       stores.apps.actions.addApp({
         id,
         menuTitle: values.name!,
+        terminalType: "mobile"
       });
       handleCancel();
       nav(`/apps/${id}/data`);
