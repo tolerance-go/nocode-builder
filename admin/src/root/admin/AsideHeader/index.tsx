@@ -1,15 +1,9 @@
 import store from "@/store";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
-import { RefObject } from "react";
 import { useSnapshot } from "valtio";
-import { TreeMenuRef } from "../ProjectTree/TreeMenu";
 
-export const AsideHeader = ({
-  treeMenuRef,
-}: {
-  treeMenuRef: RefObject<TreeMenuRef>;
-}) => {
+export const AsideHeader = () => {
   const { addFolderLoading, addFileLoading } = useSnapshot(
     store.projects.states,
   );
@@ -27,7 +21,7 @@ export const AsideHeader = ({
         loading={addFileLoading}
         icon={<FileAddOutlined />}
         onClick={async () => {
-          treeMenuRef.current?.addFile();
+          store.projects.actions.addFile();
         }}
       ></Button>
       <Button
@@ -35,7 +29,7 @@ export const AsideHeader = ({
         loading={addFolderLoading}
         icon={<FolderAddOutlined />}
         onClick={async () => {
-          treeMenuRef.current?.addFolder();
+          store.projects.actions.addFolder();
         }}
       ></Button>
     </Flex>

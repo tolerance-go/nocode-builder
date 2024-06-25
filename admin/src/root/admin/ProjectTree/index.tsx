@@ -1,25 +1,12 @@
-import { useRef, forwardRef, useImperativeHandle } from "react";
-import { TreeMenuRef, TreeMenu } from "./TreeMenu";
-import store from "@/store";
-import { createProjectGroup } from "@/services/api/createProjectGroup";
 import { createProject } from "@/services/api/createProject";
+import { createProjectGroup } from "@/services/api/createProjectGroup";
+import store from "@/store";
+import { TreeMenu } from "./TreeMenu";
 
-export const ProjectTree = forwardRef((props, ref) => {
-  const treeMenuRef = useRef<TreeMenuRef>(null);
-
-  useImperativeHandle(ref, () => ({
-    addFile: () => {
-      treeMenuRef.current?.addFile();
-    },
-    addFolder: () => {
-      treeMenuRef.current?.addFolder();
-    },
-  }));
-
+export const ProjectTree = () => {
   return (
     <TreeMenu
       initialTreeData={[]}
-      ref={treeMenuRef}
       onFolderAdd={async ({ title, parentKey }) => {
         try {
           store.projects.states.addFolderLoading = true;
@@ -46,4 +33,4 @@ export const ProjectTree = forwardRef((props, ref) => {
       }}
     />
   );
-});
+};
