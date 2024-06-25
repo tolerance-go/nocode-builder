@@ -1,15 +1,14 @@
-import { projectGroupControllerCreateProjectGroup } from "@/services/api/projectGroupControllerCreateProjectGroup";
+import { addFileLoading, addFolderLoading } from "@/stores/projects";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Avatar, Button, Dropdown, Flex, Layout, theme } from "antd";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import store from "store2";
-import { TreeMenu, TreeMenuRef } from "./TreeMenu";
-import { projectControllerCreateProject } from "@/services/api/projectControllerCreateProject";
+import { ProjectTree } from "./ProjectTree";
+import { TreeMenuRef } from "./ProjectTree/TreeMenu";
+import { AsideHeader } from "./AsideHeader";
 
 export const Admin = () => {
-  const [addFolderLoading, setAddFolderLoading] = useState(false);
-  const [addFileLoading, setAddFileLoading] = useState(false);
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const treeMenuRef = useRef<TreeMenuRef>(null);
@@ -68,64 +67,13 @@ export const Admin = () => {
               flexGrow: 1,
             }}
           >
-            <Flex
-              justify="end"
-              style={{
-                padding: `${token.sizeXXS}px ${token.sizeXS}px`,
-                borderBottom: `1px solid ${token.colorBorderSecondary}`,
-              }}
-            >
-              <Button
-                type="text"
-                loading={addFileLoading}
-                icon={<FileAddOutlined />}
-                onClick={async () => {
-                  treeMenuRef.current?.addFile();
-                }}
-              ></Button>
-              <Button
-                type="text"
-                loading={addFolderLoading}
-                icon={<FolderAddOutlined />}
-                onClick={async () => {
-                  treeMenuRef.current?.addFolder();
-                }}
-              ></Button>
-            </Flex>
+            <AsideHeader treeMenuRef={treeMenuRef} />
             <div
               style={{
                 flexGrow: 1,
               }}
             >
-              <TreeMenu
-                initialTreeData={[]}
-                ref={treeMenuRef}
-                onFolderAdd={async ({ title, parentKey }) => {
-                  try {
-                    setAddFolderLoading(true);
-                    const result =
-                      await projectGroupControllerCreateProjectGroup({
-                        name: title,
-                        parentGroupId: parentKey as number,
-                      });
-                    return result.id;
-                  } finally {
-                    setAddFolderLoading(false);
-                  }
-                }}
-                onFileAdd={async ({ title, parentKey }) => {
-                  try {
-                    setAddFileLoading(true);
-                    const result = await projectControllerCreateProject({
-                      name: title,
-                      projectGroupId: parentKey as number,
-                    });
-                    return result.id;
-                  } finally {
-                    setAddFileLoading(false);
-                  }
-                }}
-              />
+              <ProjectTree ref={treeMenuRef} />
             </div>
           </Flex>
         </Flex>

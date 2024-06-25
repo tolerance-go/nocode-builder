@@ -3,6 +3,7 @@ import * as components from "./components";
 import * as routes from "./routes";
 import * as apps from "./apps";
 import * as blueMap from "./blueMap";
+import * as projects from "./projects";
 
 import { devtools } from "valtio/utils";
 import { proxy } from "valtio";
@@ -13,6 +14,7 @@ const states = proxy({
   components,
   blueMap,
   apps,
+  projects,
 });
 
 devtools(states, {
