@@ -1,4 +1,4 @@
-import stores from "@/stores";
+import store from "@/stores";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
 import { RefObject } from "react";
@@ -11,7 +11,7 @@ export const AsideHeader = ({
   treeMenuRef: RefObject<TreeMenuRef>;
 }) => {
   const { addFolderLoading, addFileLoading } = useSnapshot(
-    stores.projects.states,
+    store.projects.states,
   );
   const { token } = theme.useToken();
   return (

@@ -1,5 +1,5 @@
 import { PreviewCard } from "@/components/PreviewCard";
-import stores from "@/stores";
+import store from "@/stores";
 import { EllipsisOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 import { css, cx } from "@emotion/css";
 import { Button, List, Space, Typography } from "antd";
@@ -8,7 +8,7 @@ import colors from "tailwindcss/colors";
 import { useSnapshot } from "valtio";
 
 export const AppList = (props: { type: "list" | "card" }) => {
-  const apps = useSnapshot(stores.apps.states.apps);
+  const apps = useSnapshot(store.apps.states.apps);
   const nav = useNavigate();
   // 按照是否收藏排序，收藏的项目排在前面
   const sortedApps = [...apps.list].sort((a, b) => {
@@ -137,7 +137,7 @@ export const AppList = (props: { type: "list" | "card" }) => {
                     type="text"
                     icon={<StarFilled className="text-yellow-400" />}
                     onClick={() => {
-                      stores.apps.actions.unfavoriteApp(item.id);
+                      store.apps.actions.unfavoriteApp(item.id);
                     }}
                   ></Button>
                 ) : (
@@ -148,7 +148,7 @@ export const AppList = (props: { type: "list" | "card" }) => {
                       <StarOutlined className="text-gray-400 group-hover:text-yellow-400 duration-200" />
                     }
                     onClick={() => {
-                      stores.apps.actions.favoriteApp(item.id);
+                      store.apps.actions.favoriteApp(item.id);
                     }}
                   ></Button>
                 )}

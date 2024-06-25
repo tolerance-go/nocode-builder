@@ -1,5 +1,5 @@
 import SettingsForm from "@/components/SettingsForm";
-import stores from "@/stores";
+import store from "@/stores";
 import { NodeData } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { Empty, Form } from "antd";
@@ -11,7 +11,7 @@ const ComponentSettingsFormCore: React.FC<{
 }> = ({ selectedNodeData }) => {
   const [form] = Form.useForm();
 
-  const selectedNodeFromWidget = stores.components.actions.findWidgetById(
+  const selectedNodeFromWidget = store.components.actions.findWidgetById(
     selectedNodeData.fromWidgetId
   );
 
@@ -27,7 +27,7 @@ const ComponentSettingsFormCore: React.FC<{
       <SettingsForm
         form={form}
         onChange={(values) => {
-          stores.designs.actions.updateNodeSettings(
+          store.designs.actions.updateNodeSettings(
             selectedNodeData.id,
             values
           );
@@ -40,7 +40,7 @@ const ComponentSettingsFormCore: React.FC<{
 
 const ComponentSettingsForm: React.FC = () => {
   const uniqueSelectedNodeData = useSnapshot(
-    stores.designs.states.uniqueSelectedNodeData
+    store.designs.states.uniqueSelectedNodeData
   );
 
   if (!uniqueSelectedNodeData.nodeData) {

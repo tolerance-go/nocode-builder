@@ -2,7 +2,7 @@ import {
   widgetEventGroupsByType,
   widgetEventsByType,
 } from "@/configs/widgetEvent";
-import stores from "@/stores";
+import store from "@/stores";
 import { SearchParams } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { useSearchData } from "@/utils/useSearchData";
@@ -29,13 +29,13 @@ const EventTree: React.FC = () => {
   });
 
   const uniqueSelectedNodeData = useSnapshot(
-    stores.designs.states.uniqueSelectedNodeData
+    store.designs.states.uniqueSelectedNodeData
   );
 
   if (!uniqueSelectedNodeData.nodeData) return null;
 
   const fromWidgetId = uniqueSelectedNodeData.nodeData.fromWidgetId;
-  const widgetData = stores.components.actions.findWidgetById(fromWidgetId);
+  const widgetData = store.components.actions.findWidgetById(fromWidgetId);
 
   const supportEvents =
     widgetData?.supportEvents?.map((type) => {

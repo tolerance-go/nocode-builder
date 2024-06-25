@@ -1,22 +1,21 @@
 declare namespace API {
-  type LoginDto = {
-    username: string;
-    password: string;
-  };
-
-  type LoginResponseDto = {
-    accessToken: string;
-  };
-
-  type ProjectControllerDeleteProjectParams = {
+  type deleteProjectGroupParams = {
     id: string;
   };
 
-  type ProjectControllerGetProjectParams = {
+  type deleteProjectParams = {
     id: string;
   };
 
-  type ProjectControllerGetProjectsParams = {
+  type deleteUserParams = {
+    id: string;
+  };
+
+  type getProjectGroupParams = {
+    id: string;
+  };
+
+  type getProjectGroupsParams = {
     /** Number of records to skip for pagination */
     skip?: number;
     /** Number of records to take for pagination */
@@ -27,8 +26,43 @@ declare namespace API {
     filter?: string;
   };
 
-  type ProjectControllerUpdateProjectParams = {
+  type getProjectParams = {
     id: string;
+  };
+
+  type getProjectsParams = {
+    /** Number of records to skip for pagination */
+    skip?: number;
+    /** Number of records to take for pagination */
+    take?: number;
+    /** Field by which to order the results */
+    orderBy?: string;
+    /** Filter condition */
+    filter?: string;
+  };
+
+  type getUserParams = {
+    id: string;
+  };
+
+  type getUsersParams = {
+    /** Number of records to skip for pagination */
+    skip?: number;
+    /** Number of records to take for pagination */
+    take?: number;
+    /** Field by which to order the results */
+    orderBy?: string;
+    /** Filter condition */
+    filter?: string;
+  };
+
+  type LoginDto = {
+    username: string;
+    password: string;
+  };
+
+  type LoginResponseDto = {
+    accessToken: string;
   };
 
   type ProjectCreateDto = {
@@ -51,29 +85,6 @@ declare namespace API {
     createdAt: string;
     /** The date and time when the project was last updated */
     updatedAt: string;
-  };
-
-  type ProjectGroupControllerDeleteProjectGroupParams = {
-    id: string;
-  };
-
-  type ProjectGroupControllerGetProjectGroupParams = {
-    id: string;
-  };
-
-  type ProjectGroupControllerGetProjectGroupsParams = {
-    /** Number of records to skip for pagination */
-    skip?: number;
-    /** Number of records to take for pagination */
-    take?: number;
-    /** Field by which to order the results */
-    orderBy?: string;
-    /** Filter condition */
-    filter?: string;
-  };
-
-  type ProjectGroupControllerUpdateProjectGroupParams = {
-    id: string;
   };
 
   type ProjectGroupCreateDto = {
@@ -112,26 +123,15 @@ declare namespace API {
     projectGroupId?: number;
   };
 
-  type UserControllerDeleteUserParams = {
+  type updateProjectGroupParams = {
     id: string;
   };
 
-  type UserControllerGetUserParams = {
+  type updateProjectParams = {
     id: string;
   };
 
-  type UserControllerGetUsersParams = {
-    /** Number of records to skip for pagination */
-    skip?: number;
-    /** Number of records to take for pagination */
-    take?: number;
-    /** Field by which to order the results */
-    orderBy?: string;
-    /** Filter condition */
-    filter?: string;
-  };
-
-  type UserControllerUpdateUserParams = {
+  type updateUserParams = {
     id: string;
   };
 

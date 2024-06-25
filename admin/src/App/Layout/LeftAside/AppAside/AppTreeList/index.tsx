@@ -1,4 +1,4 @@
-import stores from "@/stores";
+import store from "@/stores";
 import {
   AppstoreOutlined,
   EllipsisOutlined,
@@ -19,8 +19,8 @@ type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 const { DirectoryTree } = Tree;
 
 const AppTreeList: React.FC = () => {
-  const appsSnapshot = useSnapshot(stores.apps.states.apps);
-  const appGroupsSnapshot = useSnapshot(stores.apps.states.appGroups);
+  const appsSnapshot = useSnapshot(store.apps.states.apps);
+  const appGroupsSnapshot = useSnapshot(store.apps.states.appGroups);
   const navigate = useNavigate();
   const match = useMatch("/apps/:id?");
 
@@ -88,7 +88,7 @@ const AppTreeList: React.FC = () => {
                       key: "1",
                       label: "删除",
                       onClick: () => {
-                        stores.apps.actions.removeApp(data.key);
+                        store.apps.actions.removeApp(data.key);
                       },
                     },
                   ],
@@ -106,7 +106,7 @@ const AppTreeList: React.FC = () => {
                 className="more-btn star-btn opacity-0"
                 onClick={(e) => {
                   e.stopPropagation();
-                  stores.apps.actions.favoriteApp(data.key);
+                  store.apps.actions.favoriteApp(data.key);
                 }}
                 size="small"
                 type="text"

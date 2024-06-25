@@ -2,12 +2,12 @@
 /* eslint-disable */
 import request from '@/utils/axiosInstance';
 
-/** 此处后端没有提供注释 POST /projects */
-export async function projectControllerCreateProject(
-  body: API.ProjectCreateDto,
+/** 此处后端没有提供注释 POST /project-groups */
+export async function createProjectGroup(
+  body: API.ProjectGroupCreateDto,
   options?: { [key: string]: any },
 ) {
-  return request<API.ProjectDto>('/projects', {
+  return request<API.ProjectGroupDto>('/project-groups', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

@@ -4,7 +4,7 @@ import type { TreeDataNode, TreeProps } from "antd";
 import { css } from "@emotion/css";
 import { NodeData } from "@/types";
 import { useSnapshot } from "valtio";
-import stores from "@/stores";
+import store from "@/stores";
 import { DeepReadonly } from "@/utils/types";
 
 const convertNodeDataToTreeData = (
@@ -22,12 +22,12 @@ const convertNodeDataToTreeData = (
 };
 
 const TreeList: React.FC = () => {
-  const designTreeData = useSnapshot(stores.designs.states.designTreeData);
+  const designTreeData = useSnapshot(store.designs.states.designTreeData);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
 
   const onSelect: TreeProps["onSelect"] = (selectedKeys) => {
-    stores.designs.actions.selectNode(selectedKeys as string[]);
+    store.designs.actions.selectNode(selectedKeys as string[]);
   };
 
   const onCheck: TreeProps["onCheck"] = (checkedKeys, info) => {

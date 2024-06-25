@@ -1,4 +1,4 @@
-import stores from "@/stores";
+import store from "@/stores";
 import { css } from "@emotion/css";
 import type { GetProps, TreeDataNode } from "antd";
 import { Input, Tree } from "antd";
@@ -63,12 +63,12 @@ const TitleComponent = ({
   );
 };
 
-const actions = stores.projects.actions;
+const actions = store.projects.actions;
 
 export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
   const { initialTreeData, onFolderAdd, onFileAdd } = props; // 获取初始化数据和回调属性
 
-  const { treeData, expandedKeys } = useSnapshot(stores.projects.states);
+  const { treeData, expandedKeys } = useSnapshot(store.projects.states);
 
   console.log("treeData", treeData);
 

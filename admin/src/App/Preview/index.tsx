@@ -1,4 +1,4 @@
-import stores from "@/stores";
+import store from "@/stores";
 import { RouteNodeData } from "@/types";
 import { generateRouteComponents } from "@/utils/generateRouteComponents";
 import { renderNodes } from "@/utils/renderNodes";
@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { useSnapshot } from "valtio";
 
 export const Preview = () => {
-  const designTreeData = useSnapshot(stores.designs.states.designTreeData);
+  const designTreeData = useSnapshot(store.designs.states.designTreeData);
 
   return (
     <BrowserRouter basename="/preview">

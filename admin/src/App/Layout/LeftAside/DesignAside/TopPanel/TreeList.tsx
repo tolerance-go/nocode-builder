@@ -1,6 +1,6 @@
 import { coreEventBus } from "@/globals/coreEventBus";
 import useLatest from "@/hooks/useLatest";
-import stores from "@/stores";
+import store from "@/stores";
 import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { PlusOutlined } from "@ant-design/icons";
@@ -22,7 +22,7 @@ const TreeList: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const pathname = searchParams.get("pathname");
 
-  const snapshot = useSnapshot(stores.routes.states.routeNodes);
+  const snapshot = useSnapshot(store.routes.states.routeNodes);
   const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
   const [expandedKeys, setExpandedKeys] = useState<string[]>([]);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
@@ -49,10 +49,10 @@ const TreeList: React.FC = () => {
     const newPath = inputRef.current?.input?.value.trim();
     if (newPath && isValidPath(newPath, nodeId)) {
       // 更新节点路径
-      stores.routes.actions.updateNode(nodeId, { path: newPath });
+      store.routes.actions.updateNode(nodeId, { path: newPath });
     } else {
       // 如果输入无效，删除节点
-      stores.routes.actions.deleteNode(nodeId);
+      store.routes.actions.deleteNode(nodeId);
     }
     setEditingKey(null);
     setInputStatus(undefined);
@@ -117,7 +117,7 @@ const TreeList: React.FC = () => {
       path: parentId ? "" : "/",
       children: [],
     };
-    stores.routes.actions.addNode(parentId, newNode);
+    store.routes.actions.addNode(parentId, newNode);
     setEditingKey(newNode.id);
     setInputStatus(undefined);
     if (parentId) {
@@ -126,13 +126,13 @@ const TreeList: React.FC = () => {
   };
 
   const deleteNode = (nodeId: string) => {
-    stores.routes.actions.deleteNode(nodeId);
+    store.routes.actions.deleteNode(nodeId);
   };
 
   const onSelect: TreeProps["onSelect"] = (selectedKeys) => {
     if (selectedKeys.length > 0) {
       const nodeId = selectedKeys[0] as string;
-      const fullPath = stores.routes.actions.getNodeFullPath(nodeId);
+      const fullPath = store.routes.actions.getNodeFullPath(nodeId);
       if (fullPath) {
         coreEventBus.emit("stageNavigate", { to: fullPath });
       }
@@ -242,7 +242,7 @@ const TreeList: React.FC = () => {
       currentPath: string
     ): boolean => {
       for (const node of nodes) {
-        if (stores.routes.actions.getNodeFullPath(node.id) === currentPath) {
+        if (store.routes.actions.getNodeFullPath(node.id) === currentPath) {
           defaultSelectedKeys.push(node.id);
           return true;
         }
