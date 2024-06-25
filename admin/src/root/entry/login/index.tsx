@@ -1,10 +1,9 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Flex, Form, Input, Layout, theme } from "antd";
+import { Button, Form, Input } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Login: React.FC = () => {
-  const { token } = theme.useToken();
   const navigate = useNavigate();
   const onFinish = (values: unknown) => {
     console.log("Received values of form: ", values);
@@ -17,6 +16,7 @@ export const Login: React.FC = () => {
         rules={[{ required: true, message: "Please input your Username!" }]}
       >
         <Input
+          autoFocus
           prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="用户名"
         />

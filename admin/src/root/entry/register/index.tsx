@@ -30,6 +30,7 @@ export const Register: React.FC = () => {
         rules={[{ required: true, message: "请输入你的用户名!" }]}
       >
         <Input
+          autoFocus
           prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="用户名"
         />
