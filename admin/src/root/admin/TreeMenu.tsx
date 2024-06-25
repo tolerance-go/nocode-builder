@@ -1,12 +1,7 @@
 import { css } from "@emotion/css";
 import type { GetProps, TreeDataNode } from "antd";
 import { Input, Tree } from "antd";
-import React, {
-  forwardRef,
-  useImperativeHandle,
-  useRef,
-  useState,
-} from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
@@ -33,6 +28,7 @@ const initialTreeData: TreeDataNode[] = [
 
 interface TreeMenuProps {
   ref: React.Ref<TreeMenuRef>;
+  onFolderAdd?: (key: React.Key, title: string) => Promise<boolean>; // 增加回调属性，返回 Promise<boolean>
 }
 
 export interface TreeMenuRef {
@@ -40,6 +36,7 @@ export interface TreeMenuRef {
 }
 
 export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
+  const { onFolderAdd } = props; // 获取回调属性
   const [treeData, setTreeData] = useState<TreeDataNode[]>(initialTreeData);
 
   useImperativeHandle(ref, () => ({
@@ -109,14 +106,21 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
     setTreeData(addNode(treeData, key));
   };
 
-  const handleFinish = (
+  const handleFinish = async (
     e:
       | React.KeyboardEvent<HTMLInputElement>
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
   ) => {
     const value = (e.target as HTMLInputElement).value || "New Folder";
-    updateNodeTitle(key, value);
+    if (onFolderAdd) {
+      const result = await onFolderAdd(key, value); // 等待回调结果
+      if (result) {
+        updateNodeTitle(key, value); // 只有当回调返回 true 时才更新节点标题
+      }
+    } else {
+      updateNodeTitle(key, value);
+    }
   };
 
   const updateNodeTitle = (key: React.Key, title: string) => {

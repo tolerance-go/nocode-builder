@@ -59,7 +59,6 @@ export const Admin = () => {
               <Button
                 type="text"
                 shape="circle"
-                loading={loading}
                 icon={<Avatar />}
               ></Button>
             </Dropdown>
@@ -83,15 +82,7 @@ export const Admin = () => {
                 loading={loading}
                 icon={<FolderAddOutlined />}
                 onClick={async () => {
-                  treeMenuRef.current?.addFolder()
-                  // try {
-                  //   setLoading(true);
-                  //   await projectGroupControllerCreateProjectGroup({
-                  //     name: "test",
-                  //   });
-                  // } finally {
-                  //   setLoading(false);
-                  // }
+                  treeMenuRef.current?.addFolder();
                 }}
               ></Button>
             </Flex>
@@ -100,7 +91,20 @@ export const Admin = () => {
                 flexGrow: 1,
               }}
             >
-              <TreeMenu ref={treeMenuRef} />
+              <TreeMenu
+                ref={treeMenuRef}
+                onFolderAdd={async (_key, title) => {
+                  try {
+                    setLoading(true);
+                    await projectGroupControllerCreateProjectGroup({
+                      name: title,
+                    });
+                    return true;
+                  } finally {
+                    setLoading(false);
+                  }
+                }}
+              />
             </div>
           </Flex>
         </Flex>
