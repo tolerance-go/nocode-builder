@@ -30,7 +30,7 @@ export const Entry = () => {
               translate: 0 -20%;
             `}
           >
-            <Flex vertical gap={token.sizeUnit * 10}>
+            <Flex vertical gap={token.sizeXXL}>
               <Flex
                 vertical
                 style={{
@@ -61,7 +61,7 @@ export const Entry = () => {
               translate: 0 -20%;
             `}
           >
-            <Flex vertical gap={token.sizeUnit * 10} align="end">
+            <Flex vertical gap={token.sizeXXL} align="end">
               <Typography.Text>
                 “
                 <Typography.Text italic>
@@ -73,7 +73,7 @@ export const Entry = () => {
 
               <Space size="middle">
                 <Avatar size={"large"} />
-                <Space direction="vertical" size={token.sizeUnit / 4}>
+                <Space direction="vertical" size={token.sizeXXS / 4}>
                   <Typography.Text strong>周天宇</Typography.Text>
                   <Typography.Text type="secondary">
                     光大证券高级产品经理

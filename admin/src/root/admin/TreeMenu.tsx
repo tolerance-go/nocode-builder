@@ -1,7 +1,9 @@
+import { authControllerLogin } from "@/services/api/authControllerLogin";
+import { projectGroupControllerCreateProjectGroup } from "@/services/api/projectGroupControllerCreateProjectGroup";
 import { FolderAddOutlined } from "@ant-design/icons";
 import type { GetProps, TreeDataNode } from "antd";
 import { Button, Flex, Tree, theme } from "antd";
-import React from "react";
+import React, { useState } from "react";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
@@ -28,6 +30,7 @@ const treeData: TreeDataNode[] = [
 
 export const TreeMenu: React.FC = () => {
   const { token } = theme.useToken();
+  const [loading, setLoading] = useState(false);
   const onSelect: DirectoryTreeProps["onSelect"] = (keys, info) => {
     console.log("Trigger Select", keys, info);
   };
@@ -49,7 +52,23 @@ export const TreeMenu: React.FC = () => {
           border: `1px solid ${token.colorBorderSecondary}`,
         }}
       >
-        <Button size="small" type="text" icon={<FolderAddOutlined />}></Button>
+        <Button
+          size="small"
+          type="text"
+          loading={loading}
+          icon={<FolderAddOutlined />}
+          onClick={async () => {
+            try {
+              setLoading(true);
+              await projectGroupControllerCreateProjectGroup({
+                username: values.username,
+                password: values.password,
+              });
+            } finally {
+              setLoading(false);
+            }
+          }}
+        ></Button>
       </Flex>
       <DirectoryTree
         multiple

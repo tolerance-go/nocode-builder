@@ -7,6 +7,8 @@ import {
   Patch,
   Post,
   Query,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { ProjectGroupCreateDto } from './dtos/project-group-create.dto';
@@ -15,6 +17,9 @@ import { ProjectGroupUpdateDto } from './dtos/project-group-update.dto';
 import { ProjectGroupDto } from './dtos/project-group.dto';
 import { ProjectGroupService } from './project-group.service';
 import { toProjectGroupDto } from './utils/toProjectGroupDto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtPayloadDto } from '../auth/dtos/jwt-payload.dto';
+import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
 
 @Controller('project-groups')
 export class ProjectGroupController {
@@ -54,6 +59,7 @@ export class ProjectGroupController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: ProjectGroupCreateDto })
   @ApiResponse({
     status: 201,
@@ -63,12 +69,14 @@ export class ProjectGroupController {
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async createProjectGroup(
     @Body() data: ProjectGroupCreateDto,
+    @Req() req: Request & { user: JwtUserDto },
   ): Promise<ProjectGroupDto> {
+    const userId = req.user.id;
     const projectGroup = await this.projectGroupService.createProjectGroup({
       ...data,
       owner: {
         connect: {
-          id: data.ownerId,
+          id: userId,
         },
       },
     });

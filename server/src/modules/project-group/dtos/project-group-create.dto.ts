@@ -18,11 +18,6 @@ export class ProjectGroupCreateDto {
   @IsOptional()
   parentGroupId?: number;
 
-  @ApiProperty()
-  @IsInt()
-  @IsNotEmpty()
-  ownerId: number;
-
   @ApiProperty({ required: false })
   @IsDateString()
   @IsOptional()
