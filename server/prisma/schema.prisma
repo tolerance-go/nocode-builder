@@ -21,7 +21,7 @@ model User {
   projects     Project[]
   createdAt    DateTime       @default(now())
   updatedAt    DateTime       @updatedAt
-  projectGroup ProjectGroup[]
+  projectGroups ProjectGroup[]
 }
 
 model Project {
