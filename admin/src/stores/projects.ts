@@ -1,21 +1,13 @@
 import { CustomTreeDataNode } from "@/root/admin/ProjectTree/TreeMenu";
 import { proxy } from "valtio";
 
-const addFolderLoading = proxy({
-  loading: false,
-});
-
-const addFileLoading = proxy({
-  loading: false,
-});
-
 // 定义状态
 export const states = proxy({
   treeData: [] as CustomTreeDataNode[],
   expandedKeys: [] as React.Key[],
   selectedKey: null as React.Key | null,
-  addFolderLoading,
-  addFileLoading,
+  addFolderLoading: false,
+  addFileLoading: false,
 });
 
 const findParentNode = (

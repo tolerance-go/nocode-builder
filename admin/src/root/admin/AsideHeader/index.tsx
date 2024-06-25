@@ -10,8 +10,9 @@ export const AsideHeader = ({
 }: {
   treeMenuRef: RefObject<TreeMenuRef>;
 }) => {
-  const addFileLoading = useSnapshot(stores.projects.states.addFileLoading);
-  const addFolderLoading = useSnapshot(stores.projects.states.addFolderLoading);
+  const { addFolderLoading, addFileLoading } = useSnapshot(
+    stores.projects.states,
+  );
   const { token } = theme.useToken();
   return (
     <Flex
@@ -23,7 +24,7 @@ export const AsideHeader = ({
     >
       <Button
         type="text"
-        loading={addFileLoading.loading}
+        loading={addFileLoading}
         icon={<FileAddOutlined />}
         onClick={async () => {
           treeMenuRef.current?.addFile();
@@ -31,7 +32,7 @@ export const AsideHeader = ({
       ></Button>
       <Button
         type="text"
-        loading={addFolderLoading.loading}
+        loading={addFolderLoading}
         icon={<FolderAddOutlined />}
         onClick={async () => {
           treeMenuRef.current?.addFolder();
