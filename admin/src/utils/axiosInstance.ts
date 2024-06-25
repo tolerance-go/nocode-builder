@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
     // 可以统一处理错误信息，比如显示通知
     notification.error({
       message: "请求错误",
-      description: error.response?.data?.message || error.message || "未知错误",
+      description: error.response?.data?.message || error.message || "未知问题",
     });
     return Promise.reject(error);
   },
