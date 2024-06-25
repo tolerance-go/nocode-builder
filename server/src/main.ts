@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,6 +13,18 @@ async function bootstrap() {
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
+
+  const configService = app.get(ConfigService);
+  const isDevelopment = configService.get('NODE_ENV') === 'development';
+
+  // 启用 CORS
+  if (isDevelopment) {
+    app.enableCors({
+      origin: '*', // 允许所有域名访问，注意：生产环境下建议指定具体域名
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+      credentials: true,
+    });
+  }
 
   await app.listen(3000);
 }

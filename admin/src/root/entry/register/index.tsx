@@ -1,17 +1,18 @@
 import { userControllerCreateUser } from "@/services/api/userControllerCreateUser";
 import { RegisterFormValues } from "@/types/form";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input, theme } from "antd";
+import { Button, Form, Input } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Register: React.FC = () => {
-  const { token } = theme.useToken();
   const navigate = useNavigate();
 
-  const onFinish = (values: RegisterFormValues) => {
-    console.log("Received values of form: ", values);
-    userControllerCreateUser({})
+  const onFinish = async (values: RegisterFormValues) => {
+    await userControllerCreateUser({
+      name: values.username,
+      password: values.password,
+    });
   };
 
   return (
