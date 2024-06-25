@@ -17,6 +17,7 @@ export const Register: React.FC = () => {
         name: values.username,
         password: values.password,
       });
+      navigate("/entry/login");
     } finally {
       setLoading(false);
     }

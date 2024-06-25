@@ -9,7 +9,7 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Prisma } from '@prisma/client';
+import { Prisma, User } from '@prisma/client';
 import { ApiBody } from '@nestjs/swagger';
 import { UserCreateDto } from './dtos/user-create.dto';
 
@@ -41,7 +41,7 @@ export class UserController {
 
   @Post()
   @ApiBody({ type: UserCreateDto })
-  async createUser(@Body() data: Prisma.UserCreateInput) {
+  async createUser(@Body() data: Prisma.UserCreateInput): Promise<User> {
     return this.userService.createUser(data);
   }
 
