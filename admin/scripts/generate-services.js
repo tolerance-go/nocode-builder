@@ -5,7 +5,7 @@ import path from "path";
 const swaggerPath = path.resolve("src", "api", "swagger.json");
 const swaggerData = JSON.parse(fs.readFileSync(swaggerPath, "utf8"));
 
-const outputDir = path.resolve("src", "services");
+const outputDir = path.resolve("src", "api", "services");
 
 // 创建服务目录
 if (!fs.existsSync(outputDir)) {
