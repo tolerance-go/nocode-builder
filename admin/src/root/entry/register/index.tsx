@@ -1,10 +1,9 @@
+import { userControllerCreateUser } from "@/services/api/userControllerCreateUser";
 import { RegisterFormValues } from "@/types/form";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Flex, Form, Input, theme } from "antd";
+import { Button, Form, Input, theme } from "antd";
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import useAxios from 'axios-hooks'
-import axiosInstance from "@/utils/axiosInstance";
 
 export const Register: React.FC = () => {
   const { token } = theme.useToken();
@@ -12,7 +11,7 @@ export const Register: React.FC = () => {
 
   const onFinish = (values: RegisterFormValues) => {
     console.log("Received values of form: ", values);
-    axiosInstance.post()
+    userControllerCreateUser({})
   };
 
   return (
