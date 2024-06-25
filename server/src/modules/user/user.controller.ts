@@ -14,6 +14,7 @@ import { UserQueryDto } from './dtos/user-query.dto';
 import { UserUpdateDto } from './dtos/user-update.dto';
 import { UserDto } from './dtos/user.dto';
 import { UserService } from './user.service';
+import bcrypt from 'bcrypt';
 
 @Controller('users')
 export class UserController {
@@ -53,7 +54,10 @@ export class UserController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async createUser(@Body() data: UserCreateDto): Promise<UserDto> {
-    return this.userService.createUser(data);
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(data.password, salt);
+    const newData = { ...data, password: hashedPassword };
+    return this.userService.createUser(newData);
   }
 
   @Patch(':id')
