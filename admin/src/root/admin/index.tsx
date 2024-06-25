@@ -56,11 +56,7 @@ export const Admin = () => {
               }}
               placement="topRight"
             >
-              <Button
-                type="text"
-                shape="circle"
-                icon={<Avatar />}
-              ></Button>
+              <Button type="text" shape="circle" icon={<Avatar />}></Button>
             </Dropdown>
           </Flex>
           <Flex
@@ -92,6 +88,24 @@ export const Admin = () => {
               }}
             >
               <TreeMenu
+                initialTreeData={[
+                  {
+                    title: "parent 0",
+                    key: "0-0",
+                    children: [
+                      { title: "leaf 0-0", key: "0-0-0", isLeaf: true },
+                      { title: "leaf 0-1", key: "0-0-1", isLeaf: true },
+                    ],
+                  },
+                  {
+                    title: "parent 1",
+                    key: "0-1",
+                    children: [
+                      { title: "leaf 1-0", key: "0-1-0", isLeaf: true },
+                      { title: "leaf 1-1", key: "0-1-1", isLeaf: true },
+                    ],
+                  },
+                ]}
                 ref={treeMenuRef}
                 onFolderAdd={async (_key, title) => {
                   try {
