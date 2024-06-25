@@ -2,17 +2,24 @@ import { userControllerCreateUser } from "@/services/api/userControllerCreateUse
 import { RegisterFormValues } from "@/types/form";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Form, Input } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Register: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
 
   const onFinish = async (values: RegisterFormValues) => {
-    await userControllerCreateUser({
-      name: values.username,
-      password: values.password,
-    });
+    try {
+      setLoading(true);
+      await userControllerCreateUser({
+        name: values.username,
+        password: values.password,
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -55,7 +62,7 @@ export const Register: React.FC = () => {
         />
       </Form.Item>
       <Form.Item>
-        <Button block type="primary" htmlType="submit">
+        <Button loading={loading} block type="primary" htmlType="submit">
           立即注册
         </Button>
       </Form.Item>
