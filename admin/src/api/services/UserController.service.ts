@@ -3,7 +3,7 @@ import axiosInstance from '@/utils/axiosInstance';
 import { paths } from '@/api/types';
 
 
-export const getUser = async (params?: paths["/users/{id}"]["get"]["parameters"]) => {
+export const getUser = async (params: paths["/users/{id}"]["get"]["parameters"]) => {
   const response = await axiosInstance({
     url: `/users/${params.path.id}`,
     method: 'get',
@@ -13,7 +13,7 @@ export const getUser = async (params?: paths["/users/{id}"]["get"]["parameters"]
 };
 
 
-export const updateUser = async (params?: paths["/users/{id}"]["patch"]["parameters"]) => {
+export const updateUser = async (params: paths["/users/{id}"]["patch"]["parameters"]) => {
   const response = await axiosInstance({
     url: `/users/${params.path.id}`,
     method: 'patch',
@@ -23,7 +23,7 @@ export const updateUser = async (params?: paths["/users/{id}"]["patch"]["paramet
 };
 
 
-export const deleteUser = async (params?: paths["/users/{id}"]["delete"]["parameters"]) => {
+export const deleteUser = async (params: paths["/users/{id}"]["delete"]["parameters"]) => {
   const response = await axiosInstance({
     url: `/users/${params.path.id}`,
     method: 'delete',
@@ -33,7 +33,7 @@ export const deleteUser = async (params?: paths["/users/{id}"]["delete"]["parame
 };
 
 
-export const getUsers = async (params?: paths["/users"]["get"]["parameters"]) => {
+export const getUsers = async (params: paths["/users"]["get"]["parameters"]) => {
   const response = await axiosInstance({
     url: `/users`,
     method: 'get',
@@ -43,7 +43,7 @@ export const getUsers = async (params?: paths["/users"]["get"]["parameters"]) =>
 };
 
 
-export const createUser = async (params?: paths["/users"]["post"]["parameters"]) => {
+export const createUser = async (params: paths["/users"]["post"]["parameters"]) => {
   const response = await axiosInstance({
     url: `/users`,
     method: 'post',

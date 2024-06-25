@@ -55,7 +55,7 @@ import { paths } from '@/api/types';
       const responseType = `paths["${route}"]["${method}"]["responses"][200]`;
 
       return `
-export const ${functionName} = async (params?: ${paramsType}) => {
+export const ${functionName} = async (params: ${paramsType}) => {
   const response = await axiosInstance({
     url: \`${convertPathParams(route)}\`,
     method: '${method}',

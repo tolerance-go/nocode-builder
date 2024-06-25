@@ -20,32 +20,32 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/apps/{id}": {
+    "/projects/{id}": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AppController_getApp"];
+        get: operations["ProjectController_getProject"];
         put?: never;
         post?: never;
-        delete: operations["AppController_deleteApp"];
+        delete: operations["ProjectController_deleteProject"];
         options?: never;
         head?: never;
-        patch: operations["AppController_updateApp"];
+        patch: operations["ProjectController_updateProject"];
         trace?: never;
     };
-    "/apps": {
+    "/projects": {
         parameters: {
             query?: never;
             header?: never;
             path?: never;
             cookie?: never;
         };
-        get: operations["AppController_getApps"];
+        get: operations["ProjectController_getProjects"];
         put?: never;
-        post: operations["AppController_createApp"];
+        post: operations["ProjectController_createProject"];
         delete?: never;
         options?: never;
         head?: never;
@@ -113,7 +113,7 @@ export interface operations {
             };
         };
     };
-    AppController_getApp: {
+    ProjectController_getProject: {
         parameters: {
             query?: never;
             header?: never;
@@ -132,7 +132,7 @@ export interface operations {
             };
         };
     };
-    AppController_deleteApp: {
+    ProjectController_deleteProject: {
         parameters: {
             query?: never;
             header?: never;
@@ -151,7 +151,7 @@ export interface operations {
             };
         };
     };
-    AppController_updateApp: {
+    ProjectController_updateProject: {
         parameters: {
             query?: never;
             header?: never;
@@ -170,7 +170,7 @@ export interface operations {
             };
         };
     };
-    AppController_getApps: {
+    ProjectController_getProjects: {
         parameters: {
             query: {
                 skip: string;
@@ -191,7 +191,7 @@ export interface operations {
             };
         };
     };
-    AppController_createApp: {
+    ProjectController_createProject: {
         parameters: {
             query?: never;
             header?: never;

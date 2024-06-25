@@ -6,15 +6,15 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class ProjectService {
   constructor(private prisma: PrismaService) {}
 
-  async app(
+  async project(
     postWhereUniqueInput: Prisma.ProjectWhereUniqueInput,
   ): Promise<Project | null> {
-    return this.prisma.app.findUnique({
+    return this.prisma.project.findUnique({
       where: postWhereUniqueInput,
     });
   }
 
-  async apps(params: {
+  async projects(params: {
     skip?: number;
     take?: number;
     cursor?: Prisma.ProjectWhereUniqueInput;
@@ -22,7 +22,7 @@ export class ProjectService {
     orderBy?: Prisma.ProjectOrderByWithRelationInput;
   }): Promise<Project[]> {
     const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.app.findMany({
+    return this.prisma.project.findMany({
       skip,
       take,
       cursor,
@@ -32,7 +32,7 @@ export class ProjectService {
   }
 
   async createProject(data: Prisma.ProjectCreateInput): Promise<Project> {
-    return this.prisma.app.create({
+    return this.prisma.project.create({
       data,
     });
   }
@@ -42,14 +42,14 @@ export class ProjectService {
     data: Prisma.ProjectUpdateInput;
   }): Promise<Project> {
     const { data, where } = params;
-    return this.prisma.app.update({
+    return this.prisma.project.update({
       data,
       where,
     });
   }
 
   async deleteProject(where: Prisma.ProjectWhereUniqueInput): Promise<Project> {
-    return this.prisma.app.delete({
+    return this.prisma.project.delete({
       where,
     });
   }
