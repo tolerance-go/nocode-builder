@@ -53,8 +53,8 @@ const TitleComponent = ({
 
 export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
   const { initialTreeData, onFolderAdd } = props; // 获取初始化数据和回调属性
-  const [treeData, setTreeData] =
-    useState<CustomTreeDataNode[]>(initialTreeData);
+  const [treeData, setTreeData] = useState<CustomTreeDataNode[]>(initialTreeData);
+  const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]); // 维护展开状态
   const [selectedKey, setSelectedKey] = useState<React.Key | null>(null); // 维护选中节点的状态
 
   useImperativeHandle(ref, () => ({
@@ -68,6 +68,7 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
 
   const onExpand: DirectoryTreeProps["onExpand"] = (keys, info) => {
     console.log("Trigger Expand", keys, info);
+    setExpandedKeys(keys); // 更新展开状态
   };
 
   const addFolder = (key?: React.Key) => {
@@ -96,6 +97,10 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
         return items.map((item) => {
           if (item.key === parentKey) {
             if (item.children) {
+              // 判断文件夹是否已经展开，如果未展开，则展开它
+              if (!expandedKeys.includes(item.key)) {
+                setExpandedKeys((prevKeys) => [...prevKeys, item.key]);
+              }
               // 如果是文件夹，在文件夹下面的最前面插入，并设置为编辑状态
               isInserted = true;
               return {
@@ -115,6 +120,10 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
               const parentFolder = findParentFolder(data, parentKey);
               if (parentFolder) {
                 isInserted = true;
+                // 判断文件夹是否已经展开，如果未展开，则展开它
+                if (!expandedKeys.includes(parentFolder.key)) {
+                  setExpandedKeys((prevKeys) => [...prevKeys, parentFolder.key]);
+                }
                 parentFolder.children = [
                   {
                     title: "",
@@ -140,9 +149,7 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
       return insertNode(data);
     };
 
-    setTreeData((prevData) =>
-      addNode(prevData, selectedKey ?? key ?? undefined),
-    ); // 使用选中节点作为默认位置
+    setTreeData((prevData) => addNode(prevData, selectedKey ?? key ?? undefined)); // 使用选中节点作为默认位置
   };
 
   const findParentFolder = (
@@ -233,7 +240,7 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
           }
         `}
         multiple
-        defaultExpandAll
+        expandedKeys={expandedKeys} // 受控展开状态
         onSelect={onSelect}
         onExpand={onExpand}
         treeData={treeData}
