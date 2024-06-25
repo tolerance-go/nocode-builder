@@ -1,11 +1,13 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
+import { Button, Flex, Form, Input, theme } from "antd";
 import React from "react";
 
 const LoginForm: React.FC = () => {
   const onFinish = (values: unknown) => {
     console.log("Received values of form: ", values);
   };
+
+  const { token } = theme.useToken();
 
   return (
     <Form onFinish={onFinish}>
@@ -22,29 +24,18 @@ const LoginForm: React.FC = () => {
         name="password"
         rules={[{ required: true, message: "Please input your Password!" }]}
       >
-        <Input
-          prefix={<LockOutlined className="site-form-item-icon" />}
-          type="password"
-          placeholder="密码"
-        />
+        <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
       </Form.Item>
       <Form.Item>
-        <div className="flex flex-col gap-2">
-          <Button
-            block
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-          >
+        <Flex vertical gap={token.sizeUnit * 2}>
+          <Button block type="primary" htmlType="submit">
             登录
           </Button>
-          <Button block className="login-form-button">
-            立即注册
-          </Button>
-          <Button block type="link" className="login-form-button">
+          <Button block>立即注册</Button>
+          <Button block type="link">
             忘记密码
           </Button>
-        </div>
+        </Flex>
       </Form.Item>
     </Form>
   );

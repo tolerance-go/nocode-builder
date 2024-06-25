@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Login } from "./root/login";
 import { Admin } from "./root/admin";
 import "./i18n"; // 引入 i18n 配置
+import 'normalize.css'
 import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
