@@ -1,6 +1,6 @@
 import { Avatar, Flex, Layout, Space, Typography, theme } from "antd";
 import React from "react";
-import LoginForm from "./LoginForm";
+import { LoginForm } from "./LoginForm";
 import { css } from "@emotion/css";
 
 const { Sider, Content } = Layout;
@@ -58,7 +58,11 @@ export const Login: React.FC = () => {
             height: "100%",
           }}
         >
-          <div>
+          <div
+            className={css`
+              translate: 0 -20%;
+            `}
+          >
             <Flex vertical gap={token.sizeUnit * 10} align="end">
               <Typography.Text>
                 “
@@ -69,7 +73,7 @@ export const Login: React.FC = () => {
                 ”
               </Typography.Text>
 
-              <Space size='middle'>
+              <Space size="middle">
                 <Avatar size={"large"} />
                 <Space direction="vertical" size={token.sizeUnit / 4}>
                   <Typography.Text strong>周天宇</Typography.Text>

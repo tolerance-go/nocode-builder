@@ -2,7 +2,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Flex, Form, Input, theme } from "antd";
 import React from "react";
 
-const LoginForm: React.FC = () => {
+export const LoginForm: React.FC = () => {
   const onFinish = (values: unknown) => {
     console.log("Received values of form: ", values);
   };
@@ -40,5 +40,3 @@ const LoginForm: React.FC = () => {
     </Form>
   );
 };
-
-export default LoginForm;
