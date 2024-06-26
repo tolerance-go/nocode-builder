@@ -78,7 +78,7 @@ declare namespace API {
     /** The name of the project */
     name: string;
     /** The project group ID of the project */
-    projectGroupId?: Record<string, unknown>;
+    projectGroupId?: Record<string, any>;
     /** The owner ID of the project */
     ownerId: number;
     /** The date and time when the project was created */
@@ -100,7 +100,7 @@ declare namespace API {
     /** The name of the project group */
     name: string;
     /** The parent group ID of the project group */
-    parentGroupId?: Record<string, unknown>;
+    parentGroupId?: Record<string, any>;
     /** The owner ID of the project group */
     ownerId: number;
     /** The date and time when the project group was created */
@@ -149,7 +149,7 @@ declare namespace API {
     /** The name of the user */
     name: string;
     /** The email address of the user */
-    email?: Record<string, unknown>;
+    email?: Record<string, any>;
     /** The date and time when the user was created */
     createdAt: string;
     /** The date and time when the user was last updated */

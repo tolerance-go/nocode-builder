@@ -1,9 +1,11 @@
+// @ts-ignore
+/* eslint-disable */
 import request from '@/utils/axiosInstance';
 
 /** 此处后端没有提供注释 POST /project-groups */
 export async function createProjectGroup(
   body: API.ProjectGroupCreateDto,
-  options?: { [key: string]: unknown },
+  options?: { [key: string]: any },
 ) {
   return request<API.ProjectGroupDto>('/project-groups', {
     method: 'POST',

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsOptional, IsString, IsInt, IsDateString } from 'class-validator';
+import { IsInt, IsOptional, IsString } from 'class-validator';
 
 export class ProjectGroupUpdateDto {
   @ApiProperty({
