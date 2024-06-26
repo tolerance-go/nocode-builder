@@ -3,7 +3,7 @@ import { Flex, Spin } from "antd";
 import { Suspense, useEffect, useRef } from "react";
 import { TreeMenu } from "./TreeMenu";
 import { debounce } from "lodash-es";
-import { setContainerHeightAction } from "@/stores/projects";
+import { setContainerHeightAction } from "@/stores/projects/actions/setContainerHeightAction";
 
 export const ProjectTree = () => {
   const containerRef = useRef<HTMLDivElement>(null);
