@@ -1,2 +1,2 @@
-export * as projectStoresActions from "./actions";
+export * as projectActions from "./actions";
 export * as projectStores from "./stores";

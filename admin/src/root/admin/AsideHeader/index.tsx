@@ -1,5 +1,4 @@
-import { addFileAction } from "@/stores/project/actions/addFileAction";
-import { addFolderAction } from "@/stores/project/actions/addFolderAction";
+import { projectActions } from "@/stores/project";
 import { treeStore } from "@/stores/project/stores";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
@@ -21,7 +20,7 @@ export const AsideHeader = () => {
         loading={addFileLoading}
         icon={<FileAddOutlined />}
         onClick={async () => {
-          addFileAction();
+          projectActions.addFileAction();
         }}
       ></Button>
       <Button
@@ -29,7 +28,7 @@ export const AsideHeader = () => {
         loading={addFolderLoading}
         icon={<FolderAddOutlined />}
         onClick={async () => {
-          addFolderAction();
+          projectActions.addFolderAction();
         }}
       ></Button>
     </Flex>
