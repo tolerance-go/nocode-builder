@@ -5,7 +5,7 @@ import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { TitleComponent } from "./TitleComponent";
-import { projectsStoreActions, projectsStores } from "@/stores/projects";
+import { projectsStoresActions, projectsStores } from "@/stores/projects";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
@@ -17,11 +17,11 @@ export const TreeMenu = () => {
   );
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys) => {
-    projectsStoreActions.setSelectedKeyAction(keys.length > 0 ? keys[0] : null); // 更新选中节点的状态
+    projectsStoresActions.setSelectedKeyAction(keys.length > 0 ? keys[0] : null); // 更新选中节点的状态
   };
 
   const onExpand: DirectoryTreeProps["onExpand"] = (keys) => {
-    projectsStoreActions.setExpandedKeysAction(keys); // 更新展开状态
+    projectsStoresActions.setExpandedKeysAction(keys); // 更新展开状态
   };
 
   const handleFileFinish = async (
@@ -30,7 +30,7 @@ export const TreeMenu = () => {
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
   ) => {
-    projectsStoreActions.handleFileFinishAction(e, key, "New File");
+    projectsStoresActions.handleFileFinishAction(e, key, "New File");
   };
 
   const handleFolderFinish = async (
@@ -39,7 +39,7 @@ export const TreeMenu = () => {
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
   ) => {
-    projectsStoreActions.handleFolderFinishAction(e, key, "New Folder");
+    projectsStoresActions.handleFolderFinishAction(e, key, "New Folder");
   };
 
   return (
