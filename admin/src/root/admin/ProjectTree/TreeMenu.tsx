@@ -1,8 +1,8 @@
 import { projectsStore } from "@/store/projects";
 import { css } from "@emotion/css";
 import type { GetProps, TreeDataNode } from "antd";
-import { Input, Tree, Typography } from "antd";
-import React, { forwardRef, useImperativeHandle, useState } from "react";
+import { Input, Tree } from "antd";
+import React from "react";
 import { useSnapshot } from "valtio";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
@@ -11,7 +11,6 @@ const { DirectoryTree } = Tree;
 
 interface TreeMenuProps {
   initialTreeData: TreeDataNode[]; // 初始化数据从上层传入
-  ref: React.Ref<TreeMenuRef>;
   onFileAdd: (params: {
     parentKey?: React.Key;
     key: React.Key;
@@ -22,11 +21,6 @@ interface TreeMenuProps {
     key: React.Key;
     title: string;
   }) => Promise<number>; // 增加回调属性，返回 Promise<number>
-}
-
-export interface TreeMenuRef {
-  addFolder: (key?: React.Key) => void;
-  addFile: (key?: React.Key) => void; // 新增 addFile 方法
 }
 
 export interface CustomTreeDataNode extends Omit<TreeDataNode, "children"> {
@@ -65,15 +59,10 @@ const TitleComponent = ({
 
 const actions = projectsStore.actions;
 
-export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
+export const TreeMenu = (props: TreeMenuProps) => {
   const { onFolderAdd, onFileAdd } = props; // 获取初始化数据和回调属性
 
   const { treeData, expandedKeys } = useSnapshot(projectsStore.states);
-
-  useImperativeHandle(ref, () => ({
-    addFolder: (key?: React.Key) => actions.addFolder(key),
-    addFile: (key?: React.Key) => actions.addFile(key),
-  }));
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys) => {
     actions.setSelectedKey(keys.length > 0 ? keys[0] : null); // 更新选中节点的状态
@@ -89,16 +78,16 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
   ) => {
-    actions.handleFinish(e, key, onFileAdd, "New File");
+    actions.handleFileFinish(e, key, onFileAdd, "New File");
   };
 
-  const handleFinish = async (
+  const handleFolderFinish = async (
     e:
       | React.KeyboardEvent<HTMLInputElement>
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
   ) => {
-    actions.handleFinish(e, key, onFolderAdd, "New Folder");
+    actions.handleFolderFinish(e, key, onFolderAdd, "New Folder");
   };
 
   return (
@@ -121,11 +110,11 @@ export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
           <TitleComponent
             title={nodeData.title as string}
             isEditing={(nodeData as CustomTreeDataNode).isEditing}
-            onFinish={nodeData.isLeaf ? handleFileFinish : handleFinish}
+            onFinish={nodeData.isLeaf ? handleFileFinish : handleFolderFinish}
             newKey={nodeData.key}
           />
         )}
       />
     </div>
   );
-});
+};

@@ -4,13 +4,13 @@ import { getProjects } from "@/services/api/getProjects";
 import { proxy } from "valtio";
 
 type TreeNode = {
-  key: number;
+  key: string;
   title: string;
   children: Array<TreeNode | ProjectLeafNode>;
 };
 
 type ProjectLeafNode = {
-  key: number;
+  key: string;
   title: string;
   isLeaf: true;
 };
@@ -19,12 +19,12 @@ function buildTree(
   projectGroups: API.ProjectGroupDto[],
   projects: API.ProjectDto[],
 ): CustomTreeDataNode[] {
-  const groupMap: { [key: number]: TreeNode } = {};
+  const groupMap: { [key: string]: TreeNode } = {};
 
   // 初始化所有的 projectGroups 为 TreeNode
   projectGroups.forEach((group) => {
-    groupMap[group.id] = {
-      key: group.id,
+    groupMap[`group-${group.id}`] = {
+      key: `group-${group.id}`,
       title: group.name,
       children: [],
     };
@@ -33,22 +33,24 @@ function buildTree(
   // 构建嵌套的 group 结构
   const tree: TreeNode[] = [];
   projectGroups.forEach((group) => {
-    if (group.parentGroupId && groupMap[group.parentGroupId]) {
-      groupMap[group.parentGroupId].children.push(groupMap[group.id]);
+    if (group.parentGroupId && groupMap[`group-${group.parentGroupId}`]) {
+      groupMap[`group-${group.parentGroupId}`].children.push(
+        groupMap[`group-${group.id}`],
+      );
     } else {
-      tree.push(groupMap[group.id]);
+      tree.push(groupMap[`group-${group.id}`]);
     }
   });
 
   // 将 projects 放到对应的 group 下
   projects.forEach((project) => {
     const projectNode: ProjectLeafNode = {
-      key: project.id,
+      key: `project-${project.id}`,
       title: project.name,
       isLeaf: true,
     };
-    if (project.projectGroupId && groupMap[project.projectGroupId]) {
-      groupMap[project.projectGroupId].children.push(projectNode);
+    if (project.projectGroupId && groupMap[`group-${project.projectGroupId}`]) {
+      groupMap[`group-${project.projectGroupId}`].children.push(projectNode);
     }
   });
 
@@ -117,7 +119,7 @@ const findParentFolder = (
 const updateNodeTitle = async (
   key: React.Key,
   title: string,
-  newKey: number,
+  newKey: string,
 ) => {
   const updateNode = (data: CustomTreeDataNode[]): CustomTreeDataNode[] => {
     return data.map((item) => {
@@ -153,6 +155,10 @@ const deleteNode = (
     });
 };
 
+const parseId = (key: string) => {
+  return Number(key.split("-")[1]);
+};
+
 export const actions = {
   setTreeData: (newTreeData: CustomTreeDataNode[]) => {
     states.treeData = Promise.resolve(newTreeData);
@@ -164,7 +170,7 @@ export const actions = {
     states.selectedKey = newSelectedKey;
   },
   addFile: async (parentKey?: React.Key) => {
-    const newKey = Date.now();
+    const newKey = `project-${Date.now()}`;
     const addNode = (
       data: CustomTreeDataNode[],
       parentKey?: React.Key,
@@ -257,7 +263,7 @@ export const actions = {
     );
   },
   addFolder: async (parentKey?: React.Key) => {
-    const newKey = Date.now();
+    const newKey = `group-${Date.now()}`;
     const addNode = (
       data: CustomTreeDataNode[],
       parentKey?: React.Key,
@@ -350,7 +356,7 @@ export const actions = {
       addNode(await states.treeData, states.selectedKey ?? parentKey),
     );
   },
-  handleFinish: async (
+  handleFolderFinish: async (
     e:
       | React.KeyboardEvent<HTMLInputElement>
       | React.FocusEvent<HTMLInputElement>,
@@ -366,11 +372,36 @@ export const actions = {
     const parentNode = findParentNode(await states.treeData, key);
     try {
       const result = await onAdd({
-        parentKey: parentNode ? parentNode.key : undefined,
+        parentKey: parentNode ? parseId(parentNode.key as string) : undefined,
         key,
         title: value,
       });
-      updateNodeTitle(key, value, result);
+      updateNodeTitle(key, value, `group-${result}`);
+    } catch {
+      actions.setTreeData(deleteNode(await states.treeData, key));
+    }
+  },
+  handleFileFinish: async (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.FocusEvent<HTMLInputElement>,
+    key: React.Key,
+    onAdd: (params: {
+      parentKey?: React.Key;
+      key: React.Key;
+      title: string;
+    }) => Promise<number>,
+    defaultValue: string,
+  ) => {
+    const value = (e.target as HTMLInputElement).value || defaultValue;
+    const parentNode = findParentNode(await states.treeData, key);
+    try {
+      const result = await onAdd({
+        parentKey: parentNode ? parseId(parentNode.key as string) : undefined,
+        key,
+        title: value,
+      });
+      updateNodeTitle(key, value, `project-${result}`);
     } catch {
       actions.setTreeData(deleteNode(await states.treeData, key));
     }
