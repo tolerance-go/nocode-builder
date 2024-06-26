@@ -1,6 +1,6 @@
-import { CustomTreeDataNode } from "@/root/admin/ProjectTree/TreeMenu";
 import { getProjectGroups } from "@/services/api/getProjectGroups";
 import { getProjects } from "@/services/api/getProjects";
+import { CustomTreeDataNode } from "@/types/tree";
 import { proxy } from "valtio";
 
 function buildTree(

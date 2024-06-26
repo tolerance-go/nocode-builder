@@ -1,4 +1,4 @@
-import { CustomTreeDataNode } from "@/root/admin/ProjectTree/TreeMenu";
+import { CustomTreeDataNode } from "@/types/tree";
 import { states } from "../states";
 import { setExpandedKeys } from "./setExpandedKeys";
 import { setTreeData } from "./setTreeData";
@@ -26,6 +26,7 @@ const addNode = (
         key: newKey,
         isEditing: true,
         isLeaf: true,
+        id: -1,
       },
       ...data.slice(insertIndex),
     ];

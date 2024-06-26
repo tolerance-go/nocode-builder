@@ -4,7 +4,7 @@ import { addFile } from "./actions/addFile";
 import { states } from "./states";
 import { setExpandedKeys } from "./actions/setExpandedKeys";
 import { setTreeData } from "./actions/setTreeData";
-import { CustomTreeDataNode } from "@/root/admin/ProjectTree/TreeMenu";
+import { CustomTreeDataNode } from "@/types/tree";
 
 const findParentNode = (
   data: CustomTreeDataNode[],
