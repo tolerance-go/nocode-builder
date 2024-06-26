@@ -2,7 +2,6 @@ import { CustomTreeDataNode } from "@/root/admin/ProjectTree/TreeMenu";
 import { getProjectGroups } from "@/services/api/getProjectGroups";
 import { getProjects } from "@/services/api/getProjects";
 import { proxy } from "valtio";
-import { ProjectLeafNode, TreeNode } from "../types";
 
 function buildTree(
   projectGroups: API.ProjectGroupDto[],
