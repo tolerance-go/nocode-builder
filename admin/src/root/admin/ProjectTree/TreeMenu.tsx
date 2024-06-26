@@ -12,6 +12,8 @@ const { DirectoryTree } = Tree;
 export interface CustomTreeDataNode extends Omit<TreeDataNode, "children"> {
   isEditing?: boolean;
   children?: CustomTreeDataNode[];
+  parentKey?: string;
+  id: number;
 }
 
 const TitleComponent = ({

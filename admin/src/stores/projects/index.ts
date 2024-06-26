@@ -52,11 +52,12 @@ const updateNodeTitle = async (
   key: React.Key,
   title: string,
   newKey: string,
+  newId: number,
 ) => {
   const updateNode = (data: CustomTreeDataNode[]): CustomTreeDataNode[] => {
     return data.map((item) => {
       if (item.key === key) {
-        return { ...item, key: newKey, title, isEditing: false };
+        return { ...item, key: newKey, id: newId, title, isEditing: false };
       }
       if (item.children) {
         return {
@@ -111,6 +112,7 @@ export const actions = {
             key: newKey,
             isEditing: true,
             children: [],
+            id: -1,
           },
           ...data,
         ];
@@ -135,6 +137,7 @@ export const actions = {
                     key: newKey,
                     isEditing: true,
                     children: [],
+                    id: -1,
                   },
                   ...item.children,
                 ],
@@ -155,6 +158,7 @@ export const actions = {
                     key: newKey,
                     isEditing: true,
                     children: [],
+                    id: -1,
                   },
                   ...(parentFolder.children || []),
                 ];
@@ -180,6 +184,7 @@ export const actions = {
             key: newKey,
             isEditing: true,
             children: [],
+            id: -1,
           },
           ...data,
         ];
@@ -226,7 +231,7 @@ export const actions = {
         key,
         title: value,
       });
-      updateNodeTitle(key, value, `group-${result}`);
+      updateNodeTitle(key, value, `group-${result}`, result);
     } catch {
       actions.setTreeData(deleteNode(await states.treeData, key));
     }
@@ -266,7 +271,7 @@ export const actions = {
         key,
         title: value,
       });
-      updateNodeTitle(key, value, `project-${result}`);
+      updateNodeTitle(key, value, `project-${result}`, result);
     } catch {
       actions.setTreeData(deleteNode(await states.treeData, key));
     }

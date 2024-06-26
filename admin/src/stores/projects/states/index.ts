@@ -8,7 +8,7 @@ function buildTree(
   projectGroups: API.ProjectGroupDto[],
   projects: API.ProjectDto[],
 ): CustomTreeDataNode[] {
-  const groupMap: { [key: string]: TreeNode } = {};
+  const groupMap: { [key: string]: CustomTreeDataNode } = {};
 
   // 初始化所有的 projectGroups 为 TreeNode
   projectGroups.forEach((group) => {
@@ -16,16 +16,19 @@ function buildTree(
       key: `group-${group.id}`,
       title: group.name,
       children: [],
+      id: group.id,
     };
   });
 
   // 构建嵌套的 group 结构
-  const tree: TreeNode[] = [];
+  const tree: CustomTreeDataNode[] = [];
   projectGroups.forEach((group) => {
-    if (group.parentGroupId && groupMap[`group-${group.parentGroupId}`]) {
-      groupMap[`group-${group.parentGroupId}`].children.push(
-        groupMap[`group-${group.id}`],
-      );
+    const parentGroup = groupMap[`group-${group.parentGroupId}`];
+    if (group.parentGroupId && parentGroup) {
+      if (!parentGroup.children) {
+        parentGroup.children = [];
+      }
+      parentGroup.children.push(groupMap[`group-${group.id}`]);
     } else {
       tree.push(groupMap[`group-${group.id}`]);
     }
@@ -33,13 +36,18 @@ function buildTree(
 
   // 将 projects 放到对应的 group 下
   projects.forEach((project) => {
-    const projectNode: ProjectLeafNode = {
+    const projectNode: CustomTreeDataNode = {
       key: `project-${project.id}`,
       title: project.name,
       isLeaf: true,
+      id: project.id,
     };
-    if (project.projectGroupId && groupMap[`group-${project.projectGroupId}`]) {
-      groupMap[`group-${project.projectGroupId}`].children.push(projectNode);
+    const parentGroup = groupMap[`group-${project.projectGroupId}`];
+    if (project.projectGroupId && parentGroup) {
+      if (!parentGroup.children) {
+        parentGroup.children = [];
+      }
+      parentGroup.children.push(projectNode);
     }
   });
 

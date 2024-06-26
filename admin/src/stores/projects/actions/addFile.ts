@@ -67,6 +67,7 @@ const addNode = (
                 key: newKey,
                 isEditing: true,
                 isLeaf: true,
+                id: -1,
               },
               ...parent.children!.slice(insertIndex),
             ];
@@ -95,6 +96,7 @@ const addNode = (
               key: newKey,
               isEditing: true,
               isLeaf: true,
+              id: -1,
             },
             ...targetNode.children.slice(insertIndex),
           ];
@@ -128,6 +130,7 @@ const addNode = (
         key: newKey,
         isEditing: true,
         isLeaf: true,
+        id: -1,
       },
       ...data.slice(insertIndex),
     ];
