@@ -5,7 +5,7 @@ export function toProjectGroupDto(projectGroup: ProjectGroup): ProjectGroupDto {
   return {
     id: projectGroup.id,
     name: projectGroup.name,
-    parentGroupId: projectGroup.parentGroupId,
+    parentGroupId: projectGroup.parentGroupId ?? undefined,
     ownerId: projectGroup.ownerId,
     createdAt: projectGroup.createdAt.toISOString(),
     updatedAt: projectGroup.updatedAt.toISOString(),

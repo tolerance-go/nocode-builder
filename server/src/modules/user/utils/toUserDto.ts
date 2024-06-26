@@ -5,7 +5,7 @@ export function toUserDto(user: User): UserDto {
   return {
     id: user.id,
     name: user.name,
-    email: user.email,
+    email: user.email ?? undefined,
     createdAt: user.createdAt.toISOString(),
     updatedAt: user.updatedAt.toISOString(),
   };

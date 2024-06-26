@@ -1,11 +1,11 @@
-import store from "@/store";
+import { projectsStore } from "@/store/projects";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
 import { useSnapshot } from "valtio";
 
 export const AsideHeader = () => {
   const { addFolderLoading, addFileLoading } = useSnapshot(
-    store.projects.states,
+    projectsStore.states,
   );
   const { token } = theme.useToken();
   return (
@@ -21,7 +21,7 @@ export const AsideHeader = () => {
         loading={addFileLoading}
         icon={<FileAddOutlined />}
         onClick={async () => {
-          store.projects.actions.addFile();
+          projectsStore.actions.addFile();
         }}
       ></Button>
       <Button
@@ -29,7 +29,7 @@ export const AsideHeader = () => {
         loading={addFolderLoading}
         icon={<FolderAddOutlined />}
         onClick={async () => {
-          store.projects.actions.addFolder();
+          projectsStore.actions.addFolder();
         }}
       ></Button>
     </Flex>

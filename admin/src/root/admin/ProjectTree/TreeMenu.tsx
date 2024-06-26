@@ -1,7 +1,7 @@
-import store from "@/store";
+import { projectsStore } from "@/store/projects";
 import { css } from "@emotion/css";
 import type { GetProps, TreeDataNode } from "antd";
-import { Input, Tree } from "antd";
+import { Input, Tree, Typography } from "antd";
 import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { useSnapshot } from "valtio";
 
@@ -63,19 +63,12 @@ const TitleComponent = ({
   );
 };
 
-const actions = store.projects.actions;
+const actions = projectsStore.actions;
 
 export const TreeMenu = forwardRef<TreeMenuRef, TreeMenuProps>((props, ref) => {
-  const { initialTreeData, onFolderAdd, onFileAdd } = props; // 获取初始化数据和回调属性
+  const { onFolderAdd, onFileAdd } = props; // 获取初始化数据和回调属性
 
-  const { treeData, expandedKeys } = useSnapshot(store.projects.states);
-
-  console.log("treeData", treeData);
-
-  // 初始化 valtio 状态
-  useState(() => {
-    actions.setTreeData(initialTreeData);
-  });
+  const { treeData, expandedKeys } = useSnapshot(projectsStore.states);
 
   useImperativeHandle(ref, () => ({
     addFolder: (key?: React.Key) => actions.addFolder(key),

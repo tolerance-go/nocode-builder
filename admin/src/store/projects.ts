@@ -18,7 +18,7 @@ type ProjectLeafNode = {
 function buildTree(
   projectGroups: API.ProjectGroupDto[],
   projects: API.ProjectDto[],
-): TreeNode[] {
+): CustomTreeDataNode[] {
   const groupMap: { [key: number]: TreeNode } = {};
 
   // 初始化所有的 projectGroups 为 TreeNode
@@ -65,8 +65,7 @@ const fetchTreeData = async () => {
 
 // 定义状态
 export const states = proxy({
-  initialData: fetchTreeData(),
-  treeData: [] as CustomTreeDataNode[],
+  treeData: fetchTreeData(),
   expandedKeys: [] as React.Key[],
   selectedKey: null as React.Key | null,
   addFolderLoading: false,
@@ -115,7 +114,11 @@ const findParentFolder = (
   return null;
 };
 
-const updateNodeTitle = (key: React.Key, title: string, newKey: number) => {
+const updateNodeTitle = async (
+  key: React.Key,
+  title: string,
+  newKey: number,
+) => {
   const updateNode = (data: CustomTreeDataNode[]): CustomTreeDataNode[] => {
     return data.map((item) => {
       if (item.key === key) {
@@ -130,7 +133,7 @@ const updateNodeTitle = (key: React.Key, title: string, newKey: number) => {
       return item;
     });
   };
-  actions.setTreeData(updateNode(states.treeData));
+  actions.setTreeData(updateNode(await states.treeData));
 };
 
 const deleteNode = (
@@ -152,7 +155,7 @@ const deleteNode = (
 
 export const actions = {
   setTreeData: (newTreeData: CustomTreeDataNode[]) => {
-    states.treeData = newTreeData;
+    states.treeData = Promise.resolve(newTreeData);
   },
   setExpandedKeys: (newExpandedKeys: React.Key[]) => {
     states.expandedKeys = newExpandedKeys;
@@ -160,7 +163,7 @@ export const actions = {
   setSelectedKey: (newSelectedKey: React.Key | null) => {
     states.selectedKey = newSelectedKey;
   },
-  addFile: (parentKey?: React.Key) => {
+  addFile: async (parentKey?: React.Key) => {
     const newKey = Date.now();
     const addNode = (
       data: CustomTreeDataNode[],
@@ -250,10 +253,10 @@ export const actions = {
     };
 
     actions.setTreeData(
-      addNode(states.treeData, states.selectedKey ?? parentKey),
+      addNode(await states.treeData, states.selectedKey ?? parentKey),
     );
   },
-  addFolder: (parentKey?: React.Key) => {
+  addFolder: async (parentKey?: React.Key) => {
     const newKey = Date.now();
     const addNode = (
       data: CustomTreeDataNode[],
@@ -344,7 +347,7 @@ export const actions = {
     };
 
     actions.setTreeData(
-      addNode(states.treeData, states.selectedKey ?? parentKey),
+      addNode(await states.treeData, states.selectedKey ?? parentKey),
     );
   },
   handleFinish: async (
@@ -360,7 +363,7 @@ export const actions = {
     defaultValue: string,
   ) => {
     const value = (e.target as HTMLInputElement).value || defaultValue;
-    const parentNode = findParentNode(states.treeData, key);
+    const parentNode = findParentNode(await states.treeData, key);
     try {
       const result = await onAdd({
         parentKey: parentNode ? parentNode.key : undefined,
@@ -369,7 +372,12 @@ export const actions = {
       });
       updateNodeTitle(key, value, result);
     } catch {
-      actions.setTreeData(deleteNode(states.treeData, key));
+      actions.setTreeData(deleteNode(await states.treeData, key));
     }
   },
+};
+
+export const projectsStore = {
+  actions,
+  states,
 };

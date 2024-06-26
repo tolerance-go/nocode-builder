@@ -115,7 +115,7 @@ export class ProjectDto {
   })
   @IsInt()
   @IsOptional()
-  projectGroupId: number | null;
+  projectGroupId?: number;
 
   @ApiProperty({
     description: 'The owner ID of the project',

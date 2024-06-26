@@ -30,7 +30,7 @@ export class UserDto {
   })
   @IsEmail()
   @IsOptional()
-  email: string | null;
+  email?: string;
 
   @ApiProperty({
     description: 'The date and time when the user was created',

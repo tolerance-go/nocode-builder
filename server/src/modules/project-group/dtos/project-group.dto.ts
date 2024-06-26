@@ -24,7 +24,7 @@ export class ProjectGroupDto {
   })
   @IsInt()
   @IsOptional()
-  parentGroupId: number | null;
+  parentGroupId?: number;
 
   @ApiProperty({
     description: 'The owner ID of the project group',
