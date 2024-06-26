@@ -1,7 +1,7 @@
-import * as designs from "./designs";
-import * as components from "./components";
-import * as routes from "./routes";
-import * as apps from "./apps";
+import * as designs from "./design";
+import * as components from "./component";
+import * as routes from "./route";
+import * as apps from "./app";
 import * as blueMap from "./blueMap";
 
 import { devtools } from "valtio/utils";

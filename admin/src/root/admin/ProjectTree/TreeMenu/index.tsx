@@ -5,7 +5,7 @@ import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { TitleComponent } from "./TitleComponent";
-import { projectsStoresActions, projectsStores } from "@/stores/projects";
+import { projectsStoresActions, projectsStores } from "@/stores/project";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
