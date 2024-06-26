@@ -1,4 +1,6 @@
 import { CustomTreeDataNode } from "@/root/admin/ProjectTree/TreeMenu";
+import { createProject } from "@/services/api/createProject";
+import { createProjectGroup } from "@/services/api/createProjectGroup";
 import { getProjectGroups } from "@/services/api/getProjectGroups";
 import { getProjects } from "@/services/api/getProjects";
 import { proxy } from "valtio";
@@ -361,13 +363,27 @@ export const actions = {
       | React.KeyboardEvent<HTMLInputElement>
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
-    onAdd: (params: {
+    defaultValue: string,
+  ) => {
+    const onAdd = async ({
+      title,
+      parentKey,
+    }: {
       parentKey?: React.Key;
       key: React.Key;
       title: string;
-    }) => Promise<number>,
-    defaultValue: string,
-  ) => {
+    }) => {
+      try {
+        projectsStore.states.addFileLoading = true;
+        const result = await createProject({
+          name: title,
+          projectGroupId: parentKey as number,
+        });
+        return result.id;
+      } finally {
+        projectsStore.states.addFileLoading = false;
+      }
+    };
     const value = (e.target as HTMLInputElement).value || defaultValue;
     const parentNode = findParentNode(await states.treeData, key);
     try {
@@ -386,13 +402,28 @@ export const actions = {
       | React.KeyboardEvent<HTMLInputElement>
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
-    onAdd: (params: {
+    defaultValue: string,
+  ) => {
+    const onAdd = async ({
+      title,
+      parentKey,
+    }: {
       parentKey?: React.Key;
       key: React.Key;
       title: string;
-    }) => Promise<number>,
-    defaultValue: string,
-  ) => {
+    }) => {
+      try {
+        projectsStore.states.addFolderLoading = true;
+        const result = await createProjectGroup({
+          name: title,
+          parentGroupId: parentKey as number,
+        });
+        return result.id;
+      } finally {
+        projectsStore.states.addFolderLoading = false;
+      }
+    };
+
     const value = (e.target as HTMLInputElement).value || defaultValue;
     const parentNode = findParentNode(await states.treeData, key);
     try {

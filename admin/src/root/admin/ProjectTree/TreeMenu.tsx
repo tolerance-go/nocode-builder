@@ -9,20 +9,6 @@ type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
 const { DirectoryTree } = Tree;
 
-interface TreeMenuProps {
-  initialTreeData: TreeDataNode[]; // 初始化数据从上层传入
-  onFileAdd: (params: {
-    parentKey?: React.Key;
-    key: React.Key;
-    title: string;
-  }) => Promise<number>; // 新增文件回调属性，返回 Promise<number>
-  onFolderAdd: (params: {
-    parentKey?: React.Key;
-    key: React.Key;
-    title: string;
-  }) => Promise<number>; // 增加回调属性，返回 Promise<number>
-}
-
 export interface CustomTreeDataNode extends Omit<TreeDataNode, "children"> {
   isEditing?: boolean;
   children?: CustomTreeDataNode[];
@@ -59,9 +45,7 @@ const TitleComponent = ({
 
 const actions = projectsStore.actions;
 
-export const TreeMenu = (props: TreeMenuProps) => {
-  const { onFolderAdd, onFileAdd } = props; // 获取初始化数据和回调属性
-
+export const TreeMenu = () => {
   const { treeData, expandedKeys } = useSnapshot(projectsStore.states);
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys) => {
@@ -78,7 +62,7 @@ export const TreeMenu = (props: TreeMenuProps) => {
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
   ) => {
-    actions.handleFileFinish(e, key, onFileAdd, "New File");
+    actions.handleFileFinish(e, key, "New File");
   };
 
   const handleFolderFinish = async (
@@ -87,7 +71,7 @@ export const TreeMenu = (props: TreeMenuProps) => {
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
   ) => {
-    actions.handleFolderFinish(e, key, onFolderAdd, "New Folder");
+    actions.handleFolderFinish(e, key, "New Folder");
   };
 
   return (
