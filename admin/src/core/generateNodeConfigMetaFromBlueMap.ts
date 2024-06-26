@@ -7,7 +7,7 @@ import {
   BlueMapNodeConfig,
   NodeConfig,
   PortBlueMapAttrs,
-} from "../types/common";
+} from "../types/base";
 import { BasePortConfig } from "@/components/blueMap/ports/BasePort/config";
 
 // 左右中间的间距

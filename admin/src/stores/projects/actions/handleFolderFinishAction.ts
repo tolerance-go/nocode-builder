@@ -1,7 +1,7 @@
 import { createProjectGroup } from "@/services/api/createProjectGroup";
 import { treeStore } from "../stores";
 import { setTreeDataAction } from "./setTreeDataAction";
-import { parseId, updateNodeTitle, deleteNode } from "./_utils/common";
+import { parseId, updateNodeTitle, deleteNode } from "./_utils/base";
 import { findParentNode } from "./_utils/findParentNode";
 
 export const handleFolderFinishAction = async (

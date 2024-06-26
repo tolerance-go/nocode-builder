@@ -1,5 +1,5 @@
 import { proxy } from "valtio";
-import { SearchNodeSourceData } from "../../types/common";
+import { SearchNodeSourceData } from "../../types/base";
 
 /**
  * 搜索节点从哪个 port 拖出来的

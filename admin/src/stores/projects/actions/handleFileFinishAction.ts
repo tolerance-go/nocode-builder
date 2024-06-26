@@ -2,7 +2,7 @@ import { createProject } from "@/services/api/createProject";
 import { treeStore } from "../stores";
 import { setTreeDataAction } from "./setTreeDataAction";
 import { findParentNode } from "./_utils/findParentNode";
-import { deleteNode, parseId, updateNodeTitle } from "./_utils/common";
+import { deleteNode, parseId, updateNodeTitle } from "./_utils/base";
 
 export const handleFileFinishAction = async (
   e: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>,
