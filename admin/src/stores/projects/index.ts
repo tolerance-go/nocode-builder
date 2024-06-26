@@ -1,81 +1,10 @@
 import { CustomTreeDataNode } from "@/root/admin/ProjectTree/TreeMenu";
 import { createProject } from "@/services/api/createProject";
 import { createProjectGroup } from "@/services/api/createProjectGroup";
-import { getProjectGroups } from "@/services/api/getProjectGroups";
-import { getProjects } from "@/services/api/getProjects";
-import { proxy } from "valtio";
-
-type TreeNode = {
-  key: string;
-  title: string;
-  children: Array<TreeNode | ProjectLeafNode>;
-};
-
-type ProjectLeafNode = {
-  key: string;
-  title: string;
-  isLeaf: true;
-};
-
-function buildTree(
-  projectGroups: API.ProjectGroupDto[],
-  projects: API.ProjectDto[],
-): CustomTreeDataNode[] {
-  const groupMap: { [key: string]: TreeNode } = {};
-
-  // 初始化所有的 projectGroups 为 TreeNode
-  projectGroups.forEach((group) => {
-    groupMap[`group-${group.id}`] = {
-      key: `group-${group.id}`,
-      title: group.name,
-      children: [],
-    };
-  });
-
-  // 构建嵌套的 group 结构
-  const tree: TreeNode[] = [];
-  projectGroups.forEach((group) => {
-    if (group.parentGroupId && groupMap[`group-${group.parentGroupId}`]) {
-      groupMap[`group-${group.parentGroupId}`].children.push(
-        groupMap[`group-${group.id}`],
-      );
-    } else {
-      tree.push(groupMap[`group-${group.id}`]);
-    }
-  });
-
-  // 将 projects 放到对应的 group 下
-  projects.forEach((project) => {
-    const projectNode: ProjectLeafNode = {
-      key: `project-${project.id}`,
-      title: project.name,
-      isLeaf: true,
-    };
-    if (project.projectGroupId && groupMap[`group-${project.projectGroupId}`]) {
-      groupMap[`group-${project.projectGroupId}`].children.push(projectNode);
-    }
-  });
-
-  return tree;
-}
-
-const fetchTreeData = async () => {
-  const [projects, projectGroups] = await Promise.all([
-    getProjects({}),
-    getProjectGroups({}),
-  ]);
-  return buildTree(projectGroups, projects);
-};
-
-// 定义状态
-export const states = proxy({
-  containerHeight: Promise.resolve(0),
-  treeData: fetchTreeData(),
-  expandedKeys: [] as React.Key[],
-  selectedKey: null as React.Key | null,
-  addFolderLoading: false,
-  addFileLoading: false,
-});
+import { addFile } from "./actions/addFile";
+import { states } from "./states";
+import { setExpandedKeys } from "./actions/setExpandedKeys";
+import { setTreeData } from "./actions/setTreeData";
 
 const findParentNode = (
   data: CustomTreeDataNode[],
@@ -163,108 +92,12 @@ const parseId = (key: string) => {
 };
 
 export const actions = {
-  setTreeData: (newTreeData: CustomTreeDataNode[]) => {
-    states.treeData = Promise.resolve(newTreeData);
-  },
-  setExpandedKeys: (newExpandedKeys: React.Key[]) => {
-    states.expandedKeys = newExpandedKeys;
-  },
+  setTreeData,
+  setExpandedKeys,
   setSelectedKey: (newSelectedKey: React.Key | null) => {
     states.selectedKey = newSelectedKey;
   },
-  addFile: async (parentKey?: React.Key) => {
-    const newKey = `project-${Date.now()}`;
-    const addNode = (
-      data: CustomTreeDataNode[],
-      parentKey?: React.Key,
-    ): CustomTreeDataNode[] => {
-      if (!parentKey) {
-        const folderIndex = data.findLastIndex((item) => item.children);
-        const insertIndex = folderIndex === -1 ? 0 : folderIndex + 1;
-        return [
-          ...data.slice(0, insertIndex),
-          {
-            title: "",
-            key: newKey,
-            isEditing: true,
-            isLeaf: true,
-          },
-          ...data.slice(insertIndex),
-        ];
-      }
-
-      let isInserted = false;
-      const insertNode = (
-        items: CustomTreeDataNode[],
-      ): CustomTreeDataNode[] => {
-        return items.map((item) => {
-          if (item.key === parentKey) {
-            const parentFolder = item;
-            if (parentFolder.children) {
-              if (!states.expandedKeys.includes(parentFolder.key)) {
-                actions.setExpandedKeys([
-                  ...states.expandedKeys,
-                  parentFolder.key,
-                ]);
-              }
-              isInserted = true;
-              const indexToInsert = parentFolder.children.findIndex(
-                (child) => !child.children,
-              );
-              const insertIndex =
-                indexToInsert === -1
-                  ? parentFolder.children.length
-                  : indexToInsert;
-              const newChildren = [
-                ...parentFolder.children.slice(0, insertIndex),
-                {
-                  title: "",
-                  key: newKey,
-                  isEditing: true,
-                  isLeaf: true,
-                },
-                ...parentFolder.children.slice(insertIndex),
-              ];
-              return {
-                ...item,
-                children: newChildren,
-              };
-            }
-          }
-          if (item.children && !isInserted) {
-            return {
-              ...item,
-              children: insertNode(item.children),
-            };
-          }
-          return item;
-        });
-      };
-
-      const result = insertNode(data);
-
-      if (!isInserted) {
-        const folderIndex = data.findLastIndex((item) => item.children);
-        const insertIndex = folderIndex === -1 ? 0 : folderIndex + 1;
-        return [
-          ...data.slice(0, insertIndex),
-          {
-            title: "",
-            key: newKey,
-            isEditing: true,
-            isLeaf: true,
-          },
-          ...data.slice(insertIndex),
-        ];
-      }
-
-      return result;
-    };
-
-    actions.setTreeData(
-      addNode(await states.treeData, states.selectedKey ?? parentKey),
-    );
-  },
+  addFile,
   addFolder: async (parentKey?: React.Key) => {
     const newKey = `group-${Date.now()}`;
     const addNode = (
@@ -440,7 +273,7 @@ export const actions = {
   },
   setContainerHeight: (h: number) => {
     states.containerHeight = Promise.resolve(h);
-  }
+  },
 };
 
 export const projectsStore = {
