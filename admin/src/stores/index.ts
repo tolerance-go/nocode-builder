@@ -6,6 +6,7 @@ import * as blueMap from "./blueMap";
 
 import { devtools } from "valtio/utils";
 import { proxy } from "valtio";
+import { projectsStore } from "./projects";
 
 const stores = proxy({
   routes,
@@ -13,6 +14,7 @@ const stores = proxy({
   components,
   blueMap,
   apps,
+  projectsStore,
 });
 
 devtools(stores, {
