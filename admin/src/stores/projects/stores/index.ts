@@ -64,7 +64,7 @@ const fetchTreeData = async () => {
 };
 
 // 定义状态
-export const states = proxy({
+export const treeStore = proxy({
   containerHeight: Promise.resolve(0),
   treeData: fetchTreeData(),
   expandedKeys: [] as React.Key[],
@@ -92,9 +92,9 @@ function convertToMap(
   return resultMap;
 }
 
-export const treeMapState = derive({
+export const treeMapStore = derive({
   data: async (get) => {
-    const treeData = await get(states).treeData;
+    const treeData = await get(treeStore).treeData;
     return convertToMap(treeData);
   },
 });

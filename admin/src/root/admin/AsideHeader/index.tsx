@@ -1,12 +1,12 @@
-import { projectsStore } from "@/stores/projects";
+import { addFolderAction } from "@/stores/projects";
+import { addFileAction } from "@/stores/projects/actions/addFile";
+import { treeStore } from "@/stores/projects/stores";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
 import { useSnapshot } from "valtio";
 
 export const AsideHeader = () => {
-  const { addFolderLoading, addFileLoading } = useSnapshot(
-    projectsStore.states,
-  );
+  const { addFolderLoading, addFileLoading } = useSnapshot(treeStore);
   const { token } = theme.useToken();
   return (
     <Flex
@@ -21,7 +21,7 @@ export const AsideHeader = () => {
         loading={addFileLoading}
         icon={<FileAddOutlined />}
         onClick={async () => {
-          projectsStore.actions.addFile();
+          addFileAction();
         }}
       ></Button>
       <Button
@@ -29,7 +29,7 @@ export const AsideHeader = () => {
         loading={addFolderLoading}
         icon={<FolderAddOutlined />}
         onClick={async () => {
-          projectsStore.actions.addFolder();
+          addFolderAction();
         }}
       ></Button>
     </Flex>

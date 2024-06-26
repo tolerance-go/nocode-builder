@@ -1,10 +1,9 @@
 import { createProject } from "@/services/api/createProject";
 import { createProjectGroup } from "@/services/api/createProjectGroup";
-import { addFile } from "./actions/addFile";
-import { states } from "./states";
-import { setExpandedKeys } from "./actions/setExpandedKeys";
-import { setTreeData } from "./actions/setTreeData";
 import { CustomTreeDataNode } from "@/types/tree";
+import { setExpandedKeysAction } from "./actions/setExpandedKeys";
+import { setTreeDataAction } from "./actions/setTreeData";
+import { treeStore } from "./stores";
 
 const findParentNode = (
   data: CustomTreeDataNode[],
@@ -68,7 +67,7 @@ const updateNodeTitle = async (
       return item;
     });
   };
-  actions.setTreeData(updateNode(await states.treeData));
+  setTreeDataAction(updateNode(await treeStore.treeData));
 };
 
 const deleteNode = (
@@ -92,196 +91,180 @@ const parseId = (key: string) => {
   return Number(key.split("-")[1]);
 };
 
-export const actions = {
-  setTreeData,
-  setExpandedKeys,
-  setSelectedKey: (newSelectedKey: React.Key | null) => {
-    states.selectedKey = newSelectedKey;
-  },
-  addFile,
-  addFolder: async (parentKey?: React.Key) => {
-    const newKey = `group-${Date.now()}`;
-    const addNode = (
-      data: CustomTreeDataNode[],
-      parentKey?: React.Key,
-    ): CustomTreeDataNode[] => {
-      if (!parentKey) {
-        return [
-          {
-            title: "",
-            key: newKey,
-            isEditing: true,
-            children: [],
-            id: -1,
-          },
-          ...data,
-        ];
-      }
+export const setSelectedKeyAction = (newSelectedKey: React.Key | null) => {
+  treeStore.selectedKey = newSelectedKey;
+};
+export const addFolderAction = async (parentKey?: React.Key) => {
+  const newKey = `group-${Date.now()}`;
+  const addNode = (
+    data: CustomTreeDataNode[],
+    parentKey?: React.Key,
+  ): CustomTreeDataNode[] => {
+    if (!parentKey) {
+      return [
+        {
+          title: "",
+          key: newKey,
+          isEditing: true,
+          children: [],
+          id: -1,
+        },
+        ...data,
+      ];
+    }
 
-      let isInserted = false;
-      const insertNode = (
-        items: CustomTreeDataNode[],
-      ): CustomTreeDataNode[] => {
-        return items.map((item) => {
-          if (item.key === parentKey) {
-            if (item.children) {
-              if (!states.expandedKeys.includes(item.key)) {
-                actions.setExpandedKeys([...states.expandedKeys, item.key]);
-              }
-              isInserted = true;
-              return {
-                ...item,
-                children: [
-                  {
-                    title: "",
-                    key: newKey,
-                    isEditing: true,
-                    children: [],
-                    id: -1,
-                  },
-                  ...item.children,
-                ],
-              };
-            } else {
-              const parentFolder = findParentFolder(data, parentKey);
-              if (parentFolder) {
-                isInserted = true;
-                if (!states.expandedKeys.includes(parentFolder.key)) {
-                  actions.setExpandedKeys([
-                    ...states.expandedKeys,
-                    parentFolder.key,
-                  ]);
-                }
-                parentFolder.children = [
-                  {
-                    title: "",
-                    key: newKey,
-                    isEditing: true,
-                    children: [],
-                    id: -1,
-                  },
-                  ...(parentFolder.children || []),
-                ];
-              }
+    let isInserted = false;
+    const insertNode = (items: CustomTreeDataNode[]): CustomTreeDataNode[] => {
+      return items.map((item) => {
+        if (item.key === parentKey) {
+          if (item.children) {
+            if (!treeStore.expandedKeys.includes(item.key)) {
+              setExpandedKeysAction([...treeStore.expandedKeys, item.key]);
             }
-          }
-          if (item.children && !isInserted) {
+            isInserted = true;
             return {
               ...item,
-              children: insertNode(item.children),
+              children: [
+                {
+                  title: "",
+                  key: newKey,
+                  isEditing: true,
+                  children: [],
+                  id: -1,
+                },
+                ...item.children,
+              ],
             };
+          } else {
+            const parentFolder = findParentFolder(data, parentKey);
+            if (parentFolder) {
+              isInserted = true;
+              if (!treeStore.expandedKeys.includes(parentFolder.key)) {
+                setExpandedKeysAction([
+                  ...treeStore.expandedKeys,
+                  parentFolder.key,
+                ]);
+              }
+              parentFolder.children = [
+                {
+                  title: "",
+                  key: newKey,
+                  isEditing: true,
+                  children: [],
+                  id: -1,
+                },
+                ...(parentFolder.children || []),
+              ];
+            }
           }
-          return item;
-        });
-      };
-
-      const result = insertNode(data);
-
-      if (!isInserted) {
-        return [
-          {
-            title: "",
-            key: newKey,
-            isEditing: true,
-            children: [],
-            id: -1,
-          },
-          ...data,
-        ];
-      }
-
-      return result;
-    };
-
-    actions.setTreeData(
-      addNode(await states.treeData, states.selectedKey ?? parentKey),
-    );
-  },
-  handleFolderFinish: async (
-    e:
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.FocusEvent<HTMLInputElement>,
-    key: React.Key,
-    defaultValue: string,
-  ) => {
-    const onAdd = async ({
-      title,
-      parentKey,
-    }: {
-      parentKey?: React.Key;
-      key: React.Key;
-      title: string;
-    }) => {
-      try {
-        projectsStore.states.addFolderLoading = true;
-        const result = await createProjectGroup({
-          name: title,
-          parentGroupId: parentKey as number,
-        });
-        return result.id;
-      } finally {
-        projectsStore.states.addFolderLoading = false;
-      }
-    };
-    const value = (e.target as HTMLInputElement).value || defaultValue;
-    const parentNode = findParentNode(await states.treeData, key);
-    try {
-      const result = await onAdd({
-        parentKey: parentNode ? parseId(parentNode.key as string) : undefined,
-        key,
-        title: value,
+        }
+        if (item.children && !isInserted) {
+          return {
+            ...item,
+            children: insertNode(item.children),
+          };
+        }
+        return item;
       });
-      updateNodeTitle(key, value, `group-${result}`, result);
-    } catch {
-      actions.setTreeData(deleteNode(await states.treeData, key));
-    }
-  },
-  handleFileFinish: async (
-    e:
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.FocusEvent<HTMLInputElement>,
-    key: React.Key,
-    defaultValue: string,
-  ) => {
-    const onAdd = async ({
-      title,
-      parentKey,
-    }: {
-      parentKey?: React.Key;
-      key: React.Key;
-      title: string;
-    }) => {
-      try {
-        projectsStore.states.addFileLoading = true;
-        const result = await createProject({
-          name: title,
-          projectGroupId: parentKey as number,
-        });
-        return result.id;
-      } finally {
-        projectsStore.states.addFileLoading = false;
-      }
     };
 
-    const value = (e.target as HTMLInputElement).value || defaultValue;
-    const parentNode = findParentNode(await states.treeData, key);
-    try {
-      const result = await onAdd({
-        parentKey: parentNode ? parseId(parentNode.key as string) : undefined,
-        key,
-        title: value,
-      });
-      updateNodeTitle(key, value, `project-${result}`, result);
-    } catch {
-      actions.setTreeData(deleteNode(await states.treeData, key));
+    const result = insertNode(data);
+
+    if (!isInserted) {
+      return [
+        {
+          title: "",
+          key: newKey,
+          isEditing: true,
+          children: [],
+          id: -1,
+        },
+        ...data,
+      ];
     }
-  },
-  setContainerHeight: (h: number) => {
-    states.containerHeight = Promise.resolve(h);
-  },
+
+    return result;
+  };
+
+  setTreeDataAction(
+    addNode(await treeStore.treeData, treeStore.selectedKey ?? parentKey),
+  );
 };
+export const handleFolderFinishAction = async (
+  e: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>,
+  key: React.Key,
+  defaultValue: string,
+) => {
+  const onAdd = async ({
+    title,
+    parentKey,
+  }: {
+    parentKey?: React.Key;
+    key: React.Key;
+    title: string;
+  }) => {
+    try {
+      treeStore.addFolderLoading = true;
+      const result = await createProjectGroup({
+        name: title,
+        parentGroupId: parentKey as number,
+      });
+      return result.id;
+    } finally {
+      treeStore.addFolderLoading = false;
+    }
+  };
+  const value = (e.target as HTMLInputElement).value || defaultValue;
+  const parentNode = findParentNode(await treeStore.treeData, key);
+  try {
+    const result = await onAdd({
+      parentKey: parentNode ? parseId(parentNode.key as string) : undefined,
+      key,
+      title: value,
+    });
+    updateNodeTitle(key, value, `group-${result}`, result);
+  } catch {
+    setTreeDataAction(deleteNode(await treeStore.treeData, key));
+  }
+};
+export const handleFileFinishAction = async (
+  e: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>,
+  key: React.Key,
+  defaultValue: string,
+) => {
+  const onAdd = async ({
+    title,
+    parentKey,
+  }: {
+    parentKey?: React.Key;
+    key: React.Key;
+    title: string;
+  }) => {
+    try {
+      treeStore.addFileLoading = true;
+      const result = await createProject({
+        name: title,
+        projectGroupId: parentKey as number,
+      });
+      return result.id;
+    } finally {
+      treeStore.addFileLoading = false;
+    }
+  };
 
-export const projectsStore = {
-  actions,
-  states,
+  const value = (e.target as HTMLInputElement).value || defaultValue;
+  const parentNode = findParentNode(await treeStore.treeData, key);
+  try {
+    const result = await onAdd({
+      parentKey: parentNode ? parseId(parentNode.key as string) : undefined,
+      key,
+      title: value,
+    });
+    updateNodeTitle(key, value, `project-${result}`, result);
+  } catch {
+    setTreeDataAction(deleteNode(await treeStore.treeData, key));
+  }
+};
+export const setContainerHeightAction = (h: number) => {
+  treeStore.containerHeight = Promise.resolve(h);
 };

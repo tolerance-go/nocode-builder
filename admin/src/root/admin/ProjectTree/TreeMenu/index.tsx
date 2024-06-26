@@ -1,4 +1,3 @@
-import { projectsStore } from "@/stores/projects";
 import { CustomTreeDataNode } from "@/types/tree";
 import { css } from "@emotion/css";
 import type { GetProps } from "antd";
@@ -6,24 +5,27 @@ import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { TitleComponent } from "./TitleComponent";
+import { treeStore } from "@/stores/projects/stores";
+import {
+  setSelectedKeyAction,
+  handleFileFinishAction,
+  handleFolderFinishAction,
+} from "@/stores/projects";
+import { setExpandedKeysAction } from "@/stores/projects/actions/setExpandedKeys";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
 const { DirectoryTree } = Tree;
 
-const actions = projectsStore.actions;
-
 export const TreeMenu = () => {
-  const { treeData, expandedKeys, containerHeight } = useSnapshot(
-    projectsStore.states,
-  );
+  const { treeData, expandedKeys, containerHeight } = useSnapshot(treeStore);
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys) => {
-    actions.setSelectedKey(keys.length > 0 ? keys[0] : null); // 更新选中节点的状态
+    setSelectedKeyAction(keys.length > 0 ? keys[0] : null); // 更新选中节点的状态
   };
 
   const onExpand: DirectoryTreeProps["onExpand"] = (keys) => {
-    actions.setExpandedKeys(keys); // 更新展开状态
+    setExpandedKeysAction(keys); // 更新展开状态
   };
 
   const handleFileFinish = async (
@@ -32,7 +34,7 @@ export const TreeMenu = () => {
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
   ) => {
-    actions.handleFileFinish(e, key, "New File");
+    handleFileFinishAction(e, key, "New File");
   };
 
   const handleFolderFinish = async (
@@ -41,7 +43,7 @@ export const TreeMenu = () => {
       | React.FocusEvent<HTMLInputElement>,
     key: React.Key,
   ) => {
-    actions.handleFolderFinish(e, key, "New Folder");
+    handleFolderFinishAction(e, key, "New Folder");
   };
 
   return (

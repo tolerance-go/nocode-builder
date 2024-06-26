@@ -1,6 +1,6 @@
 import { CustomTreeDataNode } from "@/types/tree";
-import { states } from "../states";
+import { treeStore } from "../stores";
 
-export const setTreeData = (newTreeData: CustomTreeDataNode[]) => {
-  states.treeData = Promise.resolve(newTreeData);
+export const setTreeDataAction = (newTreeData: CustomTreeDataNode[]) => {
+  treeStore.treeData = Promise.resolve(newTreeData);
 };

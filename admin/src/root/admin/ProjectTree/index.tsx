@@ -3,7 +3,7 @@ import { Flex, Spin } from "antd";
 import { Suspense, useEffect, useRef } from "react";
 import { TreeMenu } from "./TreeMenu";
 import { debounce } from "lodash-es";
-import { projectsStore } from "@/stores/projects";
+import { setContainerHeightAction } from "@/stores/projects";
 
 export const ProjectTree = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,7 +18,7 @@ export const ProjectTree = () => {
     const updateHeight = () => {
       if (containerRef.current) {
         const height = containerRef.current.clientHeight;
-        projectsStore.actions.setContainerHeight(height);
+        setContainerHeightAction(height);
       }
     };
 

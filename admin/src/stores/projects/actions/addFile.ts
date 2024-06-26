@@ -1,7 +1,7 @@
 import { CustomTreeDataNode } from "@/types/tree";
-import { states, treeMapState } from "../states";
-import { setExpandedKeys } from "./setExpandedKeys";
-import { setTreeData } from "./setTreeData";
+import { treeStore, treeMapStore } from "../stores";
+import { setExpandedKeysAction } from "./setExpandedKeys";
+import { setTreeDataAction } from "./setTreeData";
 
 /**
  * 在树形数据中添加节点的函数
@@ -50,8 +50,8 @@ const addNode = (
           // 找到目标叶子节点的父节点
           const parent = item.parentKey ? treeMap.get(item.parentKey) : null;
           if (parent) {
-            if (!states.expandedKeys.includes(parent.key)) {
-              setExpandedKeys([...states.expandedKeys, parent.key]); // 展开父文件夹
+            if (!treeStore.expandedKeys.includes(parent.key)) {
+              setExpandedKeysAction([...treeStore.expandedKeys, parent.key]); // 展开父文件夹
             }
             isInserted = true;
             const indexToInsert = parent.children!.findIndex(
@@ -79,8 +79,8 @@ const addNode = (
 
         if (targetNode.children) {
           // 如果目标节点有子节点（即为文件夹），在其子节点中插入新节点
-          if (!states.expandedKeys.includes(targetNode.key)) {
-            setExpandedKeys([...states.expandedKeys, targetNode.key]); // 展开目标文件夹
+          if (!treeStore.expandedKeys.includes(targetNode.key)) {
+            setExpandedKeysAction([...treeStore.expandedKeys, targetNode.key]); // 展开目标文件夹
           }
           isInserted = true;
           const indexToInsert = targetNode.children.findIndex(
@@ -142,9 +142,9 @@ const addNode = (
  * 添加文件的导出函数
  * @param targetKey 目标节点的key，可选
  */
-export const addFile = async (targetKey?: React.Key) => {
-  const treeMap = await treeMapState.data;
-  setTreeData(
-    addNode(await states.treeData, treeMap, states.selectedKey ?? targetKey),
+export const addFileAction = async (targetKey?: React.Key) => {
+  const treeMap = await treeMapStore.data;
+  setTreeDataAction(
+    addNode(await treeStore.treeData, treeMap, treeStore.selectedKey ?? targetKey),
   );
 };
