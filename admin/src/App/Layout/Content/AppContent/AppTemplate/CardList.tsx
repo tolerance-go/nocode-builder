@@ -1,5 +1,5 @@
 import { PreviewCard } from "@/components/PreviewCard";
-import { Template } from "@/types";
+import { Template } from "@/types/common";
 import React from "react";
 
 interface CardListProps {

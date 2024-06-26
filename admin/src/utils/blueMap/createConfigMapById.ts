@@ -1,4 +1,4 @@
-import { DataKey } from "@/types";
+import { DataKey } from "@/types/common";
 
 export const createConfigMapByKey = <T>(
   configs: T[],

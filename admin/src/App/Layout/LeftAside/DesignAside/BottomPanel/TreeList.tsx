@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Tree } from "antd";
 import type { TreeDataNode, TreeProps } from "antd";
 import { css } from "@emotion/css";
-import { NodeData } from "@/types";
+import { NodeData } from "@/types/common";
 import { useSnapshot } from "valtio";
 import stores from "@/stores";
 import { DeepReadonly } from "@/utils/types";

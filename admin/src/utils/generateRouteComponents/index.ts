@@ -3,7 +3,7 @@ import {
   RouteComponentData,
   RouteNodeData,
   SlotsChildren,
-} from "@/types";
+} from "@/types/common";
 import { isPlainObject } from "../isPlainObject";
 
 function generateRouteComponents(

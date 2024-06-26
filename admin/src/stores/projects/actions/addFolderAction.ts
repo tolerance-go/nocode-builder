@@ -1,6 +1,6 @@
 import { CustomTreeDataNode } from "@/types/tree";
 import { treeStore } from "../stores";
-import { setExpandedKeysAction } from "./setExpandedKeys";
+import { setExpandedKeysAction } from "./setExpandedKeysAction";
 import { setTreeDataAction } from "./setTreeDataAction";
 import { findParentFolder } from "./_utils/common";
 

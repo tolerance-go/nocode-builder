@@ -1,4 +1,4 @@
-import { AppData, AppGroup } from "@/types";
+import { AppData, AppGroup } from "@/types/common";
 import { DeepReadonly } from "@/utils/types";
 import { TreeDataNode } from "antd";
 

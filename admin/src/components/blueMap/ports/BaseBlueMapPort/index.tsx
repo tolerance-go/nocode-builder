@@ -5,7 +5,7 @@ import { getNodeById } from "@/utils/blueMap/getNodeById";
 import { removePortConnections } from "@/utils/blueMap/removePortConnections";
 import { validatePortConnection } from "@/utils/blueMap/validatePortConnection";
 import { blueMapEventBus } from "@/globals/blueMapEventBus";
-import { BlueMapPortComponentProps } from "@/types";
+import { BlueMapPortComponentProps } from "@/types/common";
 import "./index.less";
 
 export const BaseBlueMapPort = ({

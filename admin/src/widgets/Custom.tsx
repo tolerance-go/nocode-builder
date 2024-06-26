@@ -1,4 +1,4 @@
-import { DesignableComponentProps } from "@/types";
+import { DesignableComponentProps } from "@/types/common";
 import { Button } from "antd";
 
 export const Custom = ({

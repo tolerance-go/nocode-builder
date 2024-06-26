@@ -6,12 +6,10 @@ import React from "react";
 import { useSnapshot } from "valtio";
 import { TitleComponent } from "./TitleComponent";
 import { treeStore } from "@/stores/projects/stores";
-import {
-  setSelectedKeyAction,
-  handleFileFinishAction,
-  handleFolderFinishAction,
-} from "@/stores/projects";
-import { setExpandedKeysAction } from "@/stores/projects/actions/setExpandedKeys";
+import { handleFileFinishAction } from "@/stores/projects/actions/handleFileFinishAction";
+import { handleFolderFinishAction } from "@/stores/projects/actions/handleFolderFinishAction";
+import { setExpandedKeysAction } from "@/stores/projects/actions/setExpandedKeysAction";
+import { setSelectedKeyAction } from "@/stores/projects/actions/setSelectedKeyAction";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 

@@ -4,7 +4,7 @@ import {
   MenuGroups,
   SearchNodeSourceData,
   SearchTreeNode,
-} from "@/types";
+} from "@/types/common";
 import { ensure } from "@/utils/ensure";
 import { Graph } from "@antv/x6";
 import { getNodeById } from "../getNodeById";

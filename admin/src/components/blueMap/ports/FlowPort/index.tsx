@@ -2,7 +2,7 @@ import { Edge } from "@antv/x6";
 import { cx } from "@emotion/css";
 import { useEffect, useState } from "react";
 import { BasePort } from "../BasePort";
-import { PortComponentProps } from "@/types";
+import { PortComponentProps } from "@/types/common";
 
 type FlowPortProps = PortComponentProps & {
   label?: string;

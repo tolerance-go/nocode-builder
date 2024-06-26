@@ -3,7 +3,7 @@ import {
   widgetEventsByType,
 } from "@/configs/widgetEvent";
 import stores from "@/stores";
-import { SearchParams } from "@/types";
+import { SearchParams } from "@/types/common";
 import { ensure } from "@/utils/ensure";
 import { useSearchData } from "@/utils/useSearchData";
 import type { GetProps } from "antd";

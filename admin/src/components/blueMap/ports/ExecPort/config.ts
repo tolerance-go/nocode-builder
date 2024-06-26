@@ -1,6 +1,6 @@
 import colors from "tailwindcss/colors";
 import { ExecPort } from ".";
-import { BlueMapPortConfig } from "@/types";
+import { BlueMapPortConfig } from "@/types/common";
 
 export const ExecPortConfig: BlueMapPortConfig = {
   id: "exec",

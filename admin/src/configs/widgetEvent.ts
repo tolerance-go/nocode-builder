@@ -1,4 +1,4 @@
-import { WidgetEventGroupItem, WidgetEventItem } from "@/types";
+import { WidgetEventGroupItem, WidgetEventItem } from "@/types/common";
 import { validateAndCreateConfigMap } from "@/utils/blueMap/validateAndCreateConfigMap";
 
 // 交互事件类型

@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { actions, states } from "../../routes";
-import { RouteNode } from "@/types";
+import { RouteNode } from "@/types/common";
 
 describe("actions", () => {
   beforeEach(() => {

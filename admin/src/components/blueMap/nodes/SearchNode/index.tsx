@@ -5,7 +5,7 @@ import {
   SearchNodeSourceData,
   SearchTreeNode,
   X6ReactComponentProps,
-} from "@/types";
+} from "@/types/common";
 import {
   filterConfigsBySource,
   generateTreeData,

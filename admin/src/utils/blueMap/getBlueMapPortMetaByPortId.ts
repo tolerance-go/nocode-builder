@@ -1,5 +1,5 @@
 import { blueMapPortConfigsByType } from "@/configs/blueMap/blueMapPortConfigs";
-import { BlueMapPortMeta, PortBlueMapAttrs } from "@/types";
+import { BlueMapPortMeta, PortBlueMapAttrs } from "@/types/common";
 import { ensure } from "@/utils/ensure";
 import { Node } from "@antv/x6";
 

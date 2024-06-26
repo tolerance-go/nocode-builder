@@ -2,7 +2,7 @@ import { SettingConfig } from "@/components/SettingsForm";
 import { coreEventBus } from "@/globals/coreEventBus";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
-import { ComponentWidget, NodeData, StaticProps } from "@/types";
+import { ComponentWidget, NodeData, StaticProps } from "@/types/common";
 import { DeepReadonly } from "@/utils/types";
 import { useEffect, useState } from "react";
 import { useSnapshot } from "valtio";

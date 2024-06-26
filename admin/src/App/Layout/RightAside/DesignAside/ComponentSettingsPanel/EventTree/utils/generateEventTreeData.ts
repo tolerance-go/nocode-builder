@@ -1,4 +1,4 @@
-import { WidgetEventItem, WidgetEventGroupItem, DataKey } from "@/types";
+import { WidgetEventItem, WidgetEventGroupItem, DataKey } from "@/types/common";
 import { TreeDataNode } from "antd";
 
 // 工具方法，用于生成树结构

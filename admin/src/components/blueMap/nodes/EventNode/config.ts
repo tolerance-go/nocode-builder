@@ -1,4 +1,4 @@
-import { BlueMapNodeConfig } from "@/types";
+import { BlueMapNodeConfig } from "@/types/common";
 import { EventNodeAttrs, EventNode } from ".";
 import { generateNodeConfigMetaFromBlueMap } from "@/core/generateNodeConfigMetaFromBlueMap";
 

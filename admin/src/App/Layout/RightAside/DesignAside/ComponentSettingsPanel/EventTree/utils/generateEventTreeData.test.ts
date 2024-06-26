@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { generateEventTreeData } from "./generateEventTreeData";
-import { WidgetEventItem, WidgetEventGroupItem, DataKey } from "@/types";
+import { WidgetEventItem, WidgetEventGroupItem, DataKey } from "@/types/common";
 import { validateAndCreateConfigMap } from "@/utils/blueMap/validateAndCreateConfigMap";
 
 // 交互事件类型

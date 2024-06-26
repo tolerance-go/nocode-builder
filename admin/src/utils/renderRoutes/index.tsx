@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-import { NodeData, RouteComponentData } from "@/types";
+import { NodeData, RouteComponentData } from "@/types/common";
 
 export const renderRoutes = (
   data: RouteComponentData[],

@@ -8,7 +8,7 @@ import {
   NodeData,
   RectVisualPosition,
   VisualPosition,
-} from "@/types";
+} from "@/types/common";
 import { ensure } from "@/utils/ensure";
 import { InsertionAnalyzer } from "@/utils/insertionAnalyzer";
 import { isPlainObject } from "@/utils/isPlainObject";

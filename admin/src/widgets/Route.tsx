@@ -1,6 +1,6 @@
 import { SlotPlaceholder } from "@/components/SlotPlaceholder";
 import { MemoryRoute } from "@/components/memoryRouter/MemoryRoute";
-import { ComponentWidget, DesignableComponentProps } from "@/types";
+import { ComponentWidget, DesignableComponentProps } from "@/types/common";
 import { isEmpty } from "@/utils/isEmpty";
 import React from "react";
 

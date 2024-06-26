@@ -1,4 +1,4 @@
-import { AppData, AppGroup } from "@/types";
+import { AppData, AppGroup } from "@/types/common";
 import { createConfigMapByKey } from "@/utils/blueMap/createConfigMapById";
 import { ensure } from "@/utils/ensure";
 import { derive } from "derive-valtio";

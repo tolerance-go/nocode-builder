@@ -1,4 +1,4 @@
-import { NodeData } from "@/types";
+import { NodeData } from "@/types/common";
 import { EventBus } from "@/utils/eventBus";
 import { DeepReadonly } from "@/utils/types";
 

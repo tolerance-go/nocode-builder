@@ -4,7 +4,7 @@ import {
   NodeData,
   SlotsChildren,
   StaticProps,
-} from "@/types";
+} from "@/types/common";
 import { ensure } from "@/utils/ensure";
 import { DeepReadonly } from "@/utils/types";
 import { derive } from "derive-valtio";

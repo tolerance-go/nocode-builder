@@ -1,5 +1,5 @@
 import stores from "@/stores";
-import { RouteNodeData } from "@/types";
+import { RouteNodeData } from "@/types/common";
 import { generateRouteComponents } from "@/utils/generateRouteComponents";
 import { renderNodes } from "@/utils/renderNodes";
 import { renderRoutes } from "@/utils/renderRoutes";

@@ -1,5 +1,5 @@
 import { components } from "@/configs/components";
-import { NodeData, RouteNodeData } from "@/types";
+import { NodeData, RouteNodeData } from "@/types/common";
 import React from "react";
 import { DeepReadonly } from "../types";
 import { isRouteNodeData } from "../isRouteNodeData";

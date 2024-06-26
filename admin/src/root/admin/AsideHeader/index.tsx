@@ -1,5 +1,5 @@
-import { addFolderAction } from "@/stores/projects";
-import { addFileAction } from "@/stores/projects/actions/addFile";
+import { addFileAction } from "@/stores/projects/actions/addFileAction";
+import { addFolderAction } from "@/stores/projects/actions/addFolderAction";
 import { treeStore } from "@/stores/projects/stores";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";

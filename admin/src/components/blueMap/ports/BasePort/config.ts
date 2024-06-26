@@ -1,4 +1,4 @@
-import { PortConfig } from "@/types";
+import { PortConfig } from "@/types/common";
 import { BasePort } from ".";
 
 export const BasePortConfig: PortConfig = {

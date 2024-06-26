@@ -2,7 +2,7 @@ import { ContentToolBar } from "@/components/ContentToolBar";
 import BlueMapGraph from "./BlueMapGraph";
 import { Button, Space } from "antd";
 import { useSearchData } from "@/utils/useSearchData";
-import { SearchParams } from "@/types";
+import { SearchParams } from "@/types/common";
 
 export const BlueMap = () => {
   const { updateSearchData } = useSearchData<
