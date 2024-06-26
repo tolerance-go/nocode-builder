@@ -1,14 +1,14 @@
 import { getProjectGroups } from "@/services/api/getProjectGroups";
 import { getProjects } from "@/services/api/getProjects";
 import { CustomTreeDataNode } from "@/types/tree";
+import { derive } from "derive-valtio";
 import { proxy } from "valtio";
-
-export const projectGroupMap = new Map<number, CustomTreeDataNode>();
 
 function buildTree(
   projectGroups: API.ProjectGroupDto[],
   projects: API.ProjectDto[],
 ): CustomTreeDataNode[] {
+  const projectGroupMap = new Map<number, CustomTreeDataNode>();
   // 初始化所有的 projectGroups 为 TreeNode
   projectGroups.forEach((group) => {
     projectGroupMap.set(group.id, {
@@ -71,4 +71,30 @@ export const states = proxy({
   selectedKey: null as React.Key | null,
   addFolderLoading: false,
   addFileLoading: false,
+});
+
+function convertToMap(
+  treeData: CustomTreeDataNode[],
+): Map<string, CustomTreeDataNode> {
+  const resultMap = new Map<string, CustomTreeDataNode>();
+
+  function traverse(nodes: CustomTreeDataNode[], parentKey?: string) {
+    nodes.forEach((node) => {
+      node.parentKey = parentKey;
+      resultMap.set(node.key, node);
+      if (node.children && node.children.length > 0) {
+        traverse(node.children, node.key);
+      }
+    });
+  }
+
+  traverse(treeData);
+  return resultMap;
+}
+
+export const treeMapState = derive({
+  data: async (get) => {
+    const treeData = await get(states).treeData;
+    return convertToMap(treeData);
+  },
 });
