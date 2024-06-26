@@ -3,33 +3,34 @@ import { getProjects } from "@/services/api/getProjects";
 import { CustomTreeDataNode } from "@/types/tree";
 import { proxy } from "valtio";
 
+export const projectGroupMap = new Map<number, CustomTreeDataNode>();
+
 function buildTree(
   projectGroups: API.ProjectGroupDto[],
   projects: API.ProjectDto[],
 ): CustomTreeDataNode[] {
-  const groupMap: { [key: string]: CustomTreeDataNode } = {};
-
   // 初始化所有的 projectGroups 为 TreeNode
   projectGroups.forEach((group) => {
-    groupMap[`group-${group.id}`] = {
+    projectGroupMap.set(group.id, {
       key: `group-${group.id}`,
       title: group.name,
       children: [],
       id: group.id,
-    };
+    });
   });
 
   // 构建嵌套的 group 结构
   const tree: CustomTreeDataNode[] = [];
   projectGroups.forEach((group) => {
-    const parentGroup = groupMap[`group-${group.parentGroupId}`];
+    const parentGroup =
+      group.parentGroupId && projectGroupMap.get(group.parentGroupId);
     if (group.parentGroupId && parentGroup) {
       if (!parentGroup.children) {
         parentGroup.children = [];
       }
-      parentGroup.children.push(groupMap[`group-${group.id}`]);
+      parentGroup.children.push(projectGroupMap.get(group.id)!);
     } else {
-      tree.push(groupMap[`group-${group.id}`]);
+      tree.push(projectGroupMap.get(group.id)!);
     }
   });
 
@@ -41,7 +42,8 @@ function buildTree(
       isLeaf: true,
       id: project.id,
     };
-    const parentGroup = groupMap[`group-${project.projectGroupId}`];
+    const parentGroup =
+      project.projectGroupId && projectGroupMap.get(project.projectGroupId);
     if (project.projectGroupId && parentGroup) {
       if (!parentGroup.children) {
         parentGroup.children = [];
