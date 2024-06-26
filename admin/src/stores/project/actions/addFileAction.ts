@@ -2,6 +2,7 @@ import { CustomTreeDataNode } from "@/types/tree";
 import { treeStore, treeMapStore } from "../stores";
 import { setExpandedKeysAction } from "./setExpandedKeysAction";
 import { setTreeDataAction } from "./setTreeDataAction";
+import { insertNodeAfterLastFolderIndex } from "../_utils/insertNodeAfterLastFolderIndex";
 
 /**
  * 在树形数据中添加节点的函数
@@ -42,41 +43,26 @@ const addNode = (
    */
   const insertNode = (items: CustomTreeDataNode[]): CustomTreeDataNode[] => {
     return items.map((item) => {
+      if (
+        item.children &&
+        item.children.some((child) => child.key === targetKey)
+      ) {
+        isInserted = true;
+
+        return {
+          ...item,
+          children: insertNodeAfterLastFolderIndex(item.children, {
+            title: "",
+            key: newKey,
+            isEditing: true,
+            isLeaf: true,
+            id: -1,
+          }),
+        };
+      }
+
       if (item.key === targetKey) {
         const targetNode = item;
-
-        // 如果目标节点是叶子节点，在其同级层级的所有文件夹之后插入
-        if (targetNode.isLeaf) {
-          // 找到目标叶子节点的父节点
-          const parent = item.parentKey ? treeMap.get(item.parentKey) : null;
-          if (parent) {
-            if (!treeStore.expandedKeys.includes(parent.key)) {
-              setExpandedKeysAction([...treeStore.expandedKeys, parent.key]); // 展开父文件夹
-            }
-            isInserted = true;
-            const indexToInsert = parent.children!.findIndex(
-              (child) => !child.children,
-            ); // 找到第一个文件的位置
-            const insertIndex =
-              indexToInsert === -1 ? parent.children!.length : indexToInsert; // 插入位置
-            const newChildren = [
-              ...parent.children!.slice(0, insertIndex),
-              {
-                title: "",
-                key: newKey,
-                isEditing: true,
-                isLeaf: true,
-                id: -1,
-              },
-              ...parent.children!.slice(insertIndex),
-            ];
-            return {
-              ...parent,
-              children: newChildren,
-            };
-          }
-        }
-
         if (targetNode.children) {
           // 如果目标节点有子节点（即为文件夹），在其子节点中插入新节点
           if (!treeStore.expandedKeys.includes(targetNode.key)) {
@@ -145,6 +131,10 @@ const addNode = (
 export const addFileAction = async (targetKey?: React.Key) => {
   const treeMap = await treeMapStore.data;
   setTreeDataAction(
-    addNode(await treeStore.treeData, treeMap, treeStore.selectedKey ?? targetKey),
+    addNode(
+      await treeStore.treeData,
+      treeMap,
+      treeStore.selectedKey ?? targetKey,
+    ),
   );
 };
