@@ -46,7 +46,9 @@ const TitleComponent = ({
 const actions = projectsStore.actions;
 
 export const TreeMenu = () => {
-  const { treeData, expandedKeys } = useSnapshot(projectsStore.states);
+  const { treeData, expandedKeys, containerHeight } = useSnapshot(
+    projectsStore.states,
+  );
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys) => {
     actions.setSelectedKey(keys.length > 0 ? keys[0] : null); // 更新选中节点的状态
@@ -77,7 +79,7 @@ export const TreeMenu = () => {
   return (
     <div>
       <DirectoryTree
-        height={233}
+        height={containerHeight}
         className={css`
           .ant-tree-node-content-wrapper {
             display: inline-flex;

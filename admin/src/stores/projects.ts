@@ -69,6 +69,7 @@ const fetchTreeData = async () => {
 
 // 定义状态
 export const states = proxy({
+  containerHeight: Promise.resolve(0),
   treeData: fetchTreeData(),
   expandedKeys: [] as React.Key[],
   selectedKey: null as React.Key | null,
@@ -437,6 +438,9 @@ export const actions = {
       actions.setTreeData(deleteNode(await states.treeData, key));
     }
   },
+  setContainerHeight: (h: number) => {
+    states.containerHeight = Promise.resolve(h);
+  }
 };
 
 export const projectsStore = {
