@@ -1,4 +1,4 @@
-import { X6ReactComponentProps } from "@/types/common";
+import { X6ReactComponentProps } from "@/types";
 import { Cell } from "@antv/x6";
 import { cx } from "@emotion/css";
 import { Typography } from "antd";

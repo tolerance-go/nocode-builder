@@ -1,4 +1,4 @@
-import { SearchParams } from "@/types/common";
+import { SearchParams } from "@/types";
 import { useSearchData } from "@/utils/useSearchData";
 import { Designer } from "./Designer";
 import { BlueMap } from "./BlueMap";

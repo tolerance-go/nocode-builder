@@ -1,5 +1,5 @@
 import { SlotPlaceholder } from "@/components/SlotPlaceholder";
-import { ComponentWidget, DesignableComponentProps } from "@/types/common";
+import { ComponentWidget, DesignableComponentProps } from "@/types";
 import { isEmpty } from "@/utils/isEmpty";
 import React from "react";
 

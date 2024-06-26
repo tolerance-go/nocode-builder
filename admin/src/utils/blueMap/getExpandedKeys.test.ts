@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { getExpandedKeys } from "./getExpandedKeys";
-import { SearchTreeNode } from "@/types/common";
+import { SearchTreeNode } from "@/types";
 
 // 静态数据
 const defaultData: SearchTreeNode[] = [

@@ -1,6 +1,6 @@
 import SettingsForm from "@/components/SettingsForm";
 import stores from "@/stores";
-import { NodeData } from "@/types/common";
+import { NodeData } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { Empty, Form } from "antd";
 import React, { useLayoutEffect } from "react";

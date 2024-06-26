@@ -1,4 +1,4 @@
-import { ComponentWidget } from "@/types/common";
+import { ComponentWidget } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { Card } from "antd";
 import React from "react";

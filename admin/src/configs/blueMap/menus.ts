@@ -1,5 +1,5 @@
 import { validateAndCreateConfigMap } from "@/utils/blueMap/validateAndCreateConfigMap";
-import { MenuGroups } from "../../types/base";
+import { MenuGroups } from "../../types";
 
 export const menuGroups: MenuGroups = [
   {

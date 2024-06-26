@@ -1,7 +1,7 @@
 import { coreEventBus } from "@/globals/coreEventBus";
 import useLatest from "@/hooks/useLatest";
 import stores from "@/stores";
-import { RouteNode } from "@/types/common";
+import { RouteNode } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { PlusOutlined } from "@ant-design/icons";
 import { css } from "@emotion/css";

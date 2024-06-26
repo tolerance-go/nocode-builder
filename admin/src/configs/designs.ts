@@ -1,4 +1,4 @@
-import { NodeData } from "@/types/common";
+import { NodeData } from "@/types";
 
 export const exampleNodeData: NodeData[] = [
   {

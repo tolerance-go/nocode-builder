@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { states, actions } from "@/stores/routes"; // 替换为实际路径
-import { RouteNode } from "@/types/common";
+import { RouteNode } from "@/types";
 
 describe("getNodeFullPath", () => {
   // 初始化测试数据

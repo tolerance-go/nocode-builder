@@ -2,7 +2,7 @@ import {
   DocumentInsertionPosition,
   InsertionPositions,
   RectVisualPosition,
-} from "@/types/common";
+} from "@/types";
 
 export class InsertionAnalyzer {
   // 分析传入的元素，返回视觉上的插入位置

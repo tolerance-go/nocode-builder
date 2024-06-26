@@ -1,4 +1,4 @@
-import { NavItem } from "@/types/common";
+import { NavItem } from "@/types";
 
 /**
  * 约定 key 就是 url item

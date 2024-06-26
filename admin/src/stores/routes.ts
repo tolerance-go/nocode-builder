@@ -1,4 +1,4 @@
-import { RouteNode } from "@/types/common";
+import { RouteNode } from "@/types";
 import store2 from "store2";
 import { proxy, subscribe } from "valtio";
 

@@ -9,7 +9,7 @@ import {
   Switch,
 } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { StaticPropsValue } from "@/types/common";
+import { StaticPropsValue } from "@/types";
 
 const { Option } = Select;
 

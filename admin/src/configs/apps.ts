@@ -1,4 +1,4 @@
-import { Template, TemplateUseCase } from "@/types/common";
+import { Template, TemplateUseCase } from "@/types";
 import { createConfigMapByKey } from "@/utils/blueMap/createConfigMapById";
 
 // 定义一个 TemplateUseCase 类型的数组

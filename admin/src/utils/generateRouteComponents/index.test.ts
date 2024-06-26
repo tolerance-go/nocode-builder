@@ -1,4 +1,4 @@
-import { RouteNodeData } from "@/types/common";
+import { RouteNodeData } from "@/types";
 import { describe, expect, it } from "vitest";
 import { generateRouteComponents } from ".";
 

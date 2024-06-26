@@ -1,7 +1,7 @@
 import { FlowPort } from "../FlowPort";
 import { BaseBlueMapPort } from "../BaseBlueMapPort";
 import { ExecPortConfig } from "./config";
-import { BlueMapPortComponentProps } from "@/types/common";
+import { BlueMapPortComponentProps } from "@/types";
 
 export const ExecPort = (props: BlueMapPortComponentProps) => {
   const { blueMapPort, ...portProps } = props;

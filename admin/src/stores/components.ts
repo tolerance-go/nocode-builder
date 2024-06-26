@@ -1,5 +1,5 @@
 import { clickWidgetEvent } from "@/configs/widgetEvent";
-import { ComponentWidget, GroupWidget } from "@/types/common";
+import { ComponentWidget, GroupWidget } from "@/types";
 import { RootWidget } from "@/widgets/Root";
 import { RouteWidget } from "@/widgets/Route";
 import { proxy } from "valtio";

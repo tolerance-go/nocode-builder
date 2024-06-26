@@ -1,4 +1,4 @@
-import { ComponentType } from "@/types/common";
+import { ComponentType } from "@/types";
 import { Button } from "@/widgets/Button";
 import { Custom } from "@/widgets/Custom";
 import { CustomWithSlots } from "@/widgets/CustomWithSlots";

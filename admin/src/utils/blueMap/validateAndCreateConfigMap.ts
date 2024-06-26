@@ -1,4 +1,4 @@
-import { DataKey } from "@/types/common";
+import { DataKey } from "@/types";
 import { checkDuplicateKeys } from "./checkDuplicateIds";
 import { createConfigMapByKey } from "./createConfigMapById";
 

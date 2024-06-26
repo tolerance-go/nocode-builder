@@ -1,4 +1,4 @@
-import { NodeData, RouteNodeData } from "@/types/common";
+import { NodeData, RouteNodeData } from "@/types";
 import { DeepReadonly } from "./types";
 
 export function isRouteNodeData(

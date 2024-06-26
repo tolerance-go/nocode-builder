@@ -1,5 +1,5 @@
 import { SlotPlaceholder } from "@/components/SlotPlaceholder";
-import { DesignableComponentProps } from "@/types/common";
+import { DesignableComponentProps } from "@/types";
 import { isEmpty } from "@/utils/isEmpty";
 import { Button } from "antd";
 

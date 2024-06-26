@@ -1,4 +1,4 @@
-import { DesignableComponentProps } from "@/types/common";
+import { DesignableComponentProps } from "@/types";
 import { Table as AntdTable } from "antd";
 
 export const Table = ({

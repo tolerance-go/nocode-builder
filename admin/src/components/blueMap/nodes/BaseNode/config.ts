@@ -1,6 +1,6 @@
 import { ReactShapeConfig } from "@antv/x6-react-shape";
 import { BaseNode, BaseNodeAttrs } from ".";
-import { NodeConfig } from "@/types/common";
+import { NodeConfig } from "@/types";
 
 export const BaseNodeShape: ReactShapeConfig = {
   shape: "base-node",

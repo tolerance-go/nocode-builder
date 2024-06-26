@@ -1,6 +1,6 @@
 import { Cell } from "@antv/x6";
 import { BaseNode } from "../BaseNode";
-import { X6ReactComponentProps } from "@/types/common";
+import { X6ReactComponentProps } from "@/types";
 
 export type EventNodeAttrs = Cell.Common["attrs"];
 
