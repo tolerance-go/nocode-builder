@@ -1,6 +1,6 @@
 import { CustomTreeDataNode } from "@/types/tree";
-import { treeStore } from "../../stores";
-import { setTreeDataAction } from "../setTreeDataAction";
+import { treeStore } from "../stores";
+import { setTreeDataAction } from "../actions/setTreeDataAction";
 
 export const parseId = (key: string) => {
   return Number(key.split("-")[1]);
