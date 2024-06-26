@@ -4,6 +4,7 @@ import type { GetProps, TreeDataNode } from "antd";
 import { Input, Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
+import { TitleComponent } from "./TitleComponent";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
@@ -15,35 +16,6 @@ export interface CustomTreeDataNode extends Omit<TreeDataNode, "children"> {
   parentKey?: string;
   id: number;
 }
-
-const TitleComponent = ({
-  title,
-  isEditing,
-  onFinish,
-  newKey,
-}: {
-  title: string;
-  isEditing?: boolean;
-  onFinish: (
-    e:
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.FocusEvent<HTMLInputElement>,
-    key: React.Key,
-  ) => void;
-  newKey: React.Key;
-}) => {
-  return isEditing ? (
-    <Input
-      autoFocus
-      defaultValue={title}
-      onBlur={(e) => onFinish(e, newKey)}
-      onPressEnter={(e) => onFinish(e, newKey)}
-      style={{ width: "100%" }}
-    />
-  ) : (
-    <span>{title}</span>
-  );
-};
 
 const actions = projectsStore.actions;
 
