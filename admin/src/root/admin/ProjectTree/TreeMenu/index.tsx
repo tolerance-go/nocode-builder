@@ -1,7 +1,8 @@
 import { projectsStore } from "@/stores/projects";
+import { CustomTreeDataNode } from "@/types/tree";
 import { css } from "@emotion/css";
-import type { GetProps, TreeDataNode } from "antd";
-import { Input, Tree } from "antd";
+import type { GetProps } from "antd";
+import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { TitleComponent } from "./TitleComponent";
@@ -9,13 +10,6 @@ import { TitleComponent } from "./TitleComponent";
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
 const { DirectoryTree } = Tree;
-
-export interface CustomTreeDataNode extends Omit<TreeDataNode, "children"> {
-  isEditing?: boolean;
-  children?: CustomTreeDataNode[];
-  parentKey?: string;
-  id: number;
-}
 
 const actions = projectsStore.actions;
 
