@@ -1,5 +1,5 @@
 import { CustomTreeDataNode } from "@/types/tree";
-import { states } from "../states";
+import { states, treeMapState } from "../states";
 import { setExpandedKeys } from "./setExpandedKeys";
 import { setTreeData } from "./setTreeData";
 
@@ -11,6 +11,7 @@ import { setTreeData } from "./setTreeData";
  */
 const addNode = (
   data: CustomTreeDataNode[],
+  treeMap: Map<string, CustomTreeDataNode>,
   targetKey?: React.Key,
 ): CustomTreeDataNode[] => {
   const newKey = `project-${Date.now()}`; // 生成新的唯一key
@@ -43,14 +44,11 @@ const addNode = (
     return items.map((item) => {
       if (item.key === targetKey) {
         const targetNode = item;
-        console.log(targetNode);
 
         // 如果目标节点是叶子节点，在其同级层级的所有文件夹之后插入
         if (targetNode.isLeaf) {
           // 找到目标叶子节点的父节点
-          const parent = items.find((item) =>
-            item.children?.some((child) => child.key === targetKey),
-          );
+          const parent = item.parentKey ? treeMap.get(item.parentKey) : null;
           if (parent) {
             if (!states.expandedKeys.includes(parent.key)) {
               setExpandedKeys([...states.expandedKeys, parent.key]); // 展开父文件夹
@@ -145,5 +143,8 @@ const addNode = (
  * @param targetKey 目标节点的key，可选
  */
 export const addFile = async (targetKey?: React.Key) => {
-  setTreeData(addNode(await states.treeData, states.selectedKey ?? targetKey));
+  const treeMap = await treeMapState.data;
+  setTreeData(
+    addNode(await states.treeData, treeMap, states.selectedKey ?? targetKey),
+  );
 };
