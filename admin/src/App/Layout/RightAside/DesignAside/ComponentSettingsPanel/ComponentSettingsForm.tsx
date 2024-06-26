@@ -1,5 +1,5 @@
 import SettingsForm from "@/components/SettingsForm";
-import store from "@/store";
+import store from "@/stores";
 import { NodeData } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { Empty, Form } from "antd";

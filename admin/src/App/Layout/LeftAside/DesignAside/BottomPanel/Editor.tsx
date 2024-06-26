@@ -1,6 +1,6 @@
 import * as monaco from "monaco-editor";
 import { useEffect, useRef } from "react";
-import store from "@/store";
+import store from "@/stores";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";

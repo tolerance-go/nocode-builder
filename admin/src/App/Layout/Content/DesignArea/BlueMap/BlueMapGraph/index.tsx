@@ -26,7 +26,7 @@ import { blueMapPortConfigsByType } from "@/configs/blueMap/blueMapPortConfigs";
 import { nodeConfigsById } from "@/configs/blueMap/configs";
 import { connectAnchorOffset } from "@/constants/blueMap";
 import { blueMapEventBus } from "@/globals/blueMapEventBus";
-import store from "@/store";
+import store from "@/stores";
 import {
   PortBlueMapAttrs,
   BlueMapPortCommonArgs,

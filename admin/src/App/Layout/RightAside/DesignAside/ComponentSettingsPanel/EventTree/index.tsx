@@ -2,7 +2,7 @@ import {
   widgetEventGroupsByType,
   widgetEventsByType,
 } from "@/configs/widgetEvent";
-import store from "@/store";
+import store from "@/stores";
 import { SearchParams } from "@/types";
 import { ensure } from "@/utils/ensure";
 import { useSearchData } from "@/utils/useSearchData";

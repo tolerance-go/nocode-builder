@@ -4,7 +4,7 @@ import { Collapse } from "antd";
 import React from "react";
 import { ComponentDisplay } from "./ComponentDisplay";
 import { useSnapshot } from "valtio";
-import store from "@/store";
+import store from "@/stores";
 
 export const ComponentStore: React.FC = () => {
   const { groupComponents } = useSnapshot(

@@ -1,4 +1,4 @@
-import { projectsStore } from "@/store/projects";
+import { projectsStore } from "@/stores/projects";
 import { css } from "@emotion/css";
 import type { GetProps, TreeDataNode } from "antd";
 import { Input, Tree } from "antd";
@@ -77,6 +77,7 @@ export const TreeMenu = () => {
   return (
     <div>
       <DirectoryTree
+        height={233}
         className={css`
           .ant-tree-node-content-wrapper {
             display: inline-flex;

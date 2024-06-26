@@ -374,14 +374,14 @@ export const actions = {
       title: string;
     }) => {
       try {
-        projectsStore.states.addFileLoading = true;
-        const result = await createProject({
+        projectsStore.states.addFolderLoading = true;
+        const result = await createProjectGroup({
           name: title,
-          projectGroupId: parentKey as number,
+          parentGroupId: parentKey as number,
         });
         return result.id;
       } finally {
-        projectsStore.states.addFileLoading = false;
+        projectsStore.states.addFolderLoading = false;
       }
     };
     const value = (e.target as HTMLInputElement).value || defaultValue;
@@ -413,14 +413,14 @@ export const actions = {
       title: string;
     }) => {
       try {
-        projectsStore.states.addFolderLoading = true;
-        const result = await createProjectGroup({
+        projectsStore.states.addFileLoading = true;
+        const result = await createProject({
           name: title,
-          parentGroupId: parentKey as number,
+          projectGroupId: parentKey as number,
         });
         return result.id;
       } finally {
-        projectsStore.states.addFolderLoading = false;
+        projectsStore.states.addFileLoading = false;
       }
     };
 

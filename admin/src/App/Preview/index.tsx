@@ -1,4 +1,4 @@
-import store from "@/store";
+import store from "@/stores";
 import { RouteNodeData } from "@/types";
 import { generateRouteComponents } from "@/utils/generateRouteComponents";
 import { renderNodes } from "@/utils/renderNodes";

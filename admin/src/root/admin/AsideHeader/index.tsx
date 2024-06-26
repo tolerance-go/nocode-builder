@@ -1,4 +1,4 @@
-import { projectsStore } from "@/store/projects";
+import { projectsStore } from "@/stores/projects";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
 import { useSnapshot } from "valtio";

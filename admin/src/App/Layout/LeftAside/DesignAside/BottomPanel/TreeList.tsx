@@ -4,7 +4,7 @@ import type { TreeDataNode, TreeProps } from "antd";
 import { css } from "@emotion/css";
 import { NodeData } from "@/types";
 import { useSnapshot } from "valtio";
-import store from "@/store";
+import store from "@/stores";
 import { DeepReadonly } from "@/utils/types";
 
 const convertNodeDataToTreeData = (
