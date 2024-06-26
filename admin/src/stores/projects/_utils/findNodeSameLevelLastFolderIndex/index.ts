@@ -1,6 +1,6 @@
 import { CustomTreeDataNode } from "@/types/tree";
-import { findNodeParent } from "../findNodeParent";
 import { findNodeChildrenLastFolderIndex } from "../findNodeChildrenLastFolderIndex";
+import { findNodeParent } from "../findNodeParent";
 
 export const findNodeSameLevelLastFolderIndex = (
   node: CustomTreeDataNode,

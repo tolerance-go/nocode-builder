@@ -5,7 +5,7 @@ import { insertNodeAfterPosition } from "../insertNodeAfterPosition";
 
 /**
  * 如何在同级目录中最后一个文件夹的位置插入一个新节点
- * 
+ *
  * @param node 同级节点
  * @param treeMap map
  * @param newNode 新节点
