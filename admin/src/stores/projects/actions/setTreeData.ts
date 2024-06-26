@@ -1,4 +1,4 @@
-import { CustomTreeDataNode } from "@/root/admin/ProjectTree/TreeMenu";
+import { CustomTreeDataNode } from "@/types/tree";
 import { states } from "../states";
 
 export const setTreeData = (newTreeData: CustomTreeDataNode[]) => {
