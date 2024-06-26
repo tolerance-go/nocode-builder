@@ -4,11 +4,11 @@ import { Collapse } from "antd";
 import React from "react";
 import { ComponentDisplay } from "./ComponentDisplay";
 import { useSnapshot } from "valtio";
-import store from "@/stores";
+import stores from "@/stores";
 
 export const ComponentStore: React.FC = () => {
   const { groupComponents } = useSnapshot(
-    store.components.states.windowDisplayComponents
+    stores.components.states.windowDisplayComponents
   );
 
   const items: CollapseProps["items"] = groupComponents.map((group) => ({

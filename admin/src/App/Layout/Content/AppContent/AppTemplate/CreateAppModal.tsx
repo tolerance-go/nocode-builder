@@ -1,4 +1,4 @@
-import store from "@/stores";
+import stores from "@/stores";
 import { Button, Form, FormProps, Input, Modal, Space } from "antd";
 import React, { useImperativeHandle, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -46,7 +46,7 @@ const CreateAppModal = React.forwardRef<CreateAppModalRef, CreateAppModalProps>(
 
     const onFinish: FormProps<FieldType>["onFinish"] = (values) => {
       const id = new Date().getTime();
-      store.apps.actions.addApp({
+      stores.apps.actions.addApp({
         id,
         menuTitle: values.name!,
         terminalType: "mobile"

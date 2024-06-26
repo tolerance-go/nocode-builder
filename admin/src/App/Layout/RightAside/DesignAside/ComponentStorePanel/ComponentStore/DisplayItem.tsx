@@ -1,7 +1,7 @@
 import { SettingConfig } from "@/components/SettingsForm";
 import { coreEventBus } from "@/globals/coreEventBus";
 import useLatest from "@/hooks/useLatest";
-import store from "@/stores";
+import stores from "@/stores";
 import { ComponentWidget, NodeData, StaticProps } from "@/types";
 import { DeepReadonly } from "@/utils/types";
 import { useEffect, useState } from "react";
@@ -46,7 +46,7 @@ export const DisplayItem: React.FC<{
 }> = ({ component }) => {
   const [nodeData, setNodeData] = useState(() => createNodeData(component));
 
-  const dragging = useSnapshot(store.designs.states.dragging);
+  const dragging = useSnapshot(stores.designs.states.dragging);
   const isDragging = dragging.draggingId === nodeData.id;
 
   const handleMouseMove = () => {};
@@ -54,7 +54,7 @@ export const DisplayItem: React.FC<{
   const handleMouseMoveRef = useLatest(handleMouseMove);
 
   const handleMouseUp = () => {
-    store.designs.actions.stopDragging();
+    stores.designs.actions.stopDragging();
 
     coreEventBus.emit("externalDragEnd", { nodeData });
 

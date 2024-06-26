@@ -1,6 +1,6 @@
 import * as monaco from "monaco-editor";
 import { useEffect, useRef } from "react";
-import store from "@/stores";
+import stores from "@/stores";
 import editorWorker from "monaco-editor/esm/vs/editor/editor.worker?worker";
 import cssWorker from "monaco-editor/esm/vs/language/css/css.worker?worker";
 import htmlWorker from "monaco-editor/esm/vs/language/html/html.worker?worker";
@@ -33,14 +33,14 @@ const Editor = () => {
   const editorInstance = useRef<monaco.editor.IStandaloneCodeEditor | null>(
     null
   );
-  const designTreeData = useSnapshot(store.designs.states.designTreeData);
+  const designTreeData = useSnapshot(stores.designs.states.designTreeData);
 
   const isSyncingNodeTree = useRef(false);
 
   useEffect(() => {
     return coreEventBus.on("editTextChange", ({ text, reason }) => {
       if (reason === "userEdit") {
-        store.designs.actions.replaceNodeData(JSON.parse(text));
+        stores.designs.actions.replaceNodeData(JSON.parse(text));
       }
     });
   }, []);

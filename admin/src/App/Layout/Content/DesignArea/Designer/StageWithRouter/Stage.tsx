@@ -2,7 +2,7 @@ import { components } from "@/configs/components";
 import { slotBackground } from "@/configs/styles";
 import { coreEventBus } from "@/globals/coreEventBus";
 import useLatest from "@/hooks/useLatest";
-import store from "@/stores";
+import stores from "@/stores";
 import {
   InsertionPositions,
   NodeData,
@@ -55,21 +55,21 @@ const RenderNode: React.FC<{
 }) => {
   const [searchParams, setSearchParams] = useSearchParams();
   const hoveredComponents = useSnapshot(
-    store.designs.states.hoveredComponents
+    stores.designs.states.hoveredComponents
   );
-  const selectedNodes = useSnapshot(store.designs.states.selectedNodeIds);
-  const dragging = useSnapshot(store.designs.states.dragging);
+  const selectedNodes = useSnapshot(stores.designs.states.selectedNodeIds);
+  const dragging = useSnapshot(stores.designs.states.dragging);
   const isSelected = selectedNodes.selectedIds.includes(node.id);
   const isDragging = dragging.draggingId === node.id;
 
   const isHighlighted = hoveredComponents.ids.includes(node.id) || isSelected;
 
   const handleMouseEnter = () => {
-    store.designs.actions.switchHoveredComponent(node.id, true);
+    stores.designs.actions.switchHoveredComponent(node.id, true);
   };
 
   const handleMouseLeave = () => {
-    store.designs.actions.switchHoveredComponent(node.id, false);
+    stores.designs.actions.switchHoveredComponent(node.id, false);
 
     if (dragging.draggingId) {
       if (isRoot) {
@@ -99,13 +99,13 @@ const RenderNode: React.FC<{
 
   const handleMouseDown = (event: React.MouseEvent) => {
     event.stopPropagation();
-    store.designs.actions.startDragging(node.id);
+    stores.designs.actions.startDragging(node.id);
 
     onDraggingStart([node, event.currentTarget as HTMLElement]);
   };
 
   const handleMouseUp = () => {
-    store.designs.actions.stopDragging();
+    stores.designs.actions.stopDragging();
 
     onDraggingEnd();
   };
@@ -117,7 +117,7 @@ const RenderNode: React.FC<{
 
   const handleClick = (event: React.MouseEvent) => {
     event.stopPropagation();
-    store.designs.actions.selectNode([node.id]);
+    stores.designs.actions.selectNode([node.id]);
     setSearchParams(
       updateSearchParams(searchParams, {
         designAsideSettings: "true",
@@ -218,8 +218,8 @@ type HighlightedSlotMeta = {
 };
 
 export const Stage: React.FC = () => {
-  const selectedNodes = useSnapshot(store.designs.states.selectedNodeIds);
-  const designTreeData = useSnapshot(store.designs.states.designTreeData);
+  const selectedNodes = useSnapshot(stores.designs.states.selectedNodeIds);
+  const designTreeData = useSnapshot(stores.designs.states.designTreeData);
   const [draggingHoveredOtherNode, setDraggingHoveredOtherNode] = useState<
     [DeepReadonly<NodeData>, HTMLElement] | null
   >(null);
@@ -249,14 +249,14 @@ export const Stage: React.FC = () => {
     if (draggingNodeElement === null) {
       // External drag, use insertNode
       if (position === "inner") {
-        store.designs.actions.insertNode(
+        stores.designs.actions.insertNode(
           draggingNodeData,
           target[0].id,
           "inner",
           slotName
         );
       } else {
-        store.designs.actions.insertNode(
+        stores.designs.actions.insertNode(
           draggingNodeData,
           target[0].id,
           InsertionAnalyzer.analyzeDocumentPosition(target[1], position)
@@ -265,14 +265,14 @@ export const Stage: React.FC = () => {
     } else {
       // Internal drag, use moveNode
       if (position === "inner") {
-        store.designs.actions.moveNode(
+        stores.designs.actions.moveNode(
           draggingNodeData,
           target[0],
           "inner",
           slotName
         );
       } else {
-        store.designs.actions.moveNode(
+        stores.designs.actions.moveNode(
           draggingNodeData,
           target[0],
           InsertionAnalyzer.analyzeDocumentPosition(target[1], position)
@@ -544,7 +544,7 @@ export const Stage: React.FC = () => {
     return coreEventBus.on(
       "externalDragStart",
       ({ nodeData }: { nodeData: NodeData }) => {
-        store.designs.actions.startDragging(nodeData.id);
+        stores.designs.actions.startDragging(nodeData.id);
         handleDraggingStart([nodeData, null]);
       }
     );
@@ -559,7 +559,7 @@ export const Stage: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Delete" && selectedNodes.selectedIds.length > 0) {
-        store.designs.actions.removeSelectedNodes();
+        stores.designs.actions.removeSelectedNodes();
       }
     };
 

@@ -7,7 +7,7 @@ import * as blueMap from "./blueMap";
 import { devtools } from "valtio/utils";
 import { proxy } from "valtio";
 
-const store = proxy({
+const stores = proxy({
   routes,
   designs,
   components,
@@ -15,9 +15,9 @@ const store = proxy({
   apps,
 });
 
-devtools(store, {
+devtools(stores, {
   name: "stores",
   enabled: import.meta.env.DEV,
 });
 
-export default store;
+export default stores;

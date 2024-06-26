@@ -26,7 +26,7 @@ import { blueMapPortConfigsByType } from "@/configs/blueMap/blueMapPortConfigs";
 import { nodeConfigsById } from "@/configs/blueMap/configs";
 import { connectAnchorOffset } from "@/constants/blueMap";
 import { blueMapEventBus } from "@/globals/blueMapEventBus";
-import store from "@/stores";
+import stores from "@/stores";
 import {
   PortBlueMapAttrs,
   BlueMapPortCommonArgs,
@@ -61,7 +61,7 @@ const BlueMapGraph = () => {
         }
       });
 
-      store.blueMap.states.search.actions.clearSearchNodeSourcePort();
+      stores.blueMap.states.search.actions.clearSearchNodeSourcePort();
     });
   };
 
@@ -496,7 +496,7 @@ const BlueMapGraph = () => {
             portId: sourcePortId,
           };
           searchNode.setPropByPath("source", searchNodeSourceData);
-          store.blueMap.states.search.actions.setSearchNodeSourcePort(
+          stores.blueMap.states.search.actions.setSearchNodeSourcePort(
             sourceNode.id,
             sourcePortId
           );
@@ -586,7 +586,7 @@ const BlueMapGraph = () => {
 
           /** 先取出来缓存 */
           const source =
-            store.blueMap.states.search.states.searchNodeSourcePort.source;
+            stores.blueMap.states.search.states.searchNodeSourcePort.source;
 
           removeSearchNodeRef.current();
 
