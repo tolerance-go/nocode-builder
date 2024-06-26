@@ -1,8 +1,8 @@
 import { CustomTreeDataNode } from "@/types/tree";
 import { treeStore } from "../stores";
 import { setExpandedKeysAction } from "./setExpandedKeys";
-import { setTreeDataAction } from "./setTreeData";
-import { findParentFolder } from "./utils/common";
+import { setTreeDataAction } from "./setTreeDataAction";
+import { findParentFolder } from "./_utils/common";
 
 export const addFolderAction = async (parentKey?: React.Key) => {
   const newKey = `group-${Date.now()}`;

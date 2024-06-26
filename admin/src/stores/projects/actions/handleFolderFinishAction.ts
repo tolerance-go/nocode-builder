@@ -1,8 +1,8 @@
 import { createProjectGroup } from "@/services/api/createProjectGroup";
 import { treeStore } from "../stores";
-import { setTreeDataAction } from "./setTreeData";
-import { parseId, updateNodeTitle, deleteNode } from "./utils/common";
-import { findParentNode } from "./utils/findParentNode";
+import { setTreeDataAction } from "./setTreeDataAction";
+import { parseId, updateNodeTitle, deleteNode } from "./_utils/common";
+import { findParentNode } from "./_utils/findParentNode";
 
 export const handleFolderFinishAction = async (
   e: React.KeyboardEvent<HTMLInputElement> | React.FocusEvent<HTMLInputElement>,
