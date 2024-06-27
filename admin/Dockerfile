@@ -24,7 +24,7 @@ COPY ./admin .
 RUN pnpm build
 
 # 使用官方的 Nginx 镜像作为基础镜像
-FROM nginx:1.21.1-alpine
+FROM nginx:1.27.0-alpine
 
 # 复制 Nginx 配置文件到镜像中
 COPY ./admin/nginx.conf /etc/nginx/conf.d/default.conf
