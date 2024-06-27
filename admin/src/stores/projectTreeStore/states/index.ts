@@ -21,7 +21,9 @@ export const projectTreeTimelineState = derive({
       };
     });
   },
-  index: (get) => get(projectTreeHistoryState).currentIndex,
+  index: (get) => {
+    return get(projectTreeHistoryState).currentIndex;
+  },
 });
 
 export const projectTreeState = proxy({
