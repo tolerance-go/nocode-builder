@@ -26,8 +26,7 @@ export const Header = () => {
         // loading={addFileLoading}
         icon={<FileAddOutlined />}
         onClick={async () => {
-          const selectedKey = projectTreeStore.projectTreeState.selectedKey;
-          if (!selectedKey) {
+          const insertInRoot = () => {
             const folderIndex = findLastFolderIndex(projectTreeState.treeData);
 
             insertNodeAction(
@@ -42,6 +41,11 @@ export const Header = () => {
               },
               folderIndex,
             );
+          };
+
+          const selectedKey = projectTreeStore.projectTreeState.selectedKey;
+          if (!selectedKey) {
+            insertInRoot();
             return;
           }
 
@@ -71,6 +75,8 @@ export const Header = () => {
             const parent = projectTreeStore.findParentNodeOrThrow(selectedKey);
             if (parent) {
               insert(parent);
+            } else {
+              insertInRoot();
             }
           }
         }}
@@ -81,7 +87,8 @@ export const Header = () => {
         icon={<FolderAddOutlined />}
         onClick={async () => {
           const selectedKey = projectTreeStore.projectTreeState.selectedKey;
-          if (!selectedKey) {
+
+          const insertInRoot = () => {
             insertNodeAction(
               projectTreeState.treeData,
               {
@@ -93,7 +100,10 @@ export const Header = () => {
               },
               -1,
             );
+          };
 
+          if (!selectedKey) {
+            insertInRoot();
             return;
           }
 
@@ -120,6 +130,8 @@ export const Header = () => {
             const parent = projectTreeStore.findParentNodeOrThrow(selectedKey);
             if (parent) {
               insert(parent);
+            } else {
+              insertInRoot();
             }
           }
         }}
