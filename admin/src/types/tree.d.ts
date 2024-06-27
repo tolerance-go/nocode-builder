@@ -9,3 +9,14 @@ export interface ProjectTreeDataNode
   children?: ProjectTreeDataNode[];
   type: "file" | "folder";
 }
+
+export type ProjectTreeCompareResult = {
+  added: ProjectTreeDataNode[];
+  removed: ProjectTreeDataNode[];
+  moved: {
+    node: ProjectTreeDataNode;
+    oldParent: ProjectTreeDataNode | null;
+    newParent: ProjectTreeDataNode | null;
+  }[];
+  updated: { oldNode: ProjectTreeDataNode; newNode: ProjectTreeDataNode }[];
+};
