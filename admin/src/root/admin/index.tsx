@@ -1,7 +1,7 @@
 import { Avatar, Button, Dropdown, Flex, Layout, theme } from "antd";
 import { Navigate, useNavigate } from "react-router-dom";
 import store from "store2";
-import { AsideHeader } from "./AsideHeader";
+import { Header } from "./Aside/Header";
 import { ProjectTree } from "./ProjectTree";
 
 export const Admin = () => {
@@ -45,7 +45,7 @@ export const Admin = () => {
                     key: "1",
                     label: "登出",
                     onClick: () => {
-                      navigate("/entry/login");
+                      navigate("/login");
                     },
                   },
                 ],
@@ -55,22 +55,7 @@ export const Admin = () => {
               <Button type="text" shape="circle" icon={<Avatar />}></Button>
             </Dropdown>
           </Flex>
-          <Flex
-            vertical
-            style={{
-              height: "100%",
-              flexGrow: 1,
-            }}
-          >
-            <AsideHeader />
-            <div
-              style={{
-                flexGrow: 1,
-              }}
-            >
-              <ProjectTree />
-            </div>
-          </Flex>
+          
         </Flex>
       </Layout.Sider>
     </Layout>

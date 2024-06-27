@@ -1,7 +1,7 @@
 import { LoadingOutlined } from "@ant-design/icons";
 import { Flex, Spin } from "antd";
 import { Suspense, useEffect, useRef } from "react";
-import { TreeMenu } from "./TreeMenu";
+import { TreeMenu } from "./DirectoryTree";
 import { debounce } from "lodash-es";
 import { setContainerHeightAction } from "@/stores/project/actions/setContainerHeightAction";
 
