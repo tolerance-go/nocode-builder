@@ -2,19 +2,22 @@ import { projectTreeStore } from "@/stores";
 import { Dropdown, Flex, InputRef, Typography, theme } from "antd";
 import React, { useRef } from "react";
 import { AutoSelectInput } from "./AutoSelectInput";
+import { useSnapshot } from "valtio";
 
 export const Title = ({
   title,
-  isEditing,
   nodeKey,
 }: {
   nodeKey: string;
   title: string;
-  isEditing?: boolean;
 }) => {
   const inputRef = useRef<InputRef>(null);
   const { token } = theme.useToken();
+  const projectTreeNodeEditingState = useSnapshot(
+    projectTreeStore.projectTreeNodeEditingState,
+  );
 
+  const isEditing = projectTreeNodeEditingState.has(nodeKey);
   const onFinish = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _e:

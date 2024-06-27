@@ -5,6 +5,7 @@ import {
   projectTreeState,
   projectTreeMapState,
   projectTreeNodeParentMapState,
+  projectTreeNodeEditingState,
 } from "../states";
 
 export * from "./compareProjectTreeAction";
@@ -105,9 +106,10 @@ const removeNodeAction = (nodeKey: string) => {
       }
     } else {
       // 如果没有父节点，则从根目录中删除
-      projectTreeState.treeData.value.data = projectTreeState.treeData.value.data.filter(
-        (rootNode) => rootNode.key !== nodeKey,
-      );
+      projectTreeState.treeData.value.data =
+        projectTreeState.treeData.value.data.filter(
+          (rootNode) => rootNode.key !== nodeKey,
+        );
     }
   }
 };
@@ -126,14 +128,14 @@ export const removeItemAction = (nodeKey: string) => {
 export const startNodeEditingAction = (key: string) => {
   const node = projectTreeMapState.data.get(key);
   if (node) {
-    node.isEditing = true;
+    projectTreeNodeEditingState.add(key);
   }
 };
 
 export const stopNodeEditingAction = (key: string) => {
   const node = projectTreeMapState.data.get(key);
   if (node) {
-    node.isEditing = false;
+    projectTreeNodeEditingState.delete(key);
   }
 };
 

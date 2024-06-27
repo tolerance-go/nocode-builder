@@ -5,7 +5,6 @@ export interface ProjectTreeDataNode
   title: string;
   id: number;
   key: string;
-  isEditing?: boolean;
   children?: ProjectTreeDataNode[];
   type: "file" | "folder";
 }

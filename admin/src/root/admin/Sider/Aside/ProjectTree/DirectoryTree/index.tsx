@@ -63,7 +63,6 @@ export const TreeMenu = () => {
         <Title
           nodeKey={nodeData.key}
           title={nodeData.title}
-          isEditing={nodeData.isEditing}
         />
       )}
     />
