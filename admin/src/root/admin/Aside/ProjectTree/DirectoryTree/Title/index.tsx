@@ -1,5 +1,5 @@
 import { projectTreeStore } from "@/stores";
-import { Dropdown, Flex, InputRef, Space, Typography, theme } from "antd";
+import { Dropdown, Flex, InputRef, Typography, theme } from "antd";
 import React, { useRef } from "react";
 import { AutoSelectInput } from "./AutoSelectInput";
 
