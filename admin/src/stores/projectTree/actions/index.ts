@@ -6,7 +6,9 @@ import {
   projectTreeMapState,
   projectTreeNodeParentMapState,
   projectTreeNodeEditingState,
+  projectTreeHistoryState,
 } from "../states";
+import { cloneDeep, cloneDeepWith, isObject, isPlainObject } from "lodash-es";
 
 export * from "./compareProjectTreeAction";
 
@@ -146,7 +148,37 @@ export const saveNodeAction = (key: string, newTitle: string) => {
   if (node) {
     node.title = newTitle;
     stopNodeEditingAction(key);
-    return projectTreeState.treeData.value;
+  }
+};
+
+export const saveNodeWithReplaceHistoryAction = (
+  key: string,
+  newTitle: string,
+) => {
+  const node = projectTreeMapState.data.get(key);
+  if (node) {
+    // node.title = newTitle;
+    const treeData = cloneDeepWith(
+      projectTreeHistoryState.value.data,
+      (value) => {
+        // 检查对象是否有id属性且等于0
+        if (isPlainObject(value) && "key" in value && value.key === key) {
+          // 返回修改后的对象
+          return {
+            ...value,
+            title: newTitle,
+          };
+        }
+        // 默认返回 undefined，表示使用默认的深拷贝逻辑
+      },
+    );
+    projectTreeHistoryState.replace(
+      projectTreeHistoryState.historyNodeCount - 1,
+      {
+        data: treeData,
+      },
+    );
+    stopNodeEditingAction(key);
   }
 };
 

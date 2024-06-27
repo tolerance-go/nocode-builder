@@ -24,10 +24,11 @@ export const Title = ({
   const isEditing = projectTreeNodeEditingState.has(nodeKey);
 
   const saveNode = (currentValue: string) => {
-    projectTreeStore.saveNodeAction(nodeKey, currentValue);
-
     if (projectTreeTempNodeState.has(nodeKey)) {
+      projectTreeStore.saveNodeWithReplaceHistoryAction(nodeKey, currentValue);
       projectTreeTempNodeState.delete(nodeKey);
+    } else {
+      projectTreeStore.saveNodeAction(nodeKey, currentValue);
     }
   };
 
