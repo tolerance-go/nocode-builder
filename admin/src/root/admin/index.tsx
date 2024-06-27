@@ -6,7 +6,7 @@ import { SubSider } from "./SubSider";
 
 export const Admin = () => {
   if (!store.get("token")) {
-    return <Navigate to={"/entry/login"} />;
+    return <Navigate to={"/login"} />;
   }
 
   return (

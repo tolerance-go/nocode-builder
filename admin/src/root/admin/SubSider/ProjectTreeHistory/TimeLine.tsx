@@ -1,7 +1,6 @@
 import { projectTreeStore } from "@/stores";
-import {
-  VerticalLeftOutlined
-} from "@ant-design/icons";
+import { projectTreeHistoryState } from "@/stores/projectTreeStore";
+import { VerticalLeftOutlined } from "@ant-design/icons";
 import { Timeline as AntdTimeline, Button, theme } from "antd";
 import dayjs from "dayjs";
 import React from "react";
@@ -12,17 +11,13 @@ export const TimeLine: React.FC = () => {
     projectTreeStore.projectTreeTimelineState,
   );
   const { token } = theme.useToken();
-  const projectTreeHistoryState = useSnapshot(
-    projectTreeStore.projectTreeHistoryState,
-  );
+
   return (
     <AntdTimeline
       reverse
       items={projectTreeTimelineState.data.map((node, index) => {
         const color =
-          projectTreeHistoryState.currentIndex === index
-            ? token.cyan8
-            : token.blue4;
+          projectTreeTimelineState.index === index ? token.cyan8 : token.blue4;
 
         const title = (
           <Button

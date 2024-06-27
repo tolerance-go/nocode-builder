@@ -39,10 +39,6 @@ export const ProjectTree = () => {
     };
   }, []);
 
-  useEffect(() => {
-    projectTreeStore.loadTreeDataAction();
-  }, []);
-
   return (
     <div
       ref={containerRef}

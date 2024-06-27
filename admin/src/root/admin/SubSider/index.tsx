@@ -3,6 +3,7 @@ import { ProjectTreeHistory } from "./ProjectTreeHistory";
 import { useSnapshot } from "valtio";
 import { layoutStore } from "@/stores";
 import { CloseOutlined } from "@ant-design/icons";
+import { projectTreeHistoryState } from "@/stores/projectTreeStore";
 
 export const SubSider = () => {
   const { token } = theme.useToken();
@@ -45,6 +46,9 @@ export const SubSider = () => {
                 icon={<CloseOutlined />}
                 onClick={() => {
                   layoutStore.closeProjectTreeTimeLineAction();
+                  projectTreeHistoryState.goTo(
+                    projectTreeHistoryState.historyNodeCount - 1,
+                  );
                 }}
               ></Button>
             </Space>

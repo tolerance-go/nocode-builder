@@ -1,8 +1,9 @@
 import {
-  projectTreeHistoryState,
+  loadTreeDataAction
 } from "@/stores/projectTreeStore";
-import { subscribe } from "valtio";
 
-subscribe(projectTreeHistoryState, () => {
-  //   projectTreeTimelineState.data =
-});
+// subscribe(projectTreeHistoryState, () => {
+//   //   projectTreeTimelineState.data =
+// });
+
+loadTreeDataAction();

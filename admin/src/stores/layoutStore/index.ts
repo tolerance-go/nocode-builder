@@ -1,6 +1,4 @@
 import { proxy } from "valtio";
-import { subscribeKey } from "valtio/utils";
-import { projectTreeHistoryState } from "../projectTreeStore";
 
 export const layoutState = proxy({
   subSiderVisible: false,
@@ -25,8 +23,7 @@ export const closeProjectTreeTimeLineAction = () => {
   layoutState.projectTreeTimeLineVisible = false;
 };
 
-subscribeKey(layoutState, "projectTreeTimeLineVisible", (visible) => {
-  if (!visible) {
-    projectTreeHistoryState.goTo(projectTreeHistoryState.historyNodeCount - 1);
-  }
-});
+// subscribeKey(layoutState, "projectTreeTimeLineVisible", (visible) => {
+//   if (!visible) {
+//   }
+// });

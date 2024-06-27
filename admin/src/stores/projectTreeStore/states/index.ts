@@ -12,7 +12,8 @@ export const projectTreeHistoryState = proxyWithHistory({
 
 export const projectTreeTimelineState = derive({
   data: (get) => {
-    return get(projectTreeHistoryState).history.nodes.map((item) => {
+    const state = get(projectTreeHistoryState);
+    return state.history.nodes.map((item) => {
       return {
         treeData: item.snapshot.data,
         createdAt: item.createdAt,
@@ -20,6 +21,7 @@ export const projectTreeTimelineState = derive({
       };
     });
   },
+  index: (get) => get(projectTreeHistoryState).currentIndex,
 });
 
 export const projectTreeState = proxy({
