@@ -1,9 +1,7 @@
-// @ts-ignore
-/* eslint-disable */
 import request from '@/utils/request';
 
 /** 此处后端没有提供注释 POST /auth/login */
-export async function login(body: API.LoginDto, options?: { [key: string]: any }) {
+export async function login(body: API.LoginDto, options?: { [key: string]: unknown }) {
   return request<API.LoginResponseDto>('/auth/login', {
     method: 'POST',
     headers: {
