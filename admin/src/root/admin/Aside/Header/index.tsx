@@ -1,6 +1,13 @@
+import { projectTreeStore } from "@/stores";
+import { nodeIsFolder } from "@/stores/_utils/is";
+import { ProjectTreeDataNode } from "@/types";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
-import { useSnapshot } from "valtio";
+
+/** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
+const findLastFolderIndex = (nodes: ProjectTreeDataNode[]): number => {
+  return nodes.findLastIndex((node) => node.type === "folder");
+};
 
 export const Header = () => {
   // const { addFolderLoading, addFileLoading } = useSnapshot(treeStore);
@@ -18,7 +25,32 @@ export const Header = () => {
         // loading={addFileLoading}
         icon={<FileAddOutlined />}
         onClick={async () => {
-          // projectActions.addFileAction();
+          const selectedKey = projectTreeStore.projectTreeState.selectedKey;
+          if (!selectedKey) return;
+
+          const selectedNode =
+            projectTreeStore.findNodeByKeyOrThrow(selectedKey);
+
+          if (nodeIsFolder(selectedNode)) {
+            const folderIndex = findLastFolderIndex(
+              selectedNode.children ?? [],
+            );
+
+            console.log("folderIndex", folderIndex);
+
+            projectTreeStore.insertChildNodeAction(
+              selectedKey,
+              {
+                title: "",
+                key: Math.random() + "",
+                id: -1,
+                type: "file",
+                isEditing: true,
+                isLeaf: true,
+              },
+              folderIndex,
+            );
+          }
         }}
       ></Button>
       <Button
@@ -26,7 +58,25 @@ export const Header = () => {
         // loading={addFolderLoading}
         icon={<FolderAddOutlined />}
         onClick={async () => {
-          // projectActions.addFolderAction();
+          const selectedKey = projectTreeStore.projectTreeState.selectedKey;
+          if (!selectedKey) return;
+
+          const selectedNode =
+            projectTreeStore.findNodeByKeyOrThrow(selectedKey);
+
+          if (nodeIsFolder(selectedNode)) {
+            projectTreeStore.insertChildNodeAction(
+              selectedKey,
+              {
+                title: "",
+                key: Math.random() + "",
+                id: -1,
+                type: "folder",
+                isEditing: true,
+              },
+              -1,
+            );
+          }
         }}
       ></Button>
     </Flex>

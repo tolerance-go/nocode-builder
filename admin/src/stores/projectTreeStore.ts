@@ -4,7 +4,7 @@ import { derive } from "derive-valtio";
 import { convertProjectTreeToMap } from "./_utils/convertProjectTreeToMap";
 import { populateParentMap } from "./_utils/populateParentMap";
 import { getProjectTreeData } from "@/services/getProjectTreeData";
-import { isNotNullOrUndefined } from "@/utils";
+import { isNotNullOrUndefined, isNullOrUndefined } from "@/utils";
 
 export const projectTreeState = proxy({
   loading: false,
@@ -44,17 +44,53 @@ export const loadTreeDataAction = async () => {
   }
 };
 
-export const addNodeAction = (
-  parentId: string,
+export const pushChildNodeAction = (
+  parentKey: string,
   newNode: ProjectTreeDataNode,
 ) => {
-  const parentNode = projectTreeMapState.data.get(parentId);
+  const parentNode = projectTreeMapState.data.get(parentKey);
   if (parentNode) {
     if (!parentNode.children) {
       parentNode.children = [];
     }
     parentNode.children.push(newNode);
   }
+};
+
+export const insertChildNodeAction = (
+  parentKey: string,
+  newNode: ProjectTreeDataNode,
+  index: number,
+) => {
+  const parentNode = projectTreeMapState.data.get(parentKey);
+  if (parentNode) {
+    if (!parentNode.children) {
+      parentNode.children = [];
+    }
+
+    // 调整 index 值
+    if (index === -1) {
+      // 如果 index 是 -1，则插入到开头
+      index = 0;
+    } else if (index === parentNode.children.length) {
+      // 如果 index 是 parentNode.children.length，则插入到最后
+      // 这里的 index 保持不变，因为 splice 在数组末尾插入元素时不需要调整
+    } else if (index >= 0 && index < parentNode.children.length) {
+      // 如果 index 在有效范围内，则插入到 index 后面
+      index = index + 1;
+    }
+
+    // 插入新节点
+    parentNode.children.splice(index, 0, newNode);
+  }
+};
+
+export const findNodeByKeyOrThrow = (key: string) => {
+  const node = projectTreeMapState.data.get(key);
+  if (isNullOrUndefined(node)) {
+    throw new Error("Invalid key");
+  }
+  return node;
 };
 
 // 删除节点的方法
@@ -64,11 +100,11 @@ const removeNodeAction = (nodeKey: string) => {
 
   if (node) {
     // 找到父节点的 ID
-    const parentId = projectTreeNodeParentMapState.data.get(nodeKey);
+    const parentKey = projectTreeNodeParentMapState.data.get(nodeKey);
 
-    if (isNotNullOrUndefined(parentId)) {
+    if (isNotNullOrUndefined(parentKey)) {
       // 获取父节点
-      const parentNode = projectTreeMapState.data.get(parentId);
+      const parentNode = projectTreeMapState.data.get(parentKey);
 
       if (parentNode && parentNode.children) {
         // 从父节点的 children 中删除指定元素
