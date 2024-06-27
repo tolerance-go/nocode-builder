@@ -6,7 +6,7 @@ import React from "react";
 import { useSnapshot } from "valtio";
 import { Title } from "./Title";
 import { useKeyPress } from "ahooks";
-import { projectTreeHistoryState } from "@/stores/projectTreeStore";
+import { projectTreeHistoryState } from "@/stores/projectTree";
 
 const { DirectoryTree } = Tree;
 

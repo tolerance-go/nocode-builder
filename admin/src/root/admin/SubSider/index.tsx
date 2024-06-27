@@ -3,7 +3,7 @@ import { ProjectTreeHistory } from "./ProjectTreeHistory";
 import { useSnapshot } from "valtio";
 import { layoutStore } from "@/stores";
 import { CloseOutlined } from "@ant-design/icons";
-import { projectTreeHistoryState } from "@/stores/projectTreeStore";
+import { projectTreeHistoryState } from "@/stores/projectTree";
 
 export const SubSider = () => {
   const { token } = theme.useToken();

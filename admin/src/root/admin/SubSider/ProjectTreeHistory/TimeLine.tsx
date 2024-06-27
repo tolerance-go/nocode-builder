@@ -1,5 +1,5 @@
 import { projectTreeStore } from "@/stores";
-import { projectTreeHistoryState } from "@/stores/projectTreeStore";
+import { projectTreeHistoryState } from "@/stores/projectTree";
 import { VerticalLeftOutlined } from "@ant-design/icons";
 import { Timeline as AntdTimeline, Button, theme } from "antd";
 import dayjs from "dayjs";

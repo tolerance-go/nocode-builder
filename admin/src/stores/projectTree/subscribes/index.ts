@@ -1,4 +1,4 @@
-import { loadTreeDataAction } from "@/stores/projectTreeStore";
+import { loadTreeDataAction } from "@/stores/projectTree";
 import { locationState } from "@/stores/route";
 import { subscribe } from "valtio";
 
