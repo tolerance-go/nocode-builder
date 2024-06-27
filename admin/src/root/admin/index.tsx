@@ -1,8 +1,7 @@
 import { Avatar, Button, Dropdown, Flex, Layout, theme } from "antd";
 import { Navigate, useNavigate } from "react-router-dom";
 import store from "store2";
-import { Header } from "./Aside/Header";
-import { ProjectTree } from "./ProjectTree";
+import { Aside } from "./Aside";
 
 export const Admin = () => {
   const { token } = theme.useToken();
@@ -55,7 +54,7 @@ export const Admin = () => {
               <Button type="text" shape="circle" icon={<Avatar />}></Button>
             </Dropdown>
           </Flex>
-          
+          <Aside />
         </Flex>
       </Layout.Sider>
     </Layout>

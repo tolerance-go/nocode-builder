@@ -1,11 +1,11 @@
-import { projectActions, projectStores } from "@/stores/project";
-import { CustomTreeDataNode } from "@/types/tree";
+import { ProjectTreeDataNode } from "@/types/tree";
 import { css } from "@emotion/css";
 import type { GetProps } from "antd";
 import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { Title } from "./Title";
+import { projectTreeStore } from "@/stores";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
@@ -13,7 +13,7 @@ const { DirectoryTree } = Tree;
 
 export const TreeMenu = () => {
   const { treeData, expandedKeys, containerHeight } = useSnapshot(
-    projectStores.treeStore,
+    projectTreeStore,
   );
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys) => {
@@ -58,11 +58,11 @@ export const TreeMenu = () => {
         expandedKeys={expandedKeys as React.Key[]} // 受控展开状态
         onSelect={onSelect}
         onExpand={onExpand}
-        treeData={treeData as CustomTreeDataNode[]}
+        treeData={treeData as ProjectTreeDataNode[]}
         titleRender={(nodeData) => (
           <Title
             title={nodeData.title as string}
-            isEditing={(nodeData as CustomTreeDataNode).isEditing}
+            isEditing={(nodeData as ProjectTreeDataNode).isEditing}
             onFinish={nodeData.isLeaf ? handleFileFinish : handleFolderFinish}
             newKey={nodeData.key}
           />

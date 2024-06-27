@@ -1,10 +1,10 @@
 import { TreeDataNode } from "antd";
 
-export interface CustomTreeDataNode
+export interface ProjectTreeDataNode
   extends Omit<TreeDataNode, "children" | "key"> {
+  id: number;
   key: string;
   isEditing?: boolean;
-  children?: CustomTreeDataNode[];
-  parentKey?: string;
-  id: number;
+  children?: ProjectTreeDataNode[];
+  type: "file" | "folder";
 }
