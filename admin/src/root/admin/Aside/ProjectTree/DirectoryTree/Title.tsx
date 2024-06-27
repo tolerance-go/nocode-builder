@@ -1,6 +1,7 @@
-import React, { useRef } from "react";
 import { projectTreeStore } from "@/stores";
-import { Input, InputRef } from "antd";
+import { InputRef } from "antd";
+import React, { useRef } from "react";
+import { AutoSelectInput } from "./AutoSelectInput";
 
 export const Title = ({
   title,
@@ -24,7 +25,7 @@ export const Title = ({
   };
 
   return isEditing ? (
-    <Input
+    <AutoSelectInput
       ref={inputRef}
       autoFocus
       defaultValue={title}
