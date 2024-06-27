@@ -1,12 +1,17 @@
 import { convertProjectTreeToMap } from "@/stores/_utils/convertProjectTreeToMap";
 import { populateParentMap } from "@/stores/_utils/populateParentMap";
 import { ProjectTreeDataNode } from "@/types";
+import { ProjectTreeTimelineNode } from "@/types/timeline";
 import { derive } from "derive-valtio";
 import { proxy } from "valtio";
 import { proxyWithHistory } from "valtio-history";
 
 export const projectTreeHistoryState = proxyWithHistory({
   data: [] as ProjectTreeDataNode[],
+});
+
+export const projectTreeTimelineState = proxy({
+  data: [] as ProjectTreeTimelineNode[],
 });
 
 export const projectTreeState = proxy({
