@@ -1,10 +1,16 @@
 import { devtools } from "valtio/utils";
-import { projectTreeHistoryState } from "./projectTreeStore";
+import { projectTreeTimelineState } from "./projectTreeStore";
 
-export * as projectTreeStore from "./projectTreeStore";
 export * as layoutStore from "./layoutStore";
+export * as projectTreeStore from "./projectTreeStore";
 
-devtools(projectTreeHistoryState, {
-  name: "projectTreeHistoryState",
+devtools(projectTreeTimelineState, {
+  name: "projectTreeTimelineState",
   enabled: import.meta.env.DEV,
 });
+
+
+// devtools(projectTreeHistoryState, {
+//   name: "projectTreeHistoryState",
+//   enabled: import.meta.env.DEV,
+// });
