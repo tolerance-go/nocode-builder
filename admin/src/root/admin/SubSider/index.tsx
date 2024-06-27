@@ -25,32 +25,43 @@ export const SubSider = () => {
         zIndex: token.zIndexBase + 1,
       }}
     >
-      <header
+      <Flex
         style={{
-          padding: `${token.paddingXXS}px ${token.paddingXXS}px`,
-          borderBottom: `1px solid ${token.colorBorderSecondary}`,
-          backgroundColor: token.colorBgContainer,
+          height: "100%",
         }}
+        vertical
       >
-        <Flex justify="end">
-          <Space>
-            <Button
-              type="text"
-              icon={<CloseOutlined />}
-              onClick={() => {
-                layoutStore.closeSubSiderAction();
-              }}
-            ></Button>
-          </Space>
-        </Flex>
-      </header>
-      <div
-        style={{
-          padding: `${token.paddingSM}px`,
-        }}
-      >
-        <ProjectTreeHistory />
-      </div>
+        <header
+          style={{
+            padding: `${token.paddingXXS}px ${token.paddingXXS}px`,
+            borderBottom: `1px solid ${token.colorBorderSecondary}`,
+            backgroundColor: token.colorBgContainer,
+          }}
+        >
+          <Flex justify="end">
+            <Space>
+              <Button
+                type="text"
+                icon={<CloseOutlined />}
+                onClick={() => {
+                  layoutStore.closeSubSiderAction();
+                }}
+              ></Button>
+            </Space>
+          </Flex>
+        </header>
+        <div
+          style={{
+            padding: `${token.paddingSM}px`,
+            overflow: "auto",
+            flexGrow: 1,
+            scrollbarWidth: "thin",
+            scrollbarColor: "auto",
+          }}
+        >
+          <ProjectTreeHistory />
+        </div>
+      </Flex>
     </aside>
   );
 };
