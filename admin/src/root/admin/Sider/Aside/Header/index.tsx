@@ -1,6 +1,6 @@
 import { layoutStore, projectTreeStore } from "@/stores";
 import { nodeIsFile, nodeIsFolder } from "@/stores/_utils/is";
-import { insertNodeAction, projectTreeState } from "@/stores/projectTreeStore";
+import { insertNodeAction, projectTreeHistoryState, projectTreeState } from "@/stores/projectTreeStore";
 import { ProjectTreeDataNode } from "@/types";
 import {
   FileAddOutlined,
