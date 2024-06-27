@@ -1,9 +1,12 @@
-import {
-  loadTreeDataAction
-} from "@/stores/projectTreeStore";
+import { loadTreeDataAction } from "@/stores/projectTreeStore";
+import { locationState } from "@/stores/route";
+import { subscribe } from "valtio";
 
-// subscribe(projectTreeHistoryState, () => {
-//   //   projectTreeTimelineState.data =
-// });
-
-loadTreeDataAction();
+subscribe(locationState, () => {
+  if (
+    locationState.pathname !== "/login" &&
+    locationState.pathname !== "/register"
+  ) {
+    loadTreeDataAction();
+  }
+});
