@@ -4,6 +4,7 @@ import { subscribe } from "valtio";
 
 subscribe(locationState, () => {
   if (
+    locationState.pathname &&
     locationState.pathname !== "/login" &&
     locationState.pathname !== "/register"
   ) {

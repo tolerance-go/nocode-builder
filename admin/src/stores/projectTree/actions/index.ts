@@ -1,6 +1,6 @@
 import { getProjectTreeData } from "@/services/getProjectTreeData";
 import { ProjectTreeDataNode } from "@/types";
-import { isNotNullOrUndefined, isNullOrUndefined } from "@/utils";
+import { DeepReadonly, isNotNullOrUndefined, isNullOrUndefined } from "@/utils";
 import {
   projectTreeState,
   projectTreeMapState,
@@ -14,7 +14,9 @@ export const loadTreeDataAction = async () => {
   try {
     projectTreeState.loading = true;
     const treeData = await getProjectTreeData();
-    projectTreeState.treeData.value.data = treeData;
+    projectTreeState.treeData.replace(0, {
+      data: treeData,
+    });
   } finally {
     projectTreeState.loading = false;
   }

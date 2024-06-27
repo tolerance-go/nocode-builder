@@ -1,5 +1,5 @@
 import { proxy } from "valtio";
 
 export const locationState = proxy({
-  pathname: "/",
+  pathname: undefined as undefined | string,
 });
