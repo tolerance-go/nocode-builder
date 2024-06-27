@@ -8,7 +8,7 @@ export const Navbar = () => {
     <Flex
       style={{
         height: '100%',
-        padding: `${token.sizeSM}px ${token.sizeXS}px`,
+        padding: `${token.paddingSM}px ${token.paddingXS}px`,
         borderRight: `1px solid ${token.colorBorderSecondary}`,
       }}
       justify="center"
