@@ -1,5 +1,8 @@
 import { projectTreeStore } from "@/stores";
-import { projectTreeHistoryState } from "@/stores/projectTree";
+import {
+  projectTreeHistoryState,
+  projectTreeTempNodeState,
+} from "@/stores/projectTree";
 import { Dropdown, Flex, InputRef, Typography, theme } from "antd";
 import { useRef } from "react";
 import { useSnapshot } from "valtio";
@@ -19,9 +22,36 @@ export const Title = ({
   );
 
   const isEditing = projectTreeNodeEditingState.has(nodeKey);
-  const saveNode = () => {
+
+  const saveNode = (currentValue: string) => {
+    projectTreeStore.saveNodeAction(nodeKey, currentValue);
+
+    if (projectTreeTempNodeState.has(nodeKey)) {
+      projectTreeTempNodeState.delete(nodeKey);
+    }
+  };
+
+  const saveInput = () => {
     const currentValue = inputRef.current?.input?.value.trim();
-    projectTreeStore.saveNodeAction(nodeKey, currentValue ?? "");
+    if (currentValue) {
+      saveNode(currentValue);
+      return;
+    }
+
+    /** 不合法的输入时 */
+
+    // 如果是临时新建的
+    if (projectTreeTempNodeState.has(nodeKey)) {
+      // 删除
+      projectTreeStore.removeNodeAction(nodeKey);
+
+      projectTreeHistoryState.remove(
+        projectTreeHistoryState.historyNodeCount - 1,
+      );
+    }
+
+    // 否则结束编辑
+    projectTreeStore.stopNodeEditingAction(nodeKey);
   };
 
   return isEditing ? (
@@ -30,22 +60,8 @@ export const Title = ({
       ref={inputRef}
       autoFocus
       defaultValue={title}
-      onBlur={() => {
-        const currentValue = inputRef.current?.input?.value.trim();
-        if (currentValue) {
-          saveNode();
-          return;
-        }
-
-        projectTreeStore.removeNodeAction(nodeKey);
-
-        projectTreeHistoryState.remove(
-          projectTreeHistoryState.historyNodeCount - 1,
-        );
-
-        projectTreeStore.stopNodeEditingAction(nodeKey);
-      }}
-      onPressEnter={() => saveNode()}
+      onBlur={() => saveInput()}
+      onPressEnter={() => saveInput()}
       style={{ width: "100%" }}
     />
   ) : (

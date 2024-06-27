@@ -55,3 +55,6 @@ export const projectTreeNodeParentMapState = derive({
 });
 
 export const projectTreeNodeEditingState = proxySet<string>([]);
+
+/** 临时的节点，新增进入编辑，但是还没保存的 */
+export const projectTreeTempNodeState = proxySet<string>([]);

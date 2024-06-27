@@ -1,6 +1,10 @@
 import { layoutStore, projectTreeStore } from "@/stores";
 import { nodeIsFile, nodeIsFolder } from "@/stores/_utils/is";
-import { insertNodeAction, projectTreeState } from "@/stores/projectTree";
+import {
+  insertNodeAction,
+  projectTreeState,
+  projectTreeTempNodeState,
+} from "@/stores/projectTree";
 import { ProjectTreeDataNode } from "@/types";
 import {
   FileAddOutlined,
@@ -60,16 +64,8 @@ export const Header = () => {
                 folderIndex,
               );
               projectTreeStore.startNodeEditingAction(newKey);
+              projectTreeTempNodeState.add(newKey);
             };
-
-            const selectedKey = projectTreeStore.projectTreeState.selectedKey;
-            if (!selectedKey) {
-              insertInRoot();
-              return;
-            }
-
-            const selectedNode =
-              projectTreeStore.findNodeByKeyOrThrow(selectedKey);
 
             const insert = (target: ProjectTreeDataNode) => {
               const folderIndex = findLastFolderIndex(target.children ?? []);
@@ -87,7 +83,17 @@ export const Header = () => {
                 folderIndex,
               );
               projectTreeStore.startNodeEditingAction(newKey);
+              projectTreeTempNodeState.add(newKey);
             };
+
+            const selectedKey = projectTreeStore.projectTreeState.selectedKey;
+            if (!selectedKey) {
+              insertInRoot();
+              return;
+            }
+
+            const selectedNode =
+              projectTreeStore.findNodeByKeyOrThrow(selectedKey);
 
             if (nodeIsFolder(selectedNode)) {
               insert(selectedNode);
@@ -123,15 +129,8 @@ export const Header = () => {
                 -1,
               );
               projectTreeStore.startNodeEditingAction(newKey);
+              projectTreeTempNodeState.add(newKey);
             };
-
-            if (!selectedKey) {
-              insertInRoot();
-              return;
-            }
-
-            const selectedNode =
-              projectTreeStore.findNodeByKeyOrThrow(selectedKey);
 
             const insert = (target: ProjectTreeDataNode) => {
               const newKey = Math.random() + "";
@@ -146,7 +145,16 @@ export const Header = () => {
                 -1,
               );
               projectTreeStore.startNodeEditingAction(newKey);
+              projectTreeTempNodeState.add(newKey);
             };
+
+            if (!selectedKey) {
+              insertInRoot();
+              return;
+            }
+
+            const selectedNode =
+              projectTreeStore.findNodeByKeyOrThrow(selectedKey);
 
             if (nodeIsFolder(selectedNode)) {
               insert(selectedNode);
