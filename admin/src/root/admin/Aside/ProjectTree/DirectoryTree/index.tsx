@@ -14,13 +14,9 @@ export const TreeMenu = () => {
     projectTreeStore.projectTreeState,
   );
 
-  useEffect(() => {
-    projectTreeStore.loadTreeDataAction();
-  }, []);
-
   useKeyPress(["Delete", "Backspace"], () => {
     projectTreeStore.projectTreeState.selectedKey &&
-      projectTreeStore.removeNodeAction(
+      projectTreeStore.removeItemAction(
         projectTreeStore.projectTreeState.selectedKey,
       );
   });
@@ -56,15 +52,7 @@ export const TreeMenu = () => {
         }}
         treeData={treeData as ProjectTreeDataNode[]}
         titleRender={(nodeData) => (
-          <Title
-            title={nodeData.title}
-            isEditing={nodeData.isEditing}
-            onFinish={
-              // nodeData.type == "file" ? handleFileFinish : handleFolderFinish
-              () => {}
-            }
-            newKey={nodeData.key}
-          />
+          <Title title={nodeData.title} isEditing={nodeData.isEditing} />
         )}
       />
     </div>

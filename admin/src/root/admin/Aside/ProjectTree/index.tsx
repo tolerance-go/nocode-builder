@@ -1,6 +1,5 @@
 import { projectTreeStore } from "@/stores";
-import { LoadingOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
+import { Flex, Spin } from "antd";
 import { debounce } from "lodash-es";
 import { useEffect, useRef } from "react";
 import { useSnapshot } from "valtio";
@@ -40,6 +39,10 @@ export const ProjectTree = () => {
     };
   }, []);
 
+  useEffect(() => {
+    projectTreeStore.loadTreeDataAction();
+  }, []);
+
   return (
     <div
       ref={containerRef}
@@ -47,12 +50,13 @@ export const ProjectTree = () => {
         height: "100%",
       }}
     >
-      <Spin
-        indicator={<LoadingOutlined spin />}
-        spinning={projectTreeState.loading}
-      >
+      {projectTreeState.loading ? (
+        <Flex justify="center" align="center" style={{ height: "100%" }}>
+          <Spin></Spin>
+        </Flex>
+      ) : (
         <TreeMenu />
-      </Spin>
+      )}
     </div>
   );
 };

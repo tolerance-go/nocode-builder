@@ -3,25 +3,22 @@ import { Input } from "antd";
 export const Title = ({
   title,
   isEditing,
-  onFinish,
-  newKey,
 }: {
   title: string;
   isEditing?: boolean;
-  onFinish: (
+}) => {
+  const onFinish = (
     e:
       | React.KeyboardEvent<HTMLInputElement>
       | React.FocusEvent<HTMLInputElement>,
-    key: React.Key,
-  ) => void;
-  newKey: React.Key;
-}) => {
+  ) => {};
+
   return isEditing ? (
     <Input
       autoFocus
       defaultValue={title}
-      onBlur={(e) => onFinish(e, newKey)}
-      onPressEnter={(e) => onFinish(e, newKey)}
+      onBlur={(e) => onFinish(e)}
+      onPressEnter={(e) => onFinish(e)}
       style={{ width: "100%" }}
     />
   ) : (

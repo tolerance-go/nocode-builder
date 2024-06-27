@@ -85,6 +85,16 @@ export const removeNodeAction = (nodeKey: string) => {
   }
 };
 
+export const removeItemAction = (nodeKey: string) => {
+  const node = projectTreeMapState.data.get(nodeKey);
+
+  if (node) {
+    if (node.isEditing) return;
+
+    removeNodeAction(node.key);
+  }
+};
+
 // 切换节点的编辑状态
 export const switchNodeEditing = (key: string) => {
   const node = projectTreeMapState.data.get(key);
