@@ -1,9 +1,8 @@
 import { Avatar, Button, Dropdown, Flex, Layout, theme } from "antd";
 import { useNavigate } from "react-router-dom";
-import { Header } from "./Header";
-import { ProjectTree } from "./ProjectTree";
+import { Aside } from "./Aside";
 
-export const Aside = () => {
+export const Sider = () => {
   const { token } = theme.useToken();
   const navigate = useNavigate();
 
@@ -45,22 +44,7 @@ export const Aside = () => {
             <Button type="text" shape="circle" icon={<Avatar />}></Button>
           </Dropdown>
         </Flex>
-        <Flex
-          vertical
-          style={{
-            height: "100%",
-            flexGrow: 1,
-          }}
-        >
-          <Header />
-          <div
-            style={{
-              flexGrow: 1,
-            }}
-          >
-            <ProjectTree />
-          </div>
-        </Flex>
+        <Aside />
       </Flex>
     </Layout.Sider>
   );
