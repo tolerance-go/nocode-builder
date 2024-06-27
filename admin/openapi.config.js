@@ -3,7 +3,7 @@ import { generateService } from "@umijs/openapi";
 generateService({
   schemaPath: "http://localhost:3000/api-json",
   serversPath: "./src/services",
-  requestLibPath: "@/utils/axiosInstance",
+  requestLibPath: "@/utils/request",
   hook: {
     /** 自定义函数名称 */
     customFunctionName: (data) => {

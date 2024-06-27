@@ -1,12 +1,14 @@
-import { LoadingOutlined } from "@ant-design/icons";
-import { Flex, Spin } from "antd";
-import { Suspense, useEffect, useRef } from "react";
-import { TreeMenu } from "./DirectoryTree";
-import { debounce } from "lodash-es";
 import { projectTreeStore } from "@/stores";
+import { LoadingOutlined } from "@ant-design/icons";
+import { Spin } from "antd";
+import { debounce } from "lodash-es";
+import { useEffect, useRef } from "react";
+import { useSnapshot } from "valtio";
+import { TreeMenu } from "./DirectoryTree";
 
 export const ProjectTree = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const projectTreeState = useSnapshot(projectTreeStore.projectTreeState);
 
   /**
    * 当组件装载到 dom 上之后
@@ -18,7 +20,7 @@ export const ProjectTree = () => {
     const updateHeight = () => {
       if (containerRef.current) {
         const height = containerRef.current.clientHeight;
-        projectTreeStore.containerHeight = height;
+        projectTreeStore.projectTreeState.containerHeight = height;
       }
     };
 
@@ -45,21 +47,12 @@ export const ProjectTree = () => {
         height: "100%",
       }}
     >
-      <Suspense
-        fallback={
-          <Flex
-            style={{
-              height: "100%",
-            }}
-            justify="center"
-            align="center"
-          >
-            <Spin indicator={<LoadingOutlined spin />} />
-          </Flex>
-        }
+      <Spin
+        indicator={<LoadingOutlined spin />}
+        spinning={projectTreeState.loading}
       >
         <TreeMenu />
-      </Suspense>
+      </Spin>
     </div>
   );
 };

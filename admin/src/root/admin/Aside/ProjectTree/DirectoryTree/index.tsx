@@ -1,46 +1,23 @@
+import { getProjectTreeData } from "@/services/getProjectTreeData";
+import { projectTreeStore } from "@/stores";
 import { ProjectTreeDataNode } from "@/types/tree";
 import { css } from "@emotion/css";
 import type { GetProps } from "antd";
 import { Tree } from "antd";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSnapshot } from "valtio";
 import { Title } from "./Title";
-import { projectTreeStore } from "@/stores";
-
-type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
 const { DirectoryTree } = Tree;
 
 export const TreeMenu = () => {
   const { treeData, expandedKeys, containerHeight } = useSnapshot(
-    projectTreeStore,
+    projectTreeStore.projectTreeState,
   );
 
-  const onSelect: DirectoryTreeProps["onSelect"] = (keys) => {
-    projectActions.setSelectedKeyAction(keys.length > 0 ? keys[0] : null); // 更新选中节点的状态
-  };
-
-  const onExpand: DirectoryTreeProps["onExpand"] = (keys) => {
-    projectActions.setExpandedKeysAction(keys); // 更新展开状态
-  };
-
-  const handleFileFinish = async (
-    e:
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.FocusEvent<HTMLInputElement>,
-    key: React.Key,
-  ) => {
-    projectActions.handleFileFinishAction(e, key, "New File");
-  };
-
-  const handleFolderFinish = async (
-    e:
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.FocusEvent<HTMLInputElement>,
-    key: React.Key,
-  ) => {
-    projectActions.handleFolderFinishAction(e, key, "New Folder");
-  };
+  useEffect(() => {
+    projectTreeStore.loadTreeDataAction();
+  }, []);
 
   return (
     <div>
@@ -56,14 +33,23 @@ export const TreeMenu = () => {
         `}
         multiple
         expandedKeys={expandedKeys as React.Key[]} // 受控展开状态
-        onSelect={onSelect}
-        onExpand={onExpand}
+        onSelect={(keys) => {
+          projectTreeStore.setSelectedKeyAction(
+            (keys.length > 0 ? keys[0] : null) as string | null,
+          );
+        }}
+        onExpand={(keys) => {
+          projectTreeStore.setExpandedKeysAction(keys as string[]); // 更新展开状态
+        }}
         treeData={treeData as ProjectTreeDataNode[]}
         titleRender={(nodeData) => (
           <Title
-            title={nodeData.title as string}
-            isEditing={(nodeData as ProjectTreeDataNode).isEditing}
-            onFinish={nodeData.isLeaf ? handleFileFinish : handleFolderFinish}
+            title={nodeData.title}
+            isEditing={nodeData.isEditing}
+            onFinish={
+              // nodeData.type == "file" ? handleFileFinish : handleFolderFinish
+              () => {}
+            }
             newKey={nodeData.key}
           />
         )}

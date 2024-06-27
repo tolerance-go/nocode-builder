@@ -1,7 +1,8 @@
 import { TreeDataNode } from "antd";
 
 export interface ProjectTreeDataNode
-  extends Omit<TreeDataNode, "children" | "key"> {
+  extends Omit<TreeDataNode, "children" | "key" | "title"> {
+  title: string;
   id: number;
   key: string;
   isEditing?: boolean;
