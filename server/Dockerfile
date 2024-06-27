@@ -20,6 +20,8 @@ RUN pnpm install
 # 复制所有文件到工作目录
 COPY ./server .
 
+RUN pnpm prisma:generate
+
 # 安装依赖
 RUN pnpm build
 

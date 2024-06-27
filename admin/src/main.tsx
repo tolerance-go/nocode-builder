@@ -14,13 +14,13 @@ import { Admin } from "./root/admin";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename={import.meta.env.DEV ? "" : "/admin"}>
       <Routes>
         <Route path="/" element={<Root />}>
           {/* <Route path="test" element={<Test />}></Route>
            */}
           <Route index element={<Admin />}></Route>
-          <Route path="admin" element={<Admin />}></Route>
+          <Route path="dashboard" element={<Admin />}></Route>
           <Route element={<Auth />}>
             <Route index element={<Login />}></Route>
             <Route path="login" element={<Login />}></Route>

@@ -4,7 +4,7 @@ import store from "store2";
 
 // 创建一个 axios 实例
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000", // 替换为你的 API 基础 URL
+  baseURL: import.meta.env.DEV ? "http://localhost:3000" : "/api", // 替换为你的 API 基础 URL
   timeout: 10000, // 请求超时时间
   headers: {
     "Content-Type": "application/json",
