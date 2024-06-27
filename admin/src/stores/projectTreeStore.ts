@@ -85,6 +85,14 @@ export const removeNodeAction = (nodeKey: string) => {
   }
 };
 
+// 切换节点的编辑状态
+export const switchNodeEditing = (key: string) => {
+  const node = projectTreeMapState.data.get(key);
+  if (node) {
+    node.isEditing = !node.isEditing;
+  }
+};
+
 export const setExpandedKeysAction = (newExpandedKeys: string[]) => {
   projectTreeState.expandedKeys = newExpandedKeys;
 };

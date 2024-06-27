@@ -25,6 +25,13 @@ export const TreeMenu = () => {
       );
   });
 
+  useKeyPress(["F2"], () => {
+    projectTreeStore.projectTreeState.selectedKey &&
+      projectTreeStore.switchNodeEditing(
+        projectTreeStore.projectTreeState.selectedKey,
+      );
+  });
+
   return (
     <div>
       <DirectoryTree
