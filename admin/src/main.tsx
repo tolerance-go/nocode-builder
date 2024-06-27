@@ -9,12 +9,14 @@ import "normalize.css";
 import "./index.css";
 import { Entry } from "./root/entry";
 import { Register } from "./root/entry/register";
+import { Test } from "./root/test";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Root />}>
+          <Route path="test" element={<Test />}></Route>
           <Route index element={<Admin />}></Route>
           <Route path="admin" element={<Admin />}></Route>
           <Route path="entry" element={<Entry />}>
