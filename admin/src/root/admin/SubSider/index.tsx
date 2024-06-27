@@ -21,8 +21,8 @@ export const SubSider = () => {
         position: "absolute",
         top: 0,
         left: 400,
-        width: 200,
         height: "100vh",
+        width: 'auto',
         zIndex: token.zIndexBase + 1,
       }}
     >
