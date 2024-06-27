@@ -1,7 +1,8 @@
 import { projectTreeStore } from "@/stores";
-import { projectTreeHistoryState } from "@/stores/projectTreeStore";
-import { FieldTimeOutlined } from "@ant-design/icons";
-import { Timeline as AntdTimeline, Button } from "antd";
+import {
+  VerticalLeftOutlined
+} from "@ant-design/icons";
+import { Timeline as AntdTimeline, Button, theme } from "antd";
 import dayjs from "dayjs";
 import React from "react";
 import { useSnapshot } from "valtio";
@@ -10,11 +11,19 @@ export const TimeLine: React.FC = () => {
   const projectTreeTimelineState = useSnapshot(
     projectTreeStore.projectTreeTimelineState,
   );
-
+  const { token } = theme.useToken();
+  const projectTreeHistoryState = useSnapshot(
+    projectTreeStore.projectTreeHistoryState,
+  );
   return (
     <AntdTimeline
       reverse
       items={projectTreeTimelineState.data.map((node, index) => {
+        const color =
+          projectTreeHistoryState.currentIndex === index
+            ? token.cyan8
+            : token.blue4;
+
         const title = (
           <Button
             size="small"
@@ -30,11 +39,13 @@ export const TimeLine: React.FC = () => {
         if (projectTreeTimelineState.data.length - 1 === index) {
           return {
             children: title,
-            color: "#00CCFF",
+            color,
+            dot: <VerticalLeftOutlined rotate={270} />,
           };
         }
         return {
           children: title,
+          color,
         };
       })}
     />
