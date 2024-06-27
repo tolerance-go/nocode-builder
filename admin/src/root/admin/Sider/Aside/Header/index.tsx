@@ -1,6 +1,6 @@
 import { layoutStore, projectTreeStore } from "@/stores";
 import { nodeIsFile, nodeIsFolder } from "@/stores/_utils/is";
-import { insertNodeAction, projectTreeHistoryState, projectTreeState } from "@/stores/projectTreeStore";
+import { insertNodeAction, projectTreeState } from "@/stores/projectTreeStore";
 import { ProjectTreeDataNode } from "@/types";
 import {
   FileAddOutlined,
@@ -8,6 +8,7 @@ import {
   HistoryOutlined,
 } from "@ant-design/icons";
 import { Button, Flex, Space, theme } from "antd";
+import { useSnapshot } from "valtio";
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
 const findLastFolderIndex = (nodes: ProjectTreeDataNode[]): number => {
@@ -15,7 +16,7 @@ const findLastFolderIndex = (nodes: ProjectTreeDataNode[]): number => {
 };
 
 export const Header = () => {
-  // const { addFolderLoading, addFileLoading } = useSnapshot(treeStore);
+  const layoutState = useSnapshot(layoutStore.layoutState);
   const { token } = theme.useToken();
   return (
     <Flex
@@ -31,11 +32,12 @@ export const Header = () => {
           // loading={addFileLoading}
           icon={<HistoryOutlined />}
           onClick={() => {
-            layoutStore.showSubSiderAction();
+            layoutStore.showProjectTreeTimeLineAction();
           }}
         ></Button>
         <Button
           type="text"
+          disabled={layoutState.projectTreeTimeLineVisible}
           // loading={addFileLoading}
           icon={<FileAddOutlined />}
           onClick={async () => {
@@ -102,6 +104,7 @@ export const Header = () => {
         ></Button>
         <Button
           type="text"
+          disabled={layoutState.projectTreeTimeLineVisible}
           // loading={addFolderLoading}
           icon={<FolderAddOutlined />}
           onClick={async () => {

@@ -12,15 +12,13 @@ export const projectTreeHistoryState = proxyWithHistory({
 
 export const projectTreeTimelineState = derive({
   data: (get) => {
-    return get(projectTreeHistoryState)
-      .history.nodes.slice(0, projectTreeHistoryState.currentIndex)
-      .map((item) => {
-        return {
-          treeData: item.snapshot.data,
-          createdAt: item.createdAt,
-          updatedAt: item.updatedAt,
-        };
-      });
+    return get(projectTreeHistoryState).history.nodes.map((item) => {
+      return {
+        treeData: item.snapshot.data,
+        createdAt: item.createdAt,
+        updatedAt: item.updatedAt,
+      };
+    });
   },
 });
 

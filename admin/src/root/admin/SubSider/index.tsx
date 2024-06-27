@@ -44,7 +44,7 @@ export const SubSider = () => {
                 type="text"
                 icon={<CloseOutlined />}
                 onClick={() => {
-                  layoutStore.closeSubSiderAction();
+                  layoutStore.closeProjectTreeTimeLineAction();
                 }}
               ></Button>
             </Space>
