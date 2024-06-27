@@ -26,6 +26,7 @@ export const Title = ({
 
   return isEditing ? (
     <AutoSelectInput
+      size="small"
       ref={inputRef}
       autoFocus
       defaultValue={title}
