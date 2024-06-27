@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "exec:remove-openapi-unused": "node scripts/remove-openapi-unused.js",
-    "openapi": "node openapi.config.js",
+    "openapi": "node openapi.config.js && pnpm exec:remove-openapi-unused",
     "dev": "vite",
     "build": "tsc && vite build",
     "tsc": "tsc",
