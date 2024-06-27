@@ -57,6 +57,35 @@ export const pushChildNodeAction = (
   }
 };
 
+export const findParentNodeOrThrow = (key: string) => {
+  const parentKey = projectTreeNodeParentMapState.data.get(key);
+  if (typeof parentKey === "string") {
+    return projectTreeMapState.data.get(parentKey);
+  }
+  return parentKey;
+};
+
+export const insertNodeAction = (
+  nodes: ProjectTreeDataNode[],
+  newNode: ProjectTreeDataNode,
+  index: number,
+) => {
+  // 调整 index 值
+  if (index === -1) {
+    // 如果 index 是 -1，则插入到开头
+    index = 0;
+  } else if (index === nodes.length) {
+    // 如果 index 是 nodes.length，则插入到最后
+    // 这里的 index 保持不变，因为 splice 在数组末尾插入元素时不需要调整
+  } else if (index >= 0 && index < nodes.length) {
+    // 如果 index 在有效范围内，则插入到 index 后面
+    index = index + 1;
+  }
+
+  // 插入新节点
+  nodes.splice(index, 0, newNode);
+};
+
 export const insertChildNodeAction = (
   parentKey: string,
   newNode: ProjectTreeDataNode,
@@ -68,20 +97,7 @@ export const insertChildNodeAction = (
       parentNode.children = [];
     }
 
-    // 调整 index 值
-    if (index === -1) {
-      // 如果 index 是 -1，则插入到开头
-      index = 0;
-    } else if (index === parentNode.children.length) {
-      // 如果 index 是 parentNode.children.length，则插入到最后
-      // 这里的 index 保持不变，因为 splice 在数组末尾插入元素时不需要调整
-    } else if (index >= 0 && index < parentNode.children.length) {
-      // 如果 index 在有效范围内，则插入到 index 后面
-      index = index + 1;
-    }
-
-    // 插入新节点
-    parentNode.children.splice(index, 0, newNode);
+    insertNodeAction(parentNode.children, newNode, index);
   }
 };
 

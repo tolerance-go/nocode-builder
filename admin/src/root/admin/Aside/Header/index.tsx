@@ -1,5 +1,6 @@
 import { projectTreeStore } from "@/stores";
-import { nodeIsFolder } from "@/stores/_utils/is";
+import { nodeIsFile, nodeIsFolder } from "@/stores/_utils/is";
+import { insertNodeAction, projectTreeState } from "@/stores/projectTreeStore";
 import { ProjectTreeDataNode } from "@/types";
 import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
@@ -26,20 +27,11 @@ export const Header = () => {
         icon={<FileAddOutlined />}
         onClick={async () => {
           const selectedKey = projectTreeStore.projectTreeState.selectedKey;
-          if (!selectedKey) return;
+          if (!selectedKey) {
+            const folderIndex = findLastFolderIndex(projectTreeState.treeData);
 
-          const selectedNode =
-            projectTreeStore.findNodeByKeyOrThrow(selectedKey);
-
-          if (nodeIsFolder(selectedNode)) {
-            const folderIndex = findLastFolderIndex(
-              selectedNode.children ?? [],
-            );
-
-            console.log("folderIndex", folderIndex);
-
-            projectTreeStore.insertChildNodeAction(
-              selectedKey,
+            insertNodeAction(
+              projectTreeState.treeData,
               {
                 title: "",
                 key: Math.random() + "",
@@ -50,6 +42,36 @@ export const Header = () => {
               },
               folderIndex,
             );
+            return;
+          }
+
+          const selectedNode =
+            projectTreeStore.findNodeByKeyOrThrow(selectedKey);
+
+          const insert = (target: ProjectTreeDataNode) => {
+            const folderIndex = findLastFolderIndex(target.children ?? []);
+
+            projectTreeStore.insertChildNodeAction(
+              target.key,
+              {
+                title: "",
+                key: Math.random() + "",
+                id: -1,
+                type: "file",
+                isEditing: true,
+                isLeaf: true,
+              },
+              folderIndex,
+            );
+          };
+
+          if (nodeIsFolder(selectedNode)) {
+            insert(selectedNode);
+          } else if (nodeIsFile(selectedNode)) {
+            const parent = projectTreeStore.findParentNodeOrThrow(selectedKey);
+            if (parent) {
+              insert(parent);
+            }
           }
         }}
       ></Button>
@@ -59,14 +81,9 @@ export const Header = () => {
         icon={<FolderAddOutlined />}
         onClick={async () => {
           const selectedKey = projectTreeStore.projectTreeState.selectedKey;
-          if (!selectedKey) return;
-
-          const selectedNode =
-            projectTreeStore.findNodeByKeyOrThrow(selectedKey);
-
-          if (nodeIsFolder(selectedNode)) {
-            projectTreeStore.insertChildNodeAction(
-              selectedKey,
+          if (!selectedKey) {
+            insertNodeAction(
+              projectTreeState.treeData,
               {
                 title: "",
                 key: Math.random() + "",
@@ -76,6 +93,34 @@ export const Header = () => {
               },
               -1,
             );
+
+            return;
+          }
+
+          const selectedNode =
+            projectTreeStore.findNodeByKeyOrThrow(selectedKey);
+
+          const insert = (target: ProjectTreeDataNode) => {
+            projectTreeStore.insertChildNodeAction(
+              target.key,
+              {
+                title: "",
+                key: Math.random() + "",
+                id: -1,
+                type: "folder",
+                isEditing: true,
+              },
+              -1,
+            );
+          };
+
+          if (nodeIsFolder(selectedNode)) {
+            insert(selectedNode);
+          } else if (nodeIsFile(selectedNode)) {
+            const parent = projectTreeStore.findParentNodeOrThrow(selectedKey);
+            if (parent) {
+              insert(parent);
+            }
           }
         }}
       ></Button>
