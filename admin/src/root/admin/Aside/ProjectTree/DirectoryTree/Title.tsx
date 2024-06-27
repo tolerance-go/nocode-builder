@@ -20,7 +20,7 @@ export const Title = ({
       | React.KeyboardEvent<HTMLInputElement>
       | React.FocusEvent<HTMLInputElement>,
   ) => {
-    const currentValue = inputRef.current?.input?.value;
+    const currentValue = inputRef.current?.input?.value.trim();
     projectTreeStore.saveNodeAction(nodeKey, currentValue ?? "");
   };
 
