@@ -1,7 +1,6 @@
 import { getProjectTreeData } from "@/services/getProjectTreeData";
 import { ProjectTreeDataNode } from "@/types";
-import { isNotNullOrUndefined } from "@/utils";
-import { isNullOrUndefined } from "util";
+import { isNotNullOrUndefined, isNullOrUndefined } from "@/utils";
 import {
   projectTreeState,
   projectTreeMapState,
@@ -14,7 +13,7 @@ export const loadTreeDataAction = async () => {
   try {
     projectTreeState.loading = true;
     const treeData = await getProjectTreeData();
-    projectTreeState.treeData = treeData;
+    projectTreeState.treeData.value.data = treeData;
   } finally {
     projectTreeState.loading = false;
   }
@@ -106,7 +105,7 @@ const removeNodeAction = (nodeKey: string) => {
       }
     } else {
       // 如果没有父节点，则从根目录中删除
-      projectTreeState.treeData = projectTreeState.treeData.filter(
+      projectTreeState.treeData.value.data = projectTreeState.treeData.value.data.filter(
         (rootNode) => rootNode.key !== nodeKey,
       );
     }

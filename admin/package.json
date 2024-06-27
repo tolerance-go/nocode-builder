@@ -26,6 +26,7 @@
     "@antv/x6-plugin-snapline": "^2.1.7",
     "@antv/x6-react-shape": "^2.2.3",
     "@emotion/css": "^11.11.2",
+    "ahooks": "^3.8.0",
     "antd": "^5.18.1",
     "axios": "^1.7.2",
     "axios-hooks": "^5.0.2",

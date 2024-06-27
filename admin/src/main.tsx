@@ -11,7 +11,6 @@ import "./i18n"; // 引入 i18n 配置
 import "normalize.css";
 import "./index.css";
 import { Admin } from "./root/admin";
-import "./subscribes";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

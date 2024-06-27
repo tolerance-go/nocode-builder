@@ -1,4 +1,3 @@
-import { useKeyPress } from "@/hooks/useKeyPress";
 import { projectTreeStore } from "@/stores";
 import { ProjectTreeDataNode } from "@/types/tree";
 import { css } from "@emotion/css";
@@ -6,6 +5,8 @@ import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { Title } from "./Title";
+import { useKeyPress } from "ahooks";
+import { projectTreeHistoryState } from "@/stores/projectTreeStore";
 
 const { DirectoryTree } = Tree;
 
@@ -26,6 +27,14 @@ export const TreeMenu = () => {
       projectTreeStore.startNodeEditingAction(
         projectTreeStore.projectTreeState.selectedKey,
       );
+  });
+
+  useKeyPress(["ctrl.z"], () => {
+    projectTreeHistoryState.undo();
+  });
+
+  useKeyPress(["ctrl.shift.z"], () => {
+    projectTreeHistoryState.redo();
   });
 
   return (
@@ -49,7 +58,7 @@ export const TreeMenu = () => {
       onExpand={(keys) => {
         projectTreeStore.setExpandedKeysAction(keys as string[]); // 更新展开状态
       }}
-      treeData={treeData as ProjectTreeDataNode[]}
+      treeData={treeData.value.data as ProjectTreeDataNode[]}
       titleRender={(nodeData) => (
         <Title
           nodeKey={nodeData.key}
