@@ -1,5 +1,5 @@
 import { projectTreeStore } from "@/stores";
-import { Dropdown, Flex, InputRef, Space, Typography } from "antd";
+import { Dropdown, Flex, InputRef, Space, Typography, theme } from "antd";
 import React, { useRef } from "react";
 import { AutoSelectInput } from "./AutoSelectInput";
 
@@ -13,6 +13,7 @@ export const Title = ({
   isEditing?: boolean;
 }) => {
   const inputRef = useRef<InputRef>(null);
+  const { token } = theme.useToken();
 
   const onFinish = (
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -39,7 +40,7 @@ export const Title = ({
       trigger={["contextMenu"]}
       menu={{
         style: {
-          width: 260,
+          width: token.sizeXXL * 5,
         },
         items: [
           {
