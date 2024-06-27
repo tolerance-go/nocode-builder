@@ -1,8 +1,8 @@
 import { devtools } from "valtio/utils";
-import { projectTreeTimelineState } from "./projectTreeStore";
+import { projectTreeTimelineState } from "./projectTree";
 
-export * as layoutStore from "./layoutStore";
-export * as projectTreeStore from "./projectTreeStore";
+export * as layoutStore from "./layout";
+export * as projectTreeStore from "./projectTree";
 
 devtools(projectTreeTimelineState, {
   name: "projectTreeTimelineState",
