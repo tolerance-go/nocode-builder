@@ -2,7 +2,11 @@ import { projectTreeStore } from "@/stores";
 import { nodeIsFile, nodeIsFolder } from "@/stores/_utils/is";
 import { insertNodeAction, projectTreeState } from "@/stores/projectTreeStore";
 import { ProjectTreeDataNode } from "@/types";
-import { FileAddOutlined, FolderAddOutlined } from "@ant-design/icons";
+import {
+  FileAddOutlined,
+  FolderAddOutlined,
+  HistoryOutlined,
+} from "@ant-design/icons";
 import { Button, Flex, theme } from "antd";
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
@@ -21,6 +25,12 @@ export const Header = () => {
         borderBottom: `1px solid ${token.colorBorderSecondary}`,
       }}
     >
+      <Button
+        type="text"
+        // loading={addFileLoading}
+        icon={<HistoryOutlined />}
+        onClick={async () => {}}
+      ></Button>
       <Button
         type="text"
         // loading={addFileLoading}
