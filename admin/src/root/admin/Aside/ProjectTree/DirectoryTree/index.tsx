@@ -1,11 +1,11 @@
+import { useKeyPress } from "@/hooks/useKeyPress";
 import { projectTreeStore } from "@/stores";
 import { ProjectTreeDataNode } from "@/types/tree";
 import { css } from "@emotion/css";
 import { Tree } from "antd";
-import React, { useEffect } from "react";
+import React from "react";
 import { useSnapshot } from "valtio";
 import { Title } from "./Title";
-import { useKeyPress } from "@/hooks/useKeyPress";
 
 const { DirectoryTree } = Tree;
 
@@ -40,7 +40,6 @@ export const TreeMenu = () => {
             }
           }
         `}
-        multiple
         expandedKeys={expandedKeys as React.Key[]} // 受控展开状态
         onSelect={(keys) => {
           projectTreeStore.setSelectedKeyAction(

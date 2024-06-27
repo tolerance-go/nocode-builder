@@ -1,5 +1,5 @@
 import { projectTreeStore } from "@/stores";
-import { InputRef } from "antd";
+import { Dropdown, Flex, InputRef, Space, Typography } from "antd";
 import React, { useRef } from "react";
 import { AutoSelectInput } from "./AutoSelectInput";
 
@@ -34,6 +34,50 @@ export const Title = ({
       style={{ width: "100%" }}
     />
   ) : (
-    <span>{title}</span>
+    <Dropdown
+      trigger={["contextMenu"]}
+      menu={{
+        style: {
+          width: 260,
+        },
+        items: [
+          {
+            key: "edit",
+            label: (
+              <Flex justify="space-between" align="center">
+                重命名...
+                <Typography.Text keyboard>F2</Typography.Text>
+              </Flex>
+            ),
+            onClick: ({ domEvent }) => {
+              domEvent.stopPropagation();
+              projectTreeStore.startNodeEditingAction(nodeKey);
+            },
+          },
+          {
+            key: "delete",
+            label: (
+              <Flex justify="space-between" align="center">
+                删除
+                <Typography.Text keyboard>Delete/Backspace</Typography.Text>
+              </Flex>
+            ),
+            onClick: ({ domEvent }) => {
+              domEvent.stopPropagation();
+              projectTreeStore.removeItemAction(nodeKey);
+            },
+          },
+        ],
+      }}
+    >
+      <span
+        style={{
+          display: "inline-block",
+          width: "100%",
+        }}
+      >
+        {title}
+      </span>
+    </Dropdown>
   );
 };
