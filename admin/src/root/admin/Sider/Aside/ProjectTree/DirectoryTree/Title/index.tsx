@@ -1,8 +1,9 @@
 import { projectTreeStore } from "@/stores";
+import { projectTreeHistoryState } from "@/stores/projectTree";
 import { Dropdown, Flex, InputRef, Typography, theme } from "antd";
-import React, { useRef } from "react";
-import { AutoSelectInput } from "./AutoSelectInput";
+import { useRef } from "react";
 import { useSnapshot } from "valtio";
+import { AutoSelectInput } from "./AutoSelectInput";
 
 export const Title = ({
   title,
@@ -18,12 +19,7 @@ export const Title = ({
   );
 
   const isEditing = projectTreeNodeEditingState.has(nodeKey);
-  const onFinish = (
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    _e:
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.FocusEvent<HTMLInputElement>,
-  ) => {
+  const saveNode = () => {
     const currentValue = inputRef.current?.input?.value.trim();
     projectTreeStore.saveNodeAction(nodeKey, currentValue ?? "");
   };
@@ -34,8 +30,22 @@ export const Title = ({
       ref={inputRef}
       autoFocus
       defaultValue={title}
-      onBlur={(e) => onFinish(e)}
-      onPressEnter={(e) => onFinish(e)}
+      onBlur={() => {
+        const currentValue = inputRef.current?.input?.value.trim();
+        if (currentValue) {
+          saveNode();
+          return;
+        }
+
+        projectTreeStore.removeNodeAction(nodeKey);
+
+        projectTreeHistoryState.remove(
+          projectTreeHistoryState.historyNodeCount - 1,
+        );
+
+        projectTreeStore.stopNodeEditingAction(nodeKey);
+      }}
+      onPressEnter={() => saveNode()}
       style={{ width: "100%" }}
     />
   ) : (

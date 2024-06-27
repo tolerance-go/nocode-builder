@@ -88,7 +88,7 @@ export const findNodeByKeyOrThrow = (key: string) => {
 };
 
 // 删除节点的方法
-const removeNodeAction = (nodeKey: string) => {
+export const removeNodeAction = (nodeKey: string) => {
   // 获取要删除的节点
   const node = projectTreeMapState.data.get(nodeKey);
 
@@ -116,6 +116,12 @@ const removeNodeAction = (nodeKey: string) => {
   }
 };
 
+/**
+ * 编辑中无法删除
+ *
+ * @param nodeKey
+ * @returns
+ */
 export const removeItemAction = (nodeKey: string) => {
   const node = projectTreeMapState.data.get(nodeKey);
 
@@ -140,6 +146,7 @@ export const saveNodeAction = (key: string, newTitle: string) => {
   if (node) {
     node.title = newTitle;
     stopNodeEditingAction(key);
+    return projectTreeState.treeData.value;
   }
 };
 
