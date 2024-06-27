@@ -1,6 +1,6 @@
 import { Flex } from "antd";
 import { Header } from "./Header";
-import { ProjectTree } from "../ProjectTree";
+import { ProjectTree } from "./ProjectTree";
 
 export const Aside = () => {
   return (

@@ -1,7 +1,7 @@
 import { Layout } from "antd";
 import { Navigate } from "react-router-dom";
 import store from "store2";
-import { Aside } from "./Aside";
+import { Sider } from "./Sider";
 
 export const Admin = () => {
   if (!store.get("token")) {
@@ -15,7 +15,7 @@ export const Admin = () => {
         height: "100vh",
       }}
     >
-      <Aside />
+      <Sider />
     </Layout>
   );
 };
