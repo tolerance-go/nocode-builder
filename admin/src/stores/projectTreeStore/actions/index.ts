@@ -118,7 +118,7 @@ export const removeItemAction = (nodeKey: string) => {
   const node = projectTreeMapState.data.get(nodeKey);
 
   if (node) {
-    if (node.isEditing) return;
+    if (projectTreeNodeEditingState.has(nodeKey)) return;
 
     removeNodeAction(node.key);
   }
@@ -126,17 +126,11 @@ export const removeItemAction = (nodeKey: string) => {
 
 // 切换节点的编辑状态
 export const startNodeEditingAction = (key: string) => {
-  const node = projectTreeMapState.data.get(key);
-  if (node) {
-    projectTreeNodeEditingState.add(key);
-  }
+  projectTreeNodeEditingState.add(key);
 };
 
 export const stopNodeEditingAction = (key: string) => {
-  const node = projectTreeMapState.data.get(key);
-  if (node) {
-    projectTreeNodeEditingState.delete(key);
-  }
+  projectTreeNodeEditingState.delete(key);
 };
 
 export const saveNodeAction = (key: string, newTitle: string) => {

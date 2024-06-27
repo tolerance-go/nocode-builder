@@ -44,18 +44,20 @@ export const Header = () => {
                 projectTreeState.treeData.value.data,
               );
 
+              const newKey = Math.random() + "";
+
               insertNodeAction(
                 projectTreeState.treeData.value.data,
                 {
                   title: "",
-                  key: Math.random() + "",
+                  key: newKey,
                   id: -1,
                   type: "file",
-                  isEditing: true,
                   isLeaf: true,
                 },
                 folderIndex,
               );
+              projectTreeStore.startNodeEditingAction(newKey);
             };
 
             const selectedKey = projectTreeStore.projectTreeState.selectedKey;
@@ -69,19 +71,20 @@ export const Header = () => {
 
             const insert = (target: ProjectTreeDataNode) => {
               const folderIndex = findLastFolderIndex(target.children ?? []);
+              const newKey = Math.random() + "";
 
               projectTreeStore.insertChildNodeAction(
                 target.key,
                 {
                   title: "",
-                  key: Math.random() + "",
+                  key: newKey,
                   id: -1,
                   type: "file",
-                  isEditing: true,
                   isLeaf: true,
                 },
                 folderIndex,
               );
+              projectTreeStore.startNodeEditingAction(newKey);
             };
 
             if (nodeIsFolder(selectedNode)) {
@@ -105,17 +108,18 @@ export const Header = () => {
             const selectedKey = projectTreeStore.projectTreeState.selectedKey;
 
             const insertInRoot = () => {
+              const newKey = Math.random() + "";
               insertNodeAction(
                 projectTreeState.treeData.value.data,
                 {
                   title: "",
-                  key: Math.random() + "",
                   id: -1,
                   type: "folder",
-                  isEditing: true,
+                  key: newKey,
                 },
                 -1,
               );
+              projectTreeStore.startNodeEditingAction(newKey);
             };
 
             if (!selectedKey) {
@@ -127,17 +131,18 @@ export const Header = () => {
               projectTreeStore.findNodeByKeyOrThrow(selectedKey);
 
             const insert = (target: ProjectTreeDataNode) => {
+              const newKey = Math.random() + "";
               projectTreeStore.insertChildNodeAction(
                 target.key,
                 {
                   title: "",
-                  key: Math.random() + "",
                   id: -1,
                   type: "folder",
-                  isEditing: true,
+                  key: newKey,
                 },
                 -1,
               );
+              projectTreeStore.startNodeEditingAction(newKey);
             };
 
             if (nodeIsFolder(selectedNode)) {
