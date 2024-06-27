@@ -23,7 +23,7 @@ export const TreeMenu = () => {
 
   useKeyPress(["F2"], () => {
     projectTreeStore.projectTreeState.selectedKey &&
-      projectTreeStore.switchNodeEditing(
+      projectTreeStore.startNodeEditingAction(
         projectTreeStore.projectTreeState.selectedKey,
       );
   });
@@ -52,7 +52,7 @@ export const TreeMenu = () => {
         }}
         treeData={treeData as ProjectTreeDataNode[]}
         titleRender={(nodeData) => (
-          <Title title={nodeData.title} isEditing={nodeData.isEditing} />
+          <Title nodeKey={nodeData.key} title={nodeData.title} isEditing={nodeData.isEditing} />
         )}
       />
     </div>

@@ -58,7 +58,7 @@ export const addNodeAction = (
 };
 
 // 删除节点的方法
-export const removeNodeAction = (nodeKey: string) => {
+const removeNodeAction = (nodeKey: string) => {
   // 获取要删除的节点
   const node = projectTreeMapState.data.get(nodeKey);
 
@@ -96,10 +96,25 @@ export const removeItemAction = (nodeKey: string) => {
 };
 
 // 切换节点的编辑状态
-export const switchNodeEditing = (key: string) => {
+export const startNodeEditingAction = (key: string) => {
   const node = projectTreeMapState.data.get(key);
   if (node) {
-    node.isEditing = !node.isEditing;
+    node.isEditing = true;
+  }
+};
+
+export const stopNodeEditingAction = (key: string) => {
+  const node = projectTreeMapState.data.get(key);
+  if (node) {
+    node.isEditing = false;
+  }
+};
+
+export const saveNodeAction = (key: string, newTitle: string) => {
+  const node = projectTreeMapState.data.get(key);
+  if (node) {
+    node.title = newTitle;
+    stopNodeEditingAction(key);
   }
 };
 
