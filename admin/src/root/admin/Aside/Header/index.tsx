@@ -27,10 +27,12 @@ export const Header = () => {
         icon={<FileAddOutlined />}
         onClick={async () => {
           const insertInRoot = () => {
-            const folderIndex = findLastFolderIndex(projectTreeState.treeData);
+            const folderIndex = findLastFolderIndex(
+              projectTreeState.treeData.value.data,
+            );
 
             insertNodeAction(
-              projectTreeState.treeData,
+              projectTreeState.treeData.value.data,
               {
                 title: "",
                 key: Math.random() + "",
@@ -90,7 +92,7 @@ export const Header = () => {
 
           const insertInRoot = () => {
             insertNodeAction(
-              projectTreeState.treeData,
+              projectTreeState.treeData.value.data,
               {
                 title: "",
                 key: Math.random() + "",
