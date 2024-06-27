@@ -11,12 +11,13 @@ export const Sider = () => {
       style={{
         borderRight: `1px solid ${token.colorBorderSecondary}`,
         backgroundColor: token.colorBgContainer,
-        height: "100%",
+        height: "100vh",
       }}
     >
       <Flex
         style={{
-          height: "100%",
+          // 防止加载闪烁
+          height: "100vh",
         }}
       >
         <Navbar />
