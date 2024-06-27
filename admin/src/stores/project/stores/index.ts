@@ -3,6 +3,7 @@ import { getProjects } from "@/services/api/getProjects";
 import { CustomTreeDataNode } from "@/types/tree";
 import { derive } from "derive-valtio";
 import { proxy } from "valtio";
+import { proxyMap, proxySet } from "valtio/utils";
 
 function buildTree(
   projectGroups: API.ProjectGroupDto[],
@@ -55,18 +56,48 @@ function buildTree(
   return tree;
 }
 
-const fetchTreeData = async () => {
-  const [projects, projectGroups] = await Promise.all([
-    getProjects({}),
-    getProjectGroups({}),
-  ]);
-  return buildTree(projectGroups, projects);
-};
+export const projectsSetStore = proxy({
+  data: (async () => {
+    return proxySet(await getProjects({}));
+  })(),
+});
+
+export const projectsMapStore = derive({
+  data: async (get) => {
+    return proxyMap(
+      Array.from(await get(projectsSetStore).data).map((value, key) => {
+        return [key, value];
+      }),
+    );
+  },
+});
+
+export const projectGroupsSetStore = proxy({
+  data: (async () => {
+    return proxySet(await getProjectGroups({}));
+  })(),
+});
+
+export const projectGroupsMapStore = derive({
+  data: async (get) => {
+    return proxyMap(
+      Array.from(await get(projectGroupsSetStore).data).map((value, key) => {
+        return [key, value];
+      }),
+    );
+  },
+});
 
 // 定义状态
 export const treeStore = proxy({
   containerHeight: Promise.resolve(0),
-  treeData: fetchTreeData(),
+  treeData: (async () => {
+    const [projects, projectGroups] = await Promise.all([
+      getProjects({}),
+      getProjectGroups({}),
+    ]);
+    return buildTree(projectGroups, projects);
+  })(),
   expandedKeys: [] as React.Key[],
   selectedKey: null as React.Key | null,
   addFolderLoading: false,

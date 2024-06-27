@@ -1,11 +1,13 @@
 import { CustomTreeDataNode } from "@/types/tree";
 import { css } from "@emotion/css";
 import type { GetProps } from "antd";
-import { Tree } from "antd";
+import { Tree, Typography } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { TitleComponent } from "./TitleComponent";
 import { projectActions, projectStores } from "@/stores/project";
+import { testStore, testStoreD } from "@/stores/project/stores";
+import { proxyMap } from "valtio/utils";
 
 type DirectoryTreeProps = GetProps<typeof Tree.DirectoryTree>;
 
@@ -15,6 +17,8 @@ export const TreeMenu = () => {
   const { treeData, expandedKeys, containerHeight } = useSnapshot(
     projectStores.treeStore,
   );
+
+  const { data } = useSnapshot(testStoreD);
 
   const onSelect: DirectoryTreeProps["onSelect"] = (keys) => {
     projectActions.setSelectedKeyAction(keys.length > 0 ? keys[0] : null); // 更新选中节点的状态
