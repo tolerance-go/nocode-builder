@@ -2,7 +2,7 @@ import { useKeyPress } from "@/hooks/useKeyPress";
 import { projectTreeStore } from "@/stores";
 import { ProjectTreeDataNode } from "@/types/tree";
 import { css } from "@emotion/css";
-import { Tree, Typography } from "antd";
+import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { Title } from "./Title";
@@ -13,8 +13,6 @@ export const TreeMenu = () => {
   const { treeData, expandedKeys, containerHeight } = useSnapshot(
     projectTreeStore.projectTreeState,
   );
-
-  console.log("containerHeight", containerHeight);
 
   useKeyPress(["Delete", "Backspace"], () => {
     projectTreeStore.projectTreeState.selectedKey &&
