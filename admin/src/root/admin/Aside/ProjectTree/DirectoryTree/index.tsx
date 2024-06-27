@@ -1,12 +1,11 @@
-import { getProjectTreeData } from "@/services/getProjectTreeData";
 import { projectTreeStore } from "@/stores";
 import { ProjectTreeDataNode } from "@/types/tree";
 import { css } from "@emotion/css";
-import type { GetProps } from "antd";
 import { Tree } from "antd";
 import React, { useEffect } from "react";
 import { useSnapshot } from "valtio";
 import { Title } from "./Title";
+import { useKeyPress } from "@/hooks/useKeyPress";
 
 const { DirectoryTree } = Tree;
 
@@ -18,6 +17,13 @@ export const TreeMenu = () => {
   useEffect(() => {
     projectTreeStore.loadTreeDataAction();
   }, []);
+
+  useKeyPress(["Delete", "Backspace"], () => {
+    projectTreeStore.projectTreeState.selectedKey &&
+      projectTreeStore.removeNodeAction(
+        projectTreeStore.projectTreeState.selectedKey,
+      );
+  });
 
   return (
     <div>
