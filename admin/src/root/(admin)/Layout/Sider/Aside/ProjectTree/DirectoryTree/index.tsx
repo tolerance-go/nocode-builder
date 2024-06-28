@@ -17,12 +17,12 @@ export const TreeMenu = () => {
   const updateExpandedKeys = useAppStore.use.updateExpandedKeys();
   const updateEditingProjectStructureTreeNode =
     useAppStore.use.updateEditingProjectStructureTreeNode();
-  const removeProjectStructureTreeNode =
-    useAppStore.use.removeProjectStructureTreeNode();
+  const removeProjectStructureTreeNodeWithCheck =
+    useAppStore.use.removeProjectStructureTreeNodeWithCheck();
 
   useKeyPress(["Delete", "Backspace"], () => {
     selectedProjectStructureTreeNodes.length &&
-      removeProjectStructureTreeNode(
+      removeProjectStructureTreeNodeWithCheck(
         selectedProjectStructureTreeNodes[
           selectedProjectStructureTreeNodes.length - 1
         ],

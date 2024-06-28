@@ -40,6 +40,7 @@ export type ProjectTreeActions = {
     index: number,
     recordItem: ProjectTreeNodeDataRecord[number],
   ) => void;
+  removeProjectStructureTreeNodeWithCheck: (nodeKey: string) => void;
   removeProjectStructureTreeNode: (nodeKey: string) => void;
   moveProjectStructureTreeNode: (
     nodeKey: string,
@@ -255,6 +256,14 @@ export const createProjectTreeSlice: ImmerStateCreator<
         state.projectTreeDataRecord[node.key] = recordItem;
       }
     });
+  },
+  // 新增一个方法，用于删除节点，并判断节点是否处于编辑中
+  removeProjectStructureTreeNodeWithCheck: (nodeKey) => {
+    // 判断节点是否处于编辑中
+    if (get().editingProjectStructureTreeNode === nodeKey) {
+      return; // 节点处于编辑中，不进行删除操作
+    }
+    get().removeProjectStructureTreeNode(nodeKey);
   },
   // 删除projectStructureTreeData中的一个节点
   removeProjectStructureTreeNode: (nodeKey) => {
