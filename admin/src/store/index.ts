@@ -1,4 +1,3 @@
-import { logger } from "@/middlewares";
 import { createSelectors } from "@/utils";
 import { StateCreator, create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -97,28 +96,25 @@ export const useAppStoreBase = create<
     ServerSlice
 >()(
   devtools(
-    logger(
-      immer((...a) => {
-        const [set] = a;
-        return {
-          ...createServerSlice(...a),
-          ...createLayoutSlice(...a),
-          ...createLocationSlice(...a),
-          ...createNetworkSlice(...a),
-          ...createProjectGroupTableSlice(...a),
-          ...createProjectTableSlice(...a),
-          ...createProjectTreeSlice(...a),
-          ...createBearSlice(...a),
-          ...createFishSlice(...a),
-          ...createSharedSlice(...a),
-          firstName: "firstName",
-          lastName: "lastName",
-          updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
-          updateLastName: (lastName) => set(() => ({ lastName: lastName })),
-        };
-      }),
-      "logger",
-    ),
+    immer((...a) => {
+      const [set] = a;
+      return {
+        ...createServerSlice(...a),
+        ...createLayoutSlice(...a),
+        ...createLocationSlice(...a),
+        ...createNetworkSlice(...a),
+        ...createProjectGroupTableSlice(...a),
+        ...createProjectTableSlice(...a),
+        ...createProjectTreeSlice(...a),
+        ...createBearSlice(...a),
+        ...createFishSlice(...a),
+        ...createSharedSlice(...a),
+        firstName: "firstName",
+        lastName: "lastName",
+        updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
+        updateLastName: (lastName) => set(() => ({ lastName: lastName })),
+      };
+    }),
   ),
 );
 
