@@ -1,3 +1,4 @@
+import { useAppStore } from "@/store";
 import { locationState } from "@/stores/route";
 import "@antv/s2-react/dist/style.min.css";
 import { ConfigProvider, theme } from "antd";
@@ -6,6 +7,8 @@ import { Outlet, useLocation } from "react-router-dom";
 
 export function Root() {
   const location = useLocation();
+  const firstName = useAppStore.use.firstName();
+  const updateFirstName = useAppStore.use.updateFirstName()
 
   useLayoutEffect(() => {
     locationState.pathname = location.pathname;
@@ -17,6 +20,13 @@ export function Root() {
         algorithm: [theme.darkAlgorithm],
       }}
     >
+      <div
+        onClick={() => {
+          updateFirstName('yarnb')
+        }}
+      >
+        {firstName}
+      </div>
       <Outlet />
     </ConfigProvider>
   );
