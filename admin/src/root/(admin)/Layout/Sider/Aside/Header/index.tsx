@@ -1,17 +1,15 @@
 import { useAppStore } from "@/store";
-import { layoutStore } from "@/stores";
-import { nodeIsFile, nodeIsFolder } from "@/stores/_utils/is";
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
 } from "@/types";
+import { nodeIsFile, nodeIsFolder } from "@/utils";
 import {
   FileAddOutlined,
   FolderAddOutlined,
   HistoryOutlined,
 } from "@ant-design/icons";
 import { Button, Flex, Space, theme } from "antd";
-import { useSnapshot } from "valtio";
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
 const findLastFolderIndex = (
@@ -21,11 +19,13 @@ const findLastFolderIndex = (
 };
 
 export const Header = () => {
-  const layoutState = useSnapshot(layoutStore.layoutState);
   const { token } = theme.useToken();
   const insertProjectStructureTreeNodeWithCheck =
     useAppStore.use.insertProjectStructureTreeNodeWithCheck();
-
+  const showProjectTreeTimeLineAction =
+    useAppStore.use.showProjectTreeTimeLineAction();
+  const projectTreeTimeLineVisible =
+    useAppStore.use.projectTreeTimeLineVisible();
   const projectStructureTreeData = useAppStore.use.projectStructureTreeData();
   const projectTreeDataRecord = useAppStore.use.projectTreeDataRecord();
   const updateEditingProjectStructureTreeNode =
@@ -59,12 +59,12 @@ export const Header = () => {
           // loading={addFileLoading}
           icon={<HistoryOutlined />}
           onClick={() => {
-            layoutStore.showProjectTreeTimeLineAction();
+            showProjectTreeTimeLineAction();
           }}
         ></Button>
         <Button
           type="text"
-          disabled={layoutState.projectTreeTimeLineVisible}
+          disabled={projectTreeTimeLineVisible}
           // loading={addFileLoading}
           icon={<FileAddOutlined />}
           onClick={async () => {
@@ -149,7 +149,7 @@ export const Header = () => {
         ></Button>
         <Button
           type="text"
-          disabled={layoutState.projectTreeTimeLineVisible}
+          disabled={projectTreeTimeLineVisible}
           // loading={addFolderLoading}
           icon={<FolderAddOutlined />}
           onClick={async () => {

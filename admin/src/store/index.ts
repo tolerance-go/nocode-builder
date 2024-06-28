@@ -16,6 +16,7 @@ import {
 } from "./createProjectTreeSlice";
 import { immer } from "zustand/middleware/immer";
 import { LocationSlice, createLocationSlice } from "./createLocationSlice";
+import { LayoutSlice, createLayoutSlice } from "./createLayoutSlice";
 
 interface FishSlice {
   fishes: number;
@@ -90,12 +91,14 @@ export const useAppStoreBase = create<
     ProjectTableDataSlice &
     ProjectGroupTableDataSlice &
     NetworkSlice &
-    LocationSlice
+    LocationSlice &
+    LayoutSlice
 >()(
   devtools(
     immer((...a) => {
       const [set] = a;
       return {
+        ...createLayoutSlice(...a),
         ...createLocationSlice(...a),
         ...createNetworkSlice(...a),
         ...createProjectGroupTableSlice(...a),

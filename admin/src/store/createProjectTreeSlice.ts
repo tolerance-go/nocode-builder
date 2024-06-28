@@ -14,6 +14,7 @@ export type ProjectTreeStates = {
   editingProjectStructureTreeNode: string | null;
   nodeParentKeyRecord: Record<string, string | null>;
   projectStructureTreeTempNode: string | null;
+  containerHeight: number;
 };
 
 export type ProjectTreeActions = {
@@ -48,6 +49,7 @@ export type ProjectTreeActions = {
   updateSelectedProjectStructureTreeNodes: (nodeKeys: string[]) => void;
   updateExpandedKeys: (keys: string[]) => void;
   updateEditingProjectStructureTreeNode: (key: string) => void;
+  updateContainerHeight: (height: number) => void;
   updateProjectStructureTreeTempNode: (key: string | null) => void;
   stopEditingProjectStructureTreeNode: () => void;
   findProjectStructureTreeNode: (
@@ -67,6 +69,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
   ProjectTreeSlice,
   ProjectTreeSlice
 > = (set, get) => ({
+  containerHeight: 0,
   editingProjectStructureTreeNode: null,
   projectStructureTreeData: [],
   projectTreeDataRecord: {},
@@ -80,6 +83,11 @@ export const createProjectTreeSlice: ImmerStateCreator<
       if (data.title) {
         state.projectTreeDataRecord[key].title = data.title;
       }
+    });
+  },
+  updateContainerHeight: (height) => {
+    set((state) => {
+      state.containerHeight = height;
     });
   },
   // 通过key在 projectStructureTreeData 递归查找节点

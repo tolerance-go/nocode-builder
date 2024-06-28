@@ -1,17 +1,13 @@
 import { useAppStore } from "@/store";
-import { projectTreeStore } from "@/stores";
-import { projectTreeHistoryState } from "@/stores/projectTree";
 import { css } from "@emotion/css";
 import { useKeyPress } from "ahooks";
 import { Tree } from "antd";
-import React from "react";
-import { useSnapshot } from "valtio";
 import { Title } from "./Title";
 
 const { DirectoryTree } = Tree;
 
 export const TreeMenu = () => {
-  const { containerHeight } = useSnapshot(projectTreeStore.projectTreeState);
+  const containerHeight = useAppStore.use.containerHeight();
   const projectTreeData = useAppStore.use.projectStructureTreeData();
   const selectProjectStructureTreeNodes =
     useAppStore.use.updateSelectedProjectStructureTreeNodes();
@@ -19,28 +15,36 @@ export const TreeMenu = () => {
     useAppStore.use.selectedProjectStructureTreeNodes();
   const expandedKeys = useAppStore.use.expandedKeys();
   const updateExpandedKeys = useAppStore.use.updateExpandedKeys();
+  const updateEditingProjectStructureTreeNode =
+    useAppStore.use.updateEditingProjectStructureTreeNode();
+  const removeProjectStructureTreeNode =
+    useAppStore.use.removeProjectStructureTreeNode();
 
   useKeyPress(["Delete", "Backspace"], () => {
-    projectTreeStore.projectTreeState.selectedKey &&
-      projectTreeStore.removeItemAction(
-        projectTreeStore.projectTreeState.selectedKey,
+    selectedProjectStructureTreeNodes.length &&
+      removeProjectStructureTreeNode(
+        selectedProjectStructureTreeNodes[
+          selectedProjectStructureTreeNodes.length - 1
+        ],
       );
   });
 
   useKeyPress(["F2"], () => {
-    projectTreeStore.projectTreeState.selectedKey &&
-      projectTreeStore.startNodeEditingAction(
-        projectTreeStore.projectTreeState.selectedKey,
+    selectedProjectStructureTreeNodes.length &&
+      updateEditingProjectStructureTreeNode(
+        selectedProjectStructureTreeNodes[
+          selectedProjectStructureTreeNodes.length - 1
+        ],
       );
   });
 
-  useKeyPress(["ctrl.z"], () => {
-    projectTreeHistoryState.undo();
-  });
+  // useKeyPress(["ctrl.z"], () => {
+  //   projectTreeHistoryState.undo();
+  // });
 
-  useKeyPress(["ctrl.shift.z"], () => {
-    projectTreeHistoryState.redo();
-  });
+  // useKeyPress(["ctrl.shift.z"], () => {
+  //   projectTreeHistoryState.redo();
+  // });
 
   return (
     <DirectoryTree

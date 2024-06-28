@@ -1,10 +1,11 @@
-import { projectTreeStore } from "@/stores";
+import { useAppStore } from "@/store";
 import { debounce } from "lodash-es";
 import { useEffect, useRef } from "react";
 import { TreeMenu } from "./DirectoryTree";
 
 export const ProjectTree = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const updateContainerHeight = useAppStore.use.updateContainerHeight();
 
   /**
    * 当组件装载到 dom 上之后
@@ -16,7 +17,7 @@ export const ProjectTree = () => {
     const updateHeight = () => {
       if (containerRef.current) {
         const height = containerRef.current.clientHeight;
-        projectTreeStore.projectTreeState.containerHeight = height;
+        updateContainerHeight(height);
       }
     };
 
@@ -34,7 +35,7 @@ export const ProjectTree = () => {
         resizeObserver.unobserve(container);
       }
     };
-  }, []);
+  }, [updateContainerHeight]);
 
   return (
     <div

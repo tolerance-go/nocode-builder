@@ -1,15 +1,15 @@
+import { useAppStore } from "@/store";
+import { CloseOutlined } from "@ant-design/icons";
 import { Button, Flex, Space, theme } from "antd";
 import { ProjectTreeHistory } from "./ProjectTreeHistory";
-import { useSnapshot } from "valtio";
-import { layoutStore } from "@/stores";
-import { CloseOutlined } from "@ant-design/icons";
-import { projectTreeHistoryState } from "@/stores/projectTree";
 
 export const SubSider = () => {
   const { token } = theme.useToken();
-  const layoutState = useSnapshot(layoutStore.layoutState);
+  const subSiderVisible = useAppStore.use.subSiderVisible();
+  const closeProjectTreeTimeLineAction =
+    useAppStore.use.closeProjectTreeTimeLineAction();
 
-  if (!layoutState.subSiderVisible) {
+  if (!subSiderVisible) {
     return null;
   }
 
@@ -22,7 +22,7 @@ export const SubSider = () => {
         top: 0,
         left: 400,
         height: "100vh",
-        width: 'auto',
+        width: "auto",
         zIndex: token.zIndexBase + 1,
       }}
     >
@@ -45,10 +45,10 @@ export const SubSider = () => {
                 type="text"
                 icon={<CloseOutlined />}
                 onClick={() => {
-                  layoutStore.closeProjectTreeTimeLineAction();
-                  projectTreeHistoryState.goTo(
-                    projectTreeHistoryState.historyNodeCount - 1,
-                  );
+                  closeProjectTreeTimeLineAction();
+                  // projectTreeHistoryState.goTo(
+                  //   projectTreeHistoryState.historyNodeCount - 1,
+                  // );
                 }}
               ></Button>
             </Space>
