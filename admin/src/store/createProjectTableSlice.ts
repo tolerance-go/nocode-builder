@@ -1,3 +1,4 @@
+import { getProjects } from "@/services/api/getProjects";
 import { StateCreator } from "zustand";
 
 export type ProjectTableDataStates = {
@@ -6,6 +7,7 @@ export type ProjectTableDataStates = {
 
 export type ProjectTableDataActions = {
   initProjectTableData: (data: API.ProjectDto[]) => void;
+  loadProjectTableData: () => Promise<void>;
 };
 
 export type ProjectTableDataSlice = ProjectTableDataStates &
@@ -19,4 +21,10 @@ export const createProjectTableSlice: StateCreator<
 > = (set) => ({
   projectTableData: [],
   initProjectTableData: (data) => set({ projectTableData: data }),
+  loadProjectTableData: async () => {
+    const projects = await getProjects({});
+    set({
+      projectTableData: projects,
+    });
+  },
 });
