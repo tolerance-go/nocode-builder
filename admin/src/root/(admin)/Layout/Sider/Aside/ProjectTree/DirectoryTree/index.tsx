@@ -11,10 +11,14 @@ import { Title } from "./Title";
 const { DirectoryTree } = Tree;
 
 export const TreeMenu = () => {
-  const { expandedKeys, containerHeight } = useSnapshot(
-    projectTreeStore.projectTreeState,
-  );
+  const { containerHeight } = useSnapshot(projectTreeStore.projectTreeState);
   const projectTreeData = useAppStore.use.projectStructureTreeData();
+  const selectProjectStructureTreeNodes =
+    useAppStore.use.updateSelectedProjectStructureTreeNodes();
+  const selectedProjectStructureTreeNodes =
+    useAppStore.use.selectedProjectStructureTreeNodes();
+  const expandedKeys = useAppStore.use.expandedKeys();
+  const updateExpandedKeys = useAppStore.use.updateExpandedKeys();
 
   useKeyPress(["Delete", "Backspace"], () => {
     projectTreeStore.projectTreeState.selectedKey &&
@@ -40,6 +44,7 @@ export const TreeMenu = () => {
 
   return (
     <DirectoryTree
+      multiple
       treeData={projectTreeData}
       height={containerHeight}
       virtual
@@ -51,14 +56,13 @@ export const TreeMenu = () => {
           }
         }
       `}
-      expandedKeys={expandedKeys as React.Key[]} // 受控展开状态
+      selectedKeys={selectedProjectStructureTreeNodes}
+      expandedKeys={expandedKeys}
       onSelect={(keys) => {
-        projectTreeStore.setSelectedKeyAction(
-          (keys.length > 0 ? keys[0] : null) as string | null,
-        );
+        selectProjectStructureTreeNodes(keys as string[]);
       }}
       onExpand={(keys) => {
-        projectTreeStore.setExpandedKeysAction(keys as string[]); // 更新展开状态
+        updateExpandedKeys(keys as string[]); // 更新展开状态
       }}
       titleRender={(nodeData) => <Title nodeKey={nodeData.key} />}
     />

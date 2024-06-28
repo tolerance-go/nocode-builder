@@ -8,6 +8,8 @@ export type ProjectTreeStates = {
   projectStructureTreeData: ProjectStructureTreeDataNode[];
   projectTreeDataRecord: ProjectTreeNodeDataRecord;
   hasInitProjectTreeDataMeta: boolean;
+  selectedProjectStructureTreeNodes: string[];
+  expandedKeys: string[];
 };
 
 export type ProjectTreeActions = {
@@ -34,6 +36,8 @@ export type ProjectTreeActions = {
     newParentKey: string | null,
     newIndex: number,
   ) => void;
+  updateSelectedProjectStructureTreeNodes: (nodeKeys: string[]) => void;
+  updateExpandedKeys: (keys: string[]) => void;
 };
 
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
@@ -45,6 +49,8 @@ export const createProjectTreeSlice: ImmerStateCreator<
   projectStructureTreeData: [],
   projectTreeDataRecord: {},
   hasInitProjectTreeDataMeta: false,
+  selectedProjectStructureTreeNodes: [],
+  expandedKeys: [],
   updateProjectStructureTreeData: (data) => {
     set((state) => {
       state.projectStructureTreeData = data;
@@ -119,6 +125,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
           const n = nodes[i];
           if (n.key === nodeKey) {
             nodes.splice(i, 1);
+            delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
             return true;
           }
           if (n.children && removeNode(n.children)) {
@@ -176,6 +183,16 @@ export const createProjectTreeSlice: ImmerStateCreator<
           insertNode(state.projectStructureTreeData);
         }
       }
+    });
+  },
+  updateSelectedProjectStructureTreeNodes: (nodeKeys) => {
+    set((state) => {
+      state.selectedProjectStructureTreeNodes = nodeKeys;
+    });
+  },
+  updateExpandedKeys: (keys) => {
+    set((state) => {
+      state.expandedKeys = keys;
     });
   },
 });
