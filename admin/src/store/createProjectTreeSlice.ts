@@ -1,5 +1,5 @@
 import { ProjectStructureTreeDataNode } from "@/types";
-import { StateCreator } from "zustand";
+import { ImmerStateCreator } from "@/utils";
 
 export type ProjectTreeStates = {
   projectStructureTreeData: ProjectStructureTreeDataNode[];
@@ -11,10 +11,8 @@ export type ProjectTreeActions = {
 
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
 
-export const createProjectTreeSlice: StateCreator<
+export const createProjectTreeSlice: ImmerStateCreator<
   ProjectTreeSlice,
-  [],
-  [],
   ProjectTreeSlice
 > = (set) => ({
   projectStructureTreeData: [],

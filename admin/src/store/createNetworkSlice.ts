@@ -1,4 +1,4 @@
-import { StateCreator } from "zustand";
+import { ImmerStateCreator } from "@/utils";
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NetworkStates = {};
@@ -8,9 +8,7 @@ export type NetworkActions = {};
 
 export type NetworkSlice = NetworkStates & NetworkActions;
 
-export const createNetworkSlice: StateCreator<
+export const createNetworkSlice: ImmerStateCreator<
   NetworkSlice,
-  [],
-  [],
   NetworkSlice
 > = () => ({});
