@@ -61,7 +61,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       size="small"
       ref={inputRef}
       autoFocus
-      defaultValue={nodeDataRecord.title}
+      defaultValue={nodeDataRecord?.title}
       onBlur={() => saveInput()}
       onPressEnter={() => saveInput()}
       style={{ width: "100%" }}
@@ -109,7 +109,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
           width: "100%",
         }}
       >
-        {nodeDataRecord.title}
+        {nodeDataRecord?.title}
       </span>
     </Dropdown>
   );

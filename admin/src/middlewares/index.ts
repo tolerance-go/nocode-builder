@@ -1,7 +1,7 @@
-import { State, StateCreator, StoreMutatorIdentifier } from "zustand";
+import { StateCreator, StoreMutatorIdentifier } from "zustand";
 
 type Logger = <
-  T extends State,
+  T,
   Mps extends [StoreMutatorIdentifier, unknown][] = [],
   Mcs extends [StoreMutatorIdentifier, unknown][] = [],
 >(
@@ -9,7 +9,7 @@ type Logger = <
   name?: string,
 ) => StateCreator<T, Mps, Mcs>;
 
-type LoggerImpl = <T extends State>(
+type LoggerImpl = <T>(
   f: StateCreator<T, [], []>,
   name?: string,
 ) => StateCreator<T, [], []>;
@@ -19,7 +19,7 @@ const loggerImpl: LoggerImpl = (f, name) => (set, get, store) => {
     const prevState = get();
     set(...args);
     const nextState = get();
-    console.log(...(name ? [`[${name}] Action:`] : ["Action:"]), args[2]);
+    console.log(...(name ? [`[${name}] Action:`] : ["Action:"]), ...args);
     console.log(
       ...(name ? [`[${name}] Previous State:`] : ["Previous State:"]),
       prevState,
@@ -35,7 +35,7 @@ const loggerImpl: LoggerImpl = (f, name) => (set, get, store) => {
     const prevState = get();
     setState(...args);
     const nextState = get();
-    console.log(...(name ? [`[${name}] Action:`] : ["Action:"]), args[2]);
+    console.log(...(name ? [`[${name}] Action:`] : ["Action:"]), ...args);
     console.log(
       ...(name ? [`[${name}] Previous State:`] : ["Previous State:"]),
       prevState,

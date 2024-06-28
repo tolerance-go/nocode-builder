@@ -83,7 +83,10 @@ export const createProjectTreeSlice: ImmerStateCreator<
   updateProjectTreeDataRecordItem: (key, data) => {
     set((state) => {
       if (data.title) {
-        state.projectTreeDataRecord[key].title = data.title;
+        const item = state.projectTreeDataRecord[key];
+        if (item) {
+          item.title = data.title;
+        }
       }
     });
   },
@@ -268,6 +271,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
   },
   // 删除projectStructureTreeData中的一个节点
   removeProjectStructureTreeNode: (nodeKey) => {
+    let removed = false;
     set(
       (state) => {
         const removeNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
@@ -276,20 +280,8 @@ export const createProjectTreeSlice: ImmerStateCreator<
             if (n.key === nodeKey) {
               nodes.splice(i, 1);
 
-              // addTimelineItemToPool({
-              //   tableName: "project",
-              //   createdAt: "",
-              //   user: 1,
-              //   actionName: "delete",
-              //   oldValues: {},
-              //   recordId: 100,
-              // });
-
-              // next tick
-              // set((state) => {
-              //   delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
-              //   delete state.nodeParentKeyRecord[nodeKey]; // 删除父节点关系
-              // });
+              delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
+              delete state.nodeParentKeyRecord[nodeKey]; // 删除父节点关系
 
               return true;
             }
@@ -300,11 +292,22 @@ export const createProjectTreeSlice: ImmerStateCreator<
           return false;
         };
 
-        removeNode(state.projectStructureTreeData);
+        removed = removeNode(state.projectStructureTreeData);
       },
       false,
       "removeProjectStructureTreeNode",
     );
+
+    if (removed) {
+      get().addTimelineItemToPool({
+        tableName: "project",
+        createdAt: "",
+        user: 1,
+        actionName: "delete",
+        oldValues: {},
+        recordId: 100,
+      });
+    }
   },
   moveProjectStructureTreeNode: (nodeKey, newParentKey, newIndex) => {
     set((state) => {
