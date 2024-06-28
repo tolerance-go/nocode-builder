@@ -1,13 +1,15 @@
+import { getProjectTreeData } from "@/services/getProjectTreeData";
+import { useAppStore } from "@/store";
 import { projectTreeStore } from "@/stores";
 import { Flex, Spin } from "antd";
 import { debounce } from "lodash-es";
-import { useEffect, useRef } from "react";
-import { useSnapshot } from "valtio";
+import { useEffect, useRef, useState } from "react";
 import { TreeMenu } from "./DirectoryTree";
 
 export const ProjectTree = () => {
+  const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const projectTreeState = useSnapshot(projectTreeStore.projectTreeState);
+  const initProjectTreeData = useAppStore.use.initProjectTreeData();
 
   /**
    * 当组件装载到 dom 上之后
@@ -39,6 +41,20 @@ export const ProjectTree = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const loadTreeDataAction = async () => {
+      try {
+        setLoading(true);
+        const treeData = await getProjectTreeData();
+        initProjectTreeData(treeData);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTreeDataAction();
+  }, [initProjectTreeData]);
+
   return (
     <div
       ref={containerRef}
@@ -46,7 +62,7 @@ export const ProjectTree = () => {
         height: "100%",
       }}
     >
-      {projectTreeState.loading ? (
+      {loading ? (
         <Flex justify="center" align="center" style={{ height: "100%" }}>
           <Spin></Spin>
         </Flex>

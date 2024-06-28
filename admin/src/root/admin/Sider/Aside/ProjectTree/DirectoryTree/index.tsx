@@ -1,19 +1,20 @@
+import { useAppStore } from "@/store";
 import { projectTreeStore } from "@/stores";
-import { ProjectTreeDataNode } from "@/types/tree";
+import { projectTreeHistoryState } from "@/stores/projectTree";
 import { css } from "@emotion/css";
+import { useKeyPress } from "ahooks";
 import { Tree } from "antd";
 import React from "react";
 import { useSnapshot } from "valtio";
 import { Title } from "./Title";
-import { useKeyPress } from "ahooks";
-import { projectTreeHistoryState } from "@/stores/projectTree";
 
 const { DirectoryTree } = Tree;
 
 export const TreeMenu = () => {
-  const { treeData, expandedKeys, containerHeight } = useSnapshot(
+  const { expandedKeys, containerHeight } = useSnapshot(
     projectTreeStore.projectTreeState,
   );
+  const projectTreeData = useAppStore.use.projectTreeData();
 
   useKeyPress(["Delete", "Backspace"], () => {
     projectTreeStore.projectTreeState.selectedKey &&
@@ -39,6 +40,7 @@ export const TreeMenu = () => {
 
   return (
     <DirectoryTree
+      treeData={projectTreeData}
       height={containerHeight}
       virtual
       className={css`
@@ -58,12 +60,8 @@ export const TreeMenu = () => {
       onExpand={(keys) => {
         projectTreeStore.setExpandedKeysAction(keys as string[]); // 更新展开状态
       }}
-      treeData={treeData.value.data as ProjectTreeDataNode[]}
       titleRender={(nodeData) => (
-        <Title
-          nodeKey={nodeData.key}
-          title={nodeData.title}
-        />
+        <Title nodeKey={nodeData.key} title={nodeData.title} />
       )}
     />
   );
