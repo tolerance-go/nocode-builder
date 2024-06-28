@@ -10,7 +10,7 @@ import { Register } from "./root/(auth)/register";
 import "./i18n"; // 引入 i18n 配置
 import "normalize.css";
 import "./index.css";
-import { Admin } from "./root/admin";
+import { Admin } from "./root/(admin)";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -20,7 +20,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           {/* <Route path="test" element={<Test />}></Route>
            */}
           <Route index element={<Admin />}></Route>
-          <Route path="dashboard" element={<Admin />}></Route>
           <Route element={<Auth />}>
             <Route index element={<Login />}></Route>
             <Route path="login" element={<Login />}></Route>
