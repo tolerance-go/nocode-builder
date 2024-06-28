@@ -14,14 +14,14 @@ const firstNameSubscriber = (
 
 useAppStoreBase.subscribe((state, previous) => {
   firstNameSubscriber(state, previous);
-  const { initProjectStructureTreeDataMeta } = useAppStoreBase.getState();
+  const { initProjectTreeDataMeta: initProjectStructureTreeDataMeta } = useAppStoreBase.getState();
   if (state.pathname !== null) {
     if (isSystemPath(state.pathname)) {
       // eslint-disable-next-line no-empty
       if (isAuthRelatedPath(state.pathname)) {
       } else {
         if (
-          !state.hasInitProjectStructureTreeDataMeta &&
+          !state.hasInitProjectTreeDataMeta &&
           state.projectGroupTableData !== null &&
           state.projectTableData !== null
         ) {

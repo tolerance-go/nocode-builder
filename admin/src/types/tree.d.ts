@@ -5,7 +5,7 @@ export type ProjectStructureTreeDataNode = {
 };
 
 /** key 到树节点数据的映射 */
-export type ProjectStructureTreeNodeDataRecord = {
+export type ProjectTreeNodeDataRecord = {
   [key: string]: {
     title: string;
     id: number;

@@ -1,25 +1,23 @@
 import {
   ProjectStructureTreeDataNode,
-  ProjectStructureTreeNodeDataRecord,
+  ProjectTreeNodeDataRecord,
 } from "@/types";
 import { ImmerStateCreator } from "@/utils";
 
 export type ProjectTreeStates = {
   projectStructureTreeData: ProjectStructureTreeDataNode[];
-  projectStructureTreeDataRecord: ProjectStructureTreeNodeDataRecord;
-  hasInitProjectStructureTreeDataMeta: boolean;
+  projectTreeDataRecord: ProjectTreeNodeDataRecord;
+  hasInitProjectTreeDataMeta: boolean;
 };
 
 export type ProjectTreeActions = {
   updateProjectStructureTreeData: (
     data: ProjectStructureTreeDataNode[],
   ) => void;
-  updateProjectStructureTreeDataRecord: (
-    data: ProjectStructureTreeNodeDataRecord,
-  ) => void;
-  initProjectStructureTreeDataMeta: (args: {
+  updateProjectTreeDataRecord: (data: ProjectTreeNodeDataRecord) => void;
+  initProjectTreeDataMeta: (args: {
     projectStructureTreeData: ProjectStructureTreeDataNode[];
-    projectStructureTreeDataRecord: ProjectStructureTreeNodeDataRecord;
+    projectStructureTreeDataRecord: ProjectTreeNodeDataRecord;
   }) => void;
 };
 
@@ -30,24 +28,24 @@ export const createProjectTreeSlice: ImmerStateCreator<
   ProjectTreeSlice
 > = (set) => ({
   projectStructureTreeData: [],
-  projectStructureTreeDataRecord: {},
-  hasInitProjectStructureTreeDataMeta: false,
+  projectTreeDataRecord: {},
+  hasInitProjectTreeDataMeta: false,
   updateProjectStructureTreeData: (data) => {
     set((state) => {
       state.projectStructureTreeData = data;
     });
   },
-  updateProjectStructureTreeDataRecord: (data) => {
-    set({ projectStructureTreeDataRecord: data });
+  updateProjectTreeDataRecord: (data) => {
+    set({ projectTreeDataRecord: data });
   },
-  initProjectStructureTreeDataMeta: ({
+  initProjectTreeDataMeta: ({
     projectStructureTreeData,
     projectStructureTreeDataRecord,
   }) => {
     set((state) => {
       state.projectStructureTreeData = projectStructureTreeData;
-      state.projectStructureTreeDataRecord = projectStructureTreeDataRecord;
-      state.hasInitProjectStructureTreeDataMeta = true;
+      state.projectTreeDataRecord = projectStructureTreeDataRecord;
+      state.hasInitProjectTreeDataMeta = true;
     });
   },
 });

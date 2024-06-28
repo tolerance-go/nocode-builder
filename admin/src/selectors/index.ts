@@ -6,7 +6,7 @@ export const selectProjectStructureTreeData = (state: ProjectTreeStates) =>
 
 export const selectProjectStructureTreeNodeDataRecord = (
   state: ProjectTreeStates,
-) => state.projectStructureTreeDataRecord;
+) => state.projectTreeDataRecord;
 
 export const selectProjectStructureTreeNodeDataRecordItem = createSelector(
   [

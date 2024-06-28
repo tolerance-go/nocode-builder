@@ -1,6 +1,6 @@
 import {
   ProjectStructureTreeDataNode,
-  ProjectStructureTreeNodeDataRecord,
+  ProjectTreeNodeDataRecord,
 } from "@/types";
 
 export function buildProjectStructureTreeDataMeta(
@@ -8,10 +8,10 @@ export function buildProjectStructureTreeDataMeta(
   projects: API.ProjectDto[],
 ): {
   tree: ProjectStructureTreeDataNode[];
-  dataRecord: ProjectStructureTreeNodeDataRecord;
+  dataRecord: ProjectTreeNodeDataRecord;
 } {
   const projectGroupMap = new Map<number, ProjectStructureTreeDataNode>();
-  const dataRecord: ProjectStructureTreeNodeDataRecord = {};
+  const dataRecord: ProjectTreeNodeDataRecord = {};
 
   // 初始化所有的 projectGroups 为 TreeNode 并填充 dataRecord
   projectGroups.forEach((group) => {
