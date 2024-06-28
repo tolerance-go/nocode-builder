@@ -172,6 +172,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
   // 插入一个节点到指定位置
   insertProjectStructureTreeNode: (parentKey, node, index, recordItem) => {
     set((state) => {
+      console.log('index', index);
       let inserted = false;
 
       const insertNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
