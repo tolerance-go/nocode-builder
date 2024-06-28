@@ -1,10 +1,10 @@
 import { DataBaseTimelineChunk, DataBaseTimelineItem } from "@/types";
 import { ImmerStateCreator } from "@/utils";
-import { once } from "lodash-es";
 
 export type ServerStates = {
   dataBaseTimelineChunks: DataBaseTimelineChunk[];
   currentTimelineItems: DataBaseTimelineItem[];
+  hasSetTimelinePoolCheckInterval: boolean;
 };
 
 export type ServerActions = {
@@ -23,6 +23,7 @@ export const createServerSlice: ImmerStateCreator<ServerSlice, ServerSlice> = (
 ) => ({
   dataBaseTimelineChunks: [],
   currentTimelineItems: [],
+  hasSetTimelinePoolCheckInterval: false,
 
   addTimelineItemToPool: (item: DataBaseTimelineItem) =>
     set((state) => {
@@ -65,11 +66,14 @@ export const createServerSlice: ImmerStateCreator<ServerSlice, ServerSlice> = (
       }
     }),
 
-  setTimelinePoolCheckInterval: once(() => {
+  setTimelinePoolCheckInterval: () => {
     setInterval(() => {
       if (get().currentTimelineItems.length > 0) {
         get().createTimelineChunkFromPool();
       }
     }, 1000);
-  }),
+    set((state) => {
+      state.hasSetTimelinePoolCheckInterval = true;
+    });
+  },
 });

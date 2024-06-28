@@ -15,34 +15,52 @@ const firstNameSubscriber = (
 useAppStoreBase.subscribe((state, previous) => {
   firstNameSubscriber(state, previous);
   const {
-    initProjectTreeDataMeta: initProjectStructureTreeDataMeta,
+    initProjectTreeDataMeta,
     loadProjectGroupTableData,
     loadProjectTableData,
     setTimelinePoolCheckInterval,
   } = useAppStoreBase.getState();
-  if (state.pathname !== null) {
-    if (isSystemPath(state.pathname)) {
-      // eslint-disable-next-line no-empty
-      if (isAuthRelatedPath(state.pathname)) {
-      } else {
+
+  const pathnameHasChanged = state.pathname !== previous.pathname;
+  const projectGroupTableDataHasChanged =
+    state.projectGroupTableData !== previous.projectGroupTableData;
+  const projectTableDataHasChanged =
+    state.projectTableData !== previous.projectTableData;
+
+  if (pathnameHasChanged) {
+    if (
+      state.pathname !== null &&
+      isSystemPath(state.pathname) &&
+      !isAuthRelatedPath(state.pathname)
+    ) {
+      if (!state.hasSetTimelinePoolCheckInterval) {
         setTimelinePoolCheckInterval();
+      }
 
-        if (
-          !state.hasLoadProjectGroupTableData &&
-          !state.loadProjectGroupTableDataLoading
-        ) {
-          loadProjectGroupTableData();
-        }
+      if (
+        !state.hasLoadedProjectGroupTableData &&
+        !state.isLoadingProjectGroupTableData
+      ) {
+        loadProjectGroupTableData();
+      }
 
-        if (
-          !state.hasLoadProjectTableData &&
-          !state.loadProjectTableDataLoading
-        ) {
-          loadProjectTableData();
-        }
+      if (
+        !state.hasLoadedProjectTableData &&
+        !state.isLoadingProjectTableData
+      ) {
+        loadProjectTableData();
+      }
+    }
+  }
 
+  if (projectGroupTableDataHasChanged || projectTableDataHasChanged) {
+    if (
+      state.pathname !== null &&
+      isSystemPath(state.pathname) &&
+      !isAuthRelatedPath(state.pathname)
+    ) {
+      if (!state.hasInitProjectTreeDataMeta) {
         if (
-          !state.hasInitProjectTreeDataMeta &&
           state.projectGroupTableData !== null &&
           state.projectTableData !== null
         ) {
@@ -51,7 +69,7 @@ useAppStoreBase.subscribe((state, previous) => {
             state.projectTableData,
           );
 
-          initProjectStructureTreeDataMeta({
+          initProjectTreeDataMeta({
             projectStructureTreeData: meta.tree,
             projectStructureTreeDataRecord: meta.dataRecord,
           });

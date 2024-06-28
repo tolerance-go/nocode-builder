@@ -3,8 +3,8 @@ import { ImmerStateCreator } from "@/utils";
 
 export type ProjectGroupTableDataStates = {
   projectGroupTableData: API.ProjectGroupDto[] | null;
-  hasLoadProjectGroupTableData: boolean;
-  loadProjectGroupTableDataLoading: boolean;
+  hasLoadedProjectGroupTableData: boolean;
+  isLoadingProjectGroupTableData: boolean;
 };
 
 export type ProjectGroupTableDataActions = {
@@ -20,21 +20,27 @@ export const createProjectGroupTableSlice: ImmerStateCreator<
   ProjectGroupTableDataSlice
 > = (set) => ({
   projectGroupTableData: null,
-  hasLoadProjectGroupTableData: false,
-  loadProjectGroupTableDataLoading: false,
+  hasLoadedProjectGroupTableData: false,
+  isLoadingProjectGroupTableData: false,
   updateProjectGroupTableData: (data) =>
     set((state) => {
       state.projectGroupTableData = data;
     }),
   loadProjectGroupTableData: async () => {
     set((state) => {
-      state.loadProjectGroupTableDataLoading = true;
+      state.isLoadingProjectGroupTableData = true;
     });
     const data = await getProjectGroups({});
+    set(
+      (state) => {
+        state.projectGroupTableData = data;
+      },
+      false,
+      "loadProjectGroupTableData",
+    );
     set((state) => {
-      state.projectGroupTableData = data;
-      state.hasLoadProjectGroupTableData = true;
-      state.loadProjectGroupTableDataLoading = false;
+      state.hasLoadedProjectGroupTableData = true;
+      state.isLoadingProjectGroupTableData = false;
     });
   },
 });
