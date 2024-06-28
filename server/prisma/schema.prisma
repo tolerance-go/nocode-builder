@@ -14,14 +14,24 @@ datasource db {
 }
 
 model User {
-  id           Int            @id @default(autoincrement())
-  name         String         @unique
-  email        String?        @unique
-  password     String
-  projects     Project[]
-  createdAt    DateTime       @default(now())
-  updatedAt    DateTime       @updatedAt
+  id            Int            @id @default(autoincrement())
+  name          String         @unique
+  email         String?        @unique
+  password      String
+  projects      Project[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   projectGroups ProjectGroup[]
+}
+
+model ProjectData {
+  id      Int       @id @default(autoincrement())
+  project Project[]
+}
+
+model ProjectGroupData {
+  id           Int            @id @default(autoincrement())
+  projectGroup ProjectGroup[]
 }
 
 model Project {
@@ -33,17 +43,21 @@ model Project {
   updatedAt      DateTime      @updatedAt
   projectGroup   ProjectGroup? @relation(fields: [projectGroupId], references: [id])
   projectGroupId Int?
+  projectDataId  Int?
+  projectData    ProjectData?  @relation(fields: [projectDataId], references: [id])
 }
 
 model ProjectGroup {
-  id            Int            @id @default(autoincrement())
-  name          String
-  parentGroupId Int?
-  parentGroup   ProjectGroup?  @relation("ChildGroups", fields: [parentGroupId], references: [id])
-  childGroups   ProjectGroup[] @relation("ChildGroups")
-  ownerId       Int
-  owner         User           @relation(fields: [ownerId], references: [id])
-  projects      Project[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  id                 Int               @id @default(autoincrement())
+  name               String
+  parentGroupId      Int?
+  parentGroup        ProjectGroup?     @relation("ChildGroups", fields: [parentGroupId], references: [id])
+  childGroups        ProjectGroup[]    @relation("ChildGroups")
+  ownerId            Int
+  owner              User              @relation(fields: [ownerId], references: [id])
+  projects           Project[]
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  projectGroupData   ProjectGroupData? @relation(fields: [projectGroupDataId], references: [id])
+  projectGroupDataId Int?
 }
