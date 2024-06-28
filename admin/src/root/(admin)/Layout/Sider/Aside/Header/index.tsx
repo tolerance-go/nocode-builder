@@ -75,6 +75,8 @@ export const Header = () => {
                 ),
               );
 
+              console.log("folderIndex", folderIndex);
+
               const newKey = Math.random() + "";
 
               insertProjectStructureTreeNode(

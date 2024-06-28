@@ -170,21 +170,39 @@ export const createProjectTreeSlice: ImmerStateCreator<
     });
   },
   // 插入一个节点到指定位置
+
   insertProjectStructureTreeNode: (parentKey, node, index, recordItem) => {
     set((state) => {
-      console.log('index', index);
       let inserted = false;
 
-      const insertNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
+      const adjustIndex = (
+        nodes: ProjectStructureTreeDataNode[],
+        idx: number,
+      ): number => {
+        if (idx === -1) {
+          idx = 0;
+        } else if (idx === nodes.length) {
+          // idx 保持不变，因为 splice 在数组末尾插入元素时不需要调整
+        } else if (idx >= 0 && idx < nodes.length) {
+          idx = idx + 1;
+        }
+        return idx;
+      };
+
+      const insertNode = (
+        nodes: ProjectStructureTreeDataNode[],
+        idx: number,
+      ): boolean => {
         for (const n of nodes) {
           if (n.key === parentKey) {
             n.children = n.children || [];
-            n.children.splice(index, 0, node);
+            idx = adjustIndex(n.children, idx);
+            n.children.splice(idx, 0, node);
             state.nodeParentKeyRecord[node.key] = parentKey; // 更新父节点关系
             inserted = true;
             return true;
           }
-          if (n.children && insertNode(n.children)) {
+          if (n.children && insertNode(n.children, idx)) {
             return true;
           }
         }
@@ -192,11 +210,12 @@ export const createProjectTreeSlice: ImmerStateCreator<
       };
 
       if (parentKey === null) {
+        index = adjustIndex(state.projectStructureTreeData, index);
         state.projectStructureTreeData.splice(index, 0, node);
         state.nodeParentKeyRecord[node.key] = null; // 根节点的父节点为 null
         inserted = true;
       } else {
-        insertNode(state.projectStructureTreeData);
+        insertNode(state.projectStructureTreeData, index);
       }
 
       if (inserted) {
