@@ -66,7 +66,7 @@ const createSharedSlice: StateCreator<
     get().addBear();
     get().addFish();
     // or do them from scratch
-    // set((state) => ({ bears: state.bears + 1, fishes: state.fishes + 1 })
+    set((state) => ({ bears: state.bears + 1, fishes: state.fishes + 1 }));
   },
   getBoth: () => get().bears + get().fishes,
 });
