@@ -3,6 +3,8 @@ import { ImmerStateCreator } from "@/utils";
 
 export type ProjectTableDataStates = {
   projectTableData: API.ProjectDto[] | null;
+  hasLoadProjectTableData: boolean;
+  loadProjectTableDataLoading: boolean;
 };
 
 export type ProjectTableDataActions = {
@@ -21,14 +23,21 @@ export const createProjectTableSlice: ImmerStateCreator<
   ProjectTableDataSlice
 > = (set) => ({
   projectTableData: null,
+  hasLoadProjectTableData: false,
+  loadProjectTableDataLoading: false,
 
   updateProjectTableData: (data: API.ProjectDto[]) =>
     set({ projectTableData: data }),
 
   loadProjectTableData: async () => {
+    set((state) => {
+      state.loadProjectTableDataLoading = true;
+    });
     const projects = await getProjects({});
-    set({
-      projectTableData: projects,
+    set((state) => {
+      state.projectTableData = projects;
+      state.hasLoadProjectTableData = true;
+      state.loadProjectTableDataLoading = false;
     });
   },
 

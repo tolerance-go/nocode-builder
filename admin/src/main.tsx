@@ -1,26 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Root } from "./root";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Login } from "./root/(auth)/login";
 // import { Admin } from "./root/admin";
-import { Auth } from "./root/(auth)";
 import { Admin } from "./root/(admin)";
+import { Auth } from "./root/(auth)";
 import { Register } from "./root/(auth)/register";
 // import { Test } from "./root/test";
-import "./i18n"; // 引入 i18n 配置
 import "normalize.css";
+import { paths } from "./configs";
+import { NotFound } from "./root/404";
+import "./i18n"; // 引入 i18n 配置
 import "./index.css";
 import "./subscribes";
-import { NotFound } from "./root/404";
-import { paths } from "./configs";
-import { useAppStoreBase } from "./store";
-
-const { loadProjectGroupTableData, loadProjectTableData } =
-  useAppStoreBase.getState();
-
-loadProjectTableData();
-loadProjectGroupTableData();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
