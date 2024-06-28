@@ -37,8 +37,9 @@ export const createProjectTreeSlice: ImmerStateCreator<
       state.projectStructureTreeData = data;
     });
   },
-  updateProjectStructureTreeDataRecord: (data) =>
-    set({ projectStructureTreeDataRecord: data }),
+  updateProjectStructureTreeDataRecord: (data) => {
+    set({ projectStructureTreeDataRecord: data });
+  },
   initProjectStructureTreeDataMeta: ({
     projectStructureTreeData,
     projectStructureTreeDataRecord,
