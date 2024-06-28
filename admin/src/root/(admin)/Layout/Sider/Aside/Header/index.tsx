@@ -35,7 +35,10 @@ export const Header = () => {
   const projectTreeDataRecord = useAppStore.use.projectTreeDataRecord();
   const updateEditingProjectStructureTreeNode =
     useAppStore.use.updateEditingProjectStructureTreeNode();
-
+  const selectedProjectStructureTreeNodes =
+    useAppStore.use.selectedProjectStructureTreeNodes();
+  const findProjectStructureTreeNode =
+    useAppStore.use.findProjectStructureTreeNode();
   return (
     <Flex
       justify="end"
@@ -86,36 +89,48 @@ export const Header = () => {
             };
 
             const insert = (target: ProjectStructureTreeDataNode) => {
-              const folderIndex = findLastFolderIndex(target.children ?? []);
+              const folderIndex = findLastFolderIndex(
+                (target.children ?? []).map(
+                  (node) => projectTreeDataRecord[node.key],
+                ),
+              );
               const newKey = Math.random() + "";
 
-              projectTreeStore.insertChildNodeAction(
+              insertProjectStructureTreeNode(
                 target.key,
                 {
-                  title: "",
-                  key: newKey,
-                  id: -1,
-                  type: "file",
                   isLeaf: true,
+                  key: newKey,
                 },
                 folderIndex,
+                {
+                  title: "",
+                  id: -1,
+                  type: "file",
+                },
               );
-              projectTreeStore.startNodeEditingAction(newKey);
+              updateEditingProjectStructureTreeNode(newKey);
               projectTreeTempNodeState.add(newKey);
             };
 
-            const selectedKey = projectTreeStore.projectTreeState.selectedKey;
+            const selectedKey = selectedProjectStructureTreeNodes.length
+              ? selectedProjectStructureTreeNodes[
+                  selectedProjectStructureTreeNodes.length - 1
+                ]
+              : null;
             if (!selectedKey) {
               insertInRoot();
               return;
             }
 
-            const selectedNode =
-              projectTreeStore.findNodeByKeyOrThrowAction(selectedKey);
+            const selectedRecordItem = projectTreeDataRecord[selectedKey];
+            const selectedNode = findProjectStructureTreeNode(selectedKey);
 
-            if (nodeIsFolder(selectedNode)) {
-              insert(selectedNode);
-            } else if (nodeIsFile(selectedNode)) {
+            if (nodeIsFolder(selectedRecordItem)) {
+              if (selectedNode) {
+                insert(selectedNode);
+              }
+            } else if (nodeIsFile(selectedRecordItem)) {
               const parent =
                 projectTreeStore.findParentNodeOrThrow(selectedKey);
               if (parent) {

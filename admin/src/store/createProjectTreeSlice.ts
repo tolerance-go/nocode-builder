@@ -42,6 +42,9 @@ export type ProjectTreeActions = {
   updateExpandedKeys: (keys: string[]) => void;
   updateEditingProjectStructureTreeNode: (key: string) => void;
   stopEditingProjectStructureTreeNode: () => void;
+  findProjectStructureTreeNode: (
+    key: string,
+  ) => ProjectStructureTreeDataNode | null;
 };
 
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
@@ -49,13 +52,34 @@ export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
 export const createProjectTreeSlice: ImmerStateCreator<
   ProjectTreeSlice,
   ProjectTreeSlice
-> = (set) => ({
+> = (set, get) => ({
   editingProjectStructureTreeNode: null,
   projectStructureTreeData: [],
   projectTreeDataRecord: {},
   hasInitProjectTreeDataMeta: false,
   selectedProjectStructureTreeNodes: [],
   expandedKeys: [],
+  // 通过key在 projectStructureTreeData 递归查找节点
+  findProjectStructureTreeNode: (key) => {
+    const findNode = (
+      nodes: ProjectStructureTreeDataNode[],
+    ): ProjectStructureTreeDataNode | null => {
+      for (const node of nodes) {
+        if (node.key === key) {
+          return node;
+        }
+        if (node.children) {
+          const found = findNode(node.children);
+          if (found) {
+            return found;
+          }
+        }
+      }
+      return null;
+    };
+
+    return findNode(get().projectStructureTreeData);
+  },
   updateEditingProjectStructureTreeNode: (key) =>
     set((state) => {
       state.editingProjectStructureTreeNode = key;
