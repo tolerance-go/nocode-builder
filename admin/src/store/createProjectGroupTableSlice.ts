@@ -6,7 +6,7 @@ export type ProjectGroupTableDataStates = {
 };
 
 export type ProjectGroupTableDataActions = {
-  initProjectGroupTableData: (data: API.ProjectGroupDto[]) => void;
+  updateProjectGroupTableData: (data: API.ProjectGroupDto[]) => void;
   loadProjectGroupTableData: () => Promise<void>;
 };
 
@@ -18,7 +18,7 @@ export const createProjectGroupTableSlice: ImmerStateCreator<
   ProjectGroupTableDataSlice
 > = (set) => ({
   projectGroupTableData: null,
-  initProjectGroupTableData: (data) =>
+  updateProjectGroupTableData: (data) =>
     set((state) => {
       state.projectGroupTableData = data;
     }),

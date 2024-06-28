@@ -6,7 +6,7 @@ export type ProjectTableDataStates = {
 };
 
 export type ProjectTableDataActions = {
-  initProjectTableData: (data: API.ProjectDto[]) => void;
+  updateProjectTableData: (data: API.ProjectDto[]) => void;
   loadProjectTableData: () => Promise<void>;
   addProject: (project: API.ProjectDto) => void;
   updateProject: (updatedProject: API.ProjectDto) => void;
@@ -22,7 +22,7 @@ export const createProjectTableSlice: ImmerStateCreator<
 > = (set) => ({
   projectTableData: null,
 
-  initProjectTableData: (data: API.ProjectDto[]) =>
+  updateProjectTableData: (data: API.ProjectDto[]) =>
     set({ projectTableData: data }),
 
   loadProjectTableData: async () => {

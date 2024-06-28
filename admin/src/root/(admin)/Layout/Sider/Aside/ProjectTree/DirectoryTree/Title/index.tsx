@@ -7,6 +7,8 @@ import { Dropdown, Flex, InputRef, Typography, theme } from "antd";
 import { useRef } from "react";
 import { useSnapshot } from "valtio";
 import { AutoSelectInput } from "./AutoSelectInput";
+import { useAppStoreBase } from "@/store";
+import { selectProjectStructureTreeNodeDataRecordItem } from "@/selectors";
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
@@ -14,9 +16,12 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const projectTreeNodeEditingState = useSnapshot(
     projectTreeStore.projectTreeNodeEditingState,
   );
-  const title = "";
 
   const isEditing = projectTreeNodeEditingState.has(nodeKey);
+
+  const nodeDataRecord = useAppStoreBase((state) =>
+    selectProjectStructureTreeNodeDataRecordItem(state, nodeKey),
+  );
 
   const saveNode = (currentValue: string) => {
     if (projectTreeTempNodeState.has(nodeKey)) {
@@ -55,7 +60,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       size="small"
       ref={inputRef}
       autoFocus
-      defaultValue={title}
+      defaultValue={nodeDataRecord.title}
       onBlur={() => saveInput()}
       onPressEnter={() => saveInput()}
       style={{ width: "100%" }}
@@ -103,7 +108,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
           width: "100%",
         }}
       >
-        {title}
+        {nodeDataRecord.title}
       </span>
     </Dropdown>
   );

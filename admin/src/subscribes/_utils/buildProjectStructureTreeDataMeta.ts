@@ -1,17 +1,30 @@
-import { ProjectStructureTreeDataNode } from "@/types";
+import {
+  ProjectStructureTreeDataNode,
+  ProjectStructureTreeNodeDataRecord,
+} from "@/types";
 
 export function buildProjectStructureTreeDataMeta(
   projectGroups: API.ProjectGroupDto[],
   projects: API.ProjectDto[],
-): ProjectStructureTreeDataNode[] {
+): {
+  tree: ProjectStructureTreeDataNode[];
+  dataRecord: ProjectStructureTreeNodeDataRecord;
+} {
   const projectGroupMap = new Map<number, ProjectStructureTreeDataNode>();
-  // 初始化所有的 projectGroups 为 TreeNode
+  const dataRecord: ProjectStructureTreeNodeDataRecord = {};
+
+  // 初始化所有的 projectGroups 为 TreeNode 并填充 dataRecord
   projectGroups.forEach((group) => {
     projectGroupMap.set(group.id, {
       key: `group-${group.id}`,
       children: [],
       isLeaf: false,
     });
+    dataRecord[`group-${group.id}`] = {
+      title: group.name,
+      id: group.id,
+      type: "folder",
+    };
   });
 
   // 构建嵌套的 group 结构
@@ -29,7 +42,7 @@ export function buildProjectStructureTreeDataMeta(
     }
   });
 
-  // 将 projects 放到对应的 group 下
+  // 将 projects 放到对应的 group 下并填充 dataRecord
   projects.forEach((project) => {
     const projectNode: ProjectStructureTreeDataNode = {
       key: `project-${project.id}`,
@@ -43,7 +56,12 @@ export function buildProjectStructureTreeDataMeta(
       }
       parentGroup.children.push(projectNode);
     }
+    dataRecord[`project-${project.id}`] = {
+      title: project.name,
+      id: project.id,
+      type: "file",
+    };
   });
 
-  return tree;
+  return { tree, dataRecord };
 }

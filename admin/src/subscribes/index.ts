@@ -14,7 +14,10 @@ const firstNameSubscriber = (
 
 useAppStoreBase.subscribe((state, previous) => {
   firstNameSubscriber(state, previous);
-
+  const {
+    updateProjectStructureTreeData,
+    updateProjectStructureTreeDataRecord,
+  } = useAppStoreBase.getState();
   if (state.pathname !== null) {
     if (isSystemPath(state.pathname)) {
       // eslint-disable-next-line no-empty
@@ -25,14 +28,13 @@ useAppStoreBase.subscribe((state, previous) => {
           previous.projectGroupTableData === null
         ) {
           if (state.projectTableData && previous.projectTableData === null) {
-            const projectStructureTreeData = buildProjectStructureTreeDataMeta(
+            const meta = buildProjectStructureTreeDataMeta(
               state.projectGroupTableData,
               state.projectTableData,
             );
 
-            useAppStoreBase
-              .getState()
-              .initProjectStructureTreeData(projectStructureTreeData);
+            updateProjectStructureTreeData(meta.tree);
+            updateProjectStructureTreeDataRecord(meta.dataRecord);
           }
         }
       }

@@ -1,12 +1,21 @@
-import { ProjectStructureTreeDataNode } from "@/types";
+import {
+  ProjectStructureTreeDataNode,
+  ProjectStructureTreeNodeDataRecord,
+} from "@/types";
 import { ImmerStateCreator } from "@/utils";
 
 export type ProjectTreeStates = {
   projectStructureTreeData: ProjectStructureTreeDataNode[];
+  projectStructureTreeDataRecord: ProjectStructureTreeNodeDataRecord;
 };
 
 export type ProjectTreeActions = {
-  initProjectStructureTreeData: (data: ProjectStructureTreeDataNode[]) => void;
+  updateProjectStructureTreeData: (
+    data: ProjectStructureTreeDataNode[],
+  ) => void;
+  updateProjectStructureTreeDataRecord: (
+    data: ProjectStructureTreeNodeDataRecord,
+  ) => void;
 };
 
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
@@ -16,6 +25,9 @@ export const createProjectTreeSlice: ImmerStateCreator<
   ProjectTreeSlice
 > = (set) => ({
   projectStructureTreeData: [],
-  initProjectStructureTreeData: (data) =>
+  projectStructureTreeDataRecord: {},
+  updateProjectStructureTreeData: (data) =>
     set({ projectStructureTreeData: data }),
+  updateProjectStructureTreeDataRecord: (data) =>
+    set({ projectStructureTreeDataRecord: data }),
 });
