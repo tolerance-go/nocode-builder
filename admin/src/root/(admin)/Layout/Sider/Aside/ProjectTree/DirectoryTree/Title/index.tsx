@@ -8,18 +8,13 @@ import { useRef } from "react";
 import { useSnapshot } from "valtio";
 import { AutoSelectInput } from "./AutoSelectInput";
 
-export const Title = ({
-  title,
-  nodeKey,
-}: {
-  nodeKey: string;
-  title: string;
-}) => {
+export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
   const { token } = theme.useToken();
   const projectTreeNodeEditingState = useSnapshot(
     projectTreeStore.projectTreeNodeEditingState,
   );
+  const title = "";
 
   const isEditing = projectTreeNodeEditingState.has(nodeKey);
 

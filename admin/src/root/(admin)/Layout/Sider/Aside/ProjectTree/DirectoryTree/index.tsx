@@ -60,9 +60,7 @@ export const TreeMenu = () => {
       onExpand={(keys) => {
         projectTreeStore.setExpandedKeysAction(keys as string[]); // 更新展开状态
       }}
-      titleRender={(nodeData) => (
-        <Title nodeKey={nodeData.key} title={nodeData.title} />
-      )}
+      titleRender={(nodeData) => <Title nodeKey={nodeData.key} />}
     />
   );
 };

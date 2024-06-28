@@ -2,7 +2,7 @@ import { getProjectGroups } from "@/services/api/getProjectGroups";
 import { ImmerStateCreator } from "@/utils";
 
 export type ProjectGroupTableDataStates = {
-  projectGroupTableData: API.ProjectGroupDto[];
+  projectGroupTableData: API.ProjectGroupDto[] | null;
 };
 
 export type ProjectGroupTableDataActions = {
@@ -17,7 +17,7 @@ export const createProjectGroupTableSlice: ImmerStateCreator<
   ProjectGroupTableDataSlice,
   ProjectGroupTableDataSlice
 > = (set) => ({
-  projectGroupTableData: [],
+  projectGroupTableData: null,
   initProjectGroupTableData: (data) =>
     set((state) => {
       state.projectGroupTableData = data;

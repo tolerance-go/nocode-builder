@@ -1,4 +1,5 @@
 export type ProjectStructureTreeDataNode = {
+  isLeaf: boolean;
   key: string;
   children?: ProjectStructureTreeDataNode[];
 };

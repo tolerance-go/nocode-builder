@@ -8,12 +8,14 @@ import { Outlet, useLocation } from "react-router-dom";
 export function Root() {
   const location = useLocation();
   const firstName = useAppStore.use.firstName();
-  const updateFirstName = useAppStore.use.updateFirstName()
-  const lastName = useAppStore.use.lastName()
+  const updateFirstName = useAppStore.use.updateFirstName();
+  const lastName = useAppStore.use.lastName();
+  const updatePathname = useAppStore.use.updatePathname();
 
   useLayoutEffect(() => {
     locationState.pathname = location.pathname;
-  }, [location]);
+    updatePathname(location.pathname);
+  }, [location, updatePathname]);
 
   return (
     <ConfigProvider
@@ -23,7 +25,7 @@ export function Root() {
     >
       <div
         onClick={() => {
-          updateFirstName('yarnb')
+          updateFirstName("yarnb");
         }}
       >
         {firstName}
