@@ -1,7 +1,14 @@
 import { StateCreator, create } from "zustand";
 import { devtools } from "zustand/middleware";
-import { ProjectTreeSlice, createProjectTreeSlice } from "./createProjectTreeSlice";
+import {
+  ProjectTreeSlice,
+  createProjectTreeSlice,
+} from "./createProjectTreeSlice";
 import { createSelectors } from "@/utils";
+import {
+  ProjectTableDataSlice,
+  createProjectTableSlice,
+} from "./createProjectTableSlice";
 
 interface FishSlice {
   fishes: number;
@@ -67,11 +74,18 @@ export type Actions = {
 };
 
 export const useAppStoreBase = create<
-  States & Actions & BearSlice & FishSlice & SharedSlice & ProjectTreeSlice
+  States &
+    Actions &
+    BearSlice &
+    FishSlice &
+    SharedSlice &
+    ProjectTreeSlice &
+    ProjectTableDataSlice
 >()(
   devtools((...a) => {
     const [set] = a;
     return {
+      ...createProjectTableSlice(...a),
       ...createProjectTreeSlice(...a),
       ...createBearSlice(...a),
       ...createFishSlice(...a),
