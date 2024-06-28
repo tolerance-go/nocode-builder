@@ -29,6 +29,7 @@ export type ProjectTreeActions = {
     parentKey: string | null,
     node: ProjectStructureTreeDataNode,
     index: number,
+    recordItem: ProjectTreeNodeDataRecord[number],
   ) => void;
   removeProjectStructureTreeNode: (nodeKey: string) => void;
   moveProjectStructureTreeNode: (
@@ -94,13 +95,16 @@ export const createProjectTreeSlice: ImmerStateCreator<
     });
   },
   // 插入一个节点到指定位置
-  insertProjectStructureTreeNode: (parentKey, node, index) => {
+  insertProjectStructureTreeNode: (parentKey, node, index, recordItem) => {
     set((state) => {
+      let inserted = false;
+
       const insertNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
         for (const n of nodes) {
           if (n.key === parentKey) {
             n.children = n.children || [];
             n.children.splice(index, 0, node);
+            inserted = true;
             return true;
           }
           if (n.children && insertNode(n.children)) {
@@ -112,8 +116,13 @@ export const createProjectTreeSlice: ImmerStateCreator<
 
       if (parentKey === null) {
         state.projectStructureTreeData.splice(index, 0, node);
+        inserted = true;
       } else {
         insertNode(state.projectStructureTreeData);
+      }
+
+      if (inserted) {
+        state.projectTreeDataRecord[node.key] = recordItem;
       }
     });
   },

@@ -1,3 +1,4 @@
+import { useAppStore } from "@/store";
 import { layoutStore, projectTreeStore } from "@/stores";
 import { nodeIsFile, nodeIsFolder } from "@/stores/_utils/is";
 import {
@@ -5,7 +6,10 @@ import {
   projectTreeState,
   projectTreeTempNodeState,
 } from "@/stores/projectTree";
-import { ProjectStructureTreeDataNode } from "@/types";
+import {
+  ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecordItem,
+} from "@/types";
 import {
   FileAddOutlined,
   FolderAddOutlined,
@@ -15,13 +19,21 @@ import { Button, Flex, Space, theme } from "antd";
 import { useSnapshot } from "valtio";
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
-const findLastFolderIndex = (nodes: ProjectStructureTreeDataNode[]): number => {
+const findLastFolderIndex = (
+  nodes: ProjectTreeNodeDataRecordItem[],
+): number => {
   return nodes.findLastIndex((node) => node.type === "folder");
 };
 
 export const Header = () => {
   const layoutState = useSnapshot(layoutStore.layoutState);
   const { token } = theme.useToken();
+  const insertProjectStructureTreeNode =
+    useAppStore.use.insertProjectStructureTreeNode();
+
+  const projectStructureTreeData = useAppStore.use.projectStructureTreeData();
+  const projectTreeDataRecord = useAppStore.use.projectTreeDataRecord();
+
   return (
     <Flex
       justify="end"
@@ -47,21 +59,25 @@ export const Header = () => {
           onClick={async () => {
             const insertInRoot = () => {
               const folderIndex = findLastFolderIndex(
-                projectTreeState.treeData.value.data,
+                projectStructureTreeData.map(
+                  (node) => projectTreeDataRecord[node.key],
+                ),
               );
 
               const newKey = Math.random() + "";
 
-              insertNodeAction(
-                projectTreeState.treeData.value.data,
+              insertProjectStructureTreeNode(
+                null,
                 {
-                  title: "",
                   key: newKey,
-                  id: -1,
-                  type: "file",
                   isLeaf: true,
                 },
                 folderIndex,
+                {
+                  title: "",
+                  type: "file",
+                  id: -1,
+                },
               );
               projectTreeStore.startNodeEditingAction(newKey);
               projectTreeTempNodeState.add(newKey);

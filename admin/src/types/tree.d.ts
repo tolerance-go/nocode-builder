@@ -4,13 +4,15 @@ export type ProjectStructureTreeDataNode = {
   children?: ProjectStructureTreeDataNode[];
 };
 
+export type ProjectTreeNodeDataRecordItem = {
+  title: string;
+  id: number;
+  type: "file" | "folder";
+};
+
 /** key 到树节点数据的映射 */
 export type ProjectTreeNodeDataRecord = {
-  [key: string]: {
-    title: string;
-    id: number;
-    type: "file" | "folder";
-  };
+  [key: string]: ProjectTreeNodeDataRecordItem;
 };
 
 export type ProjectTreeCompareResult = {
