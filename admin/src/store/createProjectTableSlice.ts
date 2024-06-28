@@ -13,6 +13,7 @@ export type ProjectTableDataActions = {
   addProject: (project: API.ProjectDto) => void;
   updateProject: (updatedProject: API.ProjectDto) => void;
   deleteProject: (projectId: number) => void;
+  findProjectById: (projectId: number) => API.ProjectDto | undefined;
 };
 
 export type ProjectTableDataSlice = ProjectTableDataStates &
@@ -21,7 +22,7 @@ export type ProjectTableDataSlice = ProjectTableDataStates &
 export const createProjectTableSlice: ImmerStateCreator<
   ProjectTableDataSlice,
   ProjectTableDataSlice
-> = (set) => ({
+> = (set, get) => ({
   projectTableData: null,
   hasLoadedProjectTableData: false,
   isLoadingProjectTableData: false,
@@ -44,6 +45,14 @@ export const createProjectTableSlice: ImmerStateCreator<
       state.isLoadingProjectTableData = false;
       state.hasLoadedProjectTableData = true;
     });
+  },
+
+  findProjectById: (projectId: number) => {
+    const state = get();
+    if (state.projectTableData === null) {
+      throw new Error("Project table data is not initialized.");
+    }
+    return state.projectTableData.find((project) => project.id === projectId);
   },
 
   addProject: (project: API.ProjectDto) =>

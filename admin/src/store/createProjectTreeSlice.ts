@@ -5,6 +5,7 @@ import {
 } from "@/types";
 import { ImmerStateCreator } from "@/utils";
 import { ServerSlice } from "./createServerSlice";
+import { ProjectTableDataActions } from "./createProjectTableSlice";
 
 export type ProjectTreeStates = {
   projectStructureTreeData: ProjectStructureTreeDataNode[];
@@ -68,7 +69,7 @@ export type ProjectTreeActions = {
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
 
 export const createProjectTreeSlice: ImmerStateCreator<
-  ProjectTreeSlice & ServerSlice,
+  ProjectTreeSlice & ServerSlice & ProjectTableDataActions,
   ProjectTreeSlice
 > = (set, get) => ({
   containerHeight: 0,
@@ -271,7 +272,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
   },
   // 删除projectStructureTreeData中的一个节点
   removeProjectStructureTreeNode: (nodeKey) => {
-    let removed = false;
+    let removed: boolean = false;
     set(
       (state) => {
         const removeNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
@@ -280,13 +281,10 @@ export const createProjectTreeSlice: ImmerStateCreator<
             if (n.key === nodeKey) {
               nodes.splice(i, 1);
 
-              delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
-              delete state.nodeParentKeyRecord[nodeKey]; // 删除父节点关系
-
               return true;
             }
-            if (n.children && removeNode(n.children)) {
-              return true;
+            if (n.children) {
+              return removeNode(n.children);
             }
           }
           return false;
@@ -299,13 +297,36 @@ export const createProjectTreeSlice: ImmerStateCreator<
     );
 
     if (removed) {
-      get().addTimelineItemToPool({
-        tableName: "project",
-        createdAt: "",
-        user: 1,
-        actionName: "delete",
-        oldValues: {},
-        recordId: 100,
+      const removedItem = get().projectTreeDataRecord[nodeKey];
+
+      if (!removedItem) {
+        throw new Error("数据不完整。");
+      }
+
+      if (removedItem.type == "file") {
+        if (removedItem.id !== -1) {
+          const project = get().findProjectById(removedItem.id);
+          if (!project) {
+            throw new Error("数据不完整。");
+          }
+          get().addTimelineItemToPool({
+            tableName: "project",
+            createdAt: new Date().toISOString(),
+            actionName: "delete",
+            record: {
+              name: removedItem.title,
+              createdAt: project.createdAt,
+              updatedAt: project.updatedAt,
+              id: project.id,
+              ownerId: project.ownerId,
+            },
+          });
+        }
+      }
+
+      set((state) => {
+        delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
+        delete state.nodeParentKeyRecord[nodeKey]; // 删除父节点关系
       });
     }
   },
