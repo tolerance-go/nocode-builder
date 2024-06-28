@@ -1,4 +1,6 @@
-import { loadTreeDataAction } from "@/stores/projectTree";
+import {
+  loadTreeDataAction
+} from "@/stores/projectTree";
 import { locationState } from "@/stores/route";
 import { subscribe } from "valtio";
 
@@ -11,3 +13,7 @@ subscribe(locationState, () => {
     loadTreeDataAction();
   }
 });
+
+// subscribeKey(projectTreeTimelineState, "data", (data) => {
+//   console.log(data);
+// });

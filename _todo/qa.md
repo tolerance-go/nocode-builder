@@ -8,3 +8,4 @@
 2. [x] [index 有哪些作用？](a\index有哪些作用.md)
 3. [x] [Set 有哪些 API?](_todo\a\Set有哪些API.md)
 4. [ ] 语意化的 HTML 标签都有哪些?
+5. [ ] React 中为什么要把节点的数据信息存储在树结构之外？
