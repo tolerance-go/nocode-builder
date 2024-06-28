@@ -14,28 +14,26 @@ const firstNameSubscriber = (
 
 useAppStoreBase.subscribe((state, previous) => {
   firstNameSubscriber(state, previous);
-  const {
-    updateProjectStructureTreeData,
-    updateProjectStructureTreeDataRecord,
-  } = useAppStoreBase.getState();
+  const { initProjectStructureTreeDataMeta } = useAppStoreBase.getState();
   if (state.pathname !== null) {
     if (isSystemPath(state.pathname)) {
       // eslint-disable-next-line no-empty
       if (isAuthRelatedPath(state.pathname)) {
       } else {
         if (
+          !state.hasInitProjectStructureTreeDataMeta &&
           state.projectGroupTableData &&
-          previous.projectGroupTableData === null
+          state.projectTableData
         ) {
-          if (state.projectTableData && previous.projectTableData === null) {
-            const meta = buildProjectStructureTreeDataMeta(
-              state.projectGroupTableData,
-              state.projectTableData,
-            );
+          const meta = buildProjectStructureTreeDataMeta(
+            state.projectGroupTableData,
+            state.projectTableData,
+          );
 
-            updateProjectStructureTreeData(meta.tree);
-            updateProjectStructureTreeDataRecord(meta.dataRecord);
-          }
+          initProjectStructureTreeDataMeta({
+            projectStructureTreeData: meta.tree,
+            projectStructureTreeDataRecord: meta.dataRecord,
+          });
         }
       }
     }
