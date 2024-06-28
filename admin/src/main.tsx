@@ -11,6 +11,7 @@ import { Register } from "./root/(auth)/register";
 import "./i18n"; // 引入 i18n 配置
 import "normalize.css";
 import "./index.css";
+import "./subscribes";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

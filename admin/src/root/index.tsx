@@ -9,6 +9,7 @@ export function Root() {
   const location = useLocation();
   const firstName = useAppStore.use.firstName();
   const updateFirstName = useAppStore.use.updateFirstName()
+  const lastName = useAppStore.use.lastName()
 
   useLayoutEffect(() => {
     locationState.pathname = location.pathname;
@@ -26,6 +27,7 @@ export function Root() {
         }}
       >
         {firstName}
+        {lastName}
       </div>
       <Outlet />
     </ConfigProvider>

@@ -21,8 +21,27 @@ export const createProjectTableSlice: ImmerStateCreator<
   initProjectTableData: (data) => set({ projectTableData: data }),
   loadProjectTableData: async () => {
     const projects = await getProjects({});
-    set((state) => {
-      state.projectTableData = projects;
+    set({
+      projectTableData: projects,
     });
   },
+  addProject: (project: API.ProjectDto) =>
+    set((state) => {
+      state.projectTableData.push(project);
+    }),
+  updateProject: (updatedProject: API.ProjectDto) =>
+    set((state) => {
+      const index = state.projectTableData.findIndex(
+        (project) => project.id === updatedProject.id,
+      );
+      if (index !== -1) {
+        state.projectTableData[index] = updatedProject;
+      }
+    }),
+  deleteProject: (projectId: number) =>
+    set((state) => {
+      state.projectTableData = state.projectTableData.filter(
+        (project) => project.id !== projectId,
+      );
+    }),
 });
