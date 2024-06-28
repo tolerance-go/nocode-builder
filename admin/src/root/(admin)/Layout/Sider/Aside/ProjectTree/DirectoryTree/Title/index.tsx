@@ -1,10 +1,5 @@
 import { selectProjectStructureTreeNodeDataRecordItem } from "@/selectors";
 import { useAppStore, useAppStoreBase } from "@/store";
-import { projectTreeStore } from "@/stores";
-import {
-  projectTreeHistoryState,
-  projectTreeTempNodeState,
-} from "@/stores/projectTree";
 import { Dropdown, Flex, InputRef, Typography, theme } from "antd";
 import { useRef } from "react";
 import { AutoSelectInput } from "./AutoSelectInput";
@@ -12,9 +7,16 @@ import { AutoSelectInput } from "./AutoSelectInput";
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
   const { token } = theme.useToken();
-
+  const projectStructureTreeTempNode =
+    useAppStore.use.projectStructureTreeTempNode();
+  const updateProjectStructureTreeTempNode =
+    useAppStore.use.updateProjectStructureTreeTempNode();
+  const removeProjectStructureTreeNode =
+    useAppStore.use.removeProjectStructureTreeNode();
   const editingProjectStructureTreeNode =
     useAppStore.use.editingProjectStructureTreeNode();
+  const updateProjectTreeDataRecordItem =
+    useAppStore.use.updateProjectTreeDataRecordItem();
   const stopEditingProjectStructureTreeNode =
     useAppStore.use.stopEditingProjectStructureTreeNode();
   const isEditing = editingProjectStructureTreeNode === nodeKey;
@@ -24,12 +26,11 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
   );
 
   const saveNode = (currentValue: string) => {
-    if (projectTreeTempNodeState.has(nodeKey)) {
-      projectTreeStore.saveNodeWithReplaceHistoryAction(nodeKey, currentValue);
-      projectTreeTempNodeState.delete(nodeKey);
-    } else {
-      projectTreeStore.saveNodeAction(nodeKey, currentValue);
+    if (projectStructureTreeTempNode === nodeKey) {
+      updateProjectStructureTreeTempNode(null);
     }
+    updateProjectTreeDataRecordItem(nodeKey, { title: currentValue });
+    stopEditingProjectStructureTreeNode();
   };
 
   const saveInput = () => {
@@ -42,17 +43,16 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     /** 不合法的输入时 */
 
     // 如果是临时新建的
-    if (projectTreeTempNodeState.has(nodeKey)) {
+    if (projectStructureTreeTempNode === nodeKey) {
       // 删除
-      projectTreeStore.removeNodeAction(nodeKey);
+      removeProjectStructureTreeNode(nodeKey);
 
-      projectTreeHistoryState.remove(
-        projectTreeHistoryState.historyNodeCount - 1,
-      );
+      // projectTreeHistoryState.remove(
+      //   projectTreeHistoryState.historyNodeCount - 1,
+      // );
+      // 否则结束编辑
+      stopEditingProjectStructureTreeNode();
     }
-
-    // 否则结束编辑
-    stopEditingProjectStructureTreeNode();
   };
 
   return isEditing ? (
@@ -83,7 +83,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             ),
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
-              projectTreeStore.startNodeEditingAction(nodeKey);
+              stopEditingProjectStructureTreeNode();
             },
           },
           {
@@ -96,7 +96,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             ),
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
-              projectTreeStore.removeItemAction(nodeKey);
+              removeProjectStructureTreeNode(nodeKey);
             },
           },
         ],

@@ -1,11 +1,6 @@
 import { useAppStore } from "@/store";
-import { layoutStore, projectTreeStore } from "@/stores";
+import { layoutStore } from "@/stores";
 import { nodeIsFile, nodeIsFolder } from "@/stores/_utils/is";
-import {
-  insertNodeAction,
-  projectTreeState,
-  projectTreeTempNodeState,
-} from "@/stores/projectTree";
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
@@ -39,6 +34,17 @@ export const Header = () => {
     useAppStore.use.selectedProjectStructureTreeNodes();
   const findProjectStructureTreeNode =
     useAppStore.use.findProjectStructureTreeNode();
+  const updateProjectStructureTreeTempNode =
+    useAppStore.use.updateProjectStructureTreeTempNode();
+
+  const nodeParentKeyRecord = useAppStore.use.nodeParentKeyRecord();
+
+  const selectedKey = selectedProjectStructureTreeNodes.length
+    ? selectedProjectStructureTreeNodes[
+        selectedProjectStructureTreeNodes.length - 1
+      ]
+    : null;
+
   return (
     <Flex
       justify="end"
@@ -85,7 +91,7 @@ export const Header = () => {
                 },
               );
               updateEditingProjectStructureTreeNode(newKey);
-              projectTreeTempNodeState.add(newKey);
+              updateProjectStructureTreeTempNode(newKey);
             };
 
             const insert = (target: ProjectStructureTreeDataNode) => {
@@ -110,14 +116,9 @@ export const Header = () => {
                 },
               );
               updateEditingProjectStructureTreeNode(newKey);
-              projectTreeTempNodeState.add(newKey);
+              updateProjectStructureTreeTempNode(newKey);
             };
 
-            const selectedKey = selectedProjectStructureTreeNodes.length
-              ? selectedProjectStructureTreeNodes[
-                  selectedProjectStructureTreeNodes.length - 1
-                ]
-              : null;
             if (!selectedKey) {
               insertInRoot();
               return;
@@ -131,10 +132,13 @@ export const Header = () => {
                 insert(selectedNode);
               }
             } else if (nodeIsFile(selectedRecordItem)) {
-              const parent =
-                projectTreeStore.findParentNodeOrThrow(selectedKey);
-              if (parent) {
-                insert(parent);
+              const parentKey = nodeParentKeyRecord[selectedKey];
+
+              if (parentKey) {
+                const parent = findProjectStructureTreeNode(parentKey);
+                if (parent) {
+                  insert(parent);
+                }
               } else {
                 insertInRoot();
               }
@@ -147,38 +151,40 @@ export const Header = () => {
           // loading={addFolderLoading}
           icon={<FolderAddOutlined />}
           onClick={async () => {
-            const selectedKey = projectTreeStore.projectTreeState.selectedKey;
-
             const insertInRoot = () => {
               const newKey = Math.random() + "";
-              insertNodeAction(
-                projectTreeState.treeData.value.data,
+              insertProjectStructureTreeNode(
+                null,
                 {
-                  title: "",
-                  id: -1,
-                  type: "folder",
                   key: newKey,
                 },
                 -1,
+                {
+                  id: -1,
+                  type: "folder",
+                  title: "",
+                },
               );
-              projectTreeStore.startNodeEditingAction(newKey);
-              projectTreeTempNodeState.add(newKey);
+              updateEditingProjectStructureTreeNode(newKey);
+              updateProjectStructureTreeTempNode(newKey);
             };
 
             const insert = (target: ProjectStructureTreeDataNode) => {
               const newKey = Math.random() + "";
-              projectTreeStore.insertChildNodeAction(
+              insertProjectStructureTreeNode(
                 target.key,
+                {
+                  key: newKey,
+                },
+                -1,
                 {
                   title: "",
                   id: -1,
                   type: "folder",
-                  key: newKey,
                 },
-                -1,
               );
-              projectTreeStore.startNodeEditingAction(newKey);
-              projectTreeTempNodeState.add(newKey);
+              updateEditingProjectStructureTreeNode(newKey);
+              updateProjectStructureTreeTempNode(newKey);
             };
 
             if (!selectedKey) {
@@ -186,16 +192,20 @@ export const Header = () => {
               return;
             }
 
-            const selectedNode =
-              projectTreeStore.findNodeByKeyOrThrowAction(selectedKey);
+            const selectedRecordItem = projectTreeDataRecord[selectedKey];
+            const selectedNode = findProjectStructureTreeNode(selectedKey);
 
-            if (nodeIsFolder(selectedNode)) {
-              insert(selectedNode);
-            } else if (nodeIsFile(selectedNode)) {
-              const parent =
-                projectTreeStore.findParentNodeOrThrow(selectedKey);
-              if (parent) {
-                insert(parent);
+            if (nodeIsFolder(selectedRecordItem)) {
+              if (selectedNode) {
+                insert(selectedNode);
+              }
+            } else if (nodeIsFile(selectedRecordItem)) {
+              const parentKey = nodeParentKeyRecord[selectedKey];
+              if (parentKey) {
+                const parent = findProjectStructureTreeNode(parentKey);
+                if (parent) {
+                  insert(parent);
+                }
               } else {
                 insertInRoot();
               }

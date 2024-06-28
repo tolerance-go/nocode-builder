@@ -1,6 +1,7 @@
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
+  ProjectTreeNodeDataRecordItem,
 } from "@/types";
 import { ImmerStateCreator } from "@/utils";
 
@@ -11,6 +12,8 @@ export type ProjectTreeStates = {
   selectedProjectStructureTreeNodes: string[];
   expandedKeys: string[];
   editingProjectStructureTreeNode: string | null;
+  nodeParentKeyRecord: Record<string, string | null>;
+  projectStructureTreeTempNode: string | null;
 };
 
 export type ProjectTreeActions = {
@@ -18,6 +21,10 @@ export type ProjectTreeActions = {
     data: ProjectStructureTreeDataNode[],
   ) => void;
   updateProjectTreeDataRecord: (data: ProjectTreeNodeDataRecord) => void;
+  updateProjectTreeDataRecordItem: (
+    key: string,
+    data: Partial<Pick<ProjectTreeNodeDataRecordItem, "title">>,
+  ) => void;
   initProjectTreeDataMeta: (args: {
     projectStructureTreeData: ProjectStructureTreeDataNode[];
     projectStructureTreeDataRecord: ProjectTreeNodeDataRecord;
@@ -41,6 +48,7 @@ export type ProjectTreeActions = {
   updateSelectedProjectStructureTreeNodes: (nodeKeys: string[]) => void;
   updateExpandedKeys: (keys: string[]) => void;
   updateEditingProjectStructureTreeNode: (key: string) => void;
+  updateProjectStructureTreeTempNode: (key: string | null) => void;
   stopEditingProjectStructureTreeNode: () => void;
   findProjectStructureTreeNode: (
     key: string,
@@ -59,7 +67,21 @@ export const createProjectTreeSlice: ImmerStateCreator<
   hasInitProjectTreeDataMeta: false,
   selectedProjectStructureTreeNodes: [],
   expandedKeys: [],
+  nodeParentKeyRecord: {},
+  projectStructureTreeTempNode: null,
+  updateProjectTreeDataRecordItem: (key, data) => {
+    set((state) => {
+      if (data.title) {
+        state.projectTreeDataRecord[key].title = data.title;
+      }
+    });
+  },
   // 通过key在 projectStructureTreeData 递归查找节点
+  updateProjectStructureTreeTempNode: (key) => {
+    set((state) => {
+      state.projectStructureTreeTempNode = key;
+    });
+  },
   findProjectStructureTreeNode: (key) => {
     const findNode = (
       nodes: ProjectStructureTreeDataNode[],
@@ -100,10 +122,25 @@ export const createProjectTreeSlice: ImmerStateCreator<
     projectStructureTreeData,
     projectStructureTreeDataRecord,
   }) => {
+    const buildParentKeyMap = (
+      nodes: ProjectStructureTreeDataNode[],
+      parentKey: string | null = null,
+    ): Record<string, string | null> => {
+      const map: Record<string, string | null> = {};
+      nodes.forEach((node) => {
+        map[node.key] = parentKey;
+        if (node.children) {
+          Object.assign(map, buildParentKeyMap(node.children, node.key));
+        }
+      });
+      return map;
+    };
+
     set((state) => {
       state.projectStructureTreeData = projectStructureTreeData;
       state.projectTreeDataRecord = projectStructureTreeDataRecord;
       state.hasInitProjectTreeDataMeta = true;
+      state.nodeParentKeyRecord = buildParentKeyMap(projectStructureTreeData);
     });
   },
   // 增加一个节点到projectStructureTreeData
@@ -114,6 +151,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
           if (n.key === parentKey) {
             n.children = n.children || [];
             n.children.push(node);
+            state.nodeParentKeyRecord[node.key] = parentKey; // 更新父节点关系
             return true;
           }
           if (n.children && addNode(n.children)) {
@@ -125,6 +163,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
 
       if (parentKey === null) {
         state.projectStructureTreeData.push(node);
+        state.nodeParentKeyRecord[node.key] = null; // 根节点的父节点为 null
       } else {
         addNode(state.projectStructureTreeData);
       }
@@ -140,6 +179,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
           if (n.key === parentKey) {
             n.children = n.children || [];
             n.children.splice(index, 0, node);
+            state.nodeParentKeyRecord[node.key] = parentKey; // 更新父节点关系
             inserted = true;
             return true;
           }
@@ -152,6 +192,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
 
       if (parentKey === null) {
         state.projectStructureTreeData.splice(index, 0, node);
+        state.nodeParentKeyRecord[node.key] = null; // 根节点的父节点为 null
         inserted = true;
       } else {
         insertNode(state.projectStructureTreeData);
@@ -171,6 +212,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
           if (n.key === nodeKey) {
             nodes.splice(i, 1);
             delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
+            delete state.nodeParentKeyRecord[nodeKey]; // 删除父节点关系
             return true;
           }
           if (n.children && removeNode(n.children)) {
@@ -209,6 +251,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
           if (n.key === newParentKey) {
             n.children = n.children || [];
             n.children.splice(newIndex, 0, nodeToMove!);
+            state.nodeParentKeyRecord[nodeKey] = newParentKey; // 更新父节点关系
             return true;
           }
           if (n.children && insertNode(n.children)) {
@@ -224,6 +267,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
       if (nodeToMove) {
         if (newParentKey === null) {
           state.projectStructureTreeData.splice(newIndex, 0, nodeToMove);
+          state.nodeParentKeyRecord[nodeKey] = null; // 根节点的父节点为 null
         } else {
           insertNode(state.projectStructureTreeData);
         }
