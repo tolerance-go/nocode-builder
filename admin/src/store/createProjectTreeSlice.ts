@@ -53,6 +53,12 @@ export type ProjectTreeActions = {
   findProjectStructureTreeNode: (
     key: string,
   ) => ProjectStructureTreeDataNode | null;
+  insertProjectStructureTreeNodeWithCheck: (
+    parentKey: string | null,
+    node: ProjectStructureTreeDataNode,
+    index: number,
+    recordItem: ProjectTreeNodeDataRecord[number],
+  ) => void;
 };
 
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
@@ -169,8 +175,23 @@ export const createProjectTreeSlice: ImmerStateCreator<
       }
     });
   },
+  // 新增方法封装 insertProjectStructureTreeNode，他插入前检查，如果没有展开，先展开
+  insertProjectStructureTreeNodeWithCheck: (
+    parentKey: string | null,
+    node: ProjectStructureTreeDataNode,
+    index: number,
+    recordItem: ProjectTreeNodeDataRecord[number],
+  ) => {
+    set((state) => {
+      // 检查是否已展开，若未展开则先展开
+      if (parentKey !== null && !state.expandedKeys.includes(parentKey)) {
+        state.expandedKeys.push(parentKey);
+      }
+    });
+    // 调用 insertProjectStructureTreeNode 方法插入节点
+    get().insertProjectStructureTreeNode(parentKey, node, index, recordItem);
+  },
   // 插入一个节点到指定位置
-
   insertProjectStructureTreeNode: (parentKey, node, index, recordItem) => {
     set((state) => {
       let inserted = false;

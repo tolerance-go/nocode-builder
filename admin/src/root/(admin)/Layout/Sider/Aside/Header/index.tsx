@@ -23,8 +23,8 @@ const findLastFolderIndex = (
 export const Header = () => {
   const layoutState = useSnapshot(layoutStore.layoutState);
   const { token } = theme.useToken();
-  const insertProjectStructureTreeNode =
-    useAppStore.use.insertProjectStructureTreeNode();
+  const insertProjectStructureTreeNodeWithCheck =
+    useAppStore.use.insertProjectStructureTreeNodeWithCheck();
 
   const projectStructureTreeData = useAppStore.use.projectStructureTreeData();
   const projectTreeDataRecord = useAppStore.use.projectTreeDataRecord();
@@ -79,7 +79,7 @@ export const Header = () => {
 
               const newKey = Math.random() + "";
 
-              insertProjectStructureTreeNode(
+              insertProjectStructureTreeNodeWithCheck(
                 null,
                 {
                   key: newKey,
@@ -104,7 +104,7 @@ export const Header = () => {
               );
               const newKey = Math.random() + "";
 
-              insertProjectStructureTreeNode(
+              insertProjectStructureTreeNodeWithCheck(
                 target.key,
                 {
                   isLeaf: true,
@@ -155,7 +155,7 @@ export const Header = () => {
           onClick={async () => {
             const insertInRoot = () => {
               const newKey = Math.random() + "";
-              insertProjectStructureTreeNode(
+              insertProjectStructureTreeNodeWithCheck(
                 null,
                 {
                   key: newKey,
@@ -173,7 +173,7 @@ export const Header = () => {
 
             const insert = (target: ProjectStructureTreeDataNode) => {
               const newKey = Math.random() + "";
-              insertProjectStructureTreeNode(
+              insertProjectStructureTreeNodeWithCheck(
                 target.key,
                 {
                   key: newKey,
