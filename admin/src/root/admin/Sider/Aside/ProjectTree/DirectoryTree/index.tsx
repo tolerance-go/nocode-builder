@@ -14,7 +14,7 @@ export const TreeMenu = () => {
   const { expandedKeys, containerHeight } = useSnapshot(
     projectTreeStore.projectTreeState,
   );
-  const projectTreeData = useAppStore.use.projectTreeData();
+  const projectTreeData = useAppStore.use.projectStructureTreeData();
 
   useKeyPress(["Delete", "Backspace"], () => {
     projectTreeStore.projectTreeState.selectedKey &&

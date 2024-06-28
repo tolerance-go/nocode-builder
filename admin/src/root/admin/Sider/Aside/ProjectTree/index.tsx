@@ -9,7 +9,7 @@ import { TreeMenu } from "./DirectoryTree";
 export const ProjectTree = () => {
   const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const initProjectTreeData = useAppStore.use.initProjectTreeData();
+  const initProjectTreeData = useAppStore.use.initProjectStructureTreeData();
 
   /**
    * 当组件装载到 dom 上之后

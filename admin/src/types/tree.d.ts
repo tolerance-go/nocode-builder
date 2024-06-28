@@ -1,10 +1,6 @@
 export type ProjectStructureTreeDataNode = {
-  // @TODO 准备去除
-  title: string;
-  id: number;
   key: string;
   children?: ProjectStructureTreeDataNode[];
-  type: "file" | "folder";
 };
 
 /** key 到树节点数据的映射 */

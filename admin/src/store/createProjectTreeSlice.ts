@@ -2,11 +2,11 @@ import { ProjectStructureTreeDataNode } from "@/types";
 import { StateCreator } from "zustand";
 
 export type ProjectTreeStates = {
-  projectTreeData: ProjectStructureTreeDataNode[];
+  projectStructureTreeData: ProjectStructureTreeDataNode[];
 };
 
 export type ProjectTreeActions = {
-  initProjectTreeData: (projectTreeData: ProjectStructureTreeDataNode[]) => void;
+  initProjectStructureTreeData: (data: ProjectStructureTreeDataNode[]) => void;
 };
 
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
@@ -17,6 +17,7 @@ export const createProjectTreeSlice: StateCreator<
   [],
   ProjectTreeSlice
 > = (set) => ({
-  projectTreeData: [],
-  initProjectTreeData: (data) => set({ projectTreeData: data }),
+  projectStructureTreeData: [],
+  initProjectStructureTreeData: (data) =>
+    set({ projectStructureTreeData: data }),
 });
