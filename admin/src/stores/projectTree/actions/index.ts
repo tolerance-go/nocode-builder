@@ -81,7 +81,7 @@ export const insertChildNodeAction = (
   }
 };
 
-export const findNodeByKeyOrThrow = (key: string) => {
+export const findNodeByKeyOrThrowAction = (key: string) => {
   const node = projectTreeMapState.data.get(key);
   if (isNullOrUndefined(node)) {
     throw new Error("Invalid key");

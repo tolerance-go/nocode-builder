@@ -93,7 +93,7 @@ export const Header = () => {
             }
 
             const selectedNode =
-              projectTreeStore.findNodeByKeyOrThrow(selectedKey);
+              projectTreeStore.findNodeByKeyOrThrowAction(selectedKey);
 
             if (nodeIsFolder(selectedNode)) {
               insert(selectedNode);
@@ -154,7 +154,7 @@ export const Header = () => {
             }
 
             const selectedNode =
-              projectTreeStore.findNodeByKeyOrThrow(selectedKey);
+              projectTreeStore.findNodeByKeyOrThrowAction(selectedKey);
 
             if (nodeIsFolder(selectedNode)) {
               insert(selectedNode);
