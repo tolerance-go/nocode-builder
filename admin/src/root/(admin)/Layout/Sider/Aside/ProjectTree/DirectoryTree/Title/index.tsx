@@ -50,9 +50,10 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       // projectTreeHistoryState.remove(
       //   projectTreeHistoryState.historyNodeCount - 1,
       // );
-      // 否则结束编辑
-      stopEditingProjectStructureTreeNode();
     }
+
+    // 始终结束编辑
+    stopEditingProjectStructureTreeNode();
   };
 
   return isEditing ? (
