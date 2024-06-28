@@ -18,12 +18,15 @@ useAppStoreBase.subscribe((state, previous) => {
     initProjectTreeDataMeta: initProjectStructureTreeDataMeta,
     loadProjectGroupTableData,
     loadProjectTableData,
+    setTimelinePoolCheckInterval,
   } = useAppStoreBase.getState();
   if (state.pathname !== null) {
     if (isSystemPath(state.pathname)) {
       // eslint-disable-next-line no-empty
       if (isAuthRelatedPath(state.pathname)) {
       } else {
+        setTimelinePoolCheckInterval();
+
         if (
           !state.hasLoadProjectGroupTableData &&
           !state.loadProjectGroupTableDataLoading

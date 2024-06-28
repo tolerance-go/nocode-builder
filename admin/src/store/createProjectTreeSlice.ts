@@ -4,6 +4,7 @@ import {
   ProjectTreeNodeDataRecordItem,
 } from "@/types";
 import { ImmerStateCreator } from "@/utils";
+import { ServerSlice } from "./createServerSlice";
 
 export type ProjectTreeStates = {
   projectStructureTreeData: ProjectStructureTreeDataNode[];
@@ -67,7 +68,7 @@ export type ProjectTreeActions = {
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
 
 export const createProjectTreeSlice: ImmerStateCreator<
-  ProjectTreeSlice,
+  ProjectTreeSlice & ServerSlice,
   ProjectTreeSlice
 > = (set, get) => ({
   containerHeight: 0,
@@ -267,30 +268,43 @@ export const createProjectTreeSlice: ImmerStateCreator<
   },
   // 删除projectStructureTreeData中的一个节点
   removeProjectStructureTreeNode: (nodeKey) => {
-    set((state) => {
-      const removeNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
-        for (let i = 0; i < nodes.length; i++) {
-          const n = nodes[i];
-          if (n.key === nodeKey) {
-            nodes.splice(i, 1);
+    set(
+      (state) => {
+        const removeNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
+          for (let i = 0; i < nodes.length; i++) {
+            const n = nodes[i];
+            if (n.key === nodeKey) {
+              nodes.splice(i, 1);
 
-            // next tick
-            set((state) => {
-              delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
-              delete state.nodeParentKeyRecord[nodeKey]; // 删除父节点关系
-            });
+              // addTimelineItemToPool({
+              //   tableName: "project",
+              //   createdAt: "",
+              //   user: 1,
+              //   actionName: "delete",
+              //   oldValues: {},
+              //   recordId: 100,
+              // });
 
-            return true;
+              // next tick
+              // set((state) => {
+              //   delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
+              //   delete state.nodeParentKeyRecord[nodeKey]; // 删除父节点关系
+              // });
+
+              return true;
+            }
+            if (n.children && removeNode(n.children)) {
+              return true;
+            }
           }
-          if (n.children && removeNode(n.children)) {
-            return true;
-          }
-        }
-        return false;
-      };
+          return false;
+        };
 
-      removeNode(state.projectStructureTreeData);
-    });
+        removeNode(state.projectStructureTreeData);
+      },
+      false,
+      "removeProjectStructureTreeNode",
+    );
   },
   moveProjectStructureTreeNode: (nodeKey, newParentKey, newIndex) => {
     set((state) => {

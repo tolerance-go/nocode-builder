@@ -14,17 +14,3 @@ export type ProjectTreeNodeDataRecordItem = {
 export type ProjectTreeNodeDataRecord = {
   [key: string]: ProjectTreeNodeDataRecordItem;
 };
-
-export type ProjectTreeCompareResult = {
-  added: ProjectStructureTreeDataNode[];
-  removed: ProjectStructureTreeDataNode[];
-  moved: {
-    node: ProjectStructureTreeDataNode;
-    oldParent: ProjectStructureTreeDataNode | null;
-    newParent: ProjectStructureTreeDataNode | null;
-  }[];
-  updated: {
-    oldNode: ProjectStructureTreeDataNode;
-    newNode: ProjectStructureTreeDataNode;
-  }[];
-};

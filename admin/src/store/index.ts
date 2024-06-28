@@ -1,6 +1,10 @@
+import { logger } from "@/middlewares";
 import { createSelectors } from "@/utils";
 import { StateCreator, create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+import { LayoutSlice, createLayoutSlice } from "./createLayoutSlice";
+import { LocationSlice, createLocationSlice } from "./createLocationSlice";
 import { NetworkSlice, createNetworkSlice } from "./createNetworkSlice";
 import {
   ProjectGroupTableDataSlice,
@@ -14,10 +18,7 @@ import {
   ProjectTreeSlice,
   createProjectTreeSlice,
 } from "./createProjectTreeSlice";
-import { immer } from "zustand/middleware/immer";
-import { LocationSlice, createLocationSlice } from "./createLocationSlice";
-import { LayoutSlice, createLayoutSlice } from "./createLayoutSlice";
-
+import { ServerSlice, createServerSlice } from "./createServerSlice";
 interface FishSlice {
   fishes: number;
   addFish: () => void;
@@ -92,27 +93,32 @@ export const useAppStoreBase = create<
     ProjectGroupTableDataSlice &
     NetworkSlice &
     LocationSlice &
-    LayoutSlice
+    LayoutSlice &
+    ServerSlice
 >()(
   devtools(
-    immer((...a) => {
-      const [set] = a;
-      return {
-        ...createLayoutSlice(...a),
-        ...createLocationSlice(...a),
-        ...createNetworkSlice(...a),
-        ...createProjectGroupTableSlice(...a),
-        ...createProjectTableSlice(...a),
-        ...createProjectTreeSlice(...a),
-        ...createBearSlice(...a),
-        ...createFishSlice(...a),
-        ...createSharedSlice(...a),
-        firstName: "firstName",
-        lastName: "lastName",
-        updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
-        updateLastName: (lastName) => set(() => ({ lastName: lastName })),
-      };
-    }),
+    logger(
+      immer((...a) => {
+        const [set] = a;
+        return {
+          ...createServerSlice(...a),
+          ...createLayoutSlice(...a),
+          ...createLocationSlice(...a),
+          ...createNetworkSlice(...a),
+          ...createProjectGroupTableSlice(...a),
+          ...createProjectTableSlice(...a),
+          ...createProjectTreeSlice(...a),
+          ...createBearSlice(...a),
+          ...createFishSlice(...a),
+          ...createSharedSlice(...a),
+          firstName: "firstName",
+          lastName: "lastName",
+          updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
+          updateLastName: (lastName) => set(() => ({ lastName: lastName })),
+        };
+      }),
+      "logger",
+    ),
   ),
 );
 
