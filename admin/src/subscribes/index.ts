@@ -22,8 +22,8 @@ useAppStoreBase.subscribe((state, previous) => {
       } else {
         if (
           !state.hasInitProjectStructureTreeDataMeta &&
-          state.projectGroupTableData &&
-          state.projectTableData
+          state.projectGroupTableData !== null &&
+          state.projectTableData !== null
         ) {
           const meta = buildProjectStructureTreeDataMeta(
             state.projectGroupTableData,
