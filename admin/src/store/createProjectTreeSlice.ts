@@ -231,8 +231,13 @@ export const createProjectTreeSlice: ImmerStateCreator<
           const n = nodes[i];
           if (n.key === nodeKey) {
             nodes.splice(i, 1);
-            delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
-            delete state.nodeParentKeyRecord[nodeKey]; // 删除父节点关系
+
+            // next tick
+            set((state) => {
+              delete state.projectTreeDataRecord[nodeKey]; // 同步更改 projectTreeDataRecord
+              delete state.nodeParentKeyRecord[nodeKey]; // 删除父节点关系
+            });
+
             return true;
           }
           if (n.children && removeNode(n.children)) {
