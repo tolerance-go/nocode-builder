@@ -1,14 +1,20 @@
+import { createSelectors } from "@/utils";
 import { StateCreator, create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { NetworkSlice, createNetworkSlice } from "./createNetworkSlice";
 import {
-  ProjectTreeSlice,
-  createProjectTreeSlice,
-} from "./createProjectTreeSlice";
-import { createSelectors } from "@/utils";
+  ProjectGroupTableDataSlice,
+  createProjectGroupTableSlice,
+} from "./createProjectGroupTableSlice";
 import {
   ProjectTableDataSlice,
   createProjectTableSlice,
 } from "./createProjectTableSlice";
+import {
+  ProjectTreeSlice,
+  createProjectTreeSlice,
+} from "./createProjectTreeSlice";
+import { immer } from "zustand/middleware/immer";
 
 interface FishSlice {
   fishes: number;
@@ -80,22 +86,28 @@ export const useAppStoreBase = create<
     FishSlice &
     SharedSlice &
     ProjectTreeSlice &
-    ProjectTableDataSlice
+    ProjectTableDataSlice &
+    ProjectGroupTableDataSlice &
+    NetworkSlice
 >()(
-  devtools((...a) => {
-    const [set] = a;
-    return {
-      ...createProjectTableSlice(...a),
-      ...createProjectTreeSlice(...a),
-      ...createBearSlice(...a),
-      ...createFishSlice(...a),
-      ...createSharedSlice(...a),
-      firstName: "firstName",
-      lastName: "lastName",
-      updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
-      updateLastName: (lastName) => set(() => ({ lastName: lastName })),
-    };
-  }),
+  devtools(
+    immer((...a) => {
+      const [set] = a;
+      return {
+        ...createNetworkSlice(...a),
+        ...createProjectGroupTableSlice(...a),
+        ...createProjectTableSlice(...a),
+        ...createProjectTreeSlice(...a),
+        ...createBearSlice(...a),
+        ...createFishSlice(...a),
+        ...createSharedSlice(...a),
+        firstName: "firstName",
+        lastName: "lastName",
+        updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
+        updateLastName: (lastName) => set(() => ({ lastName: lastName })),
+      };
+    }),
+  ),
 );
 
 export const useAppStore = createSelectors(useAppStoreBase);

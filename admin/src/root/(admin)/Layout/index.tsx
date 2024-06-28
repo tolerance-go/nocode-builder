@@ -1,14 +1,16 @@
 import { useAppStore } from "@/store";
 import { Layout as AntdLayout } from "antd";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Sider } from "./Sider";
 import { SubSider } from "./SubSider";
 
 export const Layout = () => {
   const loadProjectTableData = useAppStore.use.loadProjectTableData();
+  const loadProjectGroupTableData = useAppStore.use.loadProjectGroupTableData();
 
   useState(() => {
     loadProjectTableData();
+    loadProjectGroupTableData();
   });
 
   return (
