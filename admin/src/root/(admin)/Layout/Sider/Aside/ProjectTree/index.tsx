@@ -1,4 +1,3 @@
-import { getProjectTreeData } from "@/services/getProjectTreeData";
 import { useAppStore } from "@/store";
 import { projectTreeStore } from "@/stores";
 import { Flex, Spin } from "antd";
@@ -41,19 +40,19 @@ export const ProjectTree = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const loadTreeDataAction = async () => {
-      try {
-        setLoading(true);
-        const treeData = await getProjectTreeData();
-        initProjectTreeData(treeData);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const loadTreeDataAction = async () => {
+  //     try {
+  //       setLoading(true);
+  //       const treeData = await getProjectTreeData();
+  //       initProjectTreeData(treeData);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    loadTreeDataAction();
-  }, [initProjectTreeData]);
+  //   loadTreeDataAction();
+  // }, [initProjectTreeData]);
 
   return (
     <div
