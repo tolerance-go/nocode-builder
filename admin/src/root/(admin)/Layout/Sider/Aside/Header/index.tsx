@@ -33,6 +33,8 @@ export const Header = () => {
 
   const projectStructureTreeData = useAppStore.use.projectStructureTreeData();
   const projectTreeDataRecord = useAppStore.use.projectTreeDataRecord();
+  const updateEditingProjectStructureTreeNode =
+    useAppStore.use.updateEditingProjectStructureTreeNode();
 
   return (
     <Flex
@@ -79,7 +81,7 @@ export const Header = () => {
                   id: -1,
                 },
               );
-              projectTreeStore.startNodeEditingAction(newKey);
+              updateEditingProjectStructureTreeNode(newKey);
               projectTreeTempNodeState.add(newKey);
             };
 

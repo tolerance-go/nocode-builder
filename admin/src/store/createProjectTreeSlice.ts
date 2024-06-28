@@ -10,6 +10,7 @@ export type ProjectTreeStates = {
   hasInitProjectTreeDataMeta: boolean;
   selectedProjectStructureTreeNodes: string[];
   expandedKeys: string[];
+  editingProjectStructureTreeNode: string | null;
 };
 
 export type ProjectTreeActions = {
@@ -39,6 +40,8 @@ export type ProjectTreeActions = {
   ) => void;
   updateSelectedProjectStructureTreeNodes: (nodeKeys: string[]) => void;
   updateExpandedKeys: (keys: string[]) => void;
+  updateEditingProjectStructureTreeNode: (key: string) => void;
+  stopEditingProjectStructureTreeNode: () => void;
 };
 
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
@@ -47,11 +50,20 @@ export const createProjectTreeSlice: ImmerStateCreator<
   ProjectTreeSlice,
   ProjectTreeSlice
 > = (set) => ({
+  editingProjectStructureTreeNode: null,
   projectStructureTreeData: [],
   projectTreeDataRecord: {},
   hasInitProjectTreeDataMeta: false,
   selectedProjectStructureTreeNodes: [],
   expandedKeys: [],
+  updateEditingProjectStructureTreeNode: (key) =>
+    set((state) => {
+      state.editingProjectStructureTreeNode = key;
+    }),
+  stopEditingProjectStructureTreeNode: () =>
+    set((state) => {
+      state.editingProjectStructureTreeNode = null;
+    }),
   updateProjectStructureTreeData: (data) => {
     set((state) => {
       state.projectStructureTreeData = data;

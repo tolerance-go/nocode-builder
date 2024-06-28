@@ -1,3 +1,5 @@
+import { selectProjectStructureTreeNodeDataRecordItem } from "@/selectors";
+import { useAppStore, useAppStoreBase } from "@/store";
 import { projectTreeStore } from "@/stores";
 import {
   projectTreeHistoryState,
@@ -5,19 +7,17 @@ import {
 } from "@/stores/projectTree";
 import { Dropdown, Flex, InputRef, Typography, theme } from "antd";
 import { useRef } from "react";
-import { useSnapshot } from "valtio";
 import { AutoSelectInput } from "./AutoSelectInput";
-import { useAppStoreBase } from "@/store";
-import { selectProjectStructureTreeNodeDataRecordItem } from "@/selectors";
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
   const { token } = theme.useToken();
-  const projectTreeNodeEditingState = useSnapshot(
-    projectTreeStore.projectTreeNodeEditingState,
-  );
 
-  const isEditing = projectTreeNodeEditingState.has(nodeKey);
+  const editingProjectStructureTreeNode =
+    useAppStore.use.editingProjectStructureTreeNode();
+  const stopEditingProjectStructureTreeNode =
+    useAppStore.use.stopEditingProjectStructureTreeNode();
+  const isEditing = editingProjectStructureTreeNode === nodeKey;
 
   const nodeDataRecord = useAppStoreBase((state) =>
     selectProjectStructureTreeNodeDataRecordItem(state, nodeKey),
@@ -52,7 +52,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     }
 
     // 否则结束编辑
-    projectTreeStore.stopNodeEditingAction(nodeKey);
+    stopEditingProjectStructureTreeNode();
   };
 
   return isEditing ? (
