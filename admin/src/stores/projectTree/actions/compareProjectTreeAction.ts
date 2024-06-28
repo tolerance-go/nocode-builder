@@ -1,8 +1,8 @@
-import { ProjectTreeDataNode, ProjectTreeCompareResult } from "@/types";
+import { ProjectStructureTreeDataNode, ProjectTreeCompareResult } from "@/types";
 
 export function compareProjectTreeAction(
-  oldTree: ProjectTreeDataNode,
-  newTree: ProjectTreeDataNode,
+  oldTree: ProjectStructureTreeDataNode,
+  newTree: ProjectStructureTreeDataNode,
 ): ProjectTreeCompareResult {
   const result: ProjectTreeCompareResult = {
     added: [],
@@ -14,32 +14,32 @@ export function compareProjectTreeAction(
   const oldMap = new Map<
     string,
     {
-      node: ProjectTreeDataNode;
-      parent: ProjectTreeDataNode | null;
+      node: ProjectStructureTreeDataNode;
+      parent: ProjectStructureTreeDataNode | null;
       index: number;
     }
   >();
   const newMap = new Map<
     string,
     {
-      node: ProjectTreeDataNode;
-      parent: ProjectTreeDataNode | null;
+      node: ProjectStructureTreeDataNode;
+      parent: ProjectStructureTreeDataNode | null;
       index: number;
     }
   >();
 
   // 构建旧树的节点Map
   function buildMap(
-    node: ProjectTreeDataNode,
+    node: ProjectStructureTreeDataNode,
     map: Map<
       string,
       {
-        node: ProjectTreeDataNode;
-        parent: ProjectTreeDataNode | null;
+        node: ProjectStructureTreeDataNode;
+        parent: ProjectStructureTreeDataNode | null;
         index: number;
       }
     >,
-    parent: ProjectTreeDataNode | null = null,
+    parent: ProjectStructureTreeDataNode | null = null,
     index: number = 0,
   ): void {
     map.set(node.key, { node, parent, index });

@@ -1,7 +1,7 @@
 import { StateCreator, create } from "zustand";
-import { createSelectors } from "../selectors";
 import { devtools } from "zustand/middleware";
 import { ProjectTreeSlice, createProjectTreeSlice } from "./createProjectTreeSlice";
+import { createSelectors } from "@/utils";
 
 interface FishSlice {
   fishes: number;

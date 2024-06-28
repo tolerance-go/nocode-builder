@@ -1,12 +1,12 @@
-import { ProjectTreeDataNode } from "@/types";
+import { ProjectStructureTreeDataNode } from "@/types";
 import { getProjectGroups } from "./api/getProjectGroups";
 import { getProjects } from "./api/getProjects";
 
 function buildTree(
   projectGroups: API.ProjectGroupDto[],
   projects: API.ProjectDto[],
-): ProjectTreeDataNode[] {
-  const projectGroupMap = new Map<number, ProjectTreeDataNode>();
+): ProjectStructureTreeDataNode[] {
+  const projectGroupMap = new Map<number, ProjectStructureTreeDataNode>();
   // 初始化所有的 projectGroups 为 TreeNode
   projectGroups.forEach((group) => {
     projectGroupMap.set(group.id, {
@@ -19,7 +19,7 @@ function buildTree(
   });
 
   // 构建嵌套的 group 结构
-  const tree: ProjectTreeDataNode[] = [];
+  const tree: ProjectStructureTreeDataNode[] = [];
   projectGroups.forEach((group) => {
     const parentGroup =
       group.parentGroupId && projectGroupMap.get(group.parentGroupId);
@@ -35,7 +35,7 @@ function buildTree(
 
   // 将 projects 放到对应的 group 下
   projects.forEach((project) => {
-    const projectNode: ProjectTreeDataNode = {
+    const projectNode: ProjectStructureTreeDataNode = {
       key: `project-${project.id}`,
       title: project.name,
       isLeaf: true,

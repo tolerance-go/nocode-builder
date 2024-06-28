@@ -1,8 +1,8 @@
-import { ProjectTreeDataNode } from "@/types";
+import { ProjectStructureTreeDataNode } from "@/types";
 
 // 辅助函数：递归遍历树结构，填充 parentMap
 export const populateParentMap = (
-  node: ProjectTreeDataNode,
+  node: ProjectStructureTreeDataNode,
   parentMap: Map<string, string | null>,
   parentKey: string | null = null,
 ) => {

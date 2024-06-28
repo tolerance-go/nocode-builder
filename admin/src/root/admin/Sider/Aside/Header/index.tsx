@@ -5,7 +5,7 @@ import {
   projectTreeState,
   projectTreeTempNodeState,
 } from "@/stores/projectTree";
-import { ProjectTreeDataNode } from "@/types";
+import { ProjectStructureTreeDataNode } from "@/types";
 import {
   FileAddOutlined,
   FolderAddOutlined,
@@ -15,7 +15,7 @@ import { Button, Flex, Space, theme } from "antd";
 import { useSnapshot } from "valtio";
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
-const findLastFolderIndex = (nodes: ProjectTreeDataNode[]): number => {
+const findLastFolderIndex = (nodes: ProjectStructureTreeDataNode[]): number => {
   return nodes.findLastIndex((node) => node.type === "folder");
 };
 
@@ -67,7 +67,7 @@ export const Header = () => {
               projectTreeTempNodeState.add(newKey);
             };
 
-            const insert = (target: ProjectTreeDataNode) => {
+            const insert = (target: ProjectStructureTreeDataNode) => {
               const folderIndex = findLastFolderIndex(target.children ?? []);
               const newKey = Math.random() + "";
 
@@ -132,7 +132,7 @@ export const Header = () => {
               projectTreeTempNodeState.add(newKey);
             };
 
-            const insert = (target: ProjectTreeDataNode) => {
+            const insert = (target: ProjectStructureTreeDataNode) => {
               const newKey = Math.random() + "";
               projectTreeStore.insertChildNodeAction(
                 target.key,

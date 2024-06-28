@@ -1,5 +1,5 @@
 import { getProjectTreeData } from "@/services/getProjectTreeData";
-import { ProjectTreeDataNode } from "@/types";
+import { ProjectStructureTreeDataNode } from "@/types";
 import { isNotNullOrUndefined, isNullOrUndefined } from "@/utils";
 import { cloneDeepWith, isPlainObject } from "lodash-es";
 import {
@@ -26,7 +26,7 @@ export const loadTreeDataAction = async () => {
 
 export const pushChildNodeAction = (
   parentKey: string,
-  newNode: ProjectTreeDataNode,
+  newNode: ProjectStructureTreeDataNode,
 ) => {
   const parentNode = projectTreeMapState.data.get(parentKey);
   if (parentNode) {
@@ -46,8 +46,8 @@ export const findParentNodeOrThrow = (key: string) => {
 };
 
 export const insertNodeAction = (
-  nodes: ProjectTreeDataNode[],
-  newNode: ProjectTreeDataNode,
+  nodes: ProjectStructureTreeDataNode[],
+  newNode: ProjectStructureTreeDataNode,
   index: number,
 ) => {
   // 调整 index 值
@@ -68,7 +68,7 @@ export const insertNodeAction = (
 
 export const insertChildNodeAction = (
   parentKey: string,
-  newNode: ProjectTreeDataNode,
+  newNode: ProjectStructureTreeDataNode,
   index: number,
 ) => {
   const parentNode = projectTreeMapState.data.get(parentKey);

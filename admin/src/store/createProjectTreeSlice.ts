@@ -1,12 +1,12 @@
-import { ProjectTreeDataNode } from "@/types";
+import { ProjectStructureTreeDataNode } from "@/types";
 import { StateCreator } from "zustand";
 
 export type ProjectTreeStates = {
-  projectTreeData: ProjectTreeDataNode[];
+  projectTreeData: ProjectStructureTreeDataNode[];
 };
 
 export type ProjectTreeActions = {
-  initProjectTreeData: (projectTreeData: ProjectTreeDataNode[]) => void;
+  initProjectTreeData: (projectTreeData: ProjectStructureTreeDataNode[]) => void;
 };
 
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;

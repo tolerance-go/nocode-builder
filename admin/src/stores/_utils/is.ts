@@ -1,9 +1,9 @@
-import { ProjectTreeDataNode } from "@/types";
+import { ProjectStructureTreeDataNode } from "@/types";
 
-export function nodeIsFolder(node: ProjectTreeDataNode): boolean {
+export function nodeIsFolder(node: ProjectStructureTreeDataNode): boolean {
   return node.type === "folder";
 }
 
-export function nodeIsFile(node: ProjectTreeDataNode): boolean {
+export function nodeIsFile(node: ProjectStructureTreeDataNode): boolean {
   return node.type === "file";
 }

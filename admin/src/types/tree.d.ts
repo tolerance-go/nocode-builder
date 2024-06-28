@@ -1,21 +1,31 @@
-import { TreeDataNode } from "antd";
-
-export interface ProjectTreeDataNode
-  extends Omit<TreeDataNode, "children" | "key" | "title"> {
+export type ProjectStructureTreeDataNode = {
+  // @TODO 准备去除
   title: string;
   id: number;
   key: string;
-  children?: ProjectTreeDataNode[];
+  children?: ProjectStructureTreeDataNode[];
   type: "file" | "folder";
-}
+};
+
+/** key 到树节点数据的映射 */
+export type ProjectStructureTreeNodeDataRecord = {
+  [key: string]: {
+    title: string;
+    id: number;
+    type: "file" | "folder";
+  };
+};
 
 export type ProjectTreeCompareResult = {
-  added: ProjectTreeDataNode[];
-  removed: ProjectTreeDataNode[];
+  added: ProjectStructureTreeDataNode[];
+  removed: ProjectStructureTreeDataNode[];
   moved: {
-    node: ProjectTreeDataNode;
-    oldParent: ProjectTreeDataNode | null;
-    newParent: ProjectTreeDataNode | null;
+    node: ProjectStructureTreeDataNode;
+    oldParent: ProjectStructureTreeDataNode | null;
+    newParent: ProjectStructureTreeDataNode | null;
   }[];
-  updated: { oldNode: ProjectTreeDataNode; newNode: ProjectTreeDataNode }[];
+  updated: {
+    oldNode: ProjectStructureTreeDataNode;
+    newNode: ProjectStructureTreeDataNode;
+  }[];
 };
