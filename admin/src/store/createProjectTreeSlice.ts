@@ -142,12 +142,16 @@ export const createProjectTreeSlice: ImmerStateCreator<
       return map;
     };
 
-    set((state) => {
-      state.projectStructureTreeData = projectStructureTreeData;
-      state.projectTreeDataRecord = projectStructureTreeDataRecord;
-      state.hasInitProjectTreeDataMeta = true;
-      state.nodeParentKeyRecord = buildParentKeyMap(projectStructureTreeData);
-    });
+    set(
+      (state) => {
+        state.projectStructureTreeData = projectStructureTreeData;
+        state.projectTreeDataRecord = projectStructureTreeDataRecord;
+        state.hasInitProjectTreeDataMeta = true;
+        state.nodeParentKeyRecord = buildParentKeyMap(projectStructureTreeData);
+      },
+      false,
+      "initProjectTreeDataMeta",
+    );
   },
   // 增加一个节点到projectStructureTreeData
   addProjectStructureTreeNode: (parentKey, node) => {
