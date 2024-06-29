@@ -22,6 +22,7 @@ model User {
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
   projectGroups ProjectGroup[]
+  timeChunk     TimeChunk[]
 }
 
 model Project {
@@ -46,4 +47,35 @@ model ProjectGroup {
   projects      Project[]
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
+}
+
+model TimeChunk {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String?
+  userId      Int
+  user        User       @relation(fields: [userId], references: [id])
+  timeNodes   TimeNode[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model TimeNode {
+  id          Int       @id @default(autoincrement())
+  timeChunkId Int
+  timeChunk   TimeChunk @relation(fields: [timeChunkId], references: [id])
+  operationId Int       @unique
+  operation   Operation @relation(fields: [operationId], references: [id])
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Operation {
+  id        Int       @id @default(autoincrement())
+  tableName String
+  recordId  Int
+  action    String // "CREATE", "DELETE", "UPDATE", etc.
+  timeNode  TimeNode?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
