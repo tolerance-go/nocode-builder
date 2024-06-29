@@ -4,9 +4,9 @@ import { TimeNodeDto } from '../dtos/time-node.dto';
 export function toTimeNodeDto(timeNode: TimeNode): TimeNodeDto {
   return {
     id: timeNode.id,
-    name: timeNode.name,
-    parentGroupId: timeNode.parentGroupId ?? undefined,
-    ownerId: timeNode.ownerId,
+    timeChunkId: timeNode.timeChunkId,
+    projectOperationId: timeNode.projectOperationId ?? undefined,
+    projectGroupOperationId: timeNode.projectGroupOperationId ?? undefined,
     createdAt: timeNode.createdAt.toISOString(),
     updatedAt: timeNode.updatedAt.toISOString(),
   };

@@ -31,9 +31,7 @@ export class TimeNodeService {
     });
   }
 
-  async createTimeNode(
-    data: Prisma.TimeNodeCreateInput,
-  ): Promise<TimeNode> {
+  async createTimeNode(data: Prisma.TimeNodeCreateInput): Promise<TimeNode> {
     return this.prisma.timeNode.create({
       data,
     });

@@ -69,8 +69,6 @@ export class {{pascalCase id}}Controller {
     @Body() data: {{pascalCase id}}CreateDto,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<{{pascalCase id}}Dto> {
-    const userId = req.user.id;
-    
 {{pipeline id 'pascalCase' 'createControllerConnect'}}
 
     return to{{pascalCase id}}Dto({{camelCase id}});

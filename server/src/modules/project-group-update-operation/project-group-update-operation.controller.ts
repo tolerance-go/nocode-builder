@@ -22,7 +22,9 @@ import { toProjectGroupUpdateOperationDto } from './utils/toProjectGroupUpdateOp
 
 @Controller('project-groups')
 export class ProjectGroupUpdateOperationController {
-  constructor(private readonly projectGroupUpdateOperationService: ProjectGroupUpdateOperationService) {}
+  constructor(
+    private readonly projectGroupUpdateOperationService: ProjectGroupUpdateOperationService,
+  ) {}
 
   @Get(':id')
   @ApiResponse({
@@ -33,10 +35,15 @@ export class ProjectGroupUpdateOperationController {
   async getProjectGroupUpdateOperation(
     @Param('id') id: string,
   ): Promise<ProjectGroupUpdateOperationDto | null> {
-    const projectGroupUpdateOperation = await this.projectGroupUpdateOperationService.projectGroupUpdateOperation({
-      id: Number(id),
-    });
-    return projectGroupUpdateOperation ? toProjectGroupUpdateOperationDto(projectGroupUpdateOperation) : null;
+    const projectGroupUpdateOperation =
+      await this.projectGroupUpdateOperationService.projectGroupUpdateOperation(
+        {
+          id: Number(id),
+        },
+      );
+    return projectGroupUpdateOperation
+      ? toProjectGroupUpdateOperationDto(projectGroupUpdateOperation)
+      : null;
   }
 
   @Get()
@@ -48,12 +55,15 @@ export class ProjectGroupUpdateOperationController {
   async getProjectGroupUpdateOperations(
     @Query() query: ProjectGroupUpdateOperationQueryDto,
   ): Promise<ProjectGroupUpdateOperationDto[]> {
-    const projectGroupUpdateOperations = await this.projectGroupUpdateOperationService.projectGroupUpdateOperations({
-      skip: query.skip,
-      take: query.take,
-      cursor: query.filter ? { id: Number(query.filter) } : undefined,
-      orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
-    });
+    const projectGroupUpdateOperations =
+      await this.projectGroupUpdateOperationService.projectGroupUpdateOperations(
+        {
+          skip: query.skip,
+          take: query.take,
+          cursor: query.filter ? { id: Number(query.filter) } : undefined,
+          orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
+        },
+      );
     return projectGroupUpdateOperations.map(toProjectGroupUpdateOperationDto);
   }
 
@@ -69,23 +79,19 @@ export class ProjectGroupUpdateOperationController {
     @Body() data: ProjectGroupUpdateOperationCreateDto,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<ProjectGroupUpdateOperationDto> {
-    const { parentGroupId, ...rest } = data;
+    const { ...rest } = data;
     const userId = req.user.id;
-    const projectGroupUpdateOperation = await this.projectGroupUpdateOperationService.createProjectGroupUpdateOperation({
-      ...rest,
-      owner: {
-        connect: {
-          id: userId,
-        },
-      },
-      parentGroup: parentGroupId
-        ? {
+    const projectGroupUpdateOperation =
+      await this.projectGroupUpdateOperationService.createProjectGroupUpdateOperation(
+        {
+          ...rest,
+          owner: {
             connect: {
-              id: parentGroupId,
+              id: userId,
             },
-          }
-        : undefined,
-    });
+          },
+        },
+      );
     return toProjectGroupUpdateOperationDto(projectGroupUpdateOperation);
   }
 
@@ -99,10 +105,13 @@ export class ProjectGroupUpdateOperationController {
     @Param('id') id: string,
     @Body() data: ProjectGroupUpdateOperationUpdateDto,
   ): Promise<ProjectGroupUpdateOperationDto> {
-    const projectGroupUpdateOperation = await this.projectGroupUpdateOperationService.updateProjectGroupUpdateOperation({
-      where: { id: Number(id) },
-      data,
-    });
+    const projectGroupUpdateOperation =
+      await this.projectGroupUpdateOperationService.updateProjectGroupUpdateOperation(
+        {
+          where: { id: Number(id) },
+          data,
+        },
+      );
     return toProjectGroupUpdateOperationDto(projectGroupUpdateOperation);
   }
 
@@ -112,10 +121,15 @@ export class ProjectGroupUpdateOperationController {
     description: 'The project group has been successfully deleted.',
     type: ProjectGroupUpdateOperationDto,
   })
-  async deleteProjectGroupUpdateOperation(@Param('id') id: string): Promise<ProjectGroupUpdateOperationDto> {
-    const projectGroupUpdateOperation = await this.projectGroupUpdateOperationService.deleteProjectGroupUpdateOperation({
-      id: Number(id),
-    });
+  async deleteProjectGroupUpdateOperation(
+    @Param('id') id: string,
+  ): Promise<ProjectGroupUpdateOperationDto> {
+    const projectGroupUpdateOperation =
+      await this.projectGroupUpdateOperationService.deleteProjectGroupUpdateOperation(
+        {
+          id: Number(id),
+        },
+      );
     return toProjectGroupUpdateOperationDto(projectGroupUpdateOperation);
   }
 }

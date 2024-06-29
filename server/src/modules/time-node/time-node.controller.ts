@@ -30,9 +30,7 @@ export class TimeNodeController {
     description: 'The project group has been successfully fetched.',
     type: TimeNodeDto,
   })
-  async getTimeNode(
-    @Param('id') id: string,
-  ): Promise<TimeNodeDto | null> {
+  async getTimeNode(@Param('id') id: string): Promise<TimeNodeDto | null> {
     const timeNode = await this.timeNodeService.timeNode({
       id: Number(id),
     });
@@ -45,9 +43,7 @@ export class TimeNodeController {
     description: 'The project groups have been successfully fetched.',
     type: [TimeNodeDto],
   })
-  async getTimeNodes(
-    @Query() query: TimeNodeQueryDto,
-  ): Promise<TimeNodeDto[]> {
+  async getTimeNodes(@Query() query: TimeNodeQueryDto): Promise<TimeNodeDto[]> {
     const timeNodes = await this.timeNodeService.timeNodes({
       skip: query.skip,
       take: query.take,
@@ -69,23 +65,16 @@ export class TimeNodeController {
     @Body() data: TimeNodeCreateDto,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<TimeNodeDto> {
-    const { parentGroupId, ...rest } = data;
-    const userId = req.user.id;
+    const {
+      timeChunkConnect,
+      projectOperationConnect,
+      projectGroupOperationConnect,
+      ...rest
+    } = data;
     const timeNode = await this.timeNodeService.createTimeNode({
       ...rest,
-      owner: {
-        connect: {
-          id: userId,
-        },
-      },
-      parentGroup: parentGroupId
-        ? {
-            connect: {
-              id: parentGroupId,
-            },
-          }
-        : undefined,
     });
+
     return toTimeNodeDto(timeNode);
   }
 

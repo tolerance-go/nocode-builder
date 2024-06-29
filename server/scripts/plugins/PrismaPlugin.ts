@@ -100,7 +100,7 @@ export class PrismaPlugin extends Plugin {
         throw new Error(`Model ${modelName} not found in Prisma schema`);
       }
 
-      const userFiled = model.fields.find((item) => item.type === 'User');
+      // const userTypeFiled = this.getUserTypeField(model);
 
       return new handlebars.SafeString(
         model.fields
@@ -111,12 +111,14 @@ export class PrismaPlugin extends Plugin {
               return '';
             }
 
-            if (
-              userFiled &&
-              userFiled.relationFromFields?.includes(field.name)
-            ) {
-              return '';
-            }
+            // if (
+            //   userTypeFiled &&
+            //   this.isInUserRelationFrom(field, userTypeFiled)
+            // ) {
+            //   return '';
+            // }
+
+            if (this.isExternalObject(field.type)) return '';
 
             // 过滤掉 User 类型的外部对象字段
             if (field.type === 'User') {
@@ -159,12 +161,12 @@ export class PrismaPlugin extends Plugin {
                 break;
             }
 
-            let tsType = this.mapType(field.type);
+            const tsType = this.mapType(field.type);
 
-            if (this.isExternalObject(field.type)) {
-              tsType = field.isList ? 'number[]' : 'number';
-              return `${this.createApiPropertyDecorator(['required: false'])}\n${field.name}Connect?: ${tsType};`;
-            }
+            // if (this.isExternalObject(field.type)) {
+            //   tsType = field.isList ? 'number[]' : 'number';
+            //   return `${this.createApiPropertyDecorator(['required: false'])}\n${field.name}Connect?: ${tsType};`;
+            // }
 
             return `${decorators.join('\n')}\n${field.name}${field.default || field.isUpdatedAt || !field.isRequired ? '?' : ''}: ${tsType};`;
           })
@@ -272,11 +274,20 @@ export class PrismaPlugin extends Plugin {
         throw new Error(`Model ${modelName} not found in Prisma schema`);
       }
 
+      const userTypeFiled = this.getUserTypeField(model);
+
       return new handlebars.SafeString(
         model.fields
           .map((field) => {
             // 过滤掉 id 字段和外部对象字段
             if (field.isId) {
+              return '';
+            }
+
+            if (
+              userTypeFiled &&
+              this.isInUserRelationFrom(field, userTypeFiled)
+            ) {
               return '';
             }
 
@@ -417,35 +428,18 @@ export class PrismaPlugin extends Plugin {
           throw new Error(`Model ${modelName} not found in Prisma schema`);
         }
 
+        let hasUserFiled = false;
+
         const connections = model.fields
           .map((field) => {
             if (this.isExternalObject(field.type)) {
               if (field.type === 'User') {
+                hasUserFiled = true;
                 return `${field.name}: {
       connect: {
         id: userId,
       },
     },`;
-              } else if (field.isList) {
-                const camelCaseFieldName = handlebars.helpers.camelCase(
-                  field.name,
-                );
-                return `${camelCaseFieldName}: ${camelCaseFieldName}Connect
-      ? {
-          connect: ${camelCaseFieldName}Connect.map((id) => ({ id })),
-        }
-      : undefined,`;
-              } else {
-                const camelCaseFieldName = handlebars.helpers.camelCase(
-                  field.name,
-                );
-                return `${camelCaseFieldName}: ${camelCaseFieldName}Id
-      ? {
-          connect: {
-            id: ${camelCaseFieldName}Id,
-          },
-        }
-      : undefined,`;
               }
             }
             return '';
@@ -461,13 +455,26 @@ export class PrismaPlugin extends Plugin {
           .map((field) => `${handlebars.helpers.camelCase(field.name)}Connect`)
           .join(', ');
 
-        return new handlebars.SafeString(`const { ${destructuredFields}, ...rest } = data;
+        const userId = `const userId = req.user.id;\n`;
+
+        return new handlebars.SafeString(`${hasUserFiled ? userId : ''}const { ${destructuredFields}, ...rest } = data;
     const ${handlebars.helpers.camelCase(modelName)} = await this.${handlebars.helpers.camelCase(modelName)}Service.create${modelName}({
       ...rest,
       ${connections}
     });
 `);
       },
+    );
+  }
+
+  getUserTypeField(model: DMMF.Model) {
+    const userFiled = model.fields.find((item) => item.type === 'User');
+    return userFiled;
+  }
+
+  isInUserRelationFrom(field: DMMF.Field, userTypeFiled: DMMF.Field) {
+    return (
+      userTypeFiled && userTypeFiled.relationFromFields?.includes(field.name)
     );
   }
 
