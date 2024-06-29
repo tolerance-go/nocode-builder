@@ -8,23 +8,22 @@ import {
 } from 'class-validator';
 
 export class TimeChunkCreateDto {
-  @ApiProperty()
+  @ApiProperty({ required: true })
   @IsString()
-  @IsNotEmpty()
   name: string;
 
-  @ApiProperty({ required: false })
-  @IsInt()
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
-  parentGroupId?: number;
+  @IsString()
+  description?: string;
 
-  @ApiProperty({ required: false })
-  @IsDateString()
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
+  @IsDateString()
   createdAt?: string;
 
-  @ApiProperty({ required: false })
-  @IsDateString()
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
+  @IsDateString()
   updatedAt?: string;
 }

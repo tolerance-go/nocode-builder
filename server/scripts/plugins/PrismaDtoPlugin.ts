@@ -59,7 +59,7 @@ export class PrismaDtoPlugin extends Plugin {
               apiPropertyOptions.push(`required: false, nullable: true`);
             }
 
-            decorators.push(
+            decorators.unshift(
               `@ApiProperty({ ${apiPropertyOptions.join(', ')} })`,
             );
 
@@ -85,6 +85,86 @@ export class PrismaDtoPlugin extends Plugin {
             const tsType = this.mapType(field.type);
 
             return `${decorators.join('\n')}\n${field.name}${field.isRequired ? '' : '?'}: ${tsType};`;
+          })
+          .filter(Boolean) // 过滤掉空字符串
+          .join('\n\n'),
+      );
+    });
+
+    handlebars.registerHelper('createDtoFields', (modelName: string) => {
+      const dmmf: DMMF.Document = this.dmmf;
+      const model = dmmf.datamodel.models.find(
+        (model) => model.name === modelName,
+      );
+      if (!model) {
+        throw new Error(`Model ${modelName} not found in Prisma schema`);
+      }
+
+      return new handlebars.SafeString(
+        model.fields
+          .map((field) => {
+            // 过滤掉 id 字段和外部对象字段
+            if (field.isId) {
+              return '';
+            }
+
+            // 过滤掉链接到 User 模型的外键字段
+            const isForeignKeyToUser = model.fields.some(
+              (f) =>
+                f.relationFromFields &&
+                f.relationFromFields.includes(field.name) &&
+                f.type === 'User',
+            );
+            if (isForeignKeyToUser) {
+              return '';
+            }
+
+            const isExternalObject = dmmf.datamodel.models.some(
+              (model) => model.name === field.type,
+            );
+            if (isExternalObject) {
+              return '';
+            }
+
+            const decorators = [];
+            const apiPropertyOptions = [];
+
+            if (field.documentation) {
+              apiPropertyOptions.push(`description: '${field.documentation}'`);
+            }
+
+            if (field.default || field.isUpdatedAt) {
+              apiPropertyOptions.push(`required: false, nullable: true`);
+              decorators.push(`@IsOptional()`);
+            } else if (field.isRequired) {
+              apiPropertyOptions.push(`required: true`);
+            } else {
+              apiPropertyOptions.push(`required: false, nullable: true`);
+              decorators.push(`@IsOptional()`);
+            }
+
+            decorators.unshift(
+              `@ApiProperty({ ${apiPropertyOptions.join(', ')} })`,
+            );
+
+            switch (field.type) {
+              case 'String':
+                decorators.push(`@IsString()`);
+                break;
+              case 'Int':
+                decorators.push(`@IsInt()`);
+                break;
+              case 'DateTime':
+                decorators.push(`@IsDateString()`);
+                break;
+              // Add more cases for other types as needed
+              default:
+                break;
+            }
+
+            const tsType = this.mapType(field.type);
+
+            return `${decorators.join('\n')}\n${field.name}${field.default || field.isUpdatedAt || !field.isRequired ? '?' : ''}: ${tsType};`;
           })
           .filter(Boolean) // 过滤掉空字符串
           .join('\n\n'),
