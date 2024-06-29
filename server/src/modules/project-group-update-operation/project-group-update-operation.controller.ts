@@ -67,33 +67,33 @@ export class ProjectGroupUpdateOperationController {
     return projectGroupUpdateOperations.map(toProjectGroupUpdateOperationDto);
   }
 
-  @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiResponse({
-    status: 201,
-    description: 'The project group has been successfully created.',
-    type: ProjectGroupUpdateOperationDto,
-  })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  async createProjectGroupUpdateOperation(
-    @Body() data: ProjectGroupUpdateOperationCreateDto,
-    @Req() req: Request & { user: JwtUserDto },
-  ): Promise<ProjectGroupUpdateOperationDto> {
-    const { ...rest } = data;
-    const userId = req.user.id;
-    const projectGroupUpdateOperation =
-      await this.projectGroupUpdateOperationService.createProjectGroupUpdateOperation(
-        {
-          ...rest,
-          owner: {
-            connect: {
-              id: userId,
-            },
-          },
-        },
-      );
-    return toProjectGroupUpdateOperationDto(projectGroupUpdateOperation);
-  }
+  // @Post()
+  // @UseGuards(JwtAuthGuard)
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'The project group has been successfully created.',
+  //   type: ProjectGroupUpdateOperationDto,
+  // })
+  // @ApiResponse({ status: 400, description: 'Bad Request.' })
+  // async createProjectGroupUpdateOperation(
+  //   @Body() data: ProjectGroupUpdateOperationCreateDto,
+  //   @Req() req: Request & { user: JwtUserDto },
+  // ): Promise<ProjectGroupUpdateOperationDto> {
+  //   const { ...rest } = data;
+  //   const userId = req.user.id;
+  //   const projectGroupUpdateOperation =
+  //     await this.projectGroupUpdateOperationService.createProjectGroupUpdateOperation(
+  //       {
+  //         ...rest,
+  //         owner: {
+  //           connect: {
+  //             id: userId,
+  //           },
+  //         },
+  //       },
+  //     );
+  //   return toProjectGroupUpdateOperationDto(projectGroupUpdateOperation);
+  // }
 
   @Patch(':id')
   @ApiResponse({
