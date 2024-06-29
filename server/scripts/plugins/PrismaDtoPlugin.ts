@@ -47,23 +47,23 @@ export class PrismaDtoPlugin extends Plugin {
             }
 
             const decorators = [];
+            const apiPropertyOptions = [];
 
-            if (field.isRequired && !field.isId) {
-              const apiPropertyOptions = [];
-              if (field.documentation) {
-                apiPropertyOptions.push(`description: '${field.documentation}'`);
-              }
-              decorators.push(
-                `@ApiProperty({ ${apiPropertyOptions.join(', ')} })`,
-              );
+            if (field.documentation) {
+              apiPropertyOptions.push(`description: '${field.documentation}'`);
+            }
+
+            if (field.isRequired) {
+              apiPropertyOptions.push(`required: true`);
             } else {
-              const apiPropertyOptions = ['required: false', 'nullable: true'];
-              if (field.documentation) {
-                apiPropertyOptions.push(`description: '${field.documentation}'`);
-              }
-              decorators.push(
-                `@ApiProperty({ ${apiPropertyOptions.join(', ')} })`,
-              );
+              apiPropertyOptions.push(`required: false, nullable: true`);
+            }
+
+            decorators.push(
+              `@ApiProperty({ ${apiPropertyOptions.join(', ')} })`,
+            );
+
+            if (!field.isRequired) {
               decorators.push(`@IsOptional()`);
             }
 
