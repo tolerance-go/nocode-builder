@@ -21,6 +21,7 @@ export type ServerActions = {
 
 export type ServerSlice = ServerStates & ServerActions;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const syncChunkToRemote = async (chunk: DataBaseTimelineChunk) => {};
 
 export const createServerSlice: ImmerStateCreator<ServerSlice, ServerSlice> = (
