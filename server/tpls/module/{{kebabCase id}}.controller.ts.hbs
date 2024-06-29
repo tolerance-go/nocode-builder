@@ -13,11 +13,11 @@ import {
 import { ApiResponse } from '@nestjs/swagger';
 import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { {{pascalCase id}}CreateDto } from './dtos/{{id}}-create.dto';
-import { {{pascalCase id}}QueryDto } from './dtos/{{id}}-query.dto';
-import { {{pascalCase id}}UpdateDto } from './dtos/{{id}}-update.dto';
-import { {{pascalCase id}}Dto } from './dtos/{{id}}.dto';
-import { {{pascalCase id}}Service } from './{{id}}.service';
+import { {{pascalCase id}}CreateDto } from './dtos/{{kebabCase id}}-create.dto';
+import { {{pascalCase id}}QueryDto } from './dtos/{{kebabCase id}}-query.dto';
+import { {{pascalCase id}}UpdateDto } from './dtos/{{kebabCase id}}-update.dto';
+import { {{pascalCase id}}Dto } from './dtos/{{kebabCase id}}.dto';
+import { {{pascalCase id}}Service } from './{{kebabCase id}}.service';
 import { to{{pascalCase id}}Dto } from './utils/to{{pascalCase id}}Dto';
 
 @Controller('project-groups')
