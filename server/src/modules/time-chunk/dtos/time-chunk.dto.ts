@@ -2,45 +2,29 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class TimeChunkDto {
-  @ApiProperty({
-    description: 'id',
-    required: false,
-    nullable: true,
-    example: 1,
-  })
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   @IsInt()
-  id: int;
+  id: number;
 
-  @ApiProperty({ description: 'name', example: 1 })
+  @ApiProperty({})
   @IsString()
   name: string;
 
-  @ApiProperty({
-    description: 'description',
-    required: false,
-    nullable: true,
-    example: 1,
-  })
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   @IsString()
   description?: string;
 
-  @ApiProperty({ description: 'userId', example: 1 })
+  @ApiProperty({})
   @IsInt()
-  userId: int;
+  userId: number;
 
-  @ApiProperty({ description: 'user', example: 1 })
-  user: user;
-
-  @ApiProperty({ description: 'timeNodes', example: 1 })
-  timeNodes: timenode;
-
-  @ApiProperty({ description: 'createdAt', example: 1 })
+  @ApiProperty({})
   @IsDateString()
-  createdAt: datetime;
+  createdAt: string;
 
-  @ApiProperty({ description: 'updatedAt', example: 1 })
+  @ApiProperty({})
   @IsDateString()
-  updatedAt: datetime;
+  updatedAt: string;
 }
