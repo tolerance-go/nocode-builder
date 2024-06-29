@@ -69,23 +69,10 @@ export class {{pascalCase id}}Controller {
     @Body() data: {{pascalCase id}}CreateDto,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<{{pascalCase id}}Dto> {
-    const { parentGroupId, ...rest } = data;
     const userId = req.user.id;
-    const {{camelCase id}} = await this.{{camelCase id}}Service.create{{pascalCase id}}({
-      ...rest,
-      owner: {
-        connect: {
-          id: userId,
-        },
-      },
-      parentGroup: parentGroupId
-        ? {
-            connect: {
-              id: parentGroupId,
-            },
-          }
-        : undefined,
-    });
+    
+{{pipeline id 'pascalCase' 'createControllerConnect'}}
+
     return to{{pascalCase id}}Dto({{camelCase id}});
   }
 

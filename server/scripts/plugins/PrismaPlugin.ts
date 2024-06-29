@@ -403,6 +403,74 @@ export class PrismaPlugin extends Plugin {
           .join(',\n'),
       );
     });
+
+    handlebars.registerHelper(
+      'createControllerConnect',
+      (modelName: string) => {
+        const dmmf: DMMF.Document = this.dmmf;
+        const model = dmmf.datamodel.models.find(
+          (model) => model.name === modelName,
+        );
+        if (!model) {
+          throw new Error(`Model ${modelName} not found in Prisma schema`);
+        }
+
+        const connections = model.fields
+          .map((field) => {
+            if (this.isExternalObject(field.type)) {
+              if (field.type === 'User') {
+                return `${field.name}: {
+      connect: {
+        id: userId,
+      },
+    },`;
+              } else if (field.isList) {
+                const camelCaseFieldName = handlebars.helpers.camelCase(
+                  field.name,
+                );
+                return `${camelCaseFieldName}: ${camelCaseFieldName}
+      ? {
+          connect: ${camelCaseFieldName}.map((id) => ({ id })),
+        }
+      : undefined,`;
+              } else {
+                const camelCaseFieldName = handlebars.helpers.camelCase(
+                  field.name,
+                );
+                return `${camelCaseFieldName}: ${camelCaseFieldName}Id
+      ? {
+          connect: {
+            id: ${camelCaseFieldName}Id,
+          },
+        }
+      : undefined,`;
+              }
+            }
+            return '';
+          })
+          .filter(Boolean) // 过滤掉空字符串
+          .join('\n');
+
+        const destructuredFields = model.fields
+          .filter(
+            (field) =>
+              this.isExternalObject(field.type) && field.type !== 'User',
+          )
+          .map((field) =>
+            field.isList
+              ? handlebars.helpers.camelCase(field.name)
+              : handlebars.helpers.camelCase(field.name) + 'Id',
+          )
+          .join(', ');
+
+        return new handlebars.SafeString(`const { ${destructuredFields}, ...rest } = data;
+    const ${handlebars.helpers.camelCase(modelName)} = await this.${handlebars.helpers.camelCase(modelName)}Service.create${modelName}({
+      ...rest,
+      ${connections}
+    });
+`);
+      },
+    );
   }
 
   isExternalObject(fieldType: string): boolean {

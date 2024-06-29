@@ -67,23 +67,23 @@ export class TimeChunkController {
     @Body() data: TimeChunkCreateDto,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<TimeChunkDto> {
-    const { parentGroupId, ...rest } = data;
     const userId = req.user.id;
+
+    const { timeNodes, ...rest } = data;
     const timeChunk = await this.timeChunkService.createTimeChunk({
       ...rest,
-      owner: {
+      user: {
         connect: {
           id: userId,
         },
       },
-      parentGroup: parentGroupId
+      timeNodes: timeNodes
         ? {
-            connect: {
-              id: parentGroupId,
-            },
+            connect: timeNodes.map((id) => ({ id })),
           }
         : undefined,
     });
+
     return toTimeChunkDto(timeChunk);
   }
 
