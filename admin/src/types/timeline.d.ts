@@ -15,19 +15,17 @@ export type CreateTimelineItem = DataBaseTimelineItemBase & {
 
 export type DeleteTimelineItem = DataBaseTimelineItemBase & {
   actionName: "delete";
-  record: Record<string, unknown>;
+  recordId: number;
 };
 
 export type ProjectDeleteTimelineItem = DeleteTimelineItem & {
   tableName: "project";
   actionName: "delete";
-  record: Pick<API.ProjectDto, "id" | "name">;
 };
 
 export type ProjectGroupDeleteTimelineItem = DeleteTimelineItem & {
   tableName: "project-group";
   actionName: "delete";
-  record: API.ProjectGroupDto;
 };
 
 export type UpdateTimelineItem = DataBaseTimelineItemBase & {
@@ -42,10 +40,10 @@ export type UpdateTimelineItem = DataBaseTimelineItemBase & {
 
 // 使用联合类型
 export type DataBaseTimelineItem =
-  | CreateTimelineItem
+  // | CreateTimelineItem
   | ProjectDeleteTimelineItem
   | ProjectGroupDeleteTimelineItem
-  | UpdateTimelineItem;
+  // | UpdateTimelineItem;
 
 export type DataBaseTimelineChunk = {
   hasSyncedLocal: boolean;

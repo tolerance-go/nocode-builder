@@ -313,10 +313,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
             tableName: "project",
             createdAt: new Date().toISOString(),
             actionName: "delete",
-            record: {
-              name: removedItem.title,
-              id: removedItem.id,
-            },
+            recordId: removedItem.id,
           });
         }
       }

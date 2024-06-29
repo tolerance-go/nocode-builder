@@ -1,12 +1,15 @@
 import { DataBaseTimelineChunk, DataBaseTimelineItem } from "@/types";
 import { ImmerStateCreator } from "@/utils";
+import { ProjectTableDataActions } from "./createProjectTableSlice";
 
 export type ServerStates = {
   dataBaseTimelineChunks: DataBaseTimelineChunk[];
   currentTimelineItems: DataBaseTimelineItem[];
   hasSetTimelinePoolCheckInterval: boolean;
   currentChunksIndex: number;
+  currentChunkItemsIndex: number;
   isConsumingChunks: boolean;
+  intervalId: NodeJS.Timeout | null;
 };
 
 export type ServerActions = {
@@ -17,62 +20,104 @@ export type ServerActions = {
   setTimelinePoolCheckInterval: () => void;
   consumeChunks: () => void;
   syncChunkToLocal: (chunk: DataBaseTimelineChunk) => void;
+  syncChunkToRemote: (chunk: DataBaseTimelineChunk) => void;
 };
 
 export type ServerSlice = ServerStates & ServerActions;
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const syncChunkToRemote = async (chunk: DataBaseTimelineChunk) => {};
-
-export const createServerSlice: ImmerStateCreator<ServerSlice, ServerSlice> = (
-  set,
-  get,
-) => ({
+export const createServerSlice: ImmerStateCreator<
+  ServerSlice & ProjectTableDataActions,
+  ServerSlice
+> = (set, get) => ({
   dataBaseTimelineChunks: [],
   currentTimelineItems: [],
   hasSetTimelinePoolCheckInterval: false,
   currentChunksIndex: -1,
+  currentChunkItemsIndex: -1,
   isConsumingChunks: false,
+  intervalId: null,
+
+  syncChunkToRemote: async (chunk: DataBaseTimelineChunk) => {},
 
   syncChunkToLocal: (chunk) => {
-    console.log(chunk);
+    const snapshot = get();
+
+    let hasError = false;
+    let catchesError: unknown;
+
+    for (
+      let i = snapshot.currentChunkItemsIndex + 1;
+      i < chunk.items.length;
+      i++
+    ) {
+      const item = chunk.items[i];
+
+      try {
+        if (item.tableName === "project") {
+          if (item.actionName === "delete") {
+            snapshot.deleteProject(item.recordId);
+          }
+        }
+      } catch (error) {
+        hasError = true;
+        catchesError = error;
+        // 结束循环
+        break;
+      }
+
+      set({
+        currentChunkItemsIndex: i,
+      });
+    }
+
+    // 失败了抛出去，让 consumeChunks 知道失败了
+    if (hasError) {
+      throw catchesError;
+    }
+
+    // 如果都成功了，表示一个 chunk 处理完了，就重置下标
+    set({
+      currentChunkItemsIndex: -1,
+    });
   },
 
   consumeChunks: async () => {
-    const state = get();
-
     set({
       isConsumingChunks: true,
     });
 
+    const snapshot = get();
+
     for (
-      let i = state.currentChunksIndex + 1;
-      i < state.dataBaseTimelineChunks.length;
+      let i = snapshot.currentChunksIndex + 1;
+      i < snapshot.dataBaseTimelineChunks.length;
       i++
     ) {
-      const chunk = state.dataBaseTimelineChunks[i];
+      const chunk = snapshot.dataBaseTimelineChunks[i];
 
       if (!chunk.hasSyncedLocal) {
         try {
           // 同步本地
-          state.syncChunkToLocal(chunk); // 假设someLocalSyncMethod是同步本地的其他slice的方法
-
-          state.updateSyncedLocal(i);
-        } catch {
+          snapshot.syncChunkToLocal(chunk); // 假设someLocalSyncMethod是同步本地的其他slice的方法
+        } catch (error) {
+          console.error("Local sync failed:", error);
           break;
         }
+
+        snapshot.updateSyncedLocal(i);
       }
 
       if (!chunk.hasSyncedRemote) {
         try {
           // 调用接口同步远程
-          await syncChunkToRemote(chunk); // 假设syncRemote是一个返回同步结果的接口
-
-          state.updateSyncedRemote(i);
-        } catch {
+          await snapshot.syncChunkToRemote(chunk); // 假设syncRemote是一个返回同步结果的接口
+        } catch (error) {
+          console.error("Remote sync failed:", error);
           // 如果远程同步失败，则跳出循环，稍后重试
           break;
         }
+
+        snapshot.updateSyncedRemote(i);
       }
 
       set((state) => {
@@ -128,22 +173,32 @@ export const createServerSlice: ImmerStateCreator<ServerSlice, ServerSlice> = (
     }),
 
   setTimelinePoolCheckInterval: () => {
-    setInterval(() => {
-      const state = get();
-      if (state.currentTimelineItems.length > 0) {
-        state.createTimelineChunkFromPool();
+    const snapshot = get();
+
+    if (snapshot.intervalId) {
+      clearInterval(snapshot.intervalId);
+    }
+
+    const intervalId = setInterval(() => {
+      const snapshot = get();
+
+      if (snapshot.currentTimelineItems.length > 0) {
+        snapshot.createTimelineChunkFromPool();
       }
+
       if (
-        state.dataBaseTimelineChunks.length > 0 &&
+        snapshot.dataBaseTimelineChunks.length > 0 &&
         // 倒数第二或者之前
-        state.currentChunksIndex < state.dataBaseTimelineChunks.length - 1
+        snapshot.currentChunksIndex < snapshot.dataBaseTimelineChunks.length - 1
       ) {
-        if (!state.isConsumingChunks) {
-          state.consumeChunks();
+        if (!snapshot.isConsumingChunks) {
+          snapshot.consumeChunks();
         }
       }
     }, 1000);
+
     set((state) => {
+      state.intervalId = intervalId;
       state.hasSetTimelinePoolCheckInterval = true;
     });
   },
