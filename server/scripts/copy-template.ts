@@ -1,12 +1,29 @@
 import { Command } from 'commander';
 import fs from 'fs-extra';
 import path from 'path';
-import Handlebars from 'handlebars';
+import Handlebars, { HelperOptions } from 'handlebars';
 
 // 导入插件基础类和示例插件
 import { ExamplePlugin } from './plugins/ExamplePlugin';
 import { PrismaDtoPlugin } from './plugins/PrismaDtoPlugin';
 import { Plugin } from './plugins/Plugin';
+import { CaseHelpersPlugin } from './plugins/CaseHelpersPlugin';
+
+// 管道 helper
+Handlebars.registerHelper('pipeline', function (value: any, ...args: any[]) {
+  const options: HelperOptions = args.pop();
+  let result = value;
+
+  // 遍历每个 helper
+  args.forEach((helperName) => {
+    const helper = Handlebars.helpers[helperName];
+    if (typeof helper === 'function') {
+      result = helper(result, options);
+    }
+  });
+
+  return result;
+});
 
 // 创建命令行选项
 const program = new Command();
@@ -18,21 +35,33 @@ program
     '模板变量，以键值对形式传入，格式为 key=value，其中 value 可以是中划线、小驼峰、大驼峰或下划线格式。' +
       '可使用的命名转换 Helper 包括: ' +
       '{{camelCase key}} (小驼峰), {{pascalCase key}} (大驼峰), {{kebabCase key}} (中划线), {{snakeCase key}} (下划线)',
-  );
+  )
+  .option('--plugins <plugins...>', '启用的插件列表');
 
-// 初始化插件实例
-const examplePlugin = new ExamplePlugin();
-const prismaDtoPlugin = new PrismaDtoPlugin();
+// 初始化插件实例列表
+const pluginInstances = [
+  new ExamplePlugin(),
+  new PrismaDtoPlugin(),
+  new CaseHelpersPlugin(),
+];
 
 // 内部维护的插件列表，使用插件实例的 name 作为键
-const availablePlugins: Record<string, Plugin> = {
-  [examplePlugin.name]: examplePlugin,
-  [prismaDtoPlugin.name]: prismaDtoPlugin,
-};
+const availablePlugins: Record<string, Plugin> = {};
+const autoLoadPluginNames: string[] = [];
+
+pluginInstances.forEach((plugin) => {
+  availablePlugins[plugin.name] = plugin;
+  if (plugin.autoLoad) {
+    autoLoadPluginNames.push(plugin.name);
+  }
+});
 
 // 加载并注册插件
-function loadPlugins(pluginNames: string[]): Plugin[] {
+function loadPlugins(userPluginNames: string[]): Plugin[] {
   const loadedPlugins: Plugin[] = [];
+
+  // 合并用户传递的插件和自动加载的插件
+  const pluginNames = new Set([...autoLoadPluginNames, ...userPluginNames]);
 
   pluginNames.forEach((name) => {
     if (availablePlugins[name]) {
@@ -48,30 +77,20 @@ function loadPlugins(pluginNames: string[]): Plugin[] {
   return loadedPlugins;
 }
 
-// 读取配置文件中的插件列表
-async function readConfigFile(configPath: string): Promise<string[]> {
-  try {
-    const config = await fs.readJson(configPath);
-    return config.plugins || [];
-  } catch (error) {
-    console.error('读取配置文件时发生错误:', error);
-    return [];
-  }
-}
-
 // 主函数
 (async () => {
-  // 读取配置文件中的插件列表
-  const configPath = path.resolve('copy-template.json');
-  const pluginNames = await readConfigFile(configPath);
+  // 第一次解析命令行参数以获取插件列表
+  program.parse(process.argv);
+  const initialOptions = program.opts();
+  const pluginNames = initialOptions.plugins || [];
 
   // 加载插件
   const plugins = loadPlugins(pluginNames);
 
-  // 解析命令行参数
+  // 注册插件后再次解析命令行参数
   program.parse(process.argv);
-
   const options = program.opts();
+
   const templateVariables: Record<string, any> = {};
 
   if (options.vars) {

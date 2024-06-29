@@ -3,9 +3,11 @@ import Handlebars from 'handlebars';
 
 export abstract class Plugin {
   name: string;
+  autoLoad: boolean;
 
-  constructor(name: string) {
+  constructor(name: string, autoLoad: boolean = false) {
     this.name = name;
+    this.autoLoad = autoLoad;
   }
 
   // 定义插件需要实现的方法
