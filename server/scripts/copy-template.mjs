@@ -11,7 +11,7 @@ program
   .option('--dest <dest>', '目标文件夹路径')
   .option(
     '--vars <vars...>',
-    '模板变量，以键值对形式传入，格式为 key=value，其中 value 是带中划线的字符串。' +
+    '模板变量，以键值对形式传入，格式为 key=value，其中 value 可以是中划线、小驼峰、大驼峰或下划线格式。' +
       '可使用的命名转换 Helper 包括: ' +
       '{{camelCase key}} (小驼峰), {{pascalCase key}} (大驼峰), {{kebabCase key}} (中划线), {{snakeCase key}} (下划线)',
   );
@@ -28,23 +28,38 @@ if (options.vars) {
   });
 }
 
+// Helper 函数
+const toCamelCase = (str) => {
+  return str
+    .replace(/[-_](.)/g, (_, char) => char.toUpperCase())
+    .replace(/^(.)/, (char) => char.toLowerCase());
+};
+
+const toPascalCase = (str) => {
+  return str
+    .replace(/[-_](.)/g, (_, char) => char.toUpperCase())
+    .replace(/^(.)/, (char) => char.toUpperCase());
+};
+
+const toKebabCase = (str) => {
+  return str
+    .replace(/([a-z])([A-Z])/g, '$1-$2')
+    .replace(/_/g, '-')
+    .toLowerCase();
+};
+
+const toSnakeCase = (str) => {
+  return str
+    .replace(/([a-z])([A-Z])/g, '$1_$2')
+    .replace(/-/g, '_')
+    .toLowerCase();
+};
+
 // 注册 Handlebars 自定义 Helper
-Handlebars.registerHelper('camelCase', (str) => {
-  return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-});
-
-Handlebars.registerHelper('pascalCase', (str) => {
-  const camelCase = str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
-});
-
-Handlebars.registerHelper('kebabCase', (str) => {
-  return str.toLowerCase();
-});
-
-Handlebars.registerHelper('snakeCase', (str) => {
-  return str.replace(/-/g, '_').toLowerCase();
-});
+Handlebars.registerHelper('camelCase', toCamelCase);
+Handlebars.registerHelper('pascalCase', toPascalCase);
+Handlebars.registerHelper('kebabCase', toKebabCase);
+Handlebars.registerHelper('snakeCase', toSnakeCase);
 
 // 递归复制并处理模板文件和文件夹
 async function copyAndProcessTemplate(srcDir, destDir, templateVariables) {
