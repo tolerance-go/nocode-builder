@@ -6,6 +6,7 @@ export type ServerStates = {
   currentTimelineItems: DataBaseTimelineItem[];
   hasSetTimelinePoolCheckInterval: boolean;
   currentChunksIndex: number;
+  isConsumingChunks: boolean;
 };
 
 export type ServerActions = {
@@ -30,6 +31,7 @@ export const createServerSlice: ImmerStateCreator<ServerSlice, ServerSlice> = (
   currentTimelineItems: [],
   hasSetTimelinePoolCheckInterval: false,
   currentChunksIndex: -1,
+  isConsumingChunks: false,
 
   syncChunkToLocal: (chunk) => {
     console.log(chunk);
@@ -37,6 +39,10 @@ export const createServerSlice: ImmerStateCreator<ServerSlice, ServerSlice> = (
 
   consumeChunks: async () => {
     const state = get();
+
+    set({
+      isConsumingChunks: true,
+    });
 
     for (
       let i = state.currentChunksIndex + 1;
@@ -72,6 +78,10 @@ export const createServerSlice: ImmerStateCreator<ServerSlice, ServerSlice> = (
         state.currentChunksIndex = i;
       });
     }
+
+    set({
+      isConsumingChunks: false,
+    });
   },
 
   addTimelineItemToPool: (item: DataBaseTimelineItem) =>
@@ -122,8 +132,14 @@ export const createServerSlice: ImmerStateCreator<ServerSlice, ServerSlice> = (
       if (state.currentTimelineItems.length > 0) {
         state.createTimelineChunkFromPool();
       }
-      if (state.dataBaseTimelineChunks.length > 0) {
-        state.consumeChunks();
+      if (
+        state.dataBaseTimelineChunks.length > 0 &&
+        // 倒数第二或者之前
+        state.currentChunksIndex < state.dataBaseTimelineChunks.length - 1
+      ) {
+        if (!state.isConsumingChunks) {
+          state.consumeChunks();
+        }
       }
     }, 1000);
     set((state) => {
