@@ -1,0 +1,60 @@
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service';
+import { {{pascalCase id}}, Prisma } from '@prisma/client';
+
+@Injectable()
+export class {{pascalCase id}}Service {
+  constructor(private prisma: PrismaService) {}
+
+  async {{camelCase id}}(
+    {{camelCase id}}WhereUniqueInput: Prisma.{{pascalCase id}}WhereUniqueInput,
+  ): Promise<{{pascalCase id}} | null> {
+    return this.prisma.{{camelCase id}}.findUnique({
+      where: {{camelCase id}}WhereUniqueInput,
+    });
+  }
+
+  async {{camelCase id}}s(params: {
+    skip?: number;
+    take?: number;
+    cursor?: Prisma.{{pascalCase id}}WhereUniqueInput;
+    where?: Prisma.{{pascalCase id}}WhereInput;
+    orderBy?: Prisma.{{pascalCase id}}OrderByWithRelationInput;
+  }): Promise<{{pascalCase id}}[]> {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.{{camelCase id}}.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
+  }
+
+  async create{{pascalCase id}}(
+    data: Prisma.{{pascalCase id}}CreateInput,
+  ): Promise<{{pascalCase id}}> {
+    return this.prisma.{{camelCase id}}.create({
+      data,
+    });
+  }
+
+  async update{{pascalCase id}}(params: {
+    where: Prisma.{{pascalCase id}}WhereUniqueInput;
+    data: Prisma.{{pascalCase id}}UpdateInput;
+  }): Promise<{{pascalCase id}}> {
+    const { where, data } = params;
+    return this.prisma.{{camelCase id}}.update({
+      data,
+      where,
+    });
+  }
+
+  async delete{{pascalCase id}}(
+    where: Prisma.{{pascalCase id}}WhereUniqueInput,
+  ): Promise<{{pascalCase id}}> {
+    return this.prisma.{{camelCase id}}.delete({
+      where,
+    });
+  }
+}

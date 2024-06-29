@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ProjectGroupService } from './project-group.service';
-import { ProjectGroupController } from './project-group.controller';
+import { ProjectGroupService } from './test-demo.service';
+import { ProjectGroupController } from './test-demo.controller';
 import { PrismaModule } from '../../prisma/prisma.module';
 
 @Module({

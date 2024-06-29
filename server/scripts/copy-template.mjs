@@ -9,7 +9,12 @@ const program = new Command();
 program
   .option('--src <src>', '源文件夹路径')
   .option('--dest <dest>', '目标文件夹路径')
-  .option('--vars <vars...>', '模板变量，以键值对形式传入，格式为 key=value');
+  .option(
+    '--vars <vars...>',
+    '模板变量，以键值对形式传入，格式为 key=value，其中 value 是带中划线的字符串。' +
+      '可使用的命名转换 Helper 包括: ' +
+      '{{camelCase key}} (小驼峰), {{pascalCase key}} (大驼峰), {{kebabCase key}} (中划线), {{snakeCase key}} (下划线)',
+  );
 
 program.parse(process.argv);
 
@@ -23,6 +28,24 @@ if (options.vars) {
   });
 }
 
+// 注册 Handlebars 自定义 Helper
+Handlebars.registerHelper('camelCase', (str) => {
+  return str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+});
+
+Handlebars.registerHelper('pascalCase', (str) => {
+  const camelCase = str.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+  return camelCase.charAt(0).toUpperCase() + camelCase.slice(1);
+});
+
+Handlebars.registerHelper('kebabCase', (str) => {
+  return str.toLowerCase();
+});
+
+Handlebars.registerHelper('snakeCase', (str) => {
+  return str.replace(/-/g, '_').toLowerCase();
+});
+
 // 递归复制并处理模板文件和文件夹
 async function copyAndProcessTemplate(srcDir, destDir, templateVariables) {
   await fs.ensureDir(destDir);
@@ -32,7 +55,9 @@ async function copyAndProcessTemplate(srcDir, destDir, templateVariables) {
     const srcPath = path.join(srcDir, item);
     const destPath = path.join(
       destDir,
-      Handlebars.compile(item)(templateVariables),
+      Handlebars.compile(item.replace(/\.(hbs|handlebars)$/, ''))(
+        templateVariables,
+      ),
     );
 
     const stats = await fs.stat(srcPath);
@@ -41,8 +66,14 @@ async function copyAndProcessTemplate(srcDir, destDir, templateVariables) {
       await copyAndProcessTemplate(srcPath, destPath, templateVariables);
     } else if (stats.isFile()) {
       let content = await fs.readFile(srcPath, 'utf8');
-      content = Handlebars.compile(content)(templateVariables);
-      await fs.writeFile(destPath, content, 'utf8');
+
+      // 只对 .hbs 或 .handlebars 文件进行模板处理
+      if (item.endsWith('.hbs') || item.endsWith('.handlebars')) {
+        content = Handlebars.compile(content)(templateVariables);
+        await fs.writeFile(destPath, content, 'utf8');
+      } else {
+        await fs.copyFile(srcPath, destPath); // 直接复制非模板文件
+      }
     }
   }
 }

@@ -1,0 +1,121 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
+import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { {{pascalCase id}}CreateDto } from './dtos/{{id}}-create.dto';
+import { {{pascalCase id}}QueryDto } from './dtos/{{id}}-query.dto';
+import { {{pascalCase id}}UpdateDto } from './dtos/{{id}}-update.dto';
+import { {{pascalCase id}}Dto } from './dtos/{{id}}.dto';
+import { {{pascalCase id}}Service } from './{{id}}.service';
+import { to{{pascalCase id}}Dto } from './utils/to{{pascalCase id}}Dto';
+
+@Controller('project-groups')
+export class {{pascalCase id}}Controller {
+  constructor(private readonly {{camelCase id}}Service: {{pascalCase id}}Service) {}
+
+  @Get(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The project group has been successfully fetched.',
+    type: {{pascalCase id}}Dto,
+  })
+  async get{{pascalCase id}}(
+    @Param('id') id: string,
+  ): Promise<{{pascalCase id}}Dto | null> {
+    const {{camelCase id}} = await this.{{camelCase id}}Service.{{camelCase id}}({
+      id: Number(id),
+    });
+    return {{camelCase id}} ? to{{pascalCase id}}Dto({{camelCase id}}) : null;
+  }
+
+  @Get()
+  @ApiResponse({
+    status: 200,
+    description: 'The project groups have been successfully fetched.',
+    type: [{{pascalCase id}}Dto],
+  })
+  async get{{pascalCase id}}s(
+    @Query() query: {{pascalCase id}}QueryDto,
+  ): Promise<{{pascalCase id}}Dto[]> {
+    const {{camelCase id}}s = await this.{{camelCase id}}Service.{{camelCase id}}s({
+      skip: query.skip,
+      take: query.take,
+      cursor: query.filter ? { id: Number(query.filter) } : undefined,
+      orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
+    });
+    return {{camelCase id}}s.map(to{{pascalCase id}}Dto);
+  }
+
+  @Post()
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 201,
+    description: 'The project group has been successfully created.',
+    type: {{pascalCase id}}Dto,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  async create{{pascalCase id}}(
+    @Body() data: {{pascalCase id}}CreateDto,
+    @Req() req: Request & { user: JwtUserDto },
+  ): Promise<{{pascalCase id}}Dto> {
+    const { parentGroupId, ...rest } = data;
+    const userId = req.user.id;
+    const {{camelCase id}} = await this.{{camelCase id}}Service.create{{pascalCase id}}({
+      ...rest,
+      owner: {
+        connect: {
+          id: userId,
+        },
+      },
+      parentGroup: parentGroupId
+        ? {
+            connect: {
+              id: parentGroupId,
+            },
+          }
+        : undefined,
+    });
+    return to{{pascalCase id}}Dto({{camelCase id}});
+  }
+
+  @Patch(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The project group has been successfully updated.',
+    type: {{pascalCase id}}Dto,
+  })
+  async update{{pascalCase id}}(
+    @Param('id') id: string,
+    @Body() data: {{pascalCase id}}UpdateDto,
+  ): Promise<{{pascalCase id}}Dto> {
+    const {{camelCase id}} = await this.{{camelCase id}}Service.update{{pascalCase id}}({
+      where: { id: Number(id) },
+      data,
+    });
+    return to{{pascalCase id}}Dto({{camelCase id}});
+  }
+
+  @Delete(':id')
+  @ApiResponse({
+    status: 200,
+    description: 'The project group has been successfully deleted.',
+    type: {{pascalCase id}}Dto,
+  })
+  async delete{{pascalCase id}}(@Param('id') id: string): Promise<{{pascalCase id}}Dto> {
+    const {{camelCase id}} = await this.{{camelCase id}}Service.delete{{pascalCase id}}({
+      id: Number(id),
+    });
+    return to{{pascalCase id}}Dto({{camelCase id}});
+  }
+}

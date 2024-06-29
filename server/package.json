@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "gen:module": "node ./scripts/copy-template.js --src tpls/module --dest src/modules/{{id}}",
+    "gen:module": "node ./scripts/copy-template.mjs --src tpls/module --dest src/modules/{{id}}",
     "everyDay": "pnpm lint && pnpm test && pnpm build",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

@@ -1,0 +1,13 @@
+import { {{pascalCase id}} } from '@prisma/client';
+import { {{pascalCase id}}Dto } from '../dtos/{{id}}.dto';
+
+export function to{{pascalCase id}}Dto({{camelCase id}}: {{pascalCase id}}): {{pascalCase id}}Dto {
+  return {
+    id: {{camelCase id}}.id,
+    name: {{camelCase id}}.name,
+    parentGroupId: {{camelCase id}}.parentGroupId ?? undefined,
+    ownerId: {{camelCase id}}.ownerId,
+    createdAt: {{camelCase id}}.createdAt.toISOString(),
+    updatedAt: {{camelCase id}}.updatedAt.toISOString(),
+  };
+}
