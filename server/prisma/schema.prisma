@@ -10,6 +10,8 @@ generator client {
 
 generator prismaClassGenerator {
   provider = "prisma-class-generator"
+  dryRun   = false
+  output   = "../src/generated/prisma-class" // 指定生成实体类的输出目录
 }
 
 datasource db {
