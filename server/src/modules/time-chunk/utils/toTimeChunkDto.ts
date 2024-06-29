@@ -5,8 +5,8 @@ export function toTimeChunkDto(timeChunk: TimeChunk): TimeChunkDto {
   return {
     id: timeChunk.id,
     name: timeChunk.name,
-    parentGroupId: timeChunk.parentGroupId ?? undefined,
-    ownerId: timeChunk.ownerId,
+    description: timeChunk.description ?? undefined,
+    userId: timeChunk.userId,
     createdAt: timeChunk.createdAt.toISOString(),
     updatedAt: timeChunk.updatedAt.toISOString(),
   };

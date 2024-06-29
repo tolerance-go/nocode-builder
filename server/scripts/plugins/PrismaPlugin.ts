@@ -368,6 +368,45 @@ export class PrismaPlugin extends Plugin {
   }`,
       );
     });
+
+    handlebars.registerHelper('entityToDtoFields', (modelName: string) => {
+      const dmmf: DMMF.Document = this.dmmf;
+      const model = dmmf.datamodel.models.find(
+        (model) => model.name === modelName,
+      );
+      if (!model) {
+        throw new Error(`Model ${modelName} not found in Prisma schema`);
+      }
+
+      return new handlebars.SafeString(
+        model.fields
+          .map((field) => {
+            if (this.isExternalObject(field.type)) {
+              return '';
+            }
+            const fieldType = this.mapType(field.type);
+            const isOptional = !field.isRequired;
+            const fieldName = field.name;
+            let fieldAssignment = '';
+
+            if (fieldType === 'string' && field.type === 'DateTime') {
+              fieldAssignment = `${fieldName}: ${handlebars.helpers.camelCase(modelName)}.${fieldName}.toISOString()`;
+            } else {
+              fieldAssignment = isOptional
+                ? `${fieldName}: ${handlebars.helpers.camelCase(modelName)}.${fieldName} ?? undefined`
+                : `${fieldName}: ${handlebars.helpers.camelCase(modelName)}.${fieldName}`;
+            }
+
+            return fieldAssignment;
+          })
+          .filter(Boolean)
+          .join(',\n'),
+      );
+    });
+  }
+
+  isExternalObject(fieldType: string): boolean {
+    return this.dmmf.datamodel.models.some((model) => model.name === fieldType);
   }
 
   mapType(prismaType: string): string {

@@ -3,11 +3,6 @@ import { {{pascalCase id}}Dto } from '../dtos/{{kebabCase id}}.dto';
 
 export function to{{pascalCase id}}Dto({{camelCase id}}: {{pascalCase id}}): {{pascalCase id}}Dto {
   return {
-    id: {{camelCase id}}.id,
-    name: {{camelCase id}}.name,
-    parentGroupId: {{camelCase id}}.parentGroupId ?? undefined,
-    ownerId: {{camelCase id}}.ownerId,
-    createdAt: {{camelCase id}}.createdAt.toISOString(),
-    updatedAt: {{camelCase id}}.updatedAt.toISOString(),
+   {{pipeline id 'pascalCase' 'entityToDtoFields'}}
   };
 }
