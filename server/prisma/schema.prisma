@@ -26,27 +26,29 @@ model User {
 }
 
 model Project {
-  id             Int           @id @default(autoincrement())
+  id             Int                @id @default(autoincrement())
   name           String
   ownerId        Int
-  owner          User          @relation(fields: [ownerId], references: [id])
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
-  projectGroup   ProjectGroup? @relation(fields: [projectGroupId], references: [id])
+  owner          User               @relation(fields: [ownerId], references: [id])
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  projectGroup   ProjectGroup?      @relation(fields: [projectGroupId], references: [id])
   projectGroupId Int?
+  operations     ProjectOperation[]
 }
 
 model ProjectGroup {
-  id            Int            @id @default(autoincrement())
+  id            Int                     @id @default(autoincrement())
   name          String
   parentGroupId Int?
-  parentGroup   ProjectGroup?  @relation("ChildGroups", fields: [parentGroupId], references: [id])
-  childGroups   ProjectGroup[] @relation("ChildGroups")
+  parentGroup   ProjectGroup?           @relation("ChildGroups", fields: [parentGroupId], references: [id])
+  childGroups   ProjectGroup[]          @relation("ChildGroups")
   ownerId       Int
-  owner         User           @relation(fields: [ownerId], references: [id])
+  owner         User                    @relation(fields: [ownerId], references: [id])
   projects      Project[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  createdAt     DateTime                @default(now())
+  updatedAt     DateTime                @updatedAt
+  operations    ProjectGroupOperation[]
 }
 
 model TimeChunk {
@@ -61,21 +63,93 @@ model TimeChunk {
 }
 
 model TimeNode {
-  id          Int       @id @default(autoincrement())
-  timeChunkId Int
-  timeChunk   TimeChunk @relation(fields: [timeChunkId], references: [id])
-  operationId Int       @unique
-  operation   Operation @relation(fields: [operationId], references: [id])
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  id                      Int                    @id @default(autoincrement())
+  timeChunkId             Int
+  timeChunk               TimeChunk              @relation(fields: [timeChunkId], references: [id])
+  projectOperationId      Int?                   @unique
+  projectOperation        ProjectOperation?      @relation(fields: [projectOperationId], references: [id])
+  projectGroupOperationId Int?                   @unique
+  ProjectGroupOperation   ProjectGroupOperation? @relation(fields: [projectGroupOperationId], references: [id])
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
 }
 
-model Operation {
-  id        Int       @id @default(autoincrement())
-  tableName String
-  recordId  Int
-  action    String // "CREATE", "DELETE", "UPDATE", etc.
-  timeNode  TimeNode?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model ProjectOperation {
+  id                       Int                     @id @default(autoincrement())
+  projectId                Int
+  project                  Project                 @relation(fields: [projectId], references: [id])
+  projectCreateOperationId Int?                    @unique
+  projectUpdateOperationId Int?                    @unique
+  projectDeleteOperationId Int?                    @unique
+  timeNode                 TimeNode?
+  projectUpdateOperation   ProjectUpdateOperation?
+  projectDeleteOperation   ProjectDeleteOperation?
+  projectCreateOperation   ProjectCreateOperation?
+}
+
+model ProjectGroupOperation {
+  id                            Int                          @id @default(autoincrement())
+  projectGroupId                Int
+  projectGroup                  ProjectGroup                 @relation(fields: [projectGroupId], references: [id])
+  projectGroupCreateOperationId Int?                         @unique
+  projectGroupUpdateOperationId Int?                         @unique
+  projectGroupDeleteOperationId Int?                         @unique
+  timeNode                      TimeNode?
+  projectGroupCreateOperation   ProjectGroupCreateOperation?
+  projectGroupUpdateOperation   ProjectGroupUpdateOperation?
+  projectGroupDeleteOperation   ProjectGroupDeleteOperation?
+}
+
+model ProjectCreateOperation {
+  id                 Int              @id @default(autoincrement())
+  recordId           Int
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  projectOperation   ProjectOperation @relation(fields: [projectOperationId], references: [id])
+  projectOperationId Int              @unique
+}
+
+model ProjectUpdateOperation {
+  id                 Int              @id @default(autoincrement())
+  recordId           Int
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  projectOperation   ProjectOperation @relation(fields: [projectOperationId], references: [id])
+  projectOperationId Int              @unique
+}
+
+model ProjectDeleteOperation {
+  id                 Int              @id @default(autoincrement())
+  recordId           Int
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  projectOperation   ProjectOperation @relation(fields: [projectOperationId], references: [id])
+  projectOperationId Int              @unique
+}
+
+model ProjectGroupCreateOperation {
+  id                      Int                   @id @default(autoincrement())
+  recordId                Int
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  projectGroupOperation   ProjectGroupOperation @relation(fields: [projectGroupOperationId], references: [id])
+  projectGroupOperationId Int                   @unique
+}
+
+model ProjectGroupUpdateOperation {
+  id                      Int                   @id @default(autoincrement())
+  recordId                Int
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  projectGroupOperation   ProjectGroupOperation @relation(fields: [projectGroupOperationId], references: [id])
+  projectGroupOperationId Int                   @unique
+}
+
+model ProjectGroupDeleteOperation {
+  id                      Int                   @id @default(autoincrement())
+  recordId                Int
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
+  projectGroupOperation   ProjectGroupOperation @relation(fields: [projectGroupOperationId], references: [id])
+  projectGroupOperationId Int                   @unique
 }
