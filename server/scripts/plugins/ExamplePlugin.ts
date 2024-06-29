@@ -16,10 +16,4 @@ export class ExamplePlugin extends Plugin {
   registerOptions(program: Command): void {
     program.option('--exampleOption <value>', 'An example option');
   }
-
-  processTemplateVariables(templateVariables: Record<string, any>): void {
-    if (templateVariables.exampleOption) {
-      templateVariables.exampleProcessed = `Processed: ${templateVariables.exampleOption}`;
-    }
-  }
 }
