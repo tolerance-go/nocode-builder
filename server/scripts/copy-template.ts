@@ -1,6 +1,6 @@
 import { Command } from 'commander';
-import fs from 'fs-extra';
-import path from 'path';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 import Handlebars, { HelperOptions } from 'handlebars';
 
 // 导入插件基础类和示例插件
@@ -28,6 +28,7 @@ Handlebars.registerHelper('pipeline', function (value: any, ...args: any[]) {
 // 创建命令行选项
 const program = new Command();
 program
+  .allowUnknownOption() // 允许未知选项
   .option('--src <src>', '源文件夹路径')
   .option('--dest <dest>', '目标文件夹路径')
   .option(
@@ -86,6 +87,8 @@ function loadPlugins(userPluginNames: string[]): Plugin[] {
 
   // 加载插件
   const plugins = loadPlugins(pluginNames);
+
+  program.allowUnknownOption(false);
 
   // 注册插件后再次解析命令行参数
   program.parse(process.argv);

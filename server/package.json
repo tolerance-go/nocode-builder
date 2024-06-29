@@ -6,7 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "gen:module": "ts-node ./scripts/copy-template.ts --plugins prismaDtoPlugin --src tpls/module --dest \"src/modules/{{kebabCase id}}\"",
+    "gen:module": "ts-node ./scripts/copy-template.ts --plugins prismaDtoPlugin --prisma-schema ./prisma/schema.prisma --src tpls/module --dest \"src/modules/{{kebabCase id}}\"",
     "everyDay": "pnpm lint && pnpm test && pnpm build",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

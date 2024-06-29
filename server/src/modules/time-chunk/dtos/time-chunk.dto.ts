@@ -3,47 +3,44 @@ import { IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class TimeChunkDto {
   @ApiProperty({
-    description: 'The unique identifier of the project group',
-    example: 1,
-  })
-  @IsInt()
-  id: number;
-
-  @ApiProperty({
-    description: 'The name of the project group',
-    example: 'Project Group 1',
-  })
-  @IsString()
-  name: string;
-
-  @ApiProperty({
-    description: 'The parent group ID of the project group',
+    description: 'id',
     required: false,
     nullable: true,
     example: 1,
   })
-  @IsInt()
   @IsOptional()
-  parentGroupId?: number;
+  @IsInt()
+  id: int;
+
+  @ApiProperty({ description: 'name', example: 1 })
+  @IsString()
+  name: string;
 
   @ApiProperty({
-    description: 'The owner ID of the project group',
+    description: 'description',
+    required: false,
+    nullable: true,
     example: 1,
   })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiProperty({ description: 'userId', example: 1 })
   @IsInt()
-  ownerId: number;
+  userId: int;
 
-  @ApiProperty({
-    description: 'The date and time when the project group was created',
-    example: '2024-01-01T00:00:00Z',
-  })
-  @IsDateString()
-  createdAt: string;
+  @ApiProperty({ description: 'user', example: 1 })
+  user: user;
 
-  @ApiProperty({
-    description: 'The date and time when the project group was last updated',
-    example: '2024-01-02T00:00:00Z',
-  })
+  @ApiProperty({ description: 'timeNodes', example: 1 })
+  timeNodes: timenode;
+
+  @ApiProperty({ description: 'createdAt', example: 1 })
   @IsDateString()
-  updatedAt: string;
+  createdAt: datetime;
+
+  @ApiProperty({ description: 'updatedAt', example: 1 })
+  @IsDateString()
+  updatedAt: datetime;
 }

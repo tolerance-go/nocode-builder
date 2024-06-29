@@ -1,7 +1,7 @@
 import type { DMMF } from '@prisma/generator-helper';
 import { getDMMF } from '@prisma/sdk';
-import fs from 'fs-extra';
-import path from 'path';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 
 export async function readPrismaConfig(
   filePath: string,
