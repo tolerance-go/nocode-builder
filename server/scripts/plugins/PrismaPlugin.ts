@@ -6,11 +6,11 @@ import type { DMMF } from '@prisma/generator-helper';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
-export class PrismaDtoPlugin extends Plugin {
+export class PrismaPlugin extends Plugin {
   dmmf: DMMF.Document;
 
   constructor() {
-    super('prismaDtoPlugin');
+    super('prismaPlugin');
   }
 
   async readPrismaConfig(filePath: string): Promise<DMMF.Document> {

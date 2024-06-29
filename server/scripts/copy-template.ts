@@ -6,7 +6,7 @@ import * as prettier from 'prettier';
 
 // 导入插件基础类和示例插件
 import { ExamplePlugin } from './plugins/ExamplePlugin';
-import { PrismaDtoPlugin } from './plugins/PrismaDtoPlugin';
+import { PrismaPlugin } from './plugins/PrismaPlugin';
 import { Plugin } from './plugins/Plugin';
 import { CaseHelpersPlugin } from './plugins/CaseHelpersPlugin';
 
@@ -43,7 +43,7 @@ program
 // 初始化插件实例列表
 const pluginInstances = [
   new ExamplePlugin(),
-  new PrismaDtoPlugin(),
+  new PrismaPlugin(),
   new CaseHelpersPlugin(),
 ];
 
