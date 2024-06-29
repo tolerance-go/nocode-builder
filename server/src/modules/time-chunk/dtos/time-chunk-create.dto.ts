@@ -11,6 +11,9 @@ export class TimeChunkCreateDto {
   @IsString()
   description?: string;
 
+  @ApiProperty({ required: false })
+  timeNodesConnect?: number[];
+
   @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   @IsDateString()

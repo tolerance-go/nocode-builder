@@ -69,7 +69,7 @@ export class TimeChunkController {
   ): Promise<TimeChunkDto> {
     const userId = req.user.id;
 
-    const { timeNodes, ...rest } = data;
+    const { timeNodesConnect, ...rest } = data;
     const timeChunk = await this.timeChunkService.createTimeChunk({
       ...rest,
       user: {
@@ -77,9 +77,9 @@ export class TimeChunkController {
           id: userId,
         },
       },
-      timeNodes: timeNodes
+      timeNodes: timeNodesConnect
         ? {
-            connect: timeNodes.map((id) => ({ id })),
+            connect: timeNodesConnect.map((id) => ({ id })),
           }
         : undefined,
     });

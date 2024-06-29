@@ -100,29 +100,26 @@ export class PrismaPlugin extends Plugin {
         throw new Error(`Model ${modelName} not found in Prisma schema`);
       }
 
+      const userFiled = model.fields.find((item) => item.type === 'User');
+
       return new handlebars.SafeString(
         model.fields
+
           .map((field) => {
-            // 过滤掉 id 字段和外部对象字段
+            // 过滤掉 id 字段
             if (field.isId) {
               return '';
             }
 
-            // 过滤掉链接到 User 模型的外键字段
-            const isForeignKeyToUser = model.fields.some(
-              (f) =>
-                f.relationFromFields &&
-                f.relationFromFields.includes(field.name) &&
-                f.type === 'User',
-            );
-            if (isForeignKeyToUser) {
+            if (
+              userFiled &&
+              userFiled.relationFromFields?.includes(field.name)
+            ) {
               return '';
             }
 
-            const isExternalObject = dmmf.datamodel.models.some(
-              (model) => model.name === field.type,
-            );
-            if (isExternalObject) {
+            // 过滤掉 User 类型的外部对象字段
+            if (field.type === 'User') {
               return '';
             }
 
@@ -162,7 +159,12 @@ export class PrismaPlugin extends Plugin {
                 break;
             }
 
-            const tsType = this.mapType(field.type);
+            let tsType = this.mapType(field.type);
+
+            if (this.isExternalObject(field.type)) {
+              tsType = field.isList ? 'number[]' : 'number';
+              return `${this.createApiPropertyDecorator(['required: false'])}\n${field.name}Connect?: ${tsType};`;
+            }
 
             return `${decorators.join('\n')}\n${field.name}${field.default || field.isUpdatedAt || !field.isRequired ? '?' : ''}: ${tsType};`;
           })
@@ -428,9 +430,9 @@ export class PrismaPlugin extends Plugin {
                 const camelCaseFieldName = handlebars.helpers.camelCase(
                   field.name,
                 );
-                return `${camelCaseFieldName}: ${camelCaseFieldName}
+                return `${camelCaseFieldName}: ${camelCaseFieldName}Connect
       ? {
-          connect: ${camelCaseFieldName}.map((id) => ({ id })),
+          connect: ${camelCaseFieldName}Connect.map((id) => ({ id })),
         }
       : undefined,`;
               } else {
@@ -456,11 +458,7 @@ export class PrismaPlugin extends Plugin {
             (field) =>
               this.isExternalObject(field.type) && field.type !== 'User',
           )
-          .map((field) =>
-            field.isList
-              ? handlebars.helpers.camelCase(field.name)
-              : handlebars.helpers.camelCase(field.name) + 'Id',
-          )
+          .map((field) => `${handlebars.helpers.camelCase(field.name)}Connect`)
           .join(', ');
 
         return new handlebars.SafeString(`const { ${destructuredFields}, ...rest } = data;
@@ -489,6 +487,10 @@ export class PrismaPlugin extends Plugin {
 
     // 如果类型未在映射表中定义，则返回 'any'
     return typeMap[prismaType] || 'any';
+  }
+
+  createApiPropertyDecorator(apiPropertyOptions: string[]): string {
+    return `@ApiProperty({ ${apiPropertyOptions.join(', ')} })`;
   }
 
   registerOptions(program: Command): void {
