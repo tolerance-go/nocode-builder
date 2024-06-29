@@ -1,12 +1,1 @@
-import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsDateString,
-} from 'class-validator';
-
-export class {{pascalCase id}}CreateDto {
-  {{pipeline id 'pascalCase' 'createDtoFields'}}
-}
+{{pipeline id 'pascalCase' 'createDtoFile'}}

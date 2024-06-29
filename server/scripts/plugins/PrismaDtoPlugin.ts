@@ -214,6 +214,52 @@ export class ${handlebars.helpers.pascalCase(modelName)}Dto {
 }`,
       );
     });
+
+    handlebars.registerHelper('createDtoFile', (modelName: string) => {
+      const dmmf: DMMF.Document = this.dmmf;
+      const model = dmmf.datamodel.models.find(
+        (model) => model.name === modelName,
+      );
+      if (!model) {
+        throw new Error(`Model ${modelName} not found in Prisma schema`);
+      }
+
+      const createDtoFields = handlebars.helpers
+        .createDtoFields(modelName)
+        .toString();
+
+      // 动态生成依赖项
+      const dependencies = new Set<string>();
+      if (createDtoFields.includes('@ApiProperty')) {
+        dependencies.add("import { ApiProperty } from '@nestjs/swagger';");
+      }
+      if (createDtoFields.includes('@IsDateString')) {
+        dependencies.add('IsDateString');
+      }
+      if (createDtoFields.includes('@IsInt')) {
+        dependencies.add('IsInt');
+      }
+      if (createDtoFields.includes('@IsOptional')) {
+        dependencies.add('IsOptional');
+      }
+      if (createDtoFields.includes('@IsString')) {
+        dependencies.add('IsString');
+      }
+
+      const classValidatorImports =
+        dependencies.size > 1
+          ? `import { ${Array.from(dependencies).slice(1).join(', ')} } from 'class-validator';`
+          : '';
+
+      return new handlebars.SafeString(
+        `import { ApiProperty } from '@nestjs/swagger';
+${classValidatorImports}
+
+export class ${handlebars.helpers.pascalCase(modelName)}CreateDto {
+  ${createDtoFields}
+}`,
+      );
+    });
   }
 
   mapType(prismaType: string): string {
