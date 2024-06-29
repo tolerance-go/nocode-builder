@@ -70,9 +70,13 @@ export const Header = () => {
           onClick={async () => {
             const insertInRoot = () => {
               const folderIndex = findLastFolderIndex(
-                projectStructureTreeData.map(
-                  (node) => projectTreeDataRecord[node.key],
-                ),
+                projectStructureTreeData.map((node) => {
+                  const recordItem = projectTreeDataRecord[node.key];
+                  if (!recordItem) {
+                    throw new Error("数据不完整。");
+                  }
+                  return recordItem;
+                }),
               );
 
               console.log("folderIndex", folderIndex);
@@ -98,9 +102,13 @@ export const Header = () => {
 
             const insert = (target: ProjectStructureTreeDataNode) => {
               const folderIndex = findLastFolderIndex(
-                (target.children ?? []).map(
-                  (node) => projectTreeDataRecord[node.key],
-                ),
+                (target.children ?? []).map((node) => {
+                  const recordItem = projectTreeDataRecord[node.key];
+                  if (!recordItem) {
+                    throw new Error("数据不完整。");
+                  }
+                  return recordItem;
+                }),
               );
               const newKey = Math.random() + "";
 
@@ -128,6 +136,10 @@ export const Header = () => {
 
             const selectedRecordItem = projectTreeDataRecord[selectedKey];
             const selectedNode = findProjectStructureTreeNode(selectedKey);
+
+            if (!selectedRecordItem) {
+              throw new Error("数据不完整。");
+            }
 
             if (nodeIsFolder(selectedRecordItem)) {
               if (selectedNode) {
@@ -196,6 +208,10 @@ export const Header = () => {
 
             const selectedRecordItem = projectTreeDataRecord[selectedKey];
             const selectedNode = findProjectStructureTreeNode(selectedKey);
+
+            if (!selectedRecordItem) {
+              throw new Error("数据不完整。");
+            }
 
             if (nodeIsFolder(selectedRecordItem)) {
               if (selectedNode) {
