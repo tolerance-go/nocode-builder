@@ -30,9 +30,7 @@ export class TimeChunkController {
     description: 'The project group has been successfully fetched.',
     type: TimeChunkDto,
   })
-  async getTimeChunk(
-    @Param('id') id: string,
-  ): Promise<TimeChunkDto | null> {
+  async getTimeChunk(@Param('id') id: string): Promise<TimeChunkDto | null> {
     const timeChunk = await this.timeChunkService.timeChunk({
       id: Number(id),
     });

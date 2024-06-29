@@ -31,9 +31,7 @@ export class TimeChunkService {
     });
   }
 
-  async createTimeChunk(
-    data: Prisma.TimeChunkCreateInput,
-  ): Promise<TimeChunk> {
+  async createTimeChunk(data: Prisma.TimeChunkCreateInput): Promise<TimeChunk> {
     return this.prisma.timeChunk.create({
       data,
     });

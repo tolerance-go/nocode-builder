@@ -2,6 +2,7 @@ import { Command } from 'commander';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import Handlebars, { HelperOptions } from 'handlebars';
+import * as prettier from 'prettier';
 
 // 导入插件基础类和示例插件
 import { ExamplePlugin } from './plugins/ExamplePlugin';
@@ -78,6 +79,21 @@ function loadPlugins(userPluginNames: string[]): Plugin[] {
   return loadedPlugins;
 }
 
+// 格式化文件内容
+async function formatWithPrettier(filePath: string) {
+  try {
+    const options = await prettier.resolveConfig(filePath);
+    const fileContent = await fs.readFile(filePath, 'utf8');
+    const formatted = await prettier.format(fileContent, {
+      ...options,
+      filepath: filePath,
+    });
+    await fs.writeFile(filePath, formatted, 'utf8');
+  } catch (error) {
+    console.error(`Error formatting file ${filePath}:`, error);
+  }
+}
+
 // 主函数
 (async () => {
   // 第一次解析命令行参数以获取插件列表
@@ -149,6 +165,9 @@ function loadPlugins(userPluginNames: string[]): Plugin[] {
         } else {
           await fs.copyFile(srcPath, destPath); // 直接复制非模板文件
         }
+
+        // 写入文件后进行格式化
+        await formatWithPrettier(destPath);
       }
     }
   }
