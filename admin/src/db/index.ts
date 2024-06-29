@@ -1,5 +1,5 @@
 import Dexie, { Table } from "dexie";
-import { Item } from "../models/Item";
+import { Item } from "../models";
 
 export class Database extends Dexie {
   items: Table<Item, number>;
