@@ -1,8 +1,10 @@
-// copy-template.js
 import { Command } from 'commander';
 import fs from 'fs-extra';
 import path from 'path';
 import Handlebars from 'handlebars';
+
+// 导入插件基础类和示例插件
+import { ExamplePlugin } from './plugins/ExamplePlugin';
 
 // 创建命令行选项
 const program = new Command();
@@ -14,8 +16,33 @@ program
     '模板变量，以键值对形式传入，格式为 key=value，其中 value 可以是中划线、小驼峰、大驼峰或下划线格式。' +
       '可使用的命名转换 Helper 包括: ' +
       '{{camelCase key}} (小驼峰), {{pascalCase key}} (大驼峰), {{kebabCase key}} (中划线), {{snakeCase key}} (下划线)',
-  );
+  )
+  .option('--plugins <plugins...>', '启用的插件列表');
 
+// 内部维护的插件列表
+const availablePlugins = {
+  examplePlugin: new ExamplePlugin(),
+};
+
+// 加载并注册插件
+function loadPlugins(pluginNames) {
+  const loadedPlugins = [];
+
+  pluginNames.forEach((name) => {
+    if (availablePlugins[name]) {
+      const plugin = availablePlugins[name];
+      plugin.registerHelpers(Handlebars);
+      plugin.registerOptions(program);
+      loadedPlugins.push(plugin);
+    } else {
+      console.warn(`插件 ${name} 不存在`);
+    }
+  });
+
+  return loadedPlugins;
+}
+
+// 解析命令行参数
 program.parse(process.argv);
 
 const options = program.opts();
@@ -28,38 +55,11 @@ if (options.vars) {
   });
 }
 
-// Helper 函数
-const toCamelCase = (str) => {
-  return str
-    .replace(/[-_](.)/g, (_, char) => char.toUpperCase())
-    .replace(/^(.)/, (char) => char.toLowerCase());
-};
+// 加载插件
+const plugins = options.plugins ? loadPlugins(options.plugins) : [];
 
-const toPascalCase = (str) => {
-  return str
-    .replace(/[-_](.)/g, (_, char) => char.toUpperCase())
-    .replace(/^(.)/, (char) => char.toUpperCase());
-};
-
-const toKebabCase = (str) => {
-  return str
-    .replace(/([a-z])([A-Z])/g, '$1-$2')
-    .replace(/_/g, '-')
-    .toLowerCase();
-};
-
-const toSnakeCase = (str) => {
-  return str
-    .replace(/([a-z])([A-Z])/g, '$1_$2')
-    .replace(/-/g, '_')
-    .toLowerCase();
-};
-
-// 注册 Handlebars 自定义 Helper
-Handlebars.registerHelper('camelCase', toCamelCase);
-Handlebars.registerHelper('pascalCase', toPascalCase);
-Handlebars.registerHelper('kebabCase', toKebabCase);
-Handlebars.registerHelper('snakeCase', toSnakeCase);
+// 调用插件处理模板变量的方法
+plugins.forEach((plugin) => plugin.processTemplateVariables(templateVariables));
 
 // 递归复制并处理模板文件和文件夹
 async function copyAndProcessTemplate(srcDir, destDir, templateVariables) {
