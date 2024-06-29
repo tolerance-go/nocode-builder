@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class TimeChunkCreateDto {
   @ApiProperty({ required: true })
@@ -11,8 +11,9 @@ export class TimeChunkCreateDto {
   @IsString()
   description?: string;
 
-  @ApiProperty({ required: false })
-  timeNodesConnect?: number[];
+  @ApiProperty({ required: true })
+  @IsInt()
+  userId: number;
 
   @ApiProperty({ required: false, nullable: true })
   @IsOptional()

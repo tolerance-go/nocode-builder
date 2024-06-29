@@ -29,7 +29,7 @@ export class ProjectGroupUpdateOperationQueryDto {
   })
   @IsOptional()
   @IsString()
-  @IsIn(['name', 'createdAt', 'updatedAt'])
+  @IsIn(['createdAt', 'updatedAt'])
   orderBy?: string;
 
   @ApiProperty({

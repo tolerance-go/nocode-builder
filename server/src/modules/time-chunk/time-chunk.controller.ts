@@ -5,15 +5,15 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  // Post,
   Query,
-  Req,
-  UseGuards,
+  // Req,
+  // UseGuards,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { TimeChunkCreateDto } from './dtos/time-chunk-create.dto';
+// import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
+// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+// import { TimeChunkCreateDto } from './dtos/time-chunk-create.dto';
 import { TimeChunkQueryDto } from './dtos/time-chunk-query.dto';
 import { TimeChunkUpdateDto } from './dtos/time-chunk-update.dto';
 import { TimeChunkDto } from './dtos/time-chunk.dto';
@@ -55,37 +55,33 @@ export class TimeChunkController {
     return timeChunks.map(toTimeChunkDto);
   }
 
-  @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiResponse({
-    status: 201,
-    description: 'The project group has been successfully created.',
-    type: TimeChunkDto,
-  })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  async createTimeChunk(
-    @Body() data: TimeChunkCreateDto,
-    @Req() req: Request & { user: JwtUserDto },
-  ): Promise<TimeChunkDto> {
-    const userId = req.user.id;
-
-    const { timeNodesConnect, ...rest } = data;
-    const timeChunk = await this.timeChunkService.createTimeChunk({
-      ...rest,
-      user: {
-        connect: {
-          id: userId,
-        },
-      },
-      timeNodes: timeNodesConnect
-        ? {
-            connect: timeNodesConnect.map((id) => ({ id })),
-          }
-        : undefined,
-    });
-
-    return toTimeChunkDto(timeChunk);
-  }
+  // @Post()
+  // @UseGuards(JwtAuthGuard)
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'The project group has been successfully created.',
+  //   type: TimeChunkDto,
+  // })
+  // @ApiResponse({ status: 400, description: 'Bad Request.' })
+  // async createTimeChunk(
+  //   @Body() data: TimeChunkCreateDto,
+  //   @Req() req: Request & { user: JwtUserDto },
+  // ): Promise<TimeChunkDto> {
+  //   const { ...rest } = data;
+  //   const userId = req.user.id;
+  //   const timeChunk =
+  //     await this.timeChunkService.createTimeChunk(
+  //       {
+  //         ...rest,
+  //         owner: {
+  //           connect: {
+  //             id: userId,
+  //           },
+  //         },
+  //       },
+  //     );
+  //   return toTimeChunkDto(timeChunk);
+  // }
 
   @Patch(':id')
   @ApiResponse({

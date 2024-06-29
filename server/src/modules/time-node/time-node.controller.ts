@@ -5,15 +5,15 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  // Post,
   Query,
-  Req,
-  UseGuards,
+  // Req,
+  // UseGuards,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { TimeNodeCreateDto } from './dtos/time-node-create.dto';
+// import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
+// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+// import { TimeNodeCreateDto } from './dtos/time-node-create.dto';
 import { TimeNodeQueryDto } from './dtos/time-node-query.dto';
 import { TimeNodeUpdateDto } from './dtos/time-node-update.dto';
 import { TimeNodeDto } from './dtos/time-node.dto';
@@ -53,30 +53,33 @@ export class TimeNodeController {
     return timeNodes.map(toTimeNodeDto);
   }
 
-  @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiResponse({
-    status: 201,
-    description: 'The project group has been successfully created.',
-    type: TimeNodeDto,
-  })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  async createTimeNode(
-    @Body() data: TimeNodeCreateDto,
-    @Req() req: Request & { user: JwtUserDto },
-  ): Promise<TimeNodeDto> {
-    const {
-      timeChunkConnect,
-      projectOperationConnect,
-      projectGroupOperationConnect,
-      ...rest
-    } = data;
-    const timeNode = await this.timeNodeService.createTimeNode({
-      ...rest,
-    });
-
-    return toTimeNodeDto(timeNode);
-  }
+  // @Post()
+  // @UseGuards(JwtAuthGuard)
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'The project group has been successfully created.',
+  //   type: TimeNodeDto,
+  // })
+  // @ApiResponse({ status: 400, description: 'Bad Request.' })
+  // async createTimeNode(
+  //   @Body() data: TimeNodeCreateDto,
+  //   @Req() req: Request & { user: JwtUserDto },
+  // ): Promise<TimeNodeDto> {
+  //   const { ...rest } = data;
+  //   const userId = req.user.id;
+  //   const timeNode =
+  //     await this.timeNodeService.createTimeNode(
+  //       {
+  //         ...rest,
+  //         owner: {
+  //           connect: {
+  //             id: userId,
+  //           },
+  //         },
+  //       },
+  //     );
+  //   return toTimeNodeDto(timeNode);
+  // }
 
   @Patch(':id')
   @ApiResponse({

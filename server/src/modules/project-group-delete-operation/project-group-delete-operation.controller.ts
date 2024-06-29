@@ -5,15 +5,15 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  // Post,
   Query,
-  Req,
-  UseGuards,
+  // Req,
+  // UseGuards,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ProjectGroupDeleteOperationCreateDto } from './dtos/project-group-delete-operation-create.dto';
+// import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
+// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+// import { ProjectGroupDeleteOperationCreateDto } from './dtos/project-group-delete-operation-create.dto';
 import { ProjectGroupDeleteOperationQueryDto } from './dtos/project-group-delete-operation-query.dto';
 import { ProjectGroupDeleteOperationUpdateDto } from './dtos/project-group-delete-operation-update.dto';
 import { ProjectGroupDeleteOperationDto } from './dtos/project-group-delete-operation.dto';
@@ -67,40 +67,33 @@ export class ProjectGroupDeleteOperationController {
     return projectGroupDeleteOperations.map(toProjectGroupDeleteOperationDto);
   }
 
-  @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiResponse({
-    status: 201,
-    description: 'The project group has been successfully created.',
-    type: ProjectGroupDeleteOperationDto,
-  })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  async createProjectGroupDeleteOperation(
-    @Body() data: ProjectGroupDeleteOperationCreateDto,
-    @Req() req: Request & { user: JwtUserDto },
-  ): Promise<ProjectGroupDeleteOperationDto> {
-    const { parentGroupId, ...rest } = data;
-    const userId = req.user.id;
-    const projectGroupDeleteOperation =
-      await this.projectGroupDeleteOperationService.createProjectGroupDeleteOperation(
-        {
-          ...rest,
-          owner: {
-            connect: {
-              id: userId,
-            },
-          },
-          parentGroup: parentGroupId
-            ? {
-                connect: {
-                  id: parentGroupId,
-                },
-              }
-            : undefined,
-        },
-      );
-    return toProjectGroupDeleteOperationDto(projectGroupDeleteOperation);
-  }
+  // @Post()
+  // @UseGuards(JwtAuthGuard)
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'The project group has been successfully created.',
+  //   type: ProjectGroupDeleteOperationDto,
+  // })
+  // @ApiResponse({ status: 400, description: 'Bad Request.' })
+  // async createProjectGroupDeleteOperation(
+  //   @Body() data: ProjectGroupDeleteOperationCreateDto,
+  //   @Req() req: Request & { user: JwtUserDto },
+  // ): Promise<ProjectGroupDeleteOperationDto> {
+  //   const { ...rest } = data;
+  //   const userId = req.user.id;
+  //   const projectGroupDeleteOperation =
+  //     await this.projectGroupDeleteOperationService.createProjectGroupDeleteOperation(
+  //       {
+  //         ...rest,
+  //         owner: {
+  //           connect: {
+  //             id: userId,
+  //           },
+  //         },
+  //       },
+  //     );
+  //   return toProjectGroupDeleteOperationDto(projectGroupDeleteOperation);
+  // }
 
   @Patch(':id')
   @ApiResponse({

@@ -5,15 +5,15 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  // Post,
   Query,
-  Req,
-  UseGuards,
+  // Req,
+  // UseGuards,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ProjectCreateOperationCreateDto } from './dtos/project-create-operation-create.dto';
+// import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
+// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+// import { ProjectCreateOperationCreateDto } from './dtos/project-create-operation-create.dto';
 import { ProjectCreateOperationQueryDto } from './dtos/project-create-operation-query.dto';
 import { ProjectCreateOperationUpdateDto } from './dtos/project-create-operation-update.dto';
 import { ProjectCreateOperationDto } from './dtos/project-create-operation.dto';
@@ -22,7 +22,9 @@ import { toProjectCreateOperationDto } from './utils/toProjectCreateOperationDto
 
 @Controller('project-groups')
 export class ProjectCreateOperationController {
-  constructor(private readonly projectCreateOperationService: ProjectCreateOperationService) {}
+  constructor(
+    private readonly projectCreateOperationService: ProjectCreateOperationService,
+  ) {}
 
   @Get(':id')
   @ApiResponse({
@@ -33,10 +35,13 @@ export class ProjectCreateOperationController {
   async getProjectCreateOperation(
     @Param('id') id: string,
   ): Promise<ProjectCreateOperationDto | null> {
-    const projectCreateOperation = await this.projectCreateOperationService.projectCreateOperation({
-      id: Number(id),
-    });
-    return projectCreateOperation ? toProjectCreateOperationDto(projectCreateOperation) : null;
+    const projectCreateOperation =
+      await this.projectCreateOperationService.projectCreateOperation({
+        id: Number(id),
+      });
+    return projectCreateOperation
+      ? toProjectCreateOperationDto(projectCreateOperation)
+      : null;
   }
 
   @Get()
@@ -48,46 +53,43 @@ export class ProjectCreateOperationController {
   async getProjectCreateOperations(
     @Query() query: ProjectCreateOperationQueryDto,
   ): Promise<ProjectCreateOperationDto[]> {
-    const projectCreateOperations = await this.projectCreateOperationService.projectCreateOperations({
-      skip: query.skip,
-      take: query.take,
-      cursor: query.filter ? { id: Number(query.filter) } : undefined,
-      orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
-    });
+    const projectCreateOperations =
+      await this.projectCreateOperationService.projectCreateOperations({
+        skip: query.skip,
+        take: query.take,
+        cursor: query.filter ? { id: Number(query.filter) } : undefined,
+        orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
+      });
     return projectCreateOperations.map(toProjectCreateOperationDto);
   }
 
-  @Post()
-  @UseGuards(JwtAuthGuard)
-  @ApiResponse({
-    status: 201,
-    description: 'The project group has been successfully created.',
-    type: ProjectCreateOperationDto,
-  })
-  @ApiResponse({ status: 400, description: 'Bad Request.' })
-  async createProjectCreateOperation(
-    @Body() data: ProjectCreateOperationCreateDto,
-    @Req() req: Request & { user: JwtUserDto },
-  ): Promise<ProjectCreateOperationDto> {
-    const { parentGroupId, ...rest } = data;
-    const userId = req.user.id;
-    const projectCreateOperation = await this.projectCreateOperationService.createProjectCreateOperation({
-      ...rest,
-      owner: {
-        connect: {
-          id: userId,
-        },
-      },
-      parentGroup: parentGroupId
-        ? {
-            connect: {
-              id: parentGroupId,
-            },
-          }
-        : undefined,
-    });
-    return toProjectCreateOperationDto(projectCreateOperation);
-  }
+  // @Post()
+  // @UseGuards(JwtAuthGuard)
+  // @ApiResponse({
+  //   status: 201,
+  //   description: 'The project group has been successfully created.',
+  //   type: ProjectCreateOperationDto,
+  // })
+  // @ApiResponse({ status: 400, description: 'Bad Request.' })
+  // async createProjectCreateOperation(
+  //   @Body() data: ProjectCreateOperationCreateDto,
+  //   @Req() req: Request & { user: JwtUserDto },
+  // ): Promise<ProjectCreateOperationDto> {
+  //   const { ...rest } = data;
+  //   const userId = req.user.id;
+  //   const projectCreateOperation =
+  //     await this.projectCreateOperationService.createProjectCreateOperation(
+  //       {
+  //         ...rest,
+  //         owner: {
+  //           connect: {
+  //             id: userId,
+  //           },
+  //         },
+  //       },
+  //     );
+  //   return toProjectCreateOperationDto(projectCreateOperation);
+  // }
 
   @Patch(':id')
   @ApiResponse({
@@ -99,10 +101,11 @@ export class ProjectCreateOperationController {
     @Param('id') id: string,
     @Body() data: ProjectCreateOperationUpdateDto,
   ): Promise<ProjectCreateOperationDto> {
-    const projectCreateOperation = await this.projectCreateOperationService.updateProjectCreateOperation({
-      where: { id: Number(id) },
-      data,
-    });
+    const projectCreateOperation =
+      await this.projectCreateOperationService.updateProjectCreateOperation({
+        where: { id: Number(id) },
+        data,
+      });
     return toProjectCreateOperationDto(projectCreateOperation);
   }
 
@@ -112,10 +115,13 @@ export class ProjectCreateOperationController {
     description: 'The project group has been successfully deleted.',
     type: ProjectCreateOperationDto,
   })
-  async deleteProjectCreateOperation(@Param('id') id: string): Promise<ProjectCreateOperationDto> {
-    const projectCreateOperation = await this.projectCreateOperationService.deleteProjectCreateOperation({
-      id: Number(id),
-    });
+  async deleteProjectCreateOperation(
+    @Param('id') id: string,
+  ): Promise<ProjectCreateOperationDto> {
+    const projectCreateOperation =
+      await this.projectCreateOperationService.deleteProjectCreateOperation({
+        id: Number(id),
+      });
     return toProjectCreateOperationDto(projectCreateOperation);
   }
 }

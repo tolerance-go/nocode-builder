@@ -1,30 +1,23 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  IsInt,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsDateString,
-} from 'class-validator';
+import { IsInt, IsOptional } from 'class-validator';
 
 export class ProjectGroupOperationCreateDto {
-  @ApiProperty()
-  @IsString()
-  @IsNotEmpty()
-  name: string;
-
-  @ApiProperty({ required: false })
+  @ApiProperty({ required: true })
   @IsInt()
-  @IsOptional()
-  parentGroupId?: number;
+  projectGroupId: number;
 
-  @ApiProperty({ required: false })
-  @IsDateString()
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
-  createdAt?: string;
+  @IsInt()
+  projectGroupCreateOperationId?: number;
 
-  @ApiProperty({ required: false })
-  @IsDateString()
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
-  updatedAt?: string;
+  @IsInt()
+  projectGroupUpdateOperationId?: number;
+
+  @ApiProperty({ required: false, nullable: true })
+  @IsOptional()
+  @IsInt()
+  projectGroupDeleteOperationId?: number;
 }

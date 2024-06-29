@@ -5,15 +5,15 @@ import {
   Get,
   Param,
   Patch,
-  Post,
+  // Post,
   Query,
-  Req,
-  UseGuards,
+  // Req,
+  // UseGuards,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { {{pascalCase id}}CreateDto } from './dtos/{{kebabCase id}}-create.dto';
+// import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
+// import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+// import { {{pascalCase id}}CreateDto } from './dtos/{{kebabCase id}}-create.dto';
 import { {{pascalCase id}}QueryDto } from './dtos/{{kebabCase id}}-query.dto';
 import { {{pascalCase id}}UpdateDto } from './dtos/{{kebabCase id}}-update.dto';
 import { {{pascalCase id}}Dto } from './dtos/{{kebabCase id}}.dto';
@@ -62,17 +62,17 @@ export class {{pascalCase id}}Controller {
   // @ApiResponse({
   //   status: 201,
   //   description: 'The project group has been successfully created.',
-  //   type: ProjectGroupUpdateOperationDto,
+  //   type: {{pascalCase id}}Dto,
   // })
   // @ApiResponse({ status: 400, description: 'Bad Request.' })
-  // async createProjectGroupUpdateOperation(
-  //   @Body() data: ProjectGroupUpdateOperationCreateDto,
+  // async create{{pascalCase id}}(
+  //   @Body() data: {{pascalCase id}}CreateDto,
   //   @Req() req: Request & { user: JwtUserDto },
-  // ): Promise<ProjectGroupUpdateOperationDto> {
+  // ): Promise<{{pascalCase id}}Dto> {
   //   const { ...rest } = data;
   //   const userId = req.user.id;
-  //   const projectGroupUpdateOperation =
-  //     await this.projectGroupUpdateOperationService.createProjectGroupUpdateOperation(
+  //   const {{camelCase id}} =
+  //     await this.{{camelCase id}}Service.create{{pascalCase id}}(
   //       {
   //         ...rest,
   //         owner: {
@@ -82,7 +82,7 @@ export class {{pascalCase id}}Controller {
   //         },
   //       },
   //     );
-  //   return toProjectGroupUpdateOperationDto(projectGroupUpdateOperation);
+  //   return to{{pascalCase id}}Dto({{camelCase id}});
   // }
 
   @Patch(':id')

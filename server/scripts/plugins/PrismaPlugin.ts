@@ -416,55 +416,6 @@ export class PrismaPlugin extends Plugin {
           .join(',\n'),
       );
     });
-
-    handlebars.registerHelper(
-      'createControllerConnect',
-      (modelName: string) => {
-        const dmmf: DMMF.Document = this.dmmf;
-        const model = dmmf.datamodel.models.find(
-          (model) => model.name === modelName,
-        );
-        if (!model) {
-          throw new Error(`Model ${modelName} not found in Prisma schema`);
-        }
-
-        let hasUserFiled = false;
-
-        const connections = model.fields
-          .map((field) => {
-            if (this.isExternalObject(field.type)) {
-              if (field.type === 'User') {
-                hasUserFiled = true;
-                return `${field.name}: {
-      connect: {
-        id: userId,
-      },
-    },`;
-              }
-            }
-            return '';
-          })
-          .filter(Boolean) // 过滤掉空字符串
-          .join('\n');
-
-        const destructuredFields = model.fields
-          .filter(
-            (field) =>
-              this.isExternalObject(field.type) && field.type !== 'User',
-          )
-          .map((field) => `${handlebars.helpers.camelCase(field.name)}Connect`)
-          .join(', ');
-
-        const userId = `const userId = req.user.id;\n`;
-
-        return new handlebars.SafeString(`${hasUserFiled ? userId : ''}const { ${destructuredFields}, ...rest } = data;
-    const ${handlebars.helpers.camelCase(modelName)} = await this.${handlebars.helpers.camelCase(modelName)}Service.create${modelName}({
-      ...rest,
-      ${connections}
-    });
-`);
-      },
-    );
   }
 
   getUserTypeField(model: DMMF.Model) {
