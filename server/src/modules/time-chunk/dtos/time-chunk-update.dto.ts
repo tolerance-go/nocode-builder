@@ -1,22 +1,29 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsInt, IsOptional, IsString } from 'class-validator';
 
 export class TimeChunkUpdateDto {
-  @ApiProperty({
-    description: 'The name of the project group',
-    example: 'Project Group 1',
-    required: false,
-  })
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   @IsString()
   name?: string;
 
-  @ApiProperty({
-    description: 'The parent group ID of the project group',
-    example: 1,
-    required: false,
-  })
+  @ApiProperty({ required: false, nullable: true })
+  @IsOptional()
+  @IsString()
+  description?: string;
+
+  @ApiProperty({ required: false, nullable: true })
   @IsOptional()
   @IsInt()
-  parentGroupId?: number;
+  userId?: number;
+
+  @ApiProperty({ required: false, nullable: true })
+  @IsOptional()
+  @IsDateString()
+  createdAt?: string;
+
+  @ApiProperty({ required: false, nullable: true })
+  @IsOptional()
+  @IsDateString()
+  updatedAt?: string;
 }

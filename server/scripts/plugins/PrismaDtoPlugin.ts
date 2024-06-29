@@ -207,11 +207,11 @@ export class PrismaDtoPlugin extends Plugin {
 
       return new handlebars.SafeString(
         `import { ApiProperty } from '@nestjs/swagger';
-${classValidatorImports}
-
-export class ${handlebars.helpers.pascalCase(modelName)}Dto {
-  ${dtoFields}
-}`,
+  ${classValidatorImports}
+  
+  export class ${handlebars.helpers.pascalCase(modelName)}Dto {
+    ${dtoFields}
+  }`,
       );
     });
 
@@ -253,11 +253,119 @@ export class ${handlebars.helpers.pascalCase(modelName)}Dto {
 
       return new handlebars.SafeString(
         `import { ApiProperty } from '@nestjs/swagger';
-${classValidatorImports}
+  ${classValidatorImports}
+  
+  export class ${handlebars.helpers.pascalCase(modelName)}CreateDto {
+    ${createDtoFields}
+  }`,
+      );
+    });
 
-export class ${handlebars.helpers.pascalCase(modelName)}CreateDto {
-  ${createDtoFields}
-}`,
+    handlebars.registerHelper('updateDtoFields', (modelName: string) => {
+      const dmmf: DMMF.Document = this.dmmf;
+      const model = dmmf.datamodel.models.find(
+        (model) => model.name === modelName,
+      );
+      if (!model) {
+        throw new Error(`Model ${modelName} not found in Prisma schema`);
+      }
+
+      return new handlebars.SafeString(
+        model.fields
+          .map((field) => {
+            // 过滤掉 id 字段和外部对象字段
+            if (field.isId) {
+              return '';
+            }
+
+            const isExternalObject = dmmf.datamodel.models.some(
+              (model) => model.name === field.type,
+            );
+            if (isExternalObject) {
+              return '';
+            }
+
+            const decorators = [];
+            const apiPropertyOptions = [];
+
+            if (field.documentation) {
+              apiPropertyOptions.push(`description: '${field.documentation}'`);
+            }
+
+            apiPropertyOptions.push(`required: false, nullable: true`);
+            decorators.push(`@IsOptional()`);
+
+            decorators.unshift(
+              `@ApiProperty({ ${apiPropertyOptions.join(', ')} })`,
+            );
+
+            switch (field.type) {
+              case 'String':
+                decorators.push(`@IsString()`);
+                break;
+              case 'Int':
+                decorators.push(`@IsInt()`);
+                break;
+              case 'DateTime':
+                decorators.push(`@IsDateString()`);
+                break;
+              // Add more cases for other types as needed
+              default:
+                break;
+            }
+
+            const tsType = this.mapType(field.type);
+
+            return `${decorators.join('\n')}\n${field.name}?: ${tsType};`;
+          })
+          .filter(Boolean) // 过滤掉空字符串
+          .join('\n\n'),
+      );
+    });
+
+    handlebars.registerHelper('updateDtoFile', (modelName: string) => {
+      const dmmf: DMMF.Document = this.dmmf;
+      const model = dmmf.datamodel.models.find(
+        (model) => model.name === modelName,
+      );
+      if (!model) {
+        throw new Error(`Model ${modelName} not found in Prisma schema`);
+      }
+
+      const updateDtoFields = handlebars.helpers
+        .updateDtoFields(modelName)
+        .toString();
+
+      // 动态生成依赖项
+      const dependencies = new Set<string>();
+      if (updateDtoFields.includes('@ApiProperty')) {
+        dependencies.add("import { ApiProperty } from '@nestjs/swagger';");
+      }
+      if (updateDtoFields.includes('@IsDateString')) {
+        dependencies.add('IsDateString');
+      }
+      if (updateDtoFields.includes('@IsInt')) {
+        dependencies.add('IsInt');
+      }
+      if (updateDtoFields.includes('@IsOptional')) {
+        dependencies.add('IsOptional');
+      }
+      if (updateDtoFields.includes('@IsString')) {
+        dependencies.add('IsString');
+      }
+
+      const classValidatorImports =
+        dependencies.size > 1
+          ? `import { ${Array.from(dependencies).slice(1).join(', ')} } from 'class-validator';`
+          : '';
+
+      return new handlebars.SafeString(
+        `import { ApiProperty } from '@nestjs/swagger';
+  ${classValidatorImports}
+  
+  export class ${handlebars.helpers.pascalCase(modelName)}UpdateDto {
+    ${updateDtoFields}
+  }`,
       );
     });
   }
