@@ -188,7 +188,7 @@ export const createServerSlice: ImmerStateCreator<
 
       if (
         snapshot.dataBaseTimelineChunks.length > 0 &&
-        // 倒数第二或者之前
+        // 下标小于最后一个
         snapshot.currentChunksIndex < snapshot.dataBaseTimelineChunks.length - 1
       ) {
         if (!snapshot.isConsumingChunks) {
