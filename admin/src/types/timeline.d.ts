@@ -21,7 +21,7 @@ export type DeleteTimelineItem = DataBaseTimelineItemBase & {
 export type ProjectDeleteTimelineItem = DeleteTimelineItem & {
   tableName: "project";
   actionName: "delete";
-  record: API.ProjectDto;
+  record: Pick<API.ProjectDto, "id" | "name">;
 };
 
 export type ProjectGroupDeleteTimelineItem = DeleteTimelineItem & {

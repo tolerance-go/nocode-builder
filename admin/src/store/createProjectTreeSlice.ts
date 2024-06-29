@@ -305,20 +305,17 @@ export const createProjectTreeSlice: ImmerStateCreator<
 
       if (removedItem.type == "file") {
         if (removedItem.id !== -1) {
-          const project = get().findProjectById(removedItem.id);
-          if (!project) {
-            throw new Error("数据不完整。");
-          }
+          // const project = get().findProjectById(removedItem.id);
+          // if (!project) {
+          //   throw new Error("数据不完整。");
+          // }
           get().addTimelineItemToPool({
             tableName: "project",
             createdAt: new Date().toISOString(),
             actionName: "delete",
             record: {
               name: removedItem.title,
-              createdAt: project.createdAt,
-              updatedAt: project.updatedAt,
-              id: project.id,
-              ownerId: project.ownerId,
+              id: removedItem.id,
             },
           });
         }
