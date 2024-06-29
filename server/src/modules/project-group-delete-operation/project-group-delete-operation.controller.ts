@@ -22,7 +22,9 @@ import { toProjectGroupDeleteOperationDto } from './utils/toProjectGroupDeleteOp
 
 @Controller('project-groups')
 export class ProjectGroupDeleteOperationController {
-  constructor(private readonly projectGroupDeleteOperationService: ProjectGroupDeleteOperationService) {}
+  constructor(
+    private readonly projectGroupDeleteOperationService: ProjectGroupDeleteOperationService,
+  ) {}
 
   @Get(':id')
   @ApiResponse({
@@ -33,10 +35,15 @@ export class ProjectGroupDeleteOperationController {
   async getProjectGroupDeleteOperation(
     @Param('id') id: string,
   ): Promise<ProjectGroupDeleteOperationDto | null> {
-    const projectGroupDeleteOperation = await this.projectGroupDeleteOperationService.projectGroupDeleteOperation({
-      id: Number(id),
-    });
-    return projectGroupDeleteOperation ? toProjectGroupDeleteOperationDto(projectGroupDeleteOperation) : null;
+    const projectGroupDeleteOperation =
+      await this.projectGroupDeleteOperationService.projectGroupDeleteOperation(
+        {
+          id: Number(id),
+        },
+      );
+    return projectGroupDeleteOperation
+      ? toProjectGroupDeleteOperationDto(projectGroupDeleteOperation)
+      : null;
   }
 
   @Get()
@@ -48,12 +55,15 @@ export class ProjectGroupDeleteOperationController {
   async getProjectGroupDeleteOperations(
     @Query() query: ProjectGroupDeleteOperationQueryDto,
   ): Promise<ProjectGroupDeleteOperationDto[]> {
-    const projectGroupDeleteOperations = await this.projectGroupDeleteOperationService.projectGroupDeleteOperations({
-      skip: query.skip,
-      take: query.take,
-      cursor: query.filter ? { id: Number(query.filter) } : undefined,
-      orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
-    });
+    const projectGroupDeleteOperations =
+      await this.projectGroupDeleteOperationService.projectGroupDeleteOperations(
+        {
+          skip: query.skip,
+          take: query.take,
+          cursor: query.filter ? { id: Number(query.filter) } : undefined,
+          orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
+        },
+      );
     return projectGroupDeleteOperations.map(toProjectGroupDeleteOperationDto);
   }
 
@@ -71,21 +81,24 @@ export class ProjectGroupDeleteOperationController {
   ): Promise<ProjectGroupDeleteOperationDto> {
     const { parentGroupId, ...rest } = data;
     const userId = req.user.id;
-    const projectGroupDeleteOperation = await this.projectGroupDeleteOperationService.createProjectGroupDeleteOperation({
-      ...rest,
-      owner: {
-        connect: {
-          id: userId,
-        },
-      },
-      parentGroup: parentGroupId
-        ? {
+    const projectGroupDeleteOperation =
+      await this.projectGroupDeleteOperationService.createProjectGroupDeleteOperation(
+        {
+          ...rest,
+          owner: {
             connect: {
-              id: parentGroupId,
+              id: userId,
             },
-          }
-        : undefined,
-    });
+          },
+          parentGroup: parentGroupId
+            ? {
+                connect: {
+                  id: parentGroupId,
+                },
+              }
+            : undefined,
+        },
+      );
     return toProjectGroupDeleteOperationDto(projectGroupDeleteOperation);
   }
 
@@ -99,10 +112,13 @@ export class ProjectGroupDeleteOperationController {
     @Param('id') id: string,
     @Body() data: ProjectGroupDeleteOperationUpdateDto,
   ): Promise<ProjectGroupDeleteOperationDto> {
-    const projectGroupDeleteOperation = await this.projectGroupDeleteOperationService.updateProjectGroupDeleteOperation({
-      where: { id: Number(id) },
-      data,
-    });
+    const projectGroupDeleteOperation =
+      await this.projectGroupDeleteOperationService.updateProjectGroupDeleteOperation(
+        {
+          where: { id: Number(id) },
+          data,
+        },
+      );
     return toProjectGroupDeleteOperationDto(projectGroupDeleteOperation);
   }
 
@@ -112,10 +128,15 @@ export class ProjectGroupDeleteOperationController {
     description: 'The project group has been successfully deleted.',
     type: ProjectGroupDeleteOperationDto,
   })
-  async deleteProjectGroupDeleteOperation(@Param('id') id: string): Promise<ProjectGroupDeleteOperationDto> {
-    const projectGroupDeleteOperation = await this.projectGroupDeleteOperationService.deleteProjectGroupDeleteOperation({
-      id: Number(id),
-    });
+  async deleteProjectGroupDeleteOperation(
+    @Param('id') id: string,
+  ): Promise<ProjectGroupDeleteOperationDto> {
+    const projectGroupDeleteOperation =
+      await this.projectGroupDeleteOperationService.deleteProjectGroupDeleteOperation(
+        {
+          id: Number(id),
+        },
+      );
     return toProjectGroupDeleteOperationDto(projectGroupDeleteOperation);
   }
 }
