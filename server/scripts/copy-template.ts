@@ -5,6 +5,7 @@ import Handlebars from 'handlebars';
 
 // 导入插件基础类和示例插件
 import { ExamplePlugin } from './plugins/ExamplePlugin';
+import { Plugin } from './plugins/Plugin';
 
 // 创建命令行选项
 const program = new Command();
@@ -20,13 +21,13 @@ program
   .option('--plugins <plugins...>', '启用的插件列表');
 
 // 内部维护的插件列表
-const availablePlugins = {
+const availablePlugins: Record<string, Plugin> = {
   examplePlugin: new ExamplePlugin(),
 };
 
 // 加载并注册插件
-function loadPlugins(pluginNames) {
-  const loadedPlugins = [];
+function loadPlugins(pluginNames: string[]): Plugin[] {
+  const loadedPlugins: Plugin[] = [];
 
   pluginNames.forEach((name) => {
     if (availablePlugins[name]) {
@@ -46,10 +47,10 @@ function loadPlugins(pluginNames) {
 program.parse(process.argv);
 
 const options = program.opts();
-const templateVariables = {};
+const templateVariables: Record<string, any> = {};
 
 if (options.vars) {
-  options.vars.forEach((varStr) => {
+  options.vars.forEach((varStr: string) => {
     const [key, value] = varStr.split('=');
     templateVariables[key] = value;
   });
@@ -62,7 +63,11 @@ const plugins = options.plugins ? loadPlugins(options.plugins) : [];
 plugins.forEach((plugin) => plugin.processTemplateVariables(templateVariables));
 
 // 递归复制并处理模板文件和文件夹
-async function copyAndProcessTemplate(srcDir, destDir, templateVariables) {
+async function copyAndProcessTemplate(
+  srcDir: string,
+  destDir: string,
+  templateVariables: Record<string, any>,
+) {
   await fs.ensureDir(destDir);
   const items = await fs.readdir(srcDir);
 
