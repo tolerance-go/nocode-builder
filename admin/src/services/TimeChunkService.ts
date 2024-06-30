@@ -8,6 +8,7 @@ export class TimeChunkService extends SingletonController {
       ...data,
       createdAt: new Date(currentTime),
       updatedAt: new Date(currentTime),
+      userId: -1,
     });
   }
 }
