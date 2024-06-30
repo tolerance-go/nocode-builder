@@ -218,9 +218,7 @@ class DBFile extends File {
       )
       .join('\n');
 
-    return `${super.print()}
-
-export class Database extends Dexie {
+    return `export class Database extends Dexie {
 ${tablesStr}
 
   constructor() {
