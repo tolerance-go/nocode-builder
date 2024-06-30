@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { generateApi } from 'swagger-typescript-api';
+import { format } from 'prettier';
 
 /* NOTE: all fields are optional expect one of `input`, `url`, `spec` */
 generateApi({
@@ -9,10 +10,6 @@ generateApi({
   url: 'http://localhost:3000/api-json',
   templates: path.resolve('./templates/api/used'),
   httpClientType: 'axios', // or "fetch"
-  prettier: {
-    singleQuote: true,
-    trailingComma: 'all',
-  },
   codeGenConstructs: () => ({
     Keyword: {
       Any: 'unknown',
@@ -20,10 +17,22 @@ generateApi({
   }),
 })
   .then(({ files }) => {
-    files.forEach(({ fileName, fileContent, fileExtension }) => {
+    files.forEach(async ({ fileName, fileContent, fileExtension }) => {
       fs.writeFileSync(
         path.resolve('src/_gen', `${fileName}${fileExtension}`),
-        fileContent,
+        await format(
+          `/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED        ##
+ * ---------------------------------------------------------------
+ */
+
+${fileContent}
+`,
+          {
+            parser: 'typescript',
+          },
+        ),
       );
     });
   })
