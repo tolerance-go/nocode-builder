@@ -202,6 +202,7 @@ class DBFile extends File {
         '@/_gen/models',
       ),
       new Import(['Dexie', 'Table'], 'dexie'),
+      new Import(['OptionalKeys'], '@/utils'),
     ];
     super(classes, imports);
   }
@@ -224,16 +225,16 @@ class DBFile extends File {
       (field) => field.hasDefaultValue,
     );
 
-    const omitFields = new Set([
+    const optionalFields = new Set([
       ...idFieldNames,
       ...updateFieldNames,
       ...defaultFieldNames,
     ]);
-    const omitFieldsStr = Array.from(omitFields)
+    const optionalFieldsStr = Array.from(optionalFields)
       .map((field) => `'${field}'`)
       .join(' | ');
 
-    return `Omit<${classItem.printName}, ${omitFieldsStr}>`;
+    return `OptionalKeys<${classItem.printName}, ${optionalFieldsStr}>`;
   }
 
   print(): string {
@@ -278,6 +279,7 @@ class DBFile extends File {
 
     return `import { ${dynamicImports} } from '@/_gen/models';
 import Dexie, { Table } from 'dexie';
+import { OptionalKeys } from '@/utils';
 
 ${insertTypesStr}
 

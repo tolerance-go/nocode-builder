@@ -1,9 +1,13 @@
-import { db } from '@/_gen/db';
-import { TimeChunkModel } from '@/_gen/models';
+import { TimeChunkModelInsertType, db } from '@/_gen/db';
 import { SingletonController } from '@/utils';
 
 export class TimeChunkService extends SingletonController {
-  create(data: Omit<TimeChunkModel, 'id'>) {
-    db.timeChunks.add(data);
+  create(data: TimeChunkModelInsertType) {
+    const currentTime = new Date().getTime();
+    db.timeChunks.add({
+      ...data,
+      createdAt: new Date(currentTime),
+      updatedAt: new Date(currentTime),
+    });
   }
 }

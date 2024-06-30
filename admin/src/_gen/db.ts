@@ -20,53 +20,57 @@ import {
   ProjectGroupDeleteOperationModel,
 } from '@/_gen/models';
 import Dexie, { Table } from 'dexie';
+import { OptionalKeys } from '@/utils';
 
-export type UserModelInsertType = Omit<
+export type UserModelInsertType = OptionalKeys<
   UserModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type ProjectModelInsertType = Omit<
+export type ProjectModelInsertType = OptionalKeys<
   ProjectModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type ProjectGroupModelInsertType = Omit<
+export type ProjectGroupModelInsertType = OptionalKeys<
   ProjectGroupModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type TimeChunkModelInsertType = Omit<
+export type TimeChunkModelInsertType = OptionalKeys<
   TimeChunkModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type TimeNodeModelInsertType = Omit<
+export type TimeNodeModelInsertType = OptionalKeys<
   TimeNodeModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type ProjectOperationModelInsertType = Omit<ProjectOperationModel, 'id'>;
-export type ProjectGroupOperationModelInsertType = Omit<
+export type ProjectOperationModelInsertType = OptionalKeys<
+  ProjectOperationModel,
+  'id'
+>;
+export type ProjectGroupOperationModelInsertType = OptionalKeys<
   ProjectGroupOperationModel,
   'id'
 >;
-export type ProjectCreateOperationModelInsertType = Omit<
+export type ProjectCreateOperationModelInsertType = OptionalKeys<
   ProjectCreateOperationModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type ProjectUpdateOperationModelInsertType = Omit<
+export type ProjectUpdateOperationModelInsertType = OptionalKeys<
   ProjectUpdateOperationModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type ProjectDeleteOperationModelInsertType = Omit<
+export type ProjectDeleteOperationModelInsertType = OptionalKeys<
   ProjectDeleteOperationModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type ProjectGroupCreateOperationModelInsertType = Omit<
+export type ProjectGroupCreateOperationModelInsertType = OptionalKeys<
   ProjectGroupCreateOperationModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type ProjectGroupUpdateOperationModelInsertType = Omit<
+export type ProjectGroupUpdateOperationModelInsertType = OptionalKeys<
   ProjectGroupUpdateOperationModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
-export type ProjectGroupDeleteOperationModelInsertType = Omit<
+export type ProjectGroupDeleteOperationModelInsertType = OptionalKeys<
   ProjectGroupDeleteOperationModel,
   'id' | 'updatedAt' | 'createdAt'
 >;
