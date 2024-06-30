@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "format": "prettier --write \"src/**/*.ts\"",
-    "openapi": "swagger-typescript-api -p http://localhost:3000/api-json -o ./src -n api.ts --axios --templates ./templates/default",
+    "openapi": "swagger-typescript-api -p http://localhost:3000/api-json -o ./src -n api.ts --axios --templates ./templates/used",
     "dev": "vite",
     "build": "tsc && vite build",
     "tsc": "tsc",
