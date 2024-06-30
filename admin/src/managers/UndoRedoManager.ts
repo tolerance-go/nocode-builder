@@ -33,6 +33,13 @@ export class UndoRedoManager<T> {
     return this.getInstance<T>();
   }
 
+  // 销毁单例实例的方法
+  public static destroyInstance(): void {
+    if (UndoRedoManager.instance) {
+      UndoRedoManager.instance = null;
+    }
+  }
+
   // 执行一个新操作
   async execute(newState: T): Promise<void> {
     if (this.loadingHistory) {
