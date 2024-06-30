@@ -22,7 +22,7 @@ describe('UndoRedoManager', () => {
     UndoRedoManager.destroyInstance(); // 销毁单例实例
   });
 
-  it('should initialize and load history', async () => {
+  it('应该初始化并加载历史记录', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
     // 验证加载历史记录时是否调用了 localforage.getItem
@@ -33,7 +33,7 @@ describe('UndoRedoManager', () => {
     expect(manager.getCurrentState()).toBeUndefined();
   });
 
-  it('should execute new state and save history', async () => {
+  it('应该执行新状态并保存历史记录', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
     await manager.loadingHistory;
@@ -49,7 +49,7 @@ describe('UndoRedoManager', () => {
     });
   });
 
-  it('should undo the last operation', async () => {
+  it('应该撤销最后一个操作', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
     await manager.loadingHistory;
@@ -65,7 +65,7 @@ describe('UndoRedoManager', () => {
     expect(localforage.setItem).toHaveBeenCalledTimes(3); // initialize, execute(1), execute(2), undo
   });
 
-  it('should redo the last undone operation', async () => {
+  it('应该重做最后一个撤销的操作', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
     await manager.loadingHistory;
@@ -82,7 +82,7 @@ describe('UndoRedoManager', () => {
     expect(localforage.setItem).toHaveBeenCalledTimes(4); // initialize, execute(1), execute(2), undo, redo
   });
 
-  it('should not undo beyond the first state', async () => {
+  it('不应该撤销超过第一个状态', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
     await manager.loadingHistory;
@@ -97,7 +97,7 @@ describe('UndoRedoManager', () => {
     expect(localforage.setItem).toHaveBeenCalledTimes(1); // execute(1)
   });
 
-  it('should not redo beyond the last state', async () => {
+  it('不应该重做超过最后一个状态', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
     await manager.loadingHistory;
