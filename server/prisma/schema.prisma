@@ -8,19 +8,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
-generator prismaToModel {
-  provider = "prisma-to-model"
-  dryRun   = false
-  output   = "../src/generated/prisma-models" // 指定生成实体类的输出目录
-}
-
-generator prismaClassGenerator {
-  provider = "prisma-class-generator"
-  dryRun   = false
-  output   = "../src/generated/prisma-class" // 指定生成实体类的输出目录
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
