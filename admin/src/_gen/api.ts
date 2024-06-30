@@ -11,33 +11,15 @@ export interface LoginDto {
 
 export interface LoginResponseDto {
   accessToken: string;
+  userId: number;
+  username: string;
 }
 
-export interface UserDto {
-  /**
-   * The unique identifier of the user
-   * @example 1
-   */
+export interface UserResponseDto {
   id: number;
-  /**
-   * The name of the user
-   * @example "John Doe"
-   */
   name: string;
-  /**
-   * The email address of the user
-   * @example "johndoe@example.com"
-   */
-  email?: string | null;
-  /**
-   * The date and time when the user was created
-   * @example "2024-01-01T00:00:00Z"
-   */
+  email?: string;
   createdAt: string;
-  /**
-   * The date and time when the user was last updated
-   * @example "2024-01-02T00:00:00Z"
-   */
   updatedAt: string;
 }
 
@@ -50,10 +32,6 @@ export interface UserCreateDto {
 }
 
 export interface UserUpdateDto {
-  /**
-   * The name of the user
-   * @example "John Doe"
-   */
   name?: string;
   /**
    * The email address of the user
@@ -401,7 +379,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request GET:/users/{id}
      */
     getUser: (id: string, params: RequestParams = {}) =>
-      this.request<UserDto, unknown>({
+      this.request<UserResponseDto, unknown>({
         path: `/users/${id}`,
         method: 'GET',
         format: 'json',
@@ -415,7 +393,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request PATCH:/users/{id}
      */
     updateUser: (id: string, data: UserUpdateDto, params: RequestParams = {}) =>
-      this.request<UserDto, unknown>({
+      this.request<UserResponseDto, unknown>({
         path: `/users/${id}`,
         method: 'PATCH',
         body: data,
@@ -431,7 +409,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request DELETE:/users/{id}
      */
     deleteUser: (id: string, params: RequestParams = {}) =>
-      this.request<UserDto, unknown>({
+      this.request<UserResponseDto, unknown>({
         path: `/users/${id}`,
         method: 'DELETE',
         format: 'json',
@@ -446,30 +424,14 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      */
     getUsers: (
       query?: {
-        /**
-         * Number of records to skip for pagination
-         * @example 0
-         */
         skip?: number;
-        /**
-         * Number of records to take for pagination
-         * @example 10
-         */
         take?: number;
-        /**
-         * Field by which to order the results
-         * @example "createdAt"
-         */
         orderBy?: string;
-        /**
-         * Filter condition
-         * @example "John Doe"
-         */
         filter?: string;
       },
       params: RequestParams = {},
     ) =>
-      this.request<UserDto[], unknown>({
+      this.request<UserResponseDto[], unknown>({
         path: `/users`,
         method: 'GET',
         query: query,
@@ -484,7 +446,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request POST:/users
      */
     createUser: (data: UserCreateDto, params: RequestParams = {}) =>
-      this.request<UserDto, void>({
+      this.request<UserResponseDto, void>({
         path: `/users`,
         method: 'POST',
         body: data,
