@@ -26,10 +26,18 @@ function filterNonFunctionFields<T extends object>(
 useAppStoreBase.subscribe((state, previous) => {
   const pathnameHasChanged = state.pathname !== previous.pathname;
 
-  if (state.version > previous.version) {
-    storeDb.stores.add({
-      data: filterNonFunctionFields(state),
-    });
+  // eslint-disable-next-line no-empty
+  if (state.externalCurrentVersion < state.externalLatestVersion) {
+    // 当前最新的快照是从历史中拿出来的
+  } else {
+    if (state.version > previous.version) {
+      storeDb.stores.add({
+        data: filterNonFunctionFields({
+          ...state,
+          latestVersion: state.version,
+        }),
+      });
+    }
   }
 
   if (pathnameHasChanged) {

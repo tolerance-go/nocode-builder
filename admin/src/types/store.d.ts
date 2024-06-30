@@ -23,5 +23,6 @@ export type StoreStates = ProjectTreeStates &
 
 export type StoreStatesSlice = {
   id: number;
+  version: number;
   data: StoreStates;
 };
