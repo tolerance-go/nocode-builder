@@ -1,20 +1,36 @@
 import { useAppStoreBase } from '@/store';
 import { isAuthRelatedPath, isSystemPath } from '@/utils';
-import { buildProjectStructureTreeDataMeta } from './_utils/buildProjectStructureTreeDataMeta';
+// import { buildProjectStructureTreeDataMeta } from './_utils/buildProjectStructureTreeDataMeta';
+import { storeDb } from '@/db';
+
+function filterNonFunctionFields<T extends object>(
+  obj: T,
+): {
+  [K in keyof T]: T[K] extends (...args: unknown[]) => unknown ? never : T[K];
+} {
+  const result = {} as {
+    [K in keyof T]: T[K] extends (...args: unknown[]) => unknown ? never : T[K];
+  };
+  for (const key in obj) {
+    if (typeof obj[key] !== 'function') {
+      result[key] = obj[key] as T[typeof key] extends (
+        ...args: unknown[]
+      ) => unknown
+        ? never
+        : T[typeof key];
+    }
+  }
+  return result;
+}
 
 useAppStoreBase.subscribe((state, previous) => {
-  const {
-    initProjectTreeDataMeta,
-    loadProjectGroupTableData,
-    loadProjectTableData,
-    setTimelinePoolCheckInterval,
-  } = useAppStoreBase.getState();
-
   const pathnameHasChanged = state.pathname !== previous.pathname;
-  const projectGroupTableDataHasChanged =
-    state.projectGroupTableData !== previous.projectGroupTableData;
-  const projectTableDataHasChanged =
-    state.projectTableData !== previous.projectTableData;
+
+  if (state.version > previous.version) {
+    storeDb.stores.add({
+      data: filterNonFunctionFields(state),
+    });
+  }
 
   if (pathnameHasChanged) {
     if (
@@ -23,21 +39,7 @@ useAppStoreBase.subscribe((state, previous) => {
       !isAuthRelatedPath(state.pathname)
     ) {
       if (!state.hasSetTimelinePoolCheckInterval) {
-        setTimelinePoolCheckInterval();
-      }
-
-      if (
-        !state.hasLoadedProjectGroupTableData &&
-        !state.isLoadingProjectGroupTableData
-      ) {
-        loadProjectGroupTableData();
-      }
-
-      if (
-        !state.hasLoadedProjectTableData &&
-        !state.isLoadingProjectTableData
-      ) {
-        loadProjectTableData();
+        state.setTimelinePoolCheckInterval();
       }
     }
   }
