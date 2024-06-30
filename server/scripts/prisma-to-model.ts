@@ -57,9 +57,33 @@ class Class {
     this.dependsOnOtherClasses = false;
   }
 
+  printConstructor(): string {
+    const paramsStr = this.fields
+      .map((field) => {
+        return field.name;
+      })
+      .join(', ');
+
+    const typeAnnotationsStr = this.fields
+      .map((field) => {
+        const type =
+          typeof field.type === 'string' ? field.type : field.type.name;
+        const nullableStr = field.isRequired ? '' : '?';
+        return `${field.name}${nullableStr}: ${type}`;
+      })
+      .join('; ');
+
+    const assignmentsStr = this.fields
+      .map((field) => `this.${field.name} = ${field.name};`)
+      .join('\n    ');
+
+    return `constructor({ ${paramsStr} }: { ${typeAnnotationsStr} }) {\n    ${assignmentsStr}\n  }`;
+  }
+
   print(): string {
     const fieldsStr = this.fields.map((field) => field.print()).join('\n  ');
-    return `class ${this.name} {\n  ${fieldsStr}\n}`;
+    const constructorStr = this.printConstructor();
+    return `class ${this.name} {\n  ${fieldsStr}\n\n  ${constructorStr}\n}`;
   }
 }
 
@@ -174,7 +198,7 @@ async function main() {
     fs.writeFileSync(outputPath, prismaFile.print());
 
     console.log(
-      'Prisma schema has been successfully parsed and saved to output.txt',
+      'Prisma schema has been successfully parsed and saved to models.ts',
     );
   } catch (error) {
     console.error('Error parsing schema:', error);
