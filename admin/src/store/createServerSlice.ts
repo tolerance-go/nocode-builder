@@ -38,7 +38,7 @@ export const createServerSlice: ImmerStateCreator<
   intervalId: null,
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  syncChunkToRemote: async (chunk: DataBaseTimelineChunk) => {},
+  syncChunkToRemote: async (_chunk: DataBaseTimelineChunk) => {},
 
   syncChunkToLocal: (chunk) => {
     const snapshot = get();
