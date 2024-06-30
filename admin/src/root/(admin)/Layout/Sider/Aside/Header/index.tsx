@@ -1,21 +1,21 @@
-import { useAppStore } from "@/store";
+import { useAppStore } from '@/store';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
-} from "@/types";
-import { nodeIsFile, nodeIsFolder } from "@/utils";
+} from '@/types';
+import { nodeIsFile, nodeIsFolder } from '@/utils';
 import {
   FileAddOutlined,
   FolderAddOutlined,
   HistoryOutlined,
-} from "@ant-design/icons";
-import { Button, Flex, Space, theme } from "antd";
+} from '@ant-design/icons';
+import { Button, Flex, Space, theme } from 'antd';
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
 const findLastFolderIndex = (
   nodes: ProjectTreeNodeDataRecordItem[],
 ): number => {
-  return nodes.findLastIndex((node) => node.type === "folder");
+  return nodes.findLastIndex((node) => node.type === 'folder');
 };
 
 export const Header = () => {
@@ -73,15 +73,15 @@ export const Header = () => {
                 projectStructureTreeData.map((node) => {
                   const recordItem = projectTreeDataRecord[node.key];
                   if (!recordItem) {
-                    throw new Error("数据不完整。");
+                    throw new Error('数据不完整。');
                   }
                   return recordItem;
                 }),
               );
 
-              console.log("folderIndex", folderIndex);
+              console.log('folderIndex', folderIndex);
 
-              const newKey = Math.random() + "";
+              const newKey = Math.random() + '';
 
               insertProjectStructureTreeNodeWithCheck(
                 null,
@@ -91,8 +91,8 @@ export const Header = () => {
                 },
                 folderIndex,
                 {
-                  title: "",
-                  type: "file",
+                  title: '',
+                  type: 'file',
                   id: -1,
                 },
               );
@@ -105,12 +105,12 @@ export const Header = () => {
                 (target.children ?? []).map((node) => {
                   const recordItem = projectTreeDataRecord[node.key];
                   if (!recordItem) {
-                    throw new Error("数据不完整。");
+                    throw new Error('数据不完整。');
                   }
                   return recordItem;
                 }),
               );
-              const newKey = Math.random() + "";
+              const newKey = Math.random() + '';
 
               insertProjectStructureTreeNodeWithCheck(
                 target.key,
@@ -120,9 +120,9 @@ export const Header = () => {
                 },
                 folderIndex,
                 {
-                  title: "",
+                  title: '',
                   id: -1,
-                  type: "file",
+                  type: 'file',
                 },
               );
               updateEditingProjectStructureTreeNode(newKey);
@@ -138,7 +138,7 @@ export const Header = () => {
             const selectedNode = findProjectStructureTreeNode(selectedKey);
 
             if (!selectedRecordItem) {
-              throw new Error("数据不完整。");
+              throw new Error('数据不完整。');
             }
 
             if (nodeIsFolder(selectedRecordItem)) {
@@ -166,7 +166,7 @@ export const Header = () => {
           icon={<FolderAddOutlined />}
           onClick={async () => {
             const insertInRoot = () => {
-              const newKey = Math.random() + "";
+              const newKey = Math.random() + '';
               insertProjectStructureTreeNodeWithCheck(
                 null,
                 {
@@ -175,8 +175,8 @@ export const Header = () => {
                 -1,
                 {
                   id: -1,
-                  type: "folder",
-                  title: "",
+                  type: 'folder',
+                  title: '',
                 },
               );
               updateEditingProjectStructureTreeNode(newKey);
@@ -184,7 +184,7 @@ export const Header = () => {
             };
 
             const insert = (target: ProjectStructureTreeDataNode) => {
-              const newKey = Math.random() + "";
+              const newKey = Math.random() + '';
               insertProjectStructureTreeNodeWithCheck(
                 target.key,
                 {
@@ -192,9 +192,9 @@ export const Header = () => {
                 },
                 -1,
                 {
-                  title: "",
+                  title: '',
                   id: -1,
-                  type: "folder",
+                  type: 'folder',
                 },
               );
               updateEditingProjectStructureTreeNode(newKey);
@@ -210,7 +210,7 @@ export const Header = () => {
             const selectedNode = findProjectStructureTreeNode(selectedKey);
 
             if (!selectedRecordItem) {
-              throw new Error("数据不完整。");
+              throw new Error('数据不完整。');
             }
 
             if (nodeIsFolder(selectedRecordItem)) {

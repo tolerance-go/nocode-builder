@@ -1,12 +1,12 @@
-import { Flex, Typography } from "antd";
-import React from "react";
+import { Flex, Typography } from 'antd';
+import React from 'react';
 
 export const NotFound: React.FC = () => {
   return (
     <Flex
       vertical
       style={{
-        height: "100vh",
+        height: '100vh',
       }}
       justify="center"
       align="center"

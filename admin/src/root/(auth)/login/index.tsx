@@ -1,10 +1,10 @@
-import { login } from "@/services/api/login";
-import { LoginFormValues } from "@/types/form";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import store from "store2";
+import { login } from '@/services/api/login';
+import { LoginFormValues } from '@/types/form';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Form, Input } from 'antd';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import store from 'store2';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ export const Login: React.FC = () => {
         username: values.username,
         password: values.password,
       });
-      store.set("token", accessToken);
-      navigate("/dashboard");
+      store.set('token', accessToken);
+      navigate('/dashboard');
     } finally {
       setLoading(false);
     }
@@ -27,7 +27,7 @@ export const Login: React.FC = () => {
     <Form<LoginFormValues> onFinish={onFinish}>
       <Form.Item
         name="username"
-        rules={[{ required: true, message: "请输入你的用户名!" }]}
+        rules={[{ required: true, message: '请输入你的用户名!' }]}
       >
         <Input
           autoFocus
@@ -37,7 +37,7 @@ export const Login: React.FC = () => {
       </Form.Item>
       <Form.Item
         name="password"
-        rules={[{ required: true, message: "请输入你的密码!" }]}
+        rules={[{ required: true, message: '请输入你的密码!' }]}
       >
         <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
       </Form.Item>
@@ -51,7 +51,7 @@ export const Login: React.FC = () => {
           block
           type="link"
           onClick={() => {
-            navigate("/register");
+            navigate('/register');
           }}
         >
           立即注册

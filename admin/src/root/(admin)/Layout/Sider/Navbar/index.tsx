@@ -1,5 +1,5 @@
-import { Avatar, Button, Dropdown, Flex, theme } from "antd";
-import { useNavigate } from "react-router-dom";
+import { Avatar, Button, Dropdown, Flex, theme } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 export const Navbar = () => {
   const { token } = theme.useToken();
@@ -18,10 +18,10 @@ export const Navbar = () => {
         menu={{
           items: [
             {
-              key: "1",
-              label: "登出",
+              key: '1',
+              label: '登出',
               onClick: () => {
-                navigate("/login");
+                navigate('/login');
               },
             },
           ],

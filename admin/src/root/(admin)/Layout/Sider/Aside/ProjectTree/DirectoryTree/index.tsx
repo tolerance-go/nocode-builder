@@ -1,8 +1,8 @@
-import { useAppStore } from "@/store";
-import { css } from "@emotion/css";
-import { useKeyPress } from "ahooks";
-import { Tree } from "antd";
-import { Title } from "./Title";
+import { useAppStore } from '@/store';
+import { css } from '@emotion/css';
+import { useKeyPress } from 'ahooks';
+import { Tree } from 'antd';
+import { Title } from './Title';
 
 const { DirectoryTree } = Tree;
 
@@ -20,7 +20,7 @@ export const TreeMenu = () => {
   const removeProjectStructureTreeNodeWithCheck =
     useAppStore.use.removeProjectStructureTreeNodeWithCheck();
 
-  useKeyPress(["Delete", "Backspace"], () => {
+  useKeyPress(['Delete', 'Backspace'], () => {
     selectedProjectStructureTreeNodes.length &&
       removeProjectStructureTreeNodeWithCheck(
         selectedProjectStructureTreeNodes[
@@ -29,7 +29,7 @@ export const TreeMenu = () => {
       );
   });
 
-  useKeyPress(["F2"], () => {
+  useKeyPress(['F2'], () => {
     selectedProjectStructureTreeNodes.length &&
       updateEditingProjectStructureTreeNode(
         selectedProjectStructureTreeNodes[

@@ -1,8 +1,8 @@
-import { selectProjectStructureTreeNodeDataRecordItem } from "@/selectors";
-import { useAppStore, useAppStoreBase } from "@/store";
-import { Dropdown, Flex, InputRef, Typography, theme } from "antd";
-import { useRef } from "react";
-import { AutoSelectInput } from "./AutoSelectInput";
+import { selectProjectStructureTreeNodeDataRecordItem } from '@/selectors';
+import { useAppStore, useAppStoreBase } from '@/store';
+import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
+import { useRef } from 'react';
+import { AutoSelectInput } from './AutoSelectInput';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
@@ -64,18 +64,18 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       defaultValue={nodeDataRecord?.title}
       onBlur={() => saveInput()}
       onPressEnter={() => saveInput()}
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
     />
   ) : (
     <Dropdown
-      trigger={["contextMenu"]}
+      trigger={['contextMenu']}
       menu={{
         style: {
           width: token.sizeXXL * 5,
         },
         items: [
           {
-            key: "edit",
+            key: 'edit',
             label: (
               <Flex justify="space-between" align="center">
                 重命名...
@@ -88,7 +88,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             },
           },
           {
-            key: "delete",
+            key: 'delete',
             label: (
               <Flex justify="space-between" align="center">
                 删除
@@ -105,8 +105,8 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     >
       <span
         style={{
-          display: "inline-block",
-          width: "100%",
+          display: 'inline-block',
+          width: '100%',
         }}
       >
         {nodeDataRecord?.title}

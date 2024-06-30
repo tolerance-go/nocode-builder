@@ -1,6 +1,6 @@
-import { Flex, Layout, theme } from "antd";
-import { Aside } from "./Aside";
-import { Navbar } from "./Navbar";
+import { Flex, Layout, theme } from 'antd';
+import { Aside } from './Aside';
+import { Navbar } from './Navbar';
 
 export const Sider = () => {
   const { token } = theme.useToken();
@@ -11,13 +11,13 @@ export const Sider = () => {
       style={{
         borderRight: `1px solid ${token.colorBorderSecondary}`,
         backgroundColor: token.colorBgContainer,
-        height: "100vh",
+        height: '100vh',
       }}
     >
       <Flex
         style={{
           // 防止加载闪烁
-          height: "100vh",
+          height: '100vh',
         }}
       >
         <Navbar />

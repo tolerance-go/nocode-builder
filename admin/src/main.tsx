@@ -1,23 +1,23 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { Root } from "./root";
-import { Login } from "./root/(auth)/login";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { Root } from './root';
+import { Login } from './root/(auth)/login';
 // import { Admin } from "./root/admin";
-import { Admin } from "./root/(admin)";
-import { Auth } from "./root/(auth)";
-import { Register } from "./root/(auth)/register";
+import { Admin } from './root/(admin)';
+import { Auth } from './root/(auth)';
+import { Register } from './root/(auth)/register';
 // import { Test } from "./root/test";
-import "normalize.css";
-import { paths } from "./configs";
-import { NotFound } from "./root/404";
-import "./i18n"; // 引入 i18n 配置
-import "./index.css";
-import "./subscribes";
+import 'normalize.css';
+import { paths } from './configs';
+import { NotFound } from './root/404';
+import './i18n'; // 引入 i18n 配置
+import './index.css';
+import './subscribes';
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <BrowserRouter basename={import.meta.env.DEV ? "" : "/admin"}>
+    <BrowserRouter basename={import.meta.env.DEV ? '' : '/admin'}>
       <Routes>
         <Route path={paths.root} element={<Root />}>
           {/* <Route path="test" element={<Test />}></Route>

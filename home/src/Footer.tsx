@@ -210,8 +210,8 @@ export const Footer = () => {
                     className="text-gray-700 transition hover:text-gray-700/75"
                     href="#"
                   >
-                    {" "}
-                    Careers{" "}
+                    {' '}
+                    Careers{' '}
                   </a>
                 </li>
               </ul>
@@ -235,8 +235,8 @@ export const Footer = () => {
                     className="text-gray-700 transition hover:text-gray-700/75"
                     href="#"
                   >
-                    {" "}
-                    Web Design{" "}
+                    {' '}
+                    Web Design{' '}
                   </a>
                 </li>
 
@@ -245,8 +245,8 @@ export const Footer = () => {
                     className="text-gray-700 transition hover:text-gray-700/75"
                     href="#"
                   >
-                    {" "}
-                    Marketing{" "}
+                    {' '}
+                    Marketing{' '}
                   </a>
                 </li>
 
@@ -255,8 +255,8 @@ export const Footer = () => {
                     className="text-gray-700 transition hover:text-gray-700/75"
                     href="#"
                   >
-                    {" "}
-                    Google Ads{" "}
+                    {' '}
+                    Google Ads{' '}
                   </a>
                 </li>
               </ul>
@@ -271,8 +271,8 @@ export const Footer = () => {
                     className="text-gray-700 transition hover:text-gray-700/75"
                     href="#"
                   >
-                    {" "}
-                    FAQs{" "}
+                    {' '}
+                    FAQs{' '}
                   </a>
                 </li>
 
@@ -281,8 +281,8 @@ export const Footer = () => {
                     className="text-gray-700 transition hover:text-gray-700/75"
                     href="#"
                   >
-                    {" "}
-                    Support{" "}
+                    {' '}
+                    Support{' '}
                   </a>
                 </li>
 

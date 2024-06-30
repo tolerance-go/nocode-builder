@@ -1,16 +1,16 @@
-import { css } from "@emotion/css";
-import { Avatar, Flex, Layout, Space, Typography, theme } from "antd";
-import Sider from "antd/es/layout/Sider";
-import { Content } from "antd/es/layout/layout";
-import { Outlet } from "react-router-dom";
+import { css } from '@emotion/css';
+import { Avatar, Flex, Layout, Space, Typography, theme } from 'antd';
+import Sider from 'antd/es/layout/Sider';
+import { Content } from 'antd/es/layout/layout';
+import { Outlet } from 'react-router-dom';
 
 export const Auth = () => {
   const { token } = theme.useToken();
   return (
     <Layout
       style={{
-        overflow: "hidden",
-        height: "100vh",
+        overflow: 'hidden',
+        height: '100vh',
       }}
     >
       <Sider width="40%">
@@ -19,7 +19,7 @@ export const Auth = () => {
           align="center"
           justify="center"
           style={{
-            height: "100%",
+            height: '100%',
           }}
         >
           <div
@@ -34,7 +34,7 @@ export const Auth = () => {
               <Flex
                 vertical
                 style={{
-                  textAlign: "center",
+                  textAlign: 'center',
                 }}
               >
                 <Typography.Title>UNOCODE</Typography.Title>
@@ -53,7 +53,7 @@ export const Auth = () => {
           align="center"
           justify="center"
           style={{
-            height: "100%",
+            height: '100%',
           }}
         >
           <div
@@ -72,7 +72,7 @@ export const Auth = () => {
               </Typography.Text>
 
               <Space size="middle">
-                <Avatar size={"large"} />
+                <Avatar size={'large'} />
                 <Space direction="vertical" size={token.sizeXXS / 4}>
                   <Typography.Text strong>周天宇</Typography.Text>
                   <Typography.Text type="secondary">

@@ -1,7 +1,7 @@
-import { useAppStore } from "@/store";
-import { CloseOutlined } from "@ant-design/icons";
-import { Button, Flex, Space, theme } from "antd";
-import { ProjectTreeHistory } from "./ProjectTreeHistory";
+import { useAppStore } from '@/store';
+import { CloseOutlined } from '@ant-design/icons';
+import { Button, Flex, Space, theme } from 'antd';
+import { ProjectTreeHistory } from './ProjectTreeHistory';
 
 export const SubSider = () => {
   const { token } = theme.useToken();
@@ -18,17 +18,17 @@ export const SubSider = () => {
       style={{
         borderRight: `1px solid ${token.colorBorderSecondary}`,
         backgroundColor: token.colorBgContainer,
-        position: "absolute",
+        position: 'absolute',
         top: 0,
         left: 400,
-        height: "100vh",
-        width: "auto",
+        height: '100vh',
+        width: 'auto',
         zIndex: token.zIndexBase + 1,
       }}
     >
       <Flex
         style={{
-          height: "100%",
+          height: '100%',
         }}
         vertical
       >
@@ -57,10 +57,10 @@ export const SubSider = () => {
         <div
           style={{
             padding: `${token.paddingSM}px`,
-            overflow: "auto",
+            overflow: 'auto',
             flexGrow: 1,
-            scrollbarWidth: "thin",
-            scrollbarColor: "auto",
+            scrollbarWidth: 'thin',
+            scrollbarColor: 'auto',
           }}
         >
           <ProjectTreeHistory />

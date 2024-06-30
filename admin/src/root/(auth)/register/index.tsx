@@ -1,9 +1,9 @@
-import { createUser } from "@/services/api/createUser";
-import { RegisterFormValues } from "@/types/form";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Form, Input } from "antd";
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { createUser } from '@/services/api/createUser';
+import { RegisterFormValues } from '@/types/form';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Form, Input } from 'antd';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -17,7 +17,7 @@ export const Register: React.FC = () => {
         name: values.username,
         password: values.password,
       });
-      navigate("/login");
+      navigate('/login');
     } finally {
       setLoading(false);
     }
@@ -27,7 +27,7 @@ export const Register: React.FC = () => {
     <Form<RegisterFormValues> onFinish={onFinish}>
       <Form.Item
         name="username"
-        rules={[{ required: true, message: "请输入你的用户名!" }]}
+        rules={[{ required: true, message: '请输入你的用户名!' }]}
       >
         <Input
           autoFocus
@@ -37,22 +37,22 @@ export const Register: React.FC = () => {
       </Form.Item>
       <Form.Item
         name="password"
-        rules={[{ required: true, message: "请输入你的密码!" }]}
+        rules={[{ required: true, message: '请输入你的密码!' }]}
       >
         <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
       </Form.Item>
       <Form.Item
         name="confirm"
-        dependencies={["password"]}
+        dependencies={['password']}
         hasFeedback
         rules={[
-          { required: true, message: "请确认你的密码!" },
+          { required: true, message: '请确认你的密码!' },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (!value || getFieldValue("password") === value) {
+              if (!value || getFieldValue('password') === value) {
                 return Promise.resolve();
               }
-              return Promise.reject(new Error("两次输入的密码不匹配!"));
+              return Promise.reject(new Error('两次输入的密码不匹配!'));
             },
           }),
         ]}

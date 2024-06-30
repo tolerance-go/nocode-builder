@@ -1,7 +1,7 @@
-import { useAppStore } from "@/store";
-import { debounce } from "lodash-es";
-import { useEffect, useRef } from "react";
-import { TreeMenu } from "./DirectoryTree";
+import { useAppStore } from '@/store';
+import { debounce } from 'lodash-es';
+import { useEffect, useRef } from 'react';
+import { TreeMenu } from './DirectoryTree';
 
 export const ProjectTree = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -41,7 +41,7 @@ export const ProjectTree = () => {
     <div
       ref={containerRef}
       style={{
-        height: "100%",
+        height: '100%',
       }}
     >
       {/* {loading ? (

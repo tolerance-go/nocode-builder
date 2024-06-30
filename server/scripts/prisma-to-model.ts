@@ -4,7 +4,6 @@ import { getDMMF } from '@prisma/sdk';
 
 const classMap: { [name: string]: Class } = {};
 
-
 // 定义 Decorator 类
 class Decorator {
   name: string;
@@ -41,7 +40,8 @@ class Field {
   }
 
   print(): string {
-    const type = typeof this.type === 'string' ? this.type : this.type.printName();
+    const type =
+      typeof this.type === 'string' ? this.type : this.type.printName();
     const decoratorsStr = this.decorators.map((dec) => dec.print()).join(' ');
     const nullableStr = this.isRequired ? '' : '?';
     return `${decoratorsStr} ${this.name}${nullableStr}: ${type};`;
@@ -165,7 +165,6 @@ async function parseSchema(schema: string): Promise<File> {
     Boolean: 'boolean',
     DateTime: 'Date',
   };
-
 
   const classes: Class[] = dmmf.datamodel.models.map((model) => {
     const fields: Field[] = model.fields.map((field) => {
