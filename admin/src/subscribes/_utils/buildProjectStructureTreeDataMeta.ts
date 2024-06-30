@@ -1,7 +1,7 @@
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from "@/types";
+} from '@/types';
 
 export function buildProjectStructureTreeDataMeta(
   projectGroups: API.ProjectGroupDto[],
@@ -23,7 +23,7 @@ export function buildProjectStructureTreeDataMeta(
     dataRecord[`group-${group.id}`] = {
       title: group.name,
       id: group.id,
-      type: "folder",
+      type: 'folder',
     };
   });
 
@@ -59,7 +59,7 @@ export function buildProjectStructureTreeDataMeta(
     dataRecord[`project-${project.id}`] = {
       title: project.name,
       id: project.id,
-      type: "file",
+      type: 'file',
     };
   });
 

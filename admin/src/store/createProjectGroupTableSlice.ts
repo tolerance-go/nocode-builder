@@ -1,5 +1,5 @@
-import { getProjectGroups } from "@/services/api/getProjectGroups";
-import { ImmerStateCreator } from "@/utils";
+import { getProjectGroups } from '@/services/api/getProjectGroups';
+import { ImmerStateCreator } from '@/utils';
 
 export type ProjectGroupTableDataStates = {
   projectGroupTableData: API.ProjectGroupDto[] | null;
@@ -36,7 +36,7 @@ export const createProjectGroupTableSlice: ImmerStateCreator<
         state.projectGroupTableData = data;
       },
       false,
-      "loadProjectGroupTableData",
+      'loadProjectGroupTableData',
     );
     set((state) => {
       state.hasLoadedProjectGroupTableData = true;

@@ -1,5 +1,5 @@
-import { ProjectTreeStates } from "@/store/createProjectTreeSlice";
-import { createSelector } from "reselect";
+import { ProjectTreeStates } from '@/store/createProjectTreeSlice';
+import { createSelector } from 'reselect';
 
 export const selectProjectStructureTreeData = (state: ProjectTreeStates) =>
   state.projectStructureTreeData;

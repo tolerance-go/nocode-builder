@@ -1,23 +1,23 @@
-import { createSelectors } from "@/utils";
-import { StateCreator, create } from "zustand";
-import { devtools } from "zustand/middleware";
-import { immer } from "zustand/middleware/immer";
-import { LayoutSlice, createLayoutSlice } from "./createLayoutSlice";
-import { LocationSlice, createLocationSlice } from "./createLocationSlice";
-import { NetworkSlice, createNetworkSlice } from "./createNetworkSlice";
+import { createSelectors } from '@/utils';
+import { StateCreator, create } from 'zustand';
+import { devtools } from 'zustand/middleware';
+import { immer } from 'zustand/middleware/immer';
+import { LayoutSlice, createLayoutSlice } from './createLayoutSlice';
+import { LocationSlice, createLocationSlice } from './createLocationSlice';
+import { NetworkSlice, createNetworkSlice } from './createNetworkSlice';
 import {
   ProjectGroupTableDataSlice,
   createProjectGroupTableSlice,
-} from "./createProjectGroupTableSlice";
+} from './createProjectGroupTableSlice';
 import {
   ProjectTableDataSlice,
   createProjectTableSlice,
-} from "./createProjectTableSlice";
+} from './createProjectTableSlice';
 import {
   ProjectTreeSlice,
   createProjectTreeSlice,
-} from "./createProjectTreeSlice";
-import { ServerSlice, createServerSlice } from "./createServerSlice";
+} from './createProjectTreeSlice';
+import { ServerSlice, createServerSlice } from './createServerSlice';
 interface FishSlice {
   fishes: number;
   addFish: () => void;
@@ -77,8 +77,8 @@ export type States = {
 };
 
 export type Actions = {
-  updateFirstName: (firstName: States["firstName"]) => void;
-  updateLastName: (lastName: States["lastName"]) => void;
+  updateFirstName: (firstName: States['firstName']) => void;
+  updateLastName: (lastName: States['lastName']) => void;
 };
 
 export const useAppStoreBase = create<
@@ -109,8 +109,8 @@ export const useAppStoreBase = create<
         ...createBearSlice(...a),
         ...createFishSlice(...a),
         ...createSharedSlice(...a),
-        firstName: "firstName",
-        lastName: "lastName",
+        firstName: 'firstName',
+        lastName: 'lastName',
         updateFirstName: (firstName) => set(() => ({ firstName: firstName })),
         updateLastName: (lastName) => set(() => ({ lastName: lastName })),
       };

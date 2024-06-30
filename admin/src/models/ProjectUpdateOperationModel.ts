@@ -14,7 +14,7 @@ export class ProjectUpdateOperationModel {
     createdAt,
     updatedAt,
     projectOperation,
-    projectOperationId
+    projectOperationId,
   }: {
     id: number;
     recordId: number;

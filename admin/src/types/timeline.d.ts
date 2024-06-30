@@ -6,7 +6,7 @@ export type DataBaseTimelineItemBase = {
 };
 
 export type CreateTimelineItem = DataBaseTimelineItemBase & {
-  actionName: "create";
+  actionName: 'create';
   // 创建的记录ID
   recordId: string;
   // 其他创建相关的属性
@@ -14,22 +14,22 @@ export type CreateTimelineItem = DataBaseTimelineItemBase & {
 };
 
 export type DeleteTimelineItem = DataBaseTimelineItemBase & {
-  actionName: "delete";
+  actionName: 'delete';
   recordId: number;
 };
 
 export type ProjectDeleteTimelineItem = DeleteTimelineItem & {
-  tableName: "project";
-  actionName: "delete";
+  tableName: 'project';
+  actionName: 'delete';
 };
 
 export type ProjectGroupDeleteTimelineItem = DeleteTimelineItem & {
-  tableName: "project-group";
-  actionName: "delete";
+  tableName: 'project-group';
+  actionName: 'delete';
 };
 
 export type UpdateTimelineItem = DataBaseTimelineItemBase & {
-  actionName: "update";
+  actionName: 'update';
   // 更新的记录ID
   recordId: string;
   // 更新前的记录内容
@@ -41,9 +41,8 @@ export type UpdateTimelineItem = DataBaseTimelineItemBase & {
 // 使用联合类型
 export type DataBaseTimelineItem =
   // | CreateTimelineItem
-  | ProjectDeleteTimelineItem
-  | ProjectGroupDeleteTimelineItem
-  // | UpdateTimelineItem;
+  ProjectDeleteTimelineItem | ProjectGroupDeleteTimelineItem;
+// | UpdateTimelineItem;
 
 export type DataBaseTimelineChunk = {
   hasSyncedLocal: boolean;

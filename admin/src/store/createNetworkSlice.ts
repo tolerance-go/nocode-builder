@@ -1,4 +1,4 @@
-import { ImmerStateCreator } from "@/utils";
+import { ImmerStateCreator } from '@/utils';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NetworkStates = {};

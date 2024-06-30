@@ -1,8 +1,8 @@
-import { ProjectGroupModel } from "./ProjectGroupModel";
-import { TimeNodeModel } from "./TimeNodeModel";
-import { ProjectGroupCreateOperationModel } from "./ProjectGroupCreateOperationModel";
-import { ProjectGroupUpdateOperationModel } from "./ProjectGroupUpdateOperationModel";
-import { ProjectGroupDeleteOperationModel } from "./ProjectGroupDeleteOperationModel";
+import { ProjectGroupModel } from './ProjectGroupModel';
+import { TimeNodeModel } from './TimeNodeModel';
+import { ProjectGroupCreateOperationModel } from './ProjectGroupCreateOperationModel';
+import { ProjectGroupUpdateOperationModel } from './ProjectGroupUpdateOperationModel';
+import { ProjectGroupDeleteOperationModel } from './ProjectGroupDeleteOperationModel';
 
 export class ProjectGroupOperationModel {
   id: number;

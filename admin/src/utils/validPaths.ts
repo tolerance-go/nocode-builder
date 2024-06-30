@@ -1,4 +1,4 @@
-import { fullPaths, authFullPaths } from "@/configs";
+import { fullPaths, authFullPaths } from '@/configs';
 
 /**
  * 判断给定的 URL 是否为登录相关的 URL。

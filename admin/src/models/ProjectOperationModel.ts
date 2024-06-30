@@ -26,7 +26,7 @@ export class ProjectOperationModel {
     timeNode,
     projectUpdateOperation,
     projectDeleteOperation,
-    projectCreateOperation
+    projectCreateOperation,
   }: {
     id: number;
     projectId: number;

@@ -1,5 +1,5 @@
-import { getProjects } from "@/services/api/getProjects";
-import { ImmerStateCreator } from "@/utils";
+import { getProjects } from '@/services/api/getProjects';
+import { ImmerStateCreator } from '@/utils';
 
 export type ProjectTableDataStates = {
   projectTableData: API.ProjectDto[] | null;
@@ -39,7 +39,7 @@ export const createProjectTableSlice: ImmerStateCreator<
         state.projectTableData = projects;
       },
       false,
-      "loadProjectTableData",
+      'loadProjectTableData',
     );
     set((state) => {
       state.isLoadingProjectTableData = false;
@@ -50,7 +50,7 @@ export const createProjectTableSlice: ImmerStateCreator<
   findProjectById: (projectId: number) => {
     const state = get();
     if (state.projectTableData === null) {
-      throw new Error("Project table data is not initialized.");
+      throw new Error('Project table data is not initialized.');
     }
     return state.projectTableData.find((project) => project.id === projectId);
   },
@@ -58,7 +58,7 @@ export const createProjectTableSlice: ImmerStateCreator<
   addProject: (project: API.ProjectDto) =>
     set((state) => {
       if (state.projectTableData === null) {
-        throw new Error("Project table data is not initialized.");
+        throw new Error('Project table data is not initialized.');
       }
       state.projectTableData.push(project);
     }),
@@ -66,7 +66,7 @@ export const createProjectTableSlice: ImmerStateCreator<
   updateProject: (updatedProject: API.ProjectDto) =>
     set((state) => {
       if (state.projectTableData === null) {
-        throw new Error("Project table data is not initialized.");
+        throw new Error('Project table data is not initialized.');
       }
       const index = state.projectTableData.findIndex(
         (project) => project.id === updatedProject.id,
@@ -79,7 +79,7 @@ export const createProjectTableSlice: ImmerStateCreator<
   deleteProject: (projectId: number) =>
     set((state) => {
       if (state.projectTableData === null) {
-        throw new Error("Project table data is not initialized.");
+        throw new Error('Project table data is not initialized.');
       }
       state.projectTableData = state.projectTableData.filter(
         (project) => project.id !== projectId,

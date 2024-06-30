@@ -1,6 +1,6 @@
-import { useAppStoreBase } from "@/store";
-import { isAuthRelatedPath, isSystemPath } from "@/utils";
-import { buildProjectStructureTreeDataMeta } from "./_utils/buildProjectStructureTreeDataMeta";
+import { useAppStoreBase } from '@/store';
+import { isAuthRelatedPath, isSystemPath } from '@/utils';
+import { buildProjectStructureTreeDataMeta } from './_utils/buildProjectStructureTreeDataMeta';
 
 useAppStoreBase.subscribe((state, previous) => {
   const {

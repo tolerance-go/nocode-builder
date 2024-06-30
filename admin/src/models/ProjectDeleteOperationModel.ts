@@ -1,4 +1,4 @@
-import { ProjectOperationModel } from "./ProjectOperationModel";
+import { ProjectOperationModel } from './ProjectOperationModel';
 
 export class ProjectDeleteOperationModel {
   id: number;

@@ -1,25 +1,25 @@
-import { Api } from "@/api";
-import { notification } from "antd";
-import store from "store2";
+import { Api } from '@/api';
+import { notification } from 'antd';
+import store from 'store2';
 
 const api = new Api({
-  baseURL: import.meta.env.DEV ? "http://localhost:3000" : "/api", // 替换为你的 API 基础 URL
+  baseURL: import.meta.env.DEV ? 'http://localhost:3000' : '/api', // 替换为你的 API 基础 URL
   timeout: 10000, // 请求超时时间
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
-const a = await api.projectGroups.projectGroupControllerGetProjectGroup('')
+const a = await api.projectGroups.projectGroupControllerGetProjectGroup('');
 
 // 请求拦截器
 api.instance.interceptors.request.use(
   (config) => {
     // 在发送请求之前做些什么
     // 比如可以在这里添加认证 token
-    const token = store.get("token");
+    const token = store.get('token');
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`;
+      config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
   },
@@ -39,8 +39,8 @@ api.instance.interceptors.response.use(
     // 对响应错误做些什么
     // 可以统一处理错误信息，比如显示通知
     notification.error({
-      message: "请求错误",
-      description: error.response?.data?.message || error.message || "未知问题",
+      message: '请求错误',
+      description: error.response?.data?.message || error.message || '未知问题',
     });
     return Promise.reject(error);
   },

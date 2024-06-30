@@ -22,7 +22,7 @@ export class TimeNodeModel {
     projectGroupOperationId,
     projectGroupOperation,
     createdAt,
-    updatedAt
+    updatedAt,
   }: {
     id: number;
     timeChunkId: number;

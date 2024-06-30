@@ -1,4 +1,4 @@
-import { StateCreator } from "zustand";
+import { StateCreator } from 'zustand';
 
 // 递归 Readonly 工具类型
 export type DeepReadonly<T> = {
@@ -13,7 +13,7 @@ export type PickAndOptional<T, K extends keyof T, O extends keyof T> = {
 
 export type ImmerStateCreator<T, TT> = StateCreator<
   T,
-  [["zustand/immer", never], never],
+  [['zustand/immer', never], never],
   [],
   TT
 >;

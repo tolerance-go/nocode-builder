@@ -19,7 +19,7 @@ export class TimeChunkModel {
     user,
     timeNodes,
     createdAt,
-    updatedAt
+    updatedAt,
   }: {
     id: number;
     name: string;

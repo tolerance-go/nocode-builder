@@ -1,5 +1,5 @@
-import { db } from "@/db";
-import axios from "axios";
+import { db } from '@/db';
+import axios from 'axios';
 
 interface Friend {
   id?: number;
@@ -20,8 +20,8 @@ export class SyncController {
       const response = await axios.get<Friend[]>(this.apiUrl);
       return response.data;
     } catch (error) {
-      console.error("Error fetching remote data:", error);
-      throw new Error("Failed to fetch remote data");
+      console.error('Error fetching remote data:', error);
+      throw new Error('Failed to fetch remote data');
     }
   }
 
@@ -31,8 +31,8 @@ export class SyncController {
       const count = await db.friends.count();
       return count > 0;
     } catch (error) {
-      console.error("Error checking local data:", error);
-      throw new Error("Failed to check local data");
+      console.error('Error checking local data:', error);
+      throw new Error('Failed to check local data');
     }
   }
 
@@ -41,21 +41,21 @@ export class SyncController {
     try {
       const hasData = await this.hasLocalData();
       if (hasData) {
-        console.log("Local data exists, skipping initialization");
+        console.log('Local data exists, skipping initialization');
         return;
       }
 
       const remoteData = await this.fetchRemoteData();
-      await db.transaction("rw", db.friends, async () => {
+      await db.transaction('rw', db.friends, async () => {
         // 清空本地数据库中的数据
         await db.friends.clear();
 
         // 插入新的数据到本地数据库
         await db.friends.bulkAdd(remoteData);
       });
-      console.log("Data synced successfully");
+      console.log('Data synced successfully');
     } catch (error) {
-      console.error("Error syncing data:", error);
+      console.error('Error syncing data:', error);
     }
   }
 }

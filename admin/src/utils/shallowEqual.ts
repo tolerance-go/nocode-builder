@@ -23,5 +23,5 @@ export const shallowEqual = (obj1: unknown, obj2: unknown): boolean => {
 };
 
 const isObject = (obj: unknown): obj is Record<string, unknown> => {
-  return typeof obj === "object" && obj !== null;
+  return typeof obj === 'object' && obj !== null;
 };

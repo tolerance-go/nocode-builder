@@ -2,10 +2,10 @@ import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
-} from "@/types";
-import { ImmerStateCreator } from "@/utils";
-import { ServerSlice } from "./createServerSlice";
-import { ProjectTableDataActions } from "./createProjectTableSlice";
+} from '@/types';
+import { ImmerStateCreator } from '@/utils';
+import { ServerSlice } from './createServerSlice';
+import { ProjectTableDataActions } from './createProjectTableSlice';
 
 export type ProjectTreeStates = {
   projectStructureTreeData: ProjectStructureTreeDataNode[];
@@ -26,7 +26,7 @@ export type ProjectTreeActions = {
   updateProjectTreeDataRecord: (data: ProjectTreeNodeDataRecord) => void;
   updateProjectTreeDataRecordItem: (
     key: string,
-    data: Partial<Pick<ProjectTreeNodeDataRecordItem, "title">>,
+    data: Partial<Pick<ProjectTreeNodeDataRecordItem, 'title'>>,
   ) => void;
   initProjectTreeDataMeta: (args: {
     projectStructureTreeData: ProjectStructureTreeDataNode[];
@@ -164,7 +164,7 @@ export const createProjectTreeSlice: ImmerStateCreator<
         state.nodeParentKeyRecord = buildParentKeyMap(projectStructureTreeData);
       },
       false,
-      "initProjectTreeDataMeta",
+      'initProjectTreeDataMeta',
     );
   },
   // 增加一个节点到projectStructureTreeData
@@ -293,26 +293,26 @@ export const createProjectTreeSlice: ImmerStateCreator<
         removed = removeNode(state.projectStructureTreeData);
       },
       false,
-      "removeProjectStructureTreeNode",
+      'removeProjectStructureTreeNode',
     );
 
     if (removed) {
       const removedItem = get().projectTreeDataRecord[nodeKey];
 
       if (!removedItem) {
-        throw new Error("数据不完整。");
+        throw new Error('数据不完整。');
       }
 
-      if (removedItem.type == "file") {
+      if (removedItem.type == 'file') {
         if (removedItem.id !== -1) {
           // const project = get().findProjectById(removedItem.id);
           // if (!project) {
           //   throw new Error("数据不完整。");
           // }
           get().addTimelineItemToPool({
-            tableName: "project",
+            tableName: 'project',
             createdAt: new Date().toISOString(),
-            actionName: "delete",
+            actionName: 'delete',
             recordId: removedItem.id,
           });
         }

@@ -22,7 +22,7 @@ export class UserModel {
     createdAt,
     updatedAt,
     projectGroups,
-    timeChunk
+    timeChunk,
   }: {
     id: number;
     name: string;

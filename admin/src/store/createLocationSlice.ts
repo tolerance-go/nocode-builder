@@ -1,4 +1,4 @@
-import { ImmerStateCreator } from "@/utils";
+import { ImmerStateCreator } from '@/utils';
 
 export type LocationStates = {
   pathname: string | null;

@@ -26,7 +26,7 @@ export class ProjectGroupModel {
     projects,
     createdAt,
     updatedAt,
-    operations
+    operations,
   }: {
     id: number;
     name: string;

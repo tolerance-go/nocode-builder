@@ -1,4 +1,4 @@
-import { StateCreator, StoreMutatorIdentifier } from "zustand";
+import { StateCreator, StoreMutatorIdentifier } from 'zustand';
 
 type Logger = <
   T,
@@ -19,13 +19,13 @@ const loggerImpl: LoggerImpl = (f, name) => (set, get, store) => {
     const prevState = get();
     set(...args);
     const nextState = get();
-    console.log(...(name ? [`[${name}] Action:`] : ["Action:"]), ...args);
+    console.log(...(name ? [`[${name}] Action:`] : ['Action:']), ...args);
     console.log(
-      ...(name ? [`[${name}] Previous State:`] : ["Previous State:"]),
+      ...(name ? [`[${name}] Previous State:`] : ['Previous State:']),
       prevState,
     );
     console.log(
-      ...(name ? [`[${name}] Next State:`] : ["Next State:"]),
+      ...(name ? [`[${name}] Next State:`] : ['Next State:']),
       nextState,
     );
   };
@@ -35,13 +35,13 @@ const loggerImpl: LoggerImpl = (f, name) => (set, get, store) => {
     const prevState = get();
     setState(...args);
     const nextState = get();
-    console.log(...(name ? [`[${name}] Action:`] : ["Action:"]), ...args);
+    console.log(...(name ? [`[${name}] Action:`] : ['Action:']), ...args);
     console.log(
-      ...(name ? [`[${name}] Previous State:`] : ["Previous State:"]),
+      ...(name ? [`[${name}] Previous State:`] : ['Previous State:']),
       prevState,
     );
     console.log(
-      ...(name ? [`[${name}] Next State:`] : ["Next State:"]),
+      ...(name ? [`[${name}] Next State:`] : ['Next State:']),
       nextState,
     );
   };

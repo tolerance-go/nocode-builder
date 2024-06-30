@@ -1,6 +1,6 @@
-import { DataBaseTimelineChunk, DataBaseTimelineItem } from "@/types";
-import { ImmerStateCreator } from "@/utils";
-import { ProjectTableDataActions } from "./createProjectTableSlice";
+import { DataBaseTimelineChunk, DataBaseTimelineItem } from '@/types';
+import { ImmerStateCreator } from '@/utils';
+import { ProjectTableDataActions } from './createProjectTableSlice';
 
 export type ServerStates = {
   dataBaseTimelineChunks: DataBaseTimelineChunk[];
@@ -54,8 +54,8 @@ export const createServerSlice: ImmerStateCreator<
       const item = chunk.items[i];
 
       try {
-        if (item.tableName === "project") {
-          if (item.actionName === "delete") {
+        if (item.tableName === 'project') {
+          if (item.actionName === 'delete') {
             snapshot.deleteProject(item.recordId);
           }
         }
@@ -101,7 +101,7 @@ export const createServerSlice: ImmerStateCreator<
           // 同步本地
           snapshot.syncChunkToLocal(chunk); // 假设someLocalSyncMethod是同步本地的其他slice的方法
         } catch (error) {
-          console.error("Local sync failed:", error);
+          console.error('Local sync failed:', error);
           break;
         }
 
@@ -113,7 +113,7 @@ export const createServerSlice: ImmerStateCreator<
           // 调用接口同步远程
           await snapshot.syncChunkToRemote(chunk); // 假设syncRemote是一个返回同步结果的接口
         } catch (error) {
-          console.error("Remote sync failed:", error);
+          console.error('Remote sync failed:', error);
           // 如果远程同步失败，则跳出循环，稍后重试
           break;
         }
@@ -151,7 +151,7 @@ export const createServerSlice: ImmerStateCreator<
         }
       },
       false,
-      "createTimelineChunkFromPool",
+      'createTimelineChunkFromPool',
     );
   },
 

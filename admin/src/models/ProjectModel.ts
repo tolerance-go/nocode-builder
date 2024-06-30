@@ -22,7 +22,7 @@ export class ProjectModel {
     updatedAt,
     projectGroup,
     projectGroupId,
-    operations
+    operations,
   }: {
     id: number;
     name: string;

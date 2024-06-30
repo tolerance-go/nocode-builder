@@ -14,7 +14,7 @@ export class ProjectGroupDeleteOperationModel {
     createdAt,
     updatedAt,
     projectGroupOperation,
-    projectGroupOperationId
+    projectGroupOperationId,
   }: {
     id: number;
     recordId: number;
