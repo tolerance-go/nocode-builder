@@ -22,25 +22,26 @@ class Decorator {
 class Field {
   name: string;
   type: string | Class;
-  isNullable: boolean;
+  isRequired: boolean;
   decorators: Decorator[];
 
   constructor(
     name: string,
     type: string | Class,
-    isNullable: boolean,
+    isRequired: boolean,
     decorators: Decorator[] = [],
   ) {
     this.name = name;
     this.type = type;
-    this.isNullable = isNullable;
+    this.isRequired = isRequired;
     this.decorators = decorators;
   }
 
   print(): string {
     const type = typeof this.type === 'string' ? this.type : this.type.name;
     const decoratorsStr = this.decorators.map((dec) => dec.print()).join(' ');
-    return `${decoratorsStr} ${this.name}: ${type}${this.isNullable ? ' | null' : ''}`;
+    const nullableStr = this.isRequired ? '' : '?';
+    return `${decoratorsStr} ${this.name}${nullableStr}: ${type};`;
   }
 }
 
@@ -106,7 +107,7 @@ class File {
     };
 
     this.classes.forEach((cls) => visit(cls));
-    this.classes = sorted;
+    this.classes = sorted.reverse(); // 逆序排列，使被依赖的类先输出
   }
 
   print(): string {
@@ -127,29 +128,34 @@ const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
 async function parseSchema(schema: string): Promise<File> {
   const dmmf = await getDMMF({ datamodel: schema });
 
-  // 先解析所有的类，构建一个类名到 Class 对象的映射
+  const typeMapping: { [key: string]: string } = {
+    Int: 'number',
+    String: 'string',
+    Boolean: 'boolean',
+    DateTime: 'Date',
+  };
+
   const classMap: { [name: string]: Class } = {};
 
   const classes: Class[] = dmmf.datamodel.models.map((model) => {
     const fields: Field[] = model.fields.map((field) => {
-      return new Field(field.name, field.type, field.isNullable);
+      const fieldType = typeMapping[field.type] || field.type;
+      return new Field(field.name, fieldType, field.isRequired);
     });
     const classObj = new Class(model.name, fields);
     classMap[model.name] = classObj;
     return classObj;
   });
 
-  // 处理 Field 的 type，检查是否是一个 Class 引用
   classes.forEach((classObj) => {
     classObj.fields.forEach((field) => {
       if (typeof field.type === 'string' && classMap[field.type]) {
         field.type = classMap[field.type];
-        classObj.dependsOnOtherClasses = true; // 设置依赖属性
+        classObj.dependsOnOtherClasses = true;
       }
     });
   });
 
-  // 假设 imports 是空的，因为 Prisma schema 中没有 import 语句
   const imports: Import[] = [];
 
   return new File(classes, imports);
@@ -164,7 +170,7 @@ async function main() {
     console.log(prismaFile.print());
 
     // 将结果保存到文件
-    const outputPath = path.resolve(__dirname, 'models.ts');
+    const outputPath = path.resolve('../admin/src/models.ts');
     fs.writeFileSync(outputPath, prismaFile.print());
 
     console.log(
