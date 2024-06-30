@@ -213,36 +213,44 @@ class DBFile extends File {
     return classItem.fields.filter(condition).map((field) => field.name);
   }
 
+  private generateInsertType(classItem: Class): string {
+    const idFieldNames = this.getFieldNames(classItem, (field) => field.isId);
+    const updateFieldNames = this.getFieldNames(
+      classItem,
+      (field) => field.isUpdatedAt,
+    );
+    const defaultFieldNames = this.getFieldNames(
+      classItem,
+      (field) => field.hasDefaultValue,
+    );
+
+    const omitFields = new Set([
+      ...idFieldNames,
+      ...updateFieldNames,
+      ...defaultFieldNames,
+    ]);
+    const omitFieldsStr = Array.from(omitFields)
+      .map((field) => `'${field}'`)
+      .join(' | ');
+
+    return `Omit<${classItem.printName}, ${omitFieldsStr}>`;
+  }
+
   print(): string {
     const dynamicImports = this.classes
       .map((classItem) => `${classItem.printName}`)
       .join(', ');
 
+    const insertTypesStr = this.classes
+      .map((classItem) => {
+        const insertType = this.generateInsertType(classItem);
+        return `export type ${classItem.printName}InsertType = ${insertType};`;
+      })
+      .join('\n');
+
     const tablesStr = this.classes
       .map((classItem) => {
-        const idFieldNames = this.getFieldNames(
-          classItem,
-          (field) => field.isId,
-        );
-        const updateFieldNames = this.getFieldNames(
-          classItem,
-          (field) => field.isUpdatedAt,
-        );
-        const defaultFieldNames = this.getFieldNames(
-          classItem,
-          (field) => field.hasDefaultValue,
-        );
-
-        const omitFields = new Set([
-          ...idFieldNames,
-          ...updateFieldNames,
-          ...defaultFieldNames,
-        ]);
-        const omitFieldsStr = Array.from(omitFields)
-          .map((field) => `'${field}'`)
-          .join(' | ');
-
-        return `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number, Omit<${classItem.printName}, ${omitFieldsStr}>>;`;
+        return `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number, ${classItem.printName}InsertType>;`;
       })
       .join('\n');
 
@@ -270,6 +278,8 @@ class DBFile extends File {
 
     return `import { ${dynamicImports} } from '@/_gen/models';
 import Dexie, { Table } from 'dexie';
+
+${insertTypesStr}
 
 export class Database extends Dexie {
 ${tablesStr}

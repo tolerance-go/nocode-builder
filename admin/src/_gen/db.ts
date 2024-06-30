@@ -21,71 +21,101 @@ import {
 } from '@/_gen/models';
 import Dexie, { Table } from 'dexie';
 
+export type UserModelInsertType = Omit<
+  UserModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type ProjectModelInsertType = Omit<
+  ProjectModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type ProjectGroupModelInsertType = Omit<
+  ProjectGroupModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type TimeChunkModelInsertType = Omit<
+  TimeChunkModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type TimeNodeModelInsertType = Omit<
+  TimeNodeModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type ProjectOperationModelInsertType = Omit<ProjectOperationModel, 'id'>;
+export type ProjectGroupOperationModelInsertType = Omit<
+  ProjectGroupOperationModel,
+  'id'
+>;
+export type ProjectCreateOperationModelInsertType = Omit<
+  ProjectCreateOperationModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type ProjectUpdateOperationModelInsertType = Omit<
+  ProjectUpdateOperationModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type ProjectDeleteOperationModelInsertType = Omit<
+  ProjectDeleteOperationModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type ProjectGroupCreateOperationModelInsertType = Omit<
+  ProjectGroupCreateOperationModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type ProjectGroupUpdateOperationModelInsertType = Omit<
+  ProjectGroupUpdateOperationModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+export type ProjectGroupDeleteOperationModelInsertType = Omit<
+  ProjectGroupDeleteOperationModel,
+  'id' | 'updatedAt' | 'createdAt'
+>;
+
 export class Database extends Dexie {
-  users: Table<
-    UserModel,
-    number,
-    Omit<UserModel, 'id' | 'updatedAt' | 'createdAt'>
-  >;
-  projects: Table<
-    ProjectModel,
-    number,
-    Omit<ProjectModel, 'id' | 'updatedAt' | 'createdAt'>
-  >;
-  projectGroups: Table<
-    ProjectGroupModel,
-    number,
-    Omit<ProjectGroupModel, 'id' | 'updatedAt' | 'createdAt'>
-  >;
-  timeChunks: Table<
-    TimeChunkModel,
-    number,
-    Omit<TimeChunkModel, 'id' | 'updatedAt' | 'createdAt'>
-  >;
-  timeNodes: Table<
-    TimeNodeModel,
-    number,
-    Omit<TimeNodeModel, 'id' | 'updatedAt' | 'createdAt'>
-  >;
+  users: Table<UserModel, number, UserModelInsertType>;
+  projects: Table<ProjectModel, number, ProjectModelInsertType>;
+  projectGroups: Table<ProjectGroupModel, number, ProjectGroupModelInsertType>;
+  timeChunks: Table<TimeChunkModel, number, TimeChunkModelInsertType>;
+  timeNodes: Table<TimeNodeModel, number, TimeNodeModelInsertType>;
   projectOperations: Table<
     ProjectOperationModel,
     number,
-    Omit<ProjectOperationModel, 'id'>
+    ProjectOperationModelInsertType
   >;
   projectGroupOperations: Table<
     ProjectGroupOperationModel,
     number,
-    Omit<ProjectGroupOperationModel, 'id'>
+    ProjectGroupOperationModelInsertType
   >;
   projectCreateOperations: Table<
     ProjectCreateOperationModel,
     number,
-    Omit<ProjectCreateOperationModel, 'id' | 'updatedAt' | 'createdAt'>
+    ProjectCreateOperationModelInsertType
   >;
   projectUpdateOperations: Table<
     ProjectUpdateOperationModel,
     number,
-    Omit<ProjectUpdateOperationModel, 'id' | 'updatedAt' | 'createdAt'>
+    ProjectUpdateOperationModelInsertType
   >;
   projectDeleteOperations: Table<
     ProjectDeleteOperationModel,
     number,
-    Omit<ProjectDeleteOperationModel, 'id' | 'updatedAt' | 'createdAt'>
+    ProjectDeleteOperationModelInsertType
   >;
   projectGroupCreateOperations: Table<
     ProjectGroupCreateOperationModel,
     number,
-    Omit<ProjectGroupCreateOperationModel, 'id' | 'updatedAt' | 'createdAt'>
+    ProjectGroupCreateOperationModelInsertType
   >;
   projectGroupUpdateOperations: Table<
     ProjectGroupUpdateOperationModel,
     number,
-    Omit<ProjectGroupUpdateOperationModel, 'id' | 'updatedAt' | 'createdAt'>
+    ProjectGroupUpdateOperationModelInsertType
   >;
   projectGroupDeleteOperations: Table<
     ProjectGroupDeleteOperationModel,
     number,
-    Omit<ProjectGroupDeleteOperationModel, 'id' | 'updatedAt' | 'createdAt'>
+    ProjectGroupDeleteOperationModelInsertType
   >;
 
   constructor() {
