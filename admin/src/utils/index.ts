@@ -6,4 +6,3 @@ export * from './createSelectors';
 export * from './validPaths';
 export * from './is';
 export * from './shallowEqual';
-export * from './SingletonController';

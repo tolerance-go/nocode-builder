@@ -4,8 +4,6 @@ import {
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
 import { ImmerStateCreator } from '@/utils';
-import { ServerSlice } from './createServerSlice';
-import { ProjectTableDataActions } from './createProjectTableSlice';
 
 export type ProjectTreeStates = {
   projectStructureTreeData: ProjectStructureTreeDataNode[];
@@ -69,7 +67,7 @@ export type ProjectTreeActions = {
 export type ProjectTreeSlice = ProjectTreeStates & ProjectTreeActions;
 
 export const createProjectTreeSlice: ImmerStateCreator<
-  ProjectTreeSlice & ServerSlice & ProjectTableDataActions,
+  ProjectTreeSlice,
   ProjectTreeSlice
 > = (set, get) => ({
   containerHeight: 0,
@@ -309,12 +307,12 @@ export const createProjectTreeSlice: ImmerStateCreator<
           // if (!project) {
           //   throw new Error("数据不完整。");
           // }
-          get().addTimelineItemToPool({
-            tableName: 'project',
-            createdAt: new Date().toISOString(),
-            actionName: 'delete',
-            recordId: removedItem.id,
-          });
+          // get().addTimelineItemToPool({
+          //   tableName: 'project',
+          //   createdAt: new Date().toISOString(),
+          //   actionName: 'delete',
+          //   recordId: removedItem.id,
+          // });
         }
       }
 

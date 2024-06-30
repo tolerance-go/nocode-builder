@@ -1,14 +1,40 @@
+import localforage from 'localforage';
+
 export class UndoRedoManager<T> {
+  private static instance: UndoRedoManager<unknown> | null = null;
   private historyStack: T[];
   private currentIndex: number;
+  private storageKey: string = 'undoRedoHistory';
+  private loadingHistory: boolean;
+  private savingHistory: boolean;
+  private pendingOperations: (() => void)[];
+  private pendingSaves: (() => void)[];
 
-  constructor(initialState: T) {
-    this.historyStack = [initialState];
-    this.currentIndex = 0;
+  private constructor() {
+    this.historyStack = [];
+    this.currentIndex = -1;
+    this.loadingHistory = true;
+    this.savingHistory = false;
+    this.pendingOperations = [];
+    this.pendingSaves = [];
+    this.loadHistory();
+  }
+
+  // 获取单例实例的方法
+  public static getInstance<T>(): UndoRedoManager<T> {
+    if (!UndoRedoManager.instance) {
+      UndoRedoManager.instance = new UndoRedoManager();
+    }
+    return UndoRedoManager.instance as UndoRedoManager<T>;
   }
 
   // 执行一个新操作
-  execute(newState: T): void {
+  async execute(newState: T): Promise<void> {
+    if (this.loadingHistory) {
+      this.pendingOperations.push(() => this.execute(newState));
+      return;
+    }
+
     // 截断操作栈，删除当前指针之后的所有操作记录
     if (this.currentIndex < this.historyStack.length - 1) {
       this.historyStack = this.historyStack.slice(0, this.currentIndex + 1);
@@ -17,12 +43,19 @@ export class UndoRedoManager<T> {
     // 将新状态添加到操作栈
     this.historyStack.push(newState);
     this.currentIndex++;
+    await this.saveHistory();
   }
 
   // Undo 操作
-  undo(): T {
+  async undo(): Promise<T | undefined> {
+    if (this.loadingHistory) {
+      this.pendingOperations.push(() => this.undo());
+      return;
+    }
+
     if (this.currentIndex > 0) {
       this.currentIndex--;
+      await this.saveHistory();
     } else {
       console.log('无法再进行 Undo 操作');
     }
@@ -30,9 +63,15 @@ export class UndoRedoManager<T> {
   }
 
   // Redo 操作
-  redo(): T {
+  async redo(): Promise<T | undefined> {
+    if (this.loadingHistory) {
+      this.pendingOperations.push(() => this.redo());
+      return;
+    }
+
     if (this.currentIndex < this.historyStack.length - 1) {
       this.currentIndex++;
+      await this.saveHistory();
     } else {
       console.log('无法再进行 Redo 操作');
     }
@@ -40,7 +79,63 @@ export class UndoRedoManager<T> {
   }
 
   // 获取当前状态
-  getCurrentState(): T {
+  getCurrentState(): T | undefined {
     return this.historyStack[this.currentIndex];
+  }
+
+  // 保存历史记录到 LocalForage
+  private async saveHistory(): Promise<void> {
+    if (this.savingHistory) {
+      this.pendingSaves.push(() => this.saveHistory());
+      return;
+    }
+
+    this.savingHistory = true;
+    try {
+      await localforage.setItem(this.storageKey, {
+        historyStack: this.historyStack,
+        currentIndex: this.currentIndex,
+      });
+    } catch (error) {
+      console.error('保存历史记录失败', error);
+    } finally {
+      this.savingHistory = false;
+      this.executePendingSaves();
+    }
+  }
+
+  // 执行在保存历史期间存储的保存操作
+  private async executePendingSaves(): Promise<void> {
+    while (this.pendingSaves.length > 0) {
+      const saveOperation = this.pendingSaves.shift();
+      if (saveOperation) {
+        await saveOperation();
+      }
+    }
+  }
+
+  // 从 LocalForage 加载历史记录
+  private async loadHistory(): Promise<void> {
+    try {
+      const savedData = await localforage.getItem<{
+        historyStack: T[];
+        currentIndex: number;
+      }>(this.storageKey);
+      if (savedData) {
+        this.historyStack = savedData.historyStack;
+        this.currentIndex = savedData.currentIndex;
+      }
+    } catch (error) {
+      console.error('加载历史记录失败', error);
+    } finally {
+      this.loadingHistory = false;
+      this.executePendingOperations();
+    }
+  }
+
+  // 执行在加载历史期间存储的操作
+  private executePendingOperations(): void {
+    this.pendingOperations.forEach((operation) => operation());
+    this.pendingOperations = [];
   }
 }
