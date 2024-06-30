@@ -2,30 +2,29 @@ import { createSelectors } from '@/utils';
 import { create } from 'zustand';
 import { devtools, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { LayoutSlice, createLayoutSlice } from './createLayoutSlice';
-import { LocationSlice, createLocationSlice } from './createLocationSlice';
-import { NetworkSlice, createNetworkSlice } from './createNetworkSlice';
+import { createLayoutSlice } from './createLayoutSlice';
+import { createLocationSlice } from './createLocationSlice';
+import { createNetworkSlice } from './createNetworkSlice';
 
-import {
-  ProjectTreeSlice,
-  createProjectTreeSlice,
-} from './createProjectTreeSlice';
-import { ServerSlice, createServerSlice } from './createServerSlice';
+import { createProjectTreeSlice } from './createProjectTreeSlice';
+import { createServerSlice } from './createServerSlice';
+import { Store } from '@/types/store';
+import { storeSliceMiddleware } from '@/middlewares';
 
-export const useAppStoreBase = create<
-  ProjectTreeSlice & NetworkSlice & LocationSlice & LayoutSlice & ServerSlice
->()(
+export const useAppStoreBase = create<Store>()(
   devtools(
     persist(
-      immer((...a) => {
-        return {
-          ...createServerSlice(...a),
-          ...createLayoutSlice(...a),
-          ...createLocationSlice(...a),
-          ...createNetworkSlice(...a),
-          ...createProjectTreeSlice(...a),
-        };
-      }),
+      storeSliceMiddleware(
+        immer((...a) => {
+          return {
+            ...createServerSlice(...a),
+            ...createLayoutSlice(...a),
+            ...createLocationSlice(...a),
+            ...createNetworkSlice(...a),
+            ...createProjectTreeSlice(...a),
+          };
+        }),
+      ),
       {
         name: 'localStore',
       },
