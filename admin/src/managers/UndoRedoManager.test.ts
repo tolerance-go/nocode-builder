@@ -22,6 +22,30 @@ describe('UndoRedoManager', () => {
     UndoRedoManager.destroyInstance(); // 销毁单例实例
   });
 
+  it('应该加载保存的历史记录', async () => {
+    const savedHistory = {
+      historyStack: [1, 2, 3],
+      currentIndex: 2,
+    };
+
+    // 模拟加载历史记录时的返回数据
+    (localforage.getItem as ReturnType<typeof vi.fn>).mockResolvedValue(
+      savedHistory,
+    );
+
+    const manager = await UndoRedoManager.initialize<number>();
+    await manager.loadingHistory;
+
+    // 验证加载历史记录后的状态
+    expect(manager.getCurrentState()).toBe(3);
+    expect(manager.currentIndex).toBe(2);
+    expect(manager.historyStack).toEqual([1, 2, 3]);
+
+    // 验证加载历史记录时是否调用了 localforage.getItem
+    expect(localforage.getItem).toHaveBeenCalledTimes(1);
+    expect(localforage.getItem).toHaveBeenCalledWith('undoRedoHistory');
+  });
+
   it('应该初始化并加载历史记录', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 

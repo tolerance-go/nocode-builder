@@ -2,7 +2,7 @@ import localforage from 'localforage';
 
 export class UndoRedoManager<T> {
   private static instance: UndoRedoManager<unknown> | null = null;
-  private historyStack: T[];
+  public historyStack: T[];
   public currentIndex: number;
   private storageKey: string = 'undoRedoHistory';
   private loadingHistoryPending: boolean;
