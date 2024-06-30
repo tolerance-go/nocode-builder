@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "exec:remove-openapi-unused": "node scripts/remove-openapi-unused.js",
-    "openapi": "node openapi.config.js && pnpm exec:remove-openapi-unused",
+    "openapi": "openapi-generator-cli generate -i http://localhost:3000/api-json -g typescript-axios -o ./src/api",
     "dev": "vite",
     "build": "tsc && vite build",
     "tsc": "tsc",
@@ -47,6 +47,7 @@
     "zustand": "^4.5.4"
   },
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.13.4",
     "@rollup/plugin-alias": "^5.1.0",
     "@testing-library/jest-dom": "^6.4.6",
     "@testing-library/react": "^16.0.0",
@@ -66,6 +67,7 @@
     "less": "^4.2.0",
     "openapi-typescript": "^7.0.0",
     "postcss": "^8.4.38",
+    "swagger-typescript-api": "^13.0.11",
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vitest": "^1.6.0"
