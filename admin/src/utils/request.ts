@@ -1,4 +1,4 @@
-import { Api } from '@/api';
+import { Api } from '@/_gen/api';
 import { notification } from 'antd';
 import store from 'store2';
 
@@ -10,7 +10,6 @@ const api = new Api({
   },
 });
 
-const a = await api.projectGroups.projectGroupControllerGetProjectGroup('');
 
 // 请求拦截器
 api.instance.interceptors.request.use(

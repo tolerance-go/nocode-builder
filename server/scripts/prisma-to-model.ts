@@ -199,7 +199,7 @@ async function main() {
     console.log(prismaFile.print());
 
     // 将结果保存到文件
-    const outputPath = path.resolve('../admin/src/models.ts');
+    const outputPath = path.resolve('../admin/src/_gen/models.ts');
     fs.writeFileSync(
       outputPath,
       `/*

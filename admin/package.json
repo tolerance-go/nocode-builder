@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "openapi": "swagger-typescript-api -p http://localhost:3000/api-json -o ./src -n api.ts --axios --templates ./templates/used",
+    "openapi": "node ./swagger-typescript-api.js",
     "dev": "vite",
     "build": "tsc && vite build",
     "tsc": "tsc",

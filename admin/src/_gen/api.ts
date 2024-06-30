@@ -1,14 +1,3 @@
-/* eslint-disable */
-/* tslint:disable */
-/*
- * ---------------------------------------------------------------
- * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
- * ##                                                           ##
- * ## AUTHOR: acacode                                           ##
- * ## SOURCE: https://github.com/acacode/swagger-typescript-api ##
- * ---------------------------------------------------------------
- */
-
 export interface LoginDto {
   username: string;
   password: string;
@@ -186,7 +175,7 @@ export interface ProjectGroupUpdateDto {
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, HeadersDefaults, ResponseType } from 'axios';
 import axios from 'axios';
 
-export type QueryParamsType = Record<string | number, any>;
+export type QueryParamsType = Record<string | number, unknown>;
 
 export interface FullRequestParams extends Omit<AxiosRequestConfig, 'data' | 'params' | 'url' | 'responseType'> {
   /** set parameter to `true` for call `securityWorker` for this request */
@@ -267,7 +256,7 @@ export class HttpClient<SecurityDataType = unknown> {
     }
     return Object.keys(input || {}).reduce((formData, key) => {
       const property = input[key];
-      const propertyContent: any[] = property instanceof Array ? property : [property];
+      const propertyContent: unknown[] = property instanceof Array ? property : [property];
 
       for (const formItem of propertyContent) {
         const isFileType = formItem instanceof Blob || formItem instanceof File;
@@ -278,7 +267,8 @@ export class HttpClient<SecurityDataType = unknown> {
     }, new FormData());
   }
 
-  public request = async <T = any, _E = any>({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  public request = async <T = unknown, _E = unknown>({
     secure,
     path,
     type,
@@ -324,7 +314,7 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * The UNOCODE API description
  */
-export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
+export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
   /**
    * No description
    *
@@ -332,7 +322,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @request GET:/
    */
   getHello = (params: RequestParams = {}) =>
-    this.request<void, any>({
+    this.request<void, unknown>({
       path: `/`,
       method: 'GET',
       ...params,
@@ -346,7 +336,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request POST:/auth/login
      */
     login: (data: LoginDto, params: RequestParams = {}) =>
-      this.request<LoginResponseDto, any>({
+      this.request<LoginResponseDto, unknown>({
         path: `/auth/login`,
         method: 'POST',
         body: data,
@@ -363,7 +353,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/users/{id}
      */
     getUser: (id: string, params: RequestParams = {}) =>
-      this.request<UserDto, any>({
+      this.request<UserDto, unknown>({
         path: `/users/${id}`,
         method: 'GET',
         format: 'json',
@@ -377,7 +367,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/users/{id}
      */
     updateUser: (id: string, data: UserUpdateDto, params: RequestParams = {}) =>
-      this.request<UserDto, any>({
+      this.request<UserDto, unknown>({
         path: `/users/${id}`,
         method: 'PATCH',
         body: data,
@@ -393,7 +383,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/users/{id}
      */
     deleteUser: (id: string, params: RequestParams = {}) =>
-      this.request<UserDto, any>({
+      this.request<UserDto, unknown>({
         path: `/users/${id}`,
         method: 'DELETE',
         format: 'json',
@@ -431,7 +421,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<UserDto[], any>({
+      this.request<UserDto[], unknown>({
         path: `/users`,
         method: 'GET',
         query: query,
@@ -463,7 +453,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/projects/{id}
      */
     getProject: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectDto, any>({
+      this.request<ProjectDto, unknown>({
         path: `/projects/${id}`,
         method: 'GET',
         format: 'json',
@@ -477,7 +467,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/projects/{id}
      */
     updateProject: (id: string, data: ProjectUpdateDto, params: RequestParams = {}) =>
-      this.request<ProjectDto, any>({
+      this.request<ProjectDto, unknown>({
         path: `/projects/${id}`,
         method: 'PATCH',
         body: data,
@@ -493,7 +483,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/projects/{id}
      */
     deleteProject: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectDto, any>({
+      this.request<ProjectDto, unknown>({
         path: `/projects/${id}`,
         method: 'DELETE',
         format: 'json',
@@ -531,7 +521,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<ProjectDto[], any>({
+      this.request<ProjectDto[], unknown>({
         path: `/projects`,
         method: 'GET',
         query: query,
@@ -563,7 +553,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request GET:/project-groups/{id}
      */
     getProjectGroup: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectGroupDto, any>({
+      this.request<ProjectGroupDto, unknown>({
         path: `/project-groups/${id}`,
         method: 'GET',
         format: 'json',
@@ -577,7 +567,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request PATCH:/project-groups/{id}
      */
     updateProjectGroup: (id: string, data: ProjectGroupUpdateDto, params: RequestParams = {}) =>
-      this.request<ProjectGroupDto, any>({
+      this.request<ProjectGroupDto, unknown>({
         path: `/project-groups/${id}`,
         method: 'PATCH',
         body: data,
@@ -593,7 +583,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @request DELETE:/project-groups/{id}
      */
     deleteProjectGroup: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectGroupDto, any>({
+      this.request<ProjectGroupDto, unknown>({
         path: `/project-groups/${id}`,
         method: 'DELETE',
         format: 'json',
@@ -631,7 +621,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
       },
       params: RequestParams = {},
     ) =>
-      this.request<ProjectGroupDto[], any>({
+      this.request<ProjectGroupDto[], unknown>({
         path: `/project-groups`,
         method: 'GET',
         query: query,
