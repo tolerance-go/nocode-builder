@@ -36,6 +36,8 @@ class Field {
   type: string | Class;
   isRequired: boolean;
   isId: boolean;
+  isUpdatedAt: boolean; // 是否为更新时间字段
+  hasDefaultValue: boolean; // 是否有默认值
   decorators: Decorator[];
 
   constructor(
@@ -43,12 +45,16 @@ class Field {
     type: string | Class,
     isRequired: boolean,
     isId: boolean,
+    isUpdateAt: boolean = false,
+    hasDefault: boolean = false,
     decorators: Decorator[] = [],
   ) {
     this.name = name;
     this.type = type;
     this.isRequired = isRequired;
     this.isId = isId;
+    this.isUpdatedAt = isUpdateAt;
+    this.hasDefaultValue = hasDefault;
     this.decorators = decorators;
   }
 
@@ -200,9 +206,11 @@ class DBFile extends File {
     super(classes, imports);
   }
 
-  private getIdFieldName(classItem: Class): string {
-    const idField = classItem.fields.find((field) => field.isId);
-    return idField ? idField.name : 'id';
+  private getFieldNames(
+    classItem: Class,
+    condition: (field: Field) => boolean,
+  ): string[] {
+    return classItem.fields.filter(condition).map((field) => field.name);
   }
 
   print(): string {
@@ -212,8 +220,29 @@ class DBFile extends File {
 
     const tablesStr = this.classes
       .map((classItem) => {
-        const idFieldName = this.getIdFieldName(classItem);
-        return `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number, Omit<${classItem.printName}, '${idFieldName}'>>;`;
+        const idFieldNames = this.getFieldNames(
+          classItem,
+          (field) => field.isId,
+        );
+        const updateFieldNames = this.getFieldNames(
+          classItem,
+          (field) => field.isUpdatedAt,
+        );
+        const defaultFieldNames = this.getFieldNames(
+          classItem,
+          (field) => field.hasDefaultValue,
+        );
+
+        const omitFields = new Set([
+          ...idFieldNames,
+          ...updateFieldNames,
+          ...defaultFieldNames,
+        ]);
+        const omitFieldsStr = Array.from(omitFields)
+          .map((field) => `'${field}'`)
+          .join(' | ');
+
+        return `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number, Omit<${classItem.printName}, ${omitFieldsStr}>>;`;
       })
       .join('\n');
 
@@ -279,7 +308,14 @@ async function parseSchema(
   const classes: Class[] = dmmf.datamodel.models.map((model) => {
     const fields: Field[] = model.fields.map((field) => {
       const fieldType = typeMapping[field.type] || field.type;
-      return new Field(field.name, fieldType, field.isRequired, field.isId);
+      return new Field(
+        field.name,
+        fieldType,
+        field.isRequired,
+        field.isId,
+        field.isUpdatedAt,
+        field.hasDefaultValue,
+      );
     });
     const classObj = new Class(model.name, fields);
     classMap[model.name] = classObj;

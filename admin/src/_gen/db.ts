@@ -22,15 +22,31 @@ import {
 import Dexie, { Table } from 'dexie';
 
 export class Database extends Dexie {
-  users: Table<UserModel, number, Omit<UserModel, 'id'>>;
-  projects: Table<ProjectModel, number, Omit<ProjectModel, 'id'>>;
+  users: Table<
+    UserModel,
+    number,
+    Omit<UserModel, 'id' | 'updatedAt' | 'createdAt'>
+  >;
+  projects: Table<
+    ProjectModel,
+    number,
+    Omit<ProjectModel, 'id' | 'updatedAt' | 'createdAt'>
+  >;
   projectGroups: Table<
     ProjectGroupModel,
     number,
-    Omit<ProjectGroupModel, 'id'>
+    Omit<ProjectGroupModel, 'id' | 'updatedAt' | 'createdAt'>
   >;
-  timeChunks: Table<TimeChunkModel, number, Omit<TimeChunkModel, 'id'>>;
-  timeNodes: Table<TimeNodeModel, number, Omit<TimeNodeModel, 'id'>>;
+  timeChunks: Table<
+    TimeChunkModel,
+    number,
+    Omit<TimeChunkModel, 'id' | 'updatedAt' | 'createdAt'>
+  >;
+  timeNodes: Table<
+    TimeNodeModel,
+    number,
+    Omit<TimeNodeModel, 'id' | 'updatedAt' | 'createdAt'>
+  >;
   projectOperations: Table<
     ProjectOperationModel,
     number,
@@ -44,32 +60,32 @@ export class Database extends Dexie {
   projectCreateOperations: Table<
     ProjectCreateOperationModel,
     number,
-    Omit<ProjectCreateOperationModel, 'id'>
+    Omit<ProjectCreateOperationModel, 'id' | 'updatedAt' | 'createdAt'>
   >;
   projectUpdateOperations: Table<
     ProjectUpdateOperationModel,
     number,
-    Omit<ProjectUpdateOperationModel, 'id'>
+    Omit<ProjectUpdateOperationModel, 'id' | 'updatedAt' | 'createdAt'>
   >;
   projectDeleteOperations: Table<
     ProjectDeleteOperationModel,
     number,
-    Omit<ProjectDeleteOperationModel, 'id'>
+    Omit<ProjectDeleteOperationModel, 'id' | 'updatedAt' | 'createdAt'>
   >;
   projectGroupCreateOperations: Table<
     ProjectGroupCreateOperationModel,
     number,
-    Omit<ProjectGroupCreateOperationModel, 'id'>
+    Omit<ProjectGroupCreateOperationModel, 'id' | 'updatedAt' | 'createdAt'>
   >;
   projectGroupUpdateOperations: Table<
     ProjectGroupUpdateOperationModel,
     number,
-    Omit<ProjectGroupUpdateOperationModel, 'id'>
+    Omit<ProjectGroupUpdateOperationModel, 'id' | 'updatedAt' | 'createdAt'>
   >;
   projectGroupDeleteOperations: Table<
     ProjectGroupDeleteOperationModel,
     number,
-    Omit<ProjectGroupDeleteOperationModel, 'id'>
+    Omit<ProjectGroupDeleteOperationModel, 'id' | 'updatedAt' | 'createdAt'>
   >;
 
   constructor() {
