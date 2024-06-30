@@ -42,28 +42,28 @@ useAppStoreBase.subscribe((state, previous) => {
     }
   }
 
-  if (projectGroupTableDataHasChanged || projectTableDataHasChanged) {
-    if (
-      state.pathname !== null &&
-      isSystemPath(state.pathname) &&
-      !isAuthRelatedPath(state.pathname)
-    ) {
-      if (!state.hasInitProjectTreeDataMeta) {
-        if (
-          state.projectGroupTableData !== null &&
-          state.projectTableData !== null
-        ) {
-          const meta = buildProjectStructureTreeDataMeta(
-            state.projectGroupTableData,
-            state.projectTableData,
-          );
+  // if (projectGroupTableDataHasChanged || projectTableDataHasChanged) {
+  //   if (
+  //     state.pathname !== null &&
+  //     isSystemPath(state.pathname) &&
+  //     !isAuthRelatedPath(state.pathname)
+  //   ) {
+  //     if (!state.hasInitProjectTreeDataMeta) {
+  //       if (
+  //         state.projectGroupTableData !== null &&
+  //         state.projectTableData !== null
+  //       ) {
+  //         const meta = buildProjectStructureTreeDataMeta(
+  //           state.projectGroupTableData,
+  //           state.projectTableData,
+  //         );
 
-          initProjectTreeDataMeta({
-            projectStructureTreeData: meta.tree,
-            projectStructureTreeDataRecord: meta.dataRecord,
-          });
-        }
-      }
-    }
-  }
+  //         initProjectTreeDataMeta({
+  //           projectStructureTreeData: meta.tree,
+  //           projectStructureTreeDataRecord: meta.dataRecord,
+  //         });
+  //       }
+  //     }
+  //   }
+  // }
 });
