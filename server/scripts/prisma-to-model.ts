@@ -27,16 +27,19 @@ class Field {
   type: string | Class;
   isRequired: boolean;
   decorators: Decorator[];
+  isId: boolean;
 
   constructor(
     name: string,
     type: string | Class,
     isRequired: boolean,
+    isId: boolean,
     decorators: Decorator[] = [],
   ) {
     this.name = name;
     this.type = type;
     this.isRequired = isRequired;
+    this.isId = isId;
     this.decorators = decorators;
   }
 
@@ -102,27 +105,11 @@ class Class {
   }
 }
 
-// 定义 Import 类
-class Import {
-  name: string;
-  from: string;
-
-  constructor(name: string, from: string) {
-    this.name = name;
-    this.from = from;
-  }
-
-  print(): string {
-    return `import { ${this.name} } from '${this.from}';`;
-  }
-}
-
-// 定义 File 类
 class File {
   classes: Class[];
   imports: Import[];
 
-  constructor(classes: Class[], imports: Import[]) {
+  constructor(classes: Class[], imports: Import[] = []) {
     this.classes = classes;
     this.imports = imports;
   }
@@ -159,10 +146,25 @@ class File {
   }
 }
 
+// 修改 Import 类
+class Import {
+  params: string[];
+  from: string;
+
+  constructor(params: string[], from: string) {
+    this.params = params;
+    this.from = from;
+  }
+
+  print(): string {
+    return `import { ${this.params.join(', ')} } from '${this.from}';`;
+  }
+}
+
 // 新增 ModelsFile 类，继承自 File 类
 class ModelsFile extends File {
-  constructor(classes: Class[], imports: Import[]) {
-    super(classes, imports);
+  constructor(classes: Class[]) {
+    super(classes);
   }
 
   print(): string {
@@ -175,12 +177,68 @@ class ModelsFile extends File {
   }
 }
 
+// 新增 DBFile 类
+class DBFile extends File {
+  constructor(classes: Class[]) {
+    const imports = [
+      new Import(
+        classes.map((classItem) => `${classItem.printName}`),
+        '@/_gen/models',
+      ),
+      new Import(['Dexie', 'Table'], 'dexie'),
+    ];
+    super(classes, imports);
+  }
+
+  print(): string {
+    const tablesStr = this.classes
+      .map(
+        (classItem) =>
+          `  ${classItem.name.toLowerCase()}s: Table<${classItem.printName}, number>;`,
+      )
+      .join('\n');
+
+    const storesStr = this.classes
+      .map(
+        (classItem) =>
+          `      ${classItem.name.toLowerCase()}s: '++id, name, ownerId, createdAt, updatedAt';`,
+      )
+      .join('\n');
+
+    const tableInitStr = this.classes
+      .map(
+        (classItem) =>
+          `    this.${classItem.name.toLowerCase()}s = this.table('${classItem.name.toLowerCase()}s');`,
+      )
+      .join('\n');
+
+    return `${super.print()}
+
+export class Database extends Dexie {
+${tablesStr}
+
+  constructor() {
+    super('database');
+    this.version(1).stores({
+${storesStr}
+    });
+
+${tableInitStr}
+  }
+}
+
+export const db = new Database();`;
+  }
+}
+
 // 读取文件内容
 const schemaFilePath = path.resolve('./prisma/schema.prisma');
 const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
 
 // 使用 Prisma SDK 解析 schema
-async function parseSchema(schema: string): Promise<ModelsFile> {
+async function parseSchema(
+  schema: string,
+): Promise<{ modelsFile: ModelsFile; dbFile: DBFile }> {
   const dmmf = await getDMMF({ datamodel: schema });
 
   const typeMapping: { [key: string]: string } = {
@@ -193,7 +251,7 @@ async function parseSchema(schema: string): Promise<ModelsFile> {
   const classes: Class[] = dmmf.datamodel.models.map((model) => {
     const fields: Field[] = model.fields.map((field) => {
       const fieldType = typeMapping[field.type] || field.type;
-      return new Field(field.name, fieldType, field.isRequired);
+      return new Field(field.name, fieldType, field.isRequired, field.isId);
     });
     const classObj = new Class(model.name, fields);
     classMap[model.name] = classObj;
@@ -209,36 +267,51 @@ async function parseSchema(schema: string): Promise<ModelsFile> {
     });
   });
 
-  const imports: Import[] = [];
+  const modelsFile = new ModelsFile(classes);
+  const dbFile = new DBFile(classes);
 
-  return new ModelsFile(classes, imports);
+  return { modelsFile, dbFile };
 }
 
 // 主函数
 async function main() {
   try {
-    const prismaFile = await parseSchema(schemaContent);
+    const { modelsFile, dbFile } = await parseSchema(schemaContent);
 
-    // 输出结果
-    const formattedOutput = await format(prismaFile.print(), {
+    // 输出 ModelsFile 结果
+    const formattedModelsOutput = await format(modelsFile.print(), {
       parser: 'typescript',
     });
-
-    // 将结果保存到文件
-    const outputPath = path.resolve('../admin/src/_gen/models.ts');
+    const modelsOutputPath = path.resolve('../admin/src/_gen/models.ts');
     fs.writeFileSync(
-      outputPath,
+      modelsOutputPath,
       `/*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED        ##
  * ---------------------------------------------------------------
  */
 
-${formattedOutput}`,
+${formattedModelsOutput}`,
+    );
+
+    // 输出 DBFile 结果
+    const formattedDbOutput = await format(dbFile.print(), {
+      parser: 'typescript',
+    });
+    const dbOutputPath = path.resolve('../admin/src/_gen/db.ts');
+    fs.writeFileSync(
+      dbOutputPath,
+      `/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED        ##
+ * ---------------------------------------------------------------
+ */
+
+${formattedDbOutput}`,
     );
 
     console.log(
-      'Prisma schema has been successfully parsed and saved to models.ts',
+      'Prisma schema has been successfully parsed and saved to models.ts and db.ts',
     );
   } catch (error) {
     console.error('Error parsing schema:', error);
