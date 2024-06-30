@@ -3,18 +3,19 @@
  * ## THIS FILE WAS GENERATED        ##
  * ---------------------------------------------------------------
  */
-export class User {
+
+export class UserModel {
    id: number;
    name: string;
    email?: string;
    password: string;
-   projects: Project;
+   projects: ProjectModel;
    createdAt: Date;
    updatedAt: Date;
-   projectGroups: ProjectGroup;
-   timeChunk: TimeChunk;
+   projectGroups: ProjectGroupModel;
+   timeChunk: TimeChunkModel;
 
-  constructor({ id, name, email, password, projects, createdAt, updatedAt, projectGroups, timeChunk }: { id: number; name: string; email?: string; password: string; projects: Project; createdAt: Date; updatedAt: Date; projectGroups: ProjectGroup; timeChunk: TimeChunk }) {
+  constructor({ id, name, email, password, projects, createdAt, updatedAt, projectGroups, timeChunk }: { id: number; name: string; email?: string; password: string; projects: ProjectModel; createdAt: Date; updatedAt: Date; projectGroups: ProjectGroupModel; timeChunk: TimeChunkModel }) {
     this.id = id;
     this.name = name;
     this.email = email;
@@ -27,18 +28,18 @@ export class User {
   }
 }
 
-export class Project {
+export class ProjectModel {
    id: number;
    name: string;
    ownerId: number;
-   owner: User;
+   owner: UserModel;
    createdAt: Date;
    updatedAt: Date;
-   projectGroup?: ProjectGroup;
+   projectGroup?: ProjectGroupModel;
    projectGroupId?: number;
-   operations: ProjectOperation;
+   operations: ProjectOperationModel;
 
-  constructor({ id, name, ownerId, owner, createdAt, updatedAt, projectGroup, projectGroupId, operations }: { id: number; name: string; ownerId: number; owner: User; createdAt: Date; updatedAt: Date; projectGroup?: ProjectGroup; projectGroupId?: number; operations: ProjectOperation }) {
+  constructor({ id, name, ownerId, owner, createdAt, updatedAt, projectGroup, projectGroupId, operations }: { id: number; name: string; ownerId: number; owner: UserModel; createdAt: Date; updatedAt: Date; projectGroup?: ProjectGroupModel; projectGroupId?: number; operations: ProjectOperationModel }) {
     this.id = id;
     this.name = name;
     this.ownerId = ownerId;
@@ -51,20 +52,20 @@ export class Project {
   }
 }
 
-export class ProjectGroup {
+export class ProjectGroupModel {
    id: number;
    name: string;
    parentGroupId?: number;
-   parentGroup?: ProjectGroup;
-   childGroups: ProjectGroup;
+   parentGroup?: ProjectGroupModel;
+   childGroups: ProjectGroupModel;
    ownerId: number;
-   owner: User;
-   projects: Project;
+   owner: UserModel;
+   projects: ProjectModel;
    createdAt: Date;
    updatedAt: Date;
-   operations: ProjectGroupOperation;
+   operations: ProjectGroupOperationModel;
 
-  constructor({ id, name, parentGroupId, parentGroup, childGroups, ownerId, owner, projects, createdAt, updatedAt, operations }: { id: number; name: string; parentGroupId?: number; parentGroup?: ProjectGroup; childGroups: ProjectGroup; ownerId: number; owner: User; projects: Project; createdAt: Date; updatedAt: Date; operations: ProjectGroupOperation }) {
+  constructor({ id, name, parentGroupId, parentGroup, childGroups, ownerId, owner, projects, createdAt, updatedAt, operations }: { id: number; name: string; parentGroupId?: number; parentGroup?: ProjectGroupModel; childGroups: ProjectGroupModel; ownerId: number; owner: UserModel; projects: ProjectModel; createdAt: Date; updatedAt: Date; operations: ProjectGroupOperationModel }) {
     this.id = id;
     this.name = name;
     this.parentGroupId = parentGroupId;
@@ -79,19 +80,19 @@ export class ProjectGroup {
   }
 }
 
-export class ProjectGroupOperation {
+export class ProjectGroupOperationModel {
    id: number;
    projectGroupId: number;
-   projectGroup: ProjectGroup;
+   projectGroup: ProjectGroupModel;
    projectGroupCreateOperationId?: number;
    projectGroupUpdateOperationId?: number;
    projectGroupDeleteOperationId?: number;
-   timeNode?: TimeNode;
-   projectGroupCreateOperation?: ProjectGroupCreateOperation;
-   projectGroupUpdateOperation?: ProjectGroupUpdateOperation;
-   projectGroupDeleteOperation?: ProjectGroupDeleteOperation;
+   timeNode?: TimeNodeModel;
+   projectGroupCreateOperation?: ProjectGroupCreateOperationModel;
+   projectGroupUpdateOperation?: ProjectGroupUpdateOperationModel;
+   projectGroupDeleteOperation?: ProjectGroupDeleteOperationModel;
 
-  constructor({ id, projectGroupId, projectGroup, projectGroupCreateOperationId, projectGroupUpdateOperationId, projectGroupDeleteOperationId, timeNode, projectGroupCreateOperation, projectGroupUpdateOperation, projectGroupDeleteOperation }: { id: number; projectGroupId: number; projectGroup: ProjectGroup; projectGroupCreateOperationId?: number; projectGroupUpdateOperationId?: number; projectGroupDeleteOperationId?: number; timeNode?: TimeNode; projectGroupCreateOperation?: ProjectGroupCreateOperation; projectGroupUpdateOperation?: ProjectGroupUpdateOperation; projectGroupDeleteOperation?: ProjectGroupDeleteOperation }) {
+  constructor({ id, projectGroupId, projectGroup, projectGroupCreateOperationId, projectGroupUpdateOperationId, projectGroupDeleteOperationId, timeNode, projectGroupCreateOperation, projectGroupUpdateOperation, projectGroupDeleteOperation }: { id: number; projectGroupId: number; projectGroup: ProjectGroupModel; projectGroupCreateOperationId?: number; projectGroupUpdateOperationId?: number; projectGroupDeleteOperationId?: number; timeNode?: TimeNodeModel; projectGroupCreateOperation?: ProjectGroupCreateOperationModel; projectGroupUpdateOperation?: ProjectGroupUpdateOperationModel; projectGroupDeleteOperation?: ProjectGroupDeleteOperationModel }) {
     this.id = id;
     this.projectGroupId = projectGroupId;
     this.projectGroup = projectGroup;
@@ -105,15 +106,15 @@ export class ProjectGroupOperation {
   }
 }
 
-export class ProjectGroupDeleteOperation {
+export class ProjectGroupDeleteOperationModel {
    id: number;
    recordId: number;
    createdAt: Date;
    updatedAt: Date;
-   projectGroupOperation: ProjectGroupOperation;
+   projectGroupOperation: ProjectGroupOperationModel;
    projectGroupOperationId: number;
 
-  constructor({ id, recordId, createdAt, updatedAt, projectGroupOperation, projectGroupOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectGroupOperation: ProjectGroupOperation; projectGroupOperationId: number }) {
+  constructor({ id, recordId, createdAt, updatedAt, projectGroupOperation, projectGroupOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectGroupOperation: ProjectGroupOperationModel; projectGroupOperationId: number }) {
     this.id = id;
     this.recordId = recordId;
     this.createdAt = createdAt;
@@ -123,15 +124,15 @@ export class ProjectGroupDeleteOperation {
   }
 }
 
-export class ProjectGroupUpdateOperation {
+export class ProjectGroupUpdateOperationModel {
    id: number;
    recordId: number;
    createdAt: Date;
    updatedAt: Date;
-   projectGroupOperation: ProjectGroupOperation;
+   projectGroupOperation: ProjectGroupOperationModel;
    projectGroupOperationId: number;
 
-  constructor({ id, recordId, createdAt, updatedAt, projectGroupOperation, projectGroupOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectGroupOperation: ProjectGroupOperation; projectGroupOperationId: number }) {
+  constructor({ id, recordId, createdAt, updatedAt, projectGroupOperation, projectGroupOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectGroupOperation: ProjectGroupOperationModel; projectGroupOperationId: number }) {
     this.id = id;
     this.recordId = recordId;
     this.createdAt = createdAt;
@@ -141,15 +142,15 @@ export class ProjectGroupUpdateOperation {
   }
 }
 
-export class ProjectGroupCreateOperation {
+export class ProjectGroupCreateOperationModel {
    id: number;
    recordId: number;
    createdAt: Date;
    updatedAt: Date;
-   projectGroupOperation: ProjectGroupOperation;
+   projectGroupOperation: ProjectGroupOperationModel;
    projectGroupOperationId: number;
 
-  constructor({ id, recordId, createdAt, updatedAt, projectGroupOperation, projectGroupOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectGroupOperation: ProjectGroupOperation; projectGroupOperationId: number }) {
+  constructor({ id, recordId, createdAt, updatedAt, projectGroupOperation, projectGroupOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectGroupOperation: ProjectGroupOperationModel; projectGroupOperationId: number }) {
     this.id = id;
     this.recordId = recordId;
     this.createdAt = createdAt;
@@ -159,18 +160,18 @@ export class ProjectGroupCreateOperation {
   }
 }
 
-export class TimeNode {
+export class TimeNodeModel {
    id: number;
    timeChunkId: number;
-   timeChunk: TimeChunk;
+   timeChunk: TimeChunkModel;
    projectOperationId?: number;
-   projectOperation?: ProjectOperation;
+   projectOperation?: ProjectOperationModel;
    projectGroupOperationId?: number;
-   ProjectGroupOperation?: ProjectGroupOperation;
+   ProjectGroupOperation?: ProjectGroupOperationModel;
    createdAt: Date;
    updatedAt: Date;
 
-  constructor({ id, timeChunkId, timeChunk, projectOperationId, projectOperation, projectGroupOperationId, ProjectGroupOperation, createdAt, updatedAt }: { id: number; timeChunkId: number; timeChunk: TimeChunk; projectOperationId?: number; projectOperation?: ProjectOperation; projectGroupOperationId?: number; ProjectGroupOperation?: ProjectGroupOperation; createdAt: Date; updatedAt: Date }) {
+  constructor({ id, timeChunkId, timeChunk, projectOperationId, projectOperation, projectGroupOperationId, ProjectGroupOperation, createdAt, updatedAt }: { id: number; timeChunkId: number; timeChunk: TimeChunkModel; projectOperationId?: number; projectOperation?: ProjectOperationModel; projectGroupOperationId?: number; ProjectGroupOperation?: ProjectGroupOperationModel; createdAt: Date; updatedAt: Date }) {
     this.id = id;
     this.timeChunkId = timeChunkId;
     this.timeChunk = timeChunk;
@@ -183,19 +184,19 @@ export class TimeNode {
   }
 }
 
-export class ProjectOperation {
+export class ProjectOperationModel {
    id: number;
    projectId: number;
-   project: Project;
+   project: ProjectModel;
    projectCreateOperationId?: number;
    projectUpdateOperationId?: number;
    projectDeleteOperationId?: number;
-   timeNode?: TimeNode;
-   projectUpdateOperation?: ProjectUpdateOperation;
-   projectDeleteOperation?: ProjectDeleteOperation;
-   projectCreateOperation?: ProjectCreateOperation;
+   timeNode?: TimeNodeModel;
+   projectUpdateOperation?: ProjectUpdateOperationModel;
+   projectDeleteOperation?: ProjectDeleteOperationModel;
+   projectCreateOperation?: ProjectCreateOperationModel;
 
-  constructor({ id, projectId, project, projectCreateOperationId, projectUpdateOperationId, projectDeleteOperationId, timeNode, projectUpdateOperation, projectDeleteOperation, projectCreateOperation }: { id: number; projectId: number; project: Project; projectCreateOperationId?: number; projectUpdateOperationId?: number; projectDeleteOperationId?: number; timeNode?: TimeNode; projectUpdateOperation?: ProjectUpdateOperation; projectDeleteOperation?: ProjectDeleteOperation; projectCreateOperation?: ProjectCreateOperation }) {
+  constructor({ id, projectId, project, projectCreateOperationId, projectUpdateOperationId, projectDeleteOperationId, timeNode, projectUpdateOperation, projectDeleteOperation, projectCreateOperation }: { id: number; projectId: number; project: ProjectModel; projectCreateOperationId?: number; projectUpdateOperationId?: number; projectDeleteOperationId?: number; timeNode?: TimeNodeModel; projectUpdateOperation?: ProjectUpdateOperationModel; projectDeleteOperation?: ProjectDeleteOperationModel; projectCreateOperation?: ProjectCreateOperationModel }) {
     this.id = id;
     this.projectId = projectId;
     this.project = project;
@@ -209,15 +210,15 @@ export class ProjectOperation {
   }
 }
 
-export class ProjectCreateOperation {
+export class ProjectCreateOperationModel {
    id: number;
    recordId: number;
    createdAt: Date;
    updatedAt: Date;
-   projectOperation: ProjectOperation;
+   projectOperation: ProjectOperationModel;
    projectOperationId: number;
 
-  constructor({ id, recordId, createdAt, updatedAt, projectOperation, projectOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectOperation: ProjectOperation; projectOperationId: number }) {
+  constructor({ id, recordId, createdAt, updatedAt, projectOperation, projectOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectOperation: ProjectOperationModel; projectOperationId: number }) {
     this.id = id;
     this.recordId = recordId;
     this.createdAt = createdAt;
@@ -227,15 +228,15 @@ export class ProjectCreateOperation {
   }
 }
 
-export class ProjectDeleteOperation {
+export class ProjectDeleteOperationModel {
    id: number;
    recordId: number;
    createdAt: Date;
    updatedAt: Date;
-   projectOperation: ProjectOperation;
+   projectOperation: ProjectOperationModel;
    projectOperationId: number;
 
-  constructor({ id, recordId, createdAt, updatedAt, projectOperation, projectOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectOperation: ProjectOperation; projectOperationId: number }) {
+  constructor({ id, recordId, createdAt, updatedAt, projectOperation, projectOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectOperation: ProjectOperationModel; projectOperationId: number }) {
     this.id = id;
     this.recordId = recordId;
     this.createdAt = createdAt;
@@ -245,15 +246,15 @@ export class ProjectDeleteOperation {
   }
 }
 
-export class ProjectUpdateOperation {
+export class ProjectUpdateOperationModel {
    id: number;
    recordId: number;
    createdAt: Date;
    updatedAt: Date;
-   projectOperation: ProjectOperation;
+   projectOperation: ProjectOperationModel;
    projectOperationId: number;
 
-  constructor({ id, recordId, createdAt, updatedAt, projectOperation, projectOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectOperation: ProjectOperation; projectOperationId: number }) {
+  constructor({ id, recordId, createdAt, updatedAt, projectOperation, projectOperationId }: { id: number; recordId: number; createdAt: Date; updatedAt: Date; projectOperation: ProjectOperationModel; projectOperationId: number }) {
     this.id = id;
     this.recordId = recordId;
     this.createdAt = createdAt;
@@ -263,17 +264,17 @@ export class ProjectUpdateOperation {
   }
 }
 
-export class TimeChunk {
+export class TimeChunkModel {
    id: number;
    name: string;
    description?: string;
    userId: number;
-   user: User;
-   timeNodes: TimeNode;
+   user: UserModel;
+   timeNodes: TimeNodeModel;
    createdAt: Date;
    updatedAt: Date;
 
-  constructor({ id, name, description, userId, user, timeNodes, createdAt, updatedAt }: { id: number; name: string; description?: string; userId: number; user: User; timeNodes: TimeNode; createdAt: Date; updatedAt: Date }) {
+  constructor({ id, name, description, userId, user, timeNodes, createdAt, updatedAt }: { id: number; name: string; description?: string; userId: number; user: UserModel; timeNodes: TimeNodeModel; createdAt: Date; updatedAt: Date }) {
     this.id = id;
     this.name = name;
     this.description = description;

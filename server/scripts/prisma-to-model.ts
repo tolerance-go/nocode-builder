@@ -2,6 +2,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { getDMMF } from '@prisma/sdk';
 
+const classMap: { [name: string]: Class } = {};
+
+
 // 定义 Decorator 类
 class Decorator {
   name: string;
@@ -38,7 +41,7 @@ class Field {
   }
 
   print(): string {
-    const type = typeof this.type === 'string' ? this.type : this.type.name;
+    const type = typeof this.type === 'string' ? this.type : this.type.printName();
     const decoratorsStr = this.decorators.map((dec) => dec.print()).join(' ');
     const nullableStr = this.isRequired ? '' : '?';
     return `${decoratorsStr} ${this.name}${nullableStr}: ${type};`;
@@ -67,7 +70,7 @@ class Class {
     const typeAnnotationsStr = this.fields
       .map((field) => {
         const type =
-          typeof field.type === 'string' ? field.type : field.type.name;
+          typeof field.type === 'string' ? field.type : field.type.printName();
         const nullableStr = field.isRequired ? '' : '?';
         return `${field.name}${nullableStr}: ${type}`;
       })
@@ -80,10 +83,14 @@ class Class {
     return `constructor({ ${paramsStr} }: { ${typeAnnotationsStr} }) {\n    ${assignmentsStr}\n  }`;
   }
 
+  printName(): string {
+    return `${this.name}Model`;
+  }
+
   print(): string {
     const fieldsStr = this.fields.map((field) => field.print()).join('\n  ');
     const constructorStr = this.printConstructor();
-    return `export class ${this.name} {\n  ${fieldsStr}\n\n  ${constructorStr}\n}`;
+    return `export class ${this.printName()} {\n  ${fieldsStr}\n\n  ${constructorStr}\n}`;
   }
 }
 
@@ -159,7 +166,6 @@ async function parseSchema(schema: string): Promise<File> {
     DateTime: 'Date',
   };
 
-  const classMap: { [name: string]: Class } = {};
 
   const classes: Class[] = dmmf.datamodel.models.map((model) => {
     const fields: Field[] = model.fields.map((field) => {
