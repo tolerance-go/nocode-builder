@@ -36,6 +36,7 @@ describe('UndoRedoManager', () => {
   it('should execute new state and save history', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
+    await manager.loadingHistory;
     await manager.execute(1);
     const currentState = manager.getCurrentState();
     expect(currentState).toBe(1);
@@ -51,6 +52,7 @@ describe('UndoRedoManager', () => {
   it('should undo the last operation', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
+    await manager.loadingHistory;
     await manager.execute(1);
     await manager.execute(2);
     const stateAfterFirstUndo = await manager.undo();
@@ -66,6 +68,7 @@ describe('UndoRedoManager', () => {
   it('should redo the last undone operation', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
+    await manager.loadingHistory;
     await manager.execute(1);
     await manager.execute(2);
     await manager.undo();
@@ -82,20 +85,22 @@ describe('UndoRedoManager', () => {
   it('should not undo beyond the first state', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
+    await manager.loadingHistory;
     await manager.execute(1);
-    const stateAfterSecondUndo = await manager.undo();
-    expect(stateAfterSecondUndo).toBeUndefined();
+    await manager.undo();
+    expect(manager.currentIndex).toEqual(0);
 
     // 验证 undo 后的状态
-    expect(manager.getCurrentState()).toBeUndefined();
+    expect(manager.getCurrentState()).toBe(1);
 
     // 验证保存历史记录时是否调用了 localforage.setItem
-    expect(localforage.setItem).toHaveBeenCalledTimes(2); // initialize, execute(1), undo
+    expect(localforage.setItem).toHaveBeenCalledTimes(1); // execute(1)
   });
 
   it('should not redo beyond the last state', async () => {
     const manager = await UndoRedoManager.initialize<number>();
 
+    await manager.loadingHistory;
     await manager.execute(1);
     await manager.redo();
     const stateAfterRedo = await manager.redo();

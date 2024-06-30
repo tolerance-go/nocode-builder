@@ -3,21 +3,22 @@ import localforage from 'localforage';
 export class UndoRedoManager<T> {
   private static instance: UndoRedoManager<unknown> | null = null;
   private historyStack: T[];
-  private currentIndex: number;
+  public currentIndex: number;
   private storageKey: string = 'undoRedoHistory';
-  private loadingHistory: boolean;
+  private loadingHistoryPending: boolean;
   private savingHistory: boolean;
   private pendingOperations: (() => void)[];
   private pendingSaves: (() => void)[];
+  public loadingHistory: Promise<void>;
 
   private constructor(private storage: typeof localforage = localforage) {
     this.historyStack = [];
     this.currentIndex = -1;
-    this.loadingHistory = true;
     this.savingHistory = false;
     this.pendingOperations = [];
     this.pendingSaves = [];
-    this.loadHistory();
+    this.loadingHistoryPending = true;
+    this.loadingHistory = this.loadHistory();
   }
 
   // 获取单例实例的方法
@@ -46,7 +47,7 @@ export class UndoRedoManager<T> {
 
   // 执行一个新操作
   async execute(newState: T): Promise<void> {
-    if (this.loadingHistory) {
+    if (this.loadingHistoryPending) {
       this.pendingOperations.push(() => this.execute(newState));
       return;
     }
@@ -64,7 +65,7 @@ export class UndoRedoManager<T> {
 
   // Undo 操作
   async undo(): Promise<T | undefined> {
-    if (this.loadingHistory) {
+    if (this.loadingHistoryPending) {
       this.pendingOperations.push(() => this.undo());
       return;
     }
@@ -80,7 +81,7 @@ export class UndoRedoManager<T> {
 
   // Redo 操作
   async redo(): Promise<T | undefined> {
-    if (this.loadingHistory) {
+    if (this.loadingHistoryPending) {
       this.pendingOperations.push(() => this.redo());
       return;
     }
@@ -144,7 +145,7 @@ export class UndoRedoManager<T> {
     } catch (error) {
       console.error('加载历史记录失败', error);
     } finally {
-      this.loadingHistory = false;
+      this.loadingHistoryPending = false;
       this.executePendingOperations();
     }
   }
