@@ -1,0 +1,142 @@
+
+
+class ProjectUpdateOperation {
+   id: Int
+   recordId: Int
+   createdAt: DateTime
+   updatedAt: DateTime
+   projectOperation: ProjectOperation
+   projectOperationId: Int
+}
+
+class ProjectDeleteOperation {
+   id: Int
+   recordId: Int
+   createdAt: DateTime
+   updatedAt: DateTime
+   projectOperation: ProjectOperation
+   projectOperationId: Int
+}
+
+class ProjectCreateOperation {
+   id: Int
+   recordId: Int
+   createdAt: DateTime
+   updatedAt: DateTime
+   projectOperation: ProjectOperation
+   projectOperationId: Int
+}
+
+class ProjectOperation {
+   id: Int
+   projectId: Int
+   project: Project
+   projectCreateOperationId: Int
+   projectUpdateOperationId: Int
+   projectDeleteOperationId: Int
+   timeNode: TimeNode
+   projectUpdateOperation: ProjectUpdateOperation
+   projectDeleteOperation: ProjectDeleteOperation
+   projectCreateOperation: ProjectCreateOperation
+}
+
+class TimeNode {
+   id: Int
+   timeChunkId: Int
+   timeChunk: TimeChunk
+   projectOperationId: Int
+   projectOperation: ProjectOperation
+   projectGroupOperationId: Int
+   ProjectGroupOperation: ProjectGroupOperation
+   createdAt: DateTime
+   updatedAt: DateTime
+}
+
+class ProjectGroupCreateOperation {
+   id: Int
+   recordId: Int
+   createdAt: DateTime
+   updatedAt: DateTime
+   projectGroupOperation: ProjectGroupOperation
+   projectGroupOperationId: Int
+}
+
+class ProjectGroupUpdateOperation {
+   id: Int
+   recordId: Int
+   createdAt: DateTime
+   updatedAt: DateTime
+   projectGroupOperation: ProjectGroupOperation
+   projectGroupOperationId: Int
+}
+
+class ProjectGroupDeleteOperation {
+   id: Int
+   recordId: Int
+   createdAt: DateTime
+   updatedAt: DateTime
+   projectGroupOperation: ProjectGroupOperation
+   projectGroupOperationId: Int
+}
+
+class ProjectGroupOperation {
+   id: Int
+   projectGroupId: Int
+   projectGroup: ProjectGroup
+   projectGroupCreateOperationId: Int
+   projectGroupUpdateOperationId: Int
+   projectGroupDeleteOperationId: Int
+   timeNode: TimeNode
+   projectGroupCreateOperation: ProjectGroupCreateOperation
+   projectGroupUpdateOperation: ProjectGroupUpdateOperation
+   projectGroupDeleteOperation: ProjectGroupDeleteOperation
+}
+
+class ProjectGroup {
+   id: Int
+   name: String
+   parentGroupId: Int
+   parentGroup: ProjectGroup
+   childGroups: ProjectGroup
+   ownerId: Int
+   owner: User
+   projects: Project
+   createdAt: DateTime
+   updatedAt: DateTime
+   operations: ProjectGroupOperation
+}
+
+class Project {
+   id: Int
+   name: String
+   ownerId: Int
+   owner: User
+   createdAt: DateTime
+   updatedAt: DateTime
+   projectGroup: ProjectGroup
+   projectGroupId: Int
+   operations: ProjectOperation
+}
+
+class User {
+   id: Int
+   name: String
+   email: String
+   password: String
+   projects: Project
+   createdAt: DateTime
+   updatedAt: DateTime
+   projectGroups: ProjectGroup
+   timeChunk: TimeChunk
+}
+
+class TimeChunk {
+   id: Int
+   name: String
+   description: String
+   userId: Int
+   user: User
+   timeNodes: TimeNode
+   createdAt: DateTime
+   updatedAt: DateTime
+}
