@@ -26,8 +26,8 @@ class Field {
   name: string;
   type: string | Class;
   isRequired: boolean;
-  decorators: Decorator[];
   isId: boolean;
+  decorators: Decorator[];
 
   constructor(
     name: string,
@@ -105,6 +105,22 @@ class Class {
   }
 }
 
+// 修改 Import 类
+class Import {
+  params: string[];
+  from: string;
+
+  constructor(params: string[], from: string) {
+    this.params = params;
+    this.from = from;
+  }
+
+  print(): string {
+    return `import { ${this.params.join(', ')} } from '${this.from}';`;
+  }
+}
+
+// 定义 File 类
 class File {
   classes: Class[];
   imports: Import[];
@@ -146,21 +162,6 @@ class File {
   }
 }
 
-// 修改 Import 类
-class Import {
-  params: string[];
-  from: string;
-
-  constructor(params: string[], from: string) {
-    this.params = params;
-    this.from = from;
-  }
-
-  print(): string {
-    return `import { ${this.params.join(', ')} } from '${this.from}';`;
-  }
-}
-
 // 新增 ModelsFile 类，继承自 File 类
 class ModelsFile extends File {
   constructor(classes: Class[]) {
@@ -199,10 +200,15 @@ class DBFile extends File {
       .join('\n');
 
     const storesStr = this.classes
-      .map(
-        (classItem) =>
-          `      ${classItem.name.toLowerCase()}s: '++id, name, ownerId, createdAt, updatedAt';`,
-      )
+      .map((classItem) => {
+        const sortedFields = classItem.fields.sort(
+          (a, b) => (b.isId ? 1 : 0) - (a.isId ? 1 : 0),
+        ); // 将 isId 的字段排在最前面
+        const fieldsStr = sortedFields
+          .map((field) => `${field.isId ? '++' : ''}${field.name}`)
+          .join(', ');
+        return `      ${classItem.name.toLowerCase()}s: '${fieldsStr}',`;
+      })
       .join('\n');
 
     const tableInitStr = this.classes
