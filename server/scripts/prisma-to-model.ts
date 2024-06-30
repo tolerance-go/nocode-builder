@@ -159,12 +159,28 @@ class File {
   }
 }
 
+// 新增 ModelsFile 类，继承自 File 类
+class ModelsFile extends File {
+  constructor(classes: Class[], imports: Import[]) {
+    super(classes, imports);
+  }
+
+  print(): string {
+    // 设置 class 的 printName
+    this.classes.forEach((classItem) => {
+      classItem.printName = `${classItem.name}Model`;
+    });
+
+    return super.print();
+  }
+}
+
 // 读取文件内容
 const schemaFilePath = path.resolve('./prisma/schema.prisma');
 const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
 
 // 使用 Prisma SDK 解析 schema
-async function parseSchema(schema: string): Promise<File> {
+async function parseSchema(schema: string): Promise<ModelsFile> {
   const dmmf = await getDMMF({ datamodel: schema });
 
   const typeMapping: { [key: string]: string } = {
@@ -195,17 +211,13 @@ async function parseSchema(schema: string): Promise<File> {
 
   const imports: Import[] = [];
 
-  return new File(classes, imports);
+  return new ModelsFile(classes, imports);
 }
 
 // 主函数
 async function main() {
   try {
     const prismaFile = await parseSchema(schemaContent);
-
-    prismaFile.classes.forEach((classItem) => {
-      classItem.printName = `${classItem.name}Model`;
-    });
 
     // 输出结果
     const formattedOutput = await format(prismaFile.print(), {
