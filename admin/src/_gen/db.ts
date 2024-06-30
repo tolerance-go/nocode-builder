@@ -22,19 +22,55 @@ import {
 import Dexie, { Table } from 'dexie';
 
 export class Database extends Dexie {
-  users: Table<UserModel, number>;
-  projects: Table<ProjectModel, number>;
-  projectGroups: Table<ProjectGroupModel, number>;
-  timeChunks: Table<TimeChunkModel, number>;
-  timeNodes: Table<TimeNodeModel, number>;
-  projectOperations: Table<ProjectOperationModel, number>;
-  projectGroupOperations: Table<ProjectGroupOperationModel, number>;
-  projectCreateOperations: Table<ProjectCreateOperationModel, number>;
-  projectUpdateOperations: Table<ProjectUpdateOperationModel, number>;
-  projectDeleteOperations: Table<ProjectDeleteOperationModel, number>;
-  projectGroupCreateOperations: Table<ProjectGroupCreateOperationModel, number>;
-  projectGroupUpdateOperations: Table<ProjectGroupUpdateOperationModel, number>;
-  projectGroupDeleteOperations: Table<ProjectGroupDeleteOperationModel, number>;
+  users: Table<UserModel, number, Omit<UserModel, 'id'>>;
+  projects: Table<ProjectModel, number, Omit<ProjectModel, 'id'>>;
+  projectGroups: Table<
+    ProjectGroupModel,
+    number,
+    Omit<ProjectGroupModel, 'id'>
+  >;
+  timeChunks: Table<TimeChunkModel, number, Omit<TimeChunkModel, 'id'>>;
+  timeNodes: Table<TimeNodeModel, number, Omit<TimeNodeModel, 'id'>>;
+  projectOperations: Table<
+    ProjectOperationModel,
+    number,
+    Omit<ProjectOperationModel, 'id'>
+  >;
+  projectGroupOperations: Table<
+    ProjectGroupOperationModel,
+    number,
+    Omit<ProjectGroupOperationModel, 'id'>
+  >;
+  projectCreateOperations: Table<
+    ProjectCreateOperationModel,
+    number,
+    Omit<ProjectCreateOperationModel, 'id'>
+  >;
+  projectUpdateOperations: Table<
+    ProjectUpdateOperationModel,
+    number,
+    Omit<ProjectUpdateOperationModel, 'id'>
+  >;
+  projectDeleteOperations: Table<
+    ProjectDeleteOperationModel,
+    number,
+    Omit<ProjectDeleteOperationModel, 'id'>
+  >;
+  projectGroupCreateOperations: Table<
+    ProjectGroupCreateOperationModel,
+    number,
+    Omit<ProjectGroupCreateOperationModel, 'id'>
+  >;
+  projectGroupUpdateOperations: Table<
+    ProjectGroupUpdateOperationModel,
+    number,
+    Omit<ProjectGroupUpdateOperationModel, 'id'>
+  >;
+  projectGroupDeleteOperations: Table<
+    ProjectGroupDeleteOperationModel,
+    number,
+    Omit<ProjectGroupDeleteOperationModel, 'id'>
+  >;
 
   constructor() {
     super('database');

@@ -200,13 +200,20 @@ class DBFile extends File {
     super(classes, imports);
   }
 
+  private getIdFieldName(classItem: Class): string {
+    const idField = classItem.fields.find((field) => field.isId);
+    return idField ? idField.name : 'id';
+  }
+
   print(): string {
     const dynamicImports = this.classes
       .map((classItem) => `${classItem.printName}`)
       .join(', ');
+
     const tablesStr = this.classes
       .map((classItem) => {
-        return `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number>;`;
+        const idFieldName = this.getIdFieldName(classItem);
+        return `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number, Omit<${classItem.printName}, '${idFieldName}'>>;`;
       })
       .join('\n');
 
