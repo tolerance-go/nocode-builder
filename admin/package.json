@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "openapi": "node ./swagger-typescript-api.js",
+    "openapi": "node ./scripts/swagger-typescript-api.js",
     "dev": "vite",
     "build": "tsc && vite build",
     "tsc": "tsc",
