@@ -2,7 +2,7 @@ import { StoreStatesSlice } from '@/types';
 import { OptionalKeys } from '@/utils';
 import Dexie, { Table } from 'dexie';
 
-export class Database extends Dexie {
+export class StoreDatabase extends Dexie {
   stores: Table<
     StoreStatesSlice,
     number,
@@ -19,4 +19,4 @@ export class Database extends Dexie {
   }
 }
 
-export const storeDb = new Database();
+export const storeDb = new StoreDatabase();
