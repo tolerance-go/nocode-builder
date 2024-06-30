@@ -1,15 +1,15 @@
-import { TimeChunk } from './TimeChunk';
-import { ProjectOperation } from './ProjectOperation';
-import { ProjectGroupOperation } from './ProjectGroupOperation';
+import { TimeChunkModel } from './TimeChunkModel';
+import { ProjectOperationModel } from './ProjectOperationModel';
+import { ProjectGroupOperationModel } from './ProjectGroupOperationModel';
 
-export class TimeNode {
+export class TimeNodeModel {
   id: number;
   timeChunkId: number;
-  timeChunk: TimeChunk;
+  timeChunk: TimeChunkModel;
   projectOperationId?: number;
-  projectOperation?: ProjectOperation;
+  projectOperation?: ProjectOperationModel;
   projectGroupOperationId?: number;
-  projectGroupOperation?: ProjectGroupOperation;
+  projectGroupOperation?: ProjectGroupOperationModel;
   createdAt: Date;
   updatedAt: Date;
 
@@ -26,11 +26,11 @@ export class TimeNode {
   }: {
     id: number;
     timeChunkId: number;
-    timeChunk: TimeChunk;
+    timeChunk: TimeChunkModel;
     projectOperationId?: number;
-    projectOperation?: ProjectOperation;
+    projectOperation?: ProjectOperationModel;
     projectGroupOperationId?: number;
-    projectGroupOperation?: ProjectGroupOperation;
+    projectGroupOperation?: ProjectGroupOperationModel;
     createdAt: Date;
     updatedAt: Date;
   }) {

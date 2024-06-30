@@ -1,19 +1,19 @@
-import { User } from './User';
-import { Project } from './Project';
-import { ProjectGroupOperation } from './ProjectGroupOperation';
+import { UserModel } from './UserModel';
+import { ProjectModel } from './ProjectModel';
+import { ProjectGroupOperationModel } from './ProjectGroupOperationModel';
 
-export class ProjectGroup {
+export class ProjectGroupModel {
   id: number;
   name: string;
   parentGroupId?: number;
-  parentGroup?: ProjectGroup;
-  childGroups: ProjectGroup[];
+  parentGroup?: ProjectGroupModel;
+  childGroups: ProjectGroupModel[];
   ownerId: number;
-  owner: User;
-  projects: Project[];
+  owner: UserModel;
+  projects: ProjectModel[];
   createdAt: Date;
   updatedAt: Date;
-  operations: ProjectGroupOperation[];
+  operations: ProjectGroupOperationModel[];
 
   constructor({
     id,
@@ -31,14 +31,14 @@ export class ProjectGroup {
     id: number;
     name: string;
     parentGroupId?: number;
-    parentGroup?: ProjectGroup;
-    childGroups: ProjectGroup[];
+    parentGroup?: ProjectGroupModel;
+    childGroups: ProjectGroupModel[];
     ownerId: number;
-    owner: User;
-    projects: Project[];
+    owner: UserModel;
+    projects: ProjectModel[];
     createdAt: Date;
     updatedAt: Date;
-    operations: ProjectGroupOperation[];
+    operations: ProjectGroupOperationModel[];
   }) {
     this.id = id;
     this.name = name;

@@ -1,20 +1,20 @@
-import { Project } from './Project';
-import { TimeNode } from './TimeNode';
-import { ProjectUpdateOperation } from './ProjectUpdateOperation';
-import { ProjectDeleteOperation } from './ProjectDeleteOperation';
-import { ProjectCreateOperation } from './ProjectCreateOperation';
+import { ProjectModel } from './ProjectModel';
+import { TimeNodeModel } from './TimeNodeModel';
+import { ProjectUpdateOperationModel } from './ProjectUpdateOperationModel';
+import { ProjectDeleteOperationModel } from './ProjectDeleteOperationModel';
+import { ProjectCreateOperationModel } from './ProjectCreateOperationModel';
 
-export class ProjectOperation {
+export class ProjectOperationModel {
   id: number;
   projectId: number;
-  project: Project;
+  project: ProjectModel;
   projectCreateOperationId?: number;
   projectUpdateOperationId?: number;
   projectDeleteOperationId?: number;
-  timeNode?: TimeNode;
-  projectUpdateOperation?: ProjectUpdateOperation;
-  projectDeleteOperation?: ProjectDeleteOperation;
-  projectCreateOperation?: ProjectCreateOperation;
+  timeNode?: TimeNodeModel;
+  projectUpdateOperation?: ProjectUpdateOperationModel;
+  projectDeleteOperation?: ProjectDeleteOperationModel;
+  projectCreateOperation?: ProjectCreateOperationModel;
 
   constructor({
     id,
@@ -30,14 +30,14 @@ export class ProjectOperation {
   }: {
     id: number;
     projectId: number;
-    project: Project;
+    project: ProjectModel;
     projectCreateOperationId?: number;
     projectUpdateOperationId?: number;
     projectDeleteOperationId?: number;
-    timeNode?: TimeNode;
-    projectUpdateOperation?: ProjectUpdateOperation;
-    projectDeleteOperation?: ProjectDeleteOperation;
-    projectCreateOperation?: ProjectCreateOperation;
+    timeNode?: TimeNodeModel;
+    projectUpdateOperation?: ProjectUpdateOperationModel;
+    projectDeleteOperation?: ProjectDeleteOperationModel;
+    projectCreateOperation?: ProjectCreateOperationModel;
   }) {
     this.id = id;
     this.projectId = projectId;

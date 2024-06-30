@@ -1,17 +1,17 @@
-import { User } from './User';
-import { ProjectGroup } from './ProjectGroup';
-import { ProjectOperation } from './ProjectOperation';
+import { UserModel } from './UserModel';
+import { ProjectGroupModel } from './ProjectGroupModel';
+import { ProjectOperationModel } from './ProjectOperationModel';
 
-export class Project {
+export class ProjectModel {
   id: number;
   name: string;
   ownerId: number;
-  owner: User;
+  owner: UserModel;
   createdAt: Date;
   updatedAt: Date;
-  projectGroup?: ProjectGroup;
+  projectGroup?: ProjectGroupModel;
   projectGroupId?: number;
-  operations: ProjectOperation[];
+  operations: ProjectOperationModel[];
 
   constructor({
     id,
@@ -27,12 +27,12 @@ export class Project {
     id: number;
     name: string;
     ownerId: number;
-    owner: User;
+    owner: UserModel;
     createdAt: Date;
     updatedAt: Date;
-    projectGroup?: ProjectGroup;
+    projectGroup?: ProjectGroupModel;
     projectGroupId?: number;
-    operations: ProjectOperation[];
+    operations: ProjectOperationModel[];
   }) {
     this.id = id;
     this.name = name;

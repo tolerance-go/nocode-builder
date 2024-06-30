@@ -1,34 +1,34 @@
 import {
-  User,
-  Project,
-  ProjectGroup,
-  TimeChunk,
-  TimeNode,
-  ProjectOperation,
-  ProjectGroupOperation,
-  ProjectCreateOperation,
-  ProjectUpdateOperation,
-  ProjectDeleteOperation,
-  ProjectGroupCreateOperation,
-  ProjectGroupUpdateOperation,
-  ProjectGroupDeleteOperation,
+  UserModel,
+  ProjectModel,
+  ProjectGroupModel,
+  TimeChunkModel,
+  TimeNodeModel,
+  ProjectOperationModel,
+  ProjectGroupOperationModel,
+  ProjectCreateOperationModel,
+  ProjectUpdateOperationModel,
+  ProjectDeleteOperationModel,
+  ProjectGroupCreateOperationModel,
+  ProjectGroupUpdateOperationModel,
+  ProjectGroupDeleteOperationModel,
 } from "@/models";
 import Dexie, { Table } from "dexie";
 
 export class Database extends Dexie {
-  users: Table<User, number>;
-  projects: Table<Project, number>;
-  projectGroups: Table<ProjectGroup, number>;
-  timeChunks: Table<TimeChunk, number>;
-  timeNodes: Table<TimeNode, number>;
-  projectOperations: Table<ProjectOperation, number>;
-  projectGroupOperations: Table<ProjectGroupOperation, number>;
-  projectCreateOperations: Table<ProjectCreateOperation, number>;
-  projectUpdateOperations: Table<ProjectUpdateOperation, number>;
-  projectDeleteOperations: Table<ProjectDeleteOperation, number>;
-  projectGroupCreateOperations: Table<ProjectGroupCreateOperation, number>;
-  projectGroupUpdateOperations: Table<ProjectGroupUpdateOperation, number>;
-  projectGroupDeleteOperations: Table<ProjectGroupDeleteOperation, number>;
+  users: Table<UserModel, number>;
+  projects: Table<ProjectModel, number>;
+  projectGroups: Table<ProjectGroupModel, number>;
+  timeChunks: Table<TimeChunkModel, number>;
+  timeNodes: Table<TimeNodeModel, number>;
+  projectOperations: Table<ProjectOperationModel, number>;
+  projectGroupOperations: Table<ProjectGroupOperationModel, number>;
+  projectCreateOperations: Table<ProjectCreateOperationModel, number>;
+  projectUpdateOperations: Table<ProjectUpdateOperationModel, number>;
+  projectDeleteOperations: Table<ProjectDeleteOperationModel, number>;
+  projectGroupCreateOperations: Table<ProjectGroupCreateOperationModel, number>;
+  projectGroupUpdateOperations: Table<ProjectGroupUpdateOperationModel, number>;
+  projectGroupDeleteOperations: Table<ProjectGroupDeleteOperationModel, number>;
 
   constructor() {
     super("database");

@@ -1,11 +1,11 @@
-import { ProjectOperation } from './ProjectOperation';
+import { ProjectOperationModel } from "./ProjectOperationModel";
 
-export class ProjectUpdateOperation {
+export class ProjectCreateOperationModel {
   id: number;
   recordId: number;
   createdAt: Date;
   updatedAt: Date;
-  projectOperation: ProjectOperation;
+  projectOperation: ProjectOperationModel;
   projectOperationId: number;
 
   constructor({
@@ -14,13 +14,13 @@ export class ProjectUpdateOperation {
     createdAt,
     updatedAt,
     projectOperation,
-    projectOperationId
+    projectOperationId,
   }: {
     id: number;
     recordId: number;
     createdAt: Date;
     updatedAt: Date;
-    projectOperation: ProjectOperation;
+    projectOperation: ProjectOperationModel;
     projectOperationId: number;
   }) {
     this.id = id;

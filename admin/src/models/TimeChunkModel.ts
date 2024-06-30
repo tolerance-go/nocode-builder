@@ -1,13 +1,13 @@
-import { User } from './User';
-import { TimeNode } from './TimeNode';
+import { UserModel } from './UserModel';
+import { TimeNodeModel } from './TimeNodeModel';
 
-export class TimeChunk {
+export class TimeChunkModel {
   id: number;
   name: string;
   description?: string;
   userId: number;
-  user: User;
-  timeNodes: TimeNode[];
+  user: UserModel;
+  timeNodes: TimeNodeModel[];
   createdAt: Date;
   updatedAt: Date;
 
@@ -25,8 +25,8 @@ export class TimeChunk {
     name: string;
     description?: string;
     userId: number;
-    user: User;
-    timeNodes: TimeNode[];
+    user: UserModel;
+    timeNodes: TimeNodeModel[];
     createdAt: Date;
     updatedAt: Date;
   }) {

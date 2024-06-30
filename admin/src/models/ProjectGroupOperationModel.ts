@@ -1,20 +1,20 @@
-import { ProjectGroup } from "./ProjectGroup";
-import { TimeNode } from "./TimeNode";
-import { ProjectGroupCreateOperation } from "./ProjectGroupCreateOperation";
-import { ProjectGroupUpdateOperation } from "./ProjectGroupUpdateOperation";
-import { ProjectGroupDeleteOperation } from "./ProjectGroupDeleteOperation";
+import { ProjectGroupModel } from "./ProjectGroupModel";
+import { TimeNodeModel } from "./TimeNodeModel";
+import { ProjectGroupCreateOperationModel } from "./ProjectGroupCreateOperationModel";
+import { ProjectGroupUpdateOperationModel } from "./ProjectGroupUpdateOperationModel";
+import { ProjectGroupDeleteOperationModel } from "./ProjectGroupDeleteOperationModel";
 
-export class ProjectGroupOperation {
+export class ProjectGroupOperationModel {
   id: number;
   projectGroupId: number;
-  projectGroup: ProjectGroup;
+  projectGroup: ProjectGroupModel;
   projectGroupCreateOperationId?: number;
   projectGroupUpdateOperationId?: number;
   projectGroupDeleteOperationId?: number;
-  timeNode?: TimeNode;
-  projectGroupCreateOperation?: ProjectGroupCreateOperation;
-  projectGroupUpdateOperation?: ProjectGroupUpdateOperation;
-  projectGroupDeleteOperation?: ProjectGroupDeleteOperation;
+  timeNode?: TimeNodeModel;
+  projectGroupCreateOperation?: ProjectGroupCreateOperationModel;
+  projectGroupUpdateOperation?: ProjectGroupUpdateOperationModel;
+  projectGroupDeleteOperation?: ProjectGroupDeleteOperationModel;
 
   constructor({
     id,
@@ -30,14 +30,14 @@ export class ProjectGroupOperation {
   }: {
     id: number;
     projectGroupId: number;
-    projectGroup: ProjectGroup;
+    projectGroup: ProjectGroupModel;
     projectGroupCreateOperationId?: number;
     projectGroupUpdateOperationId?: number;
     projectGroupDeleteOperationId?: number;
-    timeNode?: TimeNode;
-    projectGroupCreateOperation?: ProjectGroupCreateOperation;
-    projectGroupUpdateOperation?: ProjectGroupUpdateOperation;
-    projectGroupDeleteOperation?: ProjectGroupDeleteOperation;
+    timeNode?: TimeNodeModel;
+    projectGroupCreateOperation?: ProjectGroupCreateOperationModel;
+    projectGroupUpdateOperation?: ProjectGroupUpdateOperationModel;
+    projectGroupDeleteOperation?: ProjectGroupDeleteOperationModel;
   }) {
     this.id = id;
     this.projectGroupId = projectGroupId;

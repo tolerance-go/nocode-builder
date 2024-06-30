@@ -1,11 +1,11 @@
-import { ProjectGroupOperation } from "./ProjectGroupOperation";
+import { ProjectGroupOperationModel } from "./ProjectGroupOperationModel";
 
-export class ProjectGroupUpdateOperation {
+export class ProjectGroupCreateOperationModel {
   id: number;
   recordId: number;
   createdAt: Date;
   updatedAt: Date;
-  projectGroupOperation: ProjectGroupOperation;
+  projectGroupOperation: ProjectGroupOperationModel;
   projectGroupOperationId: number;
 
   constructor({
@@ -20,7 +20,7 @@ export class ProjectGroupUpdateOperation {
     recordId: number;
     createdAt: Date;
     updatedAt: Date;
-    projectGroupOperation: ProjectGroupOperation;
+    projectGroupOperation: ProjectGroupOperationModel;
     projectGroupOperationId: number;
   }) {
     this.id = id;

@@ -1,17 +1,17 @@
-import { Project } from './Project';
-import { ProjectGroup } from './ProjectGroup';
-import { TimeChunk } from './TimeChunk';
+import { ProjectModel } from './ProjectModel';
+import { ProjectGroupModel } from './ProjectGroupModel';
+import { TimeChunkModel } from './TimeChunkModel';
 
-export class User {
+export class UserModel {
   id: number;
   name: string;
   email?: string;
   password: string;
-  projects: Project[];
+  projects: ProjectModel[];
   createdAt: Date;
   updatedAt: Date;
-  projectGroups: ProjectGroup[];
-  timeChunk: TimeChunk[];
+  projectGroups: ProjectGroupModel[];
+  timeChunk: TimeChunkModel[];
 
   constructor({
     id,
@@ -28,11 +28,11 @@ export class User {
     name: string;
     email?: string;
     password: string;
-    projects: Project[];
+    projects: ProjectModel[];
     createdAt: Date;
     updatedAt: Date;
-    projectGroups: ProjectGroup[];
-    timeChunk: TimeChunk[];
+    projectGroups: ProjectGroupModel[];
+    timeChunk: TimeChunkModel[];
   }) {
     this.id = id;
     this.name = name;
