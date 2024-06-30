@@ -3,6 +3,15 @@ import * as path from 'path';
 import { getDMMF } from '@prisma/sdk';
 import { format } from 'prettier';
 
+const toCamelCase = (str: string): string => {
+  return str.replace(/(?:^\w|[A-Z]|\b\w|[-_]\w)/g, (match, index) => {
+    if (index === 0) {
+      return match.toLowerCase();
+    }
+    return match.replace(/[-_]/, '').toUpperCase();
+  });
+};
+
 const classMap: { [name: string]: Class } = {};
 
 // 定义 Decorator 类
@@ -192,10 +201,13 @@ class DBFile extends File {
   }
 
   print(): string {
+    const dynamicImports = this.classes
+      .map((classItem) => `${classItem.printName}`)
+      .join(', ');
     const tablesStr = this.classes
       .map(
         (classItem) =>
-          `  ${classItem.name.toLowerCase()}s: Table<${classItem.printName}, number>;`,
+          `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number>;`,
       )
       .join('\n');
 
@@ -207,18 +219,21 @@ class DBFile extends File {
         const fieldsStr = sortedFields
           .map((field) => `${field.isId ? '++' : ''}${field.name}`)
           .join(', ');
-        return `      ${classItem.name.toLowerCase()}s: '${fieldsStr}',`;
+        return `      ${toCamelCase(classItem.name)}s: '${fieldsStr}',`;
       })
       .join('\n');
 
     const tableInitStr = this.classes
       .map(
         (classItem) =>
-          `    this.${classItem.name.toLowerCase()}s = this.table('${classItem.name.toLowerCase()}s');`,
+          `    this.${toCamelCase(classItem.name)}s = this.table('${toCamelCase(classItem.name)}s');`,
       )
       .join('\n');
 
-    return `export class Database extends Dexie {
+    return `import { ${dynamicImports} } from '@/_gen/models';
+import Dexie, { Table } from 'dexie';
+
+export class Database extends Dexie {
 ${tablesStr}
 
   constructor() {
