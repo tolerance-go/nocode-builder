@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { getDMMF } from '@prisma/sdk';
-import { format } from 'prettier';
+import { format, resolveConfig } from 'prettier';
 
 const toCamelCase = (str: string): string => {
   return str.replace(/(?:^\w|[A-Z]|\b\w|[-_]\w)/g, (match, index) => {
@@ -299,8 +299,10 @@ async function main() {
   try {
     const { modelsFile, dbFile } = await parseSchema(schemaContent);
 
+    const prettierConfig = await resolveConfig(path.resolve());
     // 输出 ModelsFile 结果
     const formattedModelsOutput = await format(modelsFile.print(), {
+      ...prettierConfig,
       parser: 'typescript',
     });
     const modelsOutputPath = path.resolve('../admin/src/_gen/models.ts');
@@ -317,6 +319,7 @@ ${formattedModelsOutput}`,
 
     // 输出 DBFile 结果
     const formattedDbOutput = await format(dbFile.print(), {
+      ...prettierConfig,
       parser: 'typescript',
     });
     const dbOutputPath = path.resolve('../admin/src/_gen/db.ts');

@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { generateApi } from 'swagger-typescript-api';
-import { format } from 'prettier';
+import { format, resolveConfig } from 'prettier';
 
 /* NOTE: all fields are optional expect one of `input`, `url`, `spec` */
 generateApi({
@@ -16,7 +16,10 @@ generateApi({
     },
   }),
 })
-  .then(({ files }) => {
+  .then(async ({ files }) => {
+    // 读取 prettier 配置
+    const prettierConfig = await resolveConfig(path.resolve());
+
     files.forEach(async ({ fileName, fileContent, fileExtension }) => {
       fs.writeFileSync(
         path.resolve('src/_gen', `${fileName}${fileExtension}`),
@@ -30,6 +33,7 @@ generateApi({
 ${fileContent}
 `,
           {
+            ...prettierConfig,
             parser: 'typescript',
           },
         ),

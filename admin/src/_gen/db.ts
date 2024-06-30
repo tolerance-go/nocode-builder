@@ -18,8 +18,8 @@ import {
   ProjectGroupCreateOperationModel,
   ProjectGroupUpdateOperationModel,
   ProjectGroupDeleteOperationModel,
-} from "@/_gen/models";
-import Dexie, { Table } from "dexie";
+} from '@/_gen/models';
+import Dexie, { Table } from 'dexie';
 
 export class Database extends Dexie {
   users: Table<UserModel, number>;
@@ -37,50 +37,50 @@ export class Database extends Dexie {
   projectGroupDeleteOperations: Table<ProjectGroupDeleteOperationModel, number>;
 
   constructor() {
-    super("database");
+    super('database');
     this.version(1).stores({
-      users: "++id, name, email, password, createdAt, updatedAt",
-      projects: "++id, name, ownerId, createdAt, updatedAt, projectGroupId",
-      projectGroups: "++id, name, parentGroupId, ownerId, createdAt, updatedAt",
-      timeChunks: "++id, name, description, userId, createdAt, updatedAt",
+      users: '++id, name, email, password, createdAt, updatedAt',
+      projects: '++id, name, ownerId, createdAt, updatedAt, projectGroupId',
+      projectGroups: '++id, name, parentGroupId, ownerId, createdAt, updatedAt',
+      timeChunks: '++id, name, description, userId, createdAt, updatedAt',
       timeNodes:
-        "++id, timeChunkId, projectOperationId, projectGroupOperationId, createdAt, updatedAt",
+        '++id, timeChunkId, projectOperationId, projectGroupOperationId, createdAt, updatedAt',
       projectOperations:
-        "++id, projectId, projectCreateOperationId, projectUpdateOperationId, projectDeleteOperationId",
+        '++id, projectId, projectCreateOperationId, projectUpdateOperationId, projectDeleteOperationId',
       projectGroupOperations:
-        "++id, projectGroupId, projectGroupCreateOperationId, projectGroupUpdateOperationId, projectGroupDeleteOperationId",
+        '++id, projectGroupId, projectGroupCreateOperationId, projectGroupUpdateOperationId, projectGroupDeleteOperationId',
       projectCreateOperations:
-        "++id, recordId, createdAt, updatedAt, projectOperationId",
+        '++id, recordId, createdAt, updatedAt, projectOperationId',
       projectUpdateOperations:
-        "++id, recordId, createdAt, updatedAt, projectOperationId",
+        '++id, recordId, createdAt, updatedAt, projectOperationId',
       projectDeleteOperations:
-        "++id, recordId, createdAt, updatedAt, projectOperationId",
+        '++id, recordId, createdAt, updatedAt, projectOperationId',
       projectGroupCreateOperations:
-        "++id, recordId, createdAt, updatedAt, projectGroupOperationId",
+        '++id, recordId, createdAt, updatedAt, projectGroupOperationId',
       projectGroupUpdateOperations:
-        "++id, recordId, createdAt, updatedAt, projectGroupOperationId",
+        '++id, recordId, createdAt, updatedAt, projectGroupOperationId',
       projectGroupDeleteOperations:
-        "++id, recordId, createdAt, updatedAt, projectGroupOperationId",
+        '++id, recordId, createdAt, updatedAt, projectGroupOperationId',
     });
 
-    this.users = this.table("users");
-    this.projects = this.table("projects");
-    this.projectGroups = this.table("projectGroups");
-    this.timeChunks = this.table("timeChunks");
-    this.timeNodes = this.table("timeNodes");
-    this.projectOperations = this.table("projectOperations");
-    this.projectGroupOperations = this.table("projectGroupOperations");
-    this.projectCreateOperations = this.table("projectCreateOperations");
-    this.projectUpdateOperations = this.table("projectUpdateOperations");
-    this.projectDeleteOperations = this.table("projectDeleteOperations");
+    this.users = this.table('users');
+    this.projects = this.table('projects');
+    this.projectGroups = this.table('projectGroups');
+    this.timeChunks = this.table('timeChunks');
+    this.timeNodes = this.table('timeNodes');
+    this.projectOperations = this.table('projectOperations');
+    this.projectGroupOperations = this.table('projectGroupOperations');
+    this.projectCreateOperations = this.table('projectCreateOperations');
+    this.projectUpdateOperations = this.table('projectUpdateOperations');
+    this.projectDeleteOperations = this.table('projectDeleteOperations');
     this.projectGroupCreateOperations = this.table(
-      "projectGroupCreateOperations",
+      'projectGroupCreateOperations',
     );
     this.projectGroupUpdateOperations = this.table(
-      "projectGroupUpdateOperations",
+      'projectGroupUpdateOperations',
     );
     this.projectGroupDeleteOperations = this.table(
-      "projectGroupDeleteOperations",
+      'projectGroupDeleteOperations',
     );
   }
 }
