@@ -1,7 +1,7 @@
 import { User } from '@prisma/client';
-import { UserDto } from '../dtos/user.dto';
+import { UserResponseDto } from '../dtos/user-response.dto';
 
-export function toUserDto(user: User): UserDto {
+export function toUserResponseDto(user: User): UserResponseDto {
   return {
     id: user.id,
     name: user.name,

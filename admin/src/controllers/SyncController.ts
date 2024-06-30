@@ -1,4 +1,4 @@
-import { db } from '@/db';
+import { db } from '@/_gen/db';
 import axios from 'axios';
 
 interface Friend {
