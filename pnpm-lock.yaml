@@ -347,6 +347,9 @@ importers:
       jest:
         specifier: ^29.5.0
         version: 29.7.0(@types/node@20.14.2)(babel-plugin-macros@3.1.0)(ts-node@10.9.2(@swc/core@1.5.29)(@types/node@20.14.2)(typescript@5.4.5))
+      prettier:
+        specifier: ^3.0.0
+        version: 3.3.2
       prisma:
         specifier: ^5.15.1
         version: 5.15.1

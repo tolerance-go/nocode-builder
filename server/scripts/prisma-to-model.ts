@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import { getDMMF } from '@prisma/sdk';
+import { format } from 'prettier';
 
 const classMap: { [name: string]: Class } = {};
 
@@ -147,7 +148,7 @@ class File {
     const importsStr = this.imports.map((imp) => imp.print()).join('\n');
     const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');
 
-    return `${importsStr}${classesStr}`;
+    return `${importsStr}\n\n${classesStr}`;
   }
 }
 
@@ -196,7 +197,10 @@ async function main() {
     const prismaFile = await parseSchema(schemaContent);
 
     // 输出结果
-    console.log(prismaFile.print());
+    const formattedOutput = await format(prismaFile.print(), {
+      parser: 'typescript',
+    });
+    console.log(formattedOutput);
 
     // 将结果保存到文件
     const outputPath = path.resolve('../admin/src/_gen/models.ts');
@@ -208,7 +212,7 @@ async function main() {
  * ---------------------------------------------------------------
  */
 
-${prismaFile.print()}`,
+${formattedOutput}`,
     );
 
     console.log(
