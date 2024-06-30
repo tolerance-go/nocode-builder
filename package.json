@@ -5,10 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "format": "prettier --write \"src/**/*.ts\"",
+    "format": "prettier --write \"*/src/**/*.ts\"",
     "docker:db": "docker-compose down && docker-compose up postgres --build -d --remove-orphans",
     "docker": "docker-compose down && docker-compose up --build -d --remove-orphans",
-    "everyDay": "pnpm recursive run everyDay && pnpm docker",
+    "everyDay": "pnpm format && pnpm recursive run everyDay && pnpm docker",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
