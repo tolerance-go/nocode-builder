@@ -6,11 +6,13 @@ import {
   ProjectTreeStates,
 } from '@/store/createProjectTreeSlice';
 import { ServerSlice, ServerStates } from '@/store/createServerSlice';
+import { VersionSlice } from '@/store/createVersionSlice';
 
 export type Store = ProjectTreeSlice &
   NetworkSlice &
   LocationSlice &
   LayoutSlice &
+  VersionSlice &
   ServerSlice;
 
 export type StoreStates = ProjectTreeStates &
@@ -21,6 +23,5 @@ export type StoreStates = ProjectTreeStates &
 
 export type StoreStatesSlice = {
   id: number;
-  version: string;
   data: StoreStates;
 };

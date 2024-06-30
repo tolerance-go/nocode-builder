@@ -38,23 +38,28 @@ function filterNonFunctionFields<T extends object>(
 
 const storeSliceImpl: StoreSliceImpl = (f) => (set, get, store) => {
   const loggedSet: typeof set = (...args) => {
-    // const prevState = get();
+    const prevState = get();
     set(...args);
     const nextState = get();
 
-    storeDb.stores.add({
-      data: filterNonFunctionFields(nextState),
-    });
+    if (nextState.version > prevState.version) {
+      storeDb.stores.add({
+        data: filterNonFunctionFields(nextState),
+      });
+    }
   };
 
   const setState = store.setState;
   store.setState = (...args) => {
-    // const prevState = get();
+    const prevState = get();
     setState(...args);
     const nextState = get();
-    storeDb.stores.add({
-      data: filterNonFunctionFields(nextState),
-    });
+
+    if (nextState.version > prevState.version) {
+      storeDb.stores.add({
+        data: filterNonFunctionFields(nextState),
+      });
+    }
   };
 
   return f(loggedSet, get, store);
