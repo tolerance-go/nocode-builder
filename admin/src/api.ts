@@ -331,7 +331,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
    * @name AppControllerGetHello
    * @request GET:/
    */
-  appControllerGetHello = (params: RequestParams = {}) =>
+  getHello = (params: RequestParams = {}) =>
     this.request<void, any>({
       path: `/`,
       method: "GET",
@@ -345,7 +345,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name AuthControllerLogin
      * @request POST:/auth/login
      */
-    authControllerLogin: (data: LoginDto, params: RequestParams = {}) =>
+    login: (data: LoginDto, params: RequestParams = {}) =>
       this.request<LoginResponseDto, any>({
         path: `/auth/login`,
         method: "POST",
@@ -362,7 +362,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UserControllerGetUser
      * @request GET:/users/{id}
      */
-    userControllerGetUser: (id: string, params: RequestParams = {}) =>
+    getUser: (id: string, params: RequestParams = {}) =>
       this.request<UserDto, any>({
         path: `/users/${id}`,
         method: "GET",
@@ -376,7 +376,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UserControllerUpdateUser
      * @request PATCH:/users/{id}
      */
-    userControllerUpdateUser: (id: string, data: UserUpdateDto, params: RequestParams = {}) =>
+    updateUser: (id: string, data: UserUpdateDto, params: RequestParams = {}) =>
       this.request<UserDto, any>({
         path: `/users/${id}`,
         method: "PATCH",
@@ -392,7 +392,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UserControllerDeleteUser
      * @request DELETE:/users/{id}
      */
-    userControllerDeleteUser: (id: string, params: RequestParams = {}) =>
+    deleteUser: (id: string, params: RequestParams = {}) =>
       this.request<UserDto, any>({
         path: `/users/${id}`,
         method: "DELETE",
@@ -406,7 +406,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UserControllerGetUsers
      * @request GET:/users
      */
-    userControllerGetUsers: (
+    getUsers: (
       query?: {
         /**
          * Number of records to skip for pagination
@@ -445,7 +445,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name UserControllerCreateUser
      * @request POST:/users
      */
-    userControllerCreateUser: (data: UserCreateDto, params: RequestParams = {}) =>
+    createUser: (data: UserCreateDto, params: RequestParams = {}) =>
       this.request<UserDto, void>({
         path: `/users`,
         method: "POST",
@@ -462,7 +462,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectControllerGetProject
      * @request GET:/projects/{id}
      */
-    projectControllerGetProject: (id: string, params: RequestParams = {}) =>
+    getProject: (id: string, params: RequestParams = {}) =>
       this.request<ProjectDto, any>({
         path: `/projects/${id}`,
         method: "GET",
@@ -476,7 +476,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectControllerUpdateProject
      * @request PATCH:/projects/{id}
      */
-    projectControllerUpdateProject: (id: string, data: ProjectUpdateDto, params: RequestParams = {}) =>
+    updateProject: (id: string, data: ProjectUpdateDto, params: RequestParams = {}) =>
       this.request<ProjectDto, any>({
         path: `/projects/${id}`,
         method: "PATCH",
@@ -492,7 +492,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectControllerDeleteProject
      * @request DELETE:/projects/{id}
      */
-    projectControllerDeleteProject: (id: string, params: RequestParams = {}) =>
+    deleteProject: (id: string, params: RequestParams = {}) =>
       this.request<ProjectDto, any>({
         path: `/projects/${id}`,
         method: "DELETE",
@@ -506,7 +506,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectControllerGetProjects
      * @request GET:/projects
      */
-    projectControllerGetProjects: (
+    getProjects: (
       query?: {
         /**
          * Number of records to skip for pagination
@@ -545,7 +545,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectControllerCreateProject
      * @request POST:/projects
      */
-    projectControllerCreateProject: (data: ProjectCreateDto, params: RequestParams = {}) =>
+    createProject: (data: ProjectCreateDto, params: RequestParams = {}) =>
       this.request<ProjectDto, void>({
         path: `/projects`,
         method: "POST",
@@ -562,7 +562,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectGroupControllerGetProjectGroup
      * @request GET:/project-groups/{id}
      */
-    projectGroupControllerGetProjectGroup: (id: string, params: RequestParams = {}) =>
+    getProjectGroup: (id: string, params: RequestParams = {}) =>
       this.request<ProjectGroupDto, any>({
         path: `/project-groups/${id}`,
         method: "GET",
@@ -576,7 +576,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectGroupControllerUpdateProjectGroup
      * @request PATCH:/project-groups/{id}
      */
-    projectGroupControllerUpdateProjectGroup: (id: string, data: ProjectGroupUpdateDto, params: RequestParams = {}) =>
+    updateProjectGroup: (id: string, data: ProjectGroupUpdateDto, params: RequestParams = {}) =>
       this.request<ProjectGroupDto, any>({
         path: `/project-groups/${id}`,
         method: "PATCH",
@@ -592,7 +592,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectGroupControllerDeleteProjectGroup
      * @request DELETE:/project-groups/{id}
      */
-    projectGroupControllerDeleteProjectGroup: (id: string, params: RequestParams = {}) =>
+    deleteProjectGroup: (id: string, params: RequestParams = {}) =>
       this.request<ProjectGroupDto, any>({
         path: `/project-groups/${id}`,
         method: "DELETE",
@@ -606,7 +606,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectGroupControllerGetProjectGroups
      * @request GET:/project-groups
      */
-    projectGroupControllerGetProjectGroups: (
+    getProjectGroups: (
       query?: {
         /**
          * Number of records to skip for pagination
@@ -645,7 +645,7 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
      * @name ProjectGroupControllerCreateProjectGroup
      * @request POST:/project-groups
      */
-    projectGroupControllerCreateProjectGroup: (data: ProjectGroupCreateDto, params: RequestParams = {}) =>
+    createProjectGroup: (data: ProjectGroupCreateDto, params: RequestParams = {}) =>
       this.request<ProjectGroupDto, void>({
         path: `/project-groups`,
         method: "POST",

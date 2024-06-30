@@ -79,6 +79,16 @@ const describeReturnType = () => {
 }
 
 %>
+<%
+// 移除前缀直到 `Controller` 为止的部分，并将剩余的字符串首字母小写
+const formatRouteName = (usage) => {
+    const controllerIndex = usage.indexOf('Controller');
+    if (controllerIndex !== -1) {
+        usage = usage.substring(controllerIndex + 'Controller'.length);
+    }
+    return usage.charAt(0).toLowerCase() + usage.slice(1);
+}
+%>
 /**
 <%~ routeDocs.description %>
 
@@ -87,7 +97,7 @@ const describeReturnType = () => {
 <%~ routeDocs.lines %>
 
  */
-<%~ route.routeName.usage %><%~ route.namespace ? ': ' : ' = ' %>(<%~ wrapperArgs %>)<%~ config.toJS ? `: ${describeReturnType()}` : "" %> =>
+<%~ formatRouteName(route.routeName.usage) %><%~ route.namespace ? ': ' : ' = ' %>(<%~ wrapperArgs %>)<%~ config.toJS ? `: ${describeReturnType()}` : "" %> =>
     <%~ config.singleHttpClient ? 'this.http.request' : 'this.request' %><<%~ type %>, <%~ errorType %>>({
         path: `<%~ path %>`,
         method: '<%~ _.upperCase(method) %>',
