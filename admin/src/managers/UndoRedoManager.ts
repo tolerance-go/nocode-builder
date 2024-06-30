@@ -10,7 +10,7 @@ export class UndoRedoManager<T> {
   private pendingOperations: (() => void)[];
   private pendingSaves: (() => void)[];
 
-  private constructor() {
+  private constructor(private storage: typeof localforage = localforage) {
     this.historyStack = [];
     this.currentIndex = -1;
     this.loadingHistory = true;
@@ -21,16 +21,20 @@ export class UndoRedoManager<T> {
   }
 
   // 获取单例实例的方法
-  public static getInstance<T>(): UndoRedoManager<T> {
+  public static getInstance<T>(
+    storage?: typeof localforage,
+  ): UndoRedoManager<T> {
     if (!UndoRedoManager.instance) {
-      UndoRedoManager.instance = new UndoRedoManager();
+      UndoRedoManager.instance = new UndoRedoManager(storage);
     }
     return UndoRedoManager.instance as UndoRedoManager<T>;
   }
 
   // 创建单例实例并提前准备数据的方法
-  public static async initialize<T>(): Promise<UndoRedoManager<T>> {
-    return this.getInstance<T>();
+  public static async initialize<T>(
+    storage?: typeof localforage,
+  ): Promise<UndoRedoManager<T>> {
+    return this.getInstance<T>(storage);
   }
 
   // 销毁单例实例的方法
@@ -96,7 +100,7 @@ export class UndoRedoManager<T> {
   }
 
   // 保存历史记录到 LocalForage
-  private async saveHistory(): Promise<void> {
+  public async saveHistory(): Promise<void> {
     if (this.savingHistory) {
       this.pendingSaves.push(() => this.saveHistory());
       return;
@@ -104,7 +108,7 @@ export class UndoRedoManager<T> {
 
     this.savingHistory = true;
     try {
-      await localforage.setItem(this.storageKey, {
+      await this.storage.setItem(this.storageKey, {
         historyStack: this.historyStack,
         currentIndex: this.currentIndex,
       });
@@ -117,7 +121,7 @@ export class UndoRedoManager<T> {
   }
 
   // 执行在保存历史期间存储的保存操作
-  private async executePendingSaves(): Promise<void> {
+  public async executePendingSaves(): Promise<void> {
     while (this.pendingSaves.length > 0) {
       const saveOperation = this.pendingSaves.shift();
       if (saveOperation) {
@@ -127,9 +131,9 @@ export class UndoRedoManager<T> {
   }
 
   // 从 LocalForage 加载历史记录
-  private async loadHistory(): Promise<void> {
+  public async loadHistory(): Promise<void> {
     try {
-      const savedData = await localforage.getItem<{
+      const savedData = await this.storage.getItem<{
         historyStack: T[];
         currentIndex: number;
       }>(this.storageKey);
@@ -146,7 +150,7 @@ export class UndoRedoManager<T> {
   }
 
   // 执行在加载历史期间存储的操作
-  private executePendingOperations(): void {
+  public executePendingOperations(): void {
     this.pendingOperations.forEach((operation) => operation());
     this.pendingOperations = [];
   }
