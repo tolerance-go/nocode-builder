@@ -3,14 +3,14 @@ import * as path from 'path';
 import { getDMMF } from '@prisma/sdk';
 import { format, resolveConfig } from 'prettier';
 
-const toCamelCase = (str: string): string => {
-  return str.replace(/(?:^\w|[A-Z]|\b\w|[-_]\w)/g, (match, index) => {
-    if (index === 0) {
-      return match.toLowerCase();
-    }
-    return match.replace(/[-_]/, '').toUpperCase();
-  });
-};
+// const toCamelCase = (str: string): string => {
+//   return str.replace(/(?:^\w|[A-Z]|\b\w|[-_]\w)/g, (match, index) => {
+//     if (index === 0) {
+//       return match.toLowerCase();
+//     }
+//     return match.replace(/[-_]/, '').toUpperCase();
+//   });
+// };
 
 const classMap: { [name: string]: Class } = {};
 
@@ -193,113 +193,6 @@ class ModelsFile extends File {
   }
 }
 
-// 修改 DBFile 类
-class DBFile extends File {
-  constructor(classes: Class[]) {
-    const imports = [
-      new Import(
-        classes.map((classItem) => `${classItem.printName}`),
-        '@/_gen/models',
-      ),
-      new Import(['Dexie', 'Table'], 'dexie'),
-      new Import(['OptionalKeys'], '@/utils'),
-    ];
-    super(classes, imports);
-  }
-
-  private getFieldNames(
-    classItem: Class,
-    condition: (field: Field) => boolean,
-  ): string[] {
-    return classItem.fields.filter(condition).map((field) => field.name);
-  }
-
-  private generateInsertType(classItem: Class): string {
-    const idFieldNames = this.getFieldNames(classItem, (field) => field.isId);
-    const updateFieldNames = this.getFieldNames(
-      classItem,
-      (field) => field.isUpdatedAt,
-    );
-    const defaultFieldNames = this.getFieldNames(
-      classItem,
-      (field) => field.hasDefaultValue,
-    );
-
-    const optionalFields = new Set([
-      ...idFieldNames,
-      ...updateFieldNames,
-      ...defaultFieldNames,
-    ]);
-    const optionalFieldsStr = Array.from(optionalFields)
-      .map((field) => `'${field}'`)
-      .join(' | ');
-
-    return `OptionalKeys<${classItem.printName}, ${optionalFieldsStr}>`;
-  }
-
-  print(): string {
-    const dynamicImports = this.classes
-      .map((classItem) => `${classItem.printName}`)
-      .join(', ');
-
-    const insertTypesStr = this.classes
-      .map((classItem) => {
-        const insertType = this.generateInsertType(classItem);
-        return `export type ${classItem.printName}InsertType = ${insertType};`;
-      })
-      .join('\n');
-
-    const tablesStr = this.classes
-      .map((classItem) => {
-        return `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number, ${classItem.printName}InsertType>;`;
-      })
-      .join('\n');
-
-    const storesStr = this.classes
-      .map((classItem) => {
-        const fields = classItem.fields.filter(
-          (field) => typeof field.type === 'string',
-        );
-        const sortedFields = fields.sort(
-          (a, b) => (b.isId ? 1 : 0) - (a.isId ? 1 : 0),
-        ); // 将 isId 的字段排在最前面
-        const fieldsStr = sortedFields
-          .map((field) => `${field.isId ? '++' : ''}${field.name}`)
-          .join(', ');
-        return `      ${toCamelCase(classItem.name)}s: '${fieldsStr}',`;
-      })
-      .join('\n');
-
-    const tableInitStr = this.classes
-      .map(
-        (classItem) =>
-          `    this.${toCamelCase(classItem.name)}s = this.table('${toCamelCase(classItem.name)}s');`,
-      )
-      .join('\n');
-
-    return `import { ${dynamicImports} } from '@/_gen/models';
-import Dexie, { Table } from 'dexie';
-import { OptionalKeys } from '@/utils';
-
-${insertTypesStr}
-
-export class Database extends Dexie {
-${tablesStr}
-
-  constructor() {
-    super('database');
-    this.version(1).stores({
-${storesStr}
-    });
-
-${tableInitStr}
-  }
-}
-
-export const db = new Database();`;
-  }
-}
-
 // 读取文件内容
 const schemaFilePath = path.resolve('./prisma/schema.prisma');
 const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
@@ -307,7 +200,7 @@ const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
 // 使用 Prisma SDK 解析 schema
 async function parseSchema(
   schema: string,
-): Promise<{ modelsFile: ModelsFile; dbFile: DBFile }> {
+): Promise<{ modelsFile: ModelsFile }> {
   const dmmf = await getDMMF({ datamodel: schema });
 
   const typeMapping: { [key: string]: string } = {
@@ -344,15 +237,14 @@ async function parseSchema(
   });
 
   const modelsFile = new ModelsFile(classes);
-  const dbFile = new DBFile(classes);
 
-  return { modelsFile, dbFile };
+  return { modelsFile };
 }
 
 // 主函数
 async function main() {
   try {
-    const { modelsFile, dbFile } = await parseSchema(schemaContent);
+    const { modelsFile } = await parseSchema(schemaContent);
 
     const prettierConfig = await resolveConfig(path.resolve());
     // 输出 ModelsFile 结果
@@ -372,25 +264,8 @@ async function main() {
 ${formattedModelsOutput}`,
     );
 
-    // 输出 DBFile 结果
-    const formattedDbOutput = await format(dbFile.print(), {
-      ...prettierConfig,
-      parser: 'typescript',
-    });
-    const dbOutputPath = path.resolve('../admin/src/_gen/db.ts');
-    fs.writeFileSync(
-      dbOutputPath,
-      `/*
- * ---------------------------------------------------------------
- * ## THIS FILE WAS GENERATED        ##
- * ---------------------------------------------------------------
- */
-
-${formattedDbOutput}`,
-    );
-
     console.log(
-      'Prisma schema has been successfully parsed and saved to models.ts and db.ts',
+      'Prisma schema has been successfully parsed and saved to models.ts',
     );
   } catch (error) {
     console.error('Error parsing schema:', error);
