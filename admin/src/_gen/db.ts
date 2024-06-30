@@ -39,32 +39,28 @@ export class Database extends Dexie {
   constructor() {
     super("database");
     this.version(1).stores({
-      users:
-        "++id, name, email, password, projects, createdAt, updatedAt, projectGroups, timeChunk",
-      projects:
-        "++id, name, ownerId, owner, createdAt, updatedAt, projectGroup, projectGroupId, operations",
-      projectGroups:
-        "++id, name, parentGroupId, parentGroup, childGroups, ownerId, owner, projects, createdAt, updatedAt, operations",
-      timeChunks:
-        "++id, name, description, userId, user, timeNodes, createdAt, updatedAt",
+      users: "++id, name, email, password, createdAt, updatedAt",
+      projects: "++id, name, ownerId, createdAt, updatedAt, projectGroupId",
+      projectGroups: "++id, name, parentGroupId, ownerId, createdAt, updatedAt",
+      timeChunks: "++id, name, description, userId, createdAt, updatedAt",
       timeNodes:
-        "++id, timeChunkId, timeChunk, projectOperationId, projectOperation, projectGroupOperationId, ProjectGroupOperation, createdAt, updatedAt",
+        "++id, timeChunkId, projectOperationId, projectGroupOperationId, createdAt, updatedAt",
       projectOperations:
-        "++id, projectId, project, projectCreateOperationId, projectUpdateOperationId, projectDeleteOperationId, timeNode, projectUpdateOperation, projectDeleteOperation, projectCreateOperation",
+        "++id, projectId, projectCreateOperationId, projectUpdateOperationId, projectDeleteOperationId",
       projectGroupOperations:
-        "++id, projectGroupId, projectGroup, projectGroupCreateOperationId, projectGroupUpdateOperationId, projectGroupDeleteOperationId, timeNode, projectGroupCreateOperation, projectGroupUpdateOperation, projectGroupDeleteOperation",
+        "++id, projectGroupId, projectGroupCreateOperationId, projectGroupUpdateOperationId, projectGroupDeleteOperationId",
       projectCreateOperations:
-        "++id, recordId, createdAt, updatedAt, projectOperation, projectOperationId",
+        "++id, recordId, createdAt, updatedAt, projectOperationId",
       projectUpdateOperations:
-        "++id, recordId, createdAt, updatedAt, projectOperation, projectOperationId",
+        "++id, recordId, createdAt, updatedAt, projectOperationId",
       projectDeleteOperations:
-        "++id, recordId, createdAt, updatedAt, projectOperation, projectOperationId",
+        "++id, recordId, createdAt, updatedAt, projectOperationId",
       projectGroupCreateOperations:
-        "++id, recordId, createdAt, updatedAt, projectGroupOperation, projectGroupOperationId",
+        "++id, recordId, createdAt, updatedAt, projectGroupOperationId",
       projectGroupUpdateOperations:
-        "++id, recordId, createdAt, updatedAt, projectGroupOperation, projectGroupOperationId",
+        "++id, recordId, createdAt, updatedAt, projectGroupOperationId",
       projectGroupDeleteOperations:
-        "++id, recordId, createdAt, updatedAt, projectGroupOperation, projectGroupOperationId",
+        "++id, recordId, createdAt, updatedAt, projectGroupOperationId",
     });
 
     this.users = this.table("users");

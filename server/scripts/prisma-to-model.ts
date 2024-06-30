@@ -187,7 +187,7 @@ class ModelsFile extends File {
   }
 }
 
-// 新增 DBFile 类
+// 修改 DBFile 类
 class DBFile extends File {
   constructor(classes: Class[]) {
     const imports = [
@@ -205,15 +205,17 @@ class DBFile extends File {
       .map((classItem) => `${classItem.printName}`)
       .join(', ');
     const tablesStr = this.classes
-      .map(
-        (classItem) =>
-          `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number>;`,
-      )
+      .map((classItem) => {
+        return `  ${toCamelCase(classItem.name)}s: Table<${classItem.printName}, number>;`;
+      })
       .join('\n');
 
     const storesStr = this.classes
       .map((classItem) => {
-        const sortedFields = classItem.fields.sort(
+        const fields = classItem.fields.filter(
+          (field) => typeof field.type === 'string',
+        );
+        const sortedFields = fields.sort(
           (a, b) => (b.isId ? 1 : 0) - (a.isId ? 1 : 0),
         ); // 将 isId 的字段排在最前面
         const fieldsStr = sortedFields
