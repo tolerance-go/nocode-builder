@@ -14,6 +14,9 @@ import { NotFound } from './root/404';
 import './i18n'; // 引入 i18n 配置
 import './index.css';
 import './subscribes';
+import { UndoRedoManager } from './managers';
+
+UndoRedoManager.initialize();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

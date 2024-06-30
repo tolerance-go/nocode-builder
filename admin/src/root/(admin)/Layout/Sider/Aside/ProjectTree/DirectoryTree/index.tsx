@@ -1,8 +1,8 @@
 import { useAppStore } from '@/store';
 import { css } from '@emotion/css';
-import { useKeyPress } from 'ahooks';
 import { Tree } from 'antd';
 import { Title } from './Title';
+import { useKeyPress } from '@/hooks';
 
 const { DirectoryTree } = Tree;
 

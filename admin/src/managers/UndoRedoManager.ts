@@ -28,6 +28,11 @@ export class UndoRedoManager<T> {
     return UndoRedoManager.instance as UndoRedoManager<T>;
   }
 
+  // 创建单例实例并提前准备数据的方法
+  public static async initialize<T>(): Promise<UndoRedoManager<T>> {
+    return this.getInstance<T>();
+  }
+
   // 执行一个新操作
   async execute(newState: T): Promise<void> {
     if (this.loadingHistory) {
