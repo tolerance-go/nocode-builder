@@ -1,5 +1,5 @@
+import { db } from "@/db";
 import axios from "axios";
-import db from "./db"; // 引入我们刚刚定义的 Dexie 数据库
 
 interface Friend {
   id?: number;
