@@ -3,5 +3,6 @@
     ["classNames\\s?\\=([^;]*);", "'([^']*)'"],
     ["classNames\\s?\\=([^;]*);", "\"([^\"]*)\""],
     ["classNames\\s?\\=([^;]*);", "\\`([^\\`]*)\\`"]
-  ]
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
