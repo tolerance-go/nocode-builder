@@ -83,7 +83,7 @@ class Class {
   print(): string {
     const fieldsStr = this.fields.map((field) => field.print()).join('\n  ');
     const constructorStr = this.printConstructor();
-    return `class ${this.name} {\n  ${fieldsStr}\n\n  ${constructorStr}\n}`;
+    return `export class ${this.name} {\n  ${fieldsStr}\n\n  ${constructorStr}\n}`;
   }
 }
 
@@ -140,7 +140,7 @@ class File {
     const importsStr = this.imports.map((imp) => imp.print()).join('\n');
     const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');
 
-    return `${importsStr}\n\n${classesStr}`;
+    return `${importsStr}${classesStr}`;
   }
 }
 
@@ -195,7 +195,16 @@ async function main() {
 
     // 将结果保存到文件
     const outputPath = path.resolve('../admin/src/models.ts');
-    fs.writeFileSync(outputPath, prismaFile.print());
+    fs.writeFileSync(
+      outputPath,
+      `/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED        ##
+ * ---------------------------------------------------------------
+ */
+
+${prismaFile.print()}`,
+    );
 
     console.log(
       'Prisma schema has been successfully parsed and saved to models.ts',
