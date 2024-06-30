@@ -42,7 +42,7 @@ class Field {
 
   print(): string {
     const type =
-      typeof this.type === 'string' ? this.type : this.type.printName();
+      typeof this.type === 'string' ? this.type : this.type.printName;
     const decoratorsStr = this.decorators.map((dec) => dec.print()).join(' ');
     const nullableStr = this.isRequired ? '' : '?';
     return `${decoratorsStr} ${this.name}${nullableStr}: ${type};`;
@@ -55,10 +55,21 @@ class Class {
   fields: Field[];
   dependsOnOtherClasses: boolean;
 
+  private _printName: string;
+
+  get printName(): string {
+    return this._printName;
+  }
+
+  set printName(name: string) {
+    this._printName = name;
+  }
+
   constructor(name: string, fields: Field[]) {
     this.name = name;
     this.fields = fields;
     this.dependsOnOtherClasses = false;
+    this._printName = name;
   }
 
   printConstructor(): string {
@@ -71,7 +82,7 @@ class Class {
     const typeAnnotationsStr = this.fields
       .map((field) => {
         const type =
-          typeof field.type === 'string' ? field.type : field.type.printName();
+          typeof field.type === 'string' ? field.type : field.type.printName;
         const nullableStr = field.isRequired ? '' : '?';
         return `${field.name}${nullableStr}: ${type}`;
       })
@@ -84,14 +95,10 @@ class Class {
     return `constructor({ ${paramsStr} }: { ${typeAnnotationsStr} }) {\n    ${assignmentsStr}\n  }`;
   }
 
-  printName(): string {
-    return `${this.name}Model`;
-  }
-
   print(): string {
     const fieldsStr = this.fields.map((field) => field.print()).join('\n  ');
     const constructorStr = this.printConstructor();
-    return `export class ${this.printName()} {\n  ${fieldsStr}\n\n  ${constructorStr}\n}`;
+    return `export class ${this.printName} {\n  ${fieldsStr}\n\n  ${constructorStr}\n}`;
   }
 }
 
@@ -196,11 +203,14 @@ async function main() {
   try {
     const prismaFile = await parseSchema(schemaContent);
 
+    prismaFile.classes.forEach((classItem) => {
+      classItem.printName = `${classItem.name}Model`;
+    });
+
     // 输出结果
     const formattedOutput = await format(prismaFile.print(), {
       parser: 'typescript',
     });
-    console.log(formattedOutput);
 
     // 将结果保存到文件
     const outputPath = path.resolve('../admin/src/_gen/models.ts');

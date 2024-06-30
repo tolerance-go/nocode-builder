@@ -12,7 +12,7 @@ import {
   ProjectGroupCreateOperationModel,
   ProjectGroupUpdateOperationModel,
   ProjectGroupDeleteOperationModel,
-} from '@/models';
+} from '@/_gen/models';
 import Dexie, { Table } from 'dexie';
 
 export class Database extends Dexie {
