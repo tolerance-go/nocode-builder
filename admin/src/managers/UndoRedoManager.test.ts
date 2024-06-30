@@ -22,6 +22,46 @@ describe('UndoRedoManager', () => {
     UndoRedoManager.destroyInstance(); // 销毁单例实例
   });
 
+  it('应该加载保存的历史记录并执行操作保持数据一致性', async () => {
+    const savedHistory = {
+      historyStack: [1, 2, 3],
+      currentIndex: 2,
+    };
+
+    // 模拟加载历史记录时的返回数据，并增加延迟
+    (localforage.getItem as ReturnType<typeof vi.fn>).mockImplementation(() => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(savedHistory);
+        }, 500); // 模拟延迟500ms
+      });
+    });
+
+    const manager = await UndoRedoManager.initialize<number>();
+
+    // 模拟加载历史记录期间执行操作
+    const executePromise = manager.execute(4);
+    await manager.loadingHistory; // 确保历史记录加载完毕
+
+    await executePromise; // 确保执行操作完成
+
+    // 验证加载历史记录后的状态
+    expect(manager.getCurrentState()).toBe(4);
+    expect(manager.currentIndex).toBe(3);
+    expect(manager.historyStack).toEqual([1, 2, 3, 4]);
+
+    // 验证加载历史记录时是否调用了 localforage.getItem
+    expect(localforage.getItem).toHaveBeenCalledTimes(1);
+    expect(localforage.getItem).toHaveBeenCalledWith('undoRedoHistory');
+
+    // 验证保存历史记录时是否调用了 localforage.setItem
+    expect(localforage.setItem).toHaveBeenCalledTimes(1);
+    expect(localforage.setItem).toHaveBeenCalledWith('undoRedoHistory', {
+      historyStack: [1, 2, 3, 4],
+      currentIndex: 3,
+    });
+  });
+
   it('应该加载保存的历史记录', async () => {
     const savedHistory = {
       historyStack: [1, 2, 3],
