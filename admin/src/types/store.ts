@@ -5,21 +5,16 @@ import {
   ProjectTreeSlice,
   ProjectTreeStates,
 } from '@/store/createProjectTreeSlice';
-import { ServerSlice, ServerStates } from '@/store/createServerSlice';
-import { VersionSlice } from '@/store/createVersionSlice';
 
 export type Store = ProjectTreeSlice &
   NetworkSlice &
   LocationSlice &
-  LayoutSlice &
-  VersionSlice &
-  ServerSlice;
+  LayoutSlice;
 
 export type StoreStates = ProjectTreeStates &
   NetworkStates &
   LocationStates &
-  LayoutStates &
-  ServerStates;
+  LayoutStates;
 
 export type StoreStatesSlice = {
   id: number;

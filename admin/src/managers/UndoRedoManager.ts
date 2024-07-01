@@ -147,8 +147,12 @@ export class UndoRedoManager<T> {
   }
 
   // 执行在加载历史期间存储的操作
-  public executePendingOperations(): void {
-    this.pendingOperations.forEach((operation) => operation());
-    this.pendingOperations = [];
+  public async executePendingOperations(): Promise<void> {
+    while (this.pendingOperations.length > 0) {
+      const operation = this.pendingOperations.shift();
+      if (operation) {
+        await operation();
+      }
+    }
   }
 }

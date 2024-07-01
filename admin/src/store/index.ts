@@ -7,7 +7,7 @@ import { createLocationSlice } from './createLocationSlice';
 import { createNetworkSlice } from './createNetworkSlice';
 
 import { createProjectTreeSlice } from './createProjectTreeSlice';
-import { Store } from '@/types/store';
+import { Store } from '@/types';
 
 export const useAppStoreBase = create<Store>()(
   devtools(
