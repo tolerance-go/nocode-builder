@@ -1,4 +1,4 @@
-export * from './request';
+export * from './api';
 export * from './typedKeys';
 export * from './isNotNullOrUndefined';
 export * from './types';

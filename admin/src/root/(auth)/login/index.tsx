@@ -1,5 +1,5 @@
-import { login } from '@/services/api/login';
 import { LoginFormValues } from '@/types/form';
+import api from '@/utils/api';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
@@ -12,7 +12,9 @@ export const Login: React.FC = () => {
   const onFinish = async (values: LoginFormValues) => {
     try {
       setLoading(true);
-      const { accessToken } = await login({
+      const {
+        data: { accessToken },
+      } = await api.auth.login({
         username: values.username,
         password: values.password,
       });

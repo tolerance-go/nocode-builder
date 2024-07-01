@@ -1,5 +1,5 @@
-import { createUser } from '@/services/api/createUser';
 import { RegisterFormValues } from '@/types/form';
+import api from '@/utils/api';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
@@ -13,7 +13,7 @@ export const Register: React.FC = () => {
   const onFinish = async (values: RegisterFormValues) => {
     try {
       setLoading(true);
-      await createUser({
+      await api.users.createUser({
         name: values.username,
         password: values.password,
       });
