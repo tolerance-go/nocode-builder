@@ -70,3 +70,139 @@
  *
  * - 无历史状态。
  */
+
+import { createMachine, assign, interpret } from 'xstate';
+
+interface Context {
+  historyStack: unknown[];
+  historyPointer: number;
+}
+
+type State =
+  | { value: 'idle'; context: Context }
+  | { value: 'undoing'; context: Context }
+  | { value: 'redoing'; context: Context }
+  | { value: 'browsingHistory'; context: Context }
+  | { value: 'browsingLatest'; context: Context };
+
+type Event =
+  | { type: 'UNDO_REQUESTED' }
+  | { type: 'REDO_REQUESTED' }
+  | { type: 'START_BROWSING_HISTORY' }
+  | { type: 'STOP_BROWSING_HISTORY' }
+  | { type: 'SELECT_HISTORY_ITEM'; index: number }
+  | { type: 'UPDATE_HISTORY'; state: unknown };
+
+const historyMachine = createMachine<Context, Event, State>(
+  {
+    id: 'historyMachine',
+    initial: 'idle',
+    context: {
+      historyStack: [],
+      historyPointer: -1,
+    },
+    states: {
+      idle: {
+        on: {
+          UNDO_REQUESTED: {
+            target: 'undoing',
+            cond: 'canPerformUndo',
+            actions: 'performUndo',
+          },
+          REDO_REQUESTED: {
+            target: 'redoing',
+            cond: 'canPerformRedo',
+            actions: 'performRedo',
+          },
+          START_BROWSING_HISTORY: 'browsingHistory',
+          UPDATE_HISTORY: {
+            actions: 'addHistory',
+          },
+        },
+      },
+      undoing: {
+        entry: 'performUndo',
+        always: 'idle',
+      },
+      redoing: {
+        entry: 'performRedo',
+        always: 'idle',
+      },
+      browsingHistory: {
+        on: {
+          STOP_BROWSING_HISTORY: 'idle',
+          SELECT_HISTORY_ITEM: {
+            actions: 'selectHistoryItem',
+          },
+        },
+      },
+      browsingLatest: {
+        type: 'final',
+      },
+    },
+  },
+  {
+    actions: {
+      performUndo: assign((context) => {
+        const historyPointer = context.historyPointer - 1;
+        const state = context.historyStack[historyPointer];
+        return {
+          historyPointer,
+          // Apply the history state here
+        };
+      }),
+      performRedo: assign((context) => {
+        const historyPointer = context.historyPointer + 1;
+        const state = context.historyStack[historyPointer];
+        return {
+          historyPointer,
+          // Apply the history state here
+        };
+      }),
+      addHistory: assign((context, event) => {
+        if (event.type !== 'UPDATE_HISTORY') return context;
+        const historyStack = [
+          ...context.historyStack.slice(0, context.historyPointer + 1),
+          event.state,
+        ];
+        return {
+          historyStack,
+          historyPointer: historyStack.length - 1,
+        };
+      }),
+      selectHistoryItem: assign((context, event) => {
+        if (event.type !== 'SELECT_HISTORY_ITEM') return context;
+        return {
+          historyPointer: event.index,
+          // Apply the history state here
+        };
+      }),
+    },
+    guards: {
+      canPerformUndo: (context) => context.historyPointer > 0,
+      canPerformRedo: (context) =>
+        context.historyPointer >= 0 &&
+        context.historyPointer < context.historyStack.length - 1,
+    },
+  },
+);
+
+// 解释并使用状态机
+const historyService = interpret(historyMachine)
+  .onTransition((state) => {
+    console.log(state.value, state.context);
+  })
+  .start();
+
+// 示例事件触发
+historyService.send({
+  type: 'UPDATE_HISTORY',
+  state: {
+    /* new state */
+  },
+});
+historyService.send({ type: 'UNDO_REQUESTED' });
+historyService.send({ type: 'REDO_REQUESTED' });
+historyService.send({ type: 'START_BROWSING_HISTORY' });
+historyService.send({ type: 'SELECT_HISTORY_ITEM', index: 1 });
+historyService.send({ type: 'STOP_BROWSING_HISTORY' });
