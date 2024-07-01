@@ -10,6 +10,7 @@ generateApi({
   url: 'http://localhost:3000/api-json',
   templates: path.resolve('./templates/api/used'),
   httpClientType: 'axios', // or "fetch"
+  unwrapResponseData: true,
   codeGenConstructs: () => ({
     Keyword: {
       Any: 'unknown',

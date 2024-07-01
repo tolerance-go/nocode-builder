@@ -12,9 +12,7 @@ export const Login: React.FC = () => {
   const onFinish = async (values: LoginFormValues) => {
     try {
       setLoading(true);
-      const {
-        data: { accessToken },
-      } = await api.auth.login({
+      const { accessToken } = await api.auth.login({
         username: values.username,
         password: values.password,
       });

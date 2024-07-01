@@ -11,8 +11,6 @@ export interface LoginDto {
 
 export interface LoginResponseDto {
   accessToken: string;
-  userId: number;
-  username: string;
 }
 
 export interface UserResponseDto {
@@ -159,7 +157,6 @@ export interface ProjectGroupUpdateDto {
 import type {
   AxiosInstance,
   AxiosRequestConfig,
-  AxiosResponse,
   HeadersDefaults,
   ResponseType,
 } from 'axios';
@@ -290,7 +287,7 @@ export class HttpClient<SecurityDataType = unknown> {
     format,
     body,
     ...params
-  }: FullRequestParams): Promise<AxiosResponse<T>> => {
+  }: FullRequestParams): Promise<T> => {
     const secureParams =
       ((typeof secure === 'boolean' ? secure : this.secure) &&
         this.securityWorker &&
@@ -317,19 +314,21 @@ export class HttpClient<SecurityDataType = unknown> {
       body = JSON.stringify(body);
     }
 
-    return this.instance.request({
-      ...requestParams,
-      headers: {
-        ...(requestParams.headers || {}),
-        ...(type && type !== ContentType.FormData
-          ? { 'Content-Type': type }
-          : {}),
-      },
-      params: query,
-      responseType: responseFormat,
-      data: body,
-      url: path,
-    });
+    return this.instance
+      .request({
+        ...requestParams,
+        headers: {
+          ...(requestParams.headers || {}),
+          ...(type && type !== ContentType.FormData
+            ? { 'Content-Type': type }
+            : {}),
+        },
+        params: query,
+        responseType: responseFormat,
+        data: body,
+        url: path,
+      })
+      .then((response) => response.data);
   };
 }
 
