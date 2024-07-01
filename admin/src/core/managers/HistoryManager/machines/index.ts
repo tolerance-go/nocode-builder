@@ -79,22 +79,102 @@
  * - 无历史状态。
  */
 
-import { assign, createMachine } from 'xstate';
+import { setup, assign } from 'xstate';
 
-export const toggleMachine = createMachine({
-  id: 'toggle',
-  context: { count: 0 },
-  initial: 'Inactive',
+// 定义上下文类型
+interface HistoryContext {
+  historyStack: unknown[];
+  historyPointer: number;
+}
+
+// 定义事件类型
+type HistoryEvent =
+  | { type: 'UNDO_REQUESTED' }
+  | { type: 'REDO_REQUESTED' }
+  | { type: 'START_BROWSING_HISTORY' }
+  | { type: 'STOP_BROWSING_HISTORY' }
+  | { type: 'SELECT_HISTORY_ITEM'; index: number }
+  | { type: 'UPDATE_HISTORY'; state: unknown };
+
+// 创建状态机
+const historyMachine = setup({
+  types: {
+    context: {} as HistoryContext,
+    events: {} as HistoryEvent,
+  },
+  actions: {
+    performUndo: assign({
+      historyPointer: ({ context }) => context.historyPointer - 1,
+    }),
+    performRedo: assign({
+      historyPointer: ({ context }) => context.historyPointer + 1,
+    }),
+    addHistory: assign({
+      historyStack: ({ context, event }) => {
+        if (event.type === 'UPDATE_HISTORY') {
+          return [...context.historyStack, event.state];
+        }
+        return context.historyStack;
+      },
+    }),
+    updatePointer: assign({
+      historyPointer: ({ event }) =>
+        event.type === 'SELECT_HISTORY_ITEM' ? event.index : -1,
+    }),
+    toggleCanUndoRedoStatus: assign({
+      historyPointer: ({ context }) =>
+        context.historyStack.length > 0 ? context.historyPointer : -1,
+    }),
+  },
+  guards: {
+    canPerformUndo: ({ context }) => context.historyPointer > 0,
+    canPerformRedo: ({ context }) =>
+      context.historyPointer < context.historyStack.length - 1,
+  },
+}).createMachine({
+  id: 'history',
+  initial: 'idle',
+  context: {
+    historyStack: [],
+    historyPointer: -1,
+  },
   states: {
-    Inactive: {
-      on: { toggle: 'Active' },
+    idle: {
+      on: {
+        UNDO_REQUESTED: {
+          target: 'undoing',
+          guard: 'canPerformUndo',
+        },
+        REDO_REQUESTED: {
+          target: 'redoing',
+          guard: 'canPerformRedo',
+        },
+        START_BROWSING_HISTORY: 'browsingHistory',
+      },
     },
-    Active: {
-      entry: assign({
-        count: ({ context }) => context.count + 1,
-      }),
-      on: { toggle: 'Inactive' },
-      after: { 2000: 'Inactive' },
+    undoing: {
+      entry: 'performUndo',
+      always: {
+        target: 'idle',
+        actions: 'toggleCanUndoRedoStatus',
+      },
+    },
+    redoing: {
+      entry: 'performRedo',
+      always: {
+        target: 'idle',
+        actions: 'toggleCanUndoRedoStatus',
+      },
+    },
+    browsingHistory: {
+      on: {
+        STOP_BROWSING_HISTORY: 'idle',
+        SELECT_HISTORY_ITEM: {
+          actions: 'updatePointer',
+        },
+      },
     },
   },
 });
+
+export default historyMachine;
