@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020", // 目标 JavaScript 版本
+    "module": "commonjs", // 使用 commonjs 模块
+    "strict": true, // 启用所有严格类型检查选项
+    "esModuleInterop": true, // 启用对 ES 模块与 CommonJS 模块之间的互操作
+    "skipLibCheck": true, // 跳过库文件的类型检查
+    "forceConsistentCasingInFileNames": true // 强制对文件名使用一致的大小写
+  },
+  "include": [
+    "scripts/**/*" // 包含 scripts 文件夹下的所有文件
+  ],
+  "exclude": [
+    "node_modules", // 排除 node_modules 文件夹
+    "dist" // 排除 dist 文件夹
+  ]
+}
