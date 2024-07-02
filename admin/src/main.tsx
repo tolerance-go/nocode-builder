@@ -1,9 +1,9 @@
 import { DocumentEnv } from './core/envs';
 import { AppManager } from './core/managers';
-import { InternationalizationSystem } from './core/systems';
+import { I18nSystem } from './core/systems';
 
 DocumentEnv.getInstance().initialize(document);
 
-InternationalizationSystem.getInstance().launch();
+I18nSystem.getInstance().launch();
 
 AppManager.getInstance().work();

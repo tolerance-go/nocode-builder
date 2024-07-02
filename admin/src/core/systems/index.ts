@@ -1,1 +1,1 @@
-export * from './InternationalizationSystem';
+export * from './I18nSystem';

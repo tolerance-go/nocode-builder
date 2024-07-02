@@ -1,19 +1,13 @@
 import {
-  LayoutSlice,
-  LayoutStates,
-} from '@/core/managers/UIStoreManager/createLayoutSlice';
-import {
-  LocationSlice,
-  LocationStates,
-} from '@/core/managers/UIStoreManager/store/createStoreSlice/createLocationSlice';
-import {
-  NetworkSlice,
-  NetworkStates,
-} from '@/core/managers/UIStoreManager/store/createStoreSlice/createNetworkSlice';
-import {
   ProjectTreeSlice,
+  NetworkSlice,
+  LocationSlice,
+  LayoutSlice,
   ProjectTreeStates,
-} from '@/core/managers/UIStoreManager/store/createStoreSlice/createProjectTreeSlice';
+  NetworkStates,
+  LocationStates,
+  LayoutStates,
+} from '@/core/managers/UIStoreManager/store/createStoreSlice';
 
 export type Store = ProjectTreeSlice &
   NetworkSlice &
