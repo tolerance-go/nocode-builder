@@ -1,4 +1,4 @@
-import { useAppStore } from '@/core/systems/UIStoreSystem';
+import { useAppStore } from '@/core/managers/UIStoreManager';
 import { CloseOutlined } from '@ant-design/icons';
 import { Button, Flex, Space, theme } from 'antd';
 import { ProjectTreeHistory } from './ProjectTreeHistory';

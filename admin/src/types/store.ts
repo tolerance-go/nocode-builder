@@ -5,15 +5,15 @@ import {
 import {
   LocationSlice,
   LocationStates,
-} from '@/core/managers/UIStoreManager/createStoreSlice/createLocationSlice';
+} from '@/core/managers/UIStoreManager/store/createStoreSlice/createLocationSlice';
 import {
   NetworkSlice,
   NetworkStates,
-} from '@/core/managers/UIStoreManager/createStoreSlice/createNetworkSlice';
+} from '@/core/managers/UIStoreManager/store/createStoreSlice/createNetworkSlice';
 import {
   ProjectTreeSlice,
   ProjectTreeStates,
-} from '@/core/managers/UIStoreManager/createStoreSlice/createProjectTreeSlice';
+} from '@/core/managers/UIStoreManager/store/createStoreSlice/createProjectTreeSlice';
 
 export type Store = ProjectTreeSlice &
   NetworkSlice &

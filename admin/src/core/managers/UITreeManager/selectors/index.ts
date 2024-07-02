@@ -1,4 +1,4 @@
-import { ProjectTreeStates } from '@/core/managers/UIStoreManager/createStoreSlice/createProjectTreeSlice';
+import { ProjectTreeStates } from '@/core/managers/UIStoreManager/store/createStoreSlice/createProjectTreeSlice';
 import { createSelector } from 'reselect';
 
 export const selectProjectStructureTreeData = (state: ProjectTreeStates) =>

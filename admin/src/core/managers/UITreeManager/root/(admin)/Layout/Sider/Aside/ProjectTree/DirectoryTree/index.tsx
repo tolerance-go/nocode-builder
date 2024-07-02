@@ -1,4 +1,4 @@
-import { useAppStore } from '@/core/systems/UIStoreSystem';
+import { useAppStore } from '@/core/managers/UIStoreManager';
 import { css } from '@emotion/css';
 import { Tree } from 'antd';
 import { Title } from './Title';

@@ -1,11 +1,12 @@
+import { ProjectGroupModel, ProjectModel } from '@/_gen/models';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
 } from '@/types';
 
 export function buildProjectStructureTreeDataMeta(
-  projectGroups: API.ProjectGroupDto[],
-  projects: API.ProjectDto[],
+  projectGroups: ProjectGroupModel[],
+  projects: ProjectModel[],
 ): {
   tree: ProjectStructureTreeDataNode[];
   dataRecord: ProjectTreeNodeDataRecord;

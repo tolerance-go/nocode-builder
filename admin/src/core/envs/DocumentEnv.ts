@@ -5,34 +5,38 @@ interface DocumentEnvEvents {
 }
 
 export class DocumentEnv {
-  public emitter: Emittery<DocumentEnvEvents>;
-  private document: Document;
+  private static instance: DocumentEnv | undefined;
 
-  constructor(document: Document) {
-    this.emitter = new Emittery<DocumentEnvEvents>();
-    this.document = document;
-    this.init();
+  public static getInstance(): DocumentEnv {
+    if (!this.instance) {
+      this.instance = new DocumentEnv();
+    }
+    return this.instance;
   }
 
-  private init() {
+  public emitter: Emittery<DocumentEnvEvents>;
+  private _document?: Document;
+
+  public get document() {
+    if (!this._document) {
+      throw new Error('document 非法。');
+    }
+    return this._document;
+  }
+
+  constructor() {
+    this.emitter = new Emittery<DocumentEnvEvents>();
+  }
+
+  public initialize(document: Document) {
+    this._document = document;
+    this.addEventListeners();
+  }
+
+  private addEventListeners() {
     // 添加事件监听器，当页面完全加载时触发
     this.document.addEventListener('DOMContentLoaded', () => {
       this.emitter.emit('pageLoadComplete');
     });
   }
 }
-
-// // 使用示例
-// const documentEnv = new DocumentEnv(document);
-
-// documentEnv.emitter.on('pageLoadComplete', () => {
-//   console.log('Page has loaded and is ready for React rendering.');
-// });
-
-// // 在需要时可以移除监听器
-// const listener = () => {
-//   console.log('This listener will be removed.');
-// };
-
-// documentEnv.emitter.on('pageLoadComplete', listener);
-// documentEnv.emitter.off('pageLoadComplete', listener);

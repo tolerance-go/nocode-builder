@@ -1,8 +1,11 @@
-import { selectProjectStructureTreeNodeDataRecordItem } from '@/selectors';
-import { useAppStore, useAppStoreBase } from '@/core/systems/UIStoreSystem';
+import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
 import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
 import { AutoSelectInput } from './AutoSelectInput';
+import {
+  useAppStore,
+  useAppStoreBase,
+} from '@/core/managers/UIStoreManager/store';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);

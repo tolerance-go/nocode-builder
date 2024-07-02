@@ -1,4 +1,4 @@
-import { useAppStore } from '@/core/systems/UIStoreSystem';
+import { useAppStore } from '@/core/managers/UIStoreManager';
 import '@antv/s2-react/dist/style.min.css';
 import { ConfigProvider, theme } from 'antd';
 import { useLayoutEffect } from 'react';

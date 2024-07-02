@@ -1,35 +1,27 @@
+import { paths } from '@/configs';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Root } from '@/root';
-import { Login } from '@/root/(auth)/login';
-// import { Admin } from "@/root/admin";
-import { Admin } from '@/root/(admin)';
-import { Auth } from '@/root/(auth)';
-import { Register } from '@/root/(auth)/register';
-// import { Test } from "@/root/test";
-import { paths } from '@/configs';
-import { NotFound } from '@/root/404';
-import 'normalize.css';
-import '@/index.css';
-import '@/subscribes';
-import { System } from '@/types';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Root } from './root';
+import { Admin } from './root/(admin)';
+import { Auth } from './root/(auth)';
+import { Login } from './root/(auth)/login';
+import { Register } from './root/(auth)/register';
+import { NotFound } from './root/404';
 
-export class RenderSystem implements System {
-  private static instance: RenderSystem | undefined;
+export class UITreeManager {
+  private static instance: UITreeManager | undefined;
 
   private constructor() {}
 
-  public static getInstance(): RenderSystem {
+  public static getInstance(): UITreeManager {
     if (!this.instance) {
-      this.instance = new RenderSystem();
+      this.instance = new UITreeManager();
     }
     return this.instance;
   }
 
-  public launch(): void {}
-
-  public render(): void {
+  work() {
     ReactDOM.createRoot(document.getElementById('root')!).render(
       <React.StrictMode>
         <BrowserRouter basename={import.meta.env.DEV ? '' : '/admin'}>
