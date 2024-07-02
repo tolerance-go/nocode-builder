@@ -1,40 +1,53 @@
-import { useAppStore } from '@/core/managers/UIStoreManager';
+import {
+  removeProjectStructureTreeNodeWithCheck,
+  updateEditingProjectStructureTreeNode,
+  updateExpandedKeys,
+  updateSelectedProjectStructureTreeNodes,
+  useAppDispatch,
+  useAppSelector,
+} from '@/core/managers/UIStoreManager';
+import { useKeyPress } from '@/hooks';
 import { css } from '@emotion/css';
 import { Tree } from 'antd';
 import { Title } from './Title';
-import { useKeyPress } from '@/hooks';
 
 const { DirectoryTree } = Tree;
 
 export const TreeMenu = () => {
-  const containerHeight = useAppStore.use.containerHeight();
-  const projectTreeData = useAppStore.use.projectStructureTreeData();
-  const selectProjectStructureTreeNodes =
-    useAppStore.use.updateSelectedProjectStructureTreeNodes();
-  const selectedProjectStructureTreeNodes =
-    useAppStore.use.selectedProjectStructureTreeNodes();
-  const expandedKeys = useAppStore.use.expandedKeys();
-  const updateExpandedKeys = useAppStore.use.updateExpandedKeys();
-  const updateEditingProjectStructureTreeNode =
-    useAppStore.use.updateEditingProjectStructureTreeNode();
-  const removeProjectStructureTreeNodeWithCheck =
-    useAppStore.use.removeProjectStructureTreeNodeWithCheck();
+  const containerHeight = useAppSelector(
+    (state) => state.projectTree.containerHeight,
+  );
+  const projectStructureTreeData = useAppSelector(
+    (state) => state.projectTree.projectStructureTreeData,
+  );
+  const selectedProjectStructureTreeNodes = useAppSelector(
+    (state) => state.projectTree.selectedProjectStructureTreeNodes,
+  );
+
+  const dispatch = useAppDispatch();
+  const expandedKeys = useAppSelector(
+    (state) => state.projectTree.expandedKeys,
+  );
 
   useKeyPress(['Delete', 'Backspace'], () => {
     selectedProjectStructureTreeNodes.length &&
-      removeProjectStructureTreeNodeWithCheck(
-        selectedProjectStructureTreeNodes[
-          selectedProjectStructureTreeNodes.length - 1
-        ],
+      dispatch(
+        removeProjectStructureTreeNodeWithCheck(
+          selectedProjectStructureTreeNodes[
+            selectedProjectStructureTreeNodes.length - 1
+          ],
+        ),
       );
   });
 
   useKeyPress(['F2'], () => {
     selectedProjectStructureTreeNodes.length &&
-      updateEditingProjectStructureTreeNode(
-        selectedProjectStructureTreeNodes[
-          selectedProjectStructureTreeNodes.length - 1
-        ],
+      dispatch(
+        updateEditingProjectStructureTreeNode(
+          selectedProjectStructureTreeNodes[
+            selectedProjectStructureTreeNodes.length - 1
+          ],
+        ),
       );
   });
 
@@ -49,7 +62,7 @@ export const TreeMenu = () => {
   return (
     <DirectoryTree
       multiple
-      treeData={projectTreeData}
+      treeData={projectStructureTreeData}
       height={containerHeight}
       virtual
       className={css`
@@ -63,10 +76,10 @@ export const TreeMenu = () => {
       selectedKeys={selectedProjectStructureTreeNodes}
       expandedKeys={expandedKeys}
       onSelect={(keys) => {
-        selectProjectStructureTreeNodes(keys as string[]);
+        dispatch(updateSelectedProjectStructureTreeNodes(keys as string[]));
       }}
       onExpand={(keys) => {
-        updateExpandedKeys(keys as string[]); // 更新展开状态
+        dispatch(updateExpandedKeys(keys as string[])); // 更新展开状态
       }}
       titleRender={(nodeData) => <Title nodeKey={nodeData.key} />}
     />

@@ -1,12 +1,10 @@
 import { ProjectStructureTreeDataNode } from '@/types';
-import { PayloadAction } from '@reduxjs/toolkit';
 import { ProjectTreeStates } from '../slices/projectTree';
 
 export const findProjectStructureTreeNode = (
   state: ProjectTreeStates,
-  action: PayloadAction<string>,
+  key: string,
 ): ProjectStructureTreeDataNode | null => {
-  const key = action.payload;
   const findNode = (
     nodes: ProjectStructureTreeDataNode[],
   ): ProjectStructureTreeDataNode | null => {

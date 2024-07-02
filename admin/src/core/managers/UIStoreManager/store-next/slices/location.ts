@@ -19,6 +19,6 @@ const locationSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const locationActions = locationSlice.actions;
+export const { updatePathname } = locationSlice.actions;
 
 export const locationReducer = locationSlice.reducer;

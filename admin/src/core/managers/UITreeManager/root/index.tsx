@@ -1,4 +1,4 @@
-import { useAppStore } from '@/core/managers/UIStoreManager';
+import { updatePathname, useAppDispatch } from '@/core/managers/UIStoreManager';
 import { ConfigProvider, theme } from 'antd';
 import { useLayoutEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -6,11 +6,11 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 export function Root() {
   const location = useLocation();
-  const updatePathname = useAppStore.use.updatePathname();
+  const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
-    updatePathname(location.pathname);
-  }, [location, updatePathname]);
+    dispatch(updatePathname(location.pathname));
+  }, [location, dispatch]);
 
   return (
     <ConfigProvider

@@ -310,6 +310,23 @@ const projectTreeSlice = createSlice({
   },
 });
 
-export const projectTreeActions = projectTreeSlice.actions;
+export const {
+  updateProjectStructureTreeData,
+  updateProjectTreeDataRecord,
+  updateProjectTreeDataRecordItem,
+  initProjectTreeDataMeta,
+  addProjectStructureTreeNode,
+  insertProjectStructureTreeNode,
+  updateContainerHeight,
+  updateProjectStructureTreeTempNode,
+  updateEditingProjectStructureTreeNode,
+  stopEditingProjectStructureTreeNode,
+  removeProjectStructureTreeNodeWithCheck,
+  removeProjectStructureTreeNode,
+  moveProjectStructureTreeNode,
+  updateSelectedProjectStructureTreeNodes,
+  updateExpandedKeys,
+  insertProjectStructureTreeNodeWithCheck,
+} = projectTreeSlice.actions;
 
 export const projectTreeReducer = projectTreeSlice.reducer;

@@ -1,13 +1,20 @@
-import { useAppStore } from '@/core/managers/UIStoreManager';
+import {
+  closeProjectTreeTimeLineAction,
+  useAppDispatch,
+  useAppSelector,
+} from '@/core/managers/UIStoreManager';
 import { CloseOutlined } from '@ant-design/icons';
 import { Button, Flex, Space, theme } from 'antd';
 import { ProjectTreeHistory } from './ProjectTreeHistory';
 
 export const SubSider = () => {
   const { token } = theme.useToken();
-  const subSiderVisible = useAppStore.use.subSiderVisible();
-  const closeProjectTreeTimeLineAction =
-    useAppStore.use.closeProjectTreeTimeLineAction();
+
+  const subSiderVisible = useAppSelector(
+    (state) => state.layout.subSiderVisible,
+  );
+
+  const dispatch = useAppDispatch();
 
   if (!subSiderVisible) {
     return null;
@@ -45,7 +52,7 @@ export const SubSider = () => {
                 type="text"
                 icon={<CloseOutlined />}
                 onClick={() => {
-                  closeProjectTreeTimeLineAction();
+                  dispatch(closeProjectTreeTimeLineAction());
                   // projectTreeHistoryState.goTo(
                   //   projectTreeHistoryState.historyNodeCount - 1,
                   // );

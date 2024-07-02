@@ -5,5 +5,5 @@ export class UIStoreManager implements Manager {
 }
 
 export * from './store';
-export * from './sotre-next';
+export * from './store-next';
 export * from './hooks';

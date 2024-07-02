@@ -1,4 +1,13 @@
-import { useAppStore } from '@/core/managers/UIStoreManager';
+import {
+  insertProjectStructureTreeNodeWithCheck,
+  reduxStore,
+  showProjectTreeTimeLineAction,
+  updateEditingProjectStructureTreeNode,
+  updateProjectStructureTreeTempNode,
+  useAppDispatch,
+  useAppSelector,
+} from '@/core/managers/UIStoreManager';
+import { findProjectStructureTreeNode } from '@/core/managers/UIStoreManager/store-next/utils';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
@@ -20,24 +29,23 @@ const findLastFolderIndex = (
 
 export const Header = () => {
   const { token } = theme.useToken();
-  const insertProjectStructureTreeNodeWithCheck =
-    useAppStore.use.insertProjectStructureTreeNodeWithCheck();
-  const showProjectTreeTimeLineAction =
-    useAppStore.use.showProjectTreeTimeLineAction();
-  const projectTreeTimeLineVisible =
-    useAppStore.use.projectTreeTimeLineVisible();
-  const projectStructureTreeData = useAppStore.use.projectStructureTreeData();
-  const projectTreeDataRecord = useAppStore.use.projectTreeDataRecord();
-  const updateEditingProjectStructureTreeNode =
-    useAppStore.use.updateEditingProjectStructureTreeNode();
-  const selectedProjectStructureTreeNodes =
-    useAppStore.use.selectedProjectStructureTreeNodes();
-  const findProjectStructureTreeNode =
-    useAppStore.use.findProjectStructureTreeNode();
-  const updateProjectStructureTreeTempNode =
-    useAppStore.use.updateProjectStructureTreeTempNode();
 
-  const nodeParentKeyRecord = useAppStore.use.nodeParentKeyRecord();
+  const projectTreeTimeLineVisible = useAppSelector(
+    (state) => state.layout.projectTreeTimeLineVisible,
+  );
+  const selectedProjectStructureTreeNodes = useAppSelector(
+    (state) => state.projectTree.selectedProjectStructureTreeNodes,
+  );
+  const projectStructureTreeData = useAppSelector(
+    (state) => state.projectTree.projectStructureTreeData,
+  );
+  const projectTreeDataRecord = useAppSelector(
+    (state) => state.projectTree.projectTreeDataRecord,
+  );
+  const nodeParentKeyRecord = useAppSelector(
+    (state) => state.projectTree.nodeParentKeyRecord,
+  );
+  const dispatch = useAppDispatch();
 
   const selectedKey = selectedProjectStructureTreeNodes.length
     ? selectedProjectStructureTreeNodes[
@@ -59,7 +67,7 @@ export const Header = () => {
           // loading={addFileLoading}
           icon={<HistoryOutlined />}
           onClick={() => {
-            showProjectTreeTimeLineAction();
+            dispatch(showProjectTreeTimeLineAction());
           }}
         ></Button>
         <Button
@@ -83,21 +91,23 @@ export const Header = () => {
 
               const newKey = Math.random() + '';
 
-              insertProjectStructureTreeNodeWithCheck(
-                null,
-                {
-                  key: newKey,
-                  isLeaf: true,
-                },
-                folderIndex,
-                {
-                  title: '',
-                  type: 'file',
-                  id: -1,
-                },
+              dispatch(
+                insertProjectStructureTreeNodeWithCheck({
+                  parentKey: null,
+                  node: {
+                    key: newKey,
+                    isLeaf: true,
+                  },
+                  index: folderIndex,
+                  recordItem: {
+                    title: '',
+                    type: 'file',
+                    id: -1,
+                  },
+                }),
               );
-              updateEditingProjectStructureTreeNode(newKey);
-              updateProjectStructureTreeTempNode(newKey);
+              dispatch(updateEditingProjectStructureTreeNode(newKey));
+              dispatch(updateProjectStructureTreeTempNode(newKey));
             };
 
             const insert = (target: ProjectStructureTreeDataNode) => {
@@ -112,21 +122,23 @@ export const Header = () => {
               );
               const newKey = Math.random() + '';
 
-              insertProjectStructureTreeNodeWithCheck(
-                target.key,
-                {
-                  isLeaf: true,
-                  key: newKey,
-                },
-                folderIndex,
-                {
-                  title: '',
-                  id: -1,
-                  type: 'file',
-                },
+              dispatch(
+                insertProjectStructureTreeNodeWithCheck({
+                  parentKey: target.key,
+                  node: {
+                    isLeaf: true,
+                    key: newKey,
+                  },
+                  index: folderIndex,
+                  recordItem: {
+                    title: '',
+                    id: -1,
+                    type: 'file',
+                  },
+                }),
               );
-              updateEditingProjectStructureTreeNode(newKey);
-              updateProjectStructureTreeTempNode(newKey);
+              dispatch(updateEditingProjectStructureTreeNode(newKey));
+              dispatch(updateProjectStructureTreeTempNode(newKey));
             };
 
             if (!selectedKey) {
@@ -135,7 +147,10 @@ export const Header = () => {
             }
 
             const selectedRecordItem = projectTreeDataRecord[selectedKey];
-            const selectedNode = findProjectStructureTreeNode(selectedKey);
+            const selectedNode = findProjectStructureTreeNode(
+              reduxStore.getState().projectTree,
+              selectedKey,
+            );
 
             if (!selectedRecordItem) {
               throw new Error('数据不完整。');
@@ -149,7 +164,10 @@ export const Header = () => {
               const parentKey = nodeParentKeyRecord[selectedKey];
 
               if (parentKey) {
-                const parent = findProjectStructureTreeNode(parentKey);
+                const parent = findProjectStructureTreeNode(
+                  reduxStore.getState().projectTree,
+                  parentKey,
+                );
                 if (parent) {
                   insert(parent);
                 }
@@ -167,38 +185,41 @@ export const Header = () => {
           onClick={async () => {
             const insertInRoot = () => {
               const newKey = Math.random() + '';
-              insertProjectStructureTreeNodeWithCheck(
-                null,
-                {
-                  key: newKey,
-                },
-                -1,
-                {
-                  id: -1,
-                  type: 'folder',
-                  title: '',
-                },
+
+              dispatch(
+                insertProjectStructureTreeNodeWithCheck({
+                  parentKey: null,
+                  node: {
+                    key: newKey,
+                  },
+                  index: -1,
+                  recordItem: {
+                    id: -1,
+                    type: 'folder',
+                    title: '',
+                  },
+                }),
               );
-              updateEditingProjectStructureTreeNode(newKey);
-              updateProjectStructureTreeTempNode(newKey);
+              dispatch(updateEditingProjectStructureTreeNode(newKey));
+              dispatch(updateProjectStructureTreeTempNode(newKey));
             };
 
             const insert = (target: ProjectStructureTreeDataNode) => {
               const newKey = Math.random() + '';
-              insertProjectStructureTreeNodeWithCheck(
-                target.key,
-                {
+              insertProjectStructureTreeNodeWithCheck({
+                parentKey: target.key,
+                node: {
                   key: newKey,
                 },
-                -1,
-                {
+                index: -1,
+                recordItem: {
                   title: '',
                   id: -1,
                   type: 'folder',
                 },
-              );
-              updateEditingProjectStructureTreeNode(newKey);
-              updateProjectStructureTreeTempNode(newKey);
+              });
+              dispatch(updateEditingProjectStructureTreeNode(newKey));
+              dispatch(updateProjectStructureTreeTempNode(newKey));
             };
 
             if (!selectedKey) {
@@ -207,7 +228,10 @@ export const Header = () => {
             }
 
             const selectedRecordItem = projectTreeDataRecord[selectedKey];
-            const selectedNode = findProjectStructureTreeNode(selectedKey);
+            const selectedNode = findProjectStructureTreeNode(
+              reduxStore.getState().projectTree,
+              selectedKey,
+            );
 
             if (!selectedRecordItem) {
               throw new Error('数据不完整。');
@@ -220,7 +244,10 @@ export const Header = () => {
             } else if (nodeIsFile(selectedRecordItem)) {
               const parentKey = nodeParentKeyRecord[selectedKey];
               if (parentKey) {
-                const parent = findProjectStructureTreeNode(parentKey);
+                const parent = findProjectStructureTreeNode(
+                  reduxStore.getState().projectTree,
+                  parentKey,
+                );
                 if (parent) {
                   insert(parent);
                 }

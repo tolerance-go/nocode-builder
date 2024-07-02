@@ -32,6 +32,11 @@ const layoutSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const layoutActions = layoutSlice.actions;
+export const {
+  showSubSiderAction,
+  closeSubSiderAction,
+  showProjectTreeTimeLineAction,
+  closeProjectTreeTimeLineAction,
+} = layoutSlice.actions;
 
 export const layoutReducer = layoutSlice.reducer;

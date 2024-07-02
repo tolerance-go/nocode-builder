@@ -1,12 +1,11 @@
-import { ProjectTreeStates } from '@/core/managers/UIStoreManager/store/createStoreSlice/createProjectTreeSlice';
 import { createSelector } from 'reselect';
+import { RootState } from '../../UIStoreManager';
 
-export const selectProjectStructureTreeData = (state: ProjectTreeStates) =>
-  state.projectStructureTreeData;
+export const selectProjectStructureTreeData = (state: RootState) =>
+  state.projectTree.projectStructureTreeData;
 
-export const selectProjectStructureTreeNodeDataRecord = (
-  state: ProjectTreeStates,
-) => state.projectTreeDataRecord;
+export const selectProjectStructureTreeNodeDataRecord = (state: RootState) =>
+  state.projectTree.projectTreeDataRecord;
 
 export const selectProjectStructureTreeNodeDataRecordItem = createSelector(
   [

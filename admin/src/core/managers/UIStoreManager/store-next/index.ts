@@ -1,12 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { counterReducer } from './slices';
-import { layoutReducer } from './slices/layout';
-import { locationReducer } from './slices/location';
-import { projectTreeReducer } from './slices/projectTree';
+import { layoutReducer, locationReducer, projectTreeReducer } from './slices';
 
 export const reduxStore = configureStore({
   reducer: {
-    counter: counterReducer,
     layout: layoutReducer,
     location: locationReducer,
     projectTree: projectTreeReducer,
@@ -17,3 +13,5 @@ export const reduxStore = configureStore({
 export type RootState = ReturnType<typeof reduxStore.getState>;
 // 推断类型：{posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof reduxStore.dispatch;
+
+export * from './slices';
