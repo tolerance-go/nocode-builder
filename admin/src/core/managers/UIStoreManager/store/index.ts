@@ -1,23 +1,17 @@
-import { Store } from '@/types';
-import { createSelectors } from '@/utils';
-import { create } from 'zustand';
-import { immer } from 'zustand/middleware/immer';
-import {
-  createLayoutSlice,
-  createLocationSlice,
-  createNetworkSlice,
-  createProjectTreeSlice,
-} from './createStoreSlice';
+import { configureStore } from '@reduxjs/toolkit';
+import { layoutReducer, locationReducer, projectTreeReducer } from './slices';
 
-export const useAppStoreBase = create<Store>()(
-  immer((...a) => {
-    return {
-      ...createLayoutSlice(...a),
-      ...createLocationSlice(...a),
-      ...createNetworkSlice(...a),
-      ...createProjectTreeSlice(...a),
-    };
-  }),
-);
+export const reduxStore = configureStore({
+  reducer: {
+    layout: layoutReducer,
+    location: locationReducer,
+    projectTree: projectTreeReducer,
+  },
+});
 
-export const useAppStore = createSelectors(useAppStoreBase);
+// 从 store 本身推断 `RootState` 和 `AppDispatch` 类型
+export type RootState = ReturnType<typeof reduxStore.getState>;
+// 推断类型：{posts: PostsState, comments: CommentsState, users: UsersState}
+export type AppDispatch = typeof reduxStore.dispatch;
+
+export * from './slices';
