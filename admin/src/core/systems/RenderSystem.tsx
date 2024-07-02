@@ -13,16 +13,29 @@ import { NotFound } from '@/root/404';
 import 'normalize.css';
 import '@/index.css';
 import '@/subscribes';
+import { System } from '@/types';
 
-export class RenderSystem {
-  render() {
+export class RenderSystem implements System {
+  private static instance: RenderSystem | undefined;
+
+  private constructor() {}
+
+  public static getInstance(): RenderSystem {
+    if (!this.instance) {
+      this.instance = new RenderSystem();
+    }
+    return this.instance;
+  }
+
+  public launch(): void {}
+
+  public render(): void {
     ReactDOM.createRoot(document.getElementById('root')!).render(
       <React.StrictMode>
         <BrowserRouter basename={import.meta.env.DEV ? '' : '/admin'}>
           <Routes>
             <Route path={paths.root} element={<Root />}>
-              {/* <Route path="test" element={<Test />}></Route>
-               */}
+              {/* <Route path="test" element={<Test />}></Route> */}
               <Route index element={<Admin />}></Route>
               <Route element={<Auth />}>
                 <Route index element={<Login />}></Route>
