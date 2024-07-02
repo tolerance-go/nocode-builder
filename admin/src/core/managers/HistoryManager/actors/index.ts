@@ -17,13 +17,13 @@ export type HistoryRecord = {
  */
 const fetchUserLogic: PromiseActorLogic<HistoryRecord[]> = fromPromise(
   async ({ input }) => {
-    // console.log(input);
-    // await delay(1000);
-    // return [
-    //   { state: 'state1' },
-    //   { state: 'state2' },
-    //   { state: 'state3' },
-    // ] as HistoryRecord[];
+    console.log(input);
+    await delay(1000);
+    return [
+      { state: 'state1' },
+      { state: 'state2' },
+      { state: 'state3' },
+    ] as HistoryRecord[];
     return [];
   },
 );
