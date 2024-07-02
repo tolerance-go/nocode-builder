@@ -1,3 +1,5 @@
-export class UIStoreManager {
+import { Manager } from '@/types';
+
+export class UIStoreManager implements Manager {
   work() {}
 }

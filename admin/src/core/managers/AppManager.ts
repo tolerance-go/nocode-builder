@@ -1,7 +1,8 @@
-import { documentEnv } from '@/core/envs';
+import { Manager } from '@/types';
+import { DocumentEnv } from '../envs';
 import { UITreeManager } from './UITreeManager';
 
-export class AppManager {
+export class AppManager implements Manager {
   private static instance: AppManager | undefined;
 
   private constructor() {}
@@ -14,7 +15,7 @@ export class AppManager {
   }
 
   work() {
-    documentEnv.emitter.on('pageLoadComplete', () => {
+    DocumentEnv.getInstance().emitter.on('pageLoadComplete', () => {
       UITreeManager.getInstance().work();
     });
   }

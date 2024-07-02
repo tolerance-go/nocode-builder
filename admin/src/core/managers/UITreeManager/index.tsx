@@ -8,8 +8,9 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
+import { Manager } from '@/types';
 
-export class UITreeManager {
+export class UITreeManager implements Manager {
   private static instance: UITreeManager | undefined;
 
   private constructor() {}
