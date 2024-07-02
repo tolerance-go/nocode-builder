@@ -328,7 +328,9 @@ export class HttpClient<SecurityDataType = unknown> {
         data: body,
         url: path,
       })
-      .then((response) => response.data);
+      .then((response) => {
+        return response.data;
+      });
   };
 }
 

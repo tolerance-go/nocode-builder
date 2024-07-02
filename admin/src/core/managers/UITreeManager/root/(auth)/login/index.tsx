@@ -17,7 +17,9 @@ export const Login: React.FC = () => {
         password: values.password,
       });
       store.set('token', accessToken);
-      navigate('/dashboard');
+      navigate('/');
+    } catch (error) {
+      /* empty */
     } finally {
       setLoading(false);
     }

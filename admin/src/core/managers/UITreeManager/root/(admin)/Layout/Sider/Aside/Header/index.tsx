@@ -7,7 +7,7 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '@/core/managers/UIStoreManager';
-import { findProjectStructureTreeNode } from '@/core/managers/UIStoreManager/store-next/utils';
+import { findProjectStructureTreeNode } from '@/core/managers/UIStoreManager/store/utils';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
