@@ -1,12 +1,40 @@
-import { setup, assign } from 'xstate';
+import { delay } from '@/utils';
+import {
+  setup,
+  assign,
+  fromPromise,
+  PromiseActorLogic,
+  createActor,
+} from 'xstate';
+
+export type HistoryRecord = {
+  state: string;
+};
+
+/**
+ * 模拟加载历史记录的服务函数
+ * @returns {Promise<unknown[]>} 模拟的历史记录数据
+ */
+const fetchUserLogic: PromiseActorLogic<HistoryRecord[]> = fromPromise(
+  async ({ input }) => {
+    // console.log(input);
+    // await delay(1000);
+    // return [
+    //   { state: 'state1' },
+    //   { state: 'state2' },
+    //   { state: 'state3' },
+    // ] as HistoryRecord[];
+    return [];
+  },
+);
 
 /**
  * 定义上下文类型
  * - historyStack: 用于存储所有历史记录的堆栈，最新记录位于栈顶。
  * - historyPointer: 指向当前激活的历史记录索引，初始值为-1（表示未选择任何历史记录）。
  */
-interface HistoryContext {
-  historyStack: unknown[];
+export interface HistoryContext {
+  historyStack: HistoryRecord[];
   historyPointer: number;
 }
 
@@ -19,13 +47,15 @@ interface HistoryContext {
  * - SELECT_HISTORY_ITEM: 从浏览模式中选择一个历史记录项。
  * - UPDATE_HISTORY: 应用新状态到历史记录栈，通常由外部操作触发。
  */
-type HistoryEvent =
+export type HistoryEvent =
   | { type: 'UNDO_REQUESTED' }
   | { type: 'REDO_REQUESTED' }
   | { type: 'START_BROWSING_HISTORY' }
   | { type: 'STOP_BROWSING_HISTORY' }
+  | { type: 'FETCH_HISTORY' }
   | { type: 'SELECT_HISTORY_ITEM'; index: number }
-  | { type: 'UPDATE_HISTORY'; state: unknown };
+  | { type: 'UPDATE_HISTORY'; state: HistoryRecord }
+  | { type: 'RETRY_LOADING_HISTORY' };
 
 // 创建状态机
 const historyMachine = setup({
@@ -69,6 +99,9 @@ const historyMachine = setup({
     canPerformRedo: ({ context }) =>
       context.historyPointer < context.historyStack.length - 1,
   },
+  actors: {
+    fetchUser: fetchUserLogic,
+  },
 }).createMachine({
   id: 'history',
   initial: 'idle',
@@ -92,6 +125,8 @@ const historyMachine = setup({
         },
         // 接收 START_BROWSING_HISTORY 事件，转换到 browsingHistory 状态。
         START_BROWSING_HISTORY: 'browsingHistory',
+        // 开始加载历史记录
+        FETCH_HISTORY: 'loadingHistory',
       },
     },
     // 撤销操作中: 当前正在执行撤销操作。
@@ -121,7 +156,29 @@ const historyMachine = setup({
         },
       },
     },
+    // 加载历史纪录中
+    loadingHistory: {
+      invoke: {
+        id: 'fetchUser',
+        src: 'fetchUser',
+        onDone: {
+          target: 'idle',
+          actions: assign({
+            historyStack: ({ event }) => event.output,
+          }),
+        },
+        onError: {
+          target: 'failure',
+        },
+      },
+    },
+    // 加载历史记录失败
+    failure: {
+      on: {
+        RETRY_LOADING_HISTORY: 'loadingHistory', // 重试加载历史记录
+      },
+    },
   },
 });
 
-export default historyMachine;
+export const historyMachineActor = createActor(historyMachine);
