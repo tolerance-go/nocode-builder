@@ -10,7 +10,6 @@ const api = new Api({
   },
 });
 
-
 // 请求拦截器
 api.instance.interceptors.request.use(
   (config) => {
@@ -45,4 +44,4 @@ api.instance.interceptors.response.use(
   },
 );
 
-export default api;
+export { api };

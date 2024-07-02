@@ -1,5 +1,5 @@
+import { api } from '@/globals';
 import { RegisterFormValues } from '@/types/form';
-import api from '@/utils/api';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
