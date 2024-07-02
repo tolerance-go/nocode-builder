@@ -1,10 +1,11 @@
+import { EnvObject } from '@/types';
 import Emittery from 'emittery';
 
 interface DocumentEnvEvents {
   pageLoadComplete: undefined;
 }
 
-export class DocumentEnv {
+export class DocumentEnv implements EnvObject {
   private static instance: DocumentEnv | undefined;
 
   public static getInstance(): DocumentEnv {
