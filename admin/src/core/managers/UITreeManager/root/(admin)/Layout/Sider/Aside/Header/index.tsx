@@ -53,6 +53,85 @@ export const Header = () => {
       ]
     : null;
 
+  /**
+   * 处理点击添加文件夹的回调函数
+   * @param event - 事件对象
+   */
+  const handleAddFolderClick = async () => {
+    const insertInRoot = () => {
+      const newKey = Math.random() + '';
+
+      dispatch(
+        insertProjectStructureTreeNodeWithCheck({
+          parentKey: null,
+          node: {
+            key: newKey,
+          },
+          index: 0,
+          recordItem: {
+            id: -1,
+            type: 'folder',
+            title: '',
+          },
+        }),
+      );
+      dispatch(updateEditingProjectStructureTreeNode(newKey));
+      dispatch(updateProjectStructureTreeTempNode(newKey));
+    };
+
+    const insert = (target: ProjectStructureTreeDataNode) => {
+      const newKey = Math.random() + '';
+      insertProjectStructureTreeNodeWithCheck({
+        parentKey: target.key,
+        node: {
+          key: newKey,
+        },
+        index: 0,
+        recordItem: {
+          title: '',
+          id: -1,
+          type: 'folder',
+        },
+      });
+      dispatch(updateEditingProjectStructureTreeNode(newKey));
+      dispatch(updateProjectStructureTreeTempNode(newKey));
+    };
+
+    if (!selectedKey) {
+      insertInRoot();
+      return;
+    }
+
+    const selectedRecordItem = projectTreeDataRecord[selectedKey];
+    const selectedNode = findProjectStructureTreeNode(
+      reduxStore.getState().projectTree,
+      selectedKey,
+    );
+
+    if (!selectedRecordItem) {
+      throw new Error('数据不完整。');
+    }
+
+    if (nodeIsFolder(selectedRecordItem)) {
+      if (selectedNode) {
+        insert(selectedNode);
+      }
+    } else if (nodeIsFile(selectedRecordItem)) {
+      const parentKey = nodeParentKeyRecord[selectedKey];
+      if (parentKey) {
+        const parent = findProjectStructureTreeNode(
+          reduxStore.getState().projectTree,
+          parentKey,
+        );
+        if (parent) {
+          insert(parent);
+        }
+      } else {
+        insertInRoot();
+      }
+    }
+  };
+
   return (
     <Flex
       justify="end"
@@ -98,7 +177,7 @@ export const Header = () => {
                     key: newKey,
                     isLeaf: true,
                   },
-                  index: folderIndex,
+                  index: folderIndex + 1,
                   recordItem: {
                     title: '',
                     type: 'file',
@@ -129,7 +208,7 @@ export const Header = () => {
                     isLeaf: true,
                     key: newKey,
                   },
-                  index: folderIndex,
+                  index: folderIndex + 1,
                   recordItem: {
                     title: '',
                     id: -1,
@@ -182,80 +261,7 @@ export const Header = () => {
           disabled={projectTreeTimeLineVisible}
           // loading={addFolderLoading}
           icon={<FolderAddOutlined />}
-          onClick={async () => {
-            const insertInRoot = () => {
-              const newKey = Math.random() + '';
-
-              dispatch(
-                insertProjectStructureTreeNodeWithCheck({
-                  parentKey: null,
-                  node: {
-                    key: newKey,
-                  },
-                  index: -1,
-                  recordItem: {
-                    id: -1,
-                    type: 'folder',
-                    title: '',
-                  },
-                }),
-              );
-              dispatch(updateEditingProjectStructureTreeNode(newKey));
-              dispatch(updateProjectStructureTreeTempNode(newKey));
-            };
-
-            const insert = (target: ProjectStructureTreeDataNode) => {
-              const newKey = Math.random() + '';
-              insertProjectStructureTreeNodeWithCheck({
-                parentKey: target.key,
-                node: {
-                  key: newKey,
-                },
-                index: -1,
-                recordItem: {
-                  title: '',
-                  id: -1,
-                  type: 'folder',
-                },
-              });
-              dispatch(updateEditingProjectStructureTreeNode(newKey));
-              dispatch(updateProjectStructureTreeTempNode(newKey));
-            };
-
-            if (!selectedKey) {
-              insertInRoot();
-              return;
-            }
-
-            const selectedRecordItem = projectTreeDataRecord[selectedKey];
-            const selectedNode = findProjectStructureTreeNode(
-              reduxStore.getState().projectTree,
-              selectedKey,
-            );
-
-            if (!selectedRecordItem) {
-              throw new Error('数据不完整。');
-            }
-
-            if (nodeIsFolder(selectedRecordItem)) {
-              if (selectedNode) {
-                insert(selectedNode);
-              }
-            } else if (nodeIsFile(selectedRecordItem)) {
-              const parentKey = nodeParentKeyRecord[selectedKey];
-              if (parentKey) {
-                const parent = findProjectStructureTreeNode(
-                  reduxStore.getState().projectTree,
-                  parentKey,
-                );
-                if (parent) {
-                  insert(parent);
-                }
-              } else {
-                insertInRoot();
-              }
-            }
-          }}
+          onClick={handleAddFolderClick}
         ></Button>
       </Space>
     </Flex>

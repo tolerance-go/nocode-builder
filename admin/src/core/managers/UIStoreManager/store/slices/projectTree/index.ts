@@ -4,6 +4,7 @@ import {
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
+import { insertNodeAtIndex } from '../../utils/tree/effects';
 
 export type ProjectTreeStates = {
   projectStructureTreeData: ProjectStructureTreeDataNode[];
@@ -130,20 +131,6 @@ const projectTreeSlice = createSlice({
       const { parentKey, node, index, recordItem } = action.payload;
       let inserted = false;
 
-      const adjustIndex = (
-        nodes: ProjectStructureTreeDataNode[],
-        idx: number,
-      ): number => {
-        if (idx === -1) {
-          idx = 0;
-        } else if (idx === nodes.length) {
-          /* empty */
-        } else if (idx >= 0 && idx < nodes.length) {
-          idx = idx + 1;
-        }
-        return idx;
-      };
-
       const insertNode = (
         nodes: ProjectStructureTreeDataNode[],
         idx: number,
@@ -151,10 +138,7 @@ const projectTreeSlice = createSlice({
         for (const n of nodes) {
           if (n.key === parentKey) {
             n.children = n.children || [];
-            idx = adjustIndex(n.children, idx);
-            n.children.splice(idx, 0, node);
-            state.nodeParentKeyRecord[node.key] = parentKey;
-            inserted = true;
+            insertNodeAtIndex(nodes, idx, node);
             return true;
           }
           if (n.children && insertNode(n.children, idx)) {
@@ -165,11 +149,14 @@ const projectTreeSlice = createSlice({
       };
 
       if (parentKey === null) {
-        state.projectStructureTreeData.splice(index, 0, node);
+        insertNodeAtIndex(state.projectStructureTreeData, index, node);
         state.nodeParentKeyRecord[node.key] = null;
         inserted = true;
       } else {
-        insertNode(state.projectStructureTreeData, index);
+        inserted = insertNode(state.projectStructureTreeData, index);
+        if (inserted) {
+          state.nodeParentKeyRecord[node.key] = parentKey;
+        }
       }
 
       if (inserted) {
