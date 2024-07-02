@@ -1,5 +1,5 @@
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/selectors';
-import { useAppStore, useAppStoreBase } from '@/store';
+import { useAppStore, useAppStoreBase } from '@/core/systems/UIStoreSystem';
 import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
 import { AutoSelectInput } from './AutoSelectInput';

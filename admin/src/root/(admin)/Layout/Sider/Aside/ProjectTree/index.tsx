@@ -1,4 +1,4 @@
-import { useAppStore } from '@/store';
+import { useAppStore } from '@/core/systems/UIStoreSystem';
 import { debounce } from 'lodash-es';
 import { useEffect, useRef } from 'react';
 import { TreeMenu } from './DirectoryTree';

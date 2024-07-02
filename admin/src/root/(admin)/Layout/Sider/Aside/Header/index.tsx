@@ -1,4 +1,4 @@
-import { useAppStore } from '@/store';
+import { useAppStore } from '@/core/systems/UIStoreSystem';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
