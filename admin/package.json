@@ -5,14 +5,15 @@
   "type": "module",
   "scripts": {
     "openapi": "node ./scripts/swagger-typescript-api.js",
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "tsc && vite build",
     "tsc": "tsc",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "vitest",
     "everyDay": "pnpm lint && vitest run --passWithNoTests && pnpm build",
-    "cypress:open": "pnpm cypress open"
+    "cypress:open": "pnpm cypress open",
+    "cypress:run": "pnpm cypress run"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
