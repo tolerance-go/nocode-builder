@@ -27,7 +27,7 @@ export const Register: React.FC = () => {
     <Form<RegisterFormValues> onFinish={onFinish}>
       <Form.Item
         name="username"
-        rules={[{ required: true, message: '请输入你的用户名!' }]}
+        rules={[{ required: true, message: '用户名不能为空' }]}
       >
         <Input
           autoFocus
@@ -72,7 +72,6 @@ export const Register: React.FC = () => {
         <Button
           block
           type="link"
-          htmlType="submit"
           onClick={() => {
             navigate(-1);
           }}

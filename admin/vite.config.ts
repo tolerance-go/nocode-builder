@@ -11,4 +11,8 @@ export default defineConfig({
       '@': path.resolve('src'),
     },
   },
+  server: {
+    host: '0.0.0.0', // Change this to a valid IP address if needed
+    port: 5173, // Optional otherwise your app will start on default port
+  },
 });
