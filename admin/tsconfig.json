@@ -6,6 +6,7 @@
     "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "types": ["cypress", "node"],
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -24,6 +25,6 @@
       "@/*": ["src/*"]
     }
   },
-  "include": ["src", "./setupTests.ts", "cypress"],
+  "include": ["src", "./setupTests.ts", "cypress", "stories"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

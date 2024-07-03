@@ -1,5 +1,5 @@
 packages:
-  - "admin"
-  - "server"
-  - "home"
-  - "docs"
+  - 'admin'
+  - 'server'
+  - 'home'
+  - 'docs'
