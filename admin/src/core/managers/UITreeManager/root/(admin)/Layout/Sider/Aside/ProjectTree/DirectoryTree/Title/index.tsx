@@ -9,7 +9,8 @@ import {
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
 import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
-import { TitleInput, isTitleInputError } from './TitleInput';
+import { TitleInput } from './TitleInput';
+import { isTitleInputError } from './utils';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
@@ -55,7 +56,10 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
         dispatch(removeProjectStructureTreeNode(nodeKey));
       }
     } else {
-      const currentValue = inputRef.current?.input?.value.trim()!;
+      const currentValue = inputRef.current?.input?.value.trim();
+      if (!currentValue) {
+        throw new Error('此处标题不应为空');
+      }
       saveNode(currentValue);
     }
 

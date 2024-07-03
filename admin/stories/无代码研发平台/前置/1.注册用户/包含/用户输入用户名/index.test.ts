@@ -46,15 +46,18 @@ describe('用户输入用户名', () => {
     );
   });
 
-  it('用户名有效', async () => {
+  it('用户名有效', () => {
     const baseUsername = 'newuniqueuser';
     const suffix = random(0, 1000000);
 
     const newUsername =
       suffix === 0 ? baseUsername : `${baseUsername}${suffix}`;
-    cy.get('input#username').clear().type(newUsername);
-    cy.get('input#password').clear().type('123456a.');
-    cy.get('input#confirm').clear().type('123456a.');
+    cy.get('input#username').clear();
+    cy.get('input#username').type(newUsername);
+    cy.get('input#password').clear();
+    cy.get('input#password').type('123456a.');
+    cy.get('input#confirm').clear();
+    cy.get('input#confirm').type('123456a.');
     cy.intercept('POST', `${BASE_API}/auth/register`, {
       statusCode: 201,
     }).as('registerRequest');

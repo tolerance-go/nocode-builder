@@ -20,7 +20,7 @@ import './commands';
 // require('./commands')
 
 // 定义异常处理器
-const uncaughtExceptionHandler = (err: unknown, runnable: unknown) => {
+const uncaughtExceptionHandler = (err: unknown) => {
   if (
     typeof err === 'object' &&
     err !== null &&

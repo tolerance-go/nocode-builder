@@ -1,5 +1,3 @@
-import { BASE_API } from '@cypress/support/constants';
-
 describe('应用程序管理', () => {
   beforeEach(() => {
     cy.login('yb', '123456');
@@ -49,7 +47,8 @@ describe('应用程序管理', () => {
     cy.get('input#project-tree-title-input').should('be.visible');
 
     // 用户输入内容后，又全部撤销
-    cy.get('input#project-tree-title-input').type('Test Group').clear();
+    cy.get('input#project-tree-title-input').type('Test Group');
+    cy.get('input#project-tree-title-input').clear();
 
     // 验证错误消息和输入框状态
     cy.get('input#project-tree-title-input').should(
