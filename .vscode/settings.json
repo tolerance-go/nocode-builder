@@ -5,5 +5,8 @@
     ["classNames\\s?\\=([^;]*);", "\\`([^\\`]*)\\`"]
   ],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "[feature]": {
+    "editor.defaultFormatter": "korostylov.gherkin-highlight"
+  }
 }
