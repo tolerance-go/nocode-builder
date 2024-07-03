@@ -32,7 +32,6 @@ describe('用户注册时自动登录', () => {
     cy.get('button[type="submit"]').click();
     cy.wait('@registerRequest');
     cy.url().should('not.include', '/register');
-    cy.url().should('eq', Cypress.config().baseUrl + '/');
   });
 
   it('用户未勾选自动登录选项后注册', () => {

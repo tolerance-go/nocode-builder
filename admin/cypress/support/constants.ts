@@ -1,1 +1,1 @@
-export const BASE_API = 'http://localhost:3000';
+export const BASE_API = Cypress.env('baseApi') || 'http://localhost:3000';

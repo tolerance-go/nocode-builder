@@ -13,7 +13,7 @@
     "test": "vitest",
     "everyDay": "pnpm lint && vitest run --passWithNoTests && pnpm build",
     "cypress:open": "pnpm cypress open",
-    "cypress:run": "pnpm cypress run"
+    "cypress:run": "cross-env CYPRESS_BASE_URL=http://127.0.0.1/admin pnpm cypress run --env baseApi=http://127.0.0.1/api"
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.7",
@@ -64,6 +64,7 @@
     "@typescript-eslint/parser": "^7.2.0",
     "@vitejs/plugin-react-swc": "^3.5.0",
     "autoprefixer": "^10.4.19",
+    "cross-env": "^7.0.3",
     "cypress": "^13.13.0",
     "eslint": "^8.57.0",
     "eslint-plugin-cypress": "^3.3.0",
