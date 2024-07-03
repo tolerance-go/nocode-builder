@@ -49,8 +49,7 @@
     "reselect": "^5.1.1",
     "store2": "^2.14.3",
     "swr": "^2.2.5",
-    "xstate": "^5.14.0",
-    "zustand": "^4.5.4"
+    "xstate": "^5.14.0"
   },
   "devDependencies": {
     "@rollup/plugin-alias": "^5.1.0",
