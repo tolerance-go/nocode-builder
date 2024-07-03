@@ -1,9 +1,11 @@
 import { api } from '@/globals';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RegisterFormValues } from '../../../types';
+import { handleLoginSuccess } from '../login/hooks';
+import { LoginResponseDto } from '@/_gen/api';
 
 export const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -13,18 +15,31 @@ export const Register: React.FC = () => {
   const onFinish = async (values: RegisterFormValues) => {
     try {
       setLoading(true);
-      await api.users.createUser({
-        name: values.username,
+      const result = await api.auth.register({
+        username: values.username,
         password: values.password,
+        autoLogin: values.autoLogin,
       });
-      navigate('/login');
+
+      if (values.autoLogin) {
+        const { accessToken } = result as LoginResponseDto;
+
+        handleLoginSuccess(accessToken, navigate);
+      } else {
+        navigate('/login');
+      }
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Form<RegisterFormValues> onFinish={onFinish}>
+    <Form<RegisterFormValues>
+      onFinish={onFinish}
+      initialValues={{
+        autoLogin: true,
+      }}
+    >
       <Form.Item
         name="username"
         rules={[{ required: true, message: '用户名不能为空' }]}
@@ -62,6 +77,9 @@ export const Register: React.FC = () => {
           type="password"
           placeholder="确认密码"
         />
+      </Form.Item>
+      <Form.Item name="autoLogin" valuePropName="checked">
+        <Checkbox>自动登录</Checkbox>
       </Form.Item>
       <Form.Item>
         <Button loading={loading} block type="primary" htmlType="submit">

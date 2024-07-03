@@ -3,8 +3,8 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import store from 'store2';
 import { LoginFormValues } from '../../../types';
+import { handleLoginSuccess } from './hooks';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -16,8 +16,7 @@ export const Login: React.FC = () => {
         username: values.username,
         password: values.password,
       });
-      store.set('token', accessToken);
-      navigate('/');
+      handleLoginSuccess(accessToken, navigate);
     } catch (error) {
       /* empty */
     } finally {

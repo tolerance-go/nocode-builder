@@ -13,6 +13,12 @@ export interface LoginResponseDto {
   accessToken: string;
 }
 
+export interface RegisterDto {
+  username: string;
+  password: string;
+  autoLogin: boolean;
+}
+
 export interface UserResponseDto {
   id: number;
   name: string;
@@ -328,9 +334,7 @@ export class HttpClient<SecurityDataType = unknown> {
         data: body,
         url: path,
       })
-      .then((response) => {
-        return response.data;
-      });
+      .then((response) => response.data);
   };
 }
 
@@ -365,6 +369,22 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     login: (data: LoginDto, params: RequestParams = {}) =>
       this.request<LoginResponseDto, unknown>({
         path: `/auth/login`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name AuthControllerRegister
+     * @request POST:/auth/register
+     */
+    register: (data: RegisterDto, params: RequestParams = {}) =>
+      this.request<LoginResponseDto | UserResponseDto, unknown>({
+        path: `/auth/register`,
         method: 'POST',
         body: data,
         type: ContentType.Json,

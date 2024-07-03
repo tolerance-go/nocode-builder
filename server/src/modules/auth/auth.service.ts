@@ -5,6 +5,7 @@ import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import { LoginResponseDto } from './dtos/login-response.dto';
 import { JwtPayloadDto } from './dtos/jwt-payload.dto';
+import { RegisterDto } from './dtos/register.dto';
 
 @Injectable()
 export class AuthService {
@@ -28,7 +29,7 @@ export class AuthService {
     return result;
   }
 
-  async login(user: User): Promise<LoginResponseDto> {
+  async login(user: Pick<User, 'name' | 'id'>): Promise<LoginResponseDto> {
     const payload: JwtPayloadDto = { username: user.name, sub: user.id };
     return {
       accessToken: this.jwtService.sign(payload),

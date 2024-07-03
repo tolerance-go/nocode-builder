@@ -1,6 +1,8 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { Prisma, User } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import * as bcrypt from 'bcrypt';
+import { UserCreateDto } from './dtos/user-create.dto';
 
 @Injectable()
 export class UserService {
@@ -29,6 +31,14 @@ export class UserService {
       where,
       orderBy,
     });
+  }
+
+  // 创建用户前加密密码
+  async createUserWithPassword(data: UserCreateDto): Promise<User> {
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(data.password, salt);
+    const newData = { ...data, password: hashedPassword };
+    return this.createUser(newData);
   }
 
   async createUser(data: Prisma.UserCreateInput): Promise<User> {
