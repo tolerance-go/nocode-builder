@@ -21,7 +21,7 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://192.168.0.107:5173',
     // 指定 E2E 测试文件的路径
-    specPattern: 'stories/**/*.test.{js,jsx,ts,tsx}',
+    specPattern: 'stories/**/*.cy.{js,jsx,ts,tsx}',
     setupNodeEvents() {
       // implement node event listeners here
     },

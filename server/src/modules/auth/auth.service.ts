@@ -5,7 +5,6 @@ import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 import { LoginResponseDto } from './dtos/login-response.dto';
 import { JwtPayloadDto } from './dtos/jwt-payload.dto';
-import { RegisterDto } from './dtos/register.dto';
 
 @Injectable()
 export class AuthService {

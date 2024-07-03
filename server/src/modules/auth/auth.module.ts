@@ -7,7 +7,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { UserModule } from '../user/user.module';
 import { AuthController } from './auth.controller';
-import { UserController } from '../user/user.controller';
 
 @Module({
   imports: [
