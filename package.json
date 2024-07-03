@@ -9,7 +9,7 @@
     "docker:db": "docker-compose down && docker-compose up postgres --build -d --remove-orphans",
     "docker:server": "docker-compose down && docker-compose up server --build -d --remove-orphans",
     "docker": "docker-compose down && docker-compose up --build -d --remove-orphans && pnpm cypress:run",
-    "everyDay": "pnpm format && pnpm recursive run everyDay && pnpm docker",
+    "everyDay": "pnpm format && pnpm --filter server recursive run everyDay && pnpm --filter=!server recursive run everyDay && pnpm docker",
     "e2e:dev": "pnpm --filter admin cypress:open",
     "cypress:run": "pnpm --filter admin cypress:run",
     "dev:admin": "pnpm --filter admin dev",
