@@ -1,4 +1,7 @@
 /// <reference types="cypress" />
+
+import { BASE_API } from './constants';
+
 // ***********************************************
 // This example commands.ts shows you how to
 // create various custom commands and overwrite
@@ -29,9 +32,21 @@
 //   namespace Cypress {
 //     interface Chainable {
 //       login(email: string, password: string): Chainable<void>
-//       drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-//       visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
+//     //   drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+//     //   dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+//     //   visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
 //     }
 //   }
 // }
+
+Cypress.Commands.add('login', (username: string, password: string) => {
+  cy.session([username, password], () => {
+    cy.request({
+      method: 'POST',
+      url: `${BASE_API}/auth/login`,
+      body: { username, password },
+    }).then(({ body }) => {
+      window.localStorage.setItem('token', body.accessToken);
+    });
+  });
+});

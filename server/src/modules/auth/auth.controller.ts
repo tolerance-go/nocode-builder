@@ -7,7 +7,6 @@ import { LoginResponseDto } from './dtos/login-response.dto';
 import { LoginDto } from './dtos/login.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { RegisterDto } from './dtos/register.dto';
-import { UserController } from '../user/user.controller';
 import { UserResponseDto } from '../user/dtos/user-response.dto';
 import { UserService } from '../user/user.service';
 import { toUserResponseDto } from '../user/utils/toUserResponseDto';

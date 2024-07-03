@@ -9,7 +9,7 @@ import {
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
 import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
-import { AutoSelectInput } from './AutoSelectInput';
+import { TitleInput, isTitleInputError } from './TitleInput';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
@@ -44,36 +44,37 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
   };
 
   const saveInput = () => {
-    const currentValue = inputRef.current?.input?.value.trim();
-    if (currentValue) {
+    const inputIsError = isTitleInputError(
+      inputRef.current?.input?.value ?? '',
+    );
+
+    if (inputIsError) {
+      // 如果是临时新建的
+      if (projectStructureTreeTempNode === nodeKey) {
+        // 删除
+        dispatch(removeProjectStructureTreeNode(nodeKey));
+      }
+    } else {
+      const currentValue = inputRef.current?.input?.value.trim()!;
       saveNode(currentValue);
-      return;
     }
 
-    /** 不合法的输入时 */
-
-    // 如果是临时新建的
-    if (projectStructureTreeTempNode === nodeKey) {
-      // 删除
-      dispatch(removeProjectStructureTreeNode(nodeKey));
-
-      // projectTreeHistoryState.remove(
-      //   projectTreeHistoryState.historyNodeCount - 1,
-      // );
-    }
-
-    // 始终结束编辑
     dispatch(stopEditingProjectStructureTreeNode());
   };
 
   return isEditing ? (
-    <AutoSelectInput
+    <TitleInput
+      id="project-tree-title-input"
       size="small"
       ref={inputRef}
       autoFocus
       defaultValue={nodeDataRecord?.title}
-      onBlur={() => saveInput()}
-      onPressEnter={() => saveInput()}
+      onBlur={() => {
+        saveInput();
+      }}
+      onPressEnter={() => {
+        saveInput();
+      }}
       style={{ width: '100%' }}
     />
   ) : (
@@ -114,6 +115,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       }}
     >
       <span
+        data-test-class={'project-tree-title'}
         style={{
           display: 'inline-block',
           width: '100%',
