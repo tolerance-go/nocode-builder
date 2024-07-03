@@ -1,3 +1,4 @@
+import { BASE_API } from '@cypress/support/constants';
 import { random } from 'lodash-es';
 
 describe('用户输入用户名', () => {
@@ -24,7 +25,7 @@ describe('用户输入用户名', () => {
   });
 
   it('用户名有效性验证 - 用户名已存在', () => {
-    cy.intercept('POST', 'http://localhost:3000/users', {
+    cy.intercept('POST', `${BASE_API}/users`, {
       statusCode: 409,
       body: {
         message: '用户名已被占用',
@@ -54,7 +55,7 @@ describe('用户输入用户名', () => {
     cy.get('input#username').clear().type(newUsername);
     cy.get('input#password').clear().type('123456a.');
     cy.get('input#confirm').clear().type('123456a.');
-    cy.intercept('POST', 'http://localhost:3000/users').as('registerRequest');
+    cy.intercept('POST', `${BASE_API}/users`).as('registerRequest');
     cy.get('button[type="submit"]').click();
     cy.wait('@registerRequest');
     cy.url().should('not.include', '/register');
