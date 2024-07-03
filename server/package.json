@@ -5,6 +5,9 @@
   "author": "",
   "private": true,
   "license": "UNLICENSED",
+  "prisma": {
+    "seed": "ts-node ./prisma/seed.ts"
+  },
   "scripts": {
     "prisma-to-model": "ts-node scripts/prisma-to-model.ts",
     "everyDay": "pnpm lint && pnpm test && pnpm build",

@@ -38,7 +38,7 @@ export class UserService {
     });
 
     if (existingUser) {
-      throw new ConflictException('用户名已存在');
+      throw new ConflictException('用户名已被占用');
     }
 
     return this.prisma.user.create({
