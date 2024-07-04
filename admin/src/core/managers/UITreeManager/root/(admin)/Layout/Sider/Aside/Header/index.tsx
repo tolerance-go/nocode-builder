@@ -82,18 +82,20 @@ export const Header = () => {
 
     const insert = (target: ProjectStructureTreeDataNode) => {
       const newKey = Math.random() + '';
-      insertProjectStructureTreeNodeWithCheck({
-        parentKey: target.key,
-        node: {
-          key: newKey,
-        },
-        index: 0,
-        recordItem: {
-          title: '',
-          id: -1,
-          type: 'folder',
-        },
-      });
+      dispatch(
+        insertProjectStructureTreeNodeWithCheck({
+          parentKey: target.key,
+          node: {
+            key: newKey,
+          },
+          index: 0,
+          recordItem: {
+            title: '',
+            id: -1,
+            type: 'folder',
+          },
+        }),
+      );
       dispatch(updateEditingProjectStructureTreeNode(newKey));
       dispatch(updateProjectStructureTreeTempNode(newKey));
     };

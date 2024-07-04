@@ -76,3 +76,7 @@ Cypress.Commands.add('addProjectGroupFolder', (typeName: string) => {
 Cypress.Commands.add('selectProjectMenu', (name: string) => {
   cy.get('[data-test-class="project-tree-title"]').contains(name).click();
 });
+
+Cypress.Commands.add('antdSelectors.ant-tree-list-holder-inner', () => {
+  return cy.get('.ant-tree-list-holder-inner');
+});

@@ -1,5 +1,38 @@
 import { TEST_IDS } from '@cypress/shared/constants';
 
+const getNodeIndents = (element: HTMLElement) => {
+  const indents = element.querySelector('.ant-tree-indent');
+  if (!indents) {
+    throw new Error('未找到 ant-tree-indent 元素');
+  }
+  const indexUnits = indents.querySelectorAll('.ant-tree-indent-unit');
+
+  return indexUnits;
+};
+
+// 获得 treeNode 的所有子节点
+const getTreeNodeChildren = ($treeNode: JQuery<HTMLElement>) => {
+  const currentNodeIndexUnits = getNodeIndents($treeNode[0]);
+  const $children = $treeNode.nextAll().filter((index, element) => {
+    const indents = getNodeIndents(element);
+    return indents.length === currentNodeIndexUnits.length + 1;
+  });
+
+  return $children;
+};
+
+// 获得 treeNode 的父节点
+const getTreeNodeParent = ($treeNode: JQuery<HTMLElement>) => {
+  const currentNodeIndexUnits = getNodeIndents($treeNode[0]);
+
+  const $parent = $treeNode.prevAll().filter((index, element) => {
+    const indents = getNodeIndents(element);
+    return indents.length === currentNodeIndexUnits.length - 1;
+  });
+
+  return $parent;
+};
+
 describe('应用程序管理', () => {
   beforeEach(() => {
     cy.login('yb', '123456');
@@ -117,65 +150,66 @@ describe('应用程序管理', () => {
     // 找到输入框的父级 ant-tree-treenode
     cy.get('@newGroupInput').parents('.ant-tree-treenode').as('treeNode');
 
-    cy.get('@treeNode')
-      .parent()
-      .children()
-      .first()
-      .then(($firstSibling) => {
-        cy.get('@treeNode').then(($treeNode) => {
-          expect($treeNode[0]).equal($firstSibling[0]);
-        });
-      });
+    cy.get('@treeNode').then(($treeNode) => {
+      const $parent = getTreeNodeParent($treeNode);
+
+      if ($parent.length === 0) {
+        cy['antdSelectors.ant-tree-list-holder-inner']()
+          .should('have.length', 1)
+          .children()
+          .first()
+          .then(($child) => {
+            expect($treeNode[0]).equal($child[0]);
+          });
+      } else {
+        const $children = getTreeNodeChildren($parent);
+
+        expect($treeNode[0]).equal($children.first()[0]);
+      }
+    });
   });
 
-  it.only('11-选中文件夹后创建分组', () => {
+  it('11-选中文件夹后创建分组', () => {
     cy.addProjectGroupFolder('Test Group');
     cy.get('[data-test-class="project-tree-title"]')
       .contains('Test Group')
-      .as('groupTreeNode');
-    cy.get('@groupTreeNode').click();
+      .as('nodeTitle');
+    cy.get('@nodeTitle').click();
+
+    cy.get('@nodeTitle').parents('.ant-tree-treenode').as('groupTreeNode');
 
     cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
-    // // 获取新建分组输入框
     cy.get('input#project-tree-title-input').as('newGroupInput');
-    // // 找到输入框的父级 ant-tree-treenode
-    cy.get('@newGroupInput').parents('.ant-tree-treenode').as('treeNode');
+    cy.get('@newGroupInput')
+      .parents('.ant-tree-treenode')
+      .should('have.length', 1)
+      .as('treeNode');
 
-    cy.get('@groupTreeNode')
-      .children('.ant-tree-treenode')
-      .first()
-      .then(($firstSibling) => {
-        cy.get('@treeNode').then(($treeNode) => {
-          expect($treeNode[0]).equal($firstSibling[0]);
-        });
-      });
+    cy.get('@groupTreeNode').then(($groupTreeNode) => {
+      const $children = getTreeNodeChildren($groupTreeNode);
+
+      const $treeTitleInput = $children
+        .first()
+        .find('#project-tree-title-input');
+
+      expect($treeTitleInput.length).equal(1);
+    });
   });
-  // it.only('10-添加分组文件夹排序', () => {
-  //   cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
-  //   cy.get('input#group-name').type('Sorted Group');
-  //   cy.intercept('POST', `${BASE_API}/groups`, {
-  //     statusCode: 201,
-  //     body: { message: '分组创建成功' },
-  //   }).as('saveGroupRequest');
 
-  //   cy.get('button#save-group').click();
-  //   cy.wait('@saveGroupRequest');
-  //   cy.get('.notification-success').should('contain', '分组创建成功');
-  //   cy.get('.modal#create-group-btn-modal').should('not.exist');
+  it('12-未选中任何项目时创建分组', () => {
+    cy['antdSelectors.ant-tree-list-holder-inner']()
+      .should('have.length', 1)
+      .as('treeListHolder');
 
-  //   cy.intercept('GET', `${BASE_API}/groups`, {
-  //     statusCode: 200,
-  //     body: [
-  //       { id: 1, name: 'Sorted Group', type: 'folder', parent: null },
-  //       { id: 2, name: 'Existing Folder', type: 'folder', parent: null },
-  //     ],
-  //   }).as('getGroupsRequest');
+    cy.get('@treeListHolder').children().should('have.length', 0);
 
-  //   cy.reload();
-  //   cy.wait('@getGroupsRequest');
-  //   cy.get('.group-list').should('contain', 'Sorted Group');
-  //   cy.get('.group-list').within(() => {
-  //     cy.get('.group-item').first().should('contain', 'Sorted Group');
-  //   });
-  // });
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
+
+    cy.get('@treeListHolder')
+      .children()
+      .should('have.length', 1)
+      .first()
+      .find(`#project-tree-title-input`)
+      .should('be.visible');
+  });
 });

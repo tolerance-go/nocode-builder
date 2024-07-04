@@ -138,7 +138,7 @@ const projectTreeSlice = createSlice({
         for (const n of nodes) {
           if (n.key === parentKey) {
             n.children = n.children || [];
-            insertNodeAtIndex(nodes, idx, node);
+            insertNodeAtIndex(n.children, idx, node);
             return true;
           }
           if (n.children && insertNode(n.children, idx)) {
