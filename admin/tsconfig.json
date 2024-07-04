@@ -26,6 +26,13 @@
       "@cypress/*": ["cypress/*"]
     }
   },
-  "include": ["src", "./setupTests.ts", "cypress", "stories", "cypress.d.ts"],
+  "include": [
+    "src",
+    "./setupTests.ts",
+    "cypress",
+    "stories",
+    "features",
+    "cypress.d.ts"
+  ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
