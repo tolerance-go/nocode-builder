@@ -1,32 +1,97 @@
 // 定义步骤函数类型
-type StepFunction = (description: string, callback: () => void) => void;
-type GivenFunction = (description: string, steps: () => void) => void;
+type StepFunction<T = void> = (
+  description: string,
+  callback: (args: T) => void,
+) => void;
 
-export const When: StepFunction = (description, callback) => {
-  cy.log(`When: ${description}`);
-  callback();
+type StepFunctionWithOnly<T = void> = StepFunction<T> & {
+  only: StepFunction<T>;
 };
 
-export const Then: StepFunction = (description, callback) => {
-  cy.log(`Then: ${description}`);
-  callback();
+type GivenCallbackArgs = {
+  /**
+   * 当 / 当...时
+   */
+  当: StepFunction;
+  /**
+   * 那么 / 然后
+   */
+  那么: StepFunction;
+  /**
+   * 并且 / 和
+   */
+  并且: StepFunction;
+  /**
+   * 但是 / 但
+   */
+  但是: StepFunction;
 };
 
-export const And: StepFunction = (description, callback) => {
-  cy.log(`And: ${description}`);
-  callback();
-};
+type ScenarioFunction = (
+  description: string,
+  steps: (args: {
+    /**
+     * 假如 / 已知
+     */
+    假如: StepFunctionWithOnly<GivenCallbackArgs>;
+  }) => void,
+) => void;
 
-export const But: StepFunction = (description, callback) => {
-  cy.log(`But: ${description}`);
-  callback();
-};
+/**
+ * 使用场景
+ *
+ * @param description
+ * @param steps
+ */
+export const 使用场景: ScenarioFunction = (description, steps) => {
+  describe(description, () => {
+    const createGivenFunction = (
+      itFunction: (desc: string, cb: () => void) => void,
+    ): StepFunctionWithOnly<GivenCallbackArgs> => {
+      const Given: StepFunctionWithOnly<GivenCallbackArgs> = (
+        description,
+        callback,
+      ) => {
+        const When: StepFunction = (description, callback) => {
+          cy.log(`当：${description}`);
+          callback();
+        };
 
-export const Given: GivenFunction = (description, steps) => {
-  const givens: { description: string; steps: () => void }[] = [];
-  givens.push({ description, steps });
+        const Then: StepFunction = (description, callback) => {
+          cy.log(`那么：${description}`);
+          callback();
+        };
 
-  givens.forEach((scenario) => {
-    it(scenario.description, scenario.steps);
+        const And: StepFunction = (description, callback) => {
+          cy.log(`并且：${description}`);
+          callback();
+        };
+
+        const But: StepFunction = (description, callback) => {
+          cy.log(`但是：${description}`);
+          callback();
+        };
+
+        itFunction(`假如：${description}`, () => {
+          callback({
+            当: When,
+            那么: Then,
+            并且: And,
+            但是: But,
+          });
+        });
+      };
+
+      Given.only = (description, callback) => {
+        createGivenFunction(it.only)(description, callback);
+      };
+
+      return Given;
+    };
+
+    const Given = createGivenFunction(it);
+
+    // 执行步骤
+    steps({ 假如: Given });
   });
 };
