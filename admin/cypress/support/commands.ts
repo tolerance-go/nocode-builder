@@ -1,5 +1,6 @@
 /// <reference types="cypress" />
 
+import { TEST_IDS } from '@cypress/shared/constants';
 import { BASE_API } from './constants';
 
 // ***********************************************
@@ -39,6 +40,13 @@ import { BASE_API } from './constants';
 //   }
 // }
 
+// 在输入框内输入内容
+const typeToProjectTreeTitleInput = (input: string) => {
+  cy.get('input#project-tree-title-input').as('projectTreeTitleInput');
+  cy.get('@projectTreeTitleInput').type(input);
+  cy.get('@projectTreeTitleInput').type('{enter}');
+};
+
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.session([username, password], () => {
     cy.request({
@@ -49,4 +57,22 @@ Cypress.Commands.add('login', (username: string, password: string) => {
       window.localStorage.setItem('token', body.accessToken);
     });
   });
+});
+
+Cypress.Commands.add('addProjectFile', (typeName: string) => {
+  cy.get('[data-test-id="create-project-btn"]').as('createProjectBtn');
+  cy.get('@createProjectBtn').click();
+  typeToProjectTreeTitleInput(typeName);
+});
+
+Cypress.Commands.add('addProjectGroupFolder', (typeName: string) => {
+  cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).as(
+    'createProjectGroupBtn',
+  );
+  cy.get('@createProjectGroupBtn').click();
+  typeToProjectTreeTitleInput(typeName);
+});
+
+Cypress.Commands.add('selectProjectMenu', (name: string) => {
+  cy.get('[data-test-class="project-tree-title"]').contains(name).click();
 });

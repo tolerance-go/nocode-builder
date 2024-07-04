@@ -9,6 +9,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve('src'),
+      '@cypress': path.resolve('cypress'),
     },
   },
   server: {

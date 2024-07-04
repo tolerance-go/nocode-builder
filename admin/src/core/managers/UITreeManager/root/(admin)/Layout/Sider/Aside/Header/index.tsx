@@ -18,6 +18,7 @@ import {
   FolderAddOutlined,
   HistoryOutlined,
 } from '@ant-design/icons';
+import { TEST_IDS } from '@cypress/shared/constants';
 import { Button, Flex, Space, theme } from 'antd';
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
@@ -252,6 +253,7 @@ export const Header = () => {
           }}
         ></Button>
         <Button
+          data-test-id="create-project-btn"
           type="text"
           disabled={projectTreeTimeLineVisible}
           // loading={addFileLoading}
@@ -260,7 +262,7 @@ export const Header = () => {
         ></Button>
         <Button
           type="text"
-          id={'create-group'}
+          data-test-id={TEST_IDS.CREATE_GROUP_BTN}
           disabled={projectTreeTimeLineVisible}
           // loading={addFolderLoading}
           icon={<FolderAddOutlined />}

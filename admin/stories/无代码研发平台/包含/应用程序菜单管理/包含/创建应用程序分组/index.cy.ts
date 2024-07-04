@@ -1,3 +1,5 @@
+import { TEST_IDS } from '@cypress/shared/constants';
+
 describe('应用程序管理', () => {
   beforeEach(() => {
     cy.login('yb', '123456');
@@ -5,18 +7,20 @@ describe('应用程序管理', () => {
   });
 
   it('1-用户应能看到“创建分组”按钮', () => {
-    cy.get('button#create-group').should('be.visible');
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).should(
+      'be.visible',
+    );
   });
 
   it('2-用户应能在输入框中输入分组名称', () => {
-    cy.get('button#create-group').click();
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
     cy.get('input#project-tree-title-input').should('be.visible');
     cy.get('input#project-tree-title-input').type('Test Group');
     cy.get('input#project-tree-title-input').should('have.value', 'Test Group');
   });
 
   it('3-系统应保存分组信息', () => {
-    cy.get('button#create-group').click();
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
     cy.get('input#project-tree-title-input').type('Test Group{enter}');
 
     // 找到 data-test-class 属性是 project-tree-title 的所有节点
@@ -43,7 +47,7 @@ describe('应用程序管理', () => {
   // });
 
   it('5-分组名称不能为空的验证', () => {
-    cy.get('button#create-group').click();
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
     cy.get('input#project-tree-title-input').should('be.visible');
 
     // 用户输入内容后，又全部撤销
@@ -58,7 +62,7 @@ describe('应用程序管理', () => {
   });
 
   it('6-分组名称不能包含无效字符', () => {
-    cy.get('button#create-group').click();
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
     cy.get('input#project-tree-title-input').should('be.visible');
 
     cy.get('input#project-tree-title-input').type('Invalid@Name!');
@@ -71,7 +75,7 @@ describe('应用程序管理', () => {
   });
 
   it('7-新建分组名称包含无效字符并按下回车的验证', () => {
-    cy.get('button#create-group').click();
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
     cy.get('input#project-tree-title-input').should('be.visible');
 
     // 用户输入包含无效字符的分组名称并按下回车键
@@ -84,7 +88,7 @@ describe('应用程序管理', () => {
   });
 
   // it('8-保存分组过程中发生网络错误', () => {
-  //   cy.get('button#create-group').click();
+  //   cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
   //   cy.get('input#group-name').type('Test Group');
   //   cy.intercept('POST', `${BASE_API}/groups`, {
   //     forceNetworkError: true,
@@ -93,17 +97,61 @@ describe('应用程序管理', () => {
   //   cy.get('button#save-group').click();
   //   cy.wait('@saveGroupRequest');
   //   cy.get('.error-message').should('contain', '网络错误，请稍后重试');
-  //   cy.get('.modal#create-group-modal').should('be.visible');
+  //   cy.get('.modal#create-group-btn-modal').should('be.visible');
   // });
 
   it('9-输入过程中失去焦点且输入内容为空', () => {
-    cy.get('button#create-group').click();
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
     cy.get('input#project-tree-title-input').blur();
     cy.get('input#project-tree-title-input').should('not.exist');
   });
 
+  it('10-选中文件后创建分组', () => {
+    cy.addProjectFile('Test File');
+    cy.selectProjectMenu('Test File');
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
+
+    // 获取新建分组输入框
+    cy.get('input#project-tree-title-input').as('newGroupInput');
+
+    // 找到输入框的父级 ant-tree-treenode
+    cy.get('@newGroupInput').parents('.ant-tree-treenode').as('treeNode');
+
+    cy.get('@treeNode')
+      .parent()
+      .children()
+      .first()
+      .then(($firstSibling) => {
+        cy.get('@treeNode').then(($treeNode) => {
+          expect($treeNode[0]).equal($firstSibling[0]);
+        });
+      });
+  });
+
+  it.only('11-选中文件夹后创建分组', () => {
+    cy.addProjectGroupFolder('Test Group');
+    cy.get('[data-test-class="project-tree-title"]')
+      .contains('Test Group')
+      .as('groupTreeNode');
+    cy.get('@groupTreeNode').click();
+
+    cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
+    // // 获取新建分组输入框
+    cy.get('input#project-tree-title-input').as('newGroupInput');
+    // // 找到输入框的父级 ant-tree-treenode
+    cy.get('@newGroupInput').parents('.ant-tree-treenode').as('treeNode');
+
+    cy.get('@groupTreeNode')
+      .children('.ant-tree-treenode')
+      .first()
+      .then(($firstSibling) => {
+        cy.get('@treeNode').then(($treeNode) => {
+          expect($treeNode[0]).equal($firstSibling[0]);
+        });
+      });
+  });
   // it.only('10-添加分组文件夹排序', () => {
-  //   cy.get('button#create-group').click();
+  //   cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).click();
   //   cy.get('input#group-name').type('Sorted Group');
   //   cy.intercept('POST', `${BASE_API}/groups`, {
   //     statusCode: 201,
@@ -113,7 +161,7 @@ describe('应用程序管理', () => {
   //   cy.get('button#save-group').click();
   //   cy.wait('@saveGroupRequest');
   //   cy.get('.notification-success').should('contain', '分组创建成功');
-  //   cy.get('.modal#create-group-modal').should('not.exist');
+  //   cy.get('.modal#create-group-btn-modal').should('not.exist');
 
   //   cy.intercept('GET', `${BASE_API}/groups`, {
   //     statusCode: 200,
