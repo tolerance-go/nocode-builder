@@ -1,6 +1,6 @@
 import {
   removeProjectStructureTreeNodeWithCheck,
-  updateEditingProjectStructureTreeNode,
+  更新当前编辑节点是哪个,
   updateExpandedKeys,
   updateSelectedProjectStructureTreeNodes,
   useAppDispatch,
@@ -15,18 +15,18 @@ const { DirectoryTree } = Tree;
 
 export const TreeMenu = () => {
   const containerHeight = useAppSelector(
-    (state) => state.projectTree.containerHeight,
+    (state) => state.projectTree.节点树容器的高度,
   );
   const projectStructureTreeData = useAppSelector(
-    (state) => state.projectTree.projectStructureTreeData,
+    (state) => state.projectTree.项目节点树,
   );
   const selectedProjectStructureTreeNodes = useAppSelector(
-    (state) => state.projectTree.selectedProjectStructureTreeNodes,
+    (state) => state.projectTree.所有已经选中的节点,
   );
 
   const dispatch = useAppDispatch();
   const expandedKeys = useAppSelector(
-    (state) => state.projectTree.expandedKeys,
+    (state) => state.projectTree.所有展开的节点的key,
   );
 
   useKeyPress(['Delete', 'Backspace'], () => {
@@ -43,7 +43,7 @@ export const TreeMenu = () => {
   useKeyPress(['F2'], () => {
     selectedProjectStructureTreeNodes.length &&
       dispatch(
-        updateEditingProjectStructureTreeNode(
+        更新当前编辑节点是哪个(
           selectedProjectStructureTreeNodes[
             selectedProjectStructureTreeNodes.length - 1
           ],

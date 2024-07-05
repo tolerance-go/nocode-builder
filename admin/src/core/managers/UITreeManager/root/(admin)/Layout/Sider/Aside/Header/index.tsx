@@ -1,18 +1,19 @@
 import {
-  insertProjectStructureTreeNodeWithCheck,
+  插入节点并且默认展开父节点,
   reduxStore,
   showProjectTreeTimeLineAction,
-  updateEditingProjectStructureTreeNode,
-  updateProjectStructureTreeTempNode,
+  更新当前编辑节点是哪个,
+  更新为了编辑创建的临时节点是哪个,
   useAppDispatch,
   useAppSelector,
+  将选中节点改为临时创建的编辑节点并暂存,
 } from '@/core/managers/UIStoreManager';
-import { findProjectStructureTreeNode } from '@/core/managers/UIStoreManager/store/utils';
+import { 查询项目树中的节点 } from '@/core/managers/UIStoreManager/store/utils';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
-import { nodeIsFile, nodeIsFolder } from '@/utils';
+import { 节点是不是文件, 节点是不是文件夹 } from '@/utils';
 import {
   FileAddOutlined,
   FolderAddOutlined,
@@ -22,7 +23,7 @@ import { TEST_IDS } from '@cypress/shared/constants';
 import { Button, Flex, Space, theme } from 'antd';
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
-const findLastFolderIndex = (
+const 找到同层最后一个文件夹的位置 = (
   nodes: ProjectTreeNodeDataRecordItem[],
 ): number => {
   return nodes.findLastIndex((node) => node.type === 'folder');
@@ -35,16 +36,16 @@ export const Header = () => {
     (state) => state.layout.projectTreeTimeLineVisible,
   );
   const selectedProjectStructureTreeNodes = useAppSelector(
-    (state) => state.projectTree.selectedProjectStructureTreeNodes,
+    (state) => state.projectTree.所有已经选中的节点,
   );
   const projectStructureTreeData = useAppSelector(
-    (state) => state.projectTree.projectStructureTreeData,
+    (state) => state.projectTree.项目节点树,
   );
   const projectTreeDataRecord = useAppSelector(
-    (state) => state.projectTree.projectTreeDataRecord,
+    (state) => state.projectTree.树节点key到节点数据的映射,
   );
   const nodeParentKeyRecord = useAppSelector(
-    (state) => state.projectTree.nodeParentKeyRecord,
+    (state) => state.projectTree.节点到父节点的映射,
   );
   const dispatch = useAppDispatch();
 
@@ -54,59 +55,126 @@ export const Header = () => {
       ]
     : null;
 
+  const 在指定节点下插入新文件夹 = (target: ProjectStructureTreeDataNode) => {
+    const newKey = Math.random() + '';
+    dispatch(
+      插入节点并且默认展开父节点({
+        parentKey: target.key,
+        node: {
+          key: newKey,
+        },
+        index: 0,
+        recordItem: {
+          title: '',
+          id: -1,
+          type: 'folder',
+        },
+      }),
+    );
+    dispatch(更新当前编辑节点是哪个(newKey));
+    dispatch(更新为了编辑创建的临时节点是哪个(newKey));
+    dispatch(将选中节点改为临时创建的编辑节点并暂存(newKey));
+  };
+
+  const 在指定节点下插入新文件 = (target: ProjectStructureTreeDataNode) => {
+    const folderIndex = 找到同层最后一个文件夹的位置(
+      (target.children ?? []).map((node) => {
+        const recordItem = projectTreeDataRecord[node.key];
+        if (!recordItem) {
+          throw new Error('数据不完整。');
+        }
+        return recordItem;
+      }),
+    );
+    const newKey = Math.random() + '';
+
+    dispatch(
+      插入节点并且默认展开父节点({
+        parentKey: target.key,
+        node: {
+          isLeaf: true,
+          key: newKey,
+        },
+        index: folderIndex + 1,
+        recordItem: {
+          title: '',
+          id: -1,
+          type: 'file',
+        },
+      }),
+    );
+    dispatch(更新当前编辑节点是哪个(newKey));
+    dispatch(更新为了编辑创建的临时节点是哪个(newKey));
+    dispatch(将选中节点改为临时创建的编辑节点并暂存(newKey));
+  };
+
+  const 在根节点下插入新文件 = () => {
+    const folderIndex = 找到同层最后一个文件夹的位置(
+      projectStructureTreeData.map((node) => {
+        const recordItem = projectTreeDataRecord[node.key];
+        if (!recordItem) {
+          throw new Error('数据不完整。');
+        }
+        return recordItem;
+      }),
+    );
+
+    const newKey = Math.random() + '';
+
+    dispatch(
+      插入节点并且默认展开父节点({
+        parentKey: null,
+        node: {
+          key: newKey,
+          isLeaf: true,
+        },
+        index: folderIndex + 1,
+        recordItem: {
+          title: '',
+          type: 'file',
+          id: -1,
+        },
+      }),
+    );
+    dispatch(更新当前编辑节点是哪个(newKey));
+    dispatch(更新为了编辑创建的临时节点是哪个(newKey));
+    dispatch(将选中节点改为临时创建的编辑节点并暂存(newKey));
+  };
+
+  const 在根节点下面插入新文件夹 = () => {
+    const newKey = Math.random() + '';
+
+    dispatch(
+      插入节点并且默认展开父节点({
+        parentKey: null,
+        node: {
+          key: newKey,
+        },
+        index: 0,
+        recordItem: {
+          id: -1,
+          type: 'folder',
+          title: '',
+        },
+      }),
+    );
+    dispatch(更新当前编辑节点是哪个(newKey));
+    dispatch(更新为了编辑创建的临时节点是哪个(newKey));
+    dispatch(将选中节点改为临时创建的编辑节点并暂存(newKey));
+  };
+
   /**
    * 处理点击添加文件夹的回调函数
    * @param event - 事件对象
    */
-  const handleProjectGroupFolderCreateBtnClick = async () => {
-    const insertInRoot = () => {
-      const newKey = Math.random() + '';
-
-      dispatch(
-        insertProjectStructureTreeNodeWithCheck({
-          parentKey: null,
-          node: {
-            key: newKey,
-          },
-          index: 0,
-          recordItem: {
-            id: -1,
-            type: 'folder',
-            title: '',
-          },
-        }),
-      );
-      dispatch(updateEditingProjectStructureTreeNode(newKey));
-      dispatch(updateProjectStructureTreeTempNode(newKey));
-    };
-
-    const insert = (target: ProjectStructureTreeDataNode) => {
-      const newKey = Math.random() + '';
-      dispatch(
-        insertProjectStructureTreeNodeWithCheck({
-          parentKey: target.key,
-          node: {
-            key: newKey,
-          },
-          index: 0,
-          recordItem: {
-            title: '',
-            id: -1,
-            type: 'folder',
-          },
-        }),
-      );
-      dispatch(updateEditingProjectStructureTreeNode(newKey));
-      dispatch(updateProjectStructureTreeTempNode(newKey));
-    };
-
+  const 处理项目组新建按钮点击事件 = async () => {
     if (!selectedKey) {
-      insertInRoot();
+      在根节点下面插入新文件夹();
       return;
     }
 
     const selectedRecordItem = projectTreeDataRecord[selectedKey];
-    const selectedNode = findProjectStructureTreeNode(
+    const selectedNode = 查询项目树中的节点(
       reduxStore.getState().projectTree,
       selectedKey,
     );
@@ -115,99 +183,34 @@ export const Header = () => {
       throw new Error('数据不完整。');
     }
 
-    if (nodeIsFolder(selectedRecordItem)) {
+    if (节点是不是文件夹(selectedRecordItem)) {
       if (selectedNode) {
-        insert(selectedNode);
+        在指定节点下插入新文件夹(selectedNode);
       }
-    } else if (nodeIsFile(selectedRecordItem)) {
+    } else if (节点是不是文件(selectedRecordItem)) {
       const parentKey = nodeParentKeyRecord[selectedKey];
       if (parentKey) {
-        const parent = findProjectStructureTreeNode(
+        const parent = 查询项目树中的节点(
           reduxStore.getState().projectTree,
           parentKey,
         );
         if (parent) {
-          insert(parent);
+          在指定节点下插入新文件夹(parent);
         }
       } else {
-        insertInRoot();
+        在根节点下面插入新文件夹();
       }
     }
   };
 
   const handleProjectFileCreateBtnClick = async () => {
-    const insertInRoot = () => {
-      const folderIndex = findLastFolderIndex(
-        projectStructureTreeData.map((node) => {
-          const recordItem = projectTreeDataRecord[node.key];
-          if (!recordItem) {
-            throw new Error('数据不完整。');
-          }
-          return recordItem;
-        }),
-      );
-
-      console.log('folderIndex', folderIndex);
-
-      const newKey = Math.random() + '';
-
-      dispatch(
-        insertProjectStructureTreeNodeWithCheck({
-          parentKey: null,
-          node: {
-            key: newKey,
-            isLeaf: true,
-          },
-          index: folderIndex + 1,
-          recordItem: {
-            title: '',
-            type: 'file',
-            id: -1,
-          },
-        }),
-      );
-      dispatch(updateEditingProjectStructureTreeNode(newKey));
-      dispatch(updateProjectStructureTreeTempNode(newKey));
-    };
-
-    const insert = (target: ProjectStructureTreeDataNode) => {
-      const folderIndex = findLastFolderIndex(
-        (target.children ?? []).map((node) => {
-          const recordItem = projectTreeDataRecord[node.key];
-          if (!recordItem) {
-            throw new Error('数据不完整。');
-          }
-          return recordItem;
-        }),
-      );
-      const newKey = Math.random() + '';
-
-      dispatch(
-        insertProjectStructureTreeNodeWithCheck({
-          parentKey: target.key,
-          node: {
-            isLeaf: true,
-            key: newKey,
-          },
-          index: folderIndex + 1,
-          recordItem: {
-            title: '',
-            id: -1,
-            type: 'file',
-          },
-        }),
-      );
-      dispatch(updateEditingProjectStructureTreeNode(newKey));
-      dispatch(updateProjectStructureTreeTempNode(newKey));
-    };
-
     if (!selectedKey) {
-      insertInRoot();
+      在根节点下插入新文件();
       return;
     }
 
     const selectedRecordItem = projectTreeDataRecord[selectedKey];
-    const selectedNode = findProjectStructureTreeNode(
+    const selectedNode = 查询项目树中的节点(
       reduxStore.getState().projectTree,
       selectedKey,
     );
@@ -215,24 +218,23 @@ export const Header = () => {
     if (!selectedRecordItem) {
       throw new Error('数据不完整。');
     }
-
-    if (nodeIsFolder(selectedRecordItem)) {
+    if (节点是不是文件夹(selectedRecordItem)) {
       if (selectedNode) {
-        insert(selectedNode);
+        在指定节点下插入新文件(selectedNode);
       }
-    } else if (nodeIsFile(selectedRecordItem)) {
+    } else if (节点是不是文件(selectedRecordItem)) {
       const parentKey = nodeParentKeyRecord[selectedKey];
 
       if (parentKey) {
-        const parent = findProjectStructureTreeNode(
+        const parent = 查询项目树中的节点(
           reduxStore.getState().projectTree,
           parentKey,
         );
         if (parent) {
-          insert(parent);
+          在指定节点下插入新文件(parent);
         }
       } else {
-        insertInRoot();
+        在根节点下插入新文件();
       }
     }
   };
@@ -268,7 +270,7 @@ export const Header = () => {
           disabled={projectTreeTimeLineVisible}
           // loading={addFolderLoading}
           icon={<FolderAddOutlined />}
-          onClick={handleProjectGroupFolderCreateBtnClick}
+          onClick={处理项目组新建按钮点击事件}
         ></Button>
       </Space>
     </Flex>

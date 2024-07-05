@@ -41,7 +41,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
   });
 
-  假如('用户正在编辑刚创建的项目分组名称', ({ 当, 那么 }) => {
+  假如('用户正在编辑输入框的时候，应该正确处理输入异常', ({ 当, 那么 }) => {
     cy.登录('yb', '123456');
     cy.visit('/');
     cy.get(
@@ -76,41 +76,44 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
   });
 
-  假如('用户选中唯一的项目节点后，准备创建项目分组', ({ 当, 那么, 并且 }) => {
-    cy.登录('yb', '123456');
-    cy.visit('/');
-    cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_NODE_BTN}"]`).click();
-    cy.获取项目树标题输入框().as('input');
-    cy.get('@input').type('text{enter}');
+  假如(
+    '用户选中唯一的项目节点后，准备创建项目分组，应该正确处理插入位置',
+    ({ 当, 那么, 并且 }) => {
+      cy.登录('yb', '123456');
+      cy.visit('/');
+      cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_NODE_BTN}"]`).click();
+      cy.获取项目树标题输入框().as('input');
+      cy.get('@input').type('text{enter}');
 
-    当('用户选中项目节点', () => {
-      cy['获取项目树节点标题元素']('text').click();
-    });
-    并且('项目树中只有一个项目节点', () => {
-      cy['获取antd树列表内部容器']().should('have.length', 1);
-    });
-    并且('点击创建项目分组按钮', () => {
-      cy.get(
-        `[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
-      ).click();
-    });
-    那么('输入框应该在根节点下一级的第一个位置显示', () => {
-      cy.获取项目树标题输入框()
-        .parents('.ant-tree-treenode')
-        .then(($inputTreeNode) => {
-          cy['获取antd树列表内部容器']()
-            .should('have.length', 1)
-            .children()
-            .first()
-            .then(($child) => {
-              expect($inputTreeNode[0]).equal($child[0]);
-            });
-        });
-    });
-  });
+      当('用户选中项目节点', () => {
+        cy['获取项目树节点标题元素']('text').click();
+      });
+      并且('项目树中只有一个项目节点', () => {
+        cy['获取antd树列表内部容器']().should('have.length', 1);
+      });
+      并且('点击创建项目分组按钮', () => {
+        cy.get(
+          `[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
+        ).click();
+      });
+      那么('输入框应该在根节点下一级的第一个位置显示', () => {
+        cy.获取项目树标题输入框()
+          .parents('.ant-tree-treenode')
+          .then(($inputTreeNode) => {
+            cy['获取antd树列表内部容器']()
+              .should('have.length', 1)
+              .children()
+              .first()
+              .then(($child) => {
+                expect($inputTreeNode[0]).equal($child[0]);
+              });
+          });
+      });
+    },
+  );
 
   假如(
-    '用户选中存在上一级的项目文件节点后，准备创建项目分组',
+    '用户选中存在上一级的项目文件节点后，准备创建项目分组，应该正确处理插入位置',
     ({ 当, 并且, 那么 }) => {
       cy.登录('yb', '123456');
       cy.visit('/');
@@ -150,23 +153,200 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     },
   );
 
-  假如('用户未选中任何节点，准备创建项目分组', ({ 当, 并且, 那么 }) => {
-    cy.登录('yb', '123456');
-    cy.visit('/');
+  假如(
+    '用户未选中任何节点，准备创建项目分组，应该正确处理插入位置',
+    ({ 当, 并且, 那么 }) => {
+      cy.登录('yb', '123456');
+      cy.visit('/');
 
-    当('项目树中没有任何节点', () => {
-      cy.获取antd树列表内部容器().children().should('have.length', 0);
+      当('项目树中没有任何节点', () => {
+        cy.获取antd树列表内部容器().children().should('have.length', 0);
+      });
+      并且('用户点击创建项目分组按钮', () => {
+        cy.获取添加项目组的按钮().click();
+      });
+      那么('输入框应该在根节点的下一级的一个位置显示', () => {
+        cy.获取antd树列表内部容器()
+          .children()
+          .should('have.length', 1)
+          .first()
+          .find(`#${TEST_IDS.项目树标题输入框}`)
+          .should('be.visible');
+      });
+    },
+  );
+
+  假如(
+    '用户创建了项目，然后取消，应该可以再次创建',
+    ({ 已经, 当, 并且, 那么 }) => {
+      已经('登录', () => {
+        cy.登录('yb', '123456');
+      });
+      已经('在主页', () => {
+        cy.visit('/');
+      });
+
+      当('用户点击创建项目', () => {
+        cy.获取添加项目的按钮().click();
+      });
+      那么('用户应该能看到项目树中的输入框', () => {
+        cy.获取项目树标题输入框().should('be.visible');
+      });
+      并且('输入框所处的节点应该是选中状态', () => {
+        cy.获取项目树标题输入框()
+          .parents('.ant-tree-treenode')
+          .should('have.class', 'ant-tree-treenode-selected');
+      });
+      当('用输入失去焦点', () => {
+        cy.获取项目树标题输入框().blur();
+      });
+      那么('节点树应该没有任何节点', () => {
+        cy.获取antd树列表内部容器().children().should('have.length', 0);
+      });
+      当('用户再次点击创建项目', () => {
+        cy.获取添加项目的按钮().click();
+      });
+      那么('用户应该能看到项目树中的输入框', () => {
+        cy.获取项目树标题输入框().should('be.visible');
+      });
+      并且('输入框所处的节点应该是选中状态', () => {
+        cy.获取项目树标题输入框()
+          .parents('.ant-tree-treenode')
+          .should('have.class', 'ant-tree-treenode-selected');
+      });
+      当('用输入失去焦点', () => {
+        cy.获取项目树标题输入框().blur();
+      });
+      那么('节点树应该没有任何节点', () => {
+        cy.获取antd树列表内部容器().children().should('have.length', 0);
+      });
+    },
+  );
+
+  假如(
+    '用户创建了项目组，然后取消，应该可以再次创建',
+    ({ 已经, 当, 并且, 那么 }) => {
+      已经('登录', () => {
+        cy.登录('yb', '123456');
+      });
+      已经('在主页', () => {
+        cy.visit('/');
+      });
+
+      当('用户点击创建项目组', () => {
+        cy.获取添加项目组的按钮().click();
+      });
+      那么('用户应该能看到项目树中的输入框', () => {
+        cy.获取项目树标题输入框().should('be.visible');
+      });
+      并且('输入框所处的节点应该是选中状态', () => {
+        cy.获取项目树标题输入框()
+          .parents('.ant-tree-treenode')
+          .should('have.class', 'ant-tree-treenode-selected');
+      });
+      当('用输入失去焦点', () => {
+        cy.获取项目树标题输入框().blur();
+      });
+      那么('节点树应该没有任何节点', () => {
+        cy.获取antd树列表内部容器().children().should('have.length', 0);
+      });
+      当('用户再次点击创建项目组', () => {
+        cy.获取添加项目组的按钮().click();
+      });
+      那么('用户应该能看到项目树中的输入框', () => {
+        cy.获取项目树标题输入框().should('be.visible');
+      });
+      并且('输入框所处的节点应该是选中状态', () => {
+        cy.获取项目树标题输入框()
+          .parents('.ant-tree-treenode')
+          .should('have.class', 'ant-tree-treenode-selected');
+      });
+      当('用输入失去焦点', () => {
+        cy.获取项目树标题输入框().blur();
+      });
+      那么('节点树应该没有任何节点', () => {
+        cy.获取antd树列表内部容器().children().should('have.length', 0);
+      });
+    },
+  );
+
+  假如('用户创建项目后，应该默认选中', ({ 已经, 当, 并且, 那么 }) => {
+    已经('登录', () => {
+      cy.登录('yb', '123456');
     });
-    并且('用户点击创建项目分组按钮', () => {
-      cy.获取添加项目组的按钮().click();
+    已经('在主页', () => {
+      cy.visit('/');
     });
-    那么('输入框应该在根节点的下一级的一个位置显示', () => {
-      cy.获取antd树列表内部容器()
-        .children()
-        .should('have.length', 1)
-        .first()
-        .find(`#${TEST_IDS.项目树标题输入框}`)
-        .should('be.visible');
+
+    当('用户点击创建项目', () => {
+      cy.获取添加项目的按钮().click();
+    });
+    那么('用户应该能看到项目树中的输入框', () => {
+      cy.获取项目树标题输入框().should('be.visible');
+    });
+    并且('输入框所处的节点应该是选中状态', () => {
+      cy.获取项目树标题输入框()
+        .parents('.ant-tree-treenode')
+        .should('have.class', 'ant-tree-treenode-selected');
+    });
+
+    当('用户输入合法内容和按下回车键', () => {
+      cy.获取项目树标题输入框().type('title{enter}');
+    });
+    那么('用户应该能看到分组名称在项目树中', () => {
+      cy.获取项目树节点标题元素('title').should('be.visible');
+    });
+    并且('节点应该是选中状态', () => {
+      cy.获取项目树节点标题元素('title')
+        .parents('.ant-tree-treenode')
+        .should('have.class', 'ant-tree-treenode-selected');
     });
   });
+
+  // 假如.only('用户创建项目失败，应该没有选中', ({ 已经, 当, 并且, 那么 }) => {
+  //   已经('登录', () => {
+  //     cy.登录('yb', '123456');
+  //   });
+  //   已经('在主页', () => {
+  //     cy.visit('/');
+  //   });
+  //   已经('存在一个没有被选中的项目节点', () => {
+  //     cy.获取添加项目的按钮().click();
+  //     cy.获取项目树标题输入框().type('title{enter}');
+  //     cy.获取项目树节点标题元素('title').click();
+  //   });
+
+  // 当('用户点击创建项目按钮', () => {
+  //   cy.获取添加项目的按钮().click();
+  // });
+  // 并且('用户输入非法内容', () => {
+  //   cy.获取项目树标题输入框().type('$');
+  // });
+  // 并且('失去焦点', () => {
+  //   cy.获取项目树标题输入框().blur();
+  // });
+  // 那么('用户应该能看到输入框消失', () => {
+  //   cy.获取项目树标题输入框().should('not.exist');
+  // });
+  // 并且('没有节点被选中', () => {
+  //   cy.get('.ant-tree-treenode')
+  //     .filter((_index, $treeNode) => {
+  //       return $treeNode.classList.contains('ant-tree-treenode-selected');
+  //     })
+  //     .should('have.length', 0);
+  // });
+  // });
+
+  // 假如 用户已经选中了一个节点，然后准备创建项目，但是取消后，应该回到之前的选中状态
+
+  // 已经 登录
+  // 已经 在主页
+  // 已经 存在一个项目组文件夹节点，里面还存在一个项目文件节点
+
+  // 当 用户选中项目组文件夹节点
+  // 并且 点击了创建项目按钮
+  // 并且 输入了非法标题
+  // 并且 失去了输入焦点
+  // 那么 用户应该能看到输入框消失
+  // 并且 之前选中的节点自动被选中
 });

@@ -7,46 +7,57 @@ import {
 import { insertNodeAtIndex } from '../../utils/tree/effects';
 
 export type ProjectTreeStates = {
-  projectStructureTreeData: ProjectStructureTreeDataNode[];
-  projectTreeDataRecord: ProjectTreeNodeDataRecord;
+  项目节点树: ProjectStructureTreeDataNode[];
+  树节点key到节点数据的映射: ProjectTreeNodeDataRecord;
   hasInitProjectTreeDataMeta: boolean;
-  selectedProjectStructureTreeNodes: string[];
-  expandedKeys: string[];
-  editingProjectStructureTreeNode: string | null;
-  nodeParentKeyRecord: Record<string, string | null>;
-  projectStructureTreeTempNode: string | null;
-  containerHeight: number;
+  所有已经选中的节点: string[];
+  所有展开的节点的key: string[];
+  当前正在编辑的项目树节点的key: string | null;
+  节点到父节点的映射: Record<string, string | null>;
+  为了编辑临时创建的节点的key: string | null;
+  节点树容器的高度: number;
+  编辑临时创建节点之前选中的节点的keys: string[] | null;
 };
 
 const initialState: ProjectTreeStates = {
-  projectStructureTreeData: [],
-  projectTreeDataRecord: {},
+  项目节点树: [],
+  树节点key到节点数据的映射: {},
   hasInitProjectTreeDataMeta: false,
-  selectedProjectStructureTreeNodes: [],
-  expandedKeys: [],
-  editingProjectStructureTreeNode: null,
-  nodeParentKeyRecord: {},
-  projectStructureTreeTempNode: null,
-  containerHeight: 0,
+  所有已经选中的节点: [],
+  所有展开的节点的key: [],
+  当前正在编辑的项目树节点的key: null,
+  节点到父节点的映射: {},
+  为了编辑临时创建的节点的key: null,
+  节点树容器的高度: 0,
+  编辑临时创建节点之前选中的节点的keys: null,
 };
 
 const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
+    将选中节点改为临时创建的编辑节点并暂存: (
+      state,
+      action: PayloadAction<string>,
+    ) => {
+      state.编辑临时创建节点之前选中的节点的keys = [
+        ...state.所有已经选中的节点,
+      ];
+      state.所有已经选中的节点 = [action.payload];
+    },
     updateProjectStructureTreeData: (
       state,
       action: PayloadAction<ProjectStructureTreeDataNode[]>,
     ) => {
-      state.projectStructureTreeData = action.payload;
+      state.项目节点树 = action.payload;
     },
     updateProjectTreeDataRecord: (
       state,
       action: PayloadAction<ProjectTreeNodeDataRecord>,
     ) => {
-      state.projectTreeDataRecord = action.payload;
+      state.树节点key到节点数据的映射 = action.payload;
     },
-    updateProjectTreeDataRecordItem: (
+    更新节点的数据: (
       state,
       action: PayloadAction<{
         key: string;
@@ -55,7 +66,7 @@ const projectTreeSlice = createSlice({
     ) => {
       const { key, data } = action.payload;
       if (data.title) {
-        const item = state.projectTreeDataRecord[key];
+        const item = state.树节点key到节点数据的映射[key];
         if (item) {
           item.title = data.title;
         }
@@ -84,10 +95,10 @@ const projectTreeSlice = createSlice({
         return map;
       };
 
-      state.projectStructureTreeData = projectStructureTreeData;
-      state.projectTreeDataRecord = projectStructureTreeDataRecord;
+      state.项目节点树 = projectStructureTreeData;
+      state.树节点key到节点数据的映射 = projectStructureTreeDataRecord;
       state.hasInitProjectTreeDataMeta = true;
-      state.nodeParentKeyRecord = buildParentKeyMap(projectStructureTreeData);
+      state.节点到父节点的映射 = buildParentKeyMap(projectStructureTreeData);
     },
     addProjectStructureTreeNode: (
       state,
@@ -102,7 +113,7 @@ const projectTreeSlice = createSlice({
           if (n.key === parentKey) {
             n.children = n.children || [];
             n.children.push(node);
-            state.nodeParentKeyRecord[node.key] = parentKey;
+            state.节点到父节点的映射[node.key] = parentKey;
             return true;
           }
           if (n.children && addNode(n.children)) {
@@ -113,10 +124,10 @@ const projectTreeSlice = createSlice({
       };
 
       if (parentKey === null) {
-        state.projectStructureTreeData.push(node);
-        state.nodeParentKeyRecord[node.key] = null;
+        state.项目节点树.push(node);
+        state.节点到父节点的映射[node.key] = null;
       } else {
-        addNode(state.projectStructureTreeData);
+        addNode(state.项目节点树);
       }
     },
     insertProjectStructureTreeNode: (
@@ -149,45 +160,42 @@ const projectTreeSlice = createSlice({
       };
 
       if (parentKey === null) {
-        insertNodeAtIndex(state.projectStructureTreeData, index, node);
-        state.nodeParentKeyRecord[node.key] = null;
+        insertNodeAtIndex(state.项目节点树, index, node);
+        state.节点到父节点的映射[node.key] = null;
         inserted = true;
       } else {
-        inserted = insertNode(state.projectStructureTreeData, index);
+        inserted = insertNode(state.项目节点树, index);
         if (inserted) {
-          state.nodeParentKeyRecord[node.key] = parentKey;
+          state.节点到父节点的映射[node.key] = parentKey;
         }
       }
 
       if (inserted) {
-        state.projectTreeDataRecord[node.key] = recordItem;
+        state.树节点key到节点数据的映射[node.key] = recordItem;
       }
     },
     updateContainerHeight: (state, action: PayloadAction<number>) => {
-      state.containerHeight = action.payload;
+      state.节点树容器的高度 = action.payload;
     },
-    updateProjectStructureTreeTempNode: (
+    更新为了编辑创建的临时节点是哪个: (
       state,
       action: PayloadAction<string | null>,
     ) => {
-      state.projectStructureTreeTempNode = action.payload;
+      state.为了编辑临时创建的节点的key = action.payload;
     },
-    updateEditingProjectStructureTreeNode: (
-      state,
-      action: PayloadAction<string>,
-    ) => {
-      state.editingProjectStructureTreeNode = action.payload;
+    更新当前编辑节点是哪个: (state, action: PayloadAction<string>) => {
+      state.当前正在编辑的项目树节点的key = action.payload;
     },
-    stopEditingProjectStructureTreeNode: (state) => {
-      state.editingProjectStructureTreeNode = null;
+    停止节点编辑状态: (state) => {
+      state.当前正在编辑的项目树节点的key = null;
     },
     removeProjectStructureTreeNodeWithCheck: (
       state,
       action: PayloadAction<string>,
     ) => {
       const nodeKey = action.payload;
-      if (state.editingProjectStructureTreeNode !== nodeKey) {
-        state.editingProjectStructureTreeNode = null;
+      if (state.当前正在编辑的项目树节点的key !== nodeKey) {
+        state.当前正在编辑的项目树节点的key = null;
       }
     },
     删除项目树节点: (state, action: PayloadAction<string>) => {
@@ -206,11 +214,11 @@ const projectTreeSlice = createSlice({
         return false;
       };
 
-      const removed = removeNode(state.projectStructureTreeData);
+      const removed = removeNode(state.项目节点树);
 
       if (removed) {
-        delete state.projectTreeDataRecord[nodeKey];
-        delete state.nodeParentKeyRecord[nodeKey];
+        delete state.树节点key到节点数据的映射[nodeKey];
+        delete state.节点到父节点的映射[nodeKey];
       }
     },
     moveProjectStructureTreeNode: (
@@ -246,7 +254,7 @@ const projectTreeSlice = createSlice({
           if (n.key === newParentKey) {
             n.children = n.children || [];
             n.children.splice(newIndex, 0, nodeToMove!);
-            state.nodeParentKeyRecord[nodeKey] = newParentKey;
+            state.节点到父节点的映射[nodeKey] = newParentKey;
             return true;
           }
           if (n.children && insertNode(n.children)) {
@@ -256,14 +264,14 @@ const projectTreeSlice = createSlice({
         return false;
       };
 
-      findAndRemoveNode(state.projectStructureTreeData);
+      findAndRemoveNode(state.项目节点树);
 
       if (nodeToMove) {
         if (newParentKey === null) {
-          state.projectStructureTreeData.splice(newIndex, 0, nodeToMove);
-          state.nodeParentKeyRecord[nodeKey] = null;
+          state.项目节点树.splice(newIndex, 0, nodeToMove);
+          state.节点到父节点的映射[nodeKey] = null;
         } else {
-          insertNode(state.projectStructureTreeData);
+          insertNode(state.项目节点树);
         }
       }
     },
@@ -271,12 +279,12 @@ const projectTreeSlice = createSlice({
       state,
       action: PayloadAction<string[]>,
     ) => {
-      state.selectedProjectStructureTreeNodes = action.payload;
+      state.所有已经选中的节点 = action.payload;
     },
     updateExpandedKeys: (state, action: PayloadAction<string[]>) => {
-      state.expandedKeys = action.payload;
+      state.所有展开的节点的key = action.payload;
     },
-    insertProjectStructureTreeNodeWithCheck: (
+    插入节点并且默认展开父节点: (
       state,
       action: PayloadAction<{
         parentKey: string | null;
@@ -286,34 +294,50 @@ const projectTreeSlice = createSlice({
       }>,
     ) => {
       const { parentKey, node, index, recordItem } = action.payload;
-      if (parentKey !== null && !state.expandedKeys.includes(parentKey)) {
-        state.expandedKeys.push(parentKey);
+      if (
+        parentKey !== null &&
+        !state.所有展开的节点的key.includes(parentKey)
+      ) {
+        state.所有展开的节点的key.push(parentKey);
       }
       projectTreeSlice.caseReducers.insertProjectStructureTreeNode(state, {
         payload: { parentKey, node, index, recordItem },
         type: 'insertProjectStructureTreeNode',
       });
     },
+    将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key: (state) => {
+      state.所有已经选中的节点 =
+        state.编辑临时创建节点之前选中的节点的keys || [];
+    },
+    更新_编辑临时创建节点之前选中的节点的key_为: (
+      state,
+      action: PayloadAction<string[] | null>,
+    ) => {
+      state.编辑临时创建节点之前选中的节点的keys = action.payload;
+    },
   },
 });
 
 export const {
+  更新_编辑临时创建节点之前选中的节点的key_为,
+  将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key,
+  将选中节点改为临时创建的编辑节点并暂存,
   updateProjectStructureTreeData,
   updateProjectTreeDataRecord,
-  updateProjectTreeDataRecordItem,
+  更新节点的数据,
   initProjectTreeDataMeta,
   addProjectStructureTreeNode,
   insertProjectStructureTreeNode,
   updateContainerHeight,
-  updateProjectStructureTreeTempNode,
-  updateEditingProjectStructureTreeNode,
-  stopEditingProjectStructureTreeNode,
+  更新为了编辑创建的临时节点是哪个,
+  更新当前编辑节点是哪个,
+  停止节点编辑状态,
   removeProjectStructureTreeNodeWithCheck,
   删除项目树节点,
   moveProjectStructureTreeNode,
   updateSelectedProjectStructureTreeNodes,
   updateExpandedKeys,
-  insertProjectStructureTreeNodeWithCheck,
+  插入节点并且默认展开父节点,
 } = projectTreeSlice.actions;
 
 export const projectTreeReducer = projectTreeSlice.reducer;

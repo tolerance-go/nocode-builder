@@ -1,7 +1,7 @@
 import { ProjectStructureTreeDataNode } from '@/types';
 import { ProjectTreeStates } from '../slices/projectTree';
 
-export const findProjectStructureTreeNode = (
+export const 查询项目树中的节点 = (
   state: ProjectTreeStates,
   key: string,
 ): ProjectStructureTreeDataNode | null => {
@@ -22,5 +22,5 @@ export const findProjectStructureTreeNode = (
     return null;
   };
 
-  return findNode(state.projectStructureTreeData);
+  return findNode(state.项目节点树);
 };

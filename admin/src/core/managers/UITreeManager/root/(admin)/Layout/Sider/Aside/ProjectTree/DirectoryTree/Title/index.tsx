@@ -1,16 +1,18 @@
 import {
   删除项目树节点,
-  stopEditingProjectStructureTreeNode,
-  updateProjectStructureTreeTempNode,
-  updateProjectTreeDataRecordItem,
+  停止节点编辑状态,
+  更新为了编辑创建的临时节点是哪个,
+  更新节点的数据,
+  将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key,
   useAppDispatch,
   useAppSelector,
+  更新_编辑临时创建节点之前选中的节点的key_为,
 } from '@/core/managers/UIStoreManager';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
 import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
 import { TitleInput } from './TitleInput';
-import { isTitleInputError } from './utils';
+import { 标题是否有错 } from './utils';
 import { TEST_IDS } from '@cypress/shared/constants';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
@@ -19,11 +21,11 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
 
   const dispatch = useAppDispatch();
 
-  const projectStructureTreeTempNode = useAppSelector(
-    (state) => state.projectTree.projectStructureTreeTempNode,
+  const 为了编辑临时创建的节点的key = useAppSelector(
+    (state) => state.projectTree.为了编辑临时创建的节点的key,
   );
   const editingProjectStructureTreeNode = useAppSelector(
-    (state) => state.projectTree.editingProjectStructureTreeNode,
+    (state) => state.projectTree.当前正在编辑的项目树节点的key,
   );
 
   const isEditing = editingProjectStructureTreeNode === nodeKey;
@@ -32,39 +34,35 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     selectProjectStructureTreeNodeDataRecordItem(state, nodeKey),
   );
 
-  const saveNode = (currentValue: string) => {
-    if (projectStructureTreeTempNode === nodeKey) {
-      dispatch(updateProjectStructureTreeTempNode(null));
-    }
-    dispatch(
-      updateProjectTreeDataRecordItem({
-        key: nodeKey,
-        data: { title: currentValue },
-      }),
-    );
-    dispatch(stopEditingProjectStructureTreeNode());
-  };
+  const 保存标题输入 = (来自失去焦点: boolean = false) => {
+    const 标题内容有错 = 标题是否有错(inputRef.current?.input?.value ?? '');
 
-  const saveInput = (fromBlur: boolean = false) => {
-    const inputIsError = isTitleInputError(
-      inputRef.current?.input?.value ?? '',
-    );
-
-    if (inputIsError) {
+    if (标题内容有错) {
       // 如果是临时新建的
-      if (projectStructureTreeTempNode === nodeKey) {
-        if (fromBlur) {
+      if (为了编辑临时创建的节点的key === nodeKey) {
+        if (来自失去焦点) {
           // 删除
           dispatch(删除项目树节点(nodeKey));
+          dispatch(更新为了编辑创建的临时节点是哪个(null));
+          dispatch(将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key());
         }
       }
     } else {
-      const currentValue = inputRef.current?.input?.value.trim();
-      if (!currentValue) {
+      const 当前输入标题 = inputRef.current?.input?.value.trim();
+      if (!当前输入标题) {
         throw new Error('此处标题不应为空');
       }
-      saveNode(currentValue);
-      dispatch(stopEditingProjectStructureTreeNode());
+      if (为了编辑临时创建的节点的key === nodeKey) {
+        dispatch(更新为了编辑创建的临时节点是哪个(null));
+        dispatch(更新_编辑临时创建节点之前选中的节点的key_为(null));
+      }
+      dispatch(
+        更新节点的数据({
+          key: nodeKey,
+          data: { title: 当前输入标题 },
+        }),
+      );
+      dispatch(停止节点编辑状态());
     }
   };
 
@@ -76,10 +74,10 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       autoFocus
       defaultValue={nodeDataRecord?.title}
       onBlur={() => {
-        saveInput(true);
+        保存标题输入(true);
       }}
       onPressEnter={() => {
-        saveInput();
+        保存标题输入();
       }}
       style={{ width: '100%' }}
     />
@@ -101,7 +99,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             ),
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
-              dispatch(stopEditingProjectStructureTreeNode());
+              dispatch(停止节点编辑状态());
             },
           },
           {

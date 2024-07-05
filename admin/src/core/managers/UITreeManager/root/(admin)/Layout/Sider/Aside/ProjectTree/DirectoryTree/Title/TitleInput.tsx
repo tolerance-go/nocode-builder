@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { isTitleInputError } from './utils';
+import { 标题是否有错 } from './utils';
 
 export const TitleInput = forwardRef<InputRef, InputProps>((props, ref) => {
   const inputRef = useRef<InputRef>(null);
@@ -36,7 +36,7 @@ export const TitleInput = forwardRef<InputRef, InputProps>((props, ref) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setValue(inputValue);
-    if (!isComposing && isTitleInputError(inputValue)) {
+    if (!isComposing && 标题是否有错(inputValue)) {
       setIsError(true);
     } else {
       setIsError(false);

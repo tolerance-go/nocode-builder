@@ -1,9 +1,9 @@
 import { ProjectTreeNodeDataRecordItem } from '@/types';
 
-export function nodeIsFolder(node: ProjectTreeNodeDataRecordItem): boolean {
+export function 节点是不是文件夹(node: ProjectTreeNodeDataRecordItem): boolean {
   return node.type === 'folder';
 }
 
-export function nodeIsFile(node: ProjectTreeNodeDataRecordItem): boolean {
+export function 节点是不是文件(node: ProjectTreeNodeDataRecordItem): boolean {
   return node.type === 'file';
 }

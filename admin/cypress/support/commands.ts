@@ -83,6 +83,10 @@ Cypress.Commands.add('获取项目树节点标题元素', (name: string) => {
     });
 });
 
+Cypress.Commands.add('获取项目树节点通过标题', (name: string) => {
+  return cy.获取项目树节点标题元素(name).parents('.ant-tree-treenode');
+});
+
 Cypress.Commands.add('获取antd树列表内部容器', () => {
   return cy.get('.ant-tree-list-holder-inner');
 });
@@ -94,6 +98,7 @@ Cypress.Commands.add('获取项目树标题输入框', () => {
 Cypress.Commands.add('获取添加项目组的按钮', () => {
   return cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`);
 });
+
 Cypress.Commands.add('获取添加项目的按钮', () => {
   return cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_NODE_BTN}"]`);
 });

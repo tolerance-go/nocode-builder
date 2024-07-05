@@ -25,6 +25,7 @@ type GivenCallbackArgs = {
    * 但是 / 但
    */
   但是: StepFunction;
+  已经: StepFunction;
 };
 
 type ScenarioFunction = (
@@ -72,12 +73,18 @@ export const 使用场景: ScenarioFunction = (description, steps) => {
           callback();
         };
 
+        const Already: StepFunction = (description, callback) => {
+          cy.log(`已经：${description}`);
+          callback();
+        };
+
         itFunction(`假如：${description}`, () => {
           callback({
             当: When,
             那么: Then,
             并且: And,
             但是: But,
+            已经: Already,
           });
         });
       };

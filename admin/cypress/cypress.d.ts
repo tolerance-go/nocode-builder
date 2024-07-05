@@ -15,6 +15,8 @@ declare global {
 
       获取项目树节点标题元素(title: string): Chainable<JQuery<HTMLElement>>;
 
+      获取项目树节点通过标题(title: string): Chainable<JQuery<HTMLElement>>;
+
       获取项目树标题输入框(): Chainable<JQuery<HTMLElement>>;
       获取添加项目组的按钮(): Chainable<JQuery<HTMLElement>>;
       获取添加项目的按钮(): Chainable<JQuery<HTMLElement>>;
