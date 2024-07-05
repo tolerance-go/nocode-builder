@@ -5,11 +5,14 @@ import {
   updateSelectedProjectStructureTreeNodes,
   useAppDispatch,
   useAppSelector,
+  reduxStore,
+  取消指定的节点的选中状态,
 } from '@/core/managers/UIStoreManager';
 import { useKeyPress } from '@/hooks';
 import { css } from '@emotion/css';
 import { Tree } from 'antd';
 import { Title } from './Title';
+import { 节点是不是文件 } from '@/utils';
 
 const { DirectoryTree } = Tree;
 
@@ -62,6 +65,17 @@ export const TreeMenu = () => {
   return (
     <DirectoryTree
       multiple
+      onDoubleClick={(e, node) => {
+        const nodeData =
+          reduxStore.getState().projectTree.树节点key到节点数据的映射[node.key];
+
+        if (!nodeData) {
+          throw new Error('节点数据不完整');
+        }
+        if (节点是不是文件(nodeData)) {
+          dispatch(取消指定的节点的选中状态(node.key));
+        }
+      }}
       treeData={projectStructureTreeData}
       height={containerHeight}
       virtual

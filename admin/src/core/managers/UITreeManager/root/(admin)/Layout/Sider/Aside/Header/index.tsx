@@ -1,12 +1,9 @@
 import {
-  插入节点并且默认展开父节点,
   reduxStore,
   showProjectTreeTimeLineAction,
-  更新当前编辑节点是哪个,
-  更新为了编辑创建的临时节点是哪个,
   useAppDispatch,
   useAppSelector,
-  将选中节点改为临时创建的编辑节点并暂存,
+  在指定节点下插入新节点并同步更新其他数据,
 } from '@/core/managers/UIStoreManager';
 import { 查询项目树中的节点 } from '@/core/managers/UIStoreManager/store/utils';
 import {
@@ -58,7 +55,7 @@ export const Header = () => {
   const 在指定节点下插入新文件夹 = (target: ProjectStructureTreeDataNode) => {
     const newKey = Math.random() + '';
     dispatch(
-      插入节点并且默认展开父节点({
+      在指定节点下插入新节点并同步更新其他数据({
         parentKey: target.key,
         node: {
           key: newKey,
@@ -71,9 +68,6 @@ export const Header = () => {
         },
       }),
     );
-    dispatch(更新当前编辑节点是哪个(newKey));
-    dispatch(更新为了编辑创建的临时节点是哪个(newKey));
-    dispatch(将选中节点改为临时创建的编辑节点并暂存(newKey));
   };
 
   const 在指定节点下插入新文件 = (target: ProjectStructureTreeDataNode) => {
@@ -89,7 +83,7 @@ export const Header = () => {
     const newKey = Math.random() + '';
 
     dispatch(
-      插入节点并且默认展开父节点({
+      在指定节点下插入新节点并同步更新其他数据({
         parentKey: target.key,
         node: {
           isLeaf: true,
@@ -103,9 +97,6 @@ export const Header = () => {
         },
       }),
     );
-    dispatch(更新当前编辑节点是哪个(newKey));
-    dispatch(更新为了编辑创建的临时节点是哪个(newKey));
-    dispatch(将选中节点改为临时创建的编辑节点并暂存(newKey));
   };
 
   const 在根节点下插入新文件 = () => {
@@ -122,7 +113,7 @@ export const Header = () => {
     const newKey = Math.random() + '';
 
     dispatch(
-      插入节点并且默认展开父节点({
+      在指定节点下插入新节点并同步更新其他数据({
         parentKey: null,
         node: {
           key: newKey,
@@ -136,16 +127,12 @@ export const Header = () => {
         },
       }),
     );
-    dispatch(更新当前编辑节点是哪个(newKey));
-    dispatch(更新为了编辑创建的临时节点是哪个(newKey));
-    dispatch(将选中节点改为临时创建的编辑节点并暂存(newKey));
   };
 
   const 在根节点下面插入新文件夹 = () => {
     const newKey = Math.random() + '';
-
     dispatch(
-      插入节点并且默认展开父节点({
+      在指定节点下插入新节点并同步更新其他数据({
         parentKey: null,
         node: {
           key: newKey,
@@ -158,9 +145,6 @@ export const Header = () => {
         },
       }),
     );
-    dispatch(更新当前编辑节点是哪个(newKey));
-    dispatch(更新为了编辑创建的临时节点是哪个(newKey));
-    dispatch(将选中节点改为临时创建的编辑节点并暂存(newKey));
   };
 
   /**

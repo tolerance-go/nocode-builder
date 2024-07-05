@@ -36,6 +36,35 @@ const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
+    在指定节点下插入新节点并同步更新其他数据: (
+      state,
+      action: PayloadAction<{
+        parentKey: string | null;
+        node: ProjectStructureTreeDataNode;
+        index: number;
+        recordItem: ProjectTreeNodeDataRecord[number];
+      }>,
+    ) => {
+      projectTreeSlice.caseReducers.插入节点并且默认展开父节点(state, {
+        type: '',
+        payload: action.payload,
+      });
+      projectTreeSlice.caseReducers.更新当前编辑节点是哪个(state, {
+        type: '',
+        payload: action.payload.node.key,
+      });
+      projectTreeSlice.caseReducers.更新为了编辑创建的临时节点是哪个(state, {
+        type: '',
+        payload: action.payload.node.key,
+      });
+      projectTreeSlice.caseReducers.将选中节点改为临时创建的编辑节点并暂存(
+        state,
+        {
+          type: '',
+          payload: action.payload.node.key,
+        },
+      );
+    },
     将选中节点改为临时创建的编辑节点并暂存: (
       state,
       action: PayloadAction<string>,
@@ -44,6 +73,11 @@ const projectTreeSlice = createSlice({
         ...state.所有已经选中的节点,
       ];
       state.所有已经选中的节点 = [action.payload];
+    },
+    取消指定的节点的选中状态: (state, action: PayloadAction<string>) => {
+      state.所有已经选中的节点 = state.所有已经选中的节点.filter(
+        (key) => key !== action.payload,
+      );
     },
     updateProjectStructureTreeData: (
       state,
@@ -302,7 +336,7 @@ const projectTreeSlice = createSlice({
       }
       projectTreeSlice.caseReducers.insertProjectStructureTreeNode(state, {
         payload: { parentKey, node, index, recordItem },
-        type: 'insertProjectStructureTreeNode',
+        type: '',
       });
     },
     将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key: (state) => {
@@ -319,6 +353,8 @@ const projectTreeSlice = createSlice({
 });
 
 export const {
+  取消指定的节点的选中状态,
+  在指定节点下插入新节点并同步更新其他数据,
   更新_编辑临时创建节点之前选中的节点的key_为,
   将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key,
   将选中节点改为临时创建的编辑节点并暂存,
