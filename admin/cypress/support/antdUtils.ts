@@ -11,7 +11,7 @@ export const getTreeNodeIndents = (element: HTMLElement) => {
 // 获得 treeNode 的所有子节点
 export const getTreeNodeChildren = ($treeNode: JQuery<HTMLElement>) => {
   const currentNodeIndexUnits = getTreeNodeIndents($treeNode[0]);
-  const $children = $treeNode.nextAll().filter((index, element) => {
+  const $children = $treeNode.nextAll().filter((_index, element) => {
     const indents = getTreeNodeIndents(element);
     return indents.length === currentNodeIndexUnits.length + 1;
   });
@@ -23,7 +23,7 @@ export const getTreeNodeChildren = ($treeNode: JQuery<HTMLElement>) => {
 export const getTreeNodeParent = ($treeNode: JQuery<HTMLElement>) => {
   const currentNodeIndexUnits = getTreeNodeIndents($treeNode[0]);
 
-  const $parent = $treeNode.prevAll().filter((index, element) => {
+  const $parent = $treeNode.prevAll().filter((_index, element) => {
     const indents = getTreeNodeIndents(element);
     return indents.length === currentNodeIndexUnits.length - 1;
   });
