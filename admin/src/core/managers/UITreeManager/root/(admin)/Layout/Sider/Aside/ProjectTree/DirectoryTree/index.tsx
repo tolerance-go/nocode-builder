@@ -65,7 +65,7 @@ export const TreeMenu = () => {
   return (
     <DirectoryTree
       multiple
-      onDoubleClick={(e, node) => {
+      onDoubleClick={(_e, node) => {
         const nodeData =
           reduxStore.getState().projectTree.树节点key到节点数据的映射[node.key];
 
