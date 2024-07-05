@@ -1,5 +1,5 @@
 import {
-  removeProjectStructureTreeNode,
+  删除项目树节点,
   stopEditingProjectStructureTreeNode,
   updateProjectStructureTreeTempNode,
   updateProjectTreeDataRecordItem,
@@ -11,6 +11,7 @@ import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
 import { TitleInput } from './TitleInput';
 import { isTitleInputError } from './utils';
+import { TEST_IDS } from '@cypress/shared/constants';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
@@ -44,7 +45,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     dispatch(stopEditingProjectStructureTreeNode());
   };
 
-  const saveInput = () => {
+  const saveInput = (fromBlur: boolean = false) => {
     const inputIsError = isTitleInputError(
       inputRef.current?.input?.value ?? '',
     );
@@ -52,8 +53,10 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     if (inputIsError) {
       // 如果是临时新建的
       if (projectStructureTreeTempNode === nodeKey) {
-        // 删除
-        dispatch(removeProjectStructureTreeNode(nodeKey));
+        if (fromBlur) {
+          // 删除
+          dispatch(删除项目树节点(nodeKey));
+        }
       }
     } else {
       const currentValue = inputRef.current?.input?.value.trim();
@@ -61,20 +64,19 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
         throw new Error('此处标题不应为空');
       }
       saveNode(currentValue);
+      dispatch(stopEditingProjectStructureTreeNode());
     }
-
-    dispatch(stopEditingProjectStructureTreeNode());
   };
 
   return isEditing ? (
     <TitleInput
-      id="project-tree-title-input"
+      id={TEST_IDS.项目树标题输入框}
       size="small"
       ref={inputRef}
       autoFocus
       defaultValue={nodeDataRecord?.title}
       onBlur={() => {
-        saveInput();
+        saveInput(true);
       }}
       onPressEnter={() => {
         saveInput();
@@ -112,7 +114,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             ),
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
-              dispatch(removeProjectStructureTreeNode(nodeKey));
+              dispatch(删除项目树节点(nodeKey));
             },
           },
         ],

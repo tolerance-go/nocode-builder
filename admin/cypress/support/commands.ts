@@ -42,12 +42,12 @@ import { BASE_API } from './constants';
 
 // 在输入框内输入内容
 const typeToProjectTreeTitleInput = (input: string) => {
-  cy.get('input#project-tree-title-input').as('projectTreeTitleInput');
+  cy.get(`input#${TEST_IDS.项目树标题输入框}`).as('projectTreeTitleInput');
   cy.get('@projectTreeTitleInput').type(input);
   cy.get('@projectTreeTitleInput').type('{enter}');
 };
 
-Cypress.Commands.add('login', (username: string, password: string) => {
+Cypress.Commands.add('登录', (username: string, password: string) => {
   cy.session([username, password], () => {
     cy.request({
       method: 'POST',
@@ -59,24 +59,41 @@ Cypress.Commands.add('login', (username: string, password: string) => {
   });
 });
 
-Cypress.Commands.add('addProjectFile', (typeName: string) => {
-  cy.get('[data-test-id="create-project-btn"]').as('createProjectBtn');
+Cypress.Commands.add('添加项目文件节点', (typeName: string) => {
+  cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_NODE_BTN}"]`).as(
+    'createProjectBtn',
+  );
   cy.get('@createProjectBtn').click();
   typeToProjectTreeTitleInput(typeName);
 });
 
-Cypress.Commands.add('addProjectGroupFolder', (typeName: string) => {
-  cy.get(`[data-test-id="${TEST_IDS.CREATE_GROUP_BTN}"]`).as(
+Cypress.Commands.add('添加项目组文件夹节点', (typeName: string) => {
+  cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`).as(
     'createProjectGroupBtn',
   );
   cy.get('@createProjectGroupBtn').click();
   typeToProjectTreeTitleInput(typeName);
 });
 
-Cypress.Commands.add('selectProjectMenu', (name: string) => {
-  cy.get('[data-test-class="project-tree-title"]').contains(name).click();
+Cypress.Commands.add('获取项目树节点标题元素', (name: string) => {
+  return cy
+    .get('[data-test-class="project-tree-title"]')
+    .filter((_index, element) => {
+      return element.textContent?.trim() === name;
+    });
 });
 
-Cypress.Commands.add('antdSelectors.ant-tree-list-holder-inner', () => {
+Cypress.Commands.add('获取antd树列表内部容器', () => {
   return cy.get('.ant-tree-list-holder-inner');
+});
+
+Cypress.Commands.add('获取项目树标题输入框', () => {
+  return cy.get(`input#${TEST_IDS.项目树标题输入框}`);
+});
+
+Cypress.Commands.add('获取添加项目组的按钮', () => {
+  return cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`);
+});
+Cypress.Commands.add('获取添加项目的按钮', () => {
+  return cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_NODE_BTN}"]`);
 });

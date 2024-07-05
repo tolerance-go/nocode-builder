@@ -12,6 +12,7 @@ export const TitleInput = forwardRef<InputRef, InputProps>((props, ref) => {
   const inputRef = useRef<InputRef>(null);
   const [value, setValue] = useState<string>('');
   const [isError, setIsError] = useState<boolean>(false);
+  const [isComposing, setIsComposing] = useState<boolean>(false);
 
   useImperativeHandle(ref, () => inputRef.current as InputRef);
 
@@ -21,10 +22,21 @@ export const TitleInput = forwardRef<InputRef, InputProps>((props, ref) => {
     });
   }, []);
 
+  const handleCompositionStart = () => {
+    setIsComposing(true);
+  };
+
+  const handleCompositionEnd = (
+    e: React.CompositionEvent<HTMLInputElement>,
+  ) => {
+    setIsComposing(false);
+    handleChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setValue(inputValue);
-    if (isTitleInputError(inputValue)) {
+    if (!isComposing && isTitleInputError(inputValue)) {
       setIsError(true);
     } else {
       setIsError(false);
@@ -37,6 +49,8 @@ export const TitleInput = forwardRef<InputRef, InputProps>((props, ref) => {
       ref={inputRef}
       value={value}
       onChange={handleChange}
+      onCompositionStart={handleCompositionStart}
+      onCompositionEnd={handleCompositionEnd}
       autoFocus
       status={isError ? 'error' : undefined}
     />

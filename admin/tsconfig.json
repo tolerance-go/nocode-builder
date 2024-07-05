@@ -32,7 +32,7 @@
     "cypress",
     "stories",
     "features",
-    "cypress.d.ts"
+    "cypress/cypress.d.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -255,7 +255,7 @@ export const Header = () => {
           }}
         ></Button>
         <Button
-          data-test-id="create-project-btn"
+          data-test-id={TEST_IDS.CREATE_PROJECT_NODE_BTN}
           type="text"
           disabled={projectTreeTimeLineVisible}
           // loading={addFileLoading}
@@ -264,7 +264,7 @@ export const Header = () => {
         ></Button>
         <Button
           type="text"
-          data-test-id={TEST_IDS.CREATE_GROUP_BTN}
+          data-test-id={TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}
           disabled={projectTreeTimeLineVisible}
           // loading={addFolderLoading}
           icon={<FolderAddOutlined />}

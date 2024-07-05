@@ -190,7 +190,7 @@ const projectTreeSlice = createSlice({
         state.editingProjectStructureTreeNode = null;
       }
     },
-    removeProjectStructureTreeNode: (state, action: PayloadAction<string>) => {
+    删除项目树节点: (state, action: PayloadAction<string>) => {
       const nodeKey = action.payload;
       const removeNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
         for (let i = 0; i < nodes.length; i++) {
@@ -309,7 +309,7 @@ export const {
   updateEditingProjectStructureTreeNode,
   stopEditingProjectStructureTreeNode,
   removeProjectStructureTreeNodeWithCheck,
-  removeProjectStructureTreeNode,
+  删除项目树节点,
   moveProjectStructureTreeNode,
   updateSelectedProjectStructureTreeNodes,
   updateExpandedKeys,
