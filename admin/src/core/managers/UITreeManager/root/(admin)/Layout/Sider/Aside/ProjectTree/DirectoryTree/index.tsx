@@ -10,13 +10,14 @@ import {
 } from '@/core/managers/UIStoreManager';
 import { useKeyPress } from '@/hooks';
 import { css } from '@emotion/css';
-import { Tree } from 'antd';
+import { theme, Tree } from 'antd';
 import { Title } from './Title';
 import { 节点是不是文件 } from '@/utils';
 
 const { DirectoryTree } = Tree;
 
 export const TreeMenu = () => {
+  const { token } = theme.useToken();
   const 节点树容器的高度 = useAppSelector(
     (state) => state.projectTree.节点树容器的高度,
   );
@@ -74,6 +75,13 @@ export const TreeMenu = () => {
       height={节点树容器的高度}
       virtual
       className={css`
+        .ant-tree-treenode {
+          :has(span.hosted) {
+            &::before {
+              background-color: ${token.blue2};
+            }
+          }
+        }
         .ant-tree-node-content-wrapper {
           display: inline-flex;
           .ant-tree-title {

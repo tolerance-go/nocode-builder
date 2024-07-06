@@ -24,11 +24,15 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const 为了编辑临时创建的节点的key = useAppSelector(
     (state) => state.projectTree.为了编辑临时创建的节点的key,
   );
-  const editingProjectStructureTreeNode = useAppSelector(
+  const 编辑临时创建节点之前选中的节点是否为自身 = useAppSelector((state) =>
+    state.projectTree.编辑临时创建节点之前选中的节点的keys?.includes(nodeKey),
+  );
+
+  const 当前正在编辑的项目树节点的key = useAppSelector(
     (state) => state.projectTree.当前正在编辑的项目树节点的key,
   );
 
-  const isEditing = editingProjectStructureTreeNode === nodeKey;
+  const isEditing = 当前正在编辑的项目树节点的key === nodeKey;
 
   const nodeDataRecord = useAppSelector((state) =>
     selectProjectStructureTreeNodeDataRecordItem(state, nodeKey),
@@ -124,6 +128,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
           display: 'inline-block',
           width: '100%',
         }}
+        className={
+          编辑临时创建节点之前选中的节点是否为自身 ? 'hosted' : undefined
+        }
       >
         {nodeDataRecord?.title}
       </span>
