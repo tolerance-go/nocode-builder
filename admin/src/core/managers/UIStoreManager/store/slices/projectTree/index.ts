@@ -4,7 +4,7 @@ import {
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
-import { insertNodeAtIndex } from '../../utils/tree/effects';
+import { insertNodeAtIndex, removeNode } from '../../utils/tree/effects';
 
 export type ProjectTreeStates = {
   项目节点树: ProjectStructureTreeDataNode[];
@@ -234,21 +234,8 @@ const projectTreeSlice = createSlice({
     },
     删除项目树节点: (state, action: PayloadAction<string>) => {
       const nodeKey = action.payload;
-      const removeNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
-        for (let i = 0; i < nodes.length; i++) {
-          const n = nodes[i];
-          if (n.key === nodeKey) {
-            nodes.splice(i, 1);
-            return true;
-          }
-          if (n.children) {
-            return removeNode(n.children);
-          }
-        }
-        return false;
-      };
 
-      const removed = removeNode(state.项目节点树);
+      const removed = removeNode(state.项目节点树, nodeKey);
 
       if (removed) {
         delete state.树节点key到节点数据的映射[nodeKey];
