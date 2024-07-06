@@ -1,6 +1,6 @@
 import {
   删除项目树节点,
-  停止节点编辑状态并清空输入内容,
+  停止节点编辑状态并重置输入内容,
   更新为了编辑创建的临时节点是哪个,
   更新节点的数据,
   恢复当前选中的节点为编辑临时创建节点之前选中的节点的key,
@@ -51,7 +51,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
         }
       } else {
         if (来自失去焦点) {
-          dispatch(停止节点编辑状态并清空输入内容());
+          dispatch(停止节点编辑状态并重置输入内容());
         }
       }
     } else {
@@ -70,7 +70,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
           data: { title: 当前输入标题 },
         }),
       );
-      dispatch(停止节点编辑状态并清空输入内容());
+      dispatch(停止节点编辑状态并重置输入内容());
     }
   };
 
@@ -80,7 +80,6 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       size="small"
       ref={inputRef}
       autoFocus
-      defaultValue={nodeDataRecord?.title}
       onBlur={() => {
         保存标题输入(true);
       }}
@@ -107,7 +106,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             ),
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
-              dispatch(停止节点编辑状态并清空输入内容());
+              dispatch(停止节点编辑状态并重置输入内容());
             },
           },
           {

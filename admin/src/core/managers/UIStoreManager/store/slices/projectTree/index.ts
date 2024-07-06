@@ -39,7 +39,7 @@ const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
-    清空当前输入的标题: (state) => {
+    重置当前输入的标题: (state) => {
       state.当前输入的标题 = '';
     },
     更新当前输入的标题: (state, action: PayloadAction<string>) => {
@@ -58,10 +58,13 @@ const projectTreeSlice = createSlice({
         type: '',
         payload: action.payload,
       });
-      projectTreeSlice.caseReducers.更新当前编辑节点是哪个(state, {
-        type: '',
-        payload: action.payload.node.key,
-      });
+      projectTreeSlice.caseReducers.更新当前编辑节点是哪个并更新输入框的值(
+        state,
+        {
+          type: '',
+          payload: action.payload.node.key,
+        },
+      );
       projectTreeSlice.caseReducers.更新为了编辑创建的临时节点是哪个(state, {
         type: '',
         payload: action.payload.node.key,
@@ -223,12 +226,21 @@ const projectTreeSlice = createSlice({
     ) => {
       state.为了编辑临时创建的节点的key = action.payload;
     },
-    更新当前编辑节点是哪个: (state, action: PayloadAction<string>) => {
+    更新当前编辑节点是哪个并更新输入框的值: (
+      state,
+      action: PayloadAction<string>,
+    ) => {
       state.当前正在编辑的项目树节点的key = action.payload;
+      projectTreeSlice.caseReducers.更新当前输入的标题(state, {
+        type: '',
+        payload:
+          state.树节点key到节点数据的映射[state.当前正在编辑的项目树节点的key]
+            ?.title ?? '',
+      });
     },
-    停止节点编辑状态并清空输入内容: (state) => {
+    停止节点编辑状态并重置输入内容: (state) => {
       state.当前正在编辑的项目树节点的key = null;
-      projectTreeSlice.caseReducers.清空当前输入的标题(state);
+      projectTreeSlice.caseReducers.重置当前输入的标题(state);
     },
     退出当前正在编辑的节点: (state) => {
       if (state.当前正在编辑的项目树节点的key) {
@@ -395,7 +407,7 @@ const projectTreeSlice = createSlice({
 });
 
 export const {
-  清空当前输入的标题,
+  重置当前输入的标题,
   更新当前输入的标题,
   退出当前正在编辑的节点,
   取消指定的节点的选中状态,
@@ -411,8 +423,8 @@ export const {
   insertProjectStructureTreeNode,
   更新容器高度,
   更新为了编辑创建的临时节点是哪个,
-  更新当前编辑节点是哪个,
-  停止节点编辑状态并清空输入内容,
+  更新当前编辑节点是哪个并更新输入框的值,
+  停止节点编辑状态并重置输入内容,
   删除所有选中的节点,
   删除项目树节点,
   moveProjectStructureTreeNode,
