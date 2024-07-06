@@ -1,6 +1,50 @@
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
+  假如.only(
+    '用户在选中节点的状态下，编辑又取消，应该正确显示节点高亮',
+    ({ 当, 那么 }) => {
+      当('用户已经登录', () => {
+        cy.登录('yb', '123456');
+      });
+
+      当('用户访问主页', () => {
+        cy.visit('/');
+      });
+
+      当('用户选中存在的项目节点', () => {
+        cy.获取添加项目的按钮().click();
+        cy.获取项目树标题输入框().type('项目节点{enter}');
+        cy.获取项目树节点通过标题('项目节点').should(
+          'have.class',
+          'ant-tree-treenode-selected',
+        );
+      });
+
+      当('用户点击新增项目按钮', () => {
+        cy.获取添加项目的按钮().click();
+      });
+
+      那么('之前选中的项目节点应该处于“之前选中”的状态', () => {
+        cy.获取项目树节点通过标题('项目节点')
+          .should('not.have.class', 'ant-tree-treenode-selected')
+          .find('span.prev-selected')
+          .should('exist');
+      });
+
+      当('用户取消输入', () => {
+        cy.获取项目树标题输入框().blur();
+      });
+
+      那么('之前选中的项目节点应该重新被选中，而非“之前选中”的状态', () => {
+        cy.获取项目树节点通过标题('项目节点')
+          .should('have.class', 'ant-tree-treenode-selected')
+          .find('span.prev-selected')
+          .should('not.exist');
+      });
+    },
+  );
+
   假如(
     '用户对选中的节点，按下编辑快捷键，应该可以开始编辑',
     ({ 当, 并且, 那么 }) => {
@@ -61,7 +105,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     },
   );
 
-  假如.only(
+  假如(
     '用户快捷编辑有标题的节点，那么输入框默认应该全部选中',
     ({ 当, 并且, 那么 }) => {
       当('用户已经登录', () => {

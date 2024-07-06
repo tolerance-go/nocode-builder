@@ -76,7 +76,7 @@ export const TreeMenu = () => {
       virtual
       className={css`
         .ant-tree-treenode {
-          :has(span.hosted) {
+          :has(span.prev-selected) {
             &::before {
               background-color: ${token.blue2};
             }

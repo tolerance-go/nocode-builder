@@ -42,16 +42,17 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     const 标题内容有错 = 标题是否有错(inputRef.current?.input?.value ?? '');
 
     if (标题内容有错) {
-      // 如果是临时新建的
       if (为了编辑临时创建的节点的key === nodeKey) {
         if (来自失去焦点) {
           // 删除
           dispatch(删除项目树节点(nodeKey));
           dispatch(更新为了编辑创建的临时节点是哪个(null));
           dispatch(将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key());
+          dispatch(更新_编辑临时创建节点之前选中的节点的key_为(null));
         }
       }
     } else {
+      // 标题内容没有错
       const 当前输入标题 = inputRef.current?.input?.value.trim();
       if (!当前输入标题) {
         throw new Error('此处标题不应为空');
@@ -129,7 +130,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
           width: '100%',
         }}
         className={
-          编辑临时创建节点之前选中的节点是否为自身 ? 'hosted' : undefined
+          编辑临时创建节点之前选中的节点是否为自身 ? 'prev-selected' : undefined
         }
       >
         {nodeDataRecord?.title}
