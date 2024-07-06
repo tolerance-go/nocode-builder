@@ -3,7 +3,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
 import { random } from 'lodash-es';
 
 使用场景('注册账号流程', ({ 假如 }) => {
-  假如('用户准备注册', ({ 那么, 当, 并且 }) => {
+  假如('用户输入错误信息，应该得到错误反馈', ({ 那么, 当, 并且 }) => {
     当('平台用户访问 /register 页面', () => {
       cy.visit('/register');
     });
@@ -59,6 +59,12 @@ import { random } from 'lodash-es';
         '用户名已被占用',
       );
     });
+  });
+
+  假如('用户输入有效的信息，应该可以注册成功', ({ 那么, 当, 并且 }) => {
+    当('平台用户访问 /register 页面', () => {
+      cy.visit('/register');
+    });
 
     当('用户输入有效的用户名和密码', () => {
       const baseUsername = 'newuniqueuser';
@@ -66,11 +72,8 @@ import { random } from 'lodash-es';
 
       const newUsername =
         suffix === 0 ? baseUsername : `${baseUsername}${suffix}`;
-      cy.get('input#username').clear();
       cy.get('input#username').type(newUsername);
-      cy.get('input#password').clear();
       cy.get('input#password').type('123456a.');
-      cy.get('input#confirm').clear();
       cy.get('input#confirm').type('123456a.');
     });
 
@@ -91,7 +94,7 @@ import { random } from 'lodash-es';
     });
   });
 
-  假如('用户注册时使用自动登录', ({ 那么, 当, 并且 }) => {
+  假如('用户注册时使用自动登录，应该自动登录成功', ({ 那么, 当, 并且 }) => {
     当('平台用户访问注册页面', () => {
       cy.visit('/register');
     });
@@ -132,7 +135,7 @@ import { random } from 'lodash-es';
     });
   });
 
-  假如('用户注册时未勾选自动登录', ({ 那么, 当, 并且 }) => {
+  假如('用户注册时未勾选自动登录，应该需要手动登录', ({ 那么, 当, 并且 }) => {
     当('用户访问注册页面', () => {
       cy.visit('/register');
     });
