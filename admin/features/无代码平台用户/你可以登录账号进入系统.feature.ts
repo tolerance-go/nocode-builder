@@ -34,7 +34,8 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy.获取测试标识(测试标识.登录提交按钮).click();
       });
       那么('用户应该被重定向到主页并看到欢迎信息', () => {
-        cy.url().should('eq', Cypress.config().baseUrl + '/');
+        const baseUrl = Cypress.config().baseUrl;
+        cy.url().should('eq', baseUrl?.endsWith('/') ? baseUrl : baseUrl + '/');
       });
     },
   );
