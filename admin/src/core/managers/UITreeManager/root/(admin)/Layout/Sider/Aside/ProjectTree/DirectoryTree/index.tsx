@@ -34,7 +34,20 @@ export const DirectoryTree = () => {
   );
 
   useKeyPress(['delete'], () => {
-    所有已经选中的节点.length && dispatch(删除所有选中的节点());
+    const {
+      projectTree: { 所有已经选中的节点, 当前正在编辑的项目树节点的key },
+    } = reduxStore.getState();
+
+    if (!所有已经选中的节点.length) return;
+
+    if (
+      当前正在编辑的项目树节点的key &&
+      所有已经选中的节点.includes(当前正在编辑的项目树节点的key)
+    ) {
+      return;
+    }
+
+    dispatch(删除所有选中的节点());
   });
 
   useKeyPress(['f2'], () => {

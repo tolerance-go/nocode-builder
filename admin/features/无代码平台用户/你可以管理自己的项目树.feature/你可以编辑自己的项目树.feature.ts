@@ -1,6 +1,43 @@
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
+  假如('用户正在编辑标题，不应该响应删除', ({ 当, 并且, 那么 }) => {
+    当('用户已经登录', () => {
+      cy.登录('yb', '123456');
+    });
+
+    当('用户访问主页', () => {
+      cy.visit('/');
+    });
+
+    当('用户选中存在的项目节点并开始编辑标题', () => {
+      cy.获取添加项目的按钮().click();
+      cy.获取项目树标题输入框().type('项目节点{enter}');
+      cy.获取项目树节点通过标题('项目节点').should(
+        'have.class',
+        'ant-tree-treenode-selected',
+      );
+      cy.get('body').trigger('keydown', {
+        keyCode: 113,
+        which: 113,
+        key: 'F2',
+      });
+      cy.获取项目树标题输入框().should('be.visible');
+    });
+
+    并且('按下 delete 键', () => {
+      cy.get('body').trigger('keydown', {
+        keyCode: 46,
+        which: 46,
+        key: 'Delete',
+      });
+    });
+
+    那么('项目节点应该仍然存在并继续编辑', () => {
+      cy.获取项目树标题输入框().should('be.visible');
+    });
+  });
+
   假如(
     '用户正在编辑临时创建节点，取消操作，应该正确删除',
     ({ 当, 并且, 那么 }) => {
