@@ -80,16 +80,13 @@ const projectTreeSlice = createSlice({
         (key) => key !== action.payload,
       );
     },
-    updateProjectStructureTreeData: (
+    更新项目节点树: (
       state,
       action: PayloadAction<ProjectStructureTreeDataNode[]>,
     ) => {
       state.项目节点树 = action.payload;
     },
-    updateProjectTreeDataRecord: (
-      state,
-      action: PayloadAction<ProjectTreeNodeDataRecord>,
-    ) => {
+    更新节点数据: (state, action: PayloadAction<ProjectTreeNodeDataRecord>) => {
       state.树节点key到节点数据的映射 = action.payload;
     },
     更新节点的数据: (
@@ -209,7 +206,7 @@ const projectTreeSlice = createSlice({
         state.树节点key到节点数据的映射[node.key] = recordItem;
       }
     },
-    updateContainerHeight: (state, action: PayloadAction<number>) => {
+    更新容器高度: (state, action: PayloadAction<number>) => {
       state.节点树容器的高度 = action.payload;
     },
     更新为了编辑创建的临时节点是哪个: (
@@ -395,13 +392,13 @@ export const {
   更新_编辑临时创建节点之前选中的节点的key_为,
   将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key,
   将选中节点改为临时创建的编辑节点并暂存,
-  updateProjectStructureTreeData,
-  updateProjectTreeDataRecord,
+  更新项目节点树,
+  更新节点数据,
   更新节点的数据,
   initProjectTreeDataMeta,
   addProjectStructureTreeNode,
   insertProjectStructureTreeNode,
-  updateContainerHeight,
+  更新容器高度,
   更新为了编辑创建的临时节点是哪个,
   更新当前编辑节点是哪个,
   停止节点编辑状态,

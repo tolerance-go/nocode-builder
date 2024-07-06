@@ -1,7 +1,4 @@
-import {
-  updateContainerHeight,
-  useAppDispatch,
-} from '@/core/managers/UIStoreManager';
+import { 更新容器高度, useAppDispatch } from '@/core/managers/UIStoreManager';
 import { debounce } from 'lodash-es';
 import { useEffect, useRef } from 'react';
 import { DirectoryTree } from './DirectoryTree';
@@ -20,7 +17,7 @@ export const ProjectTree = () => {
     const updateHeight = () => {
       if (containerRef.current) {
         const height = containerRef.current.clientHeight;
-        dispatch(updateContainerHeight(height));
+        dispatch(更新容器高度(height));
       }
     };
 
