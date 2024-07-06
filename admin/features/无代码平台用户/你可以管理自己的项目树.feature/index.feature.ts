@@ -5,7 +5,7 @@ import {
 } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
-使用场景('项目树操作流程', ({ 假如 }) => {
+使用场景('项目树管理流程', ({ 假如 }) => {
   假如('用户按正确流程创建项目分组，应该可以成功创建', ({ 当, 那么, 并且 }) => {
     当('用户登录', () => {
       cy.登录('yb', '123456');

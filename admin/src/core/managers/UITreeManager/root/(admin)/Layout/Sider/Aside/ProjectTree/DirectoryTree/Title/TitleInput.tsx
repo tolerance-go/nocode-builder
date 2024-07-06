@@ -7,10 +7,14 @@ import {
   useState,
 } from 'react';
 import { 标题是否有错 } from './utils';
+import { ReplaceKeyType } from '@/utils';
 
-export const TitleInput = forwardRef<InputRef, InputProps>((props, ref) => {
+export const TitleInput = forwardRef<
+  InputRef,
+  ReplaceKeyType<InputProps, 'defaultValue', string>
+>((props, ref) => {
   const inputRef = useRef<InputRef>(null);
-  const [value, setValue] = useState<string>('');
+  const [value, setValue] = useState<string>(props.defaultValue ?? '');
   const [isError, setIsError] = useState<boolean>(false);
   const [isComposing, setIsComposing] = useState<boolean>(false);
 

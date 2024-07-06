@@ -17,13 +17,11 @@ import { 节点是不是文件 } from '@/utils';
 const { DirectoryTree } = Tree;
 
 export const TreeMenu = () => {
-  const containerHeight = useAppSelector(
+  const 节点树容器的高度 = useAppSelector(
     (state) => state.projectTree.节点树容器的高度,
   );
-  const projectStructureTreeData = useAppSelector(
-    (state) => state.projectTree.项目节点树,
-  );
-  const selectedProjectStructureTreeNodes = useAppSelector(
+  const 项目节点树 = useAppSelector((state) => state.projectTree.项目节点树);
+  const 所有已经选中的节点 = useAppSelector(
     (state) => state.projectTree.所有已经选中的节点,
   );
 
@@ -33,23 +31,19 @@ export const TreeMenu = () => {
   );
 
   useKeyPress(['Delete', 'Backspace'], () => {
-    selectedProjectStructureTreeNodes.length &&
+    所有已经选中的节点.length &&
       dispatch(
         removeProjectStructureTreeNodeWithCheck(
-          selectedProjectStructureTreeNodes[
-            selectedProjectStructureTreeNodes.length - 1
-          ],
+          所有已经选中的节点[所有已经选中的节点.length - 1],
         ),
       );
   });
 
-  useKeyPress(['F2'], () => {
-    selectedProjectStructureTreeNodes.length &&
+  useKeyPress(['f2'], () => {
+    所有已经选中的节点.length &&
       dispatch(
         更新当前编辑节点是哪个(
-          selectedProjectStructureTreeNodes[
-            selectedProjectStructureTreeNodes.length - 1
-          ],
+          所有已经选中的节点[所有已经选中的节点.length - 1],
         ),
       );
   });
@@ -76,8 +70,8 @@ export const TreeMenu = () => {
           dispatch(取消指定的节点的选中状态(node.key));
         }
       }}
-      treeData={projectStructureTreeData}
-      height={containerHeight}
+      treeData={项目节点树}
+      height={节点树容器的高度}
       virtual
       className={css`
         .ant-tree-node-content-wrapper {
@@ -87,7 +81,7 @@ export const TreeMenu = () => {
           }
         }
       `}
-      selectedKeys={selectedProjectStructureTreeNodes}
+      selectedKeys={所有已经选中的节点}
       expandedKeys={expandedKeys}
       onSelect={(keys) => {
         dispatch(updateSelectedProjectStructureTreeNodes(keys as string[]));
