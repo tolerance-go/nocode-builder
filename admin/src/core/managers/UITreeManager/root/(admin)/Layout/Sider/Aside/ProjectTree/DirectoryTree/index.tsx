@@ -1,20 +1,19 @@
 import {
-  删除所有选中的节点,
-  更新当前编辑节点是哪个,
-  更新展开的节点是哪些,
-  更新选中的节点是哪些,
+  reduxStore,
   useAppDispatch,
   useAppSelector,
-  reduxStore,
+  删除所有选中的节点,
   取消指定的节点的选中状态,
-  停止节点编辑状态,
+  更新展开的节点是哪些,
+  更新当前编辑节点是哪个,
+  更新选中的节点是哪些,
   退出当前正在编辑的节点,
 } from '@/core/managers/UIStoreManager';
 import { useKeyPress } from '@/hooks';
+import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
 import { Title } from './Title';
-import { 节点是不是文件 } from '@/utils';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 

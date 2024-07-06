@@ -8,23 +8,26 @@ import {
 } from 'react';
 import { 标题是否有错 } from './utils';
 import { ReplaceKeyType } from '@/utils';
+import {
+  useAppDispatch,
+  useAppSelector,
+  更新当前输入的标题,
+} from '@/core/managers/UIStoreManager';
 
 export const TitleInput = forwardRef<
   InputRef,
   ReplaceKeyType<InputProps, 'defaultValue', string>
 >((props, ref) => {
   const inputRef = useRef<InputRef>(null);
-  const [value, setValue] = useState<string>(props.defaultValue ?? '');
   const [isError, setIsError] = useState<boolean>(false);
   const [isComposing, setIsComposing] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+
+  const 当前输入的标题 = useAppSelector(
+    (state) => state.projectTree.当前输入的标题,
+  );
 
   useImperativeHandle(ref, () => inputRef.current as InputRef);
-
-  useEffect(() => {
-    inputRef.current?.focus({
-      cursor: 'all', // 'all' 选中全部内容, 'start' 光标在开始位置, 'end' 光标在结束位置
-    });
-  }, []);
 
   const handleCompositionStart = () => {
     setIsComposing(true);
@@ -39,7 +42,7 @@ export const TitleInput = forwardRef<
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    setValue(inputValue);
+    dispatch(更新当前输入的标题(inputValue));
     if (!isComposing && 标题是否有错(inputValue)) {
       setIsError(true);
     } else {
@@ -47,12 +50,18 @@ export const TitleInput = forwardRef<
     }
   };
 
+  useEffect(() => {
+    inputRef.current?.focus({
+      cursor: 'all', // 'all' 选中全部内容, 'start' 光标在开始位置, 'end' 光标在结束位置
+    });
+  }, []);
+
   return (
     <Input
       {...props}
       autoComplete="off"
       ref={inputRef}
-      value={value}
+      value={当前输入的标题}
       onChange={handleChange}
       onCompositionStart={handleCompositionStart}
       onCompositionEnd={handleCompositionEnd}

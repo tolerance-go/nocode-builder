@@ -18,9 +18,11 @@ export type ProjectTreeStates = {
   为了编辑临时创建的节点的key: string | null;
   节点树容器的高度: number;
   编辑临时创建节点之前选中的节点的keys: string[] | null;
+  当前输入的标题: string;
 };
 
 const initialState: ProjectTreeStates = {
+  当前输入的标题: '',
   项目节点树: [],
   树节点key到节点数据的映射: {},
   hasInitProjectTreeDataMeta: false,
@@ -37,6 +39,12 @@ const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
+    清空当前输入的标题: (state) => {
+      state.当前输入的标题 = '';
+    },
+    更新当前输入的标题: (state, action: PayloadAction<string>) => {
+      state.当前输入的标题 = action.payload;
+    },
     插入新节点在指定节点下并同步更新其他数据: (
       state,
       action: PayloadAction<{
@@ -218,8 +226,9 @@ const projectTreeSlice = createSlice({
     更新当前编辑节点是哪个: (state, action: PayloadAction<string>) => {
       state.当前正在编辑的项目树节点的key = action.payload;
     },
-    停止节点编辑状态: (state) => {
+    停止节点编辑状态并清空输入内容: (state) => {
       state.当前正在编辑的项目树节点的key = null;
+      projectTreeSlice.caseReducers.清空当前输入的标题(state);
     },
     退出当前正在编辑的节点: (state) => {
       if (state.当前正在编辑的项目树节点的key) {
@@ -386,6 +395,8 @@ const projectTreeSlice = createSlice({
 });
 
 export const {
+  清空当前输入的标题,
+  更新当前输入的标题,
   退出当前正在编辑的节点,
   取消指定的节点的选中状态,
   插入新节点在指定节点下并同步更新其他数据,
@@ -401,7 +412,7 @@ export const {
   更新容器高度,
   更新为了编辑创建的临时节点是哪个,
   更新当前编辑节点是哪个,
-  停止节点编辑状态,
+  停止节点编辑状态并清空输入内容,
   删除所有选中的节点,
   删除项目树节点,
   moveProjectStructureTreeNode,
