@@ -4,18 +4,19 @@ import { TreeNode } from '../types';
 export const removeNode = (
   nodes: TreeNode[],
   nodeKey: number | string,
-): boolean => {
+): TreeNode | null => {
   for (let i = 0; i < nodes.length; i++) {
     const n = nodes[i];
     if (n.key === nodeKey) {
-      nodes.splice(i, 1);
-      return true;
+      const removedNode = nodes.splice(i, 1)[0];
+      return removedNode;
     }
     if (n.children) {
-      if (removeNode(n.children, nodeKey)) {
-        return true;
+      const result = removeNode(n.children, nodeKey);
+      if (result) {
+        return result;
       }
     }
   }
-  return false;
+  return null;
 };

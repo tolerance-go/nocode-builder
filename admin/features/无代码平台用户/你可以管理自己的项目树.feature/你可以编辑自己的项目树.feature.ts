@@ -1,45 +1,73 @@
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
-  假如.only(
-    '用户编辑节点标题的时候，应该可以按键退出',
-    ({ 当, 并且, 那么 }) => {
-      当('用户已经登录', () => {
-        cy.登录('yb', '123456');
-      });
+  假如.only('用户选中节点，应该可以通过快捷键删除', ({ 当, 并且, 那么 }) => {
+    当('用户已经登录', () => {
+      cy.登录('yb', '123456');
+    });
 
-      当('用户访问主页', () => {
-        cy.visit('/');
-      });
+    当('用户访问主页', () => {
+      cy.visit('/');
+    });
 
-      当('用户正在编辑项目节点标题', () => {
-        cy.获取添加项目的按钮().click();
-        cy.获取项目树标题输入框().type('项目节点{enter}');
-        cy.获取项目树节点通过标题('项目节点').should(
-          'have.class',
-          'ant-tree-treenode-selected',
-        );
-        cy.get('body').trigger('keydown', {
-          keyCode: 113,
-          which: 113,
-          key: 'F2',
-        });
-        cy.获取项目树标题输入框().should('be.visible');
-      });
+    当('用户选中存在的项目节点', () => {
+      cy.获取添加项目的按钮().click();
+      cy.获取项目树标题输入框().type('项目节点{enter}');
+      cy.获取项目树节点通过标题('项目节点').should(
+        'have.class',
+        'ant-tree-treenode-selected',
+      );
+    });
 
-      并且('按下 esc 键', () => {
-        cy.get('body').trigger('keydown', {
-          keyCode: 27,
-          which: 27,
-          key: 'Escape',
-        });
+    并且('按下 delete 键', () => {
+      cy.get('body').trigger('keydown', {
+        keyCode: 46,
+        which: 46,
+        key: 'Delete',
       });
+    });
 
-      那么('标题编辑框应该消失', () => {
-        cy.获取项目树标题输入框().should('not.exist');
+    那么('节点应该被删除', () => {
+      cy.获取antd树列表内部容器().should('be.empty');
+    });
+  });
+
+  假如('用户编辑节点标题的时候，应该可以按键退出', ({ 当, 并且, 那么 }) => {
+    当('用户已经登录', () => {
+      cy.登录('yb', '123456');
+    });
+
+    当('用户访问主页', () => {
+      cy.visit('/');
+    });
+
+    当('用户正在编辑项目节点标题', () => {
+      cy.获取添加项目的按钮().click();
+      cy.获取项目树标题输入框().type('项目节点{enter}');
+      cy.获取项目树节点通过标题('项目节点').should(
+        'have.class',
+        'ant-tree-treenode-selected',
+      );
+      cy.get('body').trigger('keydown', {
+        keyCode: 113,
+        which: 113,
+        key: 'F2',
       });
-    },
-  );
+      cy.获取项目树标题输入框().should('be.visible');
+    });
+
+    并且('按下 esc 键', () => {
+      cy.get('body').trigger('keydown', {
+        keyCode: 27,
+        which: 27,
+        key: 'Escape',
+      });
+    });
+
+    那么('标题编辑框应该消失', () => {
+      cy.获取项目树标题输入框().should('not.exist');
+    });
+  });
 
   假如(
     '用户快捷编辑文件，输入非法字符想保存，应该正确提示状态',

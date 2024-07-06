@@ -1,8 +1,8 @@
 import {
-  removeProjectStructureTreeNodeWithCheck,
+  删除所有选中的节点,
   更新当前编辑节点是哪个,
-  updateExpandedKeys,
-  updateSelectedProjectStructureTreeNodes,
+  更新展开的节点是哪些,
+  更新选中的节点是哪些,
   useAppDispatch,
   useAppSelector,
   reduxStore,
@@ -32,13 +32,8 @@ export const TreeMenu = () => {
     (state) => state.projectTree.所有展开的节点的key,
   );
 
-  useKeyPress(['Delete'], () => {
-    所有已经选中的节点.length &&
-      dispatch(
-        removeProjectStructureTreeNodeWithCheck(
-          所有已经选中的节点[所有已经选中的节点.length - 1],
-        ),
-      );
+  useKeyPress(['delete'], () => {
+    所有已经选中的节点.length && dispatch(删除所有选中的节点());
   });
 
   useKeyPress(['f2'], () => {
@@ -86,10 +81,10 @@ export const TreeMenu = () => {
       selectedKeys={所有已经选中的节点}
       expandedKeys={expandedKeys}
       onSelect={(keys) => {
-        dispatch(updateSelectedProjectStructureTreeNodes(keys as string[]));
+        dispatch(更新选中的节点是哪些(keys as string[]));
       }}
       onExpand={(keys) => {
-        dispatch(updateExpandedKeys(keys as string[])); // 更新展开状态
+        dispatch(更新展开的节点是哪些(keys as string[])); // 更新展开状态
       }}
       onDoubleClick={(_e, node) => {
         const nodeData =

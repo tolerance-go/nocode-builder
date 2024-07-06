@@ -5,6 +5,7 @@ import {
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
 import { insertNodeAtIndex, removeNode } from '../../utils/tree/effects';
+import { TreeNode } from '../../utils/tree/types';
 
 export type ProjectTreeStates = {
   项目节点树: ProjectStructureTreeDataNode[];
@@ -223,23 +224,44 @@ const projectTreeSlice = createSlice({
     停止节点编辑状态: (state) => {
       state.当前正在编辑的项目树节点的key = null;
     },
-    removeProjectStructureTreeNodeWithCheck: (
-      state,
-      action: PayloadAction<string>,
-    ) => {
-      const nodeKey = action.payload;
-      if (state.当前正在编辑的项目树节点的key !== nodeKey) {
-        state.当前正在编辑的项目树节点的key = null;
-      }
+    删除所有选中的节点: (state) => {
+      state.所有已经选中的节点.forEach((nodeKey) => {
+        projectTreeSlice.caseReducers.删除项目树节点(state, {
+          type: '',
+          payload: nodeKey,
+        });
+        projectTreeSlice.caseReducers.删除某个选中的节点(state, {
+          type: '',
+          payload: nodeKey,
+        });
+      });
     },
     删除项目树节点: (state, action: PayloadAction<string>) => {
       const nodeKey = action.payload;
 
       const removed = removeNode(state.项目节点树, nodeKey);
 
+      // 递归删除所有节点映射
+      const deleteNodeMappings = (
+        node: TreeNode,
+        keyToNodeDataMap: Record<string, unknown>,
+        nodeToParentMap: Record<string, unknown>,
+      ) => {
+        delete keyToNodeDataMap[node.key];
+        delete nodeToParentMap[node.key];
+        if (node.children) {
+          node.children.forEach((child) => {
+            deleteNodeMappings(child, keyToNodeDataMap, nodeToParentMap);
+          });
+        }
+      };
+
       if (removed) {
-        delete state.树节点key到节点数据的映射[nodeKey];
-        delete state.节点到父节点的映射[nodeKey];
+        deleteNodeMappings(
+          removed,
+          state.树节点key到节点数据的映射,
+          state.节点到父节点的映射,
+        );
       }
     },
     moveProjectStructureTreeNode: (
@@ -296,13 +318,15 @@ const projectTreeSlice = createSlice({
         }
       }
     },
-    updateSelectedProjectStructureTreeNodes: (
-      state,
-      action: PayloadAction<string[]>,
-    ) => {
+    删除某个选中的节点: (state, action: PayloadAction<string>) => {
+      state.所有已经选中的节点 = state.所有已经选中的节点.filter(
+        (key) => key !== action.payload,
+      );
+    },
+    更新选中的节点是哪些: (state, action: PayloadAction<string[]>) => {
       state.所有已经选中的节点 = action.payload;
     },
-    updateExpandedKeys: (state, action: PayloadAction<string[]>) => {
+    更新展开的节点是哪些: (state, action: PayloadAction<string[]>) => {
       state.所有展开的节点的key = action.payload;
     },
     插入节点并且默认展开父节点: (
@@ -355,11 +379,11 @@ export const {
   更新为了编辑创建的临时节点是哪个,
   更新当前编辑节点是哪个,
   停止节点编辑状态,
-  removeProjectStructureTreeNodeWithCheck,
+  删除所有选中的节点,
   删除项目树节点,
   moveProjectStructureTreeNode,
-  updateSelectedProjectStructureTreeNodes,
-  updateExpandedKeys,
+  更新选中的节点是哪些,
+  更新展开的节点是哪些,
   插入节点并且默认展开父节点,
 } = projectTreeSlice.actions;
 
