@@ -1,4 +1,4 @@
-import { TEST_CLASSES, TEST_IDS } from '@cypress/shared/constants';
+import { 测试类, 测试标识 } from '@cypress/shared/constants';
 import {
   getTreeNodeParent,
   getTreeNodeChildren,
@@ -31,7 +31,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取项目树标题输入框().type('Test Group{enter}');
     });
     那么('用户应该能看到分组名称在项目树中', () => {
-      cy.get(`[data-test-class="${TEST_CLASSES.项目树节点标题}"]`)
+      cy.get(`[data-test-class="${测试类.项目树节点标题}"]`)
         .should('have.length', 1)
         .and('contain.text', 'Test Group');
     });
@@ -41,7 +41,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     cy.登录('yb', '123456');
     cy.visit('/');
     cy.get(
-      `[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
+      `[data-test-id="${测试标识.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
     ).click();
     cy.获取项目树标题输入框().as('input');
 
@@ -77,7 +77,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     ({ 当, 那么, 并且 }) => {
       cy.登录('yb', '123456');
       cy.visit('/');
-      cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_NODE_BTN}"]`).click();
+      cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_NODE_BTN}"]`).click();
       cy.获取项目树标题输入框().as('input');
       cy.get('@input').type('text{enter}');
 
@@ -89,7 +89,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
       并且('点击创建项目分组按钮', () => {
         cy.get(
-          `[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
+          `[data-test-id="${测试标识.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
         ).click();
       });
       那么('输入框应该在根节点下一级的第一个位置显示', () => {
@@ -166,7 +166,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
           .children()
           .should('have.length', 1)
           .first()
-          .find(`#${TEST_IDS.项目树标题输入框}`)
+          .find(`#${测试标识.项目树标题输入框}`)
           .should('be.visible');
       });
     },

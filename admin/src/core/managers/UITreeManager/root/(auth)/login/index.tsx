@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginFormValues } from '../../../types';
 import { handleLoginSuccess } from './hooks';
+import { 测试标识 } from '@cypress/shared/constants';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -25,12 +26,13 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <Form<LoginFormValues> onFinish={onFinish}>
+    <Form<LoginFormValues> onFinish={onFinish} data-test-id={测试标识.登录表单}>
       <Form.Item
         name="username"
         rules={[{ required: true, message: '请输入你的用户名!' }]}
       >
         <Input
+          data-test-id={测试标识.登录用户名输入框}
           autoFocus
           prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="用户名"
@@ -40,10 +42,21 @@ export const Login: React.FC = () => {
         name="password"
         rules={[{ required: true, message: '请输入你的密码!' }]}
       >
-        <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
+        <Input
+          data-test-id={测试标识.登录密码输入框}
+          prefix={<LockOutlined />}
+          type="password"
+          placeholder="密码"
+        />
       </Form.Item>
       <Form.Item>
-        <Button loading={loading} block type="primary" htmlType="submit">
+        <Button
+          data-test-id={测试标识.登录提交按钮}
+          loading={loading}
+          block
+          type="primary"
+          htmlType="submit"
+        >
           登录
         </Button>
       </Form.Item>

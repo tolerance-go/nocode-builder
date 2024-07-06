@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { TEST_IDS } from '@cypress/shared/constants';
+import { 测试标识 } from '@cypress/shared/constants';
 import { BASE_API } from './constants';
 
 // ***********************************************
@@ -42,7 +42,7 @@ import { BASE_API } from './constants';
 
 // 在输入框内输入内容
 const typeToProjectTreeTitleInput = (input: string) => {
-  cy.get(`input#${TEST_IDS.项目树标题输入框}`).as('projectTreeTitleInput');
+  cy.get(`input#${测试标识.项目树标题输入框}`).as('projectTreeTitleInput');
   cy.get('@projectTreeTitleInput').type(input);
   cy.get('@projectTreeTitleInput').type('{enter}');
 };
@@ -60,7 +60,7 @@ Cypress.Commands.add('登录', (username: string, password: string) => {
 });
 
 Cypress.Commands.add('添加项目文件节点', (typeName: string) => {
-  cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_NODE_BTN}"]`).as(
+  cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_NODE_BTN}"]`).as(
     'createProjectBtn',
   );
   cy.get('@createProjectBtn').click();
@@ -68,7 +68,7 @@ Cypress.Commands.add('添加项目文件节点', (typeName: string) => {
 });
 
 Cypress.Commands.add('添加项目组文件夹节点', (typeName: string) => {
-  cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`).as(
+  cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_GROUP_NODE_BTN}"]`).as(
     'createProjectGroupBtn',
   );
   cy.get('@createProjectGroupBtn').click();
@@ -92,13 +92,25 @@ Cypress.Commands.add('获取antd树列表内部容器', () => {
 });
 
 Cypress.Commands.add('获取项目树标题输入框', () => {
-  return cy.get(`input#${TEST_IDS.项目树标题输入框}`);
+  return cy.get(`input#${测试标识.项目树标题输入框}`);
 });
 
 Cypress.Commands.add('获取添加项目组的按钮', () => {
-  return cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`);
+  return cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_GROUP_NODE_BTN}"]`);
 });
 
 Cypress.Commands.add('获取添加项目的按钮', () => {
-  return cy.get(`[data-test-id="${TEST_IDS.CREATE_PROJECT_NODE_BTN}"]`);
+  return cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_NODE_BTN}"]`);
+});
+
+Cypress.Commands.add('获取测试标识', (id: string) => {
+  return cy.get(`[data-test-id="${id}"]`);
+});
+
+Cypress.Commands.add('获取测试类', (className: string) => {
+  return cy.get(`[data-test-class="${className}"]`);
+});
+
+Cypress.Commands.add('获取antd通知框描述', () => {
+  return cy.get('.ant-notification-notice-description');
 });

@@ -13,7 +13,7 @@ import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
 import { TitleInput } from './TitleInput';
 import { 标题是否有错 } from './utils';
-import { TEST_CLASSES, TEST_IDS } from '@cypress/shared/constants';
+import { 测试类, 测试标识 } from '@cypress/shared/constants';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
@@ -68,7 +68,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
 
   return isEditing ? (
     <TitleInput
-      id={TEST_IDS.项目树标题输入框}
+      id={测试标识.项目树标题输入框}
       size="small"
       ref={inputRef}
       autoFocus
@@ -119,7 +119,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       }}
     >
       <span
-        data-test-class={TEST_CLASSES.项目树节点标题}
+        data-test-class={测试类.项目树节点标题}
         style={{
           display: 'inline-block',
           width: '100%',

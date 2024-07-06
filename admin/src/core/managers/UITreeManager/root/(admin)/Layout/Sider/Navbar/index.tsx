@@ -1,3 +1,4 @@
+import { 测试标识 } from '@cypress/shared/constants';
 import { Avatar, Button, Dropdown, Flex, theme } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,7 +20,7 @@ export const Navbar = () => {
           items: [
             {
               key: '1',
-              label: '登出',
+              label: <span data-test-id={测试标识.登出按钮文本}>登出</span>,
               onClick: () => {
                 navigate('/login');
               },
@@ -28,7 +29,11 @@ export const Navbar = () => {
         }}
         placement="topRight"
       >
-        <Button type="text" shape="circle" icon={<Avatar />}></Button>
+        <Button
+          type="text"
+          shape="circle"
+          icon={<Avatar data-test-id={测试标识.用户头像} />}
+        ></Button>
       </Dropdown>
     </Flex>
   );
