@@ -224,13 +224,24 @@ const projectTreeSlice = createSlice({
     停止节点编辑状态: (state) => {
       state.当前正在编辑的项目树节点的key = null;
     },
+    退出当前正在编辑的节点: (state) => {
+      if (state.当前正在编辑的项目树节点的key) {
+        if (
+          state.当前正在编辑的项目树节点的key ===
+          state.为了编辑临时创建的节点的key
+        ) {
+          projectTreeSlice.caseReducers.删除项目树节点(state, {
+            type: '',
+            payload: state.当前正在编辑的项目树节点的key,
+          });
+        } else {
+          state.当前正在编辑的项目树节点的key = null;
+        }
+      }
+    },
     删除所有选中的节点: (state) => {
       state.所有已经选中的节点.forEach((nodeKey) => {
         projectTreeSlice.caseReducers.删除项目树节点(state, {
-          type: '',
-          payload: nodeKey,
-        });
-        projectTreeSlice.caseReducers.删除某个选中的节点(state, {
           type: '',
           payload: nodeKey,
         });
@@ -241,23 +252,37 @@ const projectTreeSlice = createSlice({
 
       const removed = removeNode(state.项目节点树, nodeKey);
 
-      // 递归删除所有节点映射
-      const deleteNodeMappings = (
-        node: TreeNode,
-        keyToNodeDataMap: Record<string, unknown>,
-        nodeToParentMap: Record<string, unknown>,
-      ) => {
-        delete keyToNodeDataMap[node.key];
-        delete nodeToParentMap[node.key];
-        if (node.children) {
-          node.children.forEach((child) => {
-            deleteNodeMappings(child, keyToNodeDataMap, nodeToParentMap);
-          });
-        }
-      };
-
       if (removed) {
-        deleteNodeMappings(
+        const 递归删除所有节点映射及关联状态 = (
+          node: TreeNode,
+          keyToNodeDataMap: Record<string, unknown>,
+          nodeToParentMap: Record<string, unknown>,
+        ) => {
+          state.所有已经选中的节点 = state.所有已经选中的节点.filter(
+            (key) => key !== node.key,
+          );
+          if (node.key === state.当前正在编辑的项目树节点的key) {
+            state.当前正在编辑的项目树节点的key = null;
+          }
+          if (node.key === state.为了编辑临时创建的节点的key) {
+            state.为了编辑临时创建的节点的key = null;
+          }
+
+          delete keyToNodeDataMap[node.key];
+          delete nodeToParentMap[node.key];
+
+          if (node.children) {
+            node.children.forEach((child) => {
+              递归删除所有节点映射及关联状态(
+                child,
+                keyToNodeDataMap,
+                nodeToParentMap,
+              );
+            });
+          }
+        };
+
+        递归删除所有节点映射及关联状态(
           removed,
           state.树节点key到节点数据的映射,
           state.节点到父节点的映射,
@@ -364,6 +389,7 @@ const projectTreeSlice = createSlice({
 });
 
 export const {
+  退出当前正在编辑的节点,
   取消指定的节点的选中状态,
   在指定节点下插入新节点并同步更新其他数据,
   更新_编辑临时创建节点之前选中的节点的key_为,

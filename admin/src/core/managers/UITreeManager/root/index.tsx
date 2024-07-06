@@ -16,6 +16,11 @@ export function Root() {
     <ConfigProvider
       theme={{
         algorithm: [theme.darkAlgorithm],
+        components: {
+          Tree: {
+            borderRadius: 0,
+          },
+        },
       }}
     >
       <Outlet />

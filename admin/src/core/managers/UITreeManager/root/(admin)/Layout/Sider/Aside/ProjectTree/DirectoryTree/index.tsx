@@ -8,6 +8,7 @@ import {
   reduxStore,
   取消指定的节点的选中状态,
   停止节点编辑状态,
+  退出当前正在编辑的节点,
 } from '@/core/managers/UIStoreManager';
 import { useKeyPress } from '@/hooks';
 import { css } from '@emotion/css';
@@ -15,9 +16,9 @@ import { theme, Tree } from 'antd';
 import { Title } from './Title';
 import { 节点是不是文件 } from '@/utils';
 
-const { DirectoryTree } = Tree;
+const { DirectoryTree: AntdDirectoryTree } = Tree;
 
-export const TreeMenu = () => {
+export const DirectoryTree = () => {
   const { token } = theme.useToken();
   const 节点树容器的高度 = useAppSelector(
     (state) => state.projectTree.节点树容器的高度,
@@ -46,7 +47,9 @@ export const TreeMenu = () => {
   });
 
   useKeyPress(['esc'], () => {
-    所有已经选中的节点.length && dispatch(停止节点编辑状态());
+    if (所有已经选中的节点.length) {
+      dispatch(退出当前正在编辑的节点());
+    }
   });
 
   // useKeyPress(["ctrl.z"], () => {
@@ -58,7 +61,7 @@ export const TreeMenu = () => {
   // });
 
   return (
-    <DirectoryTree
+    <AntdDirectoryTree
       multiple
       treeData={项目节点树}
       height={节点树容器的高度}

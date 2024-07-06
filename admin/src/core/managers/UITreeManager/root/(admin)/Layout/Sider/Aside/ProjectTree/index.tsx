@@ -4,7 +4,7 @@ import {
 } from '@/core/managers/UIStoreManager';
 import { debounce } from 'lodash-es';
 import { useEffect, useRef } from 'react';
-import { TreeMenu } from './DirectoryTree';
+import { DirectoryTree } from './DirectoryTree';
 
 export const ProjectTree = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -47,13 +47,7 @@ export const ProjectTree = () => {
         height: '100%',
       }}
     >
-      {/* {loading ? (
-        <Flex justify="center" align="center" style={{ height: "100%" }}>
-          <Spin></Spin>
-        </Flex>
-      ) : (
-      )} */}
-      <TreeMenu />
+      <DirectoryTree />
     </div>
   );
 };
