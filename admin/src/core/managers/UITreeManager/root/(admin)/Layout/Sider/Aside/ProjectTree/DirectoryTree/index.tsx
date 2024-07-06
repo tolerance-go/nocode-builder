@@ -78,6 +78,7 @@ export const DirectoryTree = () => {
       treeData={项目节点树}
       height={节点树容器的高度}
       virtual
+      draggable
       className={css`
         .ant-tree-treenode {
           :has(span.prev-selected) {
@@ -112,6 +113,7 @@ export const DirectoryTree = () => {
           dispatch(取消指定的节点的选中状态(node.key));
         }
       }}
+      onDrop={() => {}}
       titleRender={(nodeData) => <Title nodeKey={nodeData.key} />}
     />
   );

@@ -143,37 +143,7 @@ const projectTreeSlice = createSlice({
       state.hasInitProjectTreeDataMeta = true;
       state.节点到父节点的映射 = buildParentKeyMap(projectStructureTreeData);
     },
-    addProjectStructureTreeNode: (
-      state,
-      action: PayloadAction<{
-        parentKey: string | null;
-        node: ProjectStructureTreeDataNode;
-      }>,
-    ) => {
-      const { parentKey, node } = action.payload;
-      const addNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
-        for (const n of nodes) {
-          if (n.key === parentKey) {
-            n.children = n.children || [];
-            n.children.push(node);
-            state.节点到父节点的映射[node.key] = parentKey;
-            return true;
-          }
-          if (n.children && addNode(n.children)) {
-            return true;
-          }
-        }
-        return false;
-      };
-
-      if (parentKey === null) {
-        state.项目节点树.push(node);
-        state.节点到父节点的映射[node.key] = null;
-      } else {
-        addNode(state.项目节点树);
-      }
-    },
-    insertProjectStructureTreeNode: (
+    插入节点到指定位置: (
       state,
       action: PayloadAction<{
         parentKey: string | null;
@@ -388,7 +358,7 @@ const projectTreeSlice = createSlice({
       ) {
         state.所有展开的节点的key.push(parentKey);
       }
-      projectTreeSlice.caseReducers.insertProjectStructureTreeNode(state, {
+      projectTreeSlice.caseReducers.插入节点到指定位置(state, {
         payload: { parentKey, node, index, recordItem },
         type: '',
       });
@@ -419,8 +389,7 @@ export const {
   更新节点数据,
   更新节点的数据,
   initProjectTreeDataMeta,
-  addProjectStructureTreeNode,
-  insertProjectStructureTreeNode,
+  插入节点到指定位置,
   更新容器高度,
   更新为了编辑创建的临时节点是哪个,
   更新当前编辑节点是哪个并更新输入框的值,
