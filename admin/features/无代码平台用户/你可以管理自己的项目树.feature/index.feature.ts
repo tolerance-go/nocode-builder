@@ -27,11 +27,10 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取项目树标题输入框().should('have.value', 'Test Group');
     });
     当('用户输入分组名称后并按下回车键', () => {
-      cy.获取项目树标题输入框().clear();
-      cy.获取项目树标题输入框().type('Test Group{enter}');
+      cy.获取项目树标题输入框().type('{enter}');
     });
     那么('用户应该能看到分组名称在项目树中', () => {
-      cy.get(`[data-test-class="${测试类.项目树节点标题}"]`)
+      cy.获取测试类(测试类.项目树节点标题)
         .should('have.length', 1)
         .and('contain.text', 'Test Group');
     });
@@ -40,35 +39,31 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
   假如('用户正在编辑输入框的时候，应该正确处理输入异常', ({ 当, 那么 }) => {
     cy.登录('yb', '123456');
     cy.visit('/');
-    cy.get(
-      `[data-test-id="${测试标识.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
-    ).click();
-    cy.获取项目树标题输入框().as('input');
+    cy.获取测试标识(测试标识.CREATE_PROJECT_GROUP_NODE_BTN).click();
 
     当('用户输入内容后，又全部撤销', () => {
-      cy.get('@input').type('s{backspace}');
+      cy.获取项目树标题输入框().type('s{backspace}');
     });
     那么('输入框应该显示错误状态', () => {
-      cy.get('@input').should('have.class', 'ant-input-status-error');
+      cy.获取项目树标题输入框().should('have.class', 'ant-input-status-error');
     });
     当('用户输入无效字符', () => {
-      cy.get('@input').clear();
-      cy.get('@input').type('Invalid@Name!');
+      cy.获取项目树标题输入框().type('{selectall}{backspace}Invalid@Name!');
     });
     那么('输入框应该显示错误状态', () => {
-      cy.get('@input').should('have.class', 'ant-input-status-error');
+      cy.获取项目树标题输入框().should('have.class', 'ant-input-status-error');
     });
     当('用户按下回车键', () => {
-      cy.get('@input').type('{enter}');
+      cy.获取项目树标题输入框().type('{enter}');
     });
     那么('应该创建失败，输入框不应该消失', () => {
-      cy.get('@input').should('exist');
+      cy.获取项目树标题输入框().should('exist');
     });
     当('输入框失去焦点', () => {
-      cy.get('@input').blur();
+      cy.获取项目树标题输入框().blur();
     });
     那么('输入框应该消失', () => {
-      cy.get('@input').should('not.exist');
+      cy.获取项目树标题输入框().should('not.exist');
     });
   });
 
