@@ -4,4 +4,6 @@ export const TEST_IDS = {
   项目树标题输入框: 'project-tree-title-input',
 };
 
-export const TEST_CLASSES = {};
+export const TEST_CLASSES = {
+  项目树节点标题: 'project-tree-title',
+};

@@ -1,4 +1,4 @@
-import { TEST_IDS } from '@cypress/shared/constants';
+import { TEST_CLASSES, TEST_IDS } from '@cypress/shared/constants';
 import {
   getTreeNodeParent,
   getTreeNodeChildren,
@@ -14,14 +14,10 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.visit('/');
     });
     那么('用户应该能看到创建项目分组按钮', () => {
-      cy.get(
-        `[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
-      ).should('be.visible');
+      cy.获取添加项目组的按钮().should('be.visible');
     });
     当('用户点击创建项目分组按钮', () => {
-      cy.get(
-        `[data-test-id="${TEST_IDS.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
-      ).click();
+      cy.获取添加项目组的按钮().click();
     });
     那么('用户应该能看到项目树中的输入框', () => {
       cy.获取项目树标题输入框().should('be.visible');
@@ -35,7 +31,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取项目树标题输入框().type('Test Group{enter}');
     });
     那么('用户应该能看到分组名称在项目树中', () => {
-      cy.get('[data-test-class="project-tree-title"]')
+      cy.get(`[data-test-class="${TEST_CLASSES.项目树节点标题}"]`)
         .should('have.length', 1)
         .and('contain.text', 'Test Group');
     });
@@ -364,7 +360,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
   });
 
-  假如.only(
+  假如(
     '用户选中了一个节点，然后准备创建项目，但是取消后，应该回到之前的选中状态',
     ({ 当, 并且, 那么 }) => {
       当('用户已经登录', () => {

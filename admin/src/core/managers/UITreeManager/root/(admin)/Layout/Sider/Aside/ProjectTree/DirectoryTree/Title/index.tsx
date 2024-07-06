@@ -13,7 +13,7 @@ import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
 import { TitleInput } from './TitleInput';
 import { 标题是否有错 } from './utils';
-import { TEST_IDS } from '@cypress/shared/constants';
+import { TEST_CLASSES, TEST_IDS } from '@cypress/shared/constants';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
@@ -119,7 +119,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       }}
     >
       <span
-        data-test-class={'project-tree-title'}
+        data-test-class={TEST_CLASSES.项目树节点标题}
         style={{
           display: 'inline-block',
           width: '100%',
