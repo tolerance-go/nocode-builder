@@ -44,11 +44,14 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     if (标题内容有错) {
       if (为了编辑临时创建的节点的key === nodeKey) {
         if (来自失去焦点) {
-          // 删除
           dispatch(删除项目树节点(nodeKey));
           dispatch(更新为了编辑创建的临时节点是哪个(null));
           dispatch(将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key());
           dispatch(更新_编辑临时创建节点之前选中的节点的key_为(null));
+        }
+      } else {
+        if (来自失去焦点) {
+          dispatch(停止节点编辑状态());
         }
       }
     } else {
