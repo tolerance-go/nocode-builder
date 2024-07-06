@@ -7,6 +7,7 @@ import {
   useAppSelector,
   reduxStore,
   取消指定的节点的选中状态,
+  停止节点编辑状态,
 } from '@/core/managers/UIStoreManager';
 import { useKeyPress } from '@/hooks';
 import { css } from '@emotion/css';
@@ -31,7 +32,7 @@ export const TreeMenu = () => {
     (state) => state.projectTree.所有展开的节点的key,
   );
 
-  useKeyPress(['Delete', 'Backspace'], () => {
+  useKeyPress(['Delete'], () => {
     所有已经选中的节点.length &&
       dispatch(
         removeProjectStructureTreeNodeWithCheck(
@@ -47,6 +48,10 @@ export const TreeMenu = () => {
           所有已经选中的节点[所有已经选中的节点.length - 1],
         ),
       );
+  });
+
+  useKeyPress(['esc'], () => {
+    所有已经选中的节点.length && dispatch(停止节点编辑状态());
   });
 
   // useKeyPress(["ctrl.z"], () => {
