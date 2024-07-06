@@ -3,7 +3,7 @@ import {
   停止节点编辑状态,
   更新为了编辑创建的临时节点是哪个,
   更新节点的数据,
-  将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key,
+  恢复当前选中的节点为编辑临时创建节点之前选中的节点的key,
   useAppDispatch,
   useAppSelector,
   更新_编辑临时创建节点之前选中的节点的key_为,
@@ -46,7 +46,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
         if (来自失去焦点) {
           dispatch(删除项目树节点(nodeKey));
           dispatch(更新为了编辑创建的临时节点是哪个(null));
-          dispatch(将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key());
+          dispatch(恢复当前选中的节点为编辑临时创建节点之前选中的节点的key());
           dispatch(更新_编辑临时创建节点之前选中的节点的key_为(null));
         }
       } else {

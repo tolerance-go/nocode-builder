@@ -37,7 +37,7 @@ const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
-    在指定节点下插入新节点并同步更新其他数据: (
+    插入新节点在指定节点下并同步更新其他数据: (
       state,
       action: PayloadAction<{
         parentKey: string | null;
@@ -58,7 +58,7 @@ const projectTreeSlice = createSlice({
         type: '',
         payload: action.payload.node.key,
       });
-      projectTreeSlice.caseReducers.将选中节点改为临时创建的编辑节点并暂存(
+      projectTreeSlice.caseReducers.更新选中节点为临时创建的编辑节点并暂存(
         state,
         {
           type: '',
@@ -66,7 +66,7 @@ const projectTreeSlice = createSlice({
         },
       );
     },
-    将选中节点改为临时创建的编辑节点并暂存: (
+    更新选中节点为临时创建的编辑节点并暂存: (
       state,
       action: PayloadAction<string>,
     ) => {
@@ -372,7 +372,7 @@ const projectTreeSlice = createSlice({
         type: '',
       });
     },
-    将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key: (state) => {
+    恢复当前选中的节点为编辑临时创建节点之前选中的节点的key: (state) => {
       state.所有已经选中的节点 =
         state.编辑临时创建节点之前选中的节点的keys || [];
     },
@@ -388,10 +388,10 @@ const projectTreeSlice = createSlice({
 export const {
   退出当前正在编辑的节点,
   取消指定的节点的选中状态,
-  在指定节点下插入新节点并同步更新其他数据,
+  插入新节点在指定节点下并同步更新其他数据,
   更新_编辑临时创建节点之前选中的节点的key_为,
-  将当前选中的节点恢复为编辑临时创建节点之前选中的节点的key,
-  将选中节点改为临时创建的编辑节点并暂存,
+  恢复当前选中的节点为编辑临时创建节点之前选中的节点的key,
+  更新选中节点为临时创建的编辑节点并暂存,
   更新项目节点树,
   更新节点数据,
   更新节点的数据,

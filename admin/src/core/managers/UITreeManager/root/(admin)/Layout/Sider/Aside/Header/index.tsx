@@ -3,7 +3,7 @@ import {
   showProjectTreeTimeLineAction,
   useAppDispatch,
   useAppSelector,
-  在指定节点下插入新节点并同步更新其他数据,
+  插入新节点在指定节点下并同步更新其他数据,
 } from '@/core/managers/UIStoreManager';
 import { 查询项目树中的节点 } from '@/core/managers/UIStoreManager/store/utils';
 import {
@@ -55,7 +55,7 @@ export const Header = () => {
   const 在指定节点下插入新文件夹 = (target: ProjectStructureTreeDataNode) => {
     const newKey = Math.random() + '';
     dispatch(
-      在指定节点下插入新节点并同步更新其他数据({
+      插入新节点在指定节点下并同步更新其他数据({
         parentKey: target.key,
         node: {
           key: newKey,
@@ -83,7 +83,7 @@ export const Header = () => {
     const newKey = Math.random() + '';
 
     dispatch(
-      在指定节点下插入新节点并同步更新其他数据({
+      插入新节点在指定节点下并同步更新其他数据({
         parentKey: target.key,
         node: {
           isLeaf: true,
@@ -113,7 +113,7 @@ export const Header = () => {
     const newKey = Math.random() + '';
 
     dispatch(
-      在指定节点下插入新节点并同步更新其他数据({
+      插入新节点在指定节点下并同步更新其他数据({
         parentKey: null,
         node: {
           key: newKey,
@@ -132,7 +132,7 @@ export const Header = () => {
   const 在根节点下面插入新文件夹 = () => {
     const newKey = Math.random() + '';
     dispatch(
-      在指定节点下插入新节点并同步更新其他数据({
+      插入新节点在指定节点下并同步更新其他数据({
         parentKey: null,
         node: {
           key: newKey,
