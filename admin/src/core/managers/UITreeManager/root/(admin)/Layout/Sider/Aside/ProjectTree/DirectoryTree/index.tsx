@@ -7,6 +7,7 @@ import {
   更新展开的节点是哪些,
   更新当前编辑节点是哪个并更新输入框的值,
   更新选中的节点是哪些,
+  移动项目树节点,
   退出当前正在编辑的节点,
 } from '@/core/managers/UIStoreManager';
 import { useKeyPress } from '@/hooks';
@@ -14,6 +15,7 @@ import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
 import { Title } from './Title';
+import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree/effects';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 
@@ -78,7 +80,103 @@ export const DirectoryTree = () => {
       treeData={项目节点树}
       height={节点树容器的高度}
       virtual
-      draggable
+      draggable={{
+        icon: false,
+      }}
+      allowDrop={(options) => {
+        const state = reduxStore.getState();
+        const { dropNode, dropPosition, dragNode } = options;
+
+        // 如果拖动的是文件夹，放置的是文件，位置是之后
+        // 那么禁止
+        if (!dragNode.isLeaf && dropNode.isLeaf && dropPosition === 1) {
+          return false;
+        }
+
+        // 如果拖动的是文件，放置的是文件夹
+        if (!dropNode.isLeaf && dragNode.isLeaf) {
+          // 如果放置到文件夹的前面
+          // 那么禁止
+          if (dropPosition === -1) {
+            return false;
+          }
+          // 如果放置到文件夹的后面
+          // 并且文件夹的后面也是文件夹
+          // 那么禁止
+          if (dropPosition === 1) {
+            const 父节点key =
+              state.projectTree.节点到父节点的映射[dropNode.key];
+
+            if (父节点key === undefined) {
+              throw new Error('父节点数据不完整');
+            }
+
+            if (父节点key) {
+              const 父节点 = findNode(state.projectTree.项目节点树, 父节点key);
+
+              if (!父节点) {
+                throw new Error('父节点数据不完整');
+              }
+
+              const 兄弟节点们 = 父节点.children;
+
+              if (!兄弟节点们) {
+                throw new Error('父节点数据不完整');
+              }
+
+              const dropIndex = 兄弟节点们.findIndex(
+                (node) => node.key === dropNode.key,
+              );
+
+              if (dropIndex === -1) {
+                throw new Error('父节点数据不完整');
+              }
+
+              if (兄弟节点们[dropIndex + 1]) {
+                if (!兄弟节点们[dropIndex + 1]?.isLeaf) {
+                  return false;
+                }
+              }
+            } else {
+              const dropIndex = state.projectTree.项目节点树.findIndex(
+                (node) => node.key === dropNode.key,
+              );
+
+              if (dropIndex === -1) {
+                throw new Error('父节点数据不完整');
+              }
+
+              const 放置节点下一个兄弟节点 =
+                state.projectTree.项目节点树[dropIndex + 1];
+
+              if (放置节点下一个兄弟节点) {
+                if (!放置节点下一个兄弟节点.isLeaf) {
+                  return false;
+                }
+              }
+            }
+          }
+        }
+
+        // 如果拖动为文件，放置是文件夹，放置位置为内部
+        if (dragNode.isLeaf && !dropNode.isLeaf && dropPosition === 0) {
+          // 并且放置文件夹内部开头存在文件夹
+          // 那么禁止放置
+          if (dropNode.children && dropNode.children.length) {
+            if (!dropNode.children[0].isLeaf) {
+              return false;
+            }
+          }
+        }
+
+        // 如果放置节点是文件，并且放置为内部
+        // 那么禁止放置
+        if (dropNode.isLeaf && dropPosition === 0) {
+          return false;
+        }
+
+        return true;
+      }}
       className={css`
         .ant-tree-treenode {
           :has(span.prev-selected) {
@@ -113,7 +211,61 @@ export const DirectoryTree = () => {
           dispatch(取消指定的节点的选中状态(node.key));
         }
       }}
-      onDrop={() => {}}
+      onDrop={(info) => {
+        const dropKey = info.node.key;
+
+        /**
+         * dropToGap 解释
+         * true：表示将拖拽的节点放置在目标节点的上方或下方（即与目标节点成为同级节点）。
+         * false：表示将拖拽的节点放置在目标节点的内部（即成为目标节点的子节点）。
+         */
+        if (info.dropToGap === false) {
+          if (info.node.isLeaf) {
+            return;
+          }
+
+          let finalIndex = info.dropPosition;
+
+          // 如果拖动的是文件，放置的是文件夹，放置位置是内部
+          // 并且放置节点内没有任何节点
+          // 那么把 info.dropPosition 的 1 转换为 0
+          if (info.dragNode.isLeaf && !info.node.isLeaf) {
+            finalIndex = 0;
+          }
+
+          dispatch(
+            移动项目树节点({
+              nodeKey: info.dragNode.key,
+              newParentKey: dropKey,
+              newIndex: finalIndex,
+            }),
+          );
+        } else {
+          const {
+            projectTree: { 节点到父节点的映射 },
+          } = reduxStore.getState();
+
+          const 父节点 = 节点到父节点的映射[dropKey];
+
+          if (父节点 === undefined) {
+            throw new Error('父节点数据不完整');
+          }
+
+          let finalIndex = info.dropPosition;
+
+          if (info.dropPosition === -1) {
+            finalIndex = 0;
+          }
+
+          dispatch(
+            移动项目树节点({
+              nodeKey: info.dragNode.key,
+              newParentKey: 父节点,
+              newIndex: finalIndex,
+            }),
+          );
+        }
+      }}
       titleRender={(nodeData) => <Title nodeKey={nodeData.key} />}
     />
   );

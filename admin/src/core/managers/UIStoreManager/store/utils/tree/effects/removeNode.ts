@@ -1,15 +1,19 @@
 import { TreeNode } from '../types';
 
-// 被测试的函数
-export const removeNode = (
-  nodes: TreeNode[],
+interface RemoveResult<T> {
+  removedNode: T;
+  index: number;
+}
+
+export const removeNode = <T extends TreeNode<T>>(
+  nodes: T[],
   nodeKey: number | string,
-): TreeNode | null => {
+): RemoveResult<T> | null => {
   for (let i = 0; i < nodes.length; i++) {
     const n = nodes[i];
     if (n.key === nodeKey) {
       const removedNode = nodes.splice(i, 1)[0];
-      return removedNode;
+      return { removedNode, index: i };
     }
     if (n.children) {
       const result = removeNode(n.children, nodeKey);

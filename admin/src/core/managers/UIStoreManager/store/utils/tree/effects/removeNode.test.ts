@@ -3,7 +3,7 @@ import { removeNode } from './removeNode';
 import { describe, it, expect } from 'vitest';
 
 describe('removeNode', () => {
-  it('应删除具有给定key的节点并返回删除的节点', () => {
+  it('应删除具有给定key的节点并返回删除的节点和原下标位置', () => {
     const tree: TreeNode[] = [
       {
         key: 1,
@@ -17,7 +17,7 @@ describe('removeNode', () => {
 
     const result = removeNode(tree, '1-2-1');
 
-    expect(result).toEqual({ key: '1-2-1' });
+    expect(result).toEqual({ removedNode: { key: '1-2-1' }, index: 0 });
     expect(tree).toEqual([
       { key: 1, children: [{ key: '1-1' }, { key: '1-2', children: [] }] },
       { key: 2 },
@@ -51,7 +51,7 @@ describe('removeNode', () => {
     ]);
   });
 
-  it('应删除根级节点并返回删除的节点', () => {
+  it('应删除根级节点并返回删除的节点和原下标位置', () => {
     const tree: TreeNode[] = [
       {
         key: 1,
@@ -65,7 +65,7 @@ describe('removeNode', () => {
 
     const result = removeNode(tree, 2);
 
-    expect(result).toEqual({ key: 2 });
+    expect(result).toEqual({ removedNode: { key: 2 }, index: 1 });
     expect(tree).toEqual([
       {
         key: 1,

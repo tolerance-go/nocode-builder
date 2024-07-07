@@ -1,8 +1,10 @@
-export type ProjectStructureTreeDataNode = {
+import { TreeDataNode } from 'antd';
+
+export interface ProjectStructureTreeDataNode extends TreeDataNode {
   isLeaf?: boolean;
   key: string;
   children?: ProjectStructureTreeDataNode[];
-};
+}
 
 export type ProjectTreeNodeDataRecordItem = {
   title: string;

@@ -4,7 +4,11 @@ import {
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
-import { insertNodeAtIndex, removeNode } from '../../utils/tree/effects';
+import {
+  insertNode,
+  insertNodeAtIndex,
+  removeNode,
+} from '../../utils/tree/effects';
 import { TreeNode } from '../../utils/tree/types';
 
 export type ProjectTreeStates = {
@@ -153,31 +157,14 @@ const projectTreeSlice = createSlice({
       }>,
     ) => {
       const { parentKey, node, index, recordItem } = action.payload;
-      let inserted = false;
-
-      const insertNode = (
-        nodes: ProjectStructureTreeDataNode[],
-        idx: number,
-      ): boolean => {
-        for (const n of nodes) {
-          if (n.key === parentKey) {
-            n.children = n.children || [];
-            insertNodeAtIndex(n.children, idx, node);
-            return true;
-          }
-          if (n.children && insertNode(n.children, idx)) {
-            return true;
-          }
-        }
-        return false;
-      };
+      let inserted: boolean = false;
 
       if (parentKey === null) {
         insertNodeAtIndex(state.项目节点树, index, node);
         state.节点到父节点的映射[node.key] = null;
         inserted = true;
       } else {
-        inserted = insertNode(state.项目节点树, index);
+        inserted = insertNode(state.项目节点树, parentKey, node, index);
         if (inserted) {
           state.节点到父节点的映射[node.key] = parentKey;
         }
@@ -242,7 +229,7 @@ const projectTreeSlice = createSlice({
 
       if (removed) {
         const 递归删除所有节点映射及关联状态 = (
-          node: TreeNode,
+          node: TreeNode<ProjectStructureTreeDataNode>,
           keyToNodeDataMap: Record<string, unknown>,
           nodeToParentMap: Record<string, unknown>,
         ) => {
@@ -271,13 +258,13 @@ const projectTreeSlice = createSlice({
         };
 
         递归删除所有节点映射及关联状态(
-          removed,
+          removed.removedNode,
           state.树节点key到节点数据的映射,
           state.节点到父节点的映射,
         );
       }
     },
-    moveProjectStructureTreeNode: (
+    移动项目树节点: (
       state,
       action: PayloadAction<{
         nodeKey: string;
@@ -286,48 +273,42 @@ const projectTreeSlice = createSlice({
       }>,
     ) => {
       const { nodeKey, newParentKey, newIndex } = action.payload;
-      let nodeToMove: ProjectStructureTreeDataNode | null = null;
 
-      const findAndRemoveNode = (
-        nodes: ProjectStructureTreeDataNode[],
-      ): boolean => {
-        for (let i = 0; i < nodes.length; i++) {
-          const n = nodes[i];
-          if (n.key === nodeKey) {
-            nodeToMove = n;
-            nodes.splice(i, 1);
-            return true;
-          }
-          if (n.children && findAndRemoveNode(n.children)) {
-            return true;
-          }
-        }
-        return false;
-      };
+      const removed = removeNode(state.项目节点树, nodeKey);
 
-      const insertNode = (nodes: ProjectStructureTreeDataNode[]): boolean => {
-        for (const n of nodes) {
-          if (n.key === newParentKey) {
-            n.children = n.children || [];
-            n.children.splice(newIndex, 0, nodeToMove!);
-            state.节点到父节点的映射[nodeKey] = newParentKey;
-            return true;
-          }
-          if (n.children && insertNode(n.children)) {
-            return true;
-          }
-        }
-        return false;
-      };
+      if (removed) {
+        let finalNewIndex = newIndex;
 
-      findAndRemoveNode(state.项目节点树);
-
-      if (nodeToMove) {
         if (newParentKey === null) {
-          state.项目节点树.splice(newIndex, 0, nodeToMove);
+          const 父节点 = state.节点到父节点的映射[nodeKey];
+          if (父节点 === null) {
+            // 被删除节点和插入节点是同一个父节点，并且插入的位置在删除节点的位置之后
+            if (removed.index < newIndex) {
+              finalNewIndex -= 1;
+            }
+          }
+
+          insertNodeAtIndex(
+            state.项目节点树,
+            finalNewIndex,
+            removed.removedNode,
+          );
           state.节点到父节点的映射[nodeKey] = null;
         } else {
-          insertNode(state.项目节点树);
+          const 父节点 = state.节点到父节点的映射[nodeKey];
+          if (父节点 === newParentKey) {
+            if (removed.index < newIndex) {
+              finalNewIndex -= 1;
+            }
+          }
+
+          insertNode(
+            state.项目节点树,
+            newParentKey,
+            removed.removedNode,
+            finalNewIndex,
+          );
+          state.节点到父节点的映射[nodeKey] = newParentKey;
         }
       }
     },
@@ -396,7 +377,7 @@ export const {
   停止节点编辑状态并重置输入内容,
   删除所有选中的节点,
   删除项目树节点,
-  moveProjectStructureTreeNode,
+  移动项目树节点,
   更新选中的节点是哪些,
   更新展开的节点是哪些,
   插入节点并且默认展开父节点,
