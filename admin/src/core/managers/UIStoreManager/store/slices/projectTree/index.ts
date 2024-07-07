@@ -21,7 +21,7 @@ export type ProjectTreeStates = {
   节点到父节点的映射: Record<string, string | null>;
   为了编辑临时创建的节点的key: string | null;
   节点树容器的高度: number;
-  编辑临时创建节点之前选中的节点的keys: string[] | null;
+  为了编辑临时创建节点之前选中的节点的key: string[] | null;
   当前输入的标题: string;
 };
 
@@ -36,7 +36,7 @@ const initialState: ProjectTreeStates = {
   节点到父节点的映射: {},
   为了编辑临时创建的节点的key: null,
   节点树容器的高度: 0,
-  编辑临时创建节点之前选中的节点的keys: null,
+  为了编辑临时创建节点之前选中的节点的key: null,
 };
 
 const projectTreeSlice = createSlice({
@@ -85,7 +85,7 @@ const projectTreeSlice = createSlice({
       state,
       action: PayloadAction<string>,
     ) => {
-      state.编辑临时创建节点之前选中的节点的keys = [
+      state.为了编辑临时创建节点之前选中的节点的key = [
         ...state.所有已经选中的节点,
       ];
       state.所有已经选中的节点 = [action.payload];
@@ -241,6 +241,11 @@ const projectTreeSlice = createSlice({
           }
           if (node.key === state.为了编辑临时创建的节点的key) {
             state.为了编辑临时创建的节点的key = null;
+            if (state.为了编辑临时创建节点之前选中的节点的key) {
+              state.所有已经选中的节点 =
+                state.为了编辑临时创建节点之前选中的节点的key;
+              state.为了编辑临时创建节点之前选中的节点的key = null;
+            }
           }
 
           delete keyToNodeDataMap[node.key];
@@ -346,13 +351,16 @@ const projectTreeSlice = createSlice({
     },
     恢复当前选中的节点为编辑临时创建节点之前选中的节点的key: (state) => {
       state.所有已经选中的节点 =
-        state.编辑临时创建节点之前选中的节点的keys || [];
+        state.为了编辑临时创建节点之前选中的节点的key || [];
     },
-    更新_编辑临时创建节点之前选中的节点的key_为: (
+    更新为了编辑临时创建节点之前选中的节点的key为: (
       state,
       action: PayloadAction<string[] | null>,
     ) => {
-      state.编辑临时创建节点之前选中的节点的keys = action.payload;
+      state.为了编辑临时创建节点之前选中的节点的key = action.payload;
+    },
+    清空为了编辑临时创建节点之前选中的节点的key: (state) => {
+      state.为了编辑临时创建节点之前选中的节点的key = null;
     },
   },
 });
@@ -363,7 +371,7 @@ export const {
   退出当前正在编辑的节点,
   取消指定的节点的选中状态,
   插入新节点在指定节点下并同步更新其他数据,
-  更新_编辑临时创建节点之前选中的节点的key_为,
+  更新为了编辑临时创建节点之前选中的节点的key为,
   恢复当前选中的节点为编辑临时创建节点之前选中的节点的key,
   更新选中节点为临时创建的编辑节点并暂存,
   更新项目节点树,

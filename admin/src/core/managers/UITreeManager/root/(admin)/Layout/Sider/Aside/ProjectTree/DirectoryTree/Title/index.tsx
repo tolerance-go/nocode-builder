@@ -6,7 +6,7 @@ import {
   恢复当前选中的节点为编辑临时创建节点之前选中的节点的key,
   useAppDispatch,
   useAppSelector,
-  更新_编辑临时创建节点之前选中的节点的key_为,
+  更新为了编辑临时创建节点之前选中的节点的key为,
 } from '@/core/managers/UIStoreManager';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
 import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
@@ -25,7 +25,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     (state) => state.projectTree.为了编辑临时创建的节点的key,
   );
   const 编辑临时创建节点之前选中的节点是否为自身 = useAppSelector((state) =>
-    state.projectTree.编辑临时创建节点之前选中的节点的keys?.includes(nodeKey),
+    state.projectTree.为了编辑临时创建节点之前选中的节点的key?.includes(
+      nodeKey,
+    ),
   );
 
   const 当前正在编辑的项目树节点的key = useAppSelector(
@@ -47,7 +49,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
           dispatch(删除项目树节点(nodeKey));
           dispatch(更新为了编辑创建的临时节点是哪个(null));
           dispatch(恢复当前选中的节点为编辑临时创建节点之前选中的节点的key());
-          dispatch(更新_编辑临时创建节点之前选中的节点的key_为(null));
+          dispatch(更新为了编辑临时创建节点之前选中的节点的key为(null));
         }
       } else {
         if (来自失去焦点) {
@@ -62,7 +64,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       }
       if (为了编辑临时创建的节点的key === nodeKey) {
         dispatch(更新为了编辑创建的临时节点是哪个(null));
-        dispatch(更新_编辑临时创建节点之前选中的节点的key_为(null));
+        dispatch(更新为了编辑临时创建节点之前选中的节点的key为(null));
       }
       dispatch(
         更新节点的数据({
