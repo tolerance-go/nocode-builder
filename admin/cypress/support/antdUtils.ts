@@ -23,10 +23,17 @@ export const getTreeNodeChildren = ($treeNode: JQuery<HTMLElement>) => {
 export const getTreeNodeParent = ($treeNode: JQuery<HTMLElement>) => {
   const currentNodeIndexUnits = getTreeNodeIndents($treeNode[0]);
 
-  const $parent = $treeNode.prevAll().filter((_index, element) => {
-    const indents = getTreeNodeIndents(element);
-    return indents.length === currentNodeIndexUnits.length - 1;
-  });
+  const parent = $treeNode
+    .prevAll()
+    .toArray()
+    .find((element) => {
+      const indents = getTreeNodeIndents(element);
+      return indents.length === currentNodeIndexUnits.length - 1;
+    });
 
-  return $parent;
+  if (!parent) {
+    throw new Error('未找到父节点');
+  }
+
+  return Cypress.$(parent);
 };

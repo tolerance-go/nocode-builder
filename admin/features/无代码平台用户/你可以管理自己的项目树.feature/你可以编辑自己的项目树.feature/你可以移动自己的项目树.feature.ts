@@ -1,6 +1,97 @@
+import { 测试类 } from '@cypress/shared/constants';
+import { getTreeNodeParent } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树移动流程', ({ 假如 }) => {
+  假如('用户拖拽文件，应该可以进行排序', ({ 当, 那么 }) => {
+    当('用户已经登录', () => {
+      cy.登录('yb', '123456');
+    });
+    当('用户访问主页', () => {
+      cy.visit('/');
+    });
+    当(
+      '用户在跟节点创建了2个项目文件节点，第一个标题为 a，第二个标题为 b',
+      () => {
+        cy.获取添加项目的按钮().click();
+        cy.获取项目树标题输入框().type('b{enter}');
+        cy.获取添加项目的按钮().click();
+        cy.获取项目树标题输入框().type('a{enter}');
+      },
+    );
+    那么('第一个标题为 a，第二个标题为 b', () => {
+      cy.获取antd树列表内部容器().children().eq(0).should('contain.text', 'a');
+      cy.获取antd树列表内部容器().children().eq(1).should('contain.text', 'b');
+    });
+    当('用户拖拽 b 到 a 的前面', () => {
+      cy.获取项目树节点通过标题('b').拖拽到(
+        cy.获取项目树节点通过标题('a'),
+        'top',
+      );
+    });
+    那么('第一个标题为 b，第二个标题为 a', () => {
+      cy.获取antd树列表内部容器().children().eq(0).should('contain.text', 'b');
+      cy.获取antd树列表内部容器().children().eq(1).should('contain.text', 'a');
+    });
+    当('用户拖拽 b 到 a 的后面', () => {
+      cy.获取项目树节点通过标题('b').拖拽到(
+        cy.获取项目树节点通过标题('a'),
+        'bottom',
+      );
+    });
+    那么('第一个标题为 a，第二个标题为 b', () => {
+      cy.获取antd树列表内部容器().children().eq(0).should('contain.text', 'a');
+      cy.获取antd树列表内部容器().children().eq(1).should('contain.text', 'b');
+    });
+  });
+
+  假如.only('用户拖拽文件到文件夹中，应该可以插入', ({ 当, 那么, 并且 }) => {
+    当('用户已经登录', () => {
+      cy.登录('yb', '123456');
+    });
+    当('用户访问主页', () => {
+      cy.visit('/');
+    });
+    当(
+      '用户在跟节点创建了一个文件夹和一个文件，文件夹标题为 folder，文件标题为 file',
+      () => {
+        cy.获取添加项目的按钮().click();
+        cy.获取项目树标题输入框().type('file{enter}');
+        cy.获取添加项目组的按钮().click();
+        cy.获取项目树标题输入框().type('folder{enter}');
+      },
+    );
+    那么('项目树中应该包含一个文件夹 folder 和一个文件 file', () => {
+      cy.获取antd树列表内部容器().should('contain.text', 'folder');
+      cy.获取antd树列表内部容器().should('contain.text', 'file');
+    });
+    当('用户拖拽 file 到 folder 中', () => {
+      cy.获取项目树节点通过标题('file').拖拽到(
+        cy.获取项目树节点通过标题('folder'),
+        'bottom',
+        'right',
+      );
+    });
+    并且('文件夹自动打开，文件显示，并且等待展开文件动画完成', () => {
+      cy.获取项目树节点通过标题('folder').should(
+        'have.class',
+        'ant-tree-treenode-switcher-open',
+      );
+      cy.获取项目树节点通过标题('file').should('be.visible');
+      cy.获取项目树节点通过标题('file')
+        .parent('.ant-tree-treenode-motion')
+        .should('not.exist');
+    });
+    那么('文件 file 应该被插入到文件夹 folder 中', () => {
+      cy.获取项目树节点通过标题('file').then(($file) => {
+        const $parent = getTreeNodeParent($file);
+        expect(
+          $parent.find(`[data-test-class="${测试类.项目树节点标题}"]`).text(),
+        ).equal('folder');
+      });
+    });
+  });
+
   /**
    * 假如 用户拖拽项目文件到文件夹下，应该可以移动位置
    * 当 用户已经登录

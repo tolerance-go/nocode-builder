@@ -4,6 +4,12 @@ export {};
 declare global {
   namespace Cypress {
     interface Chainable {
+      拖拽到(
+        target: Chainable<JQuery<HTMLElement>>,
+        vertical: 'top' | 'bottom' | 'middle' = 'middle',
+        horizontal: 'left' | 'right' | 'center' = 'center',
+      ): Chainable<void>;
+
       /**
        * 业务操作
        */
