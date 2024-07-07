@@ -314,6 +314,12 @@ const projectTreeSlice = createSlice({
             finalNewIndex,
           );
           state.节点到父节点的映射[nodeKey] = newParentKey;
+
+          // 如果插入的父节点没有展开
+          if (!state.所有展开的节点的key.includes(newParentKey)) {
+            // 那么自动展开他
+            state.所有展开的节点的key.push(newParentKey);
+          }
         }
       }
     },

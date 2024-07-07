@@ -224,20 +224,11 @@ export const DirectoryTree = () => {
             return;
           }
 
-          let finalIndex = info.dropPosition;
-
-          // 如果拖动的是文件，放置的是文件夹，放置位置是内部
-          // 并且放置节点内没有任何节点
-          // 那么把 info.dropPosition 的 1 转换为 0
-          if (info.dragNode.isLeaf && !info.node.isLeaf) {
-            finalIndex = 0;
-          }
-
           dispatch(
             移动项目树节点({
               nodeKey: info.dragNode.key,
               newParentKey: dropKey,
-              newIndex: finalIndex,
+              newIndex: 0,
             }),
           );
         } else {
