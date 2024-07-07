@@ -1,7 +1,7 @@
 import {
-  删除项目树节点,
-  停止节点编辑状态并重置输入内容,
-  更新为了编辑创建的临时节点是哪个,
+  删除项目树节点并同步其他状态,
+  停止节点编辑状态并清空输入内容,
+  更新为了编辑创建的临时节点为,
   更新节点的数据,
   恢复当前选中的节点为编辑临时创建节点之前选中的节点的key,
   useAppDispatch,
@@ -46,14 +46,11 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     if (标题内容有错) {
       if (为了编辑临时创建的节点的key === nodeKey) {
         if (来自失去焦点) {
-          dispatch(删除项目树节点(nodeKey));
-          dispatch(更新为了编辑创建的临时节点是哪个(null));
-          dispatch(恢复当前选中的节点为编辑临时创建节点之前选中的节点的key());
-          dispatch(更新为了编辑临时创建节点之前选中的节点的key为(null));
+          dispatch(删除项目树节点并同步其他状态(nodeKey));
         }
       } else {
         if (来自失去焦点) {
-          dispatch(停止节点编辑状态并重置输入内容());
+          dispatch(停止节点编辑状态并清空输入内容());
         }
       }
     } else {
@@ -63,7 +60,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
         throw new Error('此处标题不应为空');
       }
       if (为了编辑临时创建的节点的key === nodeKey) {
-        dispatch(更新为了编辑创建的临时节点是哪个(null));
+        dispatch(更新为了编辑创建的临时节点为(null));
         dispatch(更新为了编辑临时创建节点之前选中的节点的key为(null));
       }
       dispatch(
@@ -72,7 +69,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
           data: { title: 当前输入标题 },
         }),
       );
-      dispatch(停止节点编辑状态并重置输入内容());
+      dispatch(停止节点编辑状态并清空输入内容());
     }
   };
 
@@ -108,7 +105,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             ),
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
-              dispatch(停止节点编辑状态并重置输入内容());
+              dispatch(停止节点编辑状态并清空输入内容());
             },
           },
           {
@@ -121,7 +118,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             ),
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
-              dispatch(删除项目树节点(nodeKey));
+              dispatch(删除项目树节点并同步其他状态(nodeKey));
             },
           },
         ],

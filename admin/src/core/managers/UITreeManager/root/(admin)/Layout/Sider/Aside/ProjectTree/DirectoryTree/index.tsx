@@ -7,7 +7,7 @@ import {
   更新展开的节点是哪些,
   更新当前编辑节点是哪个并更新输入框的值,
   更新选中的节点是哪些,
-  移动项目树节点,
+  移动项目树节点并同步其他状态,
   退出当前正在编辑的节点,
 } from '@/core/managers/UIStoreManager';
 import { useKeyPress } from '@/hooks';
@@ -225,7 +225,7 @@ export const DirectoryTree = () => {
           }
 
           dispatch(
-            移动项目树节点({
+            移动项目树节点并同步其他状态({
               nodeKey: info.dragNode.key,
               newParentKey: dropKey,
               newIndex: 0,
@@ -249,7 +249,7 @@ export const DirectoryTree = () => {
           }
 
           dispatch(
-            移动项目树节点({
+            移动项目树节点并同步其他状态({
               nodeKey: info.dragNode.key,
               newParentKey: 父节点,
               newIndex: finalIndex,
