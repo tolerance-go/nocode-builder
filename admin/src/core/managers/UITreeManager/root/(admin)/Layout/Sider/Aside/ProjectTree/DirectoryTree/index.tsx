@@ -176,7 +176,7 @@ export const DirectoryTree = () => {
         .ant-tree-treenode:not(.ant-tree-treenode-selected) {
           &:has(span.active) {
             &::before {
-              background-color: ${token.yellow2};
+              background-color: ${token['blue-2']};
             }
           }
         }
