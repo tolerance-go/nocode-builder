@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { 过滤掉包含父节点在内的节点 } from './filterNodesWithParentInSet';
+import { 过滤掉包含父节点在内的节点 } from '.';
 
 describe('过滤包含父节点的节点', () => {
   it('应过滤掉其父节点也在集合中的节点', () => {

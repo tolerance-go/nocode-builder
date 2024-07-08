@@ -40,6 +40,12 @@ import { BASE_API } from './constants';
 //   }
 // }
 
+Cypress.Commands.add('组合批量选中节点', (titles) => {
+  titles.forEach((title) => {
+    cy.获取项目树节点通过标题(title).click({ ctrlKey: true });
+  });
+});
+
 Cypress.Commands.add('范围批量选中节点', (startTitle, endTitle) => {
   // 点击起始节点
   cy.获取项目树节点通过标题(startTitle).click();
