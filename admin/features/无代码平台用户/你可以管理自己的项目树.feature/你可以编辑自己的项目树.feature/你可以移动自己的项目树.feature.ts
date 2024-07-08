@@ -190,7 +190,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     },
   );
 
-  假如.only('用户拖拽文件夹，应该可以进行排序', ({ 当, 那么 }) => {
+  假如('用户拖拽文件夹，应该可以进行排序', ({ 当, 那么 }) => {
     当('用户已经登录', () => {
       cy.登录('yb', '123456');
     });
@@ -200,8 +200,11 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当(
       '用户在跟节点创建了2个文件夹，第一个标题为 folder1，第二个标题为 folder2',
       () => {
+        cy.获取添加项目的按钮().click();
+        cy.获取项目树标题输入框().type('file{enter}');
         cy.获取添加项目组的按钮().click();
         cy.获取项目树标题输入框().type('folder2{enter}');
+        cy.获取项目树节点通过标题('file').dblclick();
         cy.获取添加项目组的按钮().click();
         cy.获取项目树标题输入框().type('folder1{enter}');
       },
@@ -221,7 +224,6 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy.获取项目树节点通过标题('folder1'),
         {
           vertical: 'top',
-          horizontal: 'left',
         },
       );
     });

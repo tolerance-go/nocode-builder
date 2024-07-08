@@ -49,42 +49,62 @@ Cypress.Commands.add(
       const dataTransfer = new DataTransfer();
 
       // 获取目标元素的边界矩形
+      const subjectRect = subject[0].getBoundingClientRect();
       const targetRect = $target[0].getBoundingClientRect();
-      let clientY, clientX;
 
-      // 根据指定的垂直位置设置 clientY
-      if (vertical === 'top') {
-        clientY = targetRect.top + 1; // 接近目标元素的顶部
-      } else if (vertical === 'bottom') {
-        clientY = targetRect.bottom - 1; // 接近目标元素的底部
-      } else {
-        clientY = targetRect.top + (targetRect.bottom - targetRect.top) / 2; // 目标元素的中间
-      }
+      const getTargetClientXY = () => {
+        let clientY, clientX;
 
-      // 根据指定的水平位置设置 clientX
-      if (horizontal === 'left') {
-        clientX = targetRect.left + 1; // 接近目标元素的左侧
-      } else if (horizontal === 'right') {
-        clientX = targetRect.right - 1; // 接近目标元素的右侧
-      } else {
-        clientX = targetRect.left + (targetRect.right - targetRect.left) / 2; // 水平方向居中
-      }
+        // 根据指定的垂直位置设置 clientY
+        if (vertical === 'top') {
+          clientY = targetRect.top + 1; // 接近目标元素的顶部
+        } else if (vertical === 'bottom') {
+          clientY = targetRect.bottom - 1; // 接近目标元素的底部
+        } else {
+          clientY = targetRect.top + (targetRect.bottom - targetRect.top) / 2; // 目标元素的中间
+        }
+
+        // 根据指定的水平位置设置 clientX
+        if (horizontal === 'left') {
+          clientX = targetRect.left + 1; // 接近目标元素的左侧
+        } else if (horizontal === 'right') {
+          clientX = targetRect.right - 1; // 接近目标元素的右侧
+        } else {
+          clientX = targetRect.left + (targetRect.right - targetRect.left) / 2; // 水平方向居中
+        }
+
+        return { clientX, clientY };
+      };
+
+      const targetClients = getTargetClientXY();
 
       // 触发 dragstart 事件
-      cy.wrap(subject).as('subject').trigger('dragstart', {
-        dataTransfer,
-      });
+      cy.wrap(subject)
+        // .find('.ant-tree-node-content-wrapper')
+        .as('subject')
+        .trigger('dragstart', {
+          dataTransfer,
+          /** 从中间位置抓起 */
+          clientX:
+            subjectRect.left + (subjectRect.right - subjectRect.left) / 2,
+          clientY: subjectRect.top + (subjectRect.bottom - subjectRect.top) / 2,
+        });
 
       // 触发 dragenter 事件
-      cy.wrap($target).as('target').trigger('dragenter', {
-        dataTransfer,
-      });
+      cy.wrap($target)
+        // .find('.ant-tree-node-content-wrapper')
+        .as('target')
+        .trigger('dragenter', {
+          dataTransfer,
+          clientX: targetClients.clientX,
+          clientY: targetClients.clientY,
+        });
 
       // 触发 dragover 事件
       cy.get('@target').trigger('dragover', {
         dataTransfer,
-        clientX,
-        clientY,
+        clientX: targetClients.clientX,
+        clientY: targetClients.clientY,
       });
 
       // 触发 drop 事件
