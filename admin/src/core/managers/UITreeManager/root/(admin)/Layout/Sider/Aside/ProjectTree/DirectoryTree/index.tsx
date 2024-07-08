@@ -180,13 +180,15 @@ export const DirectoryTree = () => {
         return true;
       }}
       className={css`
-        .ant-tree-treenode:not(.ant-tree-treenode-selected) {
-          :has(span.prev-selected) {
+        .ant-tree-treenode {
+          &:has(span.prev-selected) {
             &::before {
               background-color: ${token.blue2};
             }
           }
-          :has(span.active) {
+        }
+        .ant-tree-treenode:not(.ant-tree-treenode-selected) {
+          &:has(span.active) {
             &::before {
               background-color: ${token.yellow2};
             }

@@ -2,7 +2,7 @@ import {
   更新容器高度,
   useAppDispatch,
   useAppSelector,
-  选中项目树容器,
+  选中项目树容器并清空选中和激活节点,
   取消选中项目树容器,
 } from '@/core/managers/UIStoreManager';
 import { debounce } from 'lodash-es';
@@ -74,7 +74,7 @@ export const ProjectTree = () => {
       onClick={(event) => {
         // 只处理当前绑定事件的 dom 的点击事件
         if (event.target !== event.currentTarget) return;
-        dispatch(选中项目树容器());
+        dispatch(选中项目树容器并清空选中和激活节点());
       }}
     >
       <DirectoryTree />
