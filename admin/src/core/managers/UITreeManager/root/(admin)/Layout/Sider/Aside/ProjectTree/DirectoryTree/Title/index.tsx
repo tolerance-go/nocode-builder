@@ -127,15 +127,16 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       }}
     >
       <span
-        data-test-class={测试类.项目树节点标题}
+        data-test-class={cx(
+          测试类.项目树节点标题,
+          编辑临时创建节点之前选中的节点是否为自身 &&
+            测试类.编辑临时创建节点之前选中的节点,
+        )}
         style={{
           display: 'inline-block',
           width: '100%',
         }}
-        className={cx(
-          编辑临时创建节点之前选中的节点是否为自身 ? 'prev-selected' : null,
-          激活的节点的key是否为自身 ? 'active' : null,
-        )}
+        className={cx(激活的节点的key是否为自身 ? 'active' : null)}
       >
         {nodeDataRecord?.title}
       </span>

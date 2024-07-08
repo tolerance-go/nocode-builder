@@ -173,13 +173,6 @@ export const DirectoryTree = () => {
         return true;
       }}
       className={css`
-        .ant-tree-treenode {
-          &:has(span.prev-selected) {
-            &::before {
-              background-color: ${token.blue2};
-            }
-          }
-        }
         .ant-tree-treenode:not(.ant-tree-treenode-selected) {
           &:has(span.active) {
             &::before {

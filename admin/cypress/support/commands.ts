@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { 测试标识 } from '@cypress/shared/constants';
+import { 测试标识, 测试类 } from '@cypress/shared/constants';
 import { BASE_API } from './constants';
 
 // ***********************************************
@@ -158,7 +158,7 @@ Cypress.Commands.add('添加项目组文件夹节点', (typeName: string) => {
 
 Cypress.Commands.add('获取项目树节点标题元素', (name: string) => {
   return cy
-    .get('[data-test-class="project-tree-title"]')
+    .get(`[data-test-class*="${测试类.项目树节点标题}"]`)
     .filter((_index, element) => {
       return element.textContent?.trim() === name;
     });
@@ -189,7 +189,7 @@ Cypress.Commands.add('获取测试标识', (id: string) => {
 });
 
 Cypress.Commands.add('获取测试类', (className: string) => {
-  return cy.get(`[data-test-class="${className}"]`);
+  return cy.get(`[data-test-class*="${className}"]`);
 });
 
 Cypress.Commands.add('获取antd通知框描述', () => {
