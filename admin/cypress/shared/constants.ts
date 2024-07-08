@@ -3,6 +3,8 @@ export const 测试标识 = {
   创建项目节点的按钮: 'create-project-node-btn',
   项目树标题输入框: 'project-tree-title-input',
 
+  项目树容器: 'project-tree-container',
+
   登录表单: 'login-form',
   登录用户名输入框: 'login-username-input',
   登录密码输入框: 'login-password-input',

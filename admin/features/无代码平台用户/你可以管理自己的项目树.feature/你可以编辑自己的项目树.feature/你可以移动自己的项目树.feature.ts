@@ -1,4 +1,4 @@
-import { 测试类 } from '@cypress/shared/constants';
+import { 测试标识, 测试类 } from '@cypress/shared/constants';
 import { getTreeNodeParent } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
@@ -200,13 +200,12 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当(
       '用户在跟节点创建了2个文件夹，第一个标题为 folder1，第二个标题为 folder2',
       () => {
-        cy.获取添加项目的按钮().click();
-        cy.获取项目树标题输入框().type('file{enter}');
         cy.获取添加项目组的按钮().click();
-        cy.获取项目树标题输入框().type('folder2{enter}');
-        cy.获取项目树节点通过标题('file').dblclick();
+        cy.获取项目树标题输入框().type('folder2');
+        cy.获取测试标识(测试标识.项目树容器).click();
         cy.获取添加项目组的按钮().click();
-        cy.获取项目树标题输入框().type('folder1{enter}');
+        cy.获取项目树标题输入框().type('folder1');
+        cy.获取测试标识(测试标识.项目树容器).click();
       },
     );
     那么('第一个标题为 folder1，第二个标题为 folder2', () => {
@@ -237,24 +236,24 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         .eq(1)
         .should('contain.text', 'folder1');
     });
-    // 当('用户拖拽 folder2 到 folder1 的后面', () => {
-    //   cy.获取项目树节点通过标题('folder2').拖拽到(
-    //     cy.获取项目树节点通过标题('folder1'),
-    //     {
-    //       vertical: 'bottom',
-    //       horizontal: 'left',
-    //     },
-    //   );
-    // });
-    // 那么('第一个标题为 folder1，第二个标题为 folder2', () => {
-    //   cy.获取antd树列表内部容器()
-    //     .children()
-    //     .eq(0)
-    //     .should('contain.text', 'folder1');
-    //   cy.获取antd树列表内部容器()
-    //     .children()
-    //     .eq(1)
-    //     .should('contain.text', 'folder2');
-    // });
+    当('用户拖拽 folder2 到 folder1 的后面', () => {
+      cy.获取项目树节点通过标题('folder2').拖拽到(
+        cy.获取项目树节点通过标题('folder1'),
+        {
+          vertical: 'bottom',
+          horizontal: 'left',
+        },
+      );
+    });
+    那么('第一个标题为 folder1，第二个标题为 folder2', () => {
+      cy.获取antd树列表内部容器()
+        .children()
+        .eq(0)
+        .should('contain.text', 'folder1');
+      cy.获取antd树列表内部容器()
+        .children()
+        .eq(1)
+        .should('contain.text', 'folder2');
+    });
   });
 });

@@ -4,13 +4,14 @@ import {
   useAppSelector,
   删除所有选中的节点,
   取消指定的节点的选中状态,
+  取消选中项目树容器,
   更新展开的节点是哪些,
   更新当前编辑节点是哪个并更新输入框的值,
   更新选中的节点是哪些,
   移动项目树节点并同步其他状态,
   退出当前正在编辑的节点,
 } from '@/core/managers/UIStoreManager';
-import { useKeyPress } from '@/hooks';
+import { useKeyPressEventByKeyboardJs } from '@/hooks';
 import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
@@ -34,7 +35,7 @@ export const DirectoryTree = () => {
     (state) => state.projectTree.所有展开的节点的key,
   );
 
-  useKeyPress(['delete'], () => {
+  useKeyPressEventByKeyboardJs(['delete'], () => {
     const {
       projectTree: { 所有已经选中的节点, 当前正在编辑的项目树节点的key },
     } = reduxStore.getState();
@@ -51,7 +52,7 @@ export const DirectoryTree = () => {
     dispatch(删除所有选中的节点());
   });
 
-  useKeyPress(['f2'], () => {
+  useKeyPressEventByKeyboardJs(['f2'], () => {
     所有已经选中的节点.length &&
       dispatch(
         更新当前编辑节点是哪个并更新输入框的值(
@@ -60,7 +61,7 @@ export const DirectoryTree = () => {
       );
   });
 
-  useKeyPress(['esc'], () => {
+  useKeyPressEventByKeyboardJs(['esc'], () => {
     if (所有已经选中的节点.length) {
       dispatch(退出当前正在编辑的节点());
     }
@@ -256,6 +257,9 @@ export const DirectoryTree = () => {
             }),
           );
         }
+      }}
+      onClick={() => {
+        dispatch(取消选中项目树容器());
       }}
       titleRender={(nodeData) => <Title nodeKey={nodeData.key} />}
     />

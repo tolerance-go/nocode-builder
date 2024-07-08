@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 
 type KeyPressCallback = (event?: keyboardjs.KeyEvent) => void;
 
-export function useKeyPress(
+export function useKeyPressEventByKeyboardJs(
   keys: string | string[],
   callback: KeyPressCallback,
   keyEvent: 'keydown' | 'keyup' = 'keydown',

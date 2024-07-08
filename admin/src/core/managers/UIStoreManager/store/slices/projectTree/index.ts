@@ -23,6 +23,7 @@ export type ProjectTreeStates = {
   节点树容器的高度: number;
   为了编辑临时创建节点之前选中的节点的key: string[] | null;
   当前输入的标题: string;
+  是否选中了项目树容器: boolean;
 };
 
 const initialState: ProjectTreeStates = {
@@ -37,12 +38,20 @@ const initialState: ProjectTreeStates = {
   为了编辑临时创建的节点的key: null,
   节点树容器的高度: 0,
   为了编辑临时创建节点之前选中的节点的key: null,
+  是否选中了项目树容器: false,
 };
 
 const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
+    选中项目树容器: (state) => {
+      state.是否选中了项目树容器 = true;
+      state.所有已经选中的节点 = [];
+    },
+    取消选中项目树容器: (state) => {
+      state.是否选中了项目树容器 = false;
+    },
     清空当前输入的标题: (state) => {
       state.当前输入的标题 = '';
     },
@@ -394,6 +403,8 @@ const projectTreeSlice = createSlice({
 
 export const {
   initProjectTreeDataMeta,
+  选中项目树容器,
+  取消选中项目树容器,
   清空当前输入的标题,
   更新当前输入的标题,
   退出当前正在编辑的节点,
