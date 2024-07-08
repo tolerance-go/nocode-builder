@@ -242,7 +242,7 @@ export const Header = () => {
           }}
         ></Button>
         <Button
-          data-test-id={测试标识.CREATE_PROJECT_NODE_BTN}
+          data-test-id={测试标识.创建项目节点的按钮}
           type="text"
           disabled={projectTreeTimeLineVisible}
           // loading={addFileLoading}
@@ -251,7 +251,7 @@ export const Header = () => {
         ></Button>
         <Button
           type="text"
-          data-test-id={测试标识.CREATE_PROJECT_GROUP_NODE_BTN}
+          data-test-id={测试标识.创建项目组节点的按钮}
           disabled={projectTreeTimeLineVisible}
           // loading={addFolderLoading}
           icon={<FolderAddOutlined />}

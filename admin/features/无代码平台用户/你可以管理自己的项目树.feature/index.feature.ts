@@ -39,7 +39,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
   假如('用户正在编辑输入框的时候，应该正确处理输入异常', ({ 当, 那么 }) => {
     cy.登录('yb', '123456');
     cy.visit('/');
-    cy.获取测试标识(测试标识.CREATE_PROJECT_GROUP_NODE_BTN).click();
+    cy.获取测试标识(测试标识.创建项目组节点的按钮).click();
 
     当('用户输入内容后，又全部撤销', () => {
       cy.获取项目树标题输入框().type('s{backspace}');
@@ -72,7 +72,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     ({ 当, 那么, 并且 }) => {
       cy.登录('yb', '123456');
       cy.visit('/');
-      cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_NODE_BTN}"]`).click();
+      cy.get(`[data-test-id="${测试标识.创建项目节点的按钮}"]`).click();
       cy.获取项目树标题输入框().as('input');
       cy.get('@input').type('text{enter}');
 
@@ -83,9 +83,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy['获取antd树列表内部容器']().should('have.length', 1);
       });
       并且('点击创建项目分组按钮', () => {
-        cy.get(
-          `[data-test-id="${测试标识.CREATE_PROJECT_GROUP_NODE_BTN}"]`,
-        ).click();
+        cy.get(`[data-test-id="${测试标识.创建项目组节点的按钮}"]`).click();
       });
       那么('输入框应该在根节点下一级的第一个位置显示', () => {
         cy.获取项目树标题输入框()

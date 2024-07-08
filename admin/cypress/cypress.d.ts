@@ -6,8 +6,10 @@ declare global {
     interface Chainable {
       拖拽到(
         target: Chainable<JQuery<HTMLElement>>,
-        vertical: 'top' | 'bottom' | 'middle' = 'middle',
-        horizontal: 'left' | 'right' | 'center' = 'center',
+        position: {
+          vertical?: 'top' | 'bottom' | 'middle';
+          horizontal?: 'left' | 'right' | 'center';
+        },
       ): Chainable<void>;
 
       /**

@@ -42,7 +42,9 @@ import { BASE_API } from './constants';
 Cypress.Commands.add(
   '拖拽到',
   { prevSubject: 'element' },
-  (subject, targetChainable, vertical = 'middle', horizontal = 'center') => {
+  (subject, targetChainable, position) => {
+    const { vertical = 'middle', horizontal = 'center' } = position;
+
     targetChainable.then(($target) => {
       const dataTransfer = new DataTransfer();
 
@@ -119,7 +121,7 @@ Cypress.Commands.add('登录', (username: string, password: string) => {
 });
 
 Cypress.Commands.add('添加项目文件节点', (typeName: string) => {
-  cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_NODE_BTN}"]`).as(
+  cy.get(`[data-test-id="${测试标识.创建项目节点的按钮}"]`).as(
     'createProjectBtn',
   );
   cy.get('@createProjectBtn').click();
@@ -127,7 +129,7 @@ Cypress.Commands.add('添加项目文件节点', (typeName: string) => {
 });
 
 Cypress.Commands.add('添加项目组文件夹节点', (typeName: string) => {
-  cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_GROUP_NODE_BTN}"]`).as(
+  cy.get(`[data-test-id="${测试标识.创建项目组节点的按钮}"]`).as(
     'createProjectGroupBtn',
   );
   cy.get('@createProjectGroupBtn').click();
@@ -155,11 +157,11 @@ Cypress.Commands.add('获取项目树标题输入框', () => {
 });
 
 Cypress.Commands.add('获取添加项目组的按钮', () => {
-  return cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_GROUP_NODE_BTN}"]`);
+  return cy.get(`[data-test-id="${测试标识.创建项目组节点的按钮}"]`);
 });
 
 Cypress.Commands.add('获取添加项目的按钮', () => {
-  return cy.get(`[data-test-id="${测试标识.CREATE_PROJECT_NODE_BTN}"]`);
+  return cy.get(`[data-test-id="${测试标识.创建项目节点的按钮}"]`);
 });
 
 Cypress.Commands.add('获取测试标识', (id: string) => {
