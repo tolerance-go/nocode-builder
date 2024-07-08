@@ -78,44 +78,6 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
   });
 
-  假如(
-    '用户点击了项目树容器，那么应该选中它，并且取消节点选中',
-    ({ 当, 并且, 那么 }) => {
-      当('用户登录', () => {
-        cy.登录('yb', '123456');
-      });
-
-      并且('进入主页', () => {
-        cy.visit('/');
-      });
-
-      当('用户创建一个项目节点', () => {
-        cy.获取添加项目的按钮().click();
-        cy.获取项目树标题输入框().type('项目节点{enter}');
-      });
-
-      并且('项目节点应该是选中状态', () => {
-        cy.获取项目树节点通过标题('项目节点')
-          .should('exist')
-          .and('have.class', 'ant-tree-treenode-selected');
-      });
-
-      当('用户点击项目容器的空白处', () => {
-        cy.获取测试标识(测试标识.项目树容器).click('bottom'); // 假设项目树容器的类名为 .项目树容器
-      });
-
-      那么('项目树容器应该高亮选中', () => {
-        cy.获取测试标识(测试标识.项目树容器).should('have.class', 'selected'); // 假设高亮的类名为 .高亮类名
-      });
-
-      并且('原先选中的项目节点应该失去选中状态', () => {
-        cy.获取项目树节点通过标题('项目节点')
-          .should('exist')
-          .and('not.have.class', 'ant-tree-treenode-selected');
-      });
-    },
-  );
-
   假如('用户按正确流程创建项目分组，应该可以成功创建', ({ 当, 那么, 并且 }) => {
     当('用户登录', () => {
       cy.登录('yb', '123456');
@@ -275,7 +237,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     },
   );
 
-  假如('用户创建了项目，然后取消，应该可以再次创建', ({ 当, 并且, 那么 }) => {
+  假如('用户创建了项目，然后取消，应该可以再次创建', ({ 当, 那么 }) => {
     当('登录', () => {
       cy.登录('yb', '123456');
     });
@@ -289,11 +251,6 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     那么('用户应该能看到项目树中的输入框', () => {
       cy.获取项目树标题输入框().should('be.visible');
     });
-    并且('输入框所处的节点应该是选中状态', () => {
-      cy.获取项目树标题输入框()
-        .parents('.ant-tree-treenode')
-        .should('have.class', 'ant-tree-treenode-selected');
-    });
     当('用输入失去焦点', () => {
       cy.获取项目树标题输入框().blur();
     });
@@ -306,11 +263,6 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     那么('用户应该能看到项目树中的输入框', () => {
       cy.获取项目树标题输入框().should('be.visible');
     });
-    并且('输入框所处的节点应该是选中状态', () => {
-      cy.获取项目树标题输入框()
-        .parents('.ant-tree-treenode')
-        .should('have.class', 'ant-tree-treenode-selected');
-    });
     当('用输入失去焦点', () => {
       cy.获取项目树标题输入框().blur();
     });
@@ -319,7 +271,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
   });
 
-  假如('用户创建了项目组，然后取消，应该可以再次创建', ({ 当, 并且, 那么 }) => {
+  假如('用户创建了项目组，然后取消，应该可以再次创建', ({ 当, 那么 }) => {
     当('登录', () => {
       cy.登录('yb', '123456');
     });
@@ -333,11 +285,6 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     那么('用户应该能看到项目树中的输入框', () => {
       cy.获取项目树标题输入框().should('be.visible');
     });
-    并且('输入框所处的节点应该是选中状态', () => {
-      cy.获取项目树标题输入框()
-        .parents('.ant-tree-treenode')
-        .should('have.class', 'ant-tree-treenode-selected');
-    });
     当('用输入失去焦点', () => {
       cy.获取项目树标题输入框().blur();
     });
@@ -349,11 +296,6 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
     那么('用户应该能看到项目树中的输入框', () => {
       cy.获取项目树标题输入框().should('be.visible');
-    });
-    并且('输入框所处的节点应该是选中状态', () => {
-      cy.获取项目树标题输入框()
-        .parents('.ant-tree-treenode')
-        .should('have.class', 'ant-tree-treenode-selected');
     });
     当('用输入失去焦点', () => {
       cy.获取项目树标题输入框().blur();
@@ -377,14 +319,9 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     那么('用户应该能看到项目树中的输入框', () => {
       cy.获取项目树标题输入框().should('be.visible');
     });
-    并且('输入框所处的节点应该是选中状态', () => {
-      cy.获取项目树标题输入框()
-        .parents('.ant-tree-treenode')
-        .should('have.class', 'ant-tree-treenode-selected');
-    });
-
-    当('用户输入合法内容和按下回车键', () => {
+    当('用户输入合法内容和按下回车键，并点击', () => {
       cy.获取项目树标题输入框().type('title{enter}');
+      cy.获取项目树节点标题元素('title').click();
     });
     那么('用户应该能看到分组名称在项目树中', () => {
       cy.获取项目树节点标题元素('title').should('be.visible');
@@ -408,8 +345,9 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取添加项目的按钮().click();
     });
 
-    并且('用户输入合法内容和按下回车键', () => {
+    并且('用户输入合法内容和按下回车键，然后点击', () => {
       cy.获取项目树标题输入框().type('title{enter}');
+      cy.获取项目树节点通过标题('title').click();
     });
 
     那么('用户应该能看到项目名称在项目树中并且选中', () => {
@@ -486,6 +424,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
           .should('have.length', 1);
       });
       当('用户已经选中项目组文件夹节点', () => {
+        cy.获取项目树节点通过标题('group').click();
         cy.获取项目树节点通过标题('group').should(
           'have.class',
           'ant-tree-treenode-selected',

@@ -35,7 +35,9 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
       那么('用户应该被重定向到主页并看到欢迎信息', () => {
         cy.location().should((loc) => {
-          expect(loc.pathname).to.eq('/');
+          expect(loc.pathname).to.eq(
+            new URL(Cypress.config().baseUrl!).pathname,
+          );
         });
       });
     },
