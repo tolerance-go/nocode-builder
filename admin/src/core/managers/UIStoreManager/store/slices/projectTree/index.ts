@@ -10,6 +10,8 @@ import {
   removeNode,
 } from '../../utils/tree/effects';
 import { TreeNode } from '../../utils/tree/types';
+import { 过滤掉包含父节点在内的节点 } from '../../utils/tree';
+import { 批量删除节点 } from '../../utils/tree/effects/批量删除节点';
 
 export type ProjectTreeStates = {
   项目节点树: ProjectStructureTreeDataNode[];
@@ -303,7 +305,24 @@ const projectTreeSlice = createSlice({
         );
       }
     },
-    移动项目树节点并同步其他状态: (
+    批量移动项目树节点并同步其他状态: (
+      state,
+      action: PayloadAction<{
+        nodeKeys: string[];
+        newParentKey: string | null;
+        newIndex: number;
+      }>,
+    ) => {
+      const { nodeKeys, newParentKey, newIndex } = action.payload;
+
+      const 互不包含的等待移动的节点 = 过滤掉包含父节点在内的节点(
+        nodeKeys,
+        state.derived_节点到父节点的映射,
+      );
+
+      const removeds = 批量删除节点(state.项目节点树, 互不包含的等待移动的节点);
+    },
+    单个移动项目树节点并同步其他状态: (
       state,
       action: PayloadAction<{
         nodeKey: string;
@@ -356,6 +375,37 @@ const projectTreeSlice = createSlice({
           }
         }
       }
+    },
+    移动项目树节点并同步其他状态: (
+      state,
+      action: PayloadAction<{
+        nodeKey: string;
+        newParentKey: string | null;
+        newIndex: number;
+      }>,
+    ) => {
+      // 如果移动的节点是选中的
+      // 并且选中的节点包含多个
+      // 那么使用批量移动节点操作
+      if (
+        state.所有已经选中的节点.includes(action.payload.nodeKey) &&
+        state.所有已经选中的节点.length > 1
+      ) {
+        projectTreeSlice.caseReducers.批量移动项目树节点并同步其他状态(state, {
+          type: '',
+          payload: {
+            nodeKeys: state.所有已经选中的节点,
+            newParentKey: action.payload.newParentKey,
+            newIndex: action.payload.newIndex,
+          },
+        });
+        return;
+      }
+
+      projectTreeSlice.caseReducers.单个移动项目树节点并同步其他状态(
+        state,
+        action,
+      );
     },
     删除某个选中的节点: (state, action: PayloadAction<string>) => {
       state.所有已经选中的节点 = state.所有已经选中的节点.filter(

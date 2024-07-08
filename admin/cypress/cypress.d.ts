@@ -12,6 +12,8 @@ declare global {
         },
       ): Chainable<void>;
 
+      范围批量选中节点(fromTitle: string, toTitle: string): Chainable<void>;
+
       /**
        * 业务操作
        */

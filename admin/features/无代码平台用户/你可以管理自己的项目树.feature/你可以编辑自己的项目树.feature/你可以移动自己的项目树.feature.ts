@@ -3,6 +3,73 @@ import { getTreeNodeParent } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树移动流程', ({ 假如 }) => {
+  // 假如 用户批量移动选中的节点，那么鼠标附件应该出现提示数量
+
+  假如.only(
+    '用户批量选中同级文件，拖动到文件夹中，应该可以全部正确移动',
+    ({ 当, 那么 }) => {
+      当('用户已经登录', () => {
+        cy.登录('yb', '123456');
+      });
+      当('用户访问主页', () => {
+        cy.visit('/');
+      });
+      当(
+        '用户在根节点创建了一个文件夹和多个文件，文件夹标题为 folder，文件标题分别为 file1, file2, file3',
+        () => {
+          cy.获取添加项目的按钮().click();
+          cy.获取项目树标题输入框().type('file1{enter}');
+          cy.获取添加项目的按钮().click();
+          cy.获取项目树标题输入框().type('file2{enter}');
+          cy.获取添加项目的按钮().click();
+          cy.获取项目树标题输入框().type('file3{enter}');
+          cy.获取添加项目组的按钮().click();
+          cy.获取项目树标题输入框().type('folder{enter}');
+        },
+      );
+      那么(
+        '项目树中应该包含一个文件夹 folder 和三个文件 file1, file2, file3',
+        () => {
+          cy.获取antd树列表内部容器().should('contain.text', 'folder');
+          cy.获取antd树列表内部容器().should('contain.text', 'file1');
+          cy.获取antd树列表内部容器().should('contain.text', 'file2');
+          cy.获取antd树列表内部容器().should('contain.text', 'file3');
+        },
+      );
+      当('用户批量选中文件 file1, file2, file3 并拖动到 folder 中', () => {
+        cy.范围批量选中节点('file1', 'file3');
+        cy.获取项目树节点通过标题('file1').拖拽到(
+          cy.获取项目树节点通过标题('folder'),
+          {
+            vertical: 'bottom',
+            horizontal: 'right',
+          },
+        );
+      });
+      那么('文件夹 folder 自动打开并包含文件 file1, file2, file3', () => {
+        cy.获取项目树节点通过标题('folder').should(
+          'have.class',
+          'ant-tree-treenode-switcher-open',
+        );
+        cy.获取项目树节点通过标题('file1').should('be.visible');
+        cy.获取项目树节点通过标题('file2').should('be.visible');
+        cy.获取项目树节点通过标题('file3').should('be.visible');
+      });
+      那么('文件 file1, file2, file3 应该被正确移动到文件夹 folder 中', () => {
+        ['file1', 'file2', 'file3'].forEach((file) => {
+          cy.获取项目树节点通过标题(file).then(($file) => {
+            const $parent = getTreeNodeParent($file);
+            expect(
+              $parent
+                .find(`[data-test-class*="${测试类.项目树节点标题}"]`)
+                .text(),
+            ).equal('folder');
+          });
+        });
+      });
+    },
+  );
+
   假如('用户拖拽文件，应该可以进行排序', ({ 当, 那么 }) => {
     当('用户已经登录', () => {
       cy.登录('yb', '123456');

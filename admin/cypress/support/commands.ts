@@ -39,6 +39,15 @@ import { BASE_API } from './constants';
 //     }
 //   }
 // }
+
+Cypress.Commands.add('范围批量选中节点', (startTitle, endTitle) => {
+  // 点击起始节点
+  cy.获取项目树节点通过标题(startTitle).click();
+
+  // 按住 shift 键点击结束节点
+  cy.获取项目树节点通过标题(endTitle).click({ shiftKey: true });
+});
+
 Cypress.Commands.add(
   '拖拽到',
   { prevSubject: 'element' },

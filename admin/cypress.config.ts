@@ -20,6 +20,9 @@ export default defineConfig({
   e2e: {
     baseUrl: 'http://192.168.0.107:5173',
     // 指定 E2E 测试文件的路径
-    specPattern: 'features/**/*.feature.{js,jsx,ts,tsx}',
+    specPattern: [
+      'features/**/*.feature.{ts,tsx}',
+      'cypress/**/*.e2e.{ts,tsx}',
+    ],
   },
 });
