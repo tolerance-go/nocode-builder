@@ -28,9 +28,11 @@ export type ProjectTreeStates = {
   当前输入的标题: string;
   是否选中了项目树容器: boolean;
   激活的节点的key: string | null;
+  当前是否正在拖拽节点中: boolean;
 };
 
 const initialState: ProjectTreeStates = {
+  当前是否正在拖拽节点中: false,
   激活的节点的key: null,
   当前输入的标题: '',
   项目节点树: [],
@@ -50,6 +52,9 @@ const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
+    更新当前是否正在拖拽节点中: (state, action: PayloadAction<boolean>) => {
+      state.当前是否正在拖拽节点中 = action.payload;
+    },
     更新激活的节点的key: (state, action: PayloadAction<string | null>) => {
       state.激活的节点的key = action.payload;
     },
@@ -91,13 +96,15 @@ const projectTreeSlice = createSlice({
         type: '',
         payload: action.payload.node.key,
       });
-      projectTreeSlice.caseReducers.清空选中节点并暂存(state);
+      projectTreeSlice.caseReducers.更新选中节点并将之前的选中节点数据暂存(
+        state,
+      );
       projectTreeSlice.caseReducers.更新激活的节点的key(state, {
         type: '',
         payload: action.payload.node.key,
       });
     },
-    清空选中节点并暂存: (state) => {
+    更新选中节点并将之前的选中节点数据暂存: (state) => {
       state.为了编辑节点标题而暂存的之前选中的节点keys = [
         ...state.所有已经选中的节点,
       ];
@@ -494,6 +501,7 @@ const projectTreeSlice = createSlice({
 
 export const {
   initProjectTreeDataMeta,
+  更新当前是否正在拖拽节点中,
   更新激活的节点的key,
   选中项目树容器并清空选中和激活节点,
   取消选中项目树容器,
@@ -504,7 +512,7 @@ export const {
   插入新节点在指定节点下并同步更新其他数据,
   更新为了编辑临时创建节点之前选中的节点的key为,
   恢复当前选中的节点为编辑临时创建节点之前选中的节点的key,
-  清空选中节点并暂存: 更新选中节点并将之前的选中节点数据暂存,
+  更新选中节点并将之前的选中节点数据暂存,
   更新项目节点树,
   更新节点数据映射,
   更新节点的数据,
