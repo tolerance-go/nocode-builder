@@ -29,15 +29,23 @@ export class DocumentEnv implements EnvObject {
     this.emitter = new Emittery<DocumentEnvEvents>();
   }
 
-  public initialize(document: Document) {
+  public initialize(
+    document: Document,
+    after: (instance: DocumentEnv) => void,
+  ) {
     this._document = document;
-    this.addEventListeners();
+    after(this);
+    this.addPageLoadCompleteEventListener();
   }
 
-  private addEventListeners() {
-    // 添加事件监听器，当页面完全加载时触发
-    this.document.addEventListener('DOMContentLoaded', () => {
+  private addPageLoadCompleteEventListener() {
+    if (document.readyState === 'loading') {
+      // 添加事件监听器，当页面完全加载时触发
+      this.document.addEventListener('DOMContentLoaded', () => {
+        this.emitter.emit('pageLoadComplete');
+      });
+    } else {
       this.emitter.emit('pageLoadComplete');
-    });
+    }
   }
 }
