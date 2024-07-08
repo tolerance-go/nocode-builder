@@ -7,6 +7,7 @@ import {
   取消选中项目树容器,
   更新展开的节点是哪些,
   更新当前编辑节点是哪个并更新输入框的值,
+  更新激活的节点的key,
   更新选中的节点是哪些,
   移动项目树节点并同步其他状态,
   退出当前正在编辑的节点,
@@ -179,10 +180,15 @@ export const DirectoryTree = () => {
         return true;
       }}
       className={css`
-        .ant-tree-treenode {
+        .ant-tree-treenode:not(.ant-tree-treenode-selected) {
           :has(span.prev-selected) {
             &::before {
               background-color: ${token.blue2};
+            }
+          }
+          :has(span.active) {
+            &::before {
+              background-color: ${token.yellow2};
             }
           }
         }
@@ -260,7 +266,8 @@ export const DirectoryTree = () => {
           );
         }
       }}
-      onClick={() => {
+      onClick={(event, info) => {
+        dispatch(更新激活的节点的key(info.key));
         dispatch(取消选中项目树容器());
       }}
       titleRender={(nodeData) => <Title nodeKey={nodeData.key} />}

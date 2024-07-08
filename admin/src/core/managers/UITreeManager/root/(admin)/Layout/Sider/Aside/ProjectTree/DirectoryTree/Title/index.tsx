@@ -13,6 +13,7 @@ import { useRef } from 'react';
 import { TitleInput } from './TitleInput';
 import { 标题是否有错 } from './utils';
 import { 测试类, 测试标识 } from '@cypress/shared/constants';
+import { cx } from '@emotion/css';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
@@ -28,7 +29,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       nodeKey,
     ),
   );
-
+  const 激活的节点的key是否为自身 = useAppSelector(
+    (state) => state.projectTree.激活的节点的key === nodeKey,
+  );
   const 当前正在编辑的项目树节点的key = useAppSelector(
     (state) => state.projectTree.当前正在编辑的项目树节点的key,
   );
@@ -129,9 +132,10 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
           display: 'inline-block',
           width: '100%',
         }}
-        className={
-          编辑临时创建节点之前选中的节点是否为自身 ? 'prev-selected' : undefined
-        }
+        className={cx(
+          编辑临时创建节点之前选中的节点是否为自身 ? 'prev-selected' : null,
+          激活的节点的key是否为自身 ? 'active' : null,
+        )}
       >
         {nodeDataRecord?.title}
       </span>

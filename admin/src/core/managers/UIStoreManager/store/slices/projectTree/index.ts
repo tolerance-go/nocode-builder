@@ -414,6 +414,7 @@ const projectTreeSlice = createSlice({
 
 export const {
   initProjectTreeDataMeta,
+  更新激活的节点的key,
   选中项目树容器,
   取消选中项目树容器,
   清空当前输入的标题,
