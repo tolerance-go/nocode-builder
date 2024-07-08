@@ -11,12 +11,12 @@ import {
   更新选中的节点是哪些,
   移动项目树节点并同步其他状态,
 } from '@/core/managers/UIStoreManager';
-import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree/effects';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
 import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
 import { Title } from './Title';
+import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 
@@ -254,7 +254,7 @@ export const DirectoryTree = () => {
           );
         }
       }}
-      onClick={(event, info) => {
+      onClick={(_event, info) => {
         dispatch(更新激活的节点的key(info.key));
         dispatch(取消选中项目树容器());
       }}

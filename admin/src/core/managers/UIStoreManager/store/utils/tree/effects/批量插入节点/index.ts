@@ -3,10 +3,16 @@ import { TreeNode } from '../../types';
 
 export const 批量插入节点 = <T extends TreeNode<T>>(
   nodes: T[],
-  parentKey: number | string,
+  parentKey: number | string | null,
   newNodes: T[],
-  position: number = -1, // 默认为-1，表示插入到最后
+  position: number,
 ): boolean => {
+  // 如果 parentKey 为 null，则在 nodes 里面插入
+  if (parentKey === null) {
+    insertNodesAtIndex(nodes, position, newNodes);
+    return true;
+  }
+
   for (let i = 0; i < nodes.length; i++) {
     const n = nodes[i];
     if (n.key === parentKey) {

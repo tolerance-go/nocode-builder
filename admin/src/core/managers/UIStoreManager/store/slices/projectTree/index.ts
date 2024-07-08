@@ -4,13 +4,12 @@ import {
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {
-  插入节点,
-  insertNodeAtIndex,
-  removeNode,
-} from '../../utils/tree/effects';
+import { 插入节点, removeNode, 批量插入节点 } from '../../utils/tree/effects';
 import { TreeNode } from '../../utils/tree/types';
-import { 过滤掉包含父节点在内的节点 } from '../../utils/tree';
+import {
+  insertNodeAtIndex,
+  过滤掉包含父节点在内的节点,
+} from '../../utils/tree';
 import { 批量删除节点 } from '../../utils/tree/effects/批量删除节点';
 
 export type ProjectTreeStates = {
@@ -320,7 +319,42 @@ const projectTreeSlice = createSlice({
         state.derived_节点到父节点的映射,
       );
 
-      const removeds = 批量删除节点(state.项目节点树, 互不包含的等待移动的节点);
+      const removed = 批量删除节点(state.项目节点树, 互不包含的等待移动的节点);
+
+      if (removed.removedNodes.length) {
+        let finalNewIndex = newIndex;
+
+        // 计算删除节点的数量
+        const 同一父节点在插入位置之前的删除节点数量 =
+          removed.removedNodes.filter(
+            (node, index) =>
+              state.derived_节点到父节点的映射[node.key] === newParentKey &&
+              removed.indices[index] < newIndex,
+          ).length;
+
+        // 如果插入节点的父节点和删除节点的父节点是同一个，并且插入的位置在删除的节点之后
+        if (同一父节点在插入位置之前的删除节点数量) {
+          finalNewIndex -= 同一父节点在插入位置之前的删除节点数量;
+        }
+
+        批量插入节点(
+          state.项目节点树,
+          newParentKey,
+          removed.removedNodes,
+          finalNewIndex,
+        );
+
+        // 如果插入的父节点没有展开
+        if (newParentKey && !state.所有展开的节点的key.includes(newParentKey)) {
+          // 那么自动展开他
+          state.所有展开的节点的key.push(newParentKey);
+        }
+
+        // 更新移动的节点的父节点
+        removed.removedNodes.forEach((removeNode) => {
+          state.derived_节点到父节点的映射[removeNode.key] = newParentKey;
+        });
+      }
     },
     单个移动项目树节点并同步其他状态: (
       state,

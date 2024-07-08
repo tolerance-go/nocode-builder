@@ -79,4 +79,21 @@ describe('insertNodes', () => {
       'Index out of bounds.',
     );
   });
+
+  it('如果 parentKey 为 null，应该在 nodes 中插入多个节点', () => {
+    const nodes: TreeNode[] = [{ key: 1, children: [] }];
+    const newNodes: TreeNode[] = [
+      { key: 2, children: [] },
+      { key: 3, children: [] },
+    ];
+
+    const result = 批量插入节点(nodes, null, newNodes, 1);
+
+    expect(result).toBe(true);
+    expect(nodes).toEqual([
+      { key: 1, children: [] },
+      { key: 2, children: [] },
+      { key: 3, children: [] },
+    ]);
+  });
 });
