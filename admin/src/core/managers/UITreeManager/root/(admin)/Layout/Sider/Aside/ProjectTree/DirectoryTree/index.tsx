@@ -106,7 +106,7 @@ export const DirectoryTree = () => {
           // 那么禁止
           if (dropPosition === 1) {
             const 父节点key =
-              state.projectTree.节点到父节点的映射[dropNode.key];
+              state.projectTree.derived_节点到父节点的映射[dropNode.key];
 
             if (父节点key === undefined) {
               throw new Error('父节点数据不完整');
@@ -203,7 +203,9 @@ export const DirectoryTree = () => {
       }}
       onDoubleClick={(_e, node) => {
         const nodeData =
-          reduxStore.getState().projectTree.树节点key到节点数据的映射[node.key];
+          reduxStore.getState().projectTree.connected_树节点key到节点数据的映射[
+            node.key
+          ];
 
         if (!nodeData) {
           throw new Error('节点数据不完整');
@@ -234,7 +236,7 @@ export const DirectoryTree = () => {
           );
         } else {
           const {
-            projectTree: { 节点到父节点的映射 },
+            projectTree: { derived_节点到父节点的映射: 节点到父节点的映射 },
           } = reduxStore.getState();
 
           const 父节点 = 节点到父节点的映射[dropKey];

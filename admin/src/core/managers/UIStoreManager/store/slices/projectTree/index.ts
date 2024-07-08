@@ -1,9 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   insertNode,
   insertNodeAtIndex,
@@ -13,28 +13,32 @@ import { TreeNode } from '../../utils/tree/types';
 
 export type ProjectTreeStates = {
   项目节点树: ProjectStructureTreeDataNode[];
-  树节点key到节点数据的映射: ProjectTreeNodeDataRecord;
+  // 关联数据
+  connected_树节点key到节点数据的映射: ProjectTreeNodeDataRecord;
   hasInitProjectTreeDataMeta: boolean;
   所有已经选中的节点: string[];
   所有展开的节点的key: string[];
   当前正在编辑的项目树节点的key: string | null;
-  节点到父节点的映射: Record<string, string | null>;
+  // 派生数据
+  derived_节点到父节点的映射: Record<string, string | null>;
   为了编辑临时创建的节点的key: string | null;
   节点树容器的高度: number;
   为了编辑临时创建节点之前选中的节点的key: string[] | null;
   当前输入的标题: string;
   是否选中了项目树容器: boolean;
+  激活的节点的key: string | null;
 };
 
 const initialState: ProjectTreeStates = {
+  激活的节点的key: null,
   当前输入的标题: '',
   项目节点树: [],
-  树节点key到节点数据的映射: {},
+  connected_树节点key到节点数据的映射: {},
   hasInitProjectTreeDataMeta: false,
   所有已经选中的节点: [],
   所有展开的节点的key: [],
   当前正在编辑的项目树节点的key: null,
-  节点到父节点的映射: {},
+  derived_节点到父节点的映射: {},
   为了编辑临时创建的节点的key: null,
   节点树容器的高度: 0,
   为了编辑临时创建节点之前选中的节点的key: null,
@@ -45,6 +49,9 @@ const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
+    更新激活的节点的key: (state, action: PayloadAction<string | null>) => {
+      state.激活的节点的key = action.payload;
+    },
     选中项目树容器: (state) => {
       state.是否选中了项目树容器 = true;
       state.所有已经选中的节点 = [];
@@ -114,7 +121,7 @@ const projectTreeSlice = createSlice({
       state,
       action: PayloadAction<ProjectTreeNodeDataRecord>,
     ) => {
-      state.树节点key到节点数据的映射 = action.payload;
+      state.connected_树节点key到节点数据的映射 = action.payload;
     },
     更新节点的数据: (
       state,
@@ -125,7 +132,7 @@ const projectTreeSlice = createSlice({
     ) => {
       const { key, data } = action.payload;
       if (data.title) {
-        const item = state.树节点key到节点数据的映射[key];
+        const item = state.connected_树节点key到节点数据的映射[key];
         if (item) {
           item.title = data.title;
         }
@@ -155,9 +162,12 @@ const projectTreeSlice = createSlice({
       };
 
       state.项目节点树 = projectStructureTreeData;
-      state.树节点key到节点数据的映射 = projectStructureTreeDataRecord;
+      state.connected_树节点key到节点数据的映射 =
+        projectStructureTreeDataRecord;
       state.hasInitProjectTreeDataMeta = true;
-      state.节点到父节点的映射 = buildParentKeyMap(projectStructureTreeData);
+      state.derived_节点到父节点的映射 = buildParentKeyMap(
+        projectStructureTreeData,
+      );
     },
     插入节点到指定位置: (
       state,
@@ -173,17 +183,17 @@ const projectTreeSlice = createSlice({
 
       if (parentKey === null) {
         insertNodeAtIndex(state.项目节点树, index, node);
-        state.节点到父节点的映射[node.key] = null;
+        state.derived_节点到父节点的映射[node.key] = null;
         inserted = true;
       } else {
         inserted = insertNode(state.项目节点树, parentKey, node, index);
         if (inserted) {
-          state.节点到父节点的映射[node.key] = parentKey;
+          state.derived_节点到父节点的映射[node.key] = parentKey;
         }
       }
 
       if (inserted) {
-        state.树节点key到节点数据的映射[node.key] = recordItem;
+        state.connected_树节点key到节点数据的映射[node.key] = recordItem;
       }
     },
     更新容器高度: (state, action: PayloadAction<number>) => {
@@ -203,12 +213,13 @@ const projectTreeSlice = createSlice({
 
       if (state.当前正在编辑的项目树节点的key) {
         if (
-          state.当前正在编辑的项目树节点的key in state.树节点key到节点数据的映射
+          state.当前正在编辑的项目树节点的key in
+          state.connected_树节点key到节点数据的映射
         ) {
           projectTreeSlice.caseReducers.更新当前输入的标题(state, {
             type: '',
             payload:
-              state.树节点key到节点数据的映射[
+              state.connected_树节点key到节点数据的映射[
                 state.当前正在编辑的项目树节点的key
               ]!.title,
           });
@@ -291,8 +302,8 @@ const projectTreeSlice = createSlice({
 
         递归删除所有节点映射及关联状态(
           removed.removedNode,
-          state.树节点key到节点数据的映射,
-          state.节点到父节点的映射,
+          state.connected_树节点key到节点数据的映射,
+          state.derived_节点到父节点的映射,
         );
       }
     },
@@ -312,7 +323,7 @@ const projectTreeSlice = createSlice({
         let finalNewIndex = newIndex;
 
         if (newParentKey === null) {
-          const 父节点 = state.节点到父节点的映射[nodeKey];
+          const 父节点 = state.derived_节点到父节点的映射[nodeKey];
           if (父节点 === null) {
             // 被删除节点和插入节点是同一个父节点，并且插入的位置在删除节点的位置之后
             if (removed.index < newIndex) {
@@ -325,9 +336,9 @@ const projectTreeSlice = createSlice({
             finalNewIndex,
             removed.removedNode,
           );
-          state.节点到父节点的映射[nodeKey] = null;
+          state.derived_节点到父节点的映射[nodeKey] = null;
         } else {
-          const 父节点 = state.节点到父节点的映射[nodeKey];
+          const 父节点 = state.derived_节点到父节点的映射[nodeKey];
           if (父节点 === newParentKey) {
             if (removed.index < newIndex) {
               finalNewIndex -= 1;
@@ -340,7 +351,7 @@ const projectTreeSlice = createSlice({
             removed.removedNode,
             finalNewIndex,
           );
-          state.节点到父节点的映射[nodeKey] = newParentKey;
+          state.derived_节点到父节点的映射[nodeKey] = newParentKey;
 
           // 如果插入的父节点没有展开
           if (!state.所有展开的节点的key.includes(newParentKey)) {
