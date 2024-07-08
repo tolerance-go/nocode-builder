@@ -14,7 +14,8 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy.获取添加项目的按钮().click();
         cy.获取项目树标题输入框().type('项目节点{enter}');
       });
-      并且('该节点为选中状态', () => {
+      并且('选中该节点', () => {
+        cy.获取项目树节点通过标题('项目节点').click();
         cy.获取项目树节点通过标题('项目节点').should(
           'have.class',
           'ant-tree-treenode-selected',
@@ -57,6 +58,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当('用户选中存在的项目节点并开始编辑标题', () => {
       cy.获取添加项目的按钮().click();
       cy.获取项目树标题输入框().type('项目节点{enter}');
+      cy.获取项目树节点通过标题('项目节点').click();
       cy.获取项目树节点通过标题('项目节点').should(
         'have.class',
         'ant-tree-treenode-selected',
@@ -127,6 +129,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当('用户选中存在的项目节点', () => {
       cy.获取添加项目的按钮().click();
       cy.获取项目树标题输入框().type('项目节点{enter}');
+      cy.获取项目树节点通过标题('项目节点').click();
       cy.获取项目树节点通过标题('项目节点').should(
         'have.class',
         'ant-tree-treenode-selected',
@@ -158,6 +161,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当('用户正在编辑项目节点标题', () => {
       cy.获取添加项目的按钮().click();
       cy.获取项目树标题输入框().type('项目节点{enter}');
+      cy.获取项目树节点通过标题('项目节点').click();
       cy.获取项目树节点通过标题('项目节点').should(
         'have.class',
         'ant-tree-treenode-selected',
@@ -197,6 +201,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当('用户选中存在的项目节点', () => {
         cy.获取添加项目的按钮().click();
         cy.获取项目树标题输入框().type('项目节点{enter}');
+        cy.获取项目树节点通过标题('项目节点').click();
         cy.获取项目树节点通过标题('项目节点').should(
           'have.class',
           'ant-tree-treenode-selected',
@@ -239,6 +244,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当('用户选中存在的项目节点', () => {
         cy.获取添加项目的按钮().click();
         cy.获取项目树标题输入框().type('项目节点{enter}');
+        cy.获取项目树节点通过标题('项目节点').click();
         cy.获取项目树节点通过标题('项目节点').should(
           'have.class',
           'ant-tree-treenode-selected',
@@ -289,6 +295,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当('用户选中存在的项目节点', () => {
         cy.获取添加项目的按钮().click();
         cy.获取项目树标题输入框().type('项目节点{enter}');
+        cy.获取项目树节点通过标题('项目节点').click();
         cy.获取项目树节点通过标题('项目节点').should(
           'have.class',
           'ant-tree-treenode-selected',
@@ -331,6 +338,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当('用户选中存在的项目节点', () => {
         cy.获取添加项目的按钮().click();
         cy.获取项目树标题输入框().type('项目节点{enter}');
+        cy.获取项目树节点通过标题('项目节点').click();
       });
       并且('按下 f2 快捷键', () => {
         cy.get('body').trigger('keydown', {
@@ -356,6 +364,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当('用户选中存在的项目组节点', () => {
         cy.获取添加项目组的按钮().click();
         cy.获取项目树标题输入框().type('项目组节点{enter}');
+        cy.获取项目树节点通过标题('项目组节点').click();
       });
       并且('按下 f2', () => {
         cy.get('body').trigger('keydown', {
@@ -391,6 +400,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当('用户选中存在的项目节点', () => {
         cy.获取添加项目的按钮().click();
         cy.获取项目树标题输入框().type('项目节点{enter}');
+        cy.获取项目树节点通过标题('项目节点').click();
       });
       并且('项目节点标题不为空', () => {
         cy.获取项目树节点标题元素('项目节点').should('not.be.empty');

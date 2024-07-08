@@ -12,7 +12,9 @@ import {
   useAppDispatch,
   useAppSelector,
   更新当前输入的标题,
+  退出当前正在编辑的节点,
 } from '@/core/managers/UIStoreManager';
+import { useKeyPressEventByKeyboardJs } from '@/hooks';
 
 export const TitleInput = forwardRef<
   InputRef,
@@ -55,6 +57,10 @@ export const TitleInput = forwardRef<
       cursor: 'all', // 'all' 选中全部内容, 'start' 光标在开始位置, 'end' 光标在结束位置
     });
   }, []);
+
+  useKeyPressEventByKeyboardJs(['esc'], () => {
+    dispatch(退出当前正在编辑的节点());
+  });
 
   return (
     <Input

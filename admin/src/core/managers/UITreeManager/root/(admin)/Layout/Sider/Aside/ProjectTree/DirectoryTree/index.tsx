@@ -10,14 +10,13 @@ import {
   更新激活的节点的key,
   更新选中的节点是哪些,
   移动项目树节点并同步其他状态,
-  退出当前正在编辑的节点,
 } from '@/core/managers/UIStoreManager';
+import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree/effects';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
 import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
 import { Title } from './Title';
-import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree/effects';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 
@@ -60,12 +59,6 @@ export const DirectoryTree = () => {
           所有已经选中的节点[所有已经选中的节点.length - 1],
         ),
       );
-  });
-
-  useKeyPressEventByKeyboardJs(['esc'], () => {
-    if (所有已经选中的节点.length) {
-      dispatch(退出当前正在编辑的节点());
-    }
   });
 
   // useKeyPress(["ctrl.z"], () => {
