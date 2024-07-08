@@ -5,7 +5,7 @@ import {
 } from '@/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  insertNode,
+  插入节点,
   insertNodeAtIndex,
   removeNode,
 } from '../../utils/tree/effects';
@@ -184,7 +184,7 @@ const projectTreeSlice = createSlice({
         state.derived_节点到父节点的映射[node.key] = null;
         inserted = true;
       } else {
-        inserted = insertNode(state.项目节点树, parentKey, node, index);
+        inserted = 插入节点(state.项目节点树, parentKey, node, index);
         if (inserted) {
           state.derived_节点到父节点的映射[node.key] = parentKey;
         }
@@ -360,7 +360,7 @@ const projectTreeSlice = createSlice({
             }
           }
 
-          insertNode(
+          插入节点(
             state.项目节点树,
             newParentKey,
             removed.removedNode,

@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { TreeNode } from '../types';
-import { insertNodeAtIndex } from './insertNodeAtIndex';
+import { TreeNode } from '../../types';
+import { insertNodeAtIndex } from '.';
 
 describe('insertNodeAtIndex', () => {
   it('应该在指定位置插入新节点', () => {

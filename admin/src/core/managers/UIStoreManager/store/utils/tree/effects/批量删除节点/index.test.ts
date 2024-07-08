@@ -1,5 +1,5 @@
-import { TreeNode } from '../types';
-import { 批量删除节点 } from './批量删除节点';
+import { TreeNode } from '../../types';
+import { 批量删除节点 } from '.';
 import { describe, it, expect } from 'vitest';
 
 const generateTreeData = (depth: number, breadth: number): TreeNode[] => {

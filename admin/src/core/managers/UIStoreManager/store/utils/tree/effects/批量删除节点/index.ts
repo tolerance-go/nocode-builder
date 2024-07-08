@@ -1,4 +1,4 @@
-import { TreeNode } from '../types';
+import { TreeNode } from '../../types';
 
 interface BatchRemoveResult<T> {
   removedNodes: T[];

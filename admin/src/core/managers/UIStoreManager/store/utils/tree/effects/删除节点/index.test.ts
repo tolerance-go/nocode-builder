@@ -1,5 +1,5 @@
-import { TreeNode } from '../types';
-import { removeNode } from './removeNode';
+import { TreeNode } from '../../types';
+import { removeNode } from '.';
 import { describe, it, expect } from 'vitest';
 
 describe('removeNode', () => {

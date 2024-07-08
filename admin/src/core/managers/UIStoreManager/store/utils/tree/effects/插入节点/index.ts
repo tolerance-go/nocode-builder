@@ -1,11 +1,11 @@
-import { TreeNode } from '../types';
-import { insertNodeAtIndex } from './insertNodeAtIndex';
+import { TreeNode } from '../../types';
+import { insertNodeAtIndex } from '../../misc/insertNodeAtIndex';
 
-export const insertNode = <T extends TreeNode<T>>(
+export const 插入节点 = <T extends TreeNode<T>>(
   nodes: T[],
   parentKey: number | string,
   newNode: T,
-  position: number, // 默认为-1，表示插入到最后
+  position: number,
 ): boolean => {
   for (let i = 0; i < nodes.length; i++) {
     const n = nodes[i];
@@ -17,7 +17,7 @@ export const insertNode = <T extends TreeNode<T>>(
       return true;
     }
     if (n.children) {
-      const result = insertNode(n.children, parentKey, newNode, position);
+      const result = 插入节点(n.children, parentKey, newNode, position);
       if (result) {
         return result;
       }
