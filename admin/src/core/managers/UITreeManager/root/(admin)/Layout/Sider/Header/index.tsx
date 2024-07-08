@@ -228,8 +228,8 @@ export const Header = () => {
       justify="end"
       style={{
         padding: `${token.paddingXXS}px ${token.paddingXXS}px`,
-        borderBottom: `1px solid ${token.colorBorderSecondary}`,
         backgroundColor: token.colorBgContainer,
+        borderRight: `1px solid ${token.colorBorderSecondary}`,
       }}
     >
       <Space>

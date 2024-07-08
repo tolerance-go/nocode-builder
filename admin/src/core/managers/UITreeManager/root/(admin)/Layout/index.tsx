@@ -1,10 +1,8 @@
-import { Layout as AntdLayout } from 'antd';
 import { Sider } from './Sider';
-import { SubSider } from './SubSider';
 
 export const Layout = () => {
   return (
-    <AntdLayout
+    <div
       style={{
         overflow: 'hidden',
         height: '100vh',
@@ -12,7 +10,6 @@ export const Layout = () => {
       }}
     >
       <Sider />
-      <SubSider />
-    </AntdLayout>
+    </div>
   );
 };

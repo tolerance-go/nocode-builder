@@ -61,6 +61,10 @@ export const ProjectTree = () => {
       data-test-id={测试标识.项目树容器}
       className={cx(
         css`
+          border-top: 1px solid ${token.colorBorderSecondary};
+          border-left: 1px solid transparent;
+          border-bottom: 1px solid transparent;
+          border-right: 1px solid ${token.colorBorderSecondary};
           &.selected {
             border: 1px solid ${token.blue6};
           }
@@ -70,6 +74,7 @@ export const ProjectTree = () => {
       ref={containerRef}
       style={{
         height: '100%',
+        flexGrow: 1,
       }}
       onClick={(event) => {
         // 只处理当前绑定事件的 dom 的点击事件

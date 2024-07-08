@@ -1,28 +1,24 @@
-import { Flex, Layout, theme } from 'antd';
-import { Aside } from './Aside';
-import { Navbar } from './Navbar';
+import { Flex, theme } from 'antd';
+import { Header } from './Header';
+import { ProjectTree } from './ProjectTree';
+import { UserBar } from './UserBar';
 
 export const Sider = () => {
   const { token } = theme.useToken();
 
   return (
-    <Layout.Sider
-      width={400}
+    <Flex
+      vertical
       style={{
-        borderRight: `1px solid ${token.colorBorderSecondary}`,
-        backgroundColor: token.colorBgContainer,
+        // 防止加载闪烁
         height: '100vh',
+        backgroundColor: token.colorBgContainer,
+        width: 400,
       }}
     >
-      <Flex
-        style={{
-          // 防止加载闪烁
-          height: '100vh',
-        }}
-      >
-        <Navbar />
-        <Aside />
-      </Flex>
-    </Layout.Sider>
+      <UserBar />
+      <Header />
+      <ProjectTree />
+    </Flex>
   );
 };
