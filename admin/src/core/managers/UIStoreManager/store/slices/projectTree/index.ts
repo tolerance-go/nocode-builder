@@ -23,7 +23,7 @@ export type ProjectTreeStates = {
   derived_节点到父节点的映射: Record<string, string | null>;
   为了编辑临时创建的节点的key: string | null;
   节点树容器的高度: number;
-  为了编辑临时创建节点之前选中的节点的key: string[] | null;
+  为了编辑节点标题而暂存的之前选中的节点keys: string[] | null;
   当前输入的标题: string;
   是否选中了项目树容器: boolean;
   激活的节点的key: string | null;
@@ -41,7 +41,7 @@ const initialState: ProjectTreeStates = {
   derived_节点到父节点的映射: {},
   为了编辑临时创建的节点的key: null,
   节点树容器的高度: 0,
-  为了编辑临时创建节点之前选中的节点的key: null,
+  为了编辑节点标题而暂存的之前选中的节点keys: null,
   是否选中了项目树容器: false,
 };
 
@@ -90,26 +90,17 @@ const projectTreeSlice = createSlice({
         type: '',
         payload: action.payload.node.key,
       });
-      projectTreeSlice.caseReducers.更新选中节点并将之前的选中节点数据暂存(
-        state,
-        {
-          type: '',
-          payload: action.payload.node.key,
-        },
-      );
+      projectTreeSlice.caseReducers.清空选中节点并暂存(state);
       projectTreeSlice.caseReducers.更新激活的节点的key(state, {
         type: '',
         payload: action.payload.node.key,
       });
     },
-    更新选中节点并将之前的选中节点数据暂存: (
-      state,
-      action: PayloadAction<string>,
-    ) => {
-      state.为了编辑临时创建节点之前选中的节点的key = [
+    清空选中节点并暂存: (state) => {
+      state.为了编辑节点标题而暂存的之前选中的节点keys = [
         ...state.所有已经选中的节点,
       ];
-      state.所有已经选中的节点 = [action.payload];
+      state.所有已经选中的节点 = [];
     },
     取消指定的节点的选中状态: (state, action: PayloadAction<string>) => {
       state.所有已经选中的节点 = state.所有已经选中的节点.filter(
@@ -399,20 +390,20 @@ const projectTreeSlice = createSlice({
       });
     },
     恢复当前选中的节点为编辑临时创建节点之前选中的节点的key: (state) => {
-      if (state.为了编辑临时创建节点之前选中的节点的key) {
+      if (state.为了编辑节点标题而暂存的之前选中的节点keys) {
         state.所有已经选中的节点 =
-          state.为了编辑临时创建节点之前选中的节点的key;
-        state.为了编辑临时创建节点之前选中的节点的key = null;
+          state.为了编辑节点标题而暂存的之前选中的节点keys;
+        state.为了编辑节点标题而暂存的之前选中的节点keys = null;
       }
     },
     更新为了编辑临时创建节点之前选中的节点的key为: (
       state,
       action: PayloadAction<string[] | null>,
     ) => {
-      state.为了编辑临时创建节点之前选中的节点的key = action.payload;
+      state.为了编辑节点标题而暂存的之前选中的节点keys = action.payload;
     },
     清空为了编辑临时创建节点之前选中的节点的key: (state) => {
-      state.为了编辑临时创建节点之前选中的节点的key = null;
+      state.为了编辑节点标题而暂存的之前选中的节点keys = null;
     },
   },
 });
@@ -429,7 +420,7 @@ export const {
   插入新节点在指定节点下并同步更新其他数据,
   更新为了编辑临时创建节点之前选中的节点的key为,
   恢复当前选中的节点为编辑临时创建节点之前选中的节点的key,
-  更新选中节点并将之前的选中节点数据暂存,
+  清空选中节点并暂存: 更新选中节点并将之前的选中节点数据暂存,
   更新项目节点树,
   更新节点数据映射,
   更新节点的数据,

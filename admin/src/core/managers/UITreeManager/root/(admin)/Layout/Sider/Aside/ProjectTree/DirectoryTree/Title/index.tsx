@@ -25,7 +25,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     (state) => state.projectTree.为了编辑临时创建的节点的key,
   );
   const 编辑临时创建节点之前选中的节点是否为自身 = useAppSelector((state) =>
-    state.projectTree.为了编辑临时创建节点之前选中的节点的key?.includes(
+    state.projectTree.为了编辑节点标题而暂存的之前选中的节点keys?.includes(
       nodeKey,
     ),
   );
