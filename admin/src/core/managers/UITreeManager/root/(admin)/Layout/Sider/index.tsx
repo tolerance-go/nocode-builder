@@ -1,5 +1,5 @@
 import { Button, Dropdown, Flex, theme } from 'antd';
-import { Header } from './Header';
+import { ToolBar } from './ToolBar';
 import { ProjectTree } from './ProjectTree';
 import { UserBar } from './UserBar';
 
@@ -17,7 +17,7 @@ export const Sider = () => {
       }}
     >
       <UserBar />
-      <Header />
+      <ToolBar />
       <ProjectTree />
     </Flex>
   );

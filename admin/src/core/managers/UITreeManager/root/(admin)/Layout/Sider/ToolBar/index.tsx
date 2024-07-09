@@ -26,7 +26,7 @@ const 找到同层最后一个文件夹的位置 = (
   return nodes.findLastIndex((node) => node.type === 'folder');
 };
 
-export const Header = () => {
+export const ToolBar = () => {
   const { token } = theme.useToken();
 
   const projectTreeTimeLineVisible = useAppSelector(
