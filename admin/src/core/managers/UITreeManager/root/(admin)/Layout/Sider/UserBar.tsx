@@ -11,6 +11,7 @@ export const UserBar = () => {
       style={{
         padding: `${token.paddingXS}px ${token.paddingSM}px`,
         borderRight: `1px solid ${token.colorBorderSecondary}`,
+        borderBottom: `1px solid ${token.colorBorderSecondary}`,
       }}
       justify="space-between"
       align="center"
