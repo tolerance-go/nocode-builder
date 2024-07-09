@@ -208,7 +208,7 @@ Cypress.Commands.add('获取项目树节点标题元素', (name: string) => {
   return cy
     .get(`[data-test-class*="${测试类.项目树节点标题}"]`)
     .filter((_index, element) => {
-      return element.textContent?.trim() === name;
+      return element.textContent === name;
     });
 });
 

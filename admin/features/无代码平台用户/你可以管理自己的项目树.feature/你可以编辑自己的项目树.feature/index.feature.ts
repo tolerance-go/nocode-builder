@@ -2,6 +2,50 @@ import { 测试类 } from '@cypress/shared/constants';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
+  假如.only(
+    '用户选中多个文件夹，按下 del 键，应该删除选中项',
+    ({ 当, 并且, 那么 }) => {
+      当('用户已经登录', () => {
+        cy.登录('yb', '123456');
+      });
+
+      当('用户访问主页', () => {
+        cy.visit('/');
+      });
+
+      当('用户选中多个文件夹', () => {
+        cy.获取添加项目组的按钮().click();
+        cy.获取项目树标题输入框().type('文件夹0{enter}');
+        cy.获取添加项目组的按钮().click();
+        cy.获取项目树标题输入框().type('文件夹1{enter}');
+        cy.获取添加项目组的按钮().click();
+        cy.获取项目树标题输入框().type('文件夹2{enter}');
+        cy.获取项目树节点通过标题('文件夹1').click({ ctrlKey: true });
+        cy.获取项目树节点通过标题('文件夹2').click({ ctrlKey: true });
+        cy.获取项目树节点通过标题('文件夹1').should(
+          'have.class',
+          'ant-tree-treenode-selected',
+        );
+        cy.获取项目树节点通过标题('文件夹2').should(
+          'have.class',
+          'ant-tree-treenode-selected',
+        );
+      });
+
+      并且('按下 delete 键', () => {
+        cy.get('body').trigger('keydown', {
+          keyCode: 46,
+          which: 46,
+          key: 'Delete',
+        });
+      });
+
+      那么('选中的文件夹应该被删除', () => {
+        cy.获取项目树节点通过标题('文件夹0').should('exist');
+        cy.获取测试类(测试类.项目树节点标题).should('have.length', 1);
+      });
+    },
+  );
   假如(
     '用户正在创建节点并编辑标题中，快捷退出，应该恢复之前的选中',
     ({ 当, 并且, 那么 }) => {
