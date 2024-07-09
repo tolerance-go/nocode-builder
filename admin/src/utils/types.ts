@@ -15,3 +15,11 @@ export type OptionalKeys<T, K extends keyof T> = Omit<T, K> &
 export type ReplaceKeyType<T, K extends keyof T, NewType> = {
   [P in keyof T]: P extends K ? NewType : T[P];
 };
+
+export type Entries<T> = {
+  [K in keyof T]: [K, T[K]];
+}[keyof T];
+
+export type OneOf<T> = {
+  [K in keyof T]: { key: K; value: T[K] };
+}[keyof T];

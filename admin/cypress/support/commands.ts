@@ -57,8 +57,9 @@ Cypress.Commands.add('范围批量选中节点', (startTitle, endTitle) => {
 Cypress.Commands.add(
   '拖拽到',
   { prevSubject: 'element' },
-  (subject, targetChainable, position) => {
+  (subject, targetChainable, position, options) => {
     const { vertical = 'middle', horizontal = 'center' } = position;
+    const doDrop = !options?.notDrop;
 
     targetChainable.then(($target) => {
       const dataTransfer = new DataTransfer();
@@ -92,7 +93,28 @@ Cypress.Commands.add(
       };
 
       const targetClients = getTargetClientXY();
+      // 计算插值坐标
+      const interpolate = (
+        start: { clientX: number; clientY: number },
+        end: { clientX: number; clientY: number },
+        steps: number,
+      ): Array<{ clientX: number; clientY: number }> => {
+        const stepX = (end.clientX - start.clientX) / steps;
+        const stepY = (end.clientY - start.clientY) / steps;
+        return Array.from({ length: steps }, (_, i) => ({
+          clientX: start.clientX + stepX * (i + 1),
+          clientY: start.clientY + stepY * (i + 1),
+        }));
+      };
 
+      const dragSteps = interpolate(
+        {
+          clientX: subjectRect.left + subjectRect.width / 2,
+          clientY: subjectRect.top + subjectRect.height / 2,
+        },
+        targetClients,
+        3,
+      );
       // 触发 dragstart 事件
       cy.wrap(subject)
         // .find('.ant-tree-node-content-wrapper')
@@ -104,6 +126,15 @@ Cypress.Commands.add(
             subjectRect.left + (subjectRect.right - subjectRect.left) / 2,
           clientY: subjectRect.top + (subjectRect.bottom - subjectRect.top) / 2,
         });
+
+      // 触发插值坐标的 drag 事件
+      dragSteps.forEach((step) => {
+        cy.get('@subject').trigger('drag', {
+          dataTransfer,
+          clientX: step.clientX,
+          clientY: step.clientY,
+        });
+      });
 
       // 触发 dragenter 事件
       cy.wrap($target)
@@ -122,10 +153,12 @@ Cypress.Commands.add(
         clientY: targetClients.clientY,
       });
 
-      // 触发 drop 事件
-      cy.get('@target').trigger('drop', {
-        dataTransfer,
-      });
+      if (doDrop) {
+        // 触发 drop 事件
+        cy.get('@target').trigger('drop', {
+          dataTransfer,
+        });
+      }
 
       // 这里注释掉，因为 antd tree 实现拖拽不依赖 dragend，并且系统实现，移动节点时，会先删除拖拽的节点，所以 @subject 不存在
       // 触发 dragend 事件

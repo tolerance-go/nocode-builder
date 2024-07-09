@@ -16,6 +16,8 @@ export const 测试标识 = {
   登录提交按钮: 'login-submit-button',
   创建项目组节点按钮: 'create-project-group-node-btn',
   创建项目节点按钮: 'create-project-node-btn',
+
+  拖拽跟随鼠标的容器: 'drag-follow-mouse-container',
 };
 
 export const 测试类 = {

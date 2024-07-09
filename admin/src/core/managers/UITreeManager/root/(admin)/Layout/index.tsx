@@ -1,4 +1,5 @@
 import { Sider } from './Sider';
+import { 拖拽跟随鼠标的容器 } from './拖拽跟随鼠标的容器';
 
 export const Layout = () => {
   return (
@@ -9,6 +10,7 @@ export const Layout = () => {
         position: 'relative',
       }}
     >
+      <拖拽跟随鼠标的容器 />
       <Sider />
     </div>
   );

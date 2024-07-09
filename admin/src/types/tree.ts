@@ -13,6 +13,7 @@ export type ProjectTreeNodeDataRecordItem = {
 };
 
 /** key 到树节点数据的映射 */
-export type ProjectTreeNodeDataRecord = {
-  [key: string]: ProjectTreeNodeDataRecordItem | undefined;
-};
+export type ProjectTreeNodeDataRecord = Record<
+  string,
+  ProjectTreeNodeDataRecordItem
+>;

@@ -6,7 +6,7 @@ import {
   取消指定的节点的选中状态,
   取消选中项目树容器,
   更新展开的节点是哪些,
-  更新当前是否正在拖拽节点中,
+  更新当前正在拖拽的节点,
   更新当前编辑节点是哪个并更新输入框的值,
   更新激活的节点的key,
   更新选中的节点是哪些,
@@ -209,13 +209,16 @@ export const DirectoryTree = () => {
           dispatch(取消指定的节点的选中状态(node.key));
         }
       }}
-      onDragStart={() => {
-        dispatch(更新当前是否正在拖拽节点中(true));
+      onDragStart={(info) => {
+        dispatch(更新当前正在拖拽的节点(info.node.key));
       }}
       onDragEnd={() => {
-        dispatch(更新当前是否正在拖拽节点中(false));
+        dispatch(更新当前正在拖拽的节点(null));
       }}
       onDrop={(info) => {
+        // 有时候不会触发 onDragEnd，所以要在 drop 的也触发
+        dispatch(更新当前正在拖拽的节点(null));
+
         const dropKey = info.node.key;
 
         /**

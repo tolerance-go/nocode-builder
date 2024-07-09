@@ -10,6 +10,9 @@ declare global {
           vertical?: 'top' | 'bottom' | 'middle';
           horizontal?: 'left' | 'right' | 'center';
         },
+        options?: {
+          notDrop?: boolean;
+        },
       ): Chainable<void>;
 
       范围批量选中节点(fromTitle: string, toTitle: string): Chainable<void>;
