@@ -9,7 +9,7 @@ export const UserBar = () => {
   return (
     <Flex
       style={{
-        padding: `${token.paddingXS}px ${token.paddingSM}px`,
+        padding: `${token.paddingXXS}px ${token.paddingXXS}px`,
         borderRight: `1px solid ${token.colorBorderSecondary}`,
         borderBottom: `1px solid ${token.colorBorderSecondary}`,
       }}
@@ -32,9 +32,8 @@ export const UserBar = () => {
       >
         <Button
           type="text"
-          size="small"
           style={{
-            padding: `${token.padding}px ${token.paddingSM}px`,
+            padding: `${token.paddingSM}px ${token.paddingXS}px`,
           }}
         >
           <Space>
@@ -43,7 +42,7 @@ export const UserBar = () => {
           </Space>
         </Button>
       </Dropdown>
-      <Button type="text" size="small" icon={<MoreOutlined />}></Button>
+      <Button type="text" icon={<MoreOutlined />}></Button>
     </Flex>
   );
 };
