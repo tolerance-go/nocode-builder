@@ -1,7 +1,6 @@
 export const 测试标识 = {
   创建项目组节点的按钮: 'create-project-group-node-btn',
   创建项目节点的按钮: 'create-project-node-btn',
-  创建视图项目节点的菜单项: 'create-view-project-node-menu-item',
   项目树标题输入框: 'project-tree-title-input',
 
   项目树容器: 'project-tree-container',
@@ -21,6 +20,8 @@ export const 测试标识 = {
   拖拽跟随鼠标的容器: 'drag-follow-mouse-container',
 
   内容区域组件: 'content-area',
+
+  创建视图项目节点的菜单项标题: 'create-view-project-node-menu-item',
 };
 
 export const 测试类 = {

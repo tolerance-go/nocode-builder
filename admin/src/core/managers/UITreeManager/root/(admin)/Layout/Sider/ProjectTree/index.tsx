@@ -14,6 +14,7 @@ import { theme } from 'antd';
 import { css, cx } from '@emotion/css';
 import { useClickAway } from 'react-use';
 import { 测试标识 } from '@cypress/shared/constants';
+import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
 
 export const ProjectTree = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -54,9 +55,21 @@ export const ProjectTree = () => {
     };
   }, [dispatch]);
 
-  useClickAway(containerRef, () => {
+  useClickAway(containerRef, (event) => {
     dispatch(更新是否正在聚焦项目树区域(false));
     dispatch(取消选中项目树容器());
+
+    // 如果点击的是创建项目或者项目组按钮，则不取消选中
+    if (
+      (event.target as Element).closest(
+        `.${组件类名.创建视图项目节点的菜单项}`,
+      ) ||
+      (event.target as Element).closest(`#${组件标识.创建项目节点的按钮}`) ||
+      (event.target as Element).closest(`#${组件标识.创建项目组节点的按钮}`)
+    ) {
+      return;
+    }
+
     dispatch(更新选中的节点是哪些([]));
   });
 

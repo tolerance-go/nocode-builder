@@ -1,11 +1,11 @@
 import {
   reduxStore,
-  showProjectTreeTimeLineAction,
   useAppDispatch,
   useAppSelector,
   插入新节点在指定节点下并同步更新其他数据,
 } from '@/core/managers/UIStoreManager';
 import { 查询项目树中的节点 } from '@/core/managers/UIStoreManager/store/utils';
+import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
 import { ProjectFileType } from '@/core/managers/UITreeManager/types';
 import {
   ProjectStructureTreeDataNode,
@@ -17,7 +17,6 @@ import {
   BuildOutlined,
   FileAddOutlined,
   FolderAddOutlined,
-  HistoryOutlined,
   TableOutlined,
 } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
@@ -244,26 +243,27 @@ export const ToolBar = () => {
       }}
     >
       <Space>
-        <Button
+        {/* <Button
           type="text"
           // loading={addFileLoading}
           icon={<HistoryOutlined />}
           onClick={() => {
             dispatch(showProjectTreeTimeLineAction());
           }}
-        ></Button>
+        ></Button> */}
         <Dropdown
           menu={{
             items: [
               {
                 key: 'view',
                 label: (
-                  <span data-test-id={测试标识.创建视图项目节点的菜单项}>
+                  <span data-test-id={测试标识.创建视图项目节点的菜单项标题}>
                     视图
                   </span>
                 ),
                 onClick: () => handleProjectFileCreateBtnClick('view'),
                 icon: <BuildOutlined />,
+                className: 组件类名.创建视图项目节点的菜单项,
               },
               {
                 key: 'data-table',
@@ -284,6 +284,7 @@ export const ToolBar = () => {
           placement="bottomCenter"
         >
           <Button
+            id={组件标识.创建项目节点的按钮}
             data-test-id={测试标识.创建项目节点的按钮}
             type="text"
             disabled={projectTreeTimeLineVisible}
@@ -293,6 +294,7 @@ export const ToolBar = () => {
         </Dropdown>
         <Button
           type="text"
+          id={组件标识.创建项目组节点的按钮}
           data-test-id={测试标识.创建项目组节点的按钮}
           disabled={projectTreeTimeLineVisible}
           // loading={addFolderLoading}
