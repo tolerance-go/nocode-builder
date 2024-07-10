@@ -13,7 +13,11 @@ import {
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
 import { 节点是不是文件, 节点是不是文件夹 } from '@/utils';
-import { FileAddOutlined, FolderAddOutlined } from '@ant-design/icons';
+import {
+  FileAddOutlined,
+  FolderAddOutlined,
+  PlusOutlined,
+} from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
 import { Button, Dropdown, Flex, Space, theme } from 'antd';
 
@@ -285,7 +289,7 @@ export const ToolBar = () => {
             type="text"
             disabled={projectTreeTimeLineVisible}
             // loading={addFileLoading}
-            icon={<FileAddOutlined />}
+            icon={<PlusOutlined />}
           ></Button>
         </Dropdown>
         <Button

@@ -11,9 +11,9 @@ import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UI
 import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
 import { TitleInput } from './TitleInput';
-import { 标题是否有错 } from './utils';
 import { 测试类, 测试标识 } from '@cypress/shared/constants';
 import { cx } from '@emotion/css';
+import { 验证管理者 } from '@/core/managers/验证管理者';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const inputRef = useRef<InputRef>(null);
@@ -43,7 +43,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
   );
 
   const 保存标题输入 = (来自失去焦点: boolean = false) => {
-    const 标题内容有错 = 标题是否有错(inputRef.current?.input?.value ?? '');
+    const 标题内容有错 = 验证管理者
+      .getInstance()
+      .项目树节点标题是否有效(inputRef.current?.input?.value ?? '');
 
     if (标题内容有错) {
       if (为了编辑临时创建的节点的key === nodeKey) {

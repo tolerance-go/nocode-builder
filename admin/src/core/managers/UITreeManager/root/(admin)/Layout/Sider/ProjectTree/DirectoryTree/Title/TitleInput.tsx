@@ -1,4 +1,13 @@
-import { Input, InputProps, InputRef } from 'antd';
+import {
+  useAppDispatch,
+  useAppSelector,
+  更新当前输入的标题,
+  退出当前正在编辑的节点,
+} from '@/core/managers/UIStoreManager';
+import { 验证管理者 } from '@/core/managers/验证管理者';
+import { useKeyPressEventByKeyboardJs } from '@/hooks';
+import { ReplaceKeyType } from '@/utils';
+import { Flex, Input, InputProps, InputRef, theme, Typography } from 'antd';
 import {
   forwardRef,
   useEffect,
@@ -6,22 +15,16 @@ import {
   useRef,
   useState,
 } from 'react';
-import { 标题是否有错 } from './utils';
-import { ReplaceKeyType } from '@/utils';
-import {
-  useAppDispatch,
-  useAppSelector,
-  更新当前输入的标题,
-  退出当前正在编辑的节点,
-} from '@/core/managers/UIStoreManager';
-import { useKeyPressEventByKeyboardJs } from '@/hooks';
+import MagneticComponent from './MagneticComponent';
+import MarkdownParser from './MarkdownParser';
 
 export const TitleInput = forwardRef<
   InputRef,
   ReplaceKeyType<InputProps, 'defaultValue', string>
 >((props, ref) => {
+  const { token } = theme.useToken();
   const inputRef = useRef<InputRef>(null);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [errMsg, setErrMsg] = useState<string | null>(null);
   const [isComposing, setIsComposing] = useState<boolean>(false);
   const dispatch = useAppDispatch();
 
@@ -39,16 +42,20 @@ export const TitleInput = forwardRef<
     e: React.CompositionEvent<HTMLInputElement>,
   ) => {
     setIsComposing(false);
-    handleChange(e as unknown as React.ChangeEvent<HTMLInputElement>);
+    handleChange(e as unknown as React.ChangeEvent<HTMLInputElement>, true);
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    fromCompositionEnd = false,
+  ) => {
     const inputValue = e.target.value;
     dispatch(更新当前输入的标题(inputValue));
-    if (!isComposing && 标题是否有错(inputValue)) {
-      setIsError(true);
+    const errMsg = 验证管理者.getInstance().项目树节点标题是否有效(inputValue);
+    if (!isComposing || fromCompositionEnd) {
+      setErrMsg(errMsg);
     } else {
-      setIsError(false);
+      setErrMsg(null);
     }
   };
 
@@ -63,16 +70,30 @@ export const TitleInput = forwardRef<
   });
 
   return (
-    <Input
-      {...props}
-      autoComplete="off"
-      ref={inputRef}
-      value={当前输入的标题}
-      onChange={handleChange}
-      onCompositionStart={handleCompositionStart}
-      onCompositionEnd={handleCompositionEnd}
-      autoFocus
-      status={isError ? 'error' : undefined}
-    />
+    <>
+      <Input
+        {...props}
+        autoComplete="off"
+        ref={inputRef}
+        value={当前输入的标题}
+        onChange={handleChange}
+        onCompositionStart={handleCompositionStart}
+        onCompositionEnd={handleCompositionEnd}
+        autoFocus
+        status={errMsg ? 'error' : undefined}
+        style={{
+          borderRadius: token.borderRadiusXS,
+        }}
+      />
+      <MagneticComponent visible={!!errMsg} compRef={inputRef}>
+        <Flex
+          style={{
+            padding: `${token.paddingXXS}px ${token.paddingXS}px`,
+          }}
+        >
+          {errMsg && <MarkdownParser content={errMsg}></MarkdownParser>}
+        </Flex>
+      </MagneticComponent>
+    </>
   );
 });
