@@ -18,7 +18,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       当('用户创建一个项目节点', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点{enter}');
       });
 
@@ -47,7 +47,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
 
     当('用户创建一个项目节点', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
       cy.获取项目树标题输入框().type('项目节点{enter}');
     });
 
@@ -181,7 +181,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取添加项目组的按钮().click();
       cy.获取项目树标题输入框().type('project group{enter}');
       cy.获取项目树节点标题元素('project group').click();
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
       cy.获取项目树标题输入框().type('project{enter}');
 
       当('用户选中项目节点', () => {
@@ -246,7 +246,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
 
     当('用户点击创建项目', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
     });
     那么('用户应该能看到项目树中的输入框', () => {
       cy.获取项目树标题输入框().should('be.visible');
@@ -258,7 +258,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取antd树列表内部容器().children().should('have.length', 0);
     });
     当('用户再次点击创建项目', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
     });
     那么('用户应该能看到项目树中的输入框', () => {
       cy.获取项目树标题输入框().should('be.visible');
@@ -314,7 +314,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
 
     当('用户点击创建项目', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
     });
     那么('用户应该能看到项目树中的输入框', () => {
       cy.获取项目树标题输入框().should('be.visible');
@@ -342,7 +342,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
 
     当('用户点击创建项目', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
     });
 
     并且('用户输入合法内容和按下回车键，然后点击', () => {
@@ -375,13 +375,13 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.visit('/');
     });
     当('存在一个没有被选中的项目节点', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
       cy.获取项目树标题输入框().type('title{enter}');
       cy.获取项目树节点标题元素('title').dblclick();
     });
 
     当('用户点击创建项目按钮', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
     });
     并且('用户输入非法内容', () => {
       cy.获取项目树标题输入框().type('$');
@@ -431,7 +431,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         );
       });
       并且('点击了创建项目按钮', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
       });
       并且('输入了非法标题', () => {
         cy.获取项目树标题输入框().type('$');

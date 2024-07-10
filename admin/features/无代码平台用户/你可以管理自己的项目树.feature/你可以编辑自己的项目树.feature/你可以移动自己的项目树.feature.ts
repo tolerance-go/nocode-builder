@@ -15,11 +15,11 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当(
         '用户在根节点创建了一个文件夹和多个文件，文件夹标题为 folder，文件标题分别为 file1, file2, file3',
         () => {
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file1{enter}');
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file2{enter}');
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file3{enter}');
           cy.获取添加项目组的按钮().click();
           cy.获取项目树标题输入框().type('file4{enter}');
@@ -69,7 +69,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当(
       '用户在根节点创建了一个文件夹和多个文件，文件夹标题为 folder，文件标题分别为 file1',
       () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('file1{enter}');
         cy.获取添加项目组的按钮().click();
         cy.获取项目树标题输入框().type('folder{enter}');
@@ -110,11 +110,11 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当(
         '用户在根节点创建了一个文件夹和多个文件，文件夹标题为 folder，文件标题分别为 file1, file2, file3',
         () => {
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file1{enter}');
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file2{enter}');
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file3{enter}');
           cy.获取添加项目组的按钮().click();
           cy.获取项目树标题输入框().type('file4{enter}');
@@ -183,11 +183,11 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当(
         '用户在根节点创建了一个文件夹和多个文件，文件夹标题为 folder，文件标题分别为 file1, file2, file3',
         () => {
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file1{enter}');
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file2{enter}');
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file3{enter}');
           cy.获取添加项目组的按钮().click();
           cy.获取项目树标题输入框().type('folder{enter}');
@@ -255,9 +255,9 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当(
       '用户在跟节点创建了2个项目文件节点，第一个标题为 a，第二个标题为 b',
       () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('b{enter}');
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('a{enter}');
       },
     );
@@ -295,7 +295,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当(
       '用户在跟节点创建了一个文件夹和一个文件，文件夹标题为 folder，文件标题为 file',
       () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('file{enter}');
         cy.获取添加项目组的按钮().click();
         cy.获取项目树标题输入框().type('folder{enter}');
@@ -346,7 +346,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当(
         '用户在跟节点创建了一个文件夹和一个文件，文件夹标题为 folder，文件标题为 file',
         () => {
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file{enter}');
           cy.获取添加项目组的按钮().click();
           cy.获取项目树标题输入框().type('folder{enter}');
@@ -398,7 +398,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       当(
         '用户在跟节点创建了一个文件夹和一个文件，文件夹标题为 folder，文件标题为 file',
         () => {
-          cy.获取添加项目的按钮().click();
+          cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file{enter}');
           cy.获取添加项目组的按钮().click();
           cy.获取项目树标题输入框().type('folder{enter}');

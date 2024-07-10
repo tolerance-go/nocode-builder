@@ -2,7 +2,7 @@ import { 测试类 } from '@cypress/shared/constants';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
-  假如.only(
+  假如(
     '用户创建并选中了项目节点，点击项目树外部的区域，应该取消所有选中',
     ({ 当, 并且, 那么 }) => {
       当('用户已经登录', () => {
@@ -14,7 +14,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       当('用户创建了项目树中一个项目节点并选中', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点{enter}');
         cy.获取项目树节点通过标题('项目节点').click();
         cy.获取项目树节点通过标题('项目节点').should(
@@ -48,11 +48,14 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       当('用户选中多个文件夹', () => {
-        cy.获取添加项目组的按钮().click();
+        cy.添加项目树视图项目();
+
         cy.获取项目树标题输入框().type('文件夹0{enter}');
-        cy.获取添加项目组的按钮().click();
+        cy.添加项目树视图项目();
+
         cy.获取项目树标题输入框().type('文件夹1{enter}');
-        cy.获取添加项目组的按钮().click();
+        cy.添加项目树视图项目();
+
         cy.获取项目树标题输入框().type('文件夹2{enter}');
         cy.获取项目树节点通过标题('文件夹1').click({ ctrlKey: true });
         cy.获取项目树节点通过标题('文件夹2').click({ ctrlKey: true });
@@ -80,7 +83,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
     },
   );
-  假如(
+  假如.only(
     '用户正在创建节点并编辑标题中，快捷退出，应该恢复之前的选中',
     ({ 当, 并且, 那么 }) => {
       当('用户已经登录', () => {
@@ -90,7 +93,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy.visit('/');
       });
       当('用户创建了项目树中一个项目节点', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点{enter}');
       });
       并且('选中该节点', () => {
@@ -101,7 +104,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         );
       });
       当('用户点击了创建项目按钮', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
       });
       那么('应该看到输入框', () => {
         cy.获取项目树标题输入框().should('be.visible');
@@ -135,7 +138,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
 
     当('用户选中存在的项目节点并开始编辑标题', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
       cy.获取项目树标题输入框().type('项目节点{enter}');
       cy.获取项目树节点通过标题('项目节点').click();
       cy.获取项目树节点通过标题('项目节点').should(
@@ -179,7 +182,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       并且('用户点击创建项目按钮', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
       });
 
       并且('用户按下 esc 键', () => {
@@ -206,7 +209,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
 
     当('用户选中存在的项目节点', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
       cy.获取项目树标题输入框().type('项目节点{enter}');
       cy.获取项目树节点通过标题('项目节点').click();
       cy.获取项目树节点通过标题('项目节点').should(
@@ -238,7 +241,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     });
 
     当('用户正在编辑项目节点标题', () => {
-      cy.获取添加项目的按钮().click();
+      cy.添加项目树视图项目();
       cy.获取项目树标题输入框().type('项目节点{enter}');
       cy.获取项目树节点通过标题('项目节点').click();
       cy.获取项目树节点通过标题('项目节点').should(
@@ -278,7 +281,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       当('用户选中存在的项目节点', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点{enter}');
         cy.获取项目树节点通过标题('项目节点').click();
         cy.获取项目树节点通过标题('项目节点').should(
@@ -321,7 +324,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       当('用户选中存在的项目节点', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点{enter}');
         cy.获取项目树节点通过标题('项目节点').click();
         cy.获取项目树节点通过标题('项目节点').should(
@@ -372,7 +375,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       当('用户选中存在的项目节点', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点{enter}');
         cy.获取项目树节点通过标题('项目节点').click();
         cy.获取项目树节点通过标题('项目节点').should(
@@ -382,7 +385,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       当('用户点击新增项目按钮', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
       });
 
       那么('之前选中的项目节点应该处于“之前选中”的状态', () => {
@@ -415,7 +418,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy.visit('/');
       });
       当('用户选中存在的项目节点', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点{enter}');
         cy.获取项目树节点通过标题('项目节点').click();
       });
@@ -441,7 +444,8 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       当('用户选中存在的项目组节点', () => {
-        cy.获取添加项目组的按钮().click();
+        cy.添加项目树视图项目();
+
         cy.获取项目树标题输入框().type('项目组节点{enter}');
         cy.获取项目树节点通过标题('项目组节点').click();
       });
@@ -477,7 +481,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy.visit('/');
       });
       当('用户选中存在的项目节点', () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点{enter}');
         cy.获取项目树节点通过标题('项目节点').click();
       });

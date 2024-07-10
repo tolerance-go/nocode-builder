@@ -258,7 +258,7 @@ export const ToolBar = () => {
               {
                 key: 'view',
                 label: (
-                  <span data-test-id={测试标识.创建视图项目节点的按钮}>
+                  <span data-test-id={测试标识.创建视图项目节点的菜单项}>
                     视图
                   </span>
                 ),

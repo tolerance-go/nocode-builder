@@ -34,6 +34,8 @@ declare global {
       获取添加项目组的按钮(): Chainable<JQuery<HTMLElement>>;
       获取添加项目的按钮(): Chainable<JQuery<HTMLElement>>;
 
+      添加项目树视图项目(): Chainable<void>;
+
       获取antd通知框描述(): Chainable<JQuery<HTMLElement>>;
 
       获取测试标识(id: string): Chainable<JQuery<HTMLElement>>;
