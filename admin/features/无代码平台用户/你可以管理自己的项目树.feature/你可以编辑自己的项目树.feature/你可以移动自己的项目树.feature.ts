@@ -3,7 +3,7 @@ import { getTreeNodeParent } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树移动流程', ({ 假如 }) => {
-  假如.only(
+  假如(
     '用户批量移动选中的节点，那么鼠标附近应该出现提示数量',
     ({ 当, 那么 }) => {
       当('用户已经登录', () => {
@@ -59,7 +59,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     },
   );
 
-  假如.only('用户移动单节点，那么鼠标附近应该出现标题提示', ({ 当, 那么 }) => {
+  假如('用户移动单节点，那么鼠标附近应该出现标题提示', ({ 当, 那么 }) => {
     当('用户已经登录', () => {
       cy.登录('yb', '123456');
     });

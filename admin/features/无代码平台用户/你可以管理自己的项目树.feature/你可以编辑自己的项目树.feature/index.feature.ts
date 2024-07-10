@@ -2,7 +2,7 @@ import { 测试类 } from '@cypress/shared/constants';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
-  假如.only(
+  假如(
     '用户选中多个文件夹，按下 del 键，应该删除选中项',
     ({ 当, 并且, 那么 }) => {
       当('用户已经登录', () => {
