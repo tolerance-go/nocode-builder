@@ -4,6 +4,8 @@ import {
   useAppSelector,
   选中项目树容器并清空选中和激活节点,
   取消选中项目树容器,
+  更新是否正在聚焦项目树区域,
+  更新选中的节点是哪些,
 } from '@/core/managers/UIStoreManager';
 import { debounce } from 'lodash-es';
 import { useEffect, useRef } from 'react';
@@ -53,7 +55,9 @@ export const ProjectTree = () => {
   }, [dispatch]);
 
   useClickAway(containerRef, () => {
+    dispatch(更新是否正在聚焦项目树区域(false));
     dispatch(取消选中项目树容器());
+    dispatch(更新选中的节点是哪些([]));
   });
 
   return (
@@ -77,6 +81,8 @@ export const ProjectTree = () => {
         flexGrow: 1,
       }}
       onClick={(event) => {
+        dispatch(更新是否正在聚焦项目树区域(true));
+
         // 只处理当前绑定事件的 dom 的点击事件
         if (event.target !== event.currentTarget) return;
         dispatch(选中项目树容器并清空选中和激活节点());

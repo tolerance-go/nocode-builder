@@ -38,8 +38,14 @@ export const DirectoryTree = () => {
 
   useKeyPressEventByKeyboardJs(['delete'], () => {
     const {
-      projectTree: { 所有已经选中的节点, 当前正在编辑的项目树节点的key },
+      projectTree: {
+        所有已经选中的节点,
+        当前正在编辑的项目树节点的key,
+        是否正在聚焦项目树区域,
+      },
     } = reduxStore.getState();
+
+    if (!是否正在聚焦项目树区域) return;
 
     if (!所有已经选中的节点.length) return;
 

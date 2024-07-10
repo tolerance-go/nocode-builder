@@ -18,6 +18,8 @@ export const 测试标识 = {
   创建项目节点按钮: 'create-project-node-btn',
 
   拖拽跟随鼠标的容器: 'drag-follow-mouse-container',
+
+  内容区域组件: 'content-area',
 };
 
 export const 测试类 = {

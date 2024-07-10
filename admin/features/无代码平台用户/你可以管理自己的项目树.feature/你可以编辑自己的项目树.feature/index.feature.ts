@@ -2,6 +2,40 @@ import { 测试类 } from '@cypress/shared/constants';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
+  假如.only(
+    '用户创建并选中了项目节点，点击项目树外部的区域，应该取消所有选中',
+    ({ 当, 并且, 那么 }) => {
+      当('用户已经登录', () => {
+        cy.登录('yb', '123456');
+      });
+
+      当('用户访问主页', () => {
+        cy.visit('/');
+      });
+
+      当('用户创建了项目树中一个项目节点并选中', () => {
+        cy.获取添加项目的按钮().click();
+        cy.获取项目树标题输入框().type('项目节点{enter}');
+        cy.获取项目树节点通过标题('项目节点').click();
+        cy.获取项目树节点通过标题('项目节点').should(
+          'have.class',
+          'ant-tree-treenode-selected',
+        );
+      });
+
+      并且('点击项目树外部的区域', () => {
+        cy.get('body').click('right');
+      });
+
+      那么('所有选中的项目节点应该取消选中', () => {
+        cy.获取项目树节点通过标题('项目节点').should(
+          'not.have.class',
+          'ant-tree-treenode-selected',
+        );
+      });
+    },
+  );
+
   假如(
     '用户选中多个文件夹，按下 del 键，应该删除选中项',
     ({ 当, 并且, 那么 }) => {

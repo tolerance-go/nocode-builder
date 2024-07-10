@@ -1,6 +1,6 @@
-import { MoreOutlined } from '@ant-design/icons';
+import { EllipsisOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
-import { Flex, Dropdown, Button, Avatar, theme, Space, Typography } from 'antd';
+import { Avatar, Button, Dropdown, Flex, Space, theme, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 export const UserBar = () => {
@@ -42,7 +42,7 @@ export const UserBar = () => {
           </Space>
         </Button>
       </Dropdown>
-      <Button type="text" icon={<MoreOutlined />}></Button>
+      <Button type="text" icon={<EllipsisOutlined />}></Button>
     </Flex>
   );
 };

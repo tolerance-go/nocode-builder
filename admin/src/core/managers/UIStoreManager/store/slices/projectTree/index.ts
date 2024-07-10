@@ -14,14 +14,14 @@ import { 批量删除节点 } from '../../utils/tree/effects/批量删除节点'
 
 export type ProjectTreeStates = {
   hasInitProjectTreeDataMeta: boolean;
-  项目节点树: ProjectStructureTreeDataNode[];
+  // 派生数据
+  derived_节点到父节点的映射: Record<string, string | null>;
   // 关联数据
   connected_树节点key到节点数据的映射: ProjectTreeNodeDataRecord;
+  项目节点树: ProjectStructureTreeDataNode[];
   所有已经选中的节点: string[];
   所有展开的节点的key: string[];
   当前正在编辑的项目树节点的key: string | null;
-  // 派生数据
-  derived_节点到父节点的映射: Record<string, string | null>;
   为了编辑临时创建的节点的key: string | null;
   节点树容器的高度: number;
   为了编辑节点标题而暂存的之前选中的节点keys: string[] | null;
@@ -29,9 +29,11 @@ export type ProjectTreeStates = {
   是否选中了项目树容器: boolean;
   激活的节点的key: string | null;
   当前正在拖拽的节点key: string | null;
+  是否正在聚焦项目树区域: boolean;
 };
 
 const initialState: ProjectTreeStates = {
+  是否正在聚焦项目树区域: false,
   当前正在拖拽的节点key: null,
   激活的节点的key: null,
   当前输入的标题: '',
@@ -52,6 +54,9 @@ const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
+    更新是否正在聚焦项目树区域: (state, action: PayloadAction<boolean>) => {
+      state.是否正在聚焦项目树区域 = action.payload;
+    },
     更新当前正在拖拽的节点: (state, action: PayloadAction<string | null>) => {
       state.当前正在拖拽的节点key = action.payload;
     },
@@ -501,6 +506,7 @@ const projectTreeSlice = createSlice({
 
 export const {
   initProjectTreeDataMeta,
+  更新是否正在聚焦项目树区域,
   更新当前正在拖拽的节点,
   更新激活的节点的key,
   选中项目树容器并清空选中和激活节点,
