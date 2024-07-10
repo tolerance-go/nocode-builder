@@ -12,14 +12,18 @@ import {
   更新选中的节点是哪些,
   移动项目树节点并同步其他状态,
 } from '@/core/managers/UIStoreManager';
+import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree';
+import { 图标管理者 } from '@/core/managers/图标管理者';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
+import { ProjectStructureTreeDataNode } from '@/types';
 import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
 import { Title } from './Title';
-import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
+
+const 图标管理者实例 = 图标管理者.getInstance();
 
 export const DirectoryTree = () => {
   const { token } = theme.useToken();
@@ -77,11 +81,12 @@ export const DirectoryTree = () => {
   // });
 
   return (
-    <AntdDirectoryTree
+    <AntdDirectoryTree<ProjectStructureTreeDataNode>
       multiple
       treeData={项目节点树}
       height={节点树容器的高度}
       virtual
+      showIcon
       draggable={{
         icon: false,
       }}
@@ -273,6 +278,38 @@ export const DirectoryTree = () => {
       onClick={(_event, info) => {
         dispatch(更新激活的节点的key(info.key));
         dispatch(取消选中项目树容器());
+      }}
+      // https://github.com/ant-design/ant-design/issues/49813
+      icon={(nodeProps: unknown) => {
+        const {
+          projectTree: { connected_树节点key到节点数据的映射 },
+        } = reduxStore.getState();
+        const { eventKey: nodeKey, expanded } = nodeProps as {
+          eventKey: string;
+          expanded: boolean;
+        };
+
+        if (nodeKey in connected_树节点key到节点数据的映射 === false) {
+          return;
+        }
+
+        const nodeData = connected_树节点key到节点数据的映射[nodeKey];
+        if (nodeData.type === 'file') {
+          if (nodeData.projectFileType === 'view') {
+            return 图标管理者实例.根据id获取组件('视图项目节点');
+          }
+          if (nodeData.projectFileType === 'data-table') {
+            return 图标管理者实例.根据id获取组件('数据表项目节点');
+          }
+          if (nodeData.projectFileType === 'bluemap') {
+            return 图标管理者实例.根据id获取组件('蓝图项目节点');
+          }
+        } else {
+          if (expanded) {
+            return 图标管理者实例.根据id获取组件('项目组文件夹展开中');
+          }
+          return 图标管理者实例.根据id获取组件('项目组文件夹');
+        }
       }}
       titleRender={(nodeData) => <Title nodeKey={nodeData.key} />}
     />

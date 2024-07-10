@@ -7,20 +7,17 @@ import {
 import { 查询项目树中的节点 } from '@/core/managers/UIStoreManager/store/utils';
 import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
 import { ProjectFileType } from '@/core/managers/UITreeManager/types';
+import { 图标管理者 } from '@/core/managers/图标管理者';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
 import { 节点是不是文件, 节点是不是文件夹 } from '@/utils';
-import {
-  ApartmentOutlined,
-  BuildOutlined,
-  FileAddOutlined,
-  FolderAddOutlined,
-  TableOutlined,
-} from '@ant-design/icons';
+import { FileAddOutlined, FolderAddOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
 import { Button, Dropdown, Flex, Space, theme } from 'antd';
+
+const 图标管理者实例 = 图标管理者.getInstance();
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
 const 找到同层最后一个文件夹的位置 = (
@@ -251,6 +248,7 @@ export const ToolBar = () => {
             dispatch(showProjectTreeTimeLineAction());
           }}
         ></Button> */}
+
         <Dropdown
           menu={{
             items: [
@@ -262,21 +260,19 @@ export const ToolBar = () => {
                   </span>
                 ),
                 onClick: () => handleProjectFileCreateBtnClick('view'),
-                icon: <BuildOutlined />,
+                icon: 图标管理者实例.根据id获取组件('视图项目节点'),
                 className: 组件类名.创建视图项目节点的菜单项,
               },
               {
                 key: 'data-table',
                 label: <span>数据表</span>,
-                icon: <TableOutlined />,
-                disabled: true,
+                icon: 图标管理者实例.根据id获取组件('数据表项目节点'),
                 onClick: () => handleProjectFileCreateBtnClick('data-table'),
               },
               {
                 key: 'bluemap',
                 label: <span>蓝图</span>,
-                icon: <ApartmentOutlined />,
-                disabled: true,
+                icon: 图标管理者实例.根据id获取组件('蓝图项目节点'),
                 onClick: () => handleProjectFileCreateBtnClick('bluemap'),
               },
             ],

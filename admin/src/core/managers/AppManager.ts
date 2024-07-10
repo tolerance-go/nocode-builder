@@ -4,6 +4,7 @@ import { UITreeManager } from './UITreeManager';
 import { UIStoreManager } from './UIStoreManager';
 import { I18nSystem } from '../systems';
 import { 跟随鼠标显示内容管理者 } from './跟随鼠标显示内容管理者';
+import { 图标管理者 } from './图标管理者';
 
 export class AppManager implements Manager {
   private static instance: AppManager | undefined;
@@ -27,5 +28,6 @@ export class AppManager implements Manager {
 
     UIStoreManager.getInstance().work();
     跟随鼠标显示内容管理者.getInstance().work();
+    图标管理者.getInstance().work();
   }
 }
