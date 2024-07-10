@@ -6,18 +6,22 @@ import {
   插入新节点在指定节点下并同步更新其他数据,
 } from '@/core/managers/UIStoreManager';
 import { 查询项目树中的节点 } from '@/core/managers/UIStoreManager/store/utils';
+import { ProjectFileType } from '@/core/managers/UITreeManager/types';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
 import { 节点是不是文件, 节点是不是文件夹 } from '@/utils';
 import {
+  ApartmentOutlined,
+  BuildOutlined,
   FileAddOutlined,
   FolderAddOutlined,
   HistoryOutlined,
+  TableOutlined,
 } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
-import { Button, Flex, Space, theme } from 'antd';
+import { Button, Dropdown, Flex, Space, theme } from 'antd';
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
 const 找到同层最后一个文件夹的位置 = (
@@ -70,7 +74,10 @@ export const ToolBar = () => {
     );
   };
 
-  const 在指定节点下插入新文件 = (target: ProjectStructureTreeDataNode) => {
+  const 在指定节点下插入新文件 = (
+    target: ProjectStructureTreeDataNode,
+    projectFileType: ProjectFileType,
+  ) => {
     const folderIndex = 找到同层最后一个文件夹的位置(
       (target.children ?? []).map((node) => {
         const recordItem = projectTreeDataRecord[node.key];
@@ -94,12 +101,13 @@ export const ToolBar = () => {
           title: '',
           id: -1,
           type: 'file',
+          projectFileType,
         },
       }),
     );
   };
 
-  const 在根节点下插入新文件 = () => {
+  const 在根节点下插入新文件 = (projectFileType: ProjectFileType) => {
     const folderIndex = 找到同层最后一个文件夹的位置(
       projectStructureTreeData.map((node) => {
         const recordItem = projectTreeDataRecord[node.key];
@@ -124,6 +132,7 @@ export const ToolBar = () => {
           title: '',
           type: 'file',
           id: -1,
+          projectFileType: projectFileType,
         },
       }),
     );
@@ -187,9 +196,11 @@ export const ToolBar = () => {
     }
   };
 
-  const handleProjectFileCreateBtnClick = async () => {
+  const handleProjectFileCreateBtnClick = async (
+    projectFileType: ProjectFileType,
+  ) => {
     if (!selectedKey) {
-      在根节点下插入新文件();
+      在根节点下插入新文件(projectFileType);
       return;
     }
 
@@ -204,7 +215,7 @@ export const ToolBar = () => {
     }
     if (节点是不是文件夹(selectedRecordItem)) {
       if (selectedNode) {
-        在指定节点下插入新文件(selectedNode);
+        在指定节点下插入新文件(selectedNode, projectFileType);
       }
     } else if (节点是不是文件(selectedRecordItem)) {
       const parentKey = nodeParentKeyRecord[selectedKey];
@@ -215,10 +226,10 @@ export const ToolBar = () => {
           parentKey,
         );
         if (parent) {
-          在指定节点下插入新文件(parent);
+          在指定节点下插入新文件(parent, projectFileType);
         }
       } else {
-        在根节点下插入新文件();
+        在根节点下插入新文件(projectFileType);
       }
     }
   };
@@ -241,14 +252,45 @@ export const ToolBar = () => {
             dispatch(showProjectTreeTimeLineAction());
           }}
         ></Button>
-        <Button
-          data-test-id={测试标识.创建项目节点的按钮}
-          type="text"
-          disabled={projectTreeTimeLineVisible}
-          // loading={addFileLoading}
-          icon={<FileAddOutlined />}
-          onClick={handleProjectFileCreateBtnClick}
-        ></Button>
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: 'view',
+                label: (
+                  <span data-test-id={测试标识.创建视图项目节点的按钮}>
+                    视图
+                  </span>
+                ),
+                onClick: () => handleProjectFileCreateBtnClick('view'),
+                icon: <BuildOutlined />,
+              },
+              {
+                key: 'data-table',
+                label: <span>数据表</span>,
+                icon: <TableOutlined />,
+                disabled: true,
+                onClick: () => handleProjectFileCreateBtnClick('data-table'),
+              },
+              {
+                key: 'bluemap',
+                label: <span>蓝图</span>,
+                icon: <ApartmentOutlined />,
+                disabled: true,
+                onClick: () => handleProjectFileCreateBtnClick('bluemap'),
+              },
+            ],
+          }}
+          placement="bottomCenter"
+        >
+          <Button
+            data-test-id={测试标识.创建项目节点的按钮}
+            type="text"
+            disabled={projectTreeTimeLineVisible}
+            // loading={addFileLoading}
+            icon={<FileAddOutlined />}
+          ></Button>
+        </Dropdown>
         <Button
           type="text"
           data-test-id={测试标识.创建项目组节点的按钮}

@@ -1,6 +1,7 @@
 export const 测试标识 = {
   创建项目组节点的按钮: 'create-project-group-node-btn',
   创建项目节点的按钮: 'create-project-node-btn',
+  创建视图项目节点的按钮: 'create-view-project-node-btn',
   项目树标题输入框: 'project-tree-title-input',
 
   项目树容器: 'project-tree-container',
