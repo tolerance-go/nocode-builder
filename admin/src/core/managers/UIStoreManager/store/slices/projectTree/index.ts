@@ -68,10 +68,11 @@ const projectTreeSlice = createSlice({
     更新激活的节点的key: (state, action: PayloadAction<string | null>) => {
       state.激活的节点的key = action.payload;
     },
-    选中项目树容器并清空选中和激活节点: (state) => {
+    选中项目树容器并清空选中和激活还有聚焦节点: (state) => {
       state.是否选中了项目树容器 = true;
       state.所有已经选中的节点 = [];
       state.激活的节点的key = null;
+      state.当前聚焦的节点key = null;
     },
     取消选中项目树容器: (state) => {
       state.是否选中了项目树容器 = false;
@@ -515,7 +516,8 @@ export const {
   更新是否正在聚焦项目树区域,
   更新当前正在拖拽的节点,
   更新激活的节点的key,
-  选中项目树容器并清空选中和激活节点,
+  选中项目树容器并清空选中和激活还有聚焦节点:
+    选中项目树容器并清空选中和激活还有聚焦节点,
   取消选中项目树容器,
   清空当前输入的标题,
   更新当前输入的标题,

@@ -22,6 +22,8 @@ declare global {
        */
       登录(username: string, password: string): Chainable<void>;
 
+      获取项目树容器(): Chainable<JQuery<HTMLElement>>;
+
       获取项目树节点标题元素(title: string): Chainable<JQuery<HTMLElement>>;
 
       获取项目树节点通过标题(title: string): Chainable<JQuery<HTMLElement>>;

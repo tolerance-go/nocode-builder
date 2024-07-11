@@ -2,12 +2,10 @@ import {
   reduxStore,
   useAppDispatch,
   useAppSelector,
-  删除所有选中的节点,
   取消指定的节点的选中状态,
   取消选中项目树容器,
   更新展开的节点是哪些,
   更新当前正在拖拽的节点,
-  更新当前编辑节点是哪个并更新输入框的值,
   更新当前聚焦的节点key,
   更新激活的节点的key,
   更新选中的节点是哪些,
@@ -15,7 +13,6 @@ import {
 } from '@/core/managers/UIStoreManager';
 import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree';
 import { 图标管理者 } from '@/core/managers/图标管理者';
-import { useKeyPressEventByKeyboardJs } from '@/hooks';
 import { ProjectStructureTreeDataNode } from '@/types';
 import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
@@ -40,53 +37,6 @@ export const DirectoryTree = () => {
   const expandedKeys = useAppSelector(
     (state) => state.projectTree.所有展开的节点的key,
   );
-
-  useKeyPressEventByKeyboardJs(['delete'], () => {
-    const {
-      projectTree: {
-        所有已经选中的节点,
-        当前正在编辑的项目树节点的key,
-        是否正在聚焦项目树区域,
-      },
-    } = reduxStore.getState();
-
-    if (!是否正在聚焦项目树区域) return;
-
-    if (!所有已经选中的节点.length) return;
-
-    if (
-      当前正在编辑的项目树节点的key &&
-      所有已经选中的节点.includes(当前正在编辑的项目树节点的key)
-    ) {
-      return;
-    }
-
-    dispatch(删除所有选中的节点());
-  });
-
-  useKeyPressEventByKeyboardJs(['f2'], () => {
-    const {
-      projectTree: { 所有已经选中的节点, 是否正在聚焦项目树区域 },
-    } = reduxStore.getState();
-
-    if (!是否正在聚焦项目树区域) return;
-
-    if (!所有已经选中的节点.length) return;
-
-    dispatch(
-      更新当前编辑节点是哪个并更新输入框的值(
-        所有已经选中的节点[所有已经选中的节点.length - 1],
-      ),
-    );
-  });
-
-  // useKeyPress(["ctrl.z"], () => {
-  //   projectTreeHistoryState.undo();
-  // });
-
-  // useKeyPress(["ctrl.shift.z"], () => {
-  //   projectTreeHistoryState.redo();
-  // });
 
   return (
     <AntdDirectoryTree<ProjectStructureTreeDataNode>

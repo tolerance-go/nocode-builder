@@ -121,13 +121,13 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
               const {
-                projectTree: { 所有已经选中的节点 },
+                projectTree: { 当前聚焦的节点key },
               } = reduxStore.getState();
 
+              if (!当前聚焦的节点key) return;
+
               dispatch(
-                更新当前编辑节点是哪个并更新输入框的值(
-                  所有已经选中的节点[所有已经选中的节点.length - 1],
-                ),
+                更新当前编辑节点是哪个并更新输入框的值(当前聚焦的节点key),
               );
             },
           },
