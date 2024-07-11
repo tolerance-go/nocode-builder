@@ -38,8 +38,6 @@ export const DirectoryTree = () => {
     (state) => state.projectTree.所有展开的节点的key,
   );
 
-  const borderTrans = `border ${token.motionDurationFast} ${token.motionEaseInOut}`;
-
   return (
     <AntdDirectoryTree<ProjectStructureTreeDataNode>
       multiple
@@ -155,8 +153,7 @@ export const DirectoryTree = () => {
         .ant-tree-treenode {
           &:has(span.focused) {
             &::before {
-              border: 1px solid ${token['gold-6']};
-              transition: ${borderTrans};
+              border: 1px solid ${token['blue-6']};
             }
           }
         }

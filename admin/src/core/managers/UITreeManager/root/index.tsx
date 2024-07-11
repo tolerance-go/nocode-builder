@@ -1,4 +1,5 @@
 import { updatePathname, useAppDispatch } from '@/core/managers/UIStoreManager';
+import { hexToRgb } from '@/utils';
 import { ConfigProvider, theme } from 'antd';
 import { useLayoutEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
@@ -7,6 +8,8 @@ import { Outlet, useLocation } from 'react-router-dom';
 export function Root() {
   const location = useLocation();
   const dispatch = useAppDispatch();
+
+  const { token } = theme.useToken();
 
   useLayoutEffect(() => {
     dispatch(updatePathname(location.pathname));
@@ -19,6 +22,7 @@ export function Root() {
         components: {
           Tree: {
             borderRadius: 0,
+            directoryNodeSelectedBg: `rgba(${hexToRgb(token.blue6).join(', ')}, 0.4)`,
           },
         },
       }}
