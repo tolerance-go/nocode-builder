@@ -11,11 +11,11 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当(
       '用户在根节点创建了一个文件夹和多个文件，文件夹标题为 folder，文件标题分别为 file1, file2, file3',
       () => {
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('file1{enter}');
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('file2{enter}');
-        cy.获取添加项目的按钮().click();
+        cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('file3{enter}');
       },
     );

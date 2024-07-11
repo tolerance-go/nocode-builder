@@ -22,10 +22,6 @@ declare global {
        */
       登录(username: string, password: string): Chainable<void>;
 
-      添加项目文件节点(typeName: string): Chainable<void>;
-
-      添加项目组文件夹节点(typeName: string): Chainable<void>;
-
       获取项目树节点标题元素(title: string): Chainable<JQuery<HTMLElement>>;
 
       获取项目树节点通过标题(title: string): Chainable<JQuery<HTMLElement>>;

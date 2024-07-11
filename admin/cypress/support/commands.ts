@@ -174,13 +174,6 @@ Cypress.Commands.add(
   },
 );
 
-// 在输入框内输入内容
-const typeToProjectTreeTitleInput = (input: string) => {
-  cy.get(`input#${测试标识.项目树标题输入框}`).as('projectTreeTitleInput');
-  cy.get('@projectTreeTitleInput').type(input);
-  cy.get('@projectTreeTitleInput').type('{enter}');
-};
-
 Cypress.Commands.add('登录', (username: string, password: string) => {
   cy.session([username, password], () => {
     cy.request({
@@ -191,22 +184,6 @@ Cypress.Commands.add('登录', (username: string, password: string) => {
       window.localStorage.setItem('token', body.accessToken);
     });
   });
-});
-
-Cypress.Commands.add('添加项目文件节点', (typeName: string) => {
-  cy.get(`[data-test-id="${测试标识.创建项目节点的按钮}"]`).as(
-    'createProjectBtn',
-  );
-  cy.get('@createProjectBtn').click();
-  typeToProjectTreeTitleInput(typeName);
-});
-
-Cypress.Commands.add('添加项目组文件夹节点', (typeName: string) => {
-  cy.get(`[data-test-id="${测试标识.创建项目组节点的按钮}"]`).as(
-    'createProjectGroupBtn',
-  );
-  cy.get('@createProjectGroupBtn').click();
-  typeToProjectTreeTitleInput(typeName);
 });
 
 Cypress.Commands.add('获取项目树节点标题元素', (name: string) => {
