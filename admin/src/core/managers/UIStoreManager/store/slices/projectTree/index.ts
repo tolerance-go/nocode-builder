@@ -30,9 +30,11 @@ export type ProjectTreeStates = {
   激活的节点的key: string | null;
   当前正在拖拽的节点key: string | null;
   是否正在聚焦项目树区域: boolean;
+  当前聚焦的节点key: string | null;
 };
 
 const initialState: ProjectTreeStates = {
+  当前聚焦的节点key: null,
   是否正在聚焦项目树区域: false,
   当前正在拖拽的节点key: null,
   激活的节点的key: null,
@@ -54,6 +56,9 @@ const projectTreeSlice = createSlice({
   name: 'projectTree',
   initialState,
   reducers: {
+    更新当前聚焦的节点key: (state, action: PayloadAction<string | null>) => {
+      state.当前聚焦的节点key = action.payload;
+    },
     更新是否正在聚焦项目树区域: (state, action: PayloadAction<boolean>) => {
       state.是否正在聚焦项目树区域 = action.payload;
     },
@@ -506,6 +511,7 @@ const projectTreeSlice = createSlice({
 
 export const {
   initProjectTreeDataMeta,
+  更新当前聚焦的节点key,
   更新是否正在聚焦项目树区域,
   更新当前正在拖拽的节点,
   更新激活的节点的key,

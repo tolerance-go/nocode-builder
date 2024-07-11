@@ -35,6 +35,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const 激活的节点的key是否为自身 = useAppSelector(
     (state) => state.projectTree.激活的节点的key === nodeKey,
   );
+  const 当前聚焦的节点key是否为自身 = useAppSelector(
+    (state) => state.projectTree.当前聚焦的节点key === nodeKey,
+  );
   const 当前正在编辑的项目树节点的key = useAppSelector(
     (state) => state.projectTree.当前正在编辑的项目树节点的key,
   );
@@ -154,7 +157,10 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
           display: 'inline-block',
           width: '100%',
         }}
-        className={cx(激活的节点的key是否为自身 ? 'active' : null)}
+        className={cx(
+          激活的节点的key是否为自身 && 'active',
+          当前聚焦的节点key是否为自身 && 'focused',
+        )}
       >
         {nodeDataRecord?.title}
       </span>

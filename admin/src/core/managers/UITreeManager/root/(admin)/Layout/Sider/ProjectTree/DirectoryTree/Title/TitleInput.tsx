@@ -7,7 +7,7 @@ import {
 import { 验证管理者 } from '@/core/managers/验证管理者';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
 import { ReplaceKeyType } from '@/utils';
-import { Flex, Input, InputProps, InputRef, theme, Typography } from 'antd';
+import { Flex, Input, InputProps, InputRef, theme } from 'antd';
 import {
   forwardRef,
   useEffect,

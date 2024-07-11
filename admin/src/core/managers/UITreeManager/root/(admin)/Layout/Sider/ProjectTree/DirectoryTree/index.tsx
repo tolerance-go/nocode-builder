@@ -8,6 +8,7 @@ import {
   更新展开的节点是哪些,
   更新当前正在拖拽的节点,
   更新当前编辑节点是哪个并更新输入框的值,
+  更新当前聚焦的节点key,
   更新激活的节点的key,
   更新选中的节点是哪些,
   移动项目树节点并同步其他状态,
@@ -199,6 +200,13 @@ export const DirectoryTree = () => {
             }
           }
         }
+        .ant-tree-treenode {
+          &:has(span.focused) {
+            &::before {
+              border: 1px solid ${token['gold-6']};
+            }
+          }
+        }
         .ant-tree-node-content-wrapper {
           display: inline-flex;
           .ant-tree-title {
@@ -284,7 +292,11 @@ export const DirectoryTree = () => {
       }}
       onClick={(_event, info) => {
         dispatch(更新激活的节点的key(info.key));
+        dispatch(更新当前聚焦的节点key(info.key));
         dispatch(取消选中项目树容器());
+      }}
+      onRightClick={({ node }) => {
+        dispatch(更新当前聚焦的节点key(node.key));
       }}
       // https://github.com/ant-design/ant-design/issues/49813
       icon={(nodeProps: unknown) => {
