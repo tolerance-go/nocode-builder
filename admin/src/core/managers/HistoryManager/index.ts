@@ -1,5 +1,5 @@
 import { Manager } from '@/types';
-import { HistoryRecord, historyMachineActor } from './actors';
+import { 历史状态机Actor, 历史记录 } from './actors';
 
 export class HistoryManager implements Manager {
   private static instance: HistoryManager | undefined;
@@ -12,14 +12,14 @@ export class HistoryManager implements Manager {
   }
 
   private constructor() {
-    historyMachineActor.start();
+    历史状态机Actor.start();
   }
 
   work(): void {}
 
-  addRecordToHistory(record: HistoryRecord) {
-    historyMachineActor.send({
-      type: 'UPDATE_HISTORY',
+  addRecordToHistory(record: 历史记录) {
+    历史状态机Actor.send({
+      type: '更新历史',
       state: record,
     });
   }

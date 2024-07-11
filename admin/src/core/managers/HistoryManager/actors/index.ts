@@ -7,7 +7,7 @@ import {
   createActor,
 } from 'xstate';
 
-export type HistoryRecord = {
+export type 历史记录 = {
   state: string;
 };
 
@@ -15,7 +15,7 @@ export type HistoryRecord = {
  * 模拟加载历史记录的服务函数
  * @returns {Promise<unknown[]>} 模拟的历史记录数据
  */
-const fetchUserLogic: PromiseActorLogic<HistoryRecord[]> = fromPromise(
+const 获取用户逻辑: PromiseActorLogic<历史记录[]> = fromPromise(
   async ({ input }) => {
     console.log(input);
     await delay(1000);
@@ -23,7 +23,7 @@ const fetchUserLogic: PromiseActorLogic<HistoryRecord[]> = fromPromise(
       { state: 'state1' },
       { state: 'state2' },
       { state: 'state3' },
-    ] as HistoryRecord[];
+    ] as 历史记录[];
     return [];
   },
 );
@@ -33,152 +33,151 @@ const fetchUserLogic: PromiseActorLogic<HistoryRecord[]> = fromPromise(
  * - historyStack: 用于存储所有历史记录的堆栈，最新记录位于栈顶。
  * - historyPointer: 指向当前激活的历史记录索引，初始值为-1（表示未选择任何历史记录）。
  */
-export interface HistoryContext {
-  historyStack: HistoryRecord[];
-  historyPointer: number;
+export interface 历史上下文 {
+  历史堆栈: 历史记录[];
+  历史指针: number;
 }
 
 /**
  * 定义事件类型
- * - UNDO_REQUESTED: 用户触发撤销操作的事件。
- * - REDO_REQUESTED: 用户触发重做操作的事件。
- * - START_BROWSING_HISTORY: 开始浏览历史记录。
- * - STOP_BROWSING_HISTORY: 结束浏览历史记录并回到之前状态。
- * - SELECT_HISTORY_ITEM: 从浏览模式中选择一个历史记录项。
- * - UPDATE_HISTORY: 应用新状态到历史记录栈，通常由外部操作触发。
+ * - 撤销请求: 用户触发撤销操作的事件。
+ * - 重做请求: 用户触发重做操作的事件。
+ * - 开始浏览历史: 开始浏览历史记录。
+ * - 停止浏览历史: 结束浏览历史记录并回到之前状态。
+ * - 选择历史项: 从浏览模式中选择一个历史记录项。
+ * - 更新历史: 应用新状态到历史记录栈，通常由外部操作触发。
  */
-export type HistoryEvent =
-  | { type: 'UNDO_REQUESTED' }
-  | { type: 'REDO_REQUESTED' }
-  | { type: 'START_BROWSING_HISTORY' }
-  | { type: 'STOP_BROWSING_HISTORY' }
-  | { type: 'FETCH_HISTORY' }
-  | { type: 'SELECT_HISTORY_ITEM'; index: number }
-  | { type: 'UPDATE_HISTORY'; state: HistoryRecord }
-  | { type: 'RETRY_LOADING_HISTORY' };
+export type 历史事件 =
+  | { type: '撤销请求' }
+  | { type: '重做请求' }
+  | { type: '开始浏览历史' }
+  | { type: '停止浏览历史' }
+  | { type: '获取历史' }
+  | { type: '选择历史项'; index: number }
+  | { type: '更新历史'; state: 历史记录 }
+  | { type: '重试加载历史' };
 
 // 创建状态机
-const historyMachine = setup({
+export const 历史状态机 = setup({
   types: {
-    context: {} as HistoryContext,
-    events: {} as HistoryEvent,
+    context: {} as 历史上下文,
+    input: {} as 历史上下文,
+    events: {} as 历史事件,
   },
   actions: {
     // 执行撤销操作: 执行撤销逻辑，弹出最近的历史记录并应用到当前状态。
-    performUndo: assign({
-      historyPointer: ({ context }) => context.historyPointer - 1,
+    执行撤销: assign({
+      历史指针: ({ context }) => context.历史指针 - 1,
     }),
     // 执行重做操作: 执行重做逻辑，从历史记录栈中获取上一个记录并应用。
-    performRedo: assign({
-      historyPointer: ({ context }) => context.historyPointer + 1,
+    执行重做: assign({
+      历史指针: ({ context }) => context.历史指针 + 1,
     }),
     // 添加历史记录: 动作用于向历史记录堆栈中添加一条新记录。
-    addHistory: assign({
-      historyStack: ({ context, event }) => {
-        if (event.type === 'UPDATE_HISTORY') {
-          return [...context.historyStack, event.state];
+    添加历史: assign({
+      历史堆栈: ({ context, event }) => {
+        if (event.type === '更新历史') {
+          return [...context.历史堆栈, event.state];
         }
-        return context.historyStack;
+        return context.历史堆栈;
       },
     }),
     // 更新历史记录指针: 动作用于更新当前的历史记录指针。
-    updatePointer: assign({
-      historyPointer: ({ event }) =>
-        event.type === 'SELECT_HISTORY_ITEM' ? event.index : -1,
+    更新指针: assign({
+      历史指针: ({ event }) => (event.type === '选择历史项' ? event.index : -1),
     }),
     // 切换撤销/重做状态: 根据 `historyStack` 的状态更新 `canUndo` 和 `canRedo`。
-    toggleCanUndoRedoStatus: assign({
-      historyPointer: ({ context }) =>
-        context.historyStack.length > 0 ? context.historyPointer : -1,
+    切换撤销重做状态: assign({
+      历史指针: ({ context }) =>
+        context.历史堆栈.length > 0 ? context.历史指针 : -1,
     }),
   },
   guards: {
     // 检查是否可以撤销: 判断是否可以执行撤销操作。
-    canPerformUndo: ({ context }) => context.historyPointer > 0,
+    可以撤销: ({ context }) => context.历史指针 > 0,
     // 检查是否可以重做: 判断是否可以执行重做操作。
-    canPerformRedo: ({ context }) =>
-      context.historyPointer < context.historyStack.length - 1,
+    可以重做: ({ context }) => context.历史指针 < context.历史堆栈.length - 1,
   },
   actors: {
-    fetchUser: fetchUserLogic,
+    获取用户: 获取用户逻辑,
   },
 }).createMachine({
-  id: 'history',
-  initial: 'idle',
-  context: {
-    historyStack: [],
-    historyPointer: -1,
-  },
+  id: '历史',
+  initial: '待机',
+  context: ({ input }) => ({
+    历史堆栈: input.历史堆栈,
+    历史指针: input.历史指针,
+  }),
   states: {
     // 待机状态: 初始或待机状态，无操作进行。
-    idle: {
+    待机: {
       on: {
-        // 接收 UNDO_REQUESTED 事件，转换到 undoing 状态，并执行撤销动作。
-        UNDO_REQUESTED: {
-          target: 'undoing',
-          guard: 'canPerformUndo',
+        // 接收 撤销请求 事件，转换到 撤销中 状态，并执行撤销动作。
+        撤销请求: {
+          target: '撤销中',
+          guard: '可以撤销',
         },
-        // 接收 REDO_REQUESTED 事件，转换到 redoing 状态，并执行重做动作。
-        REDO_REQUESTED: {
-          target: 'redoing',
-          guard: 'canPerformRedo',
+        // 接收 重做请求 事件，转换到 重做中 状态，并执行重做动作。
+        重做请求: {
+          target: '重做中',
+          guard: '可以重做',
         },
-        // 接收 START_BROWSING_HISTORY 事件，转换到 browsingHistory 状态。
-        START_BROWSING_HISTORY: 'browsingHistory',
+        // 接收 开始浏览历史 事件，转换到 浏览历史 状态。
+        开始浏览历史: '浏览历史',
         // 开始加载历史记录
-        FETCH_HISTORY: 'loadingHistory',
+        获取历史: '加载历史',
       },
     },
     // 撤销操作中: 当前正在执行撤销操作。
-    undoing: {
-      entry: 'performUndo',
+    撤销中: {
+      entry: '执行撤销',
       always: {
-        target: 'idle',
-        actions: 'toggleCanUndoRedoStatus',
+        target: '待机',
+        actions: '切换撤销重做状态',
       },
     },
     // 重做操作中: 当前正在执行重做操作。
-    redoing: {
-      entry: 'performRedo',
+    重做中: {
+      entry: '执行重做',
       always: {
-        target: 'idle',
-        actions: 'toggleCanUndoRedoStatus',
+        target: '待机',
+        actions: '切换撤销重做状态',
       },
     },
     // 浏览历史记录中: 当前正在浏览历史记录。
-    browsingHistory: {
+    浏览历史: {
       on: {
-        // 接收 STOP_BROWSING_HISTORY 事件，转换到 idle 状态。
-        STOP_BROWSING_HISTORY: 'idle',
-        // 接收 SELECT_HISTORY_ITEM 事件，更新历史记录指针。
-        SELECT_HISTORY_ITEM: {
-          actions: 'updatePointer',
+        // 接收 停止浏览历史 事件，转换到 待机 状态。
+        停止浏览历史: '待机',
+        // 接收 选择历史项 事件，更新历史记录指针。
+        选择历史项: {
+          actions: '更新指针',
         },
       },
     },
     // 加载历史纪录中
-    loadingHistory: {
+    加载历史: {
       invoke: {
-        id: 'fetchUser',
-        src: 'fetchUser',
+        id: '获取用户',
+        src: '获取用户',
         onDone: {
-          target: 'idle',
+          target: '待机',
           actions: assign({
-            historyStack: ({ event }) => event.output,
+            历史堆栈: ({ event }) => event.output,
           }),
         },
         onError: {
-          target: 'failure',
+          target: '失败',
         },
       },
     },
     // 加载历史记录失败
-    failure: {
+    失败: {
       on: {
-        RETRY_LOADING_HISTORY: 'loadingHistory', // 重试加载历史记录
+        重试加载历史: '加载历史', // 重试加载历史记录
       },
     },
   },
 });
 
-export const historyMachineActor = createActor(historyMachine);
+export const 历史状态机Actor = createActor(历史状态机);
