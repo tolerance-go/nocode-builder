@@ -69,12 +69,19 @@ describe('历史状态机', () => {
       input: {
         历史堆栈: [],
         历史指针: -1,
+        request: async () => {
+          return [
+            { state: 'state1' },
+            { state: 'state2' },
+            { state: 'state3' },
+          ];
+        },
       },
     });
     历史状态机Actor.start();
     历史状态机Actor.send({ type: '获取历史' });
 
-    await delay(2000);
+    await delay(200);
 
     expect(历史状态机Actor.getSnapshot().context.历史堆栈).toEqual([
       { state: 'state1' },
@@ -83,16 +90,19 @@ describe('历史状态机', () => {
     ]);
   });
 
-  it('加载历史记录失败时应能重试', () => {
+  it('加载历史记录失败时应能重试', async () => {
     const 历史状态机Actor = createActor(历史状态机, {
       input: {
         历史堆栈: [],
         历史指针: -1,
+        request: async () => {
+          throw new Error('加载失败');
+        },
       },
     });
     历史状态机Actor.start();
     历史状态机Actor.send({ type: '获取历史' });
-    历史状态机Actor.send({ type: '重试加载历史' });
-    expect(历史状态机Actor.getSnapshot().value).toBe('加载历史中');
+    await delay(200);
+    expect(历史状态机Actor.getSnapshot().value).toBe('加载失败');
   });
 });

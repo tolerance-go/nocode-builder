@@ -51,7 +51,7 @@ export const onWork = () => {
               '拖拽中显示的组件id',
               {
                 title: 获取节点数据通过key如果找不到抛出异常(
-                  currentState.projectTree.connected_树节点key到节点数据的映射,
+                  currentState.projectTree.树节点key到节点数据的映射,
                   currentState.projectTree.当前正在拖拽的节点key,
                 ).title,
               },

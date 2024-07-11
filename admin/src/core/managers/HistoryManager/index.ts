@@ -1,5 +1,6 @@
 import { Manager } from '@/types';
-import { 历史状态机Actor, 历史记录 } from './actors';
+import { 历史状态机, 历史记录 } from './actors';
+import { createActor } from 'xstate';
 
 export class HistoryManager implements Manager {
   private static instance: HistoryManager | undefined;
@@ -11,14 +12,21 @@ export class HistoryManager implements Manager {
     return this.instance;
   }
 
+  历史状态机Actor = createActor(历史状态机, {
+    input: {
+      历史堆栈: [],
+      历史指针: -1,
+    },
+  });
+
   private constructor() {
-    历史状态机Actor.start();
+    this.历史状态机Actor.start();
   }
 
   work(): void {}
 
   addRecordToHistory(record: 历史记录) {
-    历史状态机Actor.send({
+    this.历史状态机Actor.send({
       type: '更新历史',
       state: record,
     });

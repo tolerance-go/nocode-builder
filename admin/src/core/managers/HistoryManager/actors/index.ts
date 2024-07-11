@@ -1,26 +1,15 @@
-import { delay } from '@/utils';
-import {
-  setup,
-  assign,
-  fromPromise,
-  PromiseActorLogic,
-  createActor,
-} from 'xstate';
+import { assign, fromPromise, PromiseActorLogic, setup } from 'xstate';
+import { createActor } from 'xstate';
 
 export type 历史记录 = {
   state: string;
 };
 
-const 请求历史记录逻辑: PromiseActorLogic<历史记录[]> = fromPromise(
+type 请求历史记录Fn = () => Promise<历史记录[]>;
+
+const 请求历史记录逻辑: PromiseActorLogic<历史记录[], Input> = fromPromise(
   async ({ input }) => {
-    console.log(input);
-    await delay(1000);
-    return [
-      { state: 'state1' },
-      { state: 'state2' },
-      { state: 'state3' },
-    ] as 历史记录[];
-    return [];
+    return (await input.request?.()) ?? [];
   },
 );
 
@@ -39,11 +28,19 @@ export type 历史事件 =
   | { type: '更新历史'; state: 历史记录 }
   | { type: '重试加载历史' };
 
+type Input = Partial<历史上下文> & {
+  request?: 请求历史记录Fn;
+};
+
+type Context = 历史上下文 & {
+  request?: 请求历史记录Fn;
+};
+
 // 创建状态机
 export const 历史状态机 = setup({
   types: {
-    context: {} as 历史上下文,
-    input: {} as 历史上下文,
+    context: {} as Context,
+    input: {} as Input,
     events: {} as 历史事件,
   },
   actions: {
@@ -80,8 +77,9 @@ export const 历史状态机 = setup({
   id: '历史',
   initial: '待机',
   context: ({ input }) => ({
-    历史堆栈: input.历史堆栈,
-    历史指针: input.历史指针,
+    历史堆栈: input.历史堆栈 ?? [],
+    历史指针: input.历史指针 ?? -1,
+    request: input.request,
   }),
   states: {
     待机: {
@@ -127,6 +125,7 @@ export const 历史状态机 = setup({
       invoke: {
         id: '请求历史记录',
         src: '请求历史记录',
+        input: ({ context }) => ({ request: context.request }),
         onDone: {
           target: '待机',
           actions: assign({
@@ -143,12 +142,5 @@ export const 历史状态机 = setup({
         重试加载历史: '加载历史中',
       },
     },
-  },
-});
-
-export const 历史状态机Actor = createActor(历史状态机, {
-  input: {
-    历史堆栈: [],
-    历史指针: -1,
   },
 });

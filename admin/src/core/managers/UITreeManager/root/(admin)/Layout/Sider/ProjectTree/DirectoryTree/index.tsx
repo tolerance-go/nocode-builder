@@ -174,9 +174,7 @@ export const DirectoryTree = () => {
       }}
       onDoubleClick={(_e, node) => {
         const nodeData =
-          reduxStore.getState().projectTree.connected_树节点key到节点数据的映射[
-            node.key
-          ];
+          reduxStore.getState().projectTree.树节点key到节点数据的映射[node.key];
 
         if (!nodeData) {
           throw new Error('节点数据不完整');
@@ -251,7 +249,9 @@ export const DirectoryTree = () => {
       // https://github.com/ant-design/ant-design/issues/49813
       icon={(nodeProps: unknown) => {
         const {
-          projectTree: { connected_树节点key到节点数据的映射 },
+          projectTree: {
+            树节点key到节点数据的映射: connected_树节点key到节点数据的映射,
+          },
         } = reduxStore.getState();
         const { eventKey: nodeKey, expanded } = nodeProps as {
           eventKey: string;

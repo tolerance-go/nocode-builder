@@ -43,7 +43,7 @@ export const ToolBar = () => {
     (state) => state.projectTree.项目节点树,
   );
   const projectTreeDataRecord = useAppSelector(
-    (state) => state.projectTree.connected_树节点key到节点数据的映射,
+    (state) => state.projectTree.树节点key到节点数据的映射,
   );
   const nodeParentKeyRecord = useAppSelector(
     (state) => state.projectTree.derived_节点到父节点的映射,

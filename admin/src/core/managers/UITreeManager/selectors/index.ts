@@ -5,7 +5,7 @@ export const selectProjectStructureTreeData = (state: RootState) =>
   state.projectTree.项目节点树;
 
 export const selectProjectStructureTreeNodeDataRecord = (state: RootState) =>
-  state.projectTree.connected_树节点key到节点数据的映射;
+  state.projectTree.树节点key到节点数据的映射;
 
 export const selectProjectStructureTreeNodeDataRecordItem = createSelector(
   [

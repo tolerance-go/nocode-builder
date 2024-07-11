@@ -17,7 +17,7 @@ export type ProjectTreeStates = {
   // 派生数据
   derived_节点到父节点的映射: Record<string, string | null>;
   // 关联数据
-  connected_树节点key到节点数据的映射: ProjectTreeNodeDataRecord;
+  树节点key到节点数据的映射: ProjectTreeNodeDataRecord;
   项目节点树: ProjectStructureTreeDataNode[];
   所有已经选中的节点: string[];
   所有展开的节点的key: string[];
@@ -42,7 +42,7 @@ const initialState: ProjectTreeStates = {
   激活的节点的key: null,
   当前输入的标题: '',
   项目节点树: [],
-  connected_树节点key到节点数据的映射: {},
+  树节点key到节点数据的映射: {},
   hasInitProjectTreeDataMeta: false,
   所有已经选中的节点: [],
   所有展开的节点的key: [],
@@ -145,7 +145,7 @@ const projectTreeSlice = createSlice({
       state,
       action: PayloadAction<ProjectTreeNodeDataRecord>,
     ) => {
-      state.connected_树节点key到节点数据的映射 = action.payload;
+      state.树节点key到节点数据的映射 = action.payload;
     },
     更新节点的数据: (
       state,
@@ -156,7 +156,7 @@ const projectTreeSlice = createSlice({
     ) => {
       const { key, data } = action.payload;
       if (data.title) {
-        const item = state.connected_树节点key到节点数据的映射[key];
+        const item = state.树节点key到节点数据的映射[key];
         if (item) {
           item.title = data.title;
         }
@@ -186,8 +186,7 @@ const projectTreeSlice = createSlice({
       };
 
       state.项目节点树 = projectStructureTreeData;
-      state.connected_树节点key到节点数据的映射 =
-        projectStructureTreeDataRecord;
+      state.树节点key到节点数据的映射 = projectStructureTreeDataRecord;
       state.hasInitProjectTreeDataMeta = true;
       state.derived_节点到父节点的映射 = buildParentKeyMap(
         projectStructureTreeData,
@@ -217,7 +216,7 @@ const projectTreeSlice = createSlice({
       }
 
       if (inserted) {
-        state.connected_树节点key到节点数据的映射[node.key] = recordItem;
+        state.树节点key到节点数据的映射[node.key] = recordItem;
       }
     },
     更新容器高度: (state, action: PayloadAction<number>) => {
@@ -237,13 +236,12 @@ const projectTreeSlice = createSlice({
 
       if (state.当前正在编辑的项目树节点的key) {
         if (
-          state.当前正在编辑的项目树节点的key in
-          state.connected_树节点key到节点数据的映射
+          state.当前正在编辑的项目树节点的key in state.树节点key到节点数据的映射
         ) {
           projectTreeSlice.caseReducers.更新当前输入的标题(state, {
             type: '',
             payload:
-              state.connected_树节点key到节点数据的映射[
+              state.树节点key到节点数据的映射[
                 state.当前正在编辑的项目树节点的key
               ]!.title,
           });
@@ -329,7 +327,7 @@ const projectTreeSlice = createSlice({
 
         递归删除所有节点映射及关联状态(
           removed.removedNode,
-          state.connected_树节点key到节点数据的映射,
+          state.树节点key到节点数据的映射,
           state.derived_节点到父节点的映射,
         );
       }
