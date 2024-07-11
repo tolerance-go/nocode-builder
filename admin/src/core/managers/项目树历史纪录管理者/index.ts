@@ -1,16 +1,21 @@
 import { Manager } from '@/types';
 import { 历史状态机, 历史记录 } from './actors';
 import { createActor } from 'xstate';
+import Emittery from 'emittery';
 
-export class HistoryManager implements Manager {
-  private static instance: HistoryManager | undefined;
+interface HistoryManagerEvents {}
 
-  public static getInstance(): HistoryManager {
+export class 项目树历史纪录管理者 implements Manager {
+  private static instance: 项目树历史纪录管理者 | undefined;
+
+  public static getInstance(): 项目树历史纪录管理者 {
     if (!this.instance) {
-      this.instance = new HistoryManager();
+      this.instance = new 项目树历史纪录管理者();
     }
     return this.instance;
   }
+
+  public emitter = new Emittery<HistoryManagerEvents>();
 
   历史状态机Actor = createActor(历史状态机, {
     input: {

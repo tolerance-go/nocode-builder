@@ -4,7 +4,6 @@ import {
   更新当前输入的标题,
   退出当前正在编辑的节点,
 } from '@/core/managers/UIStoreManager';
-import { 验证管理者 } from '@/core/managers/验证管理者';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
 import { ReplaceKeyType } from '@/utils';
 import { Flex, Input, InputProps, InputRef, theme } from 'antd';
@@ -17,11 +16,13 @@ import {
 } from 'react';
 import MagneticComponent from './MagneticComponent';
 import MarkdownParser from './MarkdownParser';
+import { useCtx验证管理者 } from '@/core/managers/UITreeManager/hooks';
 
 export const TitleInput = forwardRef<
   InputRef,
   ReplaceKeyType<InputProps, 'defaultValue', string>
 >((props, ref) => {
+  const 验证管理者实例 = useCtx验证管理者();
   const { token } = theme.useToken();
   const inputRef = useRef<InputRef>(null);
   const [errMsg, setErrMsg] = useState<string | null>(null);
@@ -51,7 +52,7 @@ export const TitleInput = forwardRef<
   ) => {
     const inputValue = e.target.value;
     dispatch(更新当前输入的标题(inputValue));
-    const errMsg = 验证管理者.getInstance().项目树节点标题是否有效(inputValue);
+    const errMsg = 验证管理者实例.项目树节点标题是否有效(inputValue);
     if (!isComposing || fromCompositionEnd) {
       setErrMsg(errMsg);
     } else {

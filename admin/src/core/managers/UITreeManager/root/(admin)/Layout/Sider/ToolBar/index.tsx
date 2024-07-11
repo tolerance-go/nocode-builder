@@ -6,22 +6,16 @@ import {
 } from '@/core/managers/UIStoreManager';
 import { 查询项目树中的节点 } from '@/core/managers/UIStoreManager/store/utils';
 import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
+import { useCtx图标管理者 } from '@/core/managers/UITreeManager/hooks';
 import { ProjectFileType } from '@/core/managers/UITreeManager/types';
-import { 图标管理者 } from '@/core/managers/图标管理者';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
 } from '@/types';
 import { 节点是不是文件, 节点是不是文件夹 } from '@/utils';
-import {
-  FileAddOutlined,
-  FolderAddOutlined,
-  PlusOutlined,
-} from '@ant-design/icons';
+import { FolderAddOutlined, PlusOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
 import { Button, Dropdown, Flex, Space, theme } from 'antd';
-
-const 图标管理者实例 = 图标管理者.getInstance();
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
 const 找到同层最后一个文件夹的位置 = (
@@ -31,6 +25,7 @@ const 找到同层最后一个文件夹的位置 = (
 };
 
 export const ToolBar = () => {
+  const 图标管理者实例 = useCtx图标管理者();
   const { token } = theme.useToken();
 
   const projectTreeTimeLineVisible = useAppSelector(

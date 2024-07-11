@@ -10,8 +10,8 @@ import {
   更新节点的数据,
 } from '@/core/managers/UIStoreManager';
 import { 组件类名 } from '@/core/managers/UITreeManager/constants';
+import { useCtx验证管理者 } from '@/core/managers/UITreeManager/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
-import { 验证管理者 } from '@/core/managers/验证管理者';
 import { 测试标识, 测试类 } from '@cypress/shared/constants';
 import { cx } from '@emotion/css';
 import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
@@ -19,6 +19,7 @@ import { useRef } from 'react';
 import { TitleInput } from './TitleInput';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
+  const 验证管理者 = useCtx验证管理者();
   const inputRef = useRef<InputRef>(null);
   const { token } = theme.useToken();
 
@@ -49,9 +50,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
   );
 
   const 保存标题输入 = (来自失去焦点: boolean = false) => {
-    const 标题内容有错 = 验证管理者
-      .getInstance()
-      .项目树节点标题是否有效(inputRef.current?.input?.value ?? '');
+    const 标题内容有错 = 验证管理者.项目树节点标题是否有效(
+      inputRef.current?.input?.value ?? '',
+    );
 
     if (标题内容有错) {
       if (为了编辑临时创建的节点的key === nodeKey) {

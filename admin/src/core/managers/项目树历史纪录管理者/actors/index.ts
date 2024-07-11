@@ -1,5 +1,4 @@
 import { assign, fromPromise, PromiseActorLogic, setup } from 'xstate';
-import { createActor } from 'xstate';
 
 export type 历史记录 = {
   state: string;

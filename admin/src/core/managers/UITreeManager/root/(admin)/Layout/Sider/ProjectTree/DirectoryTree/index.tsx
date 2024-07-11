@@ -12,7 +12,7 @@ import {
   移动项目树节点并同步其他状态,
 } from '@/core/managers/UIStoreManager';
 import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree';
-import { 图标管理者 } from '@/core/managers/图标管理者';
+import { useCtx图标管理者 } from '@/core/managers/UITreeManager/hooks';
 import { ProjectStructureTreeDataNode } from '@/types';
 import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
@@ -21,9 +21,9 @@ import { Title } from './Title';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 
-const 图标管理者实例 = 图标管理者.getInstance();
-
 export const DirectoryTree = () => {
+  const 图标管理者实例 = useCtx图标管理者();
+
   const { token } = theme.useToken();
   const 节点树容器的高度 = useAppSelector(
     (state) => state.projectTree.节点树容器的高度,
