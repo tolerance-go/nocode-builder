@@ -1,16 +1,8 @@
-import {
-  reduxStore,
-  useAppDispatch,
-  useAppSelector,
-  停止节点编辑状态并清空输入内容,
-  删除项目树节点并同步其他状态,
-  更新为了编辑临时创建节点之前选中的节点的key为,
-  更新为了编辑创建的临时节点为,
-  更新当前编辑节点是哪个并更新输入框的值,
-  更新节点的数据,
-} from '@/core/managers/UIStoreManager';
 import { 组件类名 } from '@/core/managers/UITreeManager/constants';
-import { useCtx验证管理者 } from '@/core/managers/UITreeManager/hooks';
+import {
+  useCtxUIStoreManager,
+  useCtx验证管理者,
+} from '@/core/managers/UITreeManager/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
 import { 测试标识, 测试类 } from '@cypress/shared/constants';
 import { cx } from '@emotion/css';
@@ -19,6 +11,19 @@ import { useRef } from 'react';
 import { TitleInput } from './TitleInput';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
+  const {
+    hooks: { useAppDispatch, useAppSelector },
+    store: {
+      reduxStore,
+      停止节点编辑状态并清空输入内容,
+      删除项目树节点并同步其他状态,
+      更新为了编辑临时创建节点之前选中的节点的key为,
+      更新为了编辑创建的临时节点为,
+      更新当前编辑节点是哪个并更新输入框的值,
+      更新节点的数据,
+    },
+  } = useCtxUIStoreManager();
+
   const 验证管理者 = useCtx验证管理者();
   const inputRef = useRef<InputRef>(null);
   const { token } = theme.useToken();

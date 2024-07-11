@@ -1,10 +1,16 @@
-import { useAppSelector } from '@/core/managers/UIStoreManager';
-import { useCtx跟随鼠标显示内容管理者 } from '@/core/managers/UITreeManager/hooks';
+import {
+  useCtxUIStoreManager,
+  useCtx跟随鼠标显示内容管理者,
+} from '@/core/managers/UITreeManager/hooks';
 import { 测试标识 } from '@cypress/shared/constants';
 import { theme } from 'antd';
 import { useLayoutEffect, useState } from 'react';
 
 export const 拖拽跟随鼠标的容器 = () => {
+  const {
+    hooks: { useAppSelector },
+  } = useCtxUIStoreManager();
+
   const { token } = theme.useToken();
   const 鼠标附近的跟随节点是否显示 = useAppSelector(
     (state) => state.layout.拖拽时鼠标附近的跟随组件是否显示,

@@ -9,5 +9,7 @@ export interface Manager {
 }
 
 export interface EnvObject {
-  initialize(...args: unknown[]): void;
+  initialize(...args: unknown[]): EnvObject;
+
+  activate(): void;
 }

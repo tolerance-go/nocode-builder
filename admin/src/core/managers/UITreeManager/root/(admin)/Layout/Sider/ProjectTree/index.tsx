@@ -1,30 +1,33 @@
-import {
-  更新容器高度,
-  useAppDispatch,
-  useAppSelector,
-  选中项目树容器并清空选中和激活还有聚焦节点,
-  取消选中项目树容器,
-  更新是否正在聚焦项目树区域,
-  更新选中的节点是哪些,
-  reduxStore,
-  删除所有选中的节点,
-  更新当前编辑节点是哪个并更新输入框的值,
-  更新当前聚焦的节点key,
-} from '@/core/managers/UIStoreManager';
-import { debounce } from 'lodash-es';
-import { useEffect, useRef } from 'react';
-import { DirectoryTree } from './DirectoryTree';
-import { theme } from 'antd';
-import { css, cx } from '@emotion/css';
-import { useClickAway } from 'react-use';
-import { 测试标识 } from '@cypress/shared/constants';
 import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
+import { 测试标识 } from '@cypress/shared/constants';
+import { css, cx } from '@emotion/css';
+import { theme } from 'antd';
+import { debounce } from 'lodash-es';
+import { useEffect, useRef } from 'react';
+import { useClickAway } from 'react-use';
+import { DirectoryTree } from './DirectoryTree';
+import { useCtxUIStoreManager } from '@/core/managers/UITreeManager/hooks';
 
 export const ProjectTree = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const dispatch = useAppDispatch();
   const { token } = theme.useToken();
+
+  const {
+    hooks: { useAppDispatch, useAppSelector },
+    store: {
+      更新容器高度,
+      选中项目树容器并清空选中和激活还有聚焦节点,
+      取消选中项目树容器,
+      更新是否正在聚焦项目树区域,
+      更新选中的节点是哪些,
+      reduxStore,
+      删除所有选中的节点,
+      更新当前编辑节点是哪个并更新输入框的值,
+      更新当前聚焦的节点key,
+    },
+  } = useCtxUIStoreManager();
+  const dispatch = useAppDispatch();
 
   const 是否选中了项目树容器 = useAppSelector(
     (state) => state.projectTree.是否选中了项目树容器,

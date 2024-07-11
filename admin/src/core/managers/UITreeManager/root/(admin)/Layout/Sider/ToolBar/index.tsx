@@ -1,12 +1,8 @@
-import {
-  reduxStore,
-  useAppDispatch,
-  useAppSelector,
-  插入新节点在指定节点下并同步更新其他数据,
-} from '@/core/managers/UIStoreManager';
-import { 查询项目树中的节点 } from '@/core/managers/UIStoreManager/store/utils';
 import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
-import { useCtx图标管理者 } from '@/core/managers/UITreeManager/hooks';
+import {
+  useCtxUIStoreManager,
+  useCtx图标管理者,
+} from '@/core/managers/UITreeManager/hooks';
 import { ProjectFileType } from '@/core/managers/UITreeManager/types';
 import {
   ProjectStructureTreeDataNode,
@@ -25,6 +21,12 @@ const 找到同层最后一个文件夹的位置 = (
 };
 
 export const ToolBar = () => {
+  const {
+    utils: { 查询项目树中的节点 },
+    hooks: { useAppDispatch, useAppSelector },
+    store: { reduxStore, 插入新节点在指定节点下并同步更新其他数据 },
+  } = useCtxUIStoreManager();
+
   const 图标管理者实例 = useCtx图标管理者();
   const { token } = theme.useToken();
 

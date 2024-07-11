@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import {
+  UIStoreManagerContext,
   图标管理者Context,
   跟随鼠标显示内容管理者Context,
   验证管理者Context,
@@ -22,4 +23,10 @@ export const useCtx验证管理者 = () => {
   const 验证管理者 = useContext(验证管理者Context);
   if (!验证管理者) throw new Error('验证管理者未初始化');
   return 验证管理者;
+};
+
+export const useCtxUIStoreManager = () => {
+  const UIStoreManager = useContext(UIStoreManagerContext);
+  if (!UIStoreManager) throw new Error('UIStoreManager未初始化');
+  return UIStoreManager;
 };

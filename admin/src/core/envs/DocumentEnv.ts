@@ -29,12 +29,12 @@ export class DocumentEnv implements EnvObject {
     this.emitter = new Emittery<DocumentEnvEvents>();
   }
 
-  public initialize(
-    document: Document,
-    after: (instance: DocumentEnv) => void,
-  ) {
+  public initialize(document: Document) {
     this._document = document;
-    after(this);
+    return this;
+  }
+
+  public activate() {
     this.addPageLoadCompleteEventListener();
   }
 

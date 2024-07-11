@@ -1,18 +1,7 @@
 import {
-  reduxStore,
-  useAppDispatch,
-  useAppSelector,
-  取消指定的节点的选中状态,
-  取消选中项目树容器,
-  更新展开的节点是哪些,
-  更新当前正在拖拽的节点,
-  更新当前聚焦的节点key,
-  更新激活的节点的key,
-  更新选中的节点是哪些,
-  移动项目树节点并同步其他状态,
-} from '@/core/managers/UIStoreManager';
-import { findNode } from '@/core/managers/UIStoreManager/store/utils/tree';
-import { useCtx图标管理者 } from '@/core/managers/UITreeManager/hooks';
+  useCtxUIStoreManager,
+  useCtx图标管理者,
+} from '@/core/managers/UITreeManager/hooks';
 import { ProjectStructureTreeDataNode } from '@/types';
 import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
@@ -22,6 +11,22 @@ import { Title } from './Title';
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 
 export const DirectoryTree = () => {
+  const {
+    utils: { findNode },
+    hooks: { useAppDispatch, useAppSelector },
+    store: {
+      reduxStore,
+      取消指定的节点的选中状态,
+      取消选中项目树容器,
+      更新展开的节点是哪些,
+      更新当前正在拖拽的节点,
+      更新当前聚焦的节点key,
+      更新激活的节点的key,
+      更新选中的节点是哪些,
+      移动项目树节点并同步其他状态,
+    },
+  } = useCtxUIStoreManager();
+
   const 图标管理者实例 = useCtx图标管理者();
 
   const { token } = theme.useToken();

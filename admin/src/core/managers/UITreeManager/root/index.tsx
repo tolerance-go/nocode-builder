@@ -1,11 +1,15 @@
-import { updatePathname, useAppDispatch } from '@/core/managers/UIStoreManager';
 import { hexToRgb } from '@/utils';
 import { ConfigProvider, theme } from 'antd';
 import { useLayoutEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { useCtxUIStoreManager } from '../hooks';
 // import '@antv/s2-react/dist/style.min.css';
 
 export function Root() {
+  const {
+    hooks: { useAppDispatch },
+    store: { updatePathname },
+  } = useCtxUIStoreManager();
   const location = useLocation();
   const dispatch = useAppDispatch();
 
@@ -13,7 +17,7 @@ export function Root() {
 
   useLayoutEffect(() => {
     dispatch(updatePathname(location.pathname));
-  }, [location, dispatch]);
+  }, [location, dispatch, updatePathname]);
 
   return (
     <ConfigProvider
