@@ -4,7 +4,6 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { reduxStore, UIStoreManager } from '../UIStoreManager';
 import { 图标管理者 } from '../图标管理者';
 import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
 import {
@@ -21,6 +20,7 @@ import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
 import { 验证管理者 } from '../验证管理者';
 import { DocumentEnv } from '@/core/envs';
+import { UIStoreManager } from '../UIStoreManager';
 
 export class UITreeManager implements Manager {
   private static instance: UITreeManager | undefined;
@@ -50,7 +50,7 @@ export class UITreeManager implements Manager {
                 value={跟随鼠标显示内容管理者实例}
               >
                 <图标管理者Context.Provider value={图标管理者实例}>
-                  <Provider store={reduxStore}>
+                  <Provider store={界面状态管理者实例.store.reduxStore}>
                     <BrowserRouter
                       basename={import.meta.env.DEV ? '' : '/admin'}
                     >
