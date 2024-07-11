@@ -56,7 +56,6 @@ export const ProjectTree = () => {
   }, [dispatch]);
 
   useClickAway(containerRef, (event) => {
-    dispatch(更新是否正在聚焦项目树区域(false));
     dispatch(取消选中项目树容器());
 
     // 如果点击的是创建项目或者项目组按钮，则不取消选中
@@ -66,6 +65,15 @@ export const ProjectTree = () => {
       ) ||
       (event.target as Element).closest(`#${组件标识.创建项目节点的按钮}`) ||
       (event.target as Element).closest(`#${组件标识.创建项目组节点的按钮}`)
+    ) {
+      return;
+    }
+
+    dispatch(更新是否正在聚焦项目树区域(false));
+
+    // 如果点击的项目树上下文菜单，则不取消选中
+    if (
+      (event.target as Element).closest(`.${组件类名.项目树节点右键菜单容器}`)
     ) {
       return;
     }

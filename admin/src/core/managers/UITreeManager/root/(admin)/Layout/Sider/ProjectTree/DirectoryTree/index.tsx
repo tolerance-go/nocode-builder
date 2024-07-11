@@ -64,12 +64,19 @@ export const DirectoryTree = () => {
   });
 
   useKeyPressEventByKeyboardJs(['f2'], () => {
-    所有已经选中的节点.length &&
-      dispatch(
-        更新当前编辑节点是哪个并更新输入框的值(
-          所有已经选中的节点[所有已经选中的节点.length - 1],
-        ),
-      );
+    const {
+      projectTree: { 所有已经选中的节点, 是否正在聚焦项目树区域 },
+    } = reduxStore.getState();
+
+    if (!是否正在聚焦项目树区域) return;
+
+    if (!所有已经选中的节点.length) return;
+
+    dispatch(
+      更新当前编辑节点是哪个并更新输入框的值(
+        所有已经选中的节点[所有已经选中的节点.length - 1],
+      ),
+    );
   });
 
   // useKeyPress(["ctrl.z"], () => {
