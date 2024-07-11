@@ -281,7 +281,7 @@ export const ToolBar = () => {
               },
             ],
           }}
-          placement="bottomCenter"
+          placement="bottom"
         >
           <Button
             id={组件标识.创建项目节点的按钮}

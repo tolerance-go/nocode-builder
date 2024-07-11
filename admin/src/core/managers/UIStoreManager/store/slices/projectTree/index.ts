@@ -25,6 +25,7 @@ export type ProjectTreeStates = {
   为了编辑临时创建的节点的key: string | null;
   节点树容器的高度: number;
   为了编辑节点标题而暂存的之前选中的节点keys: string[] | null;
+  为了编辑节点标题而暂存的之前聚焦的节点key: string | null;
   当前输入的标题: string;
   是否选中了项目树容器: boolean;
   激活的节点的key: string | null;
@@ -34,6 +35,7 @@ export type ProjectTreeStates = {
 };
 
 const initialState: ProjectTreeStates = {
+  为了编辑节点标题而暂存的之前聚焦的节点key: null,
   当前聚焦的节点key: null,
   是否正在聚焦项目树区域: false,
   当前正在拖拽的节点key: null,
@@ -107,7 +109,10 @@ const projectTreeSlice = createSlice({
         type: '',
         payload: action.payload.node.key,
       });
-      projectTreeSlice.caseReducers.更新选中节点并将之前的选中节点数据暂存(
+      projectTreeSlice.caseReducers.清空选中节点并将之前的选中节点数据暂存(
+        state,
+      );
+      projectTreeSlice.caseReducers.清除聚焦的节点并将之前的聚焦节点数据暂存(
         state,
       );
       projectTreeSlice.caseReducers.更新激活的节点的key(state, {
@@ -115,11 +120,15 @@ const projectTreeSlice = createSlice({
         payload: action.payload.node.key,
       });
     },
-    更新选中节点并将之前的选中节点数据暂存: (state) => {
+    清空选中节点并将之前的选中节点数据暂存: (state) => {
       state.为了编辑节点标题而暂存的之前选中的节点keys = [
         ...state.所有已经选中的节点,
       ];
       state.所有已经选中的节点 = [];
+    },
+    清除聚焦的节点并将之前的聚焦节点数据暂存: (state) => {
+      state.为了编辑节点标题而暂存的之前聚焦的节点key = state.当前聚焦的节点key;
+      state.当前聚焦的节点key = null;
     },
     取消指定的节点的选中状态: (state, action: PayloadAction<string>) => {
       state.所有已经选中的节点 = state.所有已经选中的节点.filter(
@@ -297,6 +306,9 @@ const projectTreeSlice = createSlice({
           }
           if (node.key === state.为了编辑临时创建的节点的key) {
             projectTreeSlice.caseReducers.恢复当前选中的节点为编辑临时创建节点之前选中的节点的key(
+              state,
+            );
+            projectTreeSlice.caseReducers.恢复当前聚焦的节点为编辑临时创建节点之前聚焦的节点的key(
               state,
             );
           }
@@ -498,6 +510,13 @@ const projectTreeSlice = createSlice({
         state.为了编辑节点标题而暂存的之前选中的节点keys = null;
       }
     },
+    恢复当前聚焦的节点为编辑临时创建节点之前聚焦的节点的key: (state) => {
+      if (state.为了编辑节点标题而暂存的之前聚焦的节点key) {
+        state.当前聚焦的节点key =
+          state.为了编辑节点标题而暂存的之前聚焦的节点key;
+        state.为了编辑节点标题而暂存的之前聚焦的节点key = null;
+      }
+    },
     更新为了编辑临时创建节点之前选中的节点的key为: (
       state,
       action: PayloadAction<string[] | null>,
@@ -516,8 +535,7 @@ export const {
   更新是否正在聚焦项目树区域,
   更新当前正在拖拽的节点,
   更新激活的节点的key,
-  选中项目树容器并清空选中和激活还有聚焦节点:
-    选中项目树容器并清空选中和激活还有聚焦节点,
+  选中项目树容器并清空选中和激活还有聚焦节点,
   取消选中项目树容器,
   清空当前输入的标题,
   更新当前输入的标题,
@@ -526,7 +544,8 @@ export const {
   插入新节点在指定节点下并同步更新其他数据,
   更新为了编辑临时创建节点之前选中的节点的key为,
   恢复当前选中的节点为编辑临时创建节点之前选中的节点的key,
-  更新选中节点并将之前的选中节点数据暂存,
+  恢复当前聚焦的节点为编辑临时创建节点之前聚焦的节点的key,
+  清空选中节点并将之前的选中节点数据暂存,
   更新项目节点树,
   更新节点数据映射,
   更新节点的数据,

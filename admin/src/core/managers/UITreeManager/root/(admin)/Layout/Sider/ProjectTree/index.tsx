@@ -9,6 +9,7 @@ import {
   reduxStore,
   删除所有选中的节点,
   更新当前编辑节点是哪个并更新输入框的值,
+  更新当前聚焦的节点key,
 } from '@/core/managers/UIStoreManager';
 import { debounce } from 'lodash-es';
 import { useEffect, useRef } from 'react';
@@ -117,6 +118,7 @@ export const ProjectTree = () => {
 
     dispatch(更新是否正在聚焦项目树区域(false));
     dispatch(更新选中的节点是哪些([]));
+    dispatch(更新当前聚焦的节点key(null));
   });
 
   return (
