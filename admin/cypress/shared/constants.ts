@@ -24,6 +24,8 @@ export const 测试标识 = {
   创建视图项目节点的菜单项标题: 'create-view-project-node-menu-item',
 
   重命名项目树节点标题菜单按钮: 'rename-project-tree-node-title-menu-btn',
+
+  用户信息显示按钮: 'user-info-show-btn',
 };
 
 export const 测试类 = {

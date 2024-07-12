@@ -34,7 +34,9 @@ export const UserBar = () => {
         }}
         placement="bottomRight"
       >
-        <Button type="text">{username}</Button>
+        <Button data-test-id={测试标识.用户信息显示按钮} type="text">
+          {username}
+        </Button>
       </Dropdown>
       <Button type="text" icon={<EllipsisOutlined />}></Button>
     </Flex>
