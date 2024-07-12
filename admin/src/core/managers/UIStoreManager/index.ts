@@ -26,3 +26,5 @@ export class UIStoreManager implements Manager {
     projectTreeOnWork();
   }
 }
+
+export * from './store';

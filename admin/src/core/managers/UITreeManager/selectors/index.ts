@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { RootState } from '../../UIStoreManager';
+import { RootState } from '@/core/managers/UIStoreManager';
 
 export const selectProjectStructureTreeData = (state: RootState) =>
   state.projectTree.项目节点树;

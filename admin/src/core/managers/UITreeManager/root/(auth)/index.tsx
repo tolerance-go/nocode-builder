@@ -1,8 +1,8 @@
 import { css } from '@emotion/css';
 import { Avatar, Flex, Layout, Space, Typography, theme } from 'antd';
-import Sider from 'antd/es/layout/Sider';
-import { Content } from 'antd/es/layout/layout';
 import { Outlet } from 'react-router-dom';
+
+const { Sider, Content } = Layout;
 
 export const Auth = () => {
   const { token } = theme.useToken();
