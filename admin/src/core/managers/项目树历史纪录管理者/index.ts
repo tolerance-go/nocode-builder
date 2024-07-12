@@ -22,7 +22,7 @@ export class 项目树历史纪录管理者 implements Manager {
   addRecordToHistory(record: 历史记录) {
     this.历史状态机Actor.send({
       type: '更新历史',
-      state: record,
+      data: record,
     });
   }
 }

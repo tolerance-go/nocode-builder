@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest';
-import { 全局事件系统 } from '@/core/systems/事件系统';
+import { 全局事件系统 } from '@/core/systems/全局事件系统';
 
 interface 测试事件映射 {
   用户登录: { 用户ID: string };

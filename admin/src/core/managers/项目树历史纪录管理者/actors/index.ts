@@ -1,8 +1,42 @@
 import { assign, fromPromise, PromiseActorLogic, setup } from 'xstate';
-import { ProjectStructureTreeDataNode } from '../../UIStoreManager/types';
+import {
+  ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecordItem,
+} from '../../UIStoreManager/types';
+
+export type 操作类型 = '插入' | '删除' | '移动' | '更新';
+
+export interface 更新操作详情 {
+  节点key: string;
+  oldRecordItem: ProjectTreeNodeDataRecordItem;
+  newRecordItem: ProjectTreeNodeDataRecordItem;
+}
+
+export interface 插入操作详情 {
+  节点key: string;
+  父节点key: string;
+  index: number;
+  recordItem: ProjectTreeNodeDataRecordItem;
+}
+
+export interface 删除操作详情 {
+  节点keys: string[];
+}
+
+export interface 移动操作详情 {
+  节点keys: string[];
+  目标父节点key: string;
+}
+
+export type 操作详情 =
+  | { 类型: '插入'; 详情: 插入操作详情 }
+  | { 类型: '删除'; 详情: 删除操作详情 }
+  | { 类型: '更新'; 详情: 更新操作详情 }
+  | { 类型: '移动'; 详情: 移动操作详情 };
 
 export type 历史记录 = {
   state: ProjectStructureTreeDataNode[];
+  操作: 操作详情;
 };
 
 type 请求历史记录Fn = () => Promise<历史记录[]>;
@@ -25,7 +59,7 @@ export type 历史事件 =
   | { type: '停止浏览历史' }
   | { type: '获取历史' }
   | { type: '选择历史项'; index: number }
-  | { type: '更新历史'; state: 历史记录 }
+  | { type: '更新历史'; data: 历史记录 }
   | { type: '重试加载历史' };
 
 type Input = Partial<历史上下文> & {
@@ -53,7 +87,7 @@ export const 历史状态机 = setup({
     添加历史: assign({
       历史堆栈: ({ context, event }) => {
         if (event.type === '更新历史') {
-          return [...context.历史堆栈, event.state];
+          return [...context.历史堆栈, event.data];
         }
         return context.历史堆栈;
       },
