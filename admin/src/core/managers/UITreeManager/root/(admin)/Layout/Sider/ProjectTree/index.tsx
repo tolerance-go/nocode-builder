@@ -7,7 +7,7 @@ import { debounce } from 'lodash-es';
 import { useEffect, useRef } from 'react';
 import { useClickAway } from 'react-use';
 import { DirectoryTree } from './DirectoryTree';
-import { useCtxUIStoreManager } from '@/core/managers/UITreeManager/hooks';
+import { useUIStoreManager } from '@/core/managers/UITreeManager/hooks';
 
 export const ProjectTree = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,7 @@ export const ProjectTree = () => {
       更新当前编辑节点是哪个并更新输入框的值,
       更新当前聚焦的节点key,
     },
-  } = useCtxUIStoreManager();
+  } = useUIStoreManager();
   const dispatch = useAppDispatch();
 
   const 是否选中了项目树容器 = useAppSelector(

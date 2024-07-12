@@ -1,6 +1,6 @@
 import {
-  useCtxUIStoreManager,
-  useCtx图标管理者,
+  useUIStoreManager,
+  use图标管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { ProjectStructureTreeDataNode } from '@/types';
 import { 节点是不是文件 } from '@/utils';
@@ -25,9 +25,9 @@ export const DirectoryTree = () => {
       更新选中的节点是哪些,
       移动项目树节点并同步其他状态,
     },
-  } = useCtxUIStoreManager();
+  } = useUIStoreManager();
 
-  const 图标管理者实例 = useCtx图标管理者();
+  const 图标管理者实例 = use图标管理者();
 
   const { token } = theme.useToken();
   const 节点树容器的高度 = useAppSelector(

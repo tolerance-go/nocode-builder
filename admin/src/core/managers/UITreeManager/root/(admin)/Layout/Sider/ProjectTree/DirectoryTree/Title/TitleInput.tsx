@@ -1,6 +1,6 @@
 import {
-  useCtxUIStoreManager,
-  useCtx验证管理者,
+  useUIStoreManager,
+  use验证管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
 import { ReplaceKeyType } from '@/utils';
@@ -22,9 +22,9 @@ export const TitleInput = forwardRef<
   const {
     hooks: { useAppDispatch, useAppSelector },
     store: { 更新当前输入的标题, 退出当前正在编辑的节点 },
-  } = useCtxUIStoreManager();
+  } = useUIStoreManager();
 
-  const 验证管理者实例 = useCtx验证管理者();
+  const 验证管理者实例 = use验证管理者();
   const { token } = theme.useToken();
   const inputRef = useRef<InputRef>(null);
   const [errMsg, setErrMsg] = useState<string | null>(null);

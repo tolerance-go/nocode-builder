@@ -1,7 +1,7 @@
 import { 组件类名 } from '@/core/managers/UITreeManager/constants';
 import {
-  useCtxUIStoreManager,
-  useCtx验证管理者,
+  useUIStoreManager,
+  use验证管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
 import { 测试标识, 测试类 } from '@cypress/shared/constants';
@@ -22,9 +22,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
       更新当前编辑节点是哪个并更新输入框的值,
       更新节点的数据,
     },
-  } = useCtxUIStoreManager();
+  } = useUIStoreManager();
 
-  const 验证管理者 = useCtx验证管理者();
+  const 验证管理者 = use验证管理者();
   const inputRef = useRef<InputRef>(null);
   const { token } = theme.useToken();
 

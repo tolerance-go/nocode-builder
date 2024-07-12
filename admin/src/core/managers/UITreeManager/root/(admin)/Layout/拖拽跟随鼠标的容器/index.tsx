@@ -1,6 +1,6 @@
 import {
-  useCtxUIStoreManager,
-  useCtx跟随鼠标显示内容管理者,
+  useUIStoreManager,
+  use跟随鼠标显示内容管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { 测试标识 } from '@cypress/shared/constants';
 import { theme } from 'antd';
@@ -9,7 +9,7 @@ import { useLayoutEffect, useState } from 'react';
 export const 拖拽跟随鼠标的容器 = () => {
   const {
     hooks: { useAppSelector },
-  } = useCtxUIStoreManager();
+  } = useUIStoreManager();
 
   const { token } = theme.useToken();
   const 鼠标附近的跟随节点是否显示 = useAppSelector(
@@ -18,7 +18,7 @@ export const 拖拽跟随鼠标的容器 = () => {
   const 鼠标附近的跟随组件id和参数 = useAppSelector(
     (state) => state.layout.拖拽时鼠标附近的跟随组件id和参数,
   );
-  const 跟随鼠标显示内容管理者 = useCtx跟随鼠标显示内容管理者();
+  const 跟随鼠标显示内容管理者 = use跟随鼠标显示内容管理者();
 
   // 鼠标位置
   const [mousePos, setMousePos] = useState<{
