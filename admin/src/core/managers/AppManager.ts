@@ -24,8 +24,8 @@ export class AppManager implements Manager {
     const 验证管理者单例 = new 验证管理者();
     const 跟随鼠标显示内容管理者单例 = new 跟随鼠标显示内容管理者();
     const 图标管理者单例 = new 图标管理者();
-    const 界面状态管理者实例 = new UIStoreManager();
-    const 项目树历史纪录管理者实例 = new 项目树历史纪录管理者();
+    const 界面状态管理者实例 = new UIStoreManager(全局事件系统实例);
+    const 项目树历史纪录管理者实例 = new 项目树历史纪录管理者(全局事件系统实例);
     const UITreeManager实例 = new UITreeManager();
 
     await Promise.all([
@@ -33,7 +33,7 @@ export class AppManager implements Manager {
       跟随鼠标显示内容管理者单例.work(),
       图标管理者单例.work(),
       界面状态管理者实例.work(),
-      项目树历史纪录管理者实例.work(界面状态管理者实例),
+      项目树历史纪录管理者实例.work(),
       UITreeManager实例.work(
         文档环境实例,
         验证管理者单例,

@@ -1,5 +1,19 @@
+import {
+  ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecordItem,
+} from '@/core/managers/UIStoreManager/types';
 import { System } from '@/types';
 import Emittery from 'emittery';
+
+export type 全局事件映射 = {
+  '界面状态管理者/插入新节点': {
+    nodeKey: string;
+    nodeData: ProjectTreeNodeDataRecordItem;
+    parentKey: string | null;
+    treeSnapshot: ProjectStructureTreeDataNode[];
+    index: number;
+  };
+};
 
 export type UnsubscribeFn = () => void;
 
@@ -8,7 +22,9 @@ type EventCacheItem<T> = {
   [K in keyof T]: { eventName: K; eventData: T[K] };
 }[keyof T];
 
-export class 全局事件系统<T = Record<string, unknown>> implements System {
+export class 全局事件系统<T extends Record<string, unknown> = 全局事件映射>
+  implements System
+{
   private emitter = new Emittery<T>();
   private eventCache: EventCacheItem<T>[] = [];
   private isLaunched = false;

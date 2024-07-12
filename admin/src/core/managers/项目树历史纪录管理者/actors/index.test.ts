@@ -30,15 +30,15 @@ describe('历史状态机', () => {
       input: {
         历史堆栈: [
           创建历史记录([], {
-            类型: '插入',
-            详情: {
+            type: '插入',
+            detail: {
               节点key: '1',
               父节点key: '0',
               index: 0,
               recordItem: {} as ProjectTreeNodeDataRecordItem,
             },
           }),
-          创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
+          创建历史记录([], { type: '删除', detail: { 节点keys: ['1'] } }),
         ],
         历史指针: 1,
       },
@@ -53,15 +53,15 @@ describe('历史状态机', () => {
       input: {
         历史堆栈: [
           创建历史记录([], {
-            类型: '插入',
-            详情: {
+            type: '插入',
+            detail: {
               节点key: '1',
               父节点key: '0',
               index: 0,
               recordItem: {} as ProjectTreeNodeDataRecordItem,
             },
           }),
-          创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
+          创建历史记录([], { type: '删除', detail: { 节点keys: ['1'] } }),
         ],
         历史指针: 0,
       },
@@ -76,8 +76,8 @@ describe('历史状态机', () => {
       input: {
         历史堆栈: [
           创建历史记录([], {
-            类型: '插入',
-            详情: {
+            type: '插入',
+            detail: {
               节点key: '1',
               父节点key: '0',
               index: 0,
@@ -90,13 +90,14 @@ describe('历史状态机', () => {
     });
     历史状态机Actor.start();
     历史状态机Actor.send({
-      type: '更新历史',
+      type: '推入历史记录',
       data: {
         state: [],
-        操作: { 类型: '删除', 详情: { 节点keys: ['1'] } },
+        操作: { type: '删除', detail: { 节点keys: ['1'] } },
       },
     });
     expect(历史状态机Actor.getSnapshot().context.历史堆栈).toHaveLength(2);
+    expect(历史状态机Actor.getSnapshot().context.历史指针).toBe(1);
   });
 
   it('应该能够选择历史项', () => {
@@ -104,15 +105,15 @@ describe('历史状态机', () => {
       input: {
         历史堆栈: [
           创建历史记录([], {
-            类型: '插入',
-            详情: {
+            type: '插入',
+            detail: {
               节点key: '1',
               父节点key: '0',
               index: 0,
               recordItem: {} as ProjectTreeNodeDataRecordItem,
             },
           }),
-          创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
+          创建历史记录([], { type: '删除', detail: { 节点keys: ['1'] } }),
         ],
         历史指针: 0,
       },
@@ -131,42 +132,42 @@ describe('历史状态机', () => {
         request: async () => {
           return [
             创建历史记录([], {
-              类型: '插入',
-              详情: {
+              type: '插入',
+              detail: {
                 节点key: '1',
                 父节点key: '0',
                 index: 0,
                 recordItem: {} as ProjectTreeNodeDataRecordItem,
               },
             }),
-            创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
+            创建历史记录([], { type: '删除', detail: { 节点keys: ['1'] } }),
             创建历史记录([], {
-              类型: '移动',
-              详情: { 节点keys: ['1'], 目标父节点key: '2' },
+              type: '移动',
+              detail: { 节点keys: ['1'], 目标父节点key: '2' },
             }),
           ];
         },
       },
     });
     历史状态机Actor.start();
-    历史状态机Actor.send({ type: '获取历史' });
+    历史状态机Actor.send({ type: '加载历史记录' });
 
     await delay(200);
 
     expect(历史状态机Actor.getSnapshot().context.历史堆栈).toEqual([
       创建历史记录([], {
-        类型: '插入',
-        详情: {
+        type: '插入',
+        detail: {
           节点key: '1',
           父节点key: '0',
           index: 0,
           recordItem: {} as ProjectTreeNodeDataRecordItem,
         },
       }),
-      创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
+      创建历史记录([], { type: '删除', detail: { 节点keys: ['1'] } }),
       创建历史记录([], {
-        类型: '移动',
-        详情: { 节点keys: ['1'], 目标父节点key: '2' },
+        type: '移动',
+        detail: { 节点keys: ['1'], 目标父节点key: '2' },
       }),
     ]);
   });
@@ -182,7 +183,7 @@ describe('历史状态机', () => {
       },
     });
     历史状态机Actor.start();
-    历史状态机Actor.send({ type: '获取历史' });
+    历史状态机Actor.send({ type: '加载历史记录' });
     await delay(200);
     expect(历史状态机Actor.getSnapshot().value).toBe('加载失败');
   });

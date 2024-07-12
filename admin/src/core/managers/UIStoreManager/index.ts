@@ -6,30 +6,71 @@ import {
   createReducers,
   createSlices,
   createStore,
+  findNode,
 } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
+import { 全局事件系统 } from '@/core/systems/全局事件系统';
 
 export class UIStoreManager implements Manager {
   public store;
 
   public slices;
 
-  constructor() {
+  public 全局事件系统实例;
+
+  constructor(全局事件系统实例: 全局事件系统) {
+    this.全局事件系统实例 = 全局事件系统实例;
+
     this.slices = createSlices();
 
     const reducers = createReducers(this.slices);
 
-    this.store = createStore(reducers, [this.loggerMiddleware]);
+    this.store = createStore(reducers, [this.handleMiddleware]);
   }
 
-  loggerMiddleware: AppMiddleware = () => (next) => (action) => {
-    if (
-      action.type === 'projectTree/插入新节点在指定节点下并同步更新其他数据'
-    ) {
-      action.payload;
+  handleMiddleware: AppMiddleware = (store) => (next) => (action) => {
+    const result = next(action);
+
+    const nextState = store.getState();
+
+    if (action.type === 'projectTree/完成插入新节点并更新相关数据') {
+      const { nodeKey } = action.payload;
+
+      const nodeData = nextState.projectTree.树节点key到节点数据的映射[nodeKey];
+      const parentKey =
+        nextState.projectTree.derived_节点到父节点的映射[nodeKey];
+      const treeSnapshot = nextState.projectTree.项目节点树;
+
+      let index = -1;
+
+      if (parentKey) {
+        const parentNode = findNode(
+          nextState.projectTree.项目节点树,
+          parentKey,
+        );
+        if (!parentNode?.children) {
+          throw new Error('children 非法');
+        }
+        index = parentNode.children.findIndex((child) => child.key === nodeKey);
+      } else {
+        index = nextState.projectTree.项目节点树.findIndex(
+          (child) => child.key === nodeKey,
+        );
+      }
+
+      if (index < 0) {
+        throw new Error('位置非法');
+      }
+
+      this.全局事件系统实例.emit('界面状态管理者/插入新节点', {
+        nodeKey: action.payload.nodeKey,
+        nodeData,
+        parentKey,
+        treeSnapshot,
+        index,
+      });
     }
 
-    const result = next(action);
     return result;
   };
 

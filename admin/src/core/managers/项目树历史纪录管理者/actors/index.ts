@@ -14,7 +14,7 @@ export interface 更新操作详情 {
 
 export interface 插入操作详情 {
   节点key: string;
-  父节点key: string;
+  父节点key: string | null;
   index: number;
   recordItem: ProjectTreeNodeDataRecordItem;
 }
@@ -29,10 +29,10 @@ export interface 移动操作详情 {
 }
 
 export type 操作详情 =
-  | { 类型: '插入'; 详情: 插入操作详情 }
-  | { 类型: '删除'; 详情: 删除操作详情 }
-  | { 类型: '更新'; 详情: 更新操作详情 }
-  | { 类型: '移动'; 详情: 移动操作详情 };
+  | { type: '插入'; detail: 插入操作详情 }
+  | { type: '删除'; detail: 删除操作详情 }
+  | { type: '更新'; detail: 更新操作详情 }
+  | { type: '移动'; detail: 移动操作详情 };
 
 export type 历史记录 = {
   state: ProjectStructureTreeDataNode[];
@@ -57,10 +57,10 @@ export type 历史事件 =
   | { type: '重做请求' }
   | { type: '开始浏览历史' }
   | { type: '停止浏览历史' }
-  | { type: '获取历史' }
   | { type: '选择历史项'; index: number }
-  | { type: '更新历史'; data: 历史记录 }
-  | { type: '重试加载历史' };
+  | { type: '推入历史记录'; data: 历史记录 }
+  | { type: '加载历史记录' }
+  | { type: '重试加载历史记录' };
 
 type Input = Partial<历史上下文> & {
   request?: 请求历史记录Fn;
@@ -86,10 +86,16 @@ export const 历史状态机 = setup({
     }),
     添加历史: assign({
       历史堆栈: ({ context, event }) => {
-        if (event.type === '更新历史') {
+        if (event.type === '推入历史记录') {
           return [...context.历史堆栈, event.data];
         }
         return context.历史堆栈;
+      },
+      历史指针: ({ context, event }) => {
+        if (event.type === '推入历史记录') {
+          return context.历史指针 + 1;
+        }
+        return context.历史指针;
       },
     }),
     更新指针: assign({
@@ -127,8 +133,8 @@ export const 历史状态机 = setup({
           guard: '可以重做',
         },
         开始浏览历史: '浏览历史',
-        获取历史: '加载历史中',
-        更新历史: {
+        加载历史记录: '加载历史中',
+        推入历史记录: {
           actions: '添加历史',
         },
       },
@@ -173,7 +179,7 @@ export const 历史状态机 = setup({
     },
     加载失败: {
       on: {
-        重试加载历史: '加载历史中',
+        重试加载历史记录: '加载历史中',
       },
     },
   },
