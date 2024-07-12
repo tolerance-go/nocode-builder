@@ -2,7 +2,6 @@ import {
   use界面状态管理者,
   use图标管理者,
 } from '@/core/managers/UITreeManager/hooks';
-import { ProjectStructureTreeDataNode } from '@/types';
 import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
@@ -12,6 +11,7 @@ import {
   useAppDispatch,
   findNode,
 } from '@/core/managers/UIStoreManager';
+import { ProjectStructureTreeDataNode } from '@/core/managers/UIStoreManager/types';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 

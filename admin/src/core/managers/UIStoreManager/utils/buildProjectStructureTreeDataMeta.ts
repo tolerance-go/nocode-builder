@@ -2,7 +2,7 @@ import { ProjectGroupModel, ProjectModel } from '@/_gen/models';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '@/types';
+} from '../types';
 
 export function buildProjectStructureTreeDataMeta(
   projectGroups: ProjectGroupModel[],

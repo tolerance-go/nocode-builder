@@ -3,16 +3,17 @@ import {
   useAppDispatch,
   查询项目树中的节点,
 } from '@/core/managers/UIStoreManager';
+import {
+  ProjectTreeNodeDataRecordItem,
+  ProjectStructureTreeDataNode,
+} from '@/core/managers/UIStoreManager/types';
 import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
 import {
   use界面状态管理者,
   use图标管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { ProjectFileType } from '@/core/managers/UITreeManager/types';
-import {
-  ProjectStructureTreeDataNode,
-  ProjectTreeNodeDataRecordItem,
-} from '@/types';
+
 import { 节点是不是文件, 节点是不是文件夹 } from '@/utils';
 import { FolderAddOutlined, PlusOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';

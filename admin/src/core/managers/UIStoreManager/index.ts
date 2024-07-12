@@ -32,6 +32,7 @@ export class UIStoreManager implements Manager {
     if (action.type === 'layout/更新拖拽时鼠标附近的跟随节点是否显示') {
       action.payload;
     }
+
     const result = next(action);
     console.log('Next state:', store.getState());
     return result;

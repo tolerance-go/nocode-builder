@@ -1,4 +1,4 @@
-import { ProjectFileType } from '@/core/managers/UITreeManager/types';
+import { ProjectFileType } from '@/core/managers/UITreeManager';
 import { TreeDataNode } from 'antd';
 
 export interface ProjectStructureTreeDataNode extends TreeDataNode {

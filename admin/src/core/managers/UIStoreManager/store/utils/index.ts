@@ -1,4 +1,4 @@
-import { ProjectStructureTreeDataNode } from '@/types';
+import { ProjectStructureTreeDataNode } from '../../types';
 import { ProjectTreeStates } from '../slices/projectTree';
 import { findNode } from './tree';
 

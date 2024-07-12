@@ -1,8 +1,3 @@
-import {
-  ProjectStructureTreeDataNode,
-  ProjectTreeNodeDataRecord,
-  ProjectTreeNodeDataRecordItem,
-} from '@/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { 插入节点, removeNode, 批量插入节点 } from '../../utils/tree/effects';
 import { TreeNode } from '../../utils/tree/types';
@@ -11,6 +6,11 @@ import {
   过滤掉包含父节点在内的节点,
 } from '../../utils/tree';
 import { 批量删除节点 } from '../../utils/tree/effects/批量删除节点';
+import {
+  ProjectTreeNodeDataRecord,
+  ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecordItem,
+} from '../../../types';
 
 export type ProjectTreeStates = {
   hasInitProjectTreeDataMeta: boolean;

@@ -1,7 +1,8 @@
 import { assign, fromPromise, PromiseActorLogic, setup } from 'xstate';
+import { ProjectStructureTreeDataNode } from '../../UIStoreManager/types';
 
 export type 历史记录 = {
-  state: string;
+  state: ProjectStructureTreeDataNode[];
 };
 
 type 请求历史记录Fn = () => Promise<历史记录[]>;
