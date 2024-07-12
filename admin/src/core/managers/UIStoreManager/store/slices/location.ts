@@ -8,17 +8,13 @@ const initialState: LocationStates = {
   pathname: null,
 };
 
-const locationSlice = createSlice({
-  name: 'location',
-  initialState,
-  reducers: {
-    updatePathname: (state, action: PayloadAction<string>) => {
-      state.pathname = action.payload;
+export const createLocationSlice = () =>
+  createSlice({
+    name: 'location',
+    initialState,
+    reducers: {
+      updatePathname: (state, action: PayloadAction<string>) => {
+        state.pathname = action.payload;
+      },
     },
-  },
-});
-
-// Action creators are generated for each case reducer function
-export const { updatePathname } = locationSlice.actions;
-
-export const locationReducer = locationSlice.reducer;
+  });

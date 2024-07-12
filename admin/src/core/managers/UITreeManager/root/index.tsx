@@ -2,22 +2,23 @@ import { hexToRgb } from '@/utils';
 import { ConfigProvider, theme } from 'antd';
 import { useLayoutEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
+import { useAppDispatch } from '../../UIStoreManager';
 import { useUIStoreManager } from '../hooks';
 // import '@antv/s2-react/dist/style.min.css';
 
 export function Root() {
-  const {
-    hooks: { useAppDispatch },
-    store: { updatePathname },
-  } = useUIStoreManager();
   const location = useLocation();
   const dispatch = useAppDispatch();
-
+  const {
+    slices: {
+      location: { actions: locationActions },
+    },
+  } = useUIStoreManager();
   const { token } = theme.useToken();
 
   useLayoutEffect(() => {
-    dispatch(updatePathname(location.pathname));
-  }, [location, dispatch, updatePathname]);
+    dispatch(locationActions.updatePathname(location.pathname));
+  }, [location, dispatch, locationActions]);
 
   return (
     <ConfigProvider

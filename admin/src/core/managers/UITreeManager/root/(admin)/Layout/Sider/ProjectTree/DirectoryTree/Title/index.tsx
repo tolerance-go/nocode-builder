@@ -9,18 +9,13 @@ import { cx } from '@emotion/css';
 import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
 import { useRef } from 'react';
 import { TitleInput } from './TitleInput';
+import { useAppDispatch, useAppSelector } from '@/core/managers/UIStoreManager';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const {
-    hooks: { useAppDispatch, useAppSelector },
-    store: {
-      reduxStore,
-      停止节点编辑状态并清空输入内容,
-      删除项目树节点并同步其他状态,
-      更新为了编辑临时创建节点之前选中的节点的key为,
-      更新为了编辑创建的临时节点为,
-      更新当前编辑节点是哪个并更新输入框的值,
-      更新节点的数据,
+    store: reduxStore,
+    slices: {
+      projectTree: { actions: projectTreeActions },
     },
   } = useUIStoreManager();
 
@@ -62,11 +57,11 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     if (标题内容有错) {
       if (为了编辑临时创建的节点的key === nodeKey) {
         if (来自失去焦点) {
-          dispatch(删除项目树节点并同步其他状态(nodeKey));
+          dispatch(projectTreeActions.删除项目树节点并同步其他状态(nodeKey));
         }
       } else {
         if (来自失去焦点) {
-          dispatch(停止节点编辑状态并清空输入内容());
+          dispatch(projectTreeActions.停止节点编辑状态并清空输入内容());
         }
       }
     } else {
@@ -76,16 +71,20 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
         throw new Error('此处标题不应为空');
       }
       if (为了编辑临时创建的节点的key === nodeKey) {
-        dispatch(更新为了编辑创建的临时节点为(null));
-        dispatch(更新为了编辑临时创建节点之前选中的节点的key为(null));
+        dispatch(projectTreeActions.更新为了编辑创建的临时节点为(null));
+        dispatch(
+          projectTreeActions.更新为了编辑临时创建节点之前选中的节点的key为(
+            null,
+          ),
+        );
       }
       dispatch(
-        更新节点的数据({
+        projectTreeActions.更新节点的数据({
           key: nodeKey,
           data: { title: 当前输入标题 },
         }),
       );
-      dispatch(停止节点编辑状态并清空输入内容());
+      dispatch(projectTreeActions.停止节点编辑状态并清空输入内容());
     }
   };
 
@@ -133,7 +132,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
               if (!当前聚焦的节点key) return;
 
               dispatch(
-                更新当前编辑节点是哪个并更新输入框的值(当前聚焦的节点key),
+                projectTreeActions.更新当前编辑节点是哪个并更新输入框的值(
+                  当前聚焦的节点key,
+                ),
               );
             },
           },
@@ -147,7 +148,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             ),
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
-              dispatch(删除项目树节点并同步其他状态(nodeKey));
+              dispatch(
+                projectTreeActions.删除项目树节点并同步其他状态(nodeKey),
+              );
             },
           },
         ],

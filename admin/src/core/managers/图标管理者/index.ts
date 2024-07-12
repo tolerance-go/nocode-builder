@@ -19,21 +19,10 @@ export class 图标管理者 implements Manager {
     项目组文件夹展开中: FolderOpenOutlined,
   };
 
-  private static instance: 图标管理者 | undefined;
-
-  private constructor() {}
-
-  public static getInstance(): 图标管理者 {
-    if (!this.instance) {
-      this.instance = new 图标管理者();
-    }
-    return this.instance;
-  }
-
   根据id获取组件<ID extends 图标组件id联合>(id: ID, props?: AntdIconProps) {
     const Component = 图标管理者.跟随组件id到组件映射[id];
     return createElement(Component, props);
   }
 
-  work() {}
+  async work() {}
 }

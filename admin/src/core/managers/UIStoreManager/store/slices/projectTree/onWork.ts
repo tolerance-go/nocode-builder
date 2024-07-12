@@ -1,13 +1,9 @@
 import { ProjectTreeNodeDataRecord } from '@/types';
-import {
-  reduxStore,
-  显示拖拽时鼠标跟随组件,
-  隐藏并取消拖拽时鼠标跟随组件,
-} from '../..';
+import { Slices, Store } from '../../types';
 
-let previousState = reduxStore.getState(); // 初始化之前的 state
+export const onWork = (reduxStore: Store, slices: Slices) => {
+  let previousState = reduxStore.getState(); // 初始化之前的 state
 
-export const onWork = () => {
   reduxStore.subscribe(() => {
     const currentState = reduxStore.getState(); // 获取当前的 state
 
@@ -25,7 +21,7 @@ export const onWork = () => {
           )
         ) {
           reduxStore.dispatch(
-            显示拖拽时鼠标跟随组件([
+            slices.layout.actions.显示拖拽时鼠标跟随组件([
               '拖拽中显示的组件id',
               {
                 count: currentState.projectTree.所有已经选中的节点.length,
@@ -47,7 +43,7 @@ export const onWork = () => {
           // 如果拖拽的节点不是选中的
           // 那么显示名称
           reduxStore.dispatch(
-            显示拖拽时鼠标跟随组件([
+            slices.layout.actions.显示拖拽时鼠标跟随组件([
               '拖拽中显示的组件id',
               {
                 title: 获取节点数据通过key如果找不到抛出异常(
@@ -66,7 +62,9 @@ export const onWork = () => {
       previousState.projectTree.当前正在拖拽的节点key
     ) {
       if (currentState.layout.拖拽时鼠标附近的跟随组件是否显示) {
-        reduxStore.dispatch(隐藏并取消拖拽时鼠标跟随组件());
+        reduxStore.dispatch(
+          slices.layout.actions.隐藏并取消拖拽时鼠标跟随组件(),
+        );
       }
     }
 

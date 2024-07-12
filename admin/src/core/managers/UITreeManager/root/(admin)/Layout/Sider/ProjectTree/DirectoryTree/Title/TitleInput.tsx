@@ -14,14 +14,16 @@ import {
 } from 'react';
 import MagneticComponent from './MagneticComponent';
 import MarkdownParser from './MarkdownParser';
+import { useAppDispatch, useAppSelector } from '@/core/managers/UIStoreManager';
 
 export const TitleInput = forwardRef<
   InputRef,
   ReplaceKeyType<InputProps, 'defaultValue', string>
 >((props, ref) => {
   const {
-    hooks: { useAppDispatch, useAppSelector },
-    store: { 更新当前输入的标题, 退出当前正在编辑的节点 },
+    slices: {
+      projectTree: { actions: projectTreeActions },
+    },
   } = useUIStoreManager();
 
   const 验证管理者实例 = use验证管理者();
@@ -53,7 +55,7 @@ export const TitleInput = forwardRef<
     fromCompositionEnd = false,
   ) => {
     const inputValue = e.target.value;
-    dispatch(更新当前输入的标题(inputValue));
+    dispatch(projectTreeActions.更新当前输入的标题(inputValue));
     const errMsg = 验证管理者实例.项目树节点标题是否有效(inputValue);
     if (!isComposing || fromCompositionEnd) {
       setErrMsg(errMsg);
@@ -69,7 +71,7 @@ export const TitleInput = forwardRef<
   }, []);
 
   useKeyPressEventByKeyboardJs(['esc'], () => {
-    dispatch(退出当前正在编辑的节点());
+    dispatch(projectTreeActions.退出当前正在编辑的节点());
   });
 
   return (

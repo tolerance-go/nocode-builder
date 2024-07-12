@@ -21,17 +21,6 @@ const illegalPostgresqlChars = [
 ];
 
 export class 验证管理者 implements Manager {
-  private static instance: 验证管理者 | undefined;
-
-  private constructor() {}
-
-  public static getInstance(): 验证管理者 {
-    if (!this.instance) {
-      this.instance = new 验证管理者();
-    }
-    return this.instance;
-  }
-
   项目树节点标题是否有效(input: string): string | null {
     if (!input.trim()) {
       return '必须提供项目或者项目组名';
@@ -47,5 +36,5 @@ export class 验证管理者 implements Manager {
     return null;
   }
 
-  work() {}
+  async work() {}
 }

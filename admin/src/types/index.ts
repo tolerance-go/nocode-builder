@@ -1,15 +1,13 @@
 export * from './tree';
 
 export interface System {
-  launch(...args: unknown[]): void;
+  launch(...args: unknown[]): Promise<void>;
 }
 
 export interface Manager {
-  work(...args: unknown[]): void;
+  work(...args: unknown[]): Promise<void>;
 }
 
 export interface EnvObject {
-  initialize(...args: unknown[]): EnvObject;
-
-  activate(): void;
+  activate(): Promise<void>;
 }

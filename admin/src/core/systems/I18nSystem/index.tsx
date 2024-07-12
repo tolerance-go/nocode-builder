@@ -24,20 +24,9 @@ i18n.use(initReactI18next).init({
 });
 
 export class I18nSystem implements System {
-  private static instance: I18nSystem | undefined;
-
-  private constructor() {}
-
-  public static getInstance(): I18nSystem {
-    if (!this.instance) {
-      this.instance = new I18nSystem();
-    }
-    return this.instance;
-  }
-
   i18n = i18n;
 
-  public launch(): void {
+  public async launch() {
     // 启动逻辑
   }
 }

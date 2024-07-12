@@ -23,3 +23,5 @@ export type Entries<T> = {
 export type OneOf<T> = {
   [K in keyof T]: { key: K; value: T[K] };
 }[keyof T];
+
+export type ValueOfRecord<T extends Record<string, unknown>> = T[keyof T];

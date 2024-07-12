@@ -1,3 +1,8 @@
+import {
+  useAppSelector,
+  useAppDispatch,
+  查询项目树中的节点,
+} from '@/core/managers/UIStoreManager';
 import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
 import {
   useUIStoreManager,
@@ -22,9 +27,10 @@ const 找到同层最后一个文件夹的位置 = (
 
 export const ToolBar = () => {
   const {
-    utils: { 查询项目树中的节点 },
-    hooks: { useAppDispatch, useAppSelector },
-    store: { reduxStore, 插入新节点在指定节点下并同步更新其他数据 },
+    store: reduxStore,
+    slices: {
+      projectTree: { actions: projectTreeActions },
+    },
   } = useUIStoreManager();
 
   const 图标管理者实例 = use图标管理者();
@@ -56,7 +62,7 @@ export const ToolBar = () => {
   const 在指定节点下插入新文件夹 = (target: ProjectStructureTreeDataNode) => {
     const newKey = Math.random() + '';
     dispatch(
-      插入新节点在指定节点下并同步更新其他数据({
+      projectTreeActions.插入新节点在指定节点下并同步更新其他数据({
         parentKey: target.key,
         node: {
           key: newKey,
@@ -87,7 +93,7 @@ export const ToolBar = () => {
     const newKey = Math.random() + '';
 
     dispatch(
-      插入新节点在指定节点下并同步更新其他数据({
+      projectTreeActions.插入新节点在指定节点下并同步更新其他数据({
         parentKey: target.key,
         node: {
           isLeaf: true,
@@ -118,7 +124,7 @@ export const ToolBar = () => {
     const newKey = Math.random() + '';
 
     dispatch(
-      插入新节点在指定节点下并同步更新其他数据({
+      projectTreeActions.插入新节点在指定节点下并同步更新其他数据({
         parentKey: null,
         node: {
           key: newKey,
@@ -138,7 +144,7 @@ export const ToolBar = () => {
   const 在根节点下面插入新文件夹 = () => {
     const newKey = Math.random() + '';
     dispatch(
-      插入新节点在指定节点下并同步更新其他数据({
+      projectTreeActions.插入新节点在指定节点下并同步更新其他数据({
         parentKey: null,
         node: {
           key: newKey,

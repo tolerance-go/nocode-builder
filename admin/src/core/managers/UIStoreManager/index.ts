@@ -1,30 +1,25 @@
 import { Manager } from '@/types';
+import { createReducers, createSlices, createStore } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
-import * as store from './store';
-import * as hooks from './hooks';
-import * as utils from './store/utils';
 
 export class UIStoreManager implements Manager {
-  private static instance: UIStoreManager | undefined;
+  public store;
 
-  private constructor() {}
+  public slices;
 
-  public static getInstance(): UIStoreManager {
-    if (!this.instance) {
-      this.instance = new UIStoreManager();
-    }
-    return this.instance;
+  constructor() {
+    this.slices = createSlices();
+
+    const reducers = createReducers(this.slices);
+
+    this.store = createStore(reducers);
   }
 
-  public store = store;
-
-  public hooks = hooks;
-
-  public utils = utils;
-
-  work() {
-    projectTreeOnWork();
+  async work() {
+    projectTreeOnWork(this.store, this.slices);
   }
 }
 
+export * from './hooks';
 export * from './store';
+export * from './utils';

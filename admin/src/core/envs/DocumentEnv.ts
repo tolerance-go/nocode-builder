@@ -6,17 +6,13 @@ interface DocumentEnvEvents {
 }
 
 export class DocumentEnv implements EnvObject {
-  private static instance: DocumentEnv | undefined;
-
-  public static getInstance(): DocumentEnv {
-    if (!this.instance) {
-      this.instance = new DocumentEnv();
-    }
-    return this.instance;
-  }
-
   public emitter: Emittery<DocumentEnvEvents>;
   private _document?: Document;
+
+  public constructor(document: Document) {
+    this.emitter = new Emittery<DocumentEnvEvents>();
+    this._document = document;
+  }
 
   public get document() {
     if (!this._document) {
@@ -25,16 +21,7 @@ export class DocumentEnv implements EnvObject {
     return this._document;
   }
 
-  constructor() {
-    this.emitter = new Emittery<DocumentEnvEvents>();
-  }
-
-  public initialize(document: Document) {
-    this._document = document;
-    return this;
-  }
-
-  public activate() {
+  public async activate() {
     this.addPageLoadCompleteEventListener();
   }
 

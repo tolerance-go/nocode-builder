@@ -7,23 +7,19 @@ import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
 import { Title } from './Title';
+import {
+  useAppSelector,
+  useAppDispatch,
+  findNode,
+} from '@/core/managers/UIStoreManager';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 
 export const DirectoryTree = () => {
   const {
-    utils: { findNode },
-    hooks: { useAppDispatch, useAppSelector },
-    store: {
-      reduxStore,
-      取消指定的节点的选中状态,
-      取消选中项目树容器,
-      更新展开的节点是哪些,
-      更新当前正在拖拽的节点,
-      更新当前聚焦的节点key,
-      更新激活的节点的key,
-      更新选中的节点是哪些,
-      移动项目树节点并同步其他状态,
+    store: reduxStore,
+    slices: {
+      projectTree: { actions: projectTreeActions },
     },
   } = useUIStoreManager();
 
@@ -172,10 +168,10 @@ export const DirectoryTree = () => {
       selectedKeys={所有已经选中的节点}
       expandedKeys={expandedKeys}
       onSelect={(keys) => {
-        dispatch(更新选中的节点是哪些(keys as string[]));
+        dispatch(projectTreeActions.更新选中的节点是哪些(keys as string[]));
       }}
       onExpand={(keys) => {
-        dispatch(更新展开的节点是哪些(keys as string[])); // 更新展开状态
+        dispatch(projectTreeActions.更新展开的节点是哪些(keys as string[])); // 更新展开状态
       }}
       onDoubleClick={(_e, node) => {
         const nodeData =
@@ -185,18 +181,18 @@ export const DirectoryTree = () => {
           throw new Error('节点数据不完整');
         }
         if (节点是不是文件(nodeData)) {
-          dispatch(取消指定的节点的选中状态(node.key));
+          dispatch(projectTreeActions.取消指定的节点的选中状态(node.key));
         }
       }}
       onDragStart={(info) => {
-        dispatch(更新当前正在拖拽的节点(info.node.key));
+        dispatch(projectTreeActions.更新当前正在拖拽的节点(info.node.key));
       }}
       onDragEnd={() => {
-        dispatch(更新当前正在拖拽的节点(null));
+        dispatch(projectTreeActions.更新当前正在拖拽的节点(null));
       }}
       onDrop={(info) => {
         // 有时候不会触发 onDragEnd，所以要在 drop 的也触发
-        dispatch(更新当前正在拖拽的节点(null));
+        dispatch(projectTreeActions.更新当前正在拖拽的节点(null));
 
         const dropKey = info.node.key;
 
@@ -211,7 +207,7 @@ export const DirectoryTree = () => {
           }
 
           dispatch(
-            移动项目树节点并同步其他状态({
+            projectTreeActions.移动项目树节点并同步其他状态({
               nodeKey: info.dragNode.key,
               newParentKey: dropKey,
               newIndex: 0,
@@ -235,7 +231,7 @@ export const DirectoryTree = () => {
           }
 
           dispatch(
-            移动项目树节点并同步其他状态({
+            projectTreeActions.移动项目树节点并同步其他状态({
               nodeKey: info.dragNode.key,
               newParentKey: 父节点,
               newIndex: finalIndex,
@@ -244,12 +240,12 @@ export const DirectoryTree = () => {
         }
       }}
       onClick={(_event, info) => {
-        dispatch(更新激活的节点的key(info.key));
-        dispatch(更新当前聚焦的节点key(info.key));
-        dispatch(取消选中项目树容器());
+        dispatch(projectTreeActions.更新激活的节点的key(info.key));
+        dispatch(projectTreeActions.更新当前聚焦的节点key(info.key));
+        dispatch(projectTreeActions.取消选中项目树容器());
       }}
       onRightClick={({ node }) => {
-        dispatch(更新当前聚焦的节点key(node.key));
+        dispatch(projectTreeActions.更新当前聚焦的节点key(node.key));
       }}
       // https://github.com/ant-design/ant-design/issues/49813
       icon={(nodeProps: unknown) => {

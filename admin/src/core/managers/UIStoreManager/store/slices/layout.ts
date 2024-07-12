@@ -16,60 +16,47 @@ const initialState: LayoutStates = {
   拖拽时鼠标附近的跟随组件id和参数: null,
 };
 
-const layoutSlice = createSlice({
-  name: 'layout',
-  initialState,
-  reducers: {
-    显示拖拽时鼠标跟随组件: (
-      state,
-      action: PayloadAction<Entries<鼠标跟随组件id到组件参数>>,
-    ) => {
-      state.拖拽时鼠标附近的跟随组件是否显示 = true;
-      state.拖拽时鼠标附近的跟随组件id和参数 = action.payload;
+export const createLayoutSlice = () =>
+  createSlice({
+    name: 'layout',
+    initialState,
+    reducers: {
+      显示拖拽时鼠标跟随组件: (
+        state,
+        action: PayloadAction<Entries<鼠标跟随组件id到组件参数>>,
+      ) => {
+        state.拖拽时鼠标附近的跟随组件是否显示 = true;
+        state.拖拽时鼠标附近的跟随组件id和参数 = action.payload;
+      },
+      隐藏并取消拖拽时鼠标跟随组件: (state) => {
+        state.拖拽时鼠标附近的跟随组件是否显示 = false;
+        state.拖拽时鼠标附近的跟随组件id和参数 = null;
+      },
+      更新拖拽时鼠标附近的跟随节点是否显示: (
+        state,
+        action: PayloadAction<boolean>,
+      ) => {
+        state.拖拽时鼠标附近的跟随组件是否显示 = action.payload;
+      },
+      更新拖拽时鼠标附近的跟随组件id: (
+        state,
+        action: PayloadAction<Entries<鼠标跟随组件id到组件参数> | null>,
+      ) => {
+        state.拖拽时鼠标附近的跟随组件id和参数 = action.payload;
+      },
+      showSubSiderAction: (state) => {
+        state.subSiderVisible = true;
+      },
+      closeSubSiderAction: (state) => {
+        state.subSiderVisible = false;
+      },
+      showProjectTreeTimeLineAction: (state) => {
+        state.projectTreeTimeLineVisible = true;
+        state.subSiderVisible = true;
+      },
+      closeProjectTreeTimeLineAction: (state) => {
+        state.projectTreeTimeLineVisible = false;
+        state.subSiderVisible = false;
+      },
     },
-    隐藏并取消拖拽时鼠标跟随组件: (state) => {
-      state.拖拽时鼠标附近的跟随组件是否显示 = false;
-      state.拖拽时鼠标附近的跟随组件id和参数 = null;
-    },
-    更新拖拽时鼠标附近的跟随节点是否显示: (
-      state,
-      action: PayloadAction<boolean>,
-    ) => {
-      state.拖拽时鼠标附近的跟随组件是否显示 = action.payload;
-    },
-    更新拖拽时鼠标附近的跟随组件id: (
-      state,
-      action: PayloadAction<Entries<鼠标跟随组件id到组件参数> | null>,
-    ) => {
-      state.拖拽时鼠标附近的跟随组件id和参数 = action.payload;
-    },
-    showSubSiderAction: (state) => {
-      state.subSiderVisible = true;
-    },
-    closeSubSiderAction: (state) => {
-      state.subSiderVisible = false;
-    },
-    showProjectTreeTimeLineAction: (state) => {
-      state.projectTreeTimeLineVisible = true;
-      state.subSiderVisible = true;
-    },
-    closeProjectTreeTimeLineAction: (state) => {
-      state.projectTreeTimeLineVisible = false;
-      state.subSiderVisible = false;
-    },
-  },
-});
-
-// Action creators are generated for each case reducer function
-export const {
-  显示拖拽时鼠标跟随组件,
-  隐藏并取消拖拽时鼠标跟随组件,
-  更新拖拽时鼠标附近的跟随组件id,
-  更新拖拽时鼠标附近的跟随节点是否显示,
-  showSubSiderAction,
-  closeSubSiderAction,
-  showProjectTreeTimeLineAction,
-  closeProjectTreeTimeLineAction,
-} = layoutSlice.actions;
-
-export const layoutReducer = layoutSlice.reducer;
+  });

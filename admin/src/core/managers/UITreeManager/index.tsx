@@ -23,18 +23,7 @@ import { DocumentEnv } from '@/core/envs';
 import { UIStoreManager } from '../UIStoreManager';
 
 export class UITreeManager implements Manager {
-  private static instance: UITreeManager | undefined;
-
-  private constructor() {}
-
-  public static getInstance(): UITreeManager {
-    if (!this.instance) {
-      this.instance = new UITreeManager();
-    }
-    return this.instance;
-  }
-
-  work(
+  async work(
     文档环境实例: DocumentEnv,
     验证管理者实例: 验证管理者,
     图标管理者实例: 图标管理者,
@@ -50,7 +39,7 @@ export class UITreeManager implements Manager {
                 value={跟随鼠标显示内容管理者实例}
               >
                 <图标管理者Context.Provider value={图标管理者实例}>
-                  <Provider store={界面状态管理者实例.store.reduxStore}>
+                  <Provider store={界面状态管理者实例.store}>
                     <BrowserRouter
                       basename={import.meta.env.DEV ? '' : '/admin'}
                     >
