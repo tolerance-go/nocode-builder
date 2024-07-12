@@ -1,15 +1,11 @@
+import { useAppDispatch, useAppSelector } from '@/core/managers/UIStoreManager';
 import { 组件类名 } from '@/core/managers/UITreeManager/constants';
-import {
-  use界面状态管理者,
-  use验证管理者,
-} from '@/core/managers/UITreeManager/hooks';
+import { use界面状态管理者 } from '@/core/managers/UITreeManager/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
 import { 测试标识, 测试类 } from '@cypress/shared/constants';
 import { cx } from '@emotion/css';
-import { Dropdown, Flex, InputRef, Typography, theme } from 'antd';
-import { useRef } from 'react';
+import { Dropdown, Flex, Typography, theme } from 'antd';
 import { TitleInput } from './TitleInput';
-import { useAppDispatch, useAppSelector } from '@/core/managers/UIStoreManager';
 
 export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const {
@@ -19,15 +15,10 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     },
   } = use界面状态管理者();
 
-  const 验证管理者 = use验证管理者();
-  const inputRef = useRef<InputRef>(null);
   const { token } = theme.useToken();
 
   const dispatch = useAppDispatch();
 
-  const 为了编辑临时创建的节点的key = useAppSelector(
-    (state) => state.projectTree.为了编辑临时创建的节点的key,
-  );
   const 编辑临时创建节点之前选中的节点是否为自身 = useAppSelector((state) =>
     state.projectTree.为了编辑节点标题而暂存的之前选中的节点keys?.includes(
       nodeKey,
@@ -49,59 +40,8 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     selectProjectStructureTreeNodeDataRecordItem(state, nodeKey),
   );
 
-  const 保存标题输入 = (来自失去焦点: boolean = false) => {
-    const 标题内容有错 = 验证管理者.项目树节点标题是否有效(
-      inputRef.current?.input?.value ?? '',
-    );
-
-    if (标题内容有错) {
-      if (为了编辑临时创建的节点的key === nodeKey) {
-        if (来自失去焦点) {
-          dispatch(projectTreeActions.删除项目树节点并同步其他状态(nodeKey));
-        }
-      } else {
-        if (来自失去焦点) {
-          dispatch(projectTreeActions.停止节点编辑状态并清空输入内容());
-        }
-      }
-    } else {
-      // 标题内容没有错
-      const 当前输入标题 = inputRef.current?.input?.value.trim();
-      if (!当前输入标题) {
-        throw new Error('此处标题不应为空');
-      }
-      if (为了编辑临时创建的节点的key === nodeKey) {
-        dispatch(projectTreeActions.更新为了编辑创建的临时节点为(null));
-        dispatch(
-          projectTreeActions.更新为了编辑临时创建节点之前选中的节点的key为(
-            null,
-          ),
-        );
-      }
-      dispatch(
-        projectTreeActions.更新节点的数据({
-          key: nodeKey,
-          data: { title: 当前输入标题 },
-        }),
-      );
-      dispatch(projectTreeActions.停止节点编辑状态并清空输入内容());
-    }
-  };
-
   return isEditing ? (
-    <TitleInput
-      id={测试标识.项目树标题输入框}
-      size="small"
-      ref={inputRef}
-      autoFocus
-      onBlur={() => {
-        保存标题输入(true);
-      }}
-      onPressEnter={() => {
-        保存标题输入();
-      }}
-      style={{ width: '100%' }}
-    />
+    <TitleInput nodeKey={nodeKey} />
   ) : (
     <Dropdown
       trigger={['contextMenu']}
