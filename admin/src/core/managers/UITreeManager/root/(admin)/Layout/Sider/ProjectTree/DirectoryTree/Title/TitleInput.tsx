@@ -72,20 +72,21 @@ export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
       }
     } else {
       if (为了编辑临时创建的节点的key === nodeKey) {
-        dispatch(projectTreeActions.更新为了编辑创建的临时节点为(null));
         dispatch(
-          projectTreeActions.更新为了编辑临时创建节点之前选中的节点的key为(
-            null,
-          ),
+          projectTreeActions.完成插入新节点并更新相关数据({
+            nodeKey,
+            title: 输入框内容,
+          }),
         );
+      } else {
+        dispatch(
+          projectTreeActions.更新节点的数据({
+            key: nodeKey,
+            data: { title: 输入框内容 },
+          }),
+        );
+        dispatch(projectTreeActions.停止节点编辑状态并清空输入内容());
       }
-      dispatch(
-        projectTreeActions.更新节点的数据({
-          key: nodeKey,
-          data: { title: 输入框内容 },
-        }),
-      );
-      dispatch(projectTreeActions.停止节点编辑状态并清空输入内容());
     }
   };
 

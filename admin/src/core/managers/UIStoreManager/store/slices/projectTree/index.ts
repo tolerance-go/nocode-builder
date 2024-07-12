@@ -59,6 +59,39 @@ export const createProjectTreeSlice = () => {
     name: 'projectTree',
     initialState,
     reducers: {
+      完成插入新节点并更新相关数据: (
+        state,
+        action: PayloadAction<{
+          nodeKey: string;
+          title: string;
+        }>,
+      ) => {
+        if (state.为了编辑临时创建的节点的key !== action.payload.nodeKey) {
+          throw new Error('当前操作节点不是新建节点。');
+        }
+
+        projectTreeSlice.caseReducers.更新为了编辑创建的临时节点为(state, {
+          type: '',
+          payload: null,
+        });
+        projectTreeSlice.caseReducers.更新为了编辑临时创建节点之前选中的节点的key为(
+          state,
+          {
+            type: '',
+            payload: null,
+          },
+        );
+        projectTreeSlice.caseReducers.更新节点的数据(state, {
+          type: '',
+          payload: {
+            key: action.payload.nodeKey,
+            data: {
+              title: action.payload.title,
+            },
+          },
+        });
+        projectTreeSlice.caseReducers.停止节点编辑状态并清空输入内容(state);
+      },
       更新当前聚焦的节点key: (state, action: PayloadAction<string | null>) => {
         state.当前聚焦的节点key = action.payload;
       },
