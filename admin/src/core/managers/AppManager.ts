@@ -7,7 +7,7 @@ import { 跟随鼠标显示内容管理者 } from './跟随鼠标显示内容管
 import { 图标管理者 } from './图标管理者';
 import { 验证管理者 } from './验证管理者';
 import { 项目树历史纪录管理者 } from './项目树历史纪录管理者';
-import { 全局事件系统 } from '../systems/事件系统';
+import { 全局事件系统 } from '../systems/全局事件系统';
 
 export class AppManager implements Manager {
   document: Document;
