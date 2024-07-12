@@ -39,8 +39,8 @@ export class AppManager implements Manager {
         跟随鼠标显示内容管理者单例,
         界面状态管理者实例,
       ),
-      i18n系统单例.launch(),
-      文档环境实例.activate(),
     ]);
+
+    await Promise.all([i18n系统单例.launch(), 文档环境实例.activate()]);
   }
 }
