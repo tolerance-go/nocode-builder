@@ -1,6 +1,6 @@
 import { 组件类名 } from '@/core/managers/UITreeManager/constants';
 import {
-  useUIStoreManager,
+  use界面状态管理者,
   use验证管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
@@ -17,7 +17,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     slices: {
       projectTree: { actions: projectTreeActions },
     },
-  } = useUIStoreManager();
+  } = use界面状态管理者();
 
   const 验证管理者 = use验证管理者();
   const inputRef = useRef<InputRef>(null);

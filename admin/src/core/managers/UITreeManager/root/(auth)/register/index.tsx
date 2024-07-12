@@ -1,14 +1,18 @@
+import { LoginResponseDto } from '@/_gen/api';
+import { useAppDispatch } from '@/core/managers/UIStoreManager';
 import { api } from '@/globals';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { use界面状态管理者 } from '../../../hooks';
 import { RegisterFormValues } from '../../../types';
 import { handleLoginSuccess } from '../login/hooks';
-import { LoginResponseDto } from '@/_gen/api';
 
 export const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  const { slices } = use界面状态管理者();
 
   const navigate = useNavigate();
 
@@ -24,7 +28,7 @@ export const Register: React.FC = () => {
       if (values.autoLogin) {
         const { accessToken } = result as LoginResponseDto;
 
-        handleLoginSuccess(accessToken, navigate);
+        handleLoginSuccess(accessToken, navigate, dispatch, slices);
       } else {
         navigate('/login');
       }

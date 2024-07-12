@@ -1,3 +1,4 @@
+import { useAppSelector } from '@/core/managers/UIStoreManager';
 import { EllipsisOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
 import { Button, Dropdown, Flex, theme } from 'antd';
@@ -6,6 +7,9 @@ import { useNavigate } from 'react-router-dom';
 export const UserBar = () => {
   const { token } = theme.useToken();
   const navigate = useNavigate();
+
+  const username = useAppSelector((state) => state.userInfo.username);
+
   return (
     <Flex
       style={{
@@ -30,7 +34,7 @@ export const UserBar = () => {
         }}
         placement="bottomRight"
       >
-        <Button type="text">yb</Button>
+        <Button type="text">{username}</Button>
       </Dropdown>
       <Button type="text" icon={<EllipsisOutlined />}></Button>
     </Flex>

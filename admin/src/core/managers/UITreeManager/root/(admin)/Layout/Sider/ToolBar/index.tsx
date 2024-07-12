@@ -5,7 +5,7 @@ import {
 } from '@/core/managers/UIStoreManager';
 import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
 import {
-  useUIStoreManager,
+  use界面状态管理者,
   use图标管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { ProjectFileType } from '@/core/managers/UITreeManager/types';
@@ -31,7 +31,7 @@ export const ToolBar = () => {
     slices: {
       projectTree: { actions: projectTreeActions },
     },
-  } = useUIStoreManager();
+  } = use界面状态管理者();
 
   const 图标管理者实例 = use图标管理者();
   const { token } = theme.useToken();

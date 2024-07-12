@@ -1,5 +1,5 @@
 import {
-  useUIStoreManager,
+  use界面状态管理者,
   use图标管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { ProjectStructureTreeDataNode } from '@/types';
@@ -21,7 +21,7 @@ export const DirectoryTree = () => {
     slices: {
       projectTree: { actions: projectTreeActions },
     },
-  } = useUIStoreManager();
+  } = use界面状态管理者();
 
   const 图标管理者实例 = use图标管理者();
 

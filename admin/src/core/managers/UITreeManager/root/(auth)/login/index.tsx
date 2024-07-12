@@ -1,14 +1,19 @@
 import { api } from '@/globals';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { 测试标识 } from '@cypress/shared/constants';
 import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginFormValues } from '../../../types';
 import { handleLoginSuccess } from './hooks';
-import { 测试标识 } from '@cypress/shared/constants';
+import { useAppDispatch } from '@/core/managers/UIStoreManager';
+import { use界面状态管理者 } from '../../../hooks';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const { slices } = use界面状态管理者();
+
   const [loading, setLoading] = useState(false);
   const onFinish = async (values: LoginFormValues) => {
     try {
@@ -17,7 +22,7 @@ export const Login: React.FC = () => {
         username: values.username,
         password: values.password,
       });
-      handleLoginSuccess(accessToken, navigate);
+      handleLoginSuccess(accessToken, navigate, dispatch, slices);
     } catch (error) {
       /* empty */
     } finally {

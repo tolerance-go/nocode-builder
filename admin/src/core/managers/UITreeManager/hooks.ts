@@ -28,7 +28,8 @@ export const use验证管理者 = () => {
   return 验证管理者;
 };
 
-export const useUIStoreManager = () => {
+export const use界面状态管理者 = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const UIStoreManager = useContext(UIStoreManagerContext);
   if (!UIStoreManager) throw new Error('UIStoreManager未初始化');
   return UIStoreManager;

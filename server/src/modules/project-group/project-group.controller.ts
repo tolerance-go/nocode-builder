@@ -25,6 +25,7 @@ export class ProjectGroupController {
   constructor(private readonly projectGroupService: ProjectGroupService) {}
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The project group has been successfully fetched.',
@@ -40,6 +41,7 @@ export class ProjectGroupController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The project groups have been successfully fetched.',
@@ -90,6 +92,7 @@ export class ProjectGroupController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The project group has been successfully updated.',
@@ -107,6 +110,7 @@ export class ProjectGroupController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The project group has been successfully deleted.',

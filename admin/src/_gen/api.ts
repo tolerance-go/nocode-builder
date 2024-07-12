@@ -396,6 +396,20 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     /**
      * No description
      *
+     * @name UserControllerGetUserByToken
+     * @request GET:/users/getUserByToken
+     */
+    getUserByToken: (params: RequestParams = {}) =>
+      this.request<UserResponseDto, unknown>({
+        path: `/users/getUserByToken`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @name UserControllerGetUser
      * @request GET:/users/{id}
      */

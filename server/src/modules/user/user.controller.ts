@@ -7,6 +7,8 @@ import {
   Patch,
   Post,
   Query,
+  Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
 import { UserCreateDto } from './dtos/user-create.dto';
@@ -15,12 +17,30 @@ import { UserUpdateDto } from './dtos/user-update.dto';
 import { UserResponseDto } from './dtos/user-response.dto';
 import { UserService } from './user.service';
 import { toUserResponseDto } from './utils/toUserResponseDto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Get('/getUserByToken')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'The user has been successfully fetched.',
+    type: UserResponseDto,
+  })
+  async getUserByToken(
+    @Req() req: Request & { user: JwtUserDto },
+  ): Promise<UserResponseDto | null> {
+    const userId = req.user.id;
+    const user = await this.userService.user({ id: userId });
+    return user ? toUserResponseDto(user) : null;
+  }
+
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully fetched.',
@@ -32,6 +52,7 @@ export class UserController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The users have been successfully fetched.',
@@ -48,6 +69,7 @@ export class UserController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: UserCreateDto })
   @ApiResponse({
     status: 201,
@@ -61,6 +83,7 @@ export class UserController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiBody({ type: UserUpdateDto })
   @ApiResponse({
     status: 200,
@@ -79,6 +102,7 @@ export class UserController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The user has been successfully deleted.',

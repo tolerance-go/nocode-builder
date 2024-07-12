@@ -3,7 +3,7 @@ import { ConfigProvider, theme } from 'antd';
 import { useLayoutEffect } from 'react';
 import { Outlet, useLocation } from 'react-router-dom';
 import { useAppDispatch } from '../../UIStoreManager';
-import { useUIStoreManager } from '../hooks';
+import { use界面状态管理者 } from '../hooks';
 // import '@antv/s2-react/dist/style.min.css';
 
 export function Root() {
@@ -13,7 +13,7 @@ export function Root() {
     slices: {
       location: { actions: locationActions },
     },
-  } = useUIStoreManager();
+  } = use界面状态管理者();
   const { token } = theme.useToken();
 
   useLayoutEffect(() => {

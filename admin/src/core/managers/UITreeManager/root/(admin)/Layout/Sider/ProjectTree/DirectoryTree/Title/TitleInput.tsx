@@ -1,5 +1,5 @@
 import {
-  useUIStoreManager,
+  use界面状态管理者,
   use验证管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
@@ -24,7 +24,7 @@ export const TitleInput = forwardRef<
     slices: {
       projectTree: { actions: projectTreeActions },
     },
-  } = useUIStoreManager();
+  } = use界面状态管理者();
 
   const 验证管理者实例 = use验证管理者();
   const { token } = theme.useToken();

@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/core/managers/UIStoreManager';
 import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
-import { useUIStoreManager } from '@/core/managers/UITreeManager/hooks';
+import { use界面状态管理者 } from '@/core/managers/UITreeManager/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
 import { 测试标识 } from '@cypress/shared/constants';
 import { css, cx } from '@emotion/css';
@@ -19,7 +19,7 @@ export const ProjectTree = () => {
     slices: {
       projectTree: { actions: projectTreeActions },
     },
-  } = useUIStoreManager();
+  } = use界面状态管理者();
 
   const dispatch = useAppDispatch();
 

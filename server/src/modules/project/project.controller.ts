@@ -27,6 +27,7 @@ export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The project has been successfully fetched.',
@@ -40,6 +41,7 @@ export class ProjectController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The projects have been successfully fetched.',
@@ -87,6 +89,7 @@ export class ProjectController {
   }
 
   @Patch(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The project has been successfully updated.',
@@ -104,6 +107,7 @@ export class ProjectController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
     description: 'The project has been successfully deleted.',

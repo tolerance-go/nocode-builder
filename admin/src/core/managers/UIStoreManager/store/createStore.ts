@@ -3,16 +3,19 @@ import {
   createLayoutSlice,
   createLocationSlice,
   createProjectTreeSlice,
+  createUserInfoSlice,
 } from './slices';
 
 export const createSlices = () => {
   const projectSlice = createProjectTreeSlice();
   const layoutSlice = createLayoutSlice();
   const locationSlice = createLocationSlice();
+  const userInfoSlice = createUserInfoSlice();
   const slices = {
     [projectSlice.name]: projectSlice,
     [layoutSlice.name]: layoutSlice,
     [locationSlice.name]: locationSlice,
+    [userInfoSlice.name]: userInfoSlice,
   };
   return slices;
 };
@@ -24,6 +27,7 @@ export const createReducers = <T extends ReturnType<typeof createSlices>>(
     projectTree: slices.projectTree.reducer,
     layout: slices.layout.reducer,
     location: slices.location.reducer,
+    userInfo: slices.userInfo.reducer,
   };
 
   return reducers;
