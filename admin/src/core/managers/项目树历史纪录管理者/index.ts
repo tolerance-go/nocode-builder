@@ -1,14 +1,9 @@
 import { Manager } from '@/types';
-import { 历史状态机, 历史记录 } from './actors';
 import { createActor } from 'xstate';
-import Emittery from 'emittery';
 import { UIStoreManager } from '../UIStoreManager';
-
-interface HistoryManagerEvents {}
+import { 历史状态机, 历史记录 } from './actors';
 
 export class 项目树历史纪录管理者 implements Manager {
-  public emitter = new Emittery<HistoryManagerEvents>();
-
   历史状态机Actor = createActor(历史状态机, {
     input: {
       历史堆栈: [],

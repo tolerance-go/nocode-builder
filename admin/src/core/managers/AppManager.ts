@@ -7,6 +7,7 @@ import { 跟随鼠标显示内容管理者 } from './跟随鼠标显示内容管
 import { 图标管理者 } from './图标管理者';
 import { 验证管理者 } from './验证管理者';
 import { 项目树历史纪录管理者 } from './项目树历史纪录管理者';
+import { 全局事件系统 } from '../systems/事件系统';
 
 export class AppManager implements Manager {
   document: Document;
@@ -16,6 +17,7 @@ export class AppManager implements Manager {
   }
 
   async work() {
+    const 全局事件系统实例 = new 全局事件系统();
     const i18n系统单例 = new I18nSystem();
     const 文档环境实例 = new DocumentEnv(this.document);
 
@@ -41,6 +43,10 @@ export class AppManager implements Manager {
       ),
     ]);
 
-    await Promise.all([i18n系统单例.launch(), 文档环境实例.activate()]);
+    await Promise.all([
+      i18n系统单例.launch(),
+      全局事件系统实例.launch(),
+      文档环境实例.activate(),
+    ]);
   }
 }
