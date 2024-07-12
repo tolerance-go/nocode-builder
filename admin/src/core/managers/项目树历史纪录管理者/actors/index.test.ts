@@ -2,7 +2,10 @@ import { delay } from '@/utils';
 import { describe, expect, it } from 'vitest';
 import { createActor } from 'xstate';
 import { 历史状态机, 操作详情 } from '.';
-import { ProjectStructureTreeDataNode } from '../../UIStoreManager/types';
+import {
+  ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecordItem,
+} from '../../UIStoreManager/types';
 
 // 帮助函数，用于创建历史记录
 const 创建历史记录 = (
@@ -28,9 +31,14 @@ describe('历史状态机', () => {
         历史堆栈: [
           创建历史记录([], {
             类型: '插入',
-            详情: { 节点key: '1', 父节点key: '0' },
+            详情: {
+              节点key: '1',
+              父节点key: '0',
+              index: 0,
+              recordItem: {} as ProjectTreeNodeDataRecordItem,
+            },
           }),
-          创建历史记录([], { 类型: '删除', 详情: { 节点key: '1' } }),
+          创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
         ],
         历史指针: 1,
       },
@@ -46,9 +54,14 @@ describe('历史状态机', () => {
         历史堆栈: [
           创建历史记录([], {
             类型: '插入',
-            详情: { 节点key: '1', 父节点key: '0' },
+            详情: {
+              节点key: '1',
+              父节点key: '0',
+              index: 0,
+              recordItem: {} as ProjectTreeNodeDataRecordItem,
+            },
           }),
-          创建历史记录([], { 类型: '删除', 详情: { 节点key: '1' } }),
+          创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
         ],
         历史指针: 0,
       },
@@ -64,7 +77,12 @@ describe('历史状态机', () => {
         历史堆栈: [
           创建历史记录([], {
             类型: '插入',
-            详情: { 节点key: '1', 父节点key: '0' },
+            详情: {
+              节点key: '1',
+              父节点key: '0',
+              index: 0,
+              recordItem: {} as ProjectTreeNodeDataRecordItem,
+            },
           }),
         ],
         历史指针: 0,
@@ -75,7 +93,7 @@ describe('历史状态机', () => {
       type: '更新历史',
       data: {
         state: [],
-        操作: { 类型: '删除', 详情: { 节点key: '1' } },
+        操作: { 类型: '删除', 详情: { 节点keys: ['1'] } },
       },
     });
     expect(历史状态机Actor.getSnapshot().context.历史堆栈).toHaveLength(2);
@@ -87,9 +105,14 @@ describe('历史状态机', () => {
         历史堆栈: [
           创建历史记录([], {
             类型: '插入',
-            详情: { 节点key: '1', 父节点key: '0' },
+            详情: {
+              节点key: '1',
+              父节点key: '0',
+              index: 0,
+              recordItem: {} as ProjectTreeNodeDataRecordItem,
+            },
           }),
-          创建历史记录([], { 类型: '删除', 详情: { 节点key: '1' } }),
+          创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
         ],
         历史指针: 0,
       },
@@ -109,12 +132,17 @@ describe('历史状态机', () => {
           return [
             创建历史记录([], {
               类型: '插入',
-              详情: { 节点key: '1', 父节点key: '0' },
+              详情: {
+                节点key: '1',
+                父节点key: '0',
+                index: 0,
+                recordItem: {} as ProjectTreeNodeDataRecordItem,
+              },
             }),
-            创建历史记录([], { 类型: '删除', 详情: { 节点key: '1' } }),
+            创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
             创建历史记录([], {
               类型: '移动',
-              详情: { 节点key: '1', 目标父节点key: '2' },
+              详情: { 节点keys: ['1'], 目标父节点key: '2' },
             }),
           ];
         },
@@ -128,12 +156,17 @@ describe('历史状态机', () => {
     expect(历史状态机Actor.getSnapshot().context.历史堆栈).toEqual([
       创建历史记录([], {
         类型: '插入',
-        详情: { 节点key: '1', 父节点key: '0' },
+        详情: {
+          节点key: '1',
+          父节点key: '0',
+          index: 0,
+          recordItem: {} as ProjectTreeNodeDataRecordItem,
+        },
       }),
-      创建历史记录([], { 类型: '删除', 详情: { 节点key: '1' } }),
+      创建历史记录([], { 类型: '删除', 详情: { 节点keys: ['1'] } }),
       创建历史记录([], {
         类型: '移动',
-        详情: { 节点key: '1', 目标父节点key: '2' },
+        详情: { 节点keys: ['1'], 目标父节点key: '2' },
       }),
     ]);
   });
