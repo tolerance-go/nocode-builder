@@ -1,6 +1,5 @@
 import { api } from '@/globals';
 import { Manager } from '@/types';
-import Emittery from 'emittery';
 import store from 'store2';
 import {
   AppMiddleware,
@@ -10,11 +9,7 @@ import {
 } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
 
-interface UIStoreManagerEvents {}
-
 export class UIStoreManager implements Manager {
-  public emitter = new Emittery<UIStoreManagerEvents>();
-
   public store;
 
   public slices;
@@ -27,14 +22,14 @@ export class UIStoreManager implements Manager {
     this.store = createStore(reducers, [this.loggerMiddleware]);
   }
 
-  loggerMiddleware: AppMiddleware = (store) => (next) => (action) => {
-    console.log('Dispatching action:', action);
-    if (action.type === 'layout/更新拖拽时鼠标附近的跟随节点是否显示') {
+  loggerMiddleware: AppMiddleware = () => (next) => (action) => {
+    if (
+      action.type === 'projectTree/插入新节点在指定节点下并同步更新其他数据'
+    ) {
       action.payload;
     }
 
     const result = next(action);
-    console.log('Next state:', store.getState());
     return result;
   };
 
