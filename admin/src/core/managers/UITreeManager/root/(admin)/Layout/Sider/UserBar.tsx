@@ -1,6 +1,6 @@
 import { EllipsisOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
-import { Avatar, Button, Dropdown, Flex, Space, theme, Typography } from 'antd';
+import { Button, Dropdown, Flex, theme } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 export const UserBar = () => {
@@ -28,19 +28,9 @@ export const UserBar = () => {
             },
           ],
         }}
-        placement="topRight"
+        placement="bottomRight"
       >
-        <Button
-          type="text"
-          style={{
-            padding: `${token.paddingSM}px ${token.paddingXS}px`,
-          }}
-        >
-          <Space>
-            <Avatar size="small" data-test-id={测试标识.用户头像}></Avatar>
-            <Typography.Text>yb</Typography.Text>
-          </Space>
-        </Button>
+        <Button type="text">yb</Button>
       </Dropdown>
       <Button type="text" icon={<EllipsisOutlined />}></Button>
     </Flex>
