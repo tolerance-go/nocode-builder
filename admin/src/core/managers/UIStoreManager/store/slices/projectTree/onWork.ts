@@ -1,7 +1,7 @@
 import { ProjectTreeNodeDataRecord } from '@/types';
-import { Slices, Store } from '../../types';
+import { AppSlices, AppStore } from '../../types';
 
-export const onWork = (reduxStore: Store, slices: Slices) => {
+export const onWork = (reduxStore: AppStore, slices: AppSlices) => {
   let previousState = reduxStore.getState(); // 初始化之前的 state
 
   reduxStore.subscribe(() => {

@@ -1,10 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, Middleware } from '@reduxjs/toolkit';
 import {
   createLayoutSlice,
   createLocationSlice,
   createProjectTreeSlice,
   createUserInfoSlice,
 } from './slices';
+import { AppMiddleware } from './types';
 
 export const createSlices = () => {
   const projectSlice = createProjectTreeSlice();
@@ -35,7 +36,10 @@ export const createReducers = <T extends ReturnType<typeof createSlices>>(
 
 export const createStore = <T extends ReturnType<typeof createReducers>>(
   reducer: T,
+  middlewares: AppMiddleware[] = [],
 ) =>
   configureStore({
     reducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware().concat(middlewares as Middleware[]),
   });

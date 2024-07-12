@@ -1,10 +1,20 @@
-import { Manager } from '@/types';
-import { createReducers, createSlices, createStore } from './store';
-import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
 import { api } from '@/globals';
+import { Manager } from '@/types';
+import Emittery from 'emittery';
 import store from 'store2';
+import {
+  AppMiddleware,
+  createReducers,
+  createSlices,
+  createStore,
+} from './store';
+import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
+
+interface UIStoreManagerEvents {}
 
 export class UIStoreManager implements Manager {
+  public emitter = new Emittery<UIStoreManagerEvents>();
+
   public store;
 
   public slices;
@@ -14,8 +24,18 @@ export class UIStoreManager implements Manager {
 
     const reducers = createReducers(this.slices);
 
-    this.store = createStore(reducers);
+    this.store = createStore(reducers, [this.loggerMiddleware]);
   }
+
+  loggerMiddleware: AppMiddleware = (store) => (next) => (action) => {
+    console.log('Dispatching action:', action);
+    if (action.type === 'layout/更新拖拽时鼠标附近的跟随节点是否显示') {
+      action.payload;
+    }
+    const result = next(action);
+    console.log('Next state:', store.getState());
+    return result;
+  };
 
   async work() {
     projectTreeOnWork(this.store, this.slices);
