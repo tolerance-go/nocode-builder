@@ -29,7 +29,7 @@ export const DirectoryTree = () => {
   const 节点树容器的高度 = useAppSelector(
     (state) => state.projectTree.节点树容器的高度,
   );
-  const 项目节点树 = useAppSelector((state) => state.projectTree.项目节点树);
+  const 项目节点树 = useAppSelector((state) => state.projectTree.项目结构树);
   const 所有已经选中的节点 = useAppSelector(
     (state) => state.projectTree.所有已经选中的节点,
   );
@@ -78,7 +78,7 @@ export const DirectoryTree = () => {
             }
 
             if (父节点key) {
-              const 父节点 = findNode(state.projectTree.项目节点树, 父节点key);
+              const 父节点 = findNode(state.projectTree.项目结构树, 父节点key);
 
               if (!父节点) {
                 throw new Error('父节点数据不完整');
@@ -104,7 +104,7 @@ export const DirectoryTree = () => {
                 }
               }
             } else {
-              const dropIndex = state.projectTree.项目节点树.findIndex(
+              const dropIndex = state.projectTree.项目结构树.findIndex(
                 (node) => node.key === dropNode.key,
               );
 
@@ -113,7 +113,7 @@ export const DirectoryTree = () => {
               }
 
               const 放置节点下一个兄弟节点 =
-                state.projectTree.项目节点树[dropIndex + 1];
+                state.projectTree.项目结构树[dropIndex + 1];
 
               if (放置节点下一个兄弟节点) {
                 if (!放置节点下一个兄弟节点.isLeaf) {
@@ -175,7 +175,7 @@ export const DirectoryTree = () => {
       }}
       onDoubleClick={(_e, node) => {
         const nodeData =
-          reduxStore.getState().projectTree.树节点key到节点数据的映射[node.key];
+          reduxStore.getState().projectTree.项目树节点数据[node.key];
 
         if (!nodeData) {
           throw new Error('节点数据不完整');
@@ -250,9 +250,7 @@ export const DirectoryTree = () => {
       // https://github.com/ant-design/ant-design/issues/49813
       icon={(nodeProps: unknown) => {
         const {
-          projectTree: {
-            树节点key到节点数据的映射: connected_树节点key到节点数据的映射,
-          },
+          projectTree: { 项目树节点数据: connected_树节点key到节点数据的映射 },
         } = reduxStore.getState();
         const { eventKey: nodeKey, expanded } = nodeProps as {
           eventKey: string;

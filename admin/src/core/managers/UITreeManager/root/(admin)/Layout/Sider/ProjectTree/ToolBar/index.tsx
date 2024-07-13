@@ -44,10 +44,10 @@ export const ToolBar = () => {
     (state) => state.projectTree.所有已经选中的节点,
   );
   const projectStructureTreeData = useAppSelector(
-    (state) => state.projectTree.项目节点树,
+    (state) => state.projectTree.项目结构树,
   );
   const projectTreeDataRecord = useAppSelector(
-    (state) => state.projectTree.树节点key到节点数据的映射,
+    (state) => state.projectTree.项目树节点数据,
   );
   const nodeParentKeyRecord = useAppSelector(
     (state) => state.projectTree.derived_节点到父节点的映射,

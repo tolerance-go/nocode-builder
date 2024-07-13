@@ -2,10 +2,10 @@ import { createSelector } from 'reselect';
 import { RootState } from '@/core/managers/UIStoreManager';
 
 export const selectProjectStructureTreeData = (state: RootState) =>
-  state.projectTree.项目节点树;
+  state.projectTree.项目结构树;
 
 export const selectProjectStructureTreeNodeDataRecord = (state: RootState) =>
-  state.projectTree.树节点key到节点数据的映射;
+  state.projectTree.项目树节点数据;
 
 export const selectProjectStructureTreeNodeDataRecordItem = createSelector(
   [

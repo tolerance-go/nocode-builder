@@ -44,16 +44,16 @@ export class UIStoreManager implements Manager {
     if (action.type === 'projectTree/完成插入新节点并更新相关数据') {
       const { nodeKey } = action.payload;
 
-      const nodeData = nextState.projectTree.树节点key到节点数据的映射[nodeKey];
+      const nodeData = nextState.projectTree.项目树节点数据[nodeKey];
       const parentKey =
         nextState.projectTree.derived_节点到父节点的映射[nodeKey];
-      const treeSnapshot = nextState.projectTree.项目节点树;
+      const treeSnapshot = nextState.projectTree.项目结构树;
 
       let index = -1;
 
       if (parentKey) {
         const parentNode = findNode(
-          nextState.projectTree.项目节点树,
+          nextState.projectTree.项目结构树,
           parentKey,
         );
         if (!parentNode?.children) {
@@ -61,7 +61,7 @@ export class UIStoreManager implements Manager {
         }
         index = parentNode.children.findIndex((child) => child.key === nodeKey);
       } else {
-        index = nextState.projectTree.项目节点树.findIndex(
+        index = nextState.projectTree.项目结构树.findIndex(
           (child) => child.key === nodeKey,
         );
       }
@@ -75,7 +75,7 @@ export class UIStoreManager implements Manager {
         nodeData,
         parentKey,
         treeNodes: treeSnapshot,
-        treeDataRecord: nextState.projectTree.树节点key到节点数据的映射,
+        treeDataRecord: nextState.projectTree.项目树节点数据,
         index,
       });
     }
