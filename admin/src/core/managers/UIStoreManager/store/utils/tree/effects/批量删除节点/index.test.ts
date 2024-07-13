@@ -37,7 +37,7 @@ describe('批量删除节点', () => {
       { key: '5', children: [] },
     ]);
 
-    expect(nodes).toEqual([
+    expect(result.updatedNodes).toEqual([
       { key: '1', children: [] },
       { key: '4', children: [] },
     ]);
@@ -78,7 +78,7 @@ describe('批量删除节点', () => {
 
     expect(result.removedNodes).toEqual([]);
     expect(result.indices).toEqual([]);
-    expect(nodes).toEqual([
+    expect(result.updatedNodes).toEqual([
       {
         key: '1',
         children: [
@@ -98,7 +98,7 @@ describe('批量删除节点', () => {
 
     expect(result.removedNodes).toEqual([]);
     expect(result.indices).toEqual([]);
-    expect(nodes).toEqual([]);
+    expect(result.updatedNodes).toEqual([]);
   });
 
   it('应处理空的键列表', () => {
@@ -118,7 +118,7 @@ describe('批量删除节点', () => {
 
     expect(result.removedNodes).toEqual([]);
     expect(result.indices).toEqual([]);
-    expect(nodes).toEqual([
+    expect(result.updatedNodes).toEqual([
       {
         key: '1',
         children: [
@@ -137,10 +137,96 @@ describe('批量删除节点', () => {
     );
 
     const start = performance.now();
-    批量删除节点(largeNodes, nodeKeys);
+    const result = 批量删除节点(largeNodes, nodeKeys);
     const end = performance.now();
 
     console.log(`批量删除节点操作耗时: ${end - start} ms`);
     expect(end - start).toBeLessThan(1000); // 希望在大规模数据集下操作耗时小于1000ms
+    expect(result.updatedNodes).toBeDefined(); // 确保返回值中包含 updatedNodes
+  });
+
+  it('应删除嵌套的 key，但返回结果应只包含最外层的 key', () => {
+    const nodes: TreeNode[] = [
+      {
+        key: '1',
+        children: [
+          {
+            key: '2',
+            children: [
+              { key: '3', children: [] },
+              { key: '4', children: [] },
+            ],
+          },
+          { key: '5', children: [] },
+        ],
+      },
+      { key: '6', children: [{ key: '7', children: [] }] },
+    ];
+
+    const nodeKeys = ['2', '4', '7'];
+    const result = 批量删除节点(nodes, nodeKeys);
+
+    expect(result.removedNodes).toEqual([
+      {
+        key: '2',
+        children: [
+          { key: '3', children: [] },
+          { key: '4', children: [] },
+        ],
+      },
+      { key: '7', children: [] },
+    ]);
+
+    expect(result.updatedNodes).toEqual([
+      { key: '1', children: [{ key: '5', children: [] }] },
+      { key: '6', children: [] },
+    ]);
+  });
+
+  it('应确保不会删除包含关系的节点', () => {
+    const nodes: TreeNode[] = [
+      {
+        key: '1',
+        children: [
+          {
+            key: '2',
+            children: [
+              {
+                key: '3',
+                children: [
+                  { key: '4', children: [] },
+                  { key: '5', children: [] },
+                ],
+              },
+            ],
+          },
+          { key: '6', children: [] },
+        ],
+      },
+    ];
+
+    const nodeKeys = ['2', '3', '4'];
+    const result = 批量删除节点(nodes, nodeKeys);
+
+    // 确保只删除最外层的节点
+    expect(result.removedNodes).toEqual([
+      {
+        key: '2',
+        children: [
+          {
+            key: '3',
+            children: [
+              { key: '4', children: [] },
+              { key: '5', children: [] },
+            ],
+          },
+        ],
+      },
+    ]);
+
+    // 确保最终更新后的节点数组中没有包含关系的节点被删除
+    expect(result.updatedNodes).toEqual([
+      { key: '1', children: [{ key: '6', children: [] }] },
+    ]);
   });
 });

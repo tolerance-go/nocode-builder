@@ -15,8 +15,6 @@ declare global {
         },
       ): Chainable<void>;
 
-      范围批量选中节点(fromTitle: string, toTitle: string): Chainable<void>;
-      组合批量选中节点(titles: string[]): Chainable<void>;
       /**
        * 业务操作
        */
@@ -34,7 +32,12 @@ declare global {
 
       添加项目树视图项目(): Chainable<void>;
 
-      获取antd通知框描述(): Chainable<JQuery<HTMLElement>>;
+      范围批量选中节点(fromTitle: string, toTitle: string): Chainable<void>;
+      组合批量选中节点(titles: string[]): Chainable<void>;
+
+      /**
+       * 标识选择
+       */
 
       获取测试标识(id: string): Chainable<JQuery<HTMLElement>>;
       获取测试类(className: string): Chainable<JQuery<HTMLElement>>;
@@ -42,6 +45,7 @@ declare global {
        * antd 选择器
        */
       获取antd树列表内部容器(): Chainable<JQuery<HTMLElement>>;
+      获取antd通知框描述(): Chainable<JQuery<HTMLElement>>;
     }
   }
 }

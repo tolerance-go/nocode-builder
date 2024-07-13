@@ -1,11 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { 插入节点, removeNode, 批量插入节点 } from '../../utils/tree/effects';
 import { TreeNode } from '../../utils/tree/types';
-import {
-  compareTrees,
-  insertNodeAtIndex,
-  过滤掉包含父节点在内的节点,
-} from '../../utils/tree';
+import { compareTrees, insertNodeAtIndex } from '../../utils/tree';
 import { 批量删除节点 } from '../../utils/tree/effects/批量删除节点';
 import {
   ProjectTreeNodeDataRecord,
@@ -22,10 +18,10 @@ export type ProjectTreeStates = {
   所有已经选中的节点: string[];
   所有展开的节点的key: string[];
   当前正在编辑的项目树节点的key: string | null;
-  为了编辑临时创建的节点的key: string | null;
+  临时创建的节点的key: string | null;
   节点树容器的高度: number;
-  为了编辑节点标题而暂存的之前选中的节点keys: string[] | null;
-  为了编辑节点标题而暂存的之前聚焦的节点key: string | null;
+  编辑节点标题之前暂存的选中的节点keys: string[] | null;
+  编辑节点标题之前暂存的聚焦的节点key: string | null;
   当前输入的标题: string;
   是否选中了项目树容器: boolean;
   激活的节点的key: string | null;
@@ -35,7 +31,8 @@ export type ProjectTreeStates = {
 };
 
 const initialState: ProjectTreeStates = {
-  为了编辑节点标题而暂存的之前聚焦的节点key: null,
+  derived_节点到父节点的映射: {},
+  编辑节点标题之前暂存的聚焦的节点key: null,
   当前聚焦的节点key: null,
   是否正在聚焦项目树区域: false,
   当前正在拖拽的节点key: null,
@@ -46,10 +43,9 @@ const initialState: ProjectTreeStates = {
   所有已经选中的节点: [],
   所有展开的节点的key: [],
   当前正在编辑的项目树节点的key: null,
-  derived_节点到父节点的映射: {},
-  为了编辑临时创建的节点的key: null,
+  临时创建的节点的key: null,
   节点树容器的高度: 0,
-  为了编辑节点标题而暂存的之前选中的节点keys: null,
+  编辑节点标题之前暂存的选中的节点keys: null,
   是否选中了项目树容器: false,
 };
 
@@ -58,14 +54,14 @@ export const createProjectTreeSlice = () => {
     name: 'projectTree',
     initialState,
     reducers: {
-      新增节点: (
+      用户操作新增节点: (
         state,
         action: PayloadAction<{
           nodeKey: string;
           title: string;
         }>,
       ) => {
-        if (state.为了编辑临时创建的节点的key !== action.payload.nodeKey) {
+        if (state.临时创建的节点的key !== action.payload.nodeKey) {
           throw new Error('当前操作节点不是新建节点。');
         }
 
@@ -96,7 +92,7 @@ export const createProjectTreeSlice = () => {
           payload: action.payload.nodeKey,
         });
       },
-      修改节点: (
+      用户操作修改节点: (
         state,
         action: PayloadAction<{
           nodeKey: string;
@@ -113,6 +109,12 @@ export const createProjectTreeSlice = () => {
           },
         });
         projectTreeSlice.caseReducers.停止节点编辑状态并清空输入内容(state);
+      },
+      用户操作移除节点: (state, action: PayloadAction<string[]>) => {
+        projectTreeSlice.caseReducers.批量删除项目树节点(state, {
+          type: '',
+          payload: action.payload,
+        });
       },
       更新当前聚焦的节点key: (state, action: PayloadAction<string | null>) => {
         state.当前聚焦的节点key = action.payload;
@@ -173,14 +175,13 @@ export const createProjectTreeSlice = () => {
         );
       },
       清空选中节点并将之前的选中节点数据暂存: (state) => {
-        state.为了编辑节点标题而暂存的之前选中的节点keys = [
+        state.编辑节点标题之前暂存的选中的节点keys = [
           ...state.所有已经选中的节点,
         ];
         state.所有已经选中的节点 = [];
       },
       清除聚焦的节点并将之前的聚焦节点数据暂存: (state) => {
-        state.为了编辑节点标题而暂存的之前聚焦的节点key =
-          state.当前聚焦的节点key;
+        state.编辑节点标题之前暂存的聚焦的节点key = state.当前聚焦的节点key;
         state.当前聚焦的节点key = null;
       },
       取消指定的节点的选中状态: (state, action: PayloadAction<string>) => {
@@ -211,8 +212,15 @@ export const createProjectTreeSlice = () => {
         });
 
         // 修改不需要同步关联状态
+
         // 移动需要修改父节点关联状态
+
         // 新增需要修改关联状态
+        results.新增.forEach((detail) => {
+          detail.节点keys.forEach((addKey) => {
+            state.derived_节点到父节点的映射[addKey] = detail.父节点key;
+          });
+        });
       },
       更新节点数据映射: (
         state,
@@ -269,7 +277,7 @@ export const createProjectTreeSlice = () => {
         state,
         action: PayloadAction<string | null>,
       ) => {
-        state.为了编辑临时创建的节点的key = action.payload;
+        state.临时创建的节点的key = action.payload;
       },
       更新当前编辑节点是哪个并更新输入框的值: (
         state,
@@ -299,8 +307,7 @@ export const createProjectTreeSlice = () => {
       退出当前正在编辑的节点: (state) => {
         if (state.当前正在编辑的项目树节点的key) {
           if (
-            state.当前正在编辑的项目树节点的key ===
-            state.为了编辑临时创建的节点的key
+            state.当前正在编辑的项目树节点的key === state.临时创建的节点的key
           ) {
             projectTreeSlice.caseReducers.删除项目树节点(state, {
               type: '',
@@ -333,6 +340,22 @@ export const createProjectTreeSlice = () => {
           });
         }
       },
+      批量删除项目树节点: (state, action: PayloadAction<string[]>) => {
+        const nodeKeys = action.payload;
+
+        const results = 批量删除节点(state.项目结构树, nodeKeys);
+
+        if (results.removedNodes.length) {
+          results.removedNodes.forEach((removedNode) => {
+            projectTreeSlice.caseReducers.同步删除的节点的关联状态(state, {
+              type: '',
+              payload: {
+                node: removedNode,
+              },
+            });
+          });
+        }
+      },
       同步删除的节点的关联状态: (
         state,
         action: PayloadAction<{
@@ -354,7 +377,7 @@ export const createProjectTreeSlice = () => {
           );
         }
 
-        if (node.key === state.为了编辑临时创建的节点的key) {
+        if (node.key === state.临时创建的节点的key) {
           projectTreeSlice.caseReducers.恢复当前选中的节点为编辑临时创建节点之前选中的节点的key(
             state,
           );
@@ -398,15 +421,7 @@ export const createProjectTreeSlice = () => {
       ) => {
         const { nodeKeys, newParentKey, newIndex } = action.payload;
 
-        const 互不包含的等待移动的节点 = 过滤掉包含父节点在内的节点(
-          nodeKeys,
-          state.derived_节点到父节点的映射,
-        );
-
-        const removed = 批量删除节点(
-          state.项目结构树,
-          互不包含的等待移动的节点,
-        );
+        const removed = 批量删除节点(state.项目结构树, nodeKeys);
 
         if (removed.removedNodes.length) {
           let finalNewIndex = newIndex;
@@ -561,27 +576,25 @@ export const createProjectTreeSlice = () => {
         });
       },
       恢复当前选中的节点为编辑临时创建节点之前选中的节点的key: (state) => {
-        if (state.为了编辑节点标题而暂存的之前选中的节点keys) {
-          state.所有已经选中的节点 =
-            state.为了编辑节点标题而暂存的之前选中的节点keys;
-          state.为了编辑节点标题而暂存的之前选中的节点keys = null;
+        if (state.编辑节点标题之前暂存的选中的节点keys) {
+          state.所有已经选中的节点 = state.编辑节点标题之前暂存的选中的节点keys;
+          state.编辑节点标题之前暂存的选中的节点keys = null;
         }
       },
       恢复当前聚焦的节点为编辑临时创建节点之前聚焦的节点的key: (state) => {
-        if (state.为了编辑节点标题而暂存的之前聚焦的节点key) {
-          state.当前聚焦的节点key =
-            state.为了编辑节点标题而暂存的之前聚焦的节点key;
-          state.为了编辑节点标题而暂存的之前聚焦的节点key = null;
+        if (state.编辑节点标题之前暂存的聚焦的节点key) {
+          state.当前聚焦的节点key = state.编辑节点标题之前暂存的聚焦的节点key;
+          state.编辑节点标题之前暂存的聚焦的节点key = null;
         }
       },
       更新为了编辑临时创建节点之前选中的节点的key为: (
         state,
         action: PayloadAction<string[] | null>,
       ) => {
-        state.为了编辑节点标题而暂存的之前选中的节点keys = action.payload;
+        state.编辑节点标题之前暂存的选中的节点keys = action.payload;
       },
       清空为了编辑临时创建节点之前选中的节点的key: (state) => {
-        state.为了编辑节点标题而暂存的之前选中的节点keys = null;
+        state.编辑节点标题之前暂存的选中的节点keys = null;
       },
     },
   });

@@ -27,7 +27,7 @@ export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
   const [isComposing, setIsComposing] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const 为了编辑临时创建的节点的key = useAppSelector(
-    (state) => state.projectTree.为了编辑临时创建的节点的key,
+    (state) => state.projectTree.临时创建的节点的key,
   );
   const 当前输入的标题 = useAppSelector(
     (state) => state.projectTree.当前输入的标题,
@@ -75,14 +75,14 @@ export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
     } else {
       if (为了编辑临时创建的节点的key === nodeKey) {
         dispatch(
-          projectTreeActions.新增节点({
+          projectTreeActions.用户操作新增节点({
             nodeKey,
             title: 输入框内容,
           }),
         );
       } else {
         dispatch(
-          projectTreeActions.修改节点({
+          projectTreeActions.用户操作修改节点({
             nodeKey: nodeKey,
             title: 输入框内容,
           }),

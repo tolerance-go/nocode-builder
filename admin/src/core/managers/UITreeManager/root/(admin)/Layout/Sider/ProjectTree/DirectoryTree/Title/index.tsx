@@ -20,9 +20,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
   const dispatch = useAppDispatch();
 
   const 编辑临时创建节点之前选中的节点是否为自身 = useAppSelector((state) =>
-    state.projectTree.为了编辑节点标题而暂存的之前选中的节点keys?.includes(
-      nodeKey,
-    ),
+    state.projectTree.编辑节点标题之前暂存的选中的节点keys?.includes(nodeKey),
   );
   const 激活的节点的key是否为自身 = useAppSelector(
     (state) => state.projectTree.激活的节点的key === nodeKey,

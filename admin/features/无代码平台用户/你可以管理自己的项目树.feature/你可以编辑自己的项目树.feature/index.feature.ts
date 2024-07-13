@@ -2,6 +2,39 @@ import { 测试标识, 测试类 } from '@cypress/shared/constants';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
+  假如('用户删除节点标题后，应该可以回撤和重做', ({ 当, 那么 }) => {
+    当('用户登录并访问主页', () => {
+      cy.登录('yb', '123456');
+      cy.visit('/');
+    });
+
+    当('用户成功创建一个项目节点', () => {
+      cy.添加项目树视图项目();
+      cy.获取项目树标题输入框().type('项目节点{enter}');
+    });
+
+    当('用户删除节点', () => {
+      cy.获取项目树节点通过标题('项目节点').click();
+      cy.get('body').type('{del}');
+      cy.获取antd树列表内部容器().children().should('have.length', 0);
+    });
+
+    当('用户按下 ctrl + z', () => {
+      cy.get('body').type('{ctrl}z');
+    });
+
+    那么('节点标题应该回到之前的状态', () => {
+      cy.获取项目树节点标题元素('项目节点').should('exist');
+    });
+
+    当('用户按下 ctrl + shift + z', () => {
+      cy.get('body').type('{ctrl}{shift}z');
+    });
+
+    那么('节点标题应该还原', () => {
+      cy.获取antd树列表内部容器().children().should('have.length', 0);
+    });
+  });
   假如('用户编辑节点标题后，又按快捷键撤销，应该回到之前', ({ 当, 那么 }) => {
     当('用户登录并访问主页', () => {
       cy.登录('yb', '123456');

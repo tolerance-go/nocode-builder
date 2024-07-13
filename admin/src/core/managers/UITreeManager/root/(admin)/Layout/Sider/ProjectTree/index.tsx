@@ -1,4 +1,8 @@
-import { useAppDispatch, useAppSelector } from '@/core/managers/UIStoreManager';
+import {
+  useAppDispatch,
+  useAppSelector,
+  过滤掉包含父节点在内的节点,
+} from '@/core/managers/UIStoreManager';
 import { 组件类名 } from '@/core/managers/UITreeManager/constants';
 import {
   use全局事件系统,
@@ -71,6 +75,7 @@ export const ProjectTree = () => {
         所有已经选中的节点,
         当前正在编辑的项目树节点的key,
         是否正在聚焦项目树区域,
+        derived_节点到父节点的映射,
       },
     } = reduxStore.getState();
 
@@ -85,7 +90,12 @@ export const ProjectTree = () => {
       return;
     }
 
-    dispatch(projectTreeActions.删除所有选中的节点());
+    const 互不包含选中节点 = 过滤掉包含父节点在内的节点(
+      所有已经选中的节点,
+      derived_节点到父节点的映射,
+    );
+
+    dispatch(projectTreeActions.用户操作移除节点(互不包含选中节点));
   });
 
   useKeyPressEventByKeyboardJs(['f2'], () => {
