@@ -2,7 +2,6 @@ import {
   use界面状态管理者,
   use图标管理者,
 } from '@/core/managers/UITreeManager/hooks';
-import { 节点是不是文件 } from '@/utils';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
 import { Title } from './Title';
@@ -10,6 +9,7 @@ import {
   useAppSelector,
   useAppDispatch,
   findNode,
+  节点是不是文件,
 } from '@/core/managers/UIStoreManager';
 import { ProjectStructureTreeDataNode } from '@/core/managers/UIStoreManager/types';
 
