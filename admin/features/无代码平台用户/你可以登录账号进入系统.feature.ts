@@ -16,11 +16,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy.获取测试标识(测试标识.登录提交按钮).click();
       });
       那么('用户会跳转到主页', () => {
-        cy.location().should((loc) => {
-          expect(loc.pathname).to.eq(
-            new URL(Cypress.config().baseUrl!).pathname,
-          );
-        });
+        cy.当前访问应该为主页();
       });
       并且('用户会看到自己的姓名', () => {
         cy.获取测试标识(测试标识.用户信息显示按钮).should('have.text', 'yb');
@@ -35,7 +31,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy.登录('yb', '123456');
       });
       并且('用户访问主页', () => {
-        cy.visit(new URL(Cypress.config().baseUrl!).pathname);
+        cy.visit('/');
       });
       那么('用户会看到自己的姓名', () => {
         cy.获取测试标识(测试标识.用户信息显示按钮).should('have.text', 'yb');

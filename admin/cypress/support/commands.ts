@@ -229,3 +229,13 @@ Cypress.Commands.add('获取antd树列表内部容器', () => {
 Cypress.Commands.add('获取antd通知框描述', () => {
   return cy.get('.ant-notification-notice-description');
 });
+
+Cypress.Commands.add('当前访问应该为主页', () => {
+  cy.location().should((loc) => {
+    const baseUrl = Cypress.config().baseUrl;
+    if (!baseUrl) {
+      throw new Error('Cypress.config().baseUrl 未配置');
+    }
+    expect(loc.pathname).to.eq(new URL(baseUrl).pathname);
+  });
+});

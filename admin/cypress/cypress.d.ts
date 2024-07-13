@@ -34,7 +34,7 @@ declare global {
 
       范围批量选中节点(fromTitle: string, toTitle: string): Chainable<void>;
       组合批量选中节点(titles: string[]): Chainable<void>;
-
+      当前访问应该为主页(): Chainable<void>;
       /**
        * 标识选择
        */
