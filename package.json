@@ -8,13 +8,13 @@
     "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
     "docker:db": "docker-compose down && docker-compose up postgres --build -d --remove-orphans",
     "docker:server": "docker-compose down && docker-compose up server --build -d --remove-orphans",
-    "docker": "docker-compose down && docker-compose up --build -d --remove-orphans && pnpm cypress:run",
+    "docker": "docker-compose down && docker-compose up --build -d --remove-orphans",
     "cypress:run": "pnpm --filter admin cypress:run",
     "dev:e2e": "pnpm --filter admin cypress:open",
     "dev:admin": "pnpm --filter admin dev",
     "dev:server": "pnpm --filter server start:dev",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "everyDay": "pnpm format && pnpm --filter server recursive run everyDay && pnpm --filter=!server recursive run everyDay && pnpm docker"
+    "everyDay": "pnpm format && pnpm --filter server recursive run everyDay && pnpm --filter=!server recursive run everyDay && pnpm docker && pnpm cypress:run"
   },
   "keywords": [],
   "author": "",
