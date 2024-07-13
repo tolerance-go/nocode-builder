@@ -75,7 +75,7 @@ export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
     } else {
       if (为了编辑临时创建的节点的key === nodeKey) {
         dispatch(
-          projectTreeActions.完成插入新节点并更新相关数据({
+          projectTreeActions.插入新节点并更新相关数据({
             nodeKey,
             title: 输入框内容,
           }),

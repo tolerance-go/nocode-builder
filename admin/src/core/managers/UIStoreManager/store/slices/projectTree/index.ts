@@ -58,7 +58,7 @@ export const createProjectTreeSlice = () => {
     name: 'projectTree',
     initialState,
     reducers: {
-      完成插入新节点并更新相关数据: (
+      插入新节点并更新相关数据: (
         state,
         action: PayloadAction<{
           nodeKey: string;
@@ -123,7 +123,7 @@ export const createProjectTreeSlice = () => {
       更新当前输入的标题: (state, action: PayloadAction<string>) => {
         state.当前输入的标题 = action.payload;
       },
-      插入新节点在指定节点下并同步更新其他数据: (
+      插入节点并同步更新其他数据: (
         state,
         action: PayloadAction<{
           parentKey: string | null;
@@ -212,35 +212,6 @@ export const createProjectTreeSlice = () => {
             item.title = data.title;
           }
         }
-      },
-      initProjectTreeDataMeta: (
-        state,
-        action: PayloadAction<{
-          projectStructureTreeData: ProjectStructureTreeDataNode[];
-          projectStructureTreeDataRecord: ProjectTreeNodeDataRecord;
-        }>,
-      ) => {
-        const { projectStructureTreeData, projectStructureTreeDataRecord } =
-          action.payload;
-        const buildParentKeyMap = (
-          nodes: ProjectStructureTreeDataNode[],
-          parentKey: string | null = null,
-        ): Record<string, string | null> => {
-          const map: Record<string, string | null> = {};
-          nodes.forEach((node) => {
-            map[node.key] = parentKey;
-            if (node.children) {
-              Object.assign(map, buildParentKeyMap(node.children, node.key));
-            }
-          });
-          return map;
-        };
-
-        state.项目结构树 = projectStructureTreeData;
-        state.项目树节点数据 = projectStructureTreeDataRecord;
-        state.derived_节点到父节点的映射 = buildParentKeyMap(
-          projectStructureTreeData,
-        );
       },
       插入节点到指定位置: (
         state,
