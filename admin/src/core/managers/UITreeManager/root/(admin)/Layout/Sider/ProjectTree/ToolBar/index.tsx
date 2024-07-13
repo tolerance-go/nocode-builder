@@ -2,6 +2,8 @@ import {
   useAppSelector,
   useAppDispatch,
   查询项目树中的节点,
+  节点是不是文件,
+  节点是不是文件夹,
 } from '@/core/managers/UIStoreManager';
 import {
   ProjectTreeNodeDataRecordItem,
@@ -14,7 +16,6 @@ import {
 } from '@/core/managers/UITreeManager/hooks';
 import { ProjectFileType } from '@/core/managers/UITreeManager/types';
 
-import { 节点是不是文件, 节点是不是文件夹 } from '@/utils';
 import { FolderAddOutlined, PlusOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
 import { Button, Dropdown, Flex, Space, theme } from 'antd';
