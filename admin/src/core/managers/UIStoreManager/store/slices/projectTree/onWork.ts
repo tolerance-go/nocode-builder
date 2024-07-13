@@ -1,4 +1,4 @@
-import { ProjectTreeNodeDataRecord } from '@/types';
+import { ProjectTreeNodeDataRecord } from '../../..';
 import { AppSlices, AppStore } from '../../types';
 
 export const onWork = (reduxStore: AppStore, slices: AppSlices) => {

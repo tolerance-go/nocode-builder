@@ -373,6 +373,10 @@ export const createProjectTreeSlice = () => {
           state.激活的节点的key = null;
         }
 
+        if (node.key === state.当前聚焦的节点key) {
+          state.当前聚焦的节点key = null;
+        }
+
         if (node.key in state.项目树节点数据) {
           delete state.项目树节点数据[node.key];
         }
