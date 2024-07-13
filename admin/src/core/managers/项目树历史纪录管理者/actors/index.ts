@@ -5,42 +5,42 @@ import {
   ProjectTreeNodeDataRecordItem,
 } from '../../UIStoreManager/types';
 
-export type 操作类型 = '插入' | '删除' | '移动' | '更新';
+export type 历史记录操作类型 = '插入' | '删除' | '移动' | '更新';
 
-export interface 更新操作详情 {
+export interface 历史记录更新操作详情 {
   节点key: string;
   oldRecordItem: ProjectTreeNodeDataRecordItem;
   newRecordItem: ProjectTreeNodeDataRecordItem;
 }
 
-export interface 插入操作详情 {
+export interface 历史记录插入操作详情 {
   节点key: string;
   父节点key: string | null;
   index: number;
   recordItem: ProjectTreeNodeDataRecordItem;
 }
 
-export interface 删除操作详情 {
+export interface 历史记录删除操作详情 {
   节点keys: string[];
 }
 
-export interface 移动操作详情 {
+export interface 历史记录移动操作详情 {
   节点keys: string[];
   目标父节点key: string;
 }
 
-export type 操作详情 =
-  | { type: '插入'; detail: 插入操作详情 }
-  | { type: '删除'; detail: 删除操作详情 }
-  | { type: '更新'; detail: 更新操作详情 }
-  | { type: '移动'; detail: 移动操作详情 };
+export type 历史记录操作详情 =
+  | { type: '插入'; detail: 历史记录插入操作详情 }
+  | { type: '删除'; detail: 历史记录删除操作详情 }
+  | { type: '更新'; detail: 历史记录更新操作详情 }
+  | { type: '移动'; detail: 历史记录移动操作详情 };
 
 export type 历史记录 = {
   state: {
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   };
-  操作: 操作详情;
+  操作: 历史记录操作详情;
 };
 
 export interface 历史上下文 {
