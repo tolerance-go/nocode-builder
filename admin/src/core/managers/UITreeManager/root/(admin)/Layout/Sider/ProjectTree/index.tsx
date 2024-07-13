@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/core/managers/UIStoreManager';
-import { 组件标识, 组件类名 } from '@/core/managers/UITreeManager/constants';
+import { 组件类名 } from '@/core/managers/UITreeManager/constants';
 import {
   use全局事件系统,
   use界面状态管理者,
@@ -11,8 +11,8 @@ import { theme } from 'antd';
 import { debounce } from 'lodash-es';
 import { useEffect, useRef } from 'react';
 import { useClickAway } from 'react-use';
-import { ToolBar } from './ToolBar';
 import { DirectoryTree } from './DirectoryTree';
+import { ToolBar } from './ToolBar';
 
 export const ProjectTree = () => {
   const treeContainerRef = useRef<HTMLDivElement>(null);
@@ -107,7 +107,13 @@ export const ProjectTree = () => {
   useKeyPressEventByKeyboardJs(['ctrl + z'], () => {
     if (!是否正在聚焦项目树区域) return;
 
-    全局事件系统.emit('界面状态管理者/用户撤销项目树', undefined);
+    全局事件系统.emit('界面视图管理者/用户撤销项目树', undefined);
+  });
+
+  useKeyPressEventByKeyboardJs(['ctrl + shift + z'], () => {
+    if (!是否正在聚焦项目树区域) return;
+
+    全局事件系统.emit('界面视图管理者/用户重做项目树', undefined);
   });
 
   useClickAway(containerRef, (event) => {

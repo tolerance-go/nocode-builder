@@ -26,6 +26,11 @@ export class UIStoreManager implements Manager {
     const reducers = createReducers(this.slices);
 
     this.store = createStore(reducers, [this.handleMiddleware]);
+
+    this.全局事件系统实例.on('项目树历史记录管理者/指针移动', () => {
+      // this.store.dispatch(
+      // )
+    });
   }
 
   handleMiddleware: AppMiddleware = (store) => (next) => (action) => {
@@ -105,3 +110,4 @@ export class UIStoreManager implements Manager {
 export * from './hooks';
 export * from './store';
 export * from './utils';
+export * from './types';

@@ -13,7 +13,6 @@ import {
 } from '../../../types';
 
 export type ProjectTreeStates = {
-  hasInitProjectTreeDataMeta: boolean;
   // 派生数据
   derived_节点到父节点的映射: Record<string, string | null>;
   // 关联数据
@@ -43,7 +42,6 @@ const initialState: ProjectTreeStates = {
   当前输入的标题: '',
   项目节点树: [],
   树节点key到节点数据的映射: {},
-  hasInitProjectTreeDataMeta: false,
   所有已经选中的节点: [],
   所有展开的节点的key: [],
   当前正在编辑的项目树节点的key: null,
@@ -222,7 +220,6 @@ export const createProjectTreeSlice = () => {
 
         state.项目节点树 = projectStructureTreeData;
         state.树节点key到节点数据的映射 = projectStructureTreeDataRecord;
-        state.hasInitProjectTreeDataMeta = true;
         state.derived_节点到父节点的映射 = buildParentKeyMap(
           projectStructureTreeData,
         );
