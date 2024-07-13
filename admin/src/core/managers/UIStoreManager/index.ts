@@ -30,7 +30,15 @@ export class UIStoreManager implements Manager {
     this.全局事件系统实例.on('项目树历史记录管理者/指针移动', (event) => {
       this.store.dispatch(
         this.slices.projectTree.actions.更新项目节点树(
-          event.历史指针 === -1 ? [] : event.历史堆栈[event.历史指针].state,
+          event.历史指针 === -1
+            ? {
+                结构树: [],
+                节点数据: {},
+              }
+            : {
+                结构树: event.历史堆栈[event.历史指针].state.treeNodes,
+                节点数据: event.历史堆栈[event.历史指针].state.treeDataRecord,
+              },
         ),
       );
     });

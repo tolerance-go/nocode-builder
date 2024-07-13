@@ -171,11 +171,16 @@ export const createProjectTreeSlice = () => {
       },
       更新项目节点树: (
         state,
-        action: PayloadAction<ProjectStructureTreeDataNode[]>,
+        action: PayloadAction<{
+          结构树: ProjectStructureTreeDataNode[];
+          节点数据: ProjectTreeNodeDataRecord;
+        }>,
       ) => {
-        const results = compareTrees(state.项目结构树, action.payload);
+        const { 结构树, 节点数据 } = action.payload;
+        const results = compareTrees(state.项目结构树, 结构树);
 
-        state.项目结构树 = action.payload;
+        state.项目结构树 = 结构树;
+        state.项目树节点数据 = 节点数据;
 
         results.删除.节点keys.forEach((_删除的key, index) => {
           projectTreeSlice.caseReducers.同步删除的节点的关联状态(state, {
@@ -344,6 +349,7 @@ export const createProjectTreeSlice = () => {
         state.所有已经选中的节点 = state.所有已经选中的节点.filter(
           (key) => key !== node.key,
         );
+
         if (node.key === state.当前正在编辑的项目树节点的key) {
           projectTreeSlice.caseReducers.更新当前编辑节点是哪个并更新输入框的值(
             state,
@@ -353,6 +359,7 @@ export const createProjectTreeSlice = () => {
             },
           );
         }
+
         if (node.key === state.为了编辑临时创建的节点的key) {
           projectTreeSlice.caseReducers.恢复当前选中的节点为编辑临时创建节点之前选中的节点的key(
             state,
@@ -362,7 +369,14 @@ export const createProjectTreeSlice = () => {
           );
         }
 
-        delete state.项目树节点数据[node.key];
+        if (node.key === state.激活的节点的key) {
+          state.激活的节点的key = null;
+        }
+
+        if (node.key in state.项目树节点数据) {
+          delete state.项目树节点数据[node.key];
+        }
+
         delete state.derived_节点到父节点的映射[node.key];
 
         if (node.children) {
