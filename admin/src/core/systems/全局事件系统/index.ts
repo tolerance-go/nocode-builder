@@ -8,13 +8,20 @@ import { System } from '@/types';
 import Emittery from 'emittery';
 
 export type 全局事件映射 = {
-  '界面状态管理者/插入新节点': {
+  '界面状态管理者/新增节点': {
     nodeKey: string;
     nodeData: ProjectTreeNodeDataRecordItem;
     parentKey: string | null;
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
     index: number;
+  };
+  '界面状态管理者/修改节点': {
+    nodeKey: string;
+    oldTreeNodeData: ProjectTreeNodeDataRecordItem;
+    newTreeNodeData: ProjectTreeNodeDataRecordItem;
+    treeNodes: ProjectStructureTreeDataNode[];
+    treeDataRecord: ProjectTreeNodeDataRecord;
   };
   '界面视图管理者/用户撤销项目树': undefined;
   '界面视图管理者/用户重做项目树': undefined;

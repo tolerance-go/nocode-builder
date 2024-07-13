@@ -207,7 +207,7 @@ export const DirectoryTree = () => {
           }
 
           dispatch(
-            projectTreeActions.移动项目树节点并同步其他状态({
+            projectTreeActions.移动项目树节点({
               nodeKey: info.dragNode.key,
               newParentKey: dropKey,
               newIndex: 0,
@@ -231,7 +231,7 @@ export const DirectoryTree = () => {
           }
 
           dispatch(
-            projectTreeActions.移动项目树节点并同步其他状态({
+            projectTreeActions.移动项目树节点({
               nodeKey: info.dragNode.key,
               newParentKey: 父节点,
               newIndex: finalIndex,

@@ -34,7 +34,7 @@ export class 项目树历史纪录管理者 implements Manager {
 
   async work() {
     this.全局事件系统实例.on(
-      '界面状态管理者/插入新节点',
+      '界面状态管理者/新增节点',
       ({ nodeKey, parentKey, nodeData, treeNodes, treeDataRecord, index }) => {
         this.历史状态机Actor.send({
           type: '推入历史记录',
@@ -50,6 +50,35 @@ export class 项目树历史纪录管理者 implements Manager {
                 父节点key: parentKey,
                 index,
                 recordItem: nodeData,
+              },
+            },
+          },
+        });
+      },
+    );
+
+    this.全局事件系统实例.on(
+      '界面状态管理者/修改节点',
+      ({
+        nodeKey,
+        newTreeNodeData,
+        oldTreeNodeData,
+        treeNodes,
+        treeDataRecord,
+      }) => {
+        this.历史状态机Actor.send({
+          type: '推入历史记录',
+          data: {
+            state: {
+              treeNodes,
+              treeDataRecord,
+            },
+            操作: {
+              type: '更新',
+              detail: {
+                节点key: nodeKey,
+                oldRecordItem: oldTreeNodeData,
+                newRecordItem: newTreeNodeData,
               },
             },
           },

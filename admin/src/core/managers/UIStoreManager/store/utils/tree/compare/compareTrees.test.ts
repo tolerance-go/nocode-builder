@@ -3,7 +3,7 @@ import { DiffResult, compareTrees } from './compareTrees';
 import { TreeNode } from '../types';
 
 describe('compareTrees', () => {
-  it('应正确检测插入、删除和移动操作', () => {
+  it('应正确检测新增、删除和移动操作', () => {
     const oldTree: TreeNode[] = [
       { key: '1', children: [{ key: '1-1', children: [] }] },
       { key: '2', children: [] },
@@ -18,7 +18,7 @@ describe('compareTrees', () => {
     const expected: DiffResult<TreeNode> = {
       删除: { 节点keys: ['2'], recordItems: [{ key: '2', children: [] }] },
       移动: [],
-      插入: [
+      新增: [
         {
           父节点key: null,
           index: 1,
@@ -54,7 +54,7 @@ describe('compareTrees', () => {
           目标父节点key: '2',
         },
       ],
-      插入: [],
+      新增: [],
     };
 
     const result = compareTrees(oldTree, newTree);
@@ -76,7 +76,7 @@ describe('compareTrees', () => {
     const expected: DiffResult<TreeNode> = {
       删除: { 节点keys: [], recordItems: [] },
       移动: [],
-      插入: [
+      新增: [
         {
           父节点key: '1-1',
           index: 0,
@@ -97,7 +97,7 @@ describe('compareTrees', () => {
     const expected: DiffResult<TreeNode> = {
       删除: { 节点keys: [], recordItems: [] },
       移动: [],
-      插入: [],
+      新增: [],
     };
 
     const result = compareTrees(oldTree, newTree);
@@ -118,7 +118,7 @@ describe('compareTrees', () => {
     const expected: DiffResult<TreeNode> = {
       删除: { 节点keys: [], recordItems: [] },
       移动: [],
-      插入: [],
+      新增: [],
     };
 
     const result = compareTrees(oldTree, newTree);
@@ -143,14 +143,14 @@ describe('compareTrees', () => {
         recordItems: [{ key: '1-1-1', children: [] }],
       },
       移动: [],
-      插入: [],
+      新增: [],
     };
 
     const result = compareTrees(oldTree, newTree);
     expect(result).toEqual(expected);
   });
 
-  it('应正确处理多个节点插入和删除的情况', () => {
+  it('应正确处理多个节点新增和删除的情况', () => {
     const oldTree: TreeNode[] = [{ key: '1', children: [] }];
 
     const newTree: TreeNode[] = [
@@ -162,7 +162,7 @@ describe('compareTrees', () => {
     const expected: DiffResult<TreeNode> = {
       删除: { 节点keys: [], recordItems: [] },
       移动: [],
-      插入: [
+      新增: [
         {
           父节点key: null,
           index: 1,
@@ -179,7 +179,7 @@ describe('compareTrees', () => {
     expect(result).toEqual(expected);
   });
 
-  it('应正确处理嵌套节点的插入和删除，并返回最外层的父节点', () => {
+  it('应正确处理嵌套节点的新增和删除，并返回最外层的父节点', () => {
     const oldTree: TreeNode[] = [
       { key: '1', children: [] },
       {
@@ -201,7 +201,7 @@ describe('compareTrees', () => {
         ],
       },
       移动: [],
-      插入: [],
+      新增: [],
     };
 
     const result = compareTrees(oldTree, newTree);

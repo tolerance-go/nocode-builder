@@ -45,11 +45,13 @@ export class UIStoreManager implements Manager {
   }
 
   handleMiddleware: AppMiddleware = (store) => (next) => (action) => {
+    const prevState = store.getState();
+
     const result = next(action);
 
     const nextState = store.getState();
 
-    if (action.type === 'projectTree/完成插入新节点并更新相关数据') {
+    if (action.type === 'projectTree/新增节点') {
       const { nodeKey } = action.payload;
 
       const nodeData = nextState.projectTree.项目树节点数据[nodeKey];
@@ -78,13 +80,24 @@ export class UIStoreManager implements Manager {
         throw new Error('位置非法');
       }
 
-      this.全局事件系统实例.emit('界面状态管理者/插入新节点', {
+      this.全局事件系统实例.emit('界面状态管理者/新增节点', {
         nodeKey: action.payload.nodeKey,
         nodeData,
         parentKey,
         treeNodes: treeSnapshot,
         treeDataRecord: nextState.projectTree.项目树节点数据,
         index,
+      });
+    } else if (action.type === 'projectTree/修改节点') {
+      const { nodeKey } = action.payload;
+      const newNodeData = nextState.projectTree.项目树节点数据[nodeKey];
+      const oldNodeData = prevState.projectTree.项目树节点数据[nodeKey];
+      this.全局事件系统实例.emit('界面状态管理者/修改节点', {
+        nodeKey: action.payload.nodeKey,
+        newTreeNodeData: newNodeData,
+        oldTreeNodeData: oldNodeData,
+        treeNodes: nextState.projectTree.项目结构树,
+        treeDataRecord: nextState.projectTree.项目树节点数据,
       });
     }
 

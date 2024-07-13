@@ -58,7 +58,7 @@ export const createProjectTreeSlice = () => {
     name: 'projectTree',
     initialState,
     reducers: {
-      插入新节点并更新相关数据: (
+      新增节点: (
         state,
         action: PayloadAction<{
           nodeKey: string;
@@ -96,6 +96,24 @@ export const createProjectTreeSlice = () => {
           payload: action.payload.nodeKey,
         });
       },
+      修改节点: (
+        state,
+        action: PayloadAction<{
+          nodeKey: string;
+          title: string;
+        }>,
+      ) => {
+        projectTreeSlice.caseReducers.更新节点的数据(state, {
+          type: '',
+          payload: {
+            key: action.payload.nodeKey,
+            data: {
+              title: action.payload.title,
+            },
+          },
+        });
+        projectTreeSlice.caseReducers.停止节点编辑状态并清空输入内容(state);
+      },
       更新当前聚焦的节点key: (state, action: PayloadAction<string | null>) => {
         state.当前聚焦的节点key = action.payload;
       },
@@ -123,7 +141,7 @@ export const createProjectTreeSlice = () => {
       更新当前输入的标题: (state, action: PayloadAction<string>) => {
         state.当前输入的标题 = action.payload;
       },
-      插入节点并同步更新其他数据: (
+      插入节点: (
         state,
         action: PayloadAction<{
           parentKey: string | null;
@@ -191,6 +209,10 @@ export const createProjectTreeSlice = () => {
             },
           });
         });
+
+        // 修改不需要同步关联状态
+        // 移动需要修改父节点关联状态
+        // 新增需要修改关联状态
       },
       更新节点数据映射: (
         state,
@@ -280,7 +302,7 @@ export const createProjectTreeSlice = () => {
             state.当前正在编辑的项目树节点的key ===
             state.为了编辑临时创建的节点的key
           ) {
-            projectTreeSlice.caseReducers.删除项目树节点并同步其他状态(state, {
+            projectTreeSlice.caseReducers.删除项目树节点(state, {
               type: '',
               payload: state.当前正在编辑的项目树节点的key,
             });
@@ -291,13 +313,13 @@ export const createProjectTreeSlice = () => {
       },
       删除所有选中的节点: (state) => {
         state.所有已经选中的节点.forEach((nodeKey) => {
-          projectTreeSlice.caseReducers.删除项目树节点并同步其他状态(state, {
+          projectTreeSlice.caseReducers.删除项目树节点(state, {
             type: '',
             payload: nodeKey,
           });
         });
       },
-      删除项目树节点并同步其他状态: (state, action: PayloadAction<string>) => {
+      删除项目树节点: (state, action: PayloadAction<string>) => {
         const nodeKey = action.payload;
 
         const removed = removeNode(state.项目结构树, nodeKey);
@@ -366,7 +388,7 @@ export const createProjectTreeSlice = () => {
           });
         }
       },
-      批量移动项目树节点并同步其他状态: (
+      批量移动项目树节点: (
         state,
         action: PayloadAction<{
           nodeKeys: string[];
@@ -424,7 +446,7 @@ export const createProjectTreeSlice = () => {
           });
         }
       },
-      单个移动项目树节点并同步其他状态: (
+      单个移动项目树节点: (
         state,
         action: PayloadAction<{
           nodeKey: string;
@@ -478,7 +500,7 @@ export const createProjectTreeSlice = () => {
           }
         }
       },
-      移动项目树节点并同步其他状态: (
+      移动项目树节点: (
         state,
         action: PayloadAction<{
           nodeKey: string;
@@ -493,24 +515,18 @@ export const createProjectTreeSlice = () => {
           state.所有已经选中的节点.includes(action.payload.nodeKey) &&
           state.所有已经选中的节点.length > 1
         ) {
-          projectTreeSlice.caseReducers.批量移动项目树节点并同步其他状态(
-            state,
-            {
-              type: '',
-              payload: {
-                nodeKeys: state.所有已经选中的节点,
-                newParentKey: action.payload.newParentKey,
-                newIndex: action.payload.newIndex,
-              },
+          projectTreeSlice.caseReducers.批量移动项目树节点(state, {
+            type: '',
+            payload: {
+              nodeKeys: state.所有已经选中的节点,
+              newParentKey: action.payload.newParentKey,
+              newIndex: action.payload.newIndex,
             },
-          );
+          });
           return;
         }
 
-        projectTreeSlice.caseReducers.单个移动项目树节点并同步其他状态(
-          state,
-          action,
-        );
+        projectTreeSlice.caseReducers.单个移动项目树节点(state, action);
       },
       删除某个选中的节点: (state, action: PayloadAction<string>) => {
         state.所有已经选中的节点 = state.所有已经选中的节点.filter(

@@ -88,9 +88,7 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
             ),
             onClick: ({ domEvent }) => {
               domEvent.stopPropagation();
-              dispatch(
-                projectTreeActions.删除项目树节点并同步其他状态(nodeKey),
-              );
+              dispatch(projectTreeActions.删除项目树节点(nodeKey));
             },
           },
         ],

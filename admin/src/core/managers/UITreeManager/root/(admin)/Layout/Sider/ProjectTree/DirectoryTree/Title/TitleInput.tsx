@@ -65,7 +65,7 @@ export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
     if (标题内容错误消息) {
       if (为了编辑临时创建的节点的key === nodeKey) {
         if (来自失去焦点) {
-          dispatch(projectTreeActions.删除项目树节点并同步其他状态(nodeKey));
+          dispatch(projectTreeActions.删除项目树节点(nodeKey));
         }
       } else {
         if (来自失去焦点) {
@@ -75,19 +75,18 @@ export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
     } else {
       if (为了编辑临时创建的节点的key === nodeKey) {
         dispatch(
-          projectTreeActions.插入新节点并更新相关数据({
+          projectTreeActions.新增节点({
             nodeKey,
             title: 输入框内容,
           }),
         );
       } else {
         dispatch(
-          projectTreeActions.更新节点的数据({
-            key: nodeKey,
-            data: { title: 输入框内容 },
+          projectTreeActions.修改节点({
+            nodeKey: nodeKey,
+            title: 输入框内容,
           }),
         );
-        dispatch(projectTreeActions.停止节点编辑状态并清空输入内容());
       }
     }
   };

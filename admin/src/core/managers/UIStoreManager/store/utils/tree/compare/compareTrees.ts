@@ -1,6 +1,6 @@
 import { TreeNode } from '../types';
 
-export type 操作类型 = '插入' | '删除' | '移动' | '更新';
+export type 操作类型 = '新增' | '删除' | '移动';
 
 export interface 更新操作详情<T> {
   节点key: string;
@@ -8,7 +8,7 @@ export interface 更新操作详情<T> {
   newRecordItem: T;
 }
 
-export interface 插入操作详情<T> {
+export interface 新增操作详情<T> {
   父节点key: string | null;
   index: number;
   recordItems: T[];
@@ -26,7 +26,7 @@ export interface 移动操作详情 {
 }
 
 export type 操作详情<T> =
-  | { type: '插入'; detail: 插入操作详情<T> }
+  | { type: '新增'; detail: 新增操作详情<T> }
   | { type: '删除'; detail: 删除操作详情<T> }
   | { type: '更新'; detail: 更新操作详情<T> }
   | { type: '移动'; detail: 移动操作详情 };
@@ -34,7 +34,7 @@ export type 操作详情<T> =
 export interface DiffResult<T> {
   删除: 删除操作详情<T>;
   移动: 移动操作详情[];
-  插入: 插入操作详情<T>[];
+  新增: 新增操作详情<T>[];
 }
 
 export function compareTrees<T extends TreeNode<T>>(
@@ -47,7 +47,7 @@ export function compareTrees<T extends TreeNode<T>>(
   const newParentMap = new Map<string | number, string | number | null>();
   const 删除: 删除操作详情<T> = { 节点keys: [], recordItems: [] };
   const 移动: 移动操作详情[] = [];
-  const 插入: 插入操作详情<T>[] = [];
+  const 新增: 新增操作详情<T>[] = [];
 
   function traverse(
     node: T,
@@ -96,7 +96,7 @@ export function compareTrees<T extends TreeNode<T>>(
         ? 父节点.children?.indexOf(node) ?? 0
         : newTree.indexOf(node);
 
-      const existingInsert = 插入.find(
+      const existingInsert = 新增.find(
         (insert) => insert.父节点key === 父节点key,
       );
 
@@ -104,7 +104,7 @@ export function compareTrees<T extends TreeNode<T>>(
         existingInsert.recordItems.push(node);
         existingInsert.节点keys.push(key as string);
       } else {
-        插入.push({
+        新增.push({
           父节点key,
           index,
           recordItems: [node],
@@ -114,5 +114,5 @@ export function compareTrees<T extends TreeNode<T>>(
     }
   });
 
-  return { 删除, 移动, 插入 };
+  return { 删除, 移动, 新增 };
 }
