@@ -140,7 +140,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
     当('用户已经成功登录并点击登出按钮', () => {
       cy.登录('yb', '123456'); // 假设这是一个自定义命令，用于简化登录过程
       cy.visit('/');
-      cy.获取测试标识(测试标识.用户头像).trigger('mouseover');
+      cy.获取测试标识(测试标识.用户名称文本).trigger('mouseover');
       cy.获取测试标识(测试标识.登出按钮文本).should('be.visible').click();
     });
     那么('用户应该被登出并返回到登录页面', () => {

@@ -90,6 +90,11 @@ export const createProjectTreeSlice = () => {
           },
         });
         projectTreeSlice.caseReducers.停止节点编辑状态并清空输入内容(state);
+
+        projectTreeSlice.caseReducers.更新激活的节点的key(state, {
+          type: '',
+          payload: action.payload.nodeKey,
+        });
       },
       更新当前聚焦的节点key: (state, action: PayloadAction<string | null>) => {
         state.当前聚焦的节点key = action.payload;
@@ -148,10 +153,6 @@ export const createProjectTreeSlice = () => {
         projectTreeSlice.caseReducers.清除聚焦的节点并将之前的聚焦节点数据暂存(
           state,
         );
-        projectTreeSlice.caseReducers.更新激活的节点的key(state, {
-          type: '',
-          payload: action.payload.node.key,
-        });
       },
       清空选中节点并将之前的选中节点数据暂存: (state) => {
         state.为了编辑节点标题而暂存的之前选中的节点keys = [

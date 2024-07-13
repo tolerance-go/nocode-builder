@@ -35,7 +35,7 @@ export const UserBar = () => {
         placement="bottomRight"
       >
         <Button data-test-id={测试标识.用户信息显示按钮} type="text">
-          {username}
+          <span data-test-id={测试标识.用户名称文本}>{username}</span>
         </Button>
       </Dropdown>
       <Button type="text" icon={<EllipsisOutlined />}></Button>

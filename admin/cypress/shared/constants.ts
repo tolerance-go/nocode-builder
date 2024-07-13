@@ -11,6 +11,7 @@ export const 测试标识 = {
   登录密码输入框: 'login-password-input',
 
   用户头像: 'user-avatar',
+  用户名称文本: 'user-avatar',
 
   登出按钮文本: 'logout-btn-text',
 

@@ -248,15 +248,6 @@ export const ToolBar = () => {
       }}
     >
       <Space>
-        {/* <Button
-          type="text"
-          // loading={addFileLoading}
-          icon={<HistoryOutlined />}
-          onClick={() => {
-            dispatch(showProjectTreeTimeLineAction());
-          }}
-        ></Button> */}
-
         <Dropdown
           menu={{
             items: [
