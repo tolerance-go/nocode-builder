@@ -1,6 +1,5 @@
 import { Flex, theme } from 'antd';
 import { ProjectTree } from './ProjectTree';
-import { ToolBar } from './ToolBar';
 import { UserBar } from './UserBar';
 
 export const Sider = () => {
@@ -17,7 +16,6 @@ export const Sider = () => {
       }}
     >
       <UserBar />
-      <ToolBar />
       <ProjectTree />
     </Flex>
   );

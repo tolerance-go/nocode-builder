@@ -13,6 +13,7 @@ export type 全局事件映射 = {
     treeSnapshot: ProjectStructureTreeDataNode[];
     index: number;
   };
+  '界面状态管理者/用户撤销项目树': undefined;
 };
 
 export type UnsubscribeFn = () => void;

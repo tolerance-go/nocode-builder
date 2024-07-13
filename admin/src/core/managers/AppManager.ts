@@ -40,6 +40,7 @@ export class AppManager implements Manager {
         图标管理者单例,
         跟随鼠标显示内容管理者单例,
         界面状态管理者实例,
+        全局事件系统实例,
       ),
     ]);
 

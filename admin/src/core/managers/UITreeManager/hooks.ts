@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import {
   UIStoreManagerContext,
+  全局事件系统Context,
   图标管理者Context,
   跟随鼠标显示内容管理者Context,
   验证管理者Context,
@@ -33,4 +34,10 @@ export const use界面状态管理者 = () => {
   const UIStoreManager = useContext(UIStoreManagerContext);
   if (!UIStoreManager) throw new Error('UIStoreManager未初始化');
   return UIStoreManager;
+};
+export const use全局事件系统 = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const 全局事件系统 = useContext(全局事件系统Context);
+  if (!全局事件系统) throw new Error('全局事件系统未初始化');
+  return 全局事件系统;
 };

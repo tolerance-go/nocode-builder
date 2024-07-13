@@ -18,6 +18,9 @@ export class 项目树历史纪录管理者 implements Manager {
   public constructor(全局事件系统实例: 全局事件系统) {
     this.全局事件系统实例 = 全局事件系统实例;
     this.历史状态机Actor.start();
+    this.历史状态机Actor.subscribe((state) => {
+      console.log('subscribe', state.context);
+    });
   }
 
   async work() {
@@ -41,6 +44,12 @@ export class 项目树历史纪录管理者 implements Manager {
         });
       },
     );
+
+    this.全局事件系统实例.on('界面状态管理者/用户撤销项目树', () => {
+      this.历史状态机Actor.send({
+        type: '撤销请求',
+      });
+    });
   }
 
   addRecordToHistory(record: 历史记录) {
