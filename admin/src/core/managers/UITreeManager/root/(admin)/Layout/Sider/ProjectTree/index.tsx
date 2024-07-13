@@ -5,7 +5,7 @@ import {
   use界面状态管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
-import { 测试标识 } from '@cypress/shared/constants';
+import { 测试标识, 测试类 } from '@cypress/shared/constants';
 import { css, cx } from '@emotion/css';
 import { theme } from 'antd';
 import { debounce } from 'lodash-es';
@@ -150,6 +150,8 @@ export const ProjectTree = () => {
         // 处理所有内部的点击冒泡
         dispatch(projectTreeActions.更新是否正在聚焦项目树区域(true));
       }}
+      data-test-id={测试标识.项目树区域容器}
+      className={cx(是否正在聚焦项目树区域 && 'focused')}
     >
       <ToolBar />
       <div

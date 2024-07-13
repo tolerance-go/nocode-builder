@@ -4,6 +4,7 @@ export const 测试标识 = {
   项目树标题输入框: 'project-tree-title-input',
 
   项目树容器: 'project-tree-container',
+  项目树区域容器: 'project-tree-area-container',
 
   登录表单: 'login-form',
   登录用户名输入框: 'login-username-input',
