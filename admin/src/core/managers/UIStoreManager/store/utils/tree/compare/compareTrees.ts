@@ -44,6 +44,9 @@ export function compareTrees<T extends TreeNode<T>>(
   const newNodes = new Map<string | number, T>();
   const oldParentMap = new Map<string | number, string | number | null>();
   const newParentMap = new Map<string | number, string | number | null>();
+  const 删除: 删除操作详情 = { 节点keys: [] };
+  const 移动: 移动操作详情[] = [];
+  const 插入: 插入操作详情<T>[] = [];
 
   function traverse(
     node: T,
@@ -63,12 +66,17 @@ export function compareTrees<T extends TreeNode<T>>(
   oldTree.forEach((node) => traverse(node, oldNodes, oldParentMap));
   newTree.forEach((node) => traverse(node, newNodes, newParentMap));
 
-  const 删除: 删除操作详情 = { 节点keys: [] };
-  const 移动: 移动操作详情[] = [];
-  const 插入: 插入操作详情<T>[] = [];
-
-  oldNodes.forEach((node, key) => {
-    if (!newNodes.has(key)) {
+  oldNodes.forEach((_node, key) => {
+    if (newNodes.has(key)) {
+      const oldParentKey = oldParentMap.get(key);
+      const newParentKey = newParentMap.get(key);
+      if (oldParentKey !== newParentKey) {
+        移动.push({
+          节点keys: [key as string],
+          目标父节点key: (newParentKey as string) || '',
+        });
+      }
+    } else {
       删除.节点keys.push(key as string);
     }
   });
@@ -94,19 +102,6 @@ export function compareTrees<T extends TreeNode<T>>(
           index,
           recordItems: [node],
           节点keys: [key as string],
-        });
-      }
-    }
-  });
-
-  oldNodes.forEach((node, key) => {
-    if (newNodes.has(key)) {
-      const oldParentKey = oldParentMap.get(key);
-      const newParentKey = newParentMap.get(key);
-      if (oldParentKey !== newParentKey) {
-        移动.push({
-          节点keys: [key as string],
-          目标父节点key: (newParentKey as string) || '',
         });
       }
     }
