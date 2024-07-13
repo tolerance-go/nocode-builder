@@ -1,5 +1,6 @@
 import {
   ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '@/core/managers/UIStoreManager/types';
 import { 历史记录 } from '@/core/managers/项目树历史纪录管理者';
@@ -11,7 +12,8 @@ export type 全局事件映射 = {
     nodeKey: string;
     nodeData: ProjectTreeNodeDataRecordItem;
     parentKey: string | null;
-    treeSnapshot: ProjectStructureTreeDataNode[];
+    treeNodes: ProjectStructureTreeDataNode[];
+    treeDataRecord: ProjectTreeNodeDataRecord;
     index: number;
   };
   '界面视图管理者/用户撤销项目树': undefined;

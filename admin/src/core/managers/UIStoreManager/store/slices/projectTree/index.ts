@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { 插入节点, removeNode, 批量插入节点 } from '../../utils/tree/effects';
 import { TreeNode } from '../../utils/tree/types';
 import {
+  compareTrees,
   insertNodeAtIndex,
   过滤掉包含父节点在内的节点,
 } from '../../utils/tree';
@@ -172,7 +173,18 @@ export const createProjectTreeSlice = () => {
         state,
         action: PayloadAction<ProjectStructureTreeDataNode[]>,
       ) => {
+        const results = compareTrees(state.项目节点树, action.payload);
+
         state.项目节点树 = action.payload;
+
+        results.删除.节点keys.forEach((_删除的key, index) => {
+          projectTreeSlice.caseReducers.同步删除的节点的关联状态(state, {
+            type: '',
+            payload: {
+              node: results.删除.recordItems[index],
+            },
+          });
+        });
       },
       更新节点数据映射: (
         state,
@@ -318,51 +330,54 @@ export const createProjectTreeSlice = () => {
         const removed = removeNode(state.项目节点树, nodeKey);
 
         if (removed) {
-          const 递归删除所有节点映射及关联状态 = (
-            node: TreeNode<ProjectStructureTreeDataNode>,
-            keyToNodeDataMap: Record<string, unknown>,
-            nodeToParentMap: Record<string, unknown>,
-          ) => {
-            state.所有已经选中的节点 = state.所有已经选中的节点.filter(
-              (key) => key !== node.key,
-            );
-            if (node.key === state.当前正在编辑的项目树节点的key) {
-              projectTreeSlice.caseReducers.更新当前编辑节点是哪个并更新输入框的值(
-                state,
-                {
-                  type: '',
-                  payload: null,
-                },
-              );
-            }
-            if (node.key === state.为了编辑临时创建的节点的key) {
-              projectTreeSlice.caseReducers.恢复当前选中的节点为编辑临时创建节点之前选中的节点的key(
-                state,
-              );
-              projectTreeSlice.caseReducers.恢复当前聚焦的节点为编辑临时创建节点之前聚焦的节点的key(
-                state,
-              );
-            }
-
-            delete keyToNodeDataMap[node.key];
-            delete nodeToParentMap[node.key];
-
-            if (node.children) {
-              node.children.forEach((child) => {
-                递归删除所有节点映射及关联状态(
-                  child,
-                  keyToNodeDataMap,
-                  nodeToParentMap,
-                );
-              });
-            }
-          };
-
-          递归删除所有节点映射及关联状态(
-            removed.removedNode,
-            state.树节点key到节点数据的映射,
-            state.derived_节点到父节点的映射,
+          projectTreeSlice.caseReducers.同步删除的节点的关联状态(state, {
+            type: '',
+            payload: {
+              node: removed.removedNode,
+            },
+          });
+        }
+      },
+      同步删除的节点的关联状态: (
+        state,
+        action: PayloadAction<{
+          node: TreeNode<ProjectStructureTreeDataNode>;
+        }>,
+      ) => {
+        const { node } = action.payload;
+        state.所有已经选中的节点 = state.所有已经选中的节点.filter(
+          (key) => key !== node.key,
+        );
+        if (node.key === state.当前正在编辑的项目树节点的key) {
+          projectTreeSlice.caseReducers.更新当前编辑节点是哪个并更新输入框的值(
+            state,
+            {
+              type: '',
+              payload: null,
+            },
           );
+        }
+        if (node.key === state.为了编辑临时创建的节点的key) {
+          projectTreeSlice.caseReducers.恢复当前选中的节点为编辑临时创建节点之前选中的节点的key(
+            state,
+          );
+          projectTreeSlice.caseReducers.恢复当前聚焦的节点为编辑临时创建节点之前聚焦的节点的key(
+            state,
+          );
+        }
+
+        delete state.树节点key到节点数据的映射[node.key];
+        delete state.derived_节点到父节点的映射[node.key];
+
+        if (node.children) {
+          node.children.forEach((child) => {
+            projectTreeSlice.caseReducers.同步删除的节点的关联状态(state, {
+              type: '',
+              payload: {
+                node: child,
+              },
+            });
+          });
         }
       },
       批量移动项目树节点并同步其他状态: (

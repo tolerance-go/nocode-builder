@@ -1,6 +1,7 @@
 import { assign, setup } from 'xstate';
 import {
   ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '../../UIStoreManager/types';
 
@@ -35,7 +36,10 @@ export type 操作详情 =
   | { type: '移动'; detail: 移动操作详情 };
 
 export type 历史记录 = {
-  state: ProjectStructureTreeDataNode[];
+  state: {
+    treeNodes: ProjectStructureTreeDataNode[];
+    treeDataRecord: ProjectTreeNodeDataRecord;
+  };
   操作: 操作详情;
 };
 

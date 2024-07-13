@@ -27,9 +27,12 @@ export class UIStoreManager implements Manager {
 
     this.store = createStore(reducers, [this.handleMiddleware]);
 
-    this.全局事件系统实例.on('项目树历史记录管理者/指针移动', () => {
-      // this.store.dispatch(
-      // )
+    this.全局事件系统实例.on('项目树历史记录管理者/指针移动', (event) => {
+      this.store.dispatch(
+        this.slices.projectTree.actions.更新项目节点树(
+          event.历史指针 === -1 ? [] : event.历史堆栈[event.历史指针].state,
+        ),
+      );
     });
   }
 
@@ -71,7 +74,8 @@ export class UIStoreManager implements Manager {
         nodeKey: action.payload.nodeKey,
         nodeData,
         parentKey,
-        treeSnapshot,
+        treeNodes: treeSnapshot,
+        treeDataRecord: nextState.projectTree.树节点key到节点数据的映射,
         index,
       });
     }

@@ -3,16 +3,23 @@ import { createActor } from 'xstate';
 import { 历史记录, 历史状态机 } from '.';
 import {
   ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '../../UIStoreManager';
 
 describe('历史状态机', () => {
-  const 创建Mock记录 = (key: string): ProjectStructureTreeDataNode => ({
-    key,
+  const 创建Mock记录 = (
+    key: string,
+  ): {
+    treeNodes: ProjectStructureTreeDataNode[];
+    treeDataRecord: ProjectTreeNodeDataRecord;
+  } => ({
+    treeNodes: [{ key }],
+    treeDataRecord: {},
   });
 
   const 创建Mock历史记录 = (key: string): 历史记录 => ({
-    state: [创建Mock记录(key)],
+    state: 创建Mock记录(key),
     操作: {
       type: '插入',
       detail: {

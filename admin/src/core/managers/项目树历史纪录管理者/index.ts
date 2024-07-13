@@ -36,11 +36,14 @@ export class 项目树历史纪录管理者 implements Manager {
   async work() {
     this.全局事件系统实例.on(
       '界面状态管理者/插入新节点',
-      ({ nodeKey, parentKey, nodeData, treeSnapshot, index }) => {
+      ({ nodeKey, parentKey, nodeData, treeNodes, treeDataRecord, index }) => {
         this.历史状态机Actor.send({
           type: '推入历史记录',
           data: {
-            state: treeSnapshot,
+            state: {
+              treeNodes,
+              treeDataRecord,
+            },
             操作: {
               type: '插入',
               detail: {

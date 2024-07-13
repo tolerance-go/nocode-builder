@@ -15,8 +15,9 @@ export interface 插入操作详情<T> {
   节点keys: string[];
 }
 
-export interface 删除操作详情 {
+export interface 删除操作详情<T> {
   节点keys: string[];
+  recordItems: T[];
 }
 
 export interface 移动操作详情 {
@@ -26,12 +27,12 @@ export interface 移动操作详情 {
 
 export type 操作详情<T> =
   | { type: '插入'; detail: 插入操作详情<T> }
-  | { type: '删除'; detail: 删除操作详情 }
+  | { type: '删除'; detail: 删除操作详情<T> }
   | { type: '更新'; detail: 更新操作详情<T> }
   | { type: '移动'; detail: 移动操作详情 };
 
 export interface DiffResult<T> {
-  删除: 删除操作详情;
+  删除: 删除操作详情<T>;
   移动: 移动操作详情[];
   插入: 插入操作详情<T>[];
 }
@@ -44,7 +45,7 @@ export function compareTrees<T extends TreeNode<T>>(
   const newNodes = new Map<string | number, T>();
   const oldParentMap = new Map<string | number, string | number | null>();
   const newParentMap = new Map<string | number, string | number | null>();
-  const 删除: 删除操作详情 = { 节点keys: [] };
+  const 删除: 删除操作详情<T> = { 节点keys: [], recordItems: [] };
   const 移动: 移动操作详情[] = [];
   const 插入: 插入操作详情<T>[] = [];
 
@@ -66,7 +67,7 @@ export function compareTrees<T extends TreeNode<T>>(
   oldTree.forEach((node) => traverse(node, oldNodes, oldParentMap));
   newTree.forEach((node) => traverse(node, newNodes, newParentMap));
 
-  oldNodes.forEach((_node, key) => {
+  oldNodes.forEach((node, key) => {
     if (newNodes.has(key)) {
       const oldParentKey = oldParentMap.get(key);
       const newParentKey = newParentMap.get(key);
@@ -77,7 +78,13 @@ export function compareTrees<T extends TreeNode<T>>(
         });
       }
     } else {
-      删除.节点keys.push(key as string);
+      if (
+        !oldParentMap.has(key) ||
+        !删除.节点keys.includes(oldParentMap.get(key) as string)
+      ) {
+        删除.节点keys.push(key as string);
+        删除.recordItems.push(node);
+      }
     }
   });
 

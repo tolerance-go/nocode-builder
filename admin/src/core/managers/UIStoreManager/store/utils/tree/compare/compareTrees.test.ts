@@ -16,7 +16,7 @@ describe('compareTrees', () => {
     ];
 
     const expected: DiffResult<TreeNode> = {
-      删除: { 节点keys: ['2'] },
+      删除: { 节点keys: ['2'], recordItems: [{ key: '2', children: [] }] },
       移动: [],
       插入: [
         {
@@ -47,7 +47,7 @@ describe('compareTrees', () => {
     ];
 
     const expected: DiffResult<TreeNode> = {
-      删除: { 节点keys: [] },
+      删除: { 节点keys: [], recordItems: [] },
       移动: [
         {
           节点keys: ['1-1'],
@@ -74,7 +74,7 @@ describe('compareTrees', () => {
     ];
 
     const expected: DiffResult<TreeNode> = {
-      删除: { 节点keys: [] },
+      删除: { 节点keys: [], recordItems: [] },
       移动: [],
       插入: [
         {
@@ -95,7 +95,7 @@ describe('compareTrees', () => {
     const newTree: TreeNode[] = [];
 
     const expected: DiffResult<TreeNode> = {
-      删除: { 节点keys: [] },
+      删除: { 节点keys: [], recordItems: [] },
       移动: [],
       插入: [],
     };
@@ -116,7 +116,7 @@ describe('compareTrees', () => {
     ];
 
     const expected: DiffResult<TreeNode> = {
-      删除: { 节点keys: [] },
+      删除: { 节点keys: [], recordItems: [] },
       移动: [],
       插入: [],
     };
@@ -138,7 +138,10 @@ describe('compareTrees', () => {
     ];
 
     const expected: DiffResult<TreeNode> = {
-      删除: { 节点keys: ['1-1-1'] },
+      删除: {
+        节点keys: ['1-1-1'],
+        recordItems: [{ key: '1-1-1', children: [] }],
+      },
       移动: [],
       插入: [],
     };
@@ -157,7 +160,7 @@ describe('compareTrees', () => {
     ];
 
     const expected: DiffResult<TreeNode> = {
-      删除: { 节点keys: [] },
+      删除: { 节点keys: [], recordItems: [] },
       移动: [],
       插入: [
         {
@@ -170,6 +173,35 @@ describe('compareTrees', () => {
           节点keys: ['2', '3'],
         },
       ],
+    };
+
+    const result = compareTrees(oldTree, newTree);
+    expect(result).toEqual(expected);
+  });
+
+  it('应正确处理嵌套节点的插入和删除，并返回最外层的父节点', () => {
+    const oldTree: TreeNode[] = [
+      { key: '1', children: [] },
+      {
+        key: '2',
+        children: [{ key: '2-1', children: [{ key: '2-1-1', children: [] }] }],
+      },
+    ];
+
+    const newTree: TreeNode[] = [
+      { key: '1', children: [] },
+      { key: '2', children: [] },
+    ];
+
+    const expected: DiffResult<TreeNode> = {
+      删除: {
+        节点keys: ['2-1'],
+        recordItems: [
+          { key: '2-1', children: [{ key: '2-1-1', children: [] }] },
+        ],
+      },
+      移动: [],
+      插入: [],
     };
 
     const result = compareTrees(oldTree, newTree);
