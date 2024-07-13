@@ -68,11 +68,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       });
 
       并且('用户取消新节点标题编辑', () => {
-        cy.get('body').trigger('keydown', {
-          keyCode: 27,
-          which: 27,
-          key: 'Escape',
-        });
+        cy.get('body').type('{esc}');
       });
 
       那么('原节点应该恢复聚焦', () => {

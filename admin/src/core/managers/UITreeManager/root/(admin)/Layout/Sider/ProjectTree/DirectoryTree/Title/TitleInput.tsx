@@ -17,6 +17,8 @@ export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
     },
   } = use界面状态管理者();
 
+  const 是否执行了esc退出 = useRef<boolean>(false);
+
   const 验证管理者 = use验证管理者();
   const 验证管理者实例 = use验证管理者();
   const { token } = theme.useToken();
@@ -97,6 +99,8 @@ export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
   }, []);
 
   useKeyPressEventByKeyboardJs(['esc'], () => {
+    是否执行了esc退出.current = true;
+
     dispatch(projectTreeActions.退出当前正在编辑的节点());
   });
 
@@ -104,6 +108,13 @@ export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
     <>
       <Input
         onBlur={() => {
+          /**
+           * 防止有些浏览器环境当 esc 执行后，会触发 input 的 blur
+           */
+          if (是否执行了esc退出.current) {
+            是否执行了esc退出.current = false;
+            return;
+          }
           保存标题输入(true);
         }}
         onPressEnter={() => {
