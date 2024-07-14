@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { ProjectType } from '@prisma/client';
 import {
   IsInt,
   IsNotEmpty,
@@ -7,6 +8,7 @@ import {
   IsDateString,
   IsIn,
   Min,
+  IsEnum,
 } from 'class-validator';
 
 export class ProjectCreateDto {
@@ -29,6 +31,10 @@ export class ProjectCreateDto {
   @IsDateString()
   @IsOptional()
   updatedAt?: string;
+
+  @ApiProperty()
+  @IsEnum(ProjectType)
+  type: ProjectType;
 }
 
 export class ProjectQueryDto {
