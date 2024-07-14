@@ -1,10 +1,9 @@
-import { hexToRgb } from '@/utils';
-import { ConfigProvider, theme } from 'antd';
-import { useLayoutEffect } from 'react';
+import { ConfigProvider } from 'antd';
+import React, { useLayoutEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../UIStoreManager';
+import { themeConfig } from '../configs';
 import { use导航系统, use界面状态管理者 } from '../hooks';
-import React from 'react';
 // import '@antv/s2-react/dist/style.min.css';
 
 export function Root() {
@@ -15,7 +14,6 @@ export function Root() {
       location: { actions: locationActions },
     },
   } = use界面状态管理者();
-  const { token } = theme.useToken();
   const navigate = useNavigate();
 
   const 导航系统 = use导航系统();
@@ -29,17 +27,7 @@ export function Root() {
   }, [navigate, 导航系统]);
 
   return (
-    <ConfigProvider
-      theme={{
-        algorithm: [theme.darkAlgorithm],
-        components: {
-          Tree: {
-            borderRadius: 0,
-            directoryNodeSelectedBg: `rgba(${hexToRgb(token.blue6).join(', ')}, 0.4)`,
-          },
-        },
-      }}
-    >
+    <ConfigProvider theme={themeConfig}>
       <Outlet />
     </ConfigProvider>
   );

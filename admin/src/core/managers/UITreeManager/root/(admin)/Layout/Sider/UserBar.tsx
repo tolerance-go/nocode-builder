@@ -1,4 +1,5 @@
 import { useAppSelector } from '@/core/managers/UIStoreManager';
+import { layoutPadding } from '@/core/managers/UITreeManager/configs';
 import { EllipsisOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@cypress/shared/constants';
 import { Button, Dropdown, Flex, theme } from 'antd';
@@ -13,7 +14,7 @@ export const UserBar = () => {
   return (
     <Flex
       style={{
-        padding: `${token.paddingXXS}px ${token.paddingXXS}px`,
+        padding: layoutPadding(token),
         borderRight: `1px solid ${token.colorBorderSecondary}`,
         borderBottom: `1px solid ${token.colorBorderSecondary}`,
       }}
