@@ -12,6 +12,8 @@ import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { 导航系统 } from '@/core/systems';
 import { paths } from '@/configs';
+import localforage from 'localforage';
+import { localStateFieldName } from './configs';
 
 export class UIStoreManager implements Manager {
   public store;
@@ -22,7 +24,11 @@ export class UIStoreManager implements Manager {
 
   public 导航系统实例;
 
-  constructor(全局事件系统实例: 全局事件系统, 导航系统实例: 导航系统) {
+  constructor(
+    全局事件系统实例: 全局事件系统,
+    导航系统实例: 导航系统,
+    localState: unknown,
+  ) {
     this.全局事件系统实例 = 全局事件系统实例;
     this.导航系统实例 = 导航系统实例;
 
@@ -30,9 +36,14 @@ export class UIStoreManager implements Manager {
 
     const reducers = createReducers(this.slices);
 
-    this.store = createStore(reducers, [this.handleMiddleware]);
+    this.store = createStore(
+      reducers,
+      [this.handleMiddleware],
+      localState ?? {},
+    );
 
     this.监听项目节点激活状态变化并修改url();
+    this.注册监听保存状态到本地();
 
     this.全局事件系统实例.on('项目树历史记录管理者/指针移动', (event) => {
       this.store.dispatch(
@@ -179,6 +190,13 @@ export class UIStoreManager implements Manager {
       }
 
       previousState = currentState; // 更新之前的 state
+    });
+  }
+
+  注册监听保存状态到本地() {
+    this.store.subscribe(() => {
+      const state = this.store.getState();
+      localforage.setItem(localStateFieldName, state);
     });
   }
 }

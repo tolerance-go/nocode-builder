@@ -8,6 +8,8 @@ import { 图标管理者 } from './图标管理者';
 import { 验证管理者 } from './验证管理者';
 import { 项目树历史纪录管理者 } from './项目树历史纪录管理者';
 import { 全局事件系统 } from '../systems/全局事件系统';
+import localforage from 'localforage';
+import { localStateFieldName } from './UIStoreManager/configs';
 
 export class AppManager implements Manager {
   document: Document;
@@ -17,6 +19,8 @@ export class AppManager implements Manager {
   }
 
   async work() {
+    const localState = await localforage.getItem(localStateFieldName);
+
     const 全局事件系统实例 = new 全局事件系统();
     const 导航系统实例 = new 导航系统();
     const i18n系统单例 = new I18nSystem();
@@ -28,6 +32,7 @@ export class AppManager implements Manager {
     const 界面状态管理者实例 = new UIStoreManager(
       全局事件系统实例,
       导航系统实例,
+      localState,
     );
     const 项目树历史纪录管理者实例 = new 项目树历史纪录管理者(全局事件系统实例);
     const UITreeManager实例 = new UITreeManager();
