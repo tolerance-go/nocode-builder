@@ -1,18 +1,20 @@
+import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { Manager } from '@/types';
+import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
 import { 历史状态机, 历史记录 } from './actors';
-import { 全局事件系统 } from '@/core/systems/全局事件系统';
-import { createBrowserInspector } from '@statelyai/inspect';
 
 export class 项目树历史纪录管理者 implements Manager {
   public 全局事件系统实例;
 
   private 历史指针: number = -1;
 
+  private 历史堆栈: 历史记录[] = [];
+
   历史状态机Actor = createActor(历史状态机, {
     inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
     input: {
-      历史堆栈: [],
+      历史堆栈: this.历史堆栈,
       历史指针: this.历史指针,
     },
   });
@@ -32,6 +34,7 @@ export class 项目树历史纪录管理者 implements Manager {
         });
       }
 
+      this.历史堆栈 = state.context.历史堆栈;
       this.历史指针 = state.context.历史指针;
     });
 
