@@ -4,6 +4,12 @@
  * ---------------------------------------------------------------
  */
 
+export enum ProjectTypeEnum {
+  View = 'View',
+  DataTable = 'DataTable',
+  Bluemap = 'Bluemap',
+}
+
 export class UserModel {
   id: number;
   name: string;
@@ -53,7 +59,7 @@ export class ProjectModel {
   updatedAt: Date;
   projectGroup?: ProjectGroupModel;
   projectGroupId?: number;
-  type: ProjectType;
+  type: ProjectTypeEnum;
 
   constructor({
     id,
@@ -74,7 +80,7 @@ export class ProjectModel {
     updatedAt: Date;
     projectGroup?: ProjectGroupModel;
     projectGroupId?: number;
-    type: ProjectType;
+    type: ProjectTypeEnum;
   }) {
     this.id = id;
     this.name = name;

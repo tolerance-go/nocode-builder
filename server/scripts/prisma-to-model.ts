@@ -33,7 +33,7 @@ class Decorator {
 // 定义 Field 类
 class Field {
   name: string;
-  type: string | Class;
+  type: string | Class | Enum;
   isRequired: boolean;
   isId: boolean;
   isUpdatedAt: boolean; // 是否为更新时间字段
@@ -42,7 +42,7 @@ class Field {
 
   constructor(
     name: string,
-    type: string | Class,
+    type: string | Class | Enum,
     isRequired: boolean,
     isId: boolean,
     isUpdateAt: boolean = false,
@@ -60,7 +60,9 @@ class Field {
 
   print(): string {
     const type =
-      typeof this.type === 'string' ? this.type : this.type.printName;
+      typeof this.type === 'string'
+        ? this.type
+        : (this.type as Class | Enum).printName;
     const decoratorsStr = this.decorators.map((dec) => dec.print()).join(' ');
     const nullableStr = this.isRequired ? '' : '?';
     return `${decoratorsStr} ${this.name}${nullableStr}: ${type};`;
@@ -100,7 +102,9 @@ class Class {
     const typeAnnotationsStr = this.fields
       .map((field) => {
         const type =
-          typeof field.type === 'string' ? field.type : field.type.printName;
+          typeof field.type === 'string'
+            ? field.type
+            : (field.type as Class | Enum).printName;
         const nullableStr = field.isRequired ? '' : '?';
         return `${field.name}${nullableStr}: ${type}`;
       })
@@ -117,6 +121,35 @@ class Class {
     const fieldsStr = this.fields.map((field) => field.print()).join('\n  ');
     const constructorStr = this.printConstructor();
     return `export class ${this.printName} {\n  ${fieldsStr}\n\n  ${constructorStr}\n}`;
+  }
+}
+
+// 新增 Enum 类
+class Enum {
+  name: string;
+  values: string[];
+
+  private _printName: string;
+
+  get printName(): string {
+    return this._printName;
+  }
+
+  set printName(name: string) {
+    this._printName = name;
+  }
+
+  constructor(name: string, values: string[]) {
+    this.name = name;
+    this.values = values;
+    this._printName = name;
+  }
+
+  print(): string {
+    const valuesStr = this.values
+      .map((value) => `${value} = "${value}"`)
+      .join(',\n  ');
+    return `export enum ${this.printName} {\n  ${valuesStr}\n}`;
   }
 }
 
@@ -138,10 +171,12 @@ class Import {
 // 定义 File 类
 class File {
   classes: Class[];
+  enums: Enum[];
   imports: Import[];
 
-  constructor(classes: Class[], imports: Import[] = []) {
+  constructor(classes: Class[], enums: Enum[] = [], imports: Import[] = []) {
     this.classes = classes;
+    this.enums = enums;
     this.imports = imports;
   }
 
@@ -156,7 +191,7 @@ class File {
       if (visited[cls.name]) return;
       visited[cls.name] = true;
       cls.fields.forEach((field) => {
-        if (typeof field.type !== 'string') {
+        if (typeof field.type !== 'string' && field.type instanceof Class) {
           visit(field.type as Class);
         }
       });
@@ -171,22 +206,26 @@ class File {
     this.sortClasses();
 
     const importsStr = this.imports.map((imp) => imp.print()).join('\n');
+    const enumsStr = this.enums.map((enm) => enm.print()).join('\n\n');
     const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');
 
-    return `${importsStr}\n\n${classesStr}`;
+    return `${importsStr}\n\n${enumsStr}\n\n${classesStr}`;
   }
 }
 
 // 新增 ModelsFile 类，继承自 File 类
 class ModelsFile extends File {
-  constructor(classes: Class[]) {
-    super(classes);
+  constructor(classes: Class[], enums: Enum[] = []) {
+    super(classes, enums);
   }
 
   print(): string {
-    // 设置 class 的 printName
+    // 设置 class 和 enum 的 printName
     this.classes.forEach((classItem) => {
       classItem.printName = `${classItem.name}Model`;
+    });
+    this.enums.forEach((enumItem) => {
+      enumItem.printName = `${enumItem.name}Enum`;
     });
 
     return super.print();
@@ -210,6 +249,11 @@ async function parseSchema(
     DateTime: 'Date',
   };
 
+  const enums: Enum[] = dmmf.datamodel.enums.map((enm) => {
+    const values = enm.values.map((val) => val.name);
+    return new Enum(enm.name, values);
+  });
+
   const classes: Class[] = dmmf.datamodel.models.map((model) => {
     const fields: Field[] = model.fields.map((field) => {
       const fieldType = typeMapping[field.type] || field.type;
@@ -232,11 +276,16 @@ async function parseSchema(
       if (typeof field.type === 'string' && classMap[field.type]) {
         field.type = classMap[field.type];
         classObj.dependsOnOtherClasses = true;
+      } else if (
+        typeof field.type === 'string' &&
+        enums.find((enm) => enm.name === field.type)
+      ) {
+        field.type = enums.find((enm) => enm.name === field.type)!;
       }
     });
   });
 
-  const modelsFile = new ModelsFile(classes);
+  const modelsFile = new ModelsFile(classes, enums);
 
   return { modelsFile };
 }
