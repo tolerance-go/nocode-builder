@@ -191,6 +191,13 @@ export const DirectoryTree = () => {
         dispatch(projectTreeActions.更新当前正在拖拽的节点(null));
       }}
       onDrop={(info) => {
+        const {
+          projectTree: {
+            derived_节点到父节点的映射: 节点到父节点的映射,
+            所有已经选中的节点,
+          },
+        } = reduxStore.getState();
+
         // 有时候不会触发 onDragEnd，所以要在 drop 的也触发
         dispatch(projectTreeActions.更新当前正在拖拽的节点(null));
 
@@ -206,18 +213,26 @@ export const DirectoryTree = () => {
             return;
           }
 
+          let dragKeys = [info.dragNode.key];
+
+          // 如果移动的节点是选中的
+          // 并且选中的节点包含多个
+          // 那么使用批量移动节点操作
+          if (
+            所有已经选中的节点.includes(info.dragNode.key) &&
+            所有已经选中的节点.length > 1
+          ) {
+            dragKeys = 所有已经选中的节点;
+          }
+
           dispatch(
-            projectTreeActions.移动项目树节点({
-              nodeKey: info.dragNode.key,
+            projectTreeActions.移动节点({
+              nodeKeys: dragKeys,
               newParentKey: dropKey,
               newIndex: 0,
             }),
           );
         } else {
-          const {
-            projectTree: { derived_节点到父节点的映射: 节点到父节点的映射 },
-          } = reduxStore.getState();
-
           const 父节点 = 节点到父节点的映射[dropKey];
 
           if (父节点 === undefined) {
@@ -230,9 +245,21 @@ export const DirectoryTree = () => {
             finalIndex = 0;
           }
 
+          let dragKeys = [info.dragNode.key];
+
+          // 如果移动的节点是选中的
+          // 并且选中的节点包含多个
+          // 那么使用批量移动节点操作
+          if (
+            所有已经选中的节点.includes(info.dragNode.key) &&
+            所有已经选中的节点.length > 1
+          ) {
+            dragKeys = 所有已经选中的节点;
+          }
+
           dispatch(
-            projectTreeActions.移动项目树节点({
-              nodeKey: info.dragNode.key,
+            projectTreeActions.移动节点({
+              nodeKeys: dragKeys,
               newParentKey: 父节点,
               newIndex: finalIndex,
             }),

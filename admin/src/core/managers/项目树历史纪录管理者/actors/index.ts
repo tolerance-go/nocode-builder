@@ -26,7 +26,8 @@ export interface 历史记录删除操作详情 {
 
 export interface 历史记录移动操作详情 {
   节点keys: string[];
-  目标父节点key: string;
+  目标父节点key: string | null;
+  index: number;
 }
 
 export type 历史记录操作详情 =

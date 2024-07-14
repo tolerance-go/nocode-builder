@@ -23,10 +23,17 @@ export type 全局事件映射 = {
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   };
-  '界面状态管理者/移除节点': {
+  '界面状态管理者/删除节点': {
     nodeKeys: string[];
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
+  };
+  '界面状态管理者/移动节点': {
+    treeNodes: ProjectStructureTreeDataNode[];
+    treeDataRecord: ProjectTreeNodeDataRecord;
+    节点keys: string[];
+    目标父节点key: string | null;
+    index: number;
   };
   '界面视图管理者/用户撤销项目树': undefined;
   '界面视图管理者/用户重做项目树': undefined;

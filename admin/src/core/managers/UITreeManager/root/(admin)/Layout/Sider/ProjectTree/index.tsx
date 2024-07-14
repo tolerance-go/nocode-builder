@@ -95,7 +95,7 @@ export const ProjectTree = () => {
       derived_节点到父节点的映射,
     );
 
-    dispatch(projectTreeActions.用户操作移除节点(互不包含选中节点));
+    dispatch(projectTreeActions.删除节点(互不包含选中节点));
   });
 
   useKeyPressEventByKeyboardJs(['f2'], () => {

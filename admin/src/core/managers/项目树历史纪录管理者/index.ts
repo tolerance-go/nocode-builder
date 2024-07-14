@@ -87,7 +87,7 @@ export class 项目树历史纪录管理者 implements Manager {
     );
 
     this.全局事件系统实例.on(
-      '界面状态管理者/移除节点',
+      '界面状态管理者/删除节点',
       ({ nodeKeys, treeNodes, treeDataRecord }) => {
         this.历史状态机Actor.send({
           type: '推入历史记录',
@@ -100,6 +100,29 @@ export class 项目树历史纪录管理者 implements Manager {
               type: '删除',
               detail: {
                 节点keys: nodeKeys,
+              },
+            },
+          },
+        });
+      },
+    );
+
+    this.全局事件系统实例.on(
+      '界面状态管理者/移动节点',
+      ({ 节点keys, 目标父节点key, index, treeNodes, treeDataRecord }) => {
+        this.历史状态机Actor.send({
+          type: '推入历史记录',
+          data: {
+            state: {
+              treeNodes,
+              treeDataRecord,
+            },
+            操作: {
+              type: '移动',
+              detail: {
+                节点keys,
+                目标父节点key,
+                index,
               },
             },
           },

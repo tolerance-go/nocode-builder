@@ -1,7 +1,95 @@
 import { 测试标识, 测试类 } from '@cypress/shared/constants';
+import {
+  getTreeNodeChildren,
+  getTreeNodeParent,
+} from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
+  假如.only(
+    '用户移动一个节点到文件夹下，应该可以回撤和重做',
+    ({ 当, 那么 }) => {
+      当('用户登录并访问主页', () => {
+        cy.登录('yb', '123456');
+        cy.visit('/');
+      });
+
+      当('用户成功创建一个项目节点和一个文件夹节点', () => {
+        cy.添加项目树视图项目();
+        cy.获取项目树标题输入框().type('项目节点{enter}');
+
+        cy.获取添加项目组的按钮().click();
+        cy.获取项目树标题输入框().type('文件夹节点{enter}');
+      });
+
+      当('用户将项目节点移动到文件夹节点下', () => {
+        cy.获取项目树节点通过标题('项目节点').拖拽到(
+          cy.获取项目树节点通过标题('文件夹节点'),
+          {
+            vertical: 'bottom',
+            horizontal: 'right',
+          },
+        );
+      });
+
+      那么('项目节点应该位于文件夹节点下', () => {
+        cy.获取项目树节点通过标题('文件夹节点').should(
+          'have.class',
+          'ant-tree-treenode-switcher-open',
+        );
+        cy.获取项目树节点通过标题('项目节点').should('be.visible');
+        cy.获取项目树节点通过标题('项目节点')
+          .parent('.ant-tree-treenode-motion')
+          .should('not.exist');
+
+        cy.获取项目树节点通过标题('项目节点').then(($file) => {
+          const $parent = getTreeNodeParent($file);
+          expect(
+            $parent
+              .find(`[data-test-class*="${测试类.项目树节点标题}"]`)
+              .text(),
+          ).equal('文件夹节点');
+        });
+      });
+
+      当('用户按下 ctrl + z 撤销操作', () => {
+        cy.get('body').type('{ctrl}z');
+      });
+
+      那么('项目节点应该恢复到原来的位置', () => {
+        cy.获取项目树节点通过标题('文件夹节点').then(($folder) => {
+          const $children = getTreeNodeChildren($folder);
+          expect($children.length).equal(0);
+        });
+        cy.获取antd树列表内部容器().children().should('have.length', 2);
+      });
+
+      当('用户按下 ctrl + shift + z 重做操作', () => {
+        cy.get('body').type('{ctrl}{shift}z');
+      });
+
+      那么('项目节点应该再次位于文件夹节点下', () => {
+        cy.获取项目树节点通过标题('文件夹节点').should(
+          'have.class',
+          'ant-tree-treenode-switcher-open',
+        );
+        cy.获取项目树节点通过标题('项目节点').should('be.visible');
+        cy.获取项目树节点通过标题('项目节点')
+          .parent('.ant-tree-treenode-motion')
+          .should('not.exist');
+
+        cy.获取项目树节点通过标题('项目节点').then(($file) => {
+          const $parent = getTreeNodeParent($file);
+          expect(
+            $parent
+              .find(`[data-test-class*="${测试类.项目树节点标题}"]`)
+              .text(),
+          ).equal('文件夹节点');
+        });
+      });
+    },
+  );
+
   假如('用户删除节点标题后，应该可以回撤和重做', ({ 当, 那么 }) => {
     当('用户登录并访问主页', () => {
       cy.登录('yb', '123456');

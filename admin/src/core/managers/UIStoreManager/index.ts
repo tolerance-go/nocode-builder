@@ -51,7 +51,7 @@ export class UIStoreManager implements Manager {
 
     const nextState = store.getState();
 
-    if (action.type === 'projectTree/用户操作新增节点') {
+    if (action.type === 'projectTree/新增节点') {
       const { nodeKey } = action.payload;
 
       const nodeData = nextState.projectTree.项目树节点数据[nodeKey];
@@ -88,7 +88,7 @@ export class UIStoreManager implements Manager {
         treeDataRecord: nextState.projectTree.项目树节点数据,
         index,
       });
-    } else if (action.type === 'projectTree/用户操作修改节点') {
+    } else if (action.type === 'projectTree/修改节点') {
       const { nodeKey } = action.payload;
       const newNodeData = nextState.projectTree.项目树节点数据[nodeKey];
       const oldNodeData = prevState.projectTree.项目树节点数据[nodeKey];
@@ -99,9 +99,17 @@ export class UIStoreManager implements Manager {
         treeNodes: nextState.projectTree.项目结构树,
         treeDataRecord: nextState.projectTree.项目树节点数据,
       });
-    } else if (action.type === 'projectTree/用户操作移除节点') {
-      this.全局事件系统实例.emit('界面状态管理者/移除节点', {
+    } else if (action.type === 'projectTree/删除节点') {
+      this.全局事件系统实例.emit('界面状态管理者/删除节点', {
         nodeKeys: action.payload,
+        treeNodes: nextState.projectTree.项目结构树,
+        treeDataRecord: nextState.projectTree.项目树节点数据,
+      });
+    } else if (action.type === 'projectTree/移动节点') {
+      this.全局事件系统实例.emit('界面状态管理者/移动节点', {
+        节点keys: action.payload.nodeKeys,
+        目标父节点key: action.payload.newParentKey,
+        index: action.payload.newIndex,
         treeNodes: nextState.projectTree.项目结构树,
         treeDataRecord: nextState.projectTree.项目树节点数据,
       });
