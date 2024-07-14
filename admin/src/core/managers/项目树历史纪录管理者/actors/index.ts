@@ -58,6 +58,8 @@ type Input = Partial<历史上下文>;
 
 type Context = 历史上下文;
 
+const maxStackSize = 100;
+
 // 创建状态机
 export const 历史状态机 = setup({
   types: {
@@ -79,15 +81,15 @@ export const 历史状态机 = setup({
             ...context.历史堆栈.slice(0, context.历史指针 + 1),
             event.data,
           ];
-          return newStack.length > 100
-            ? newStack.slice(newStack.length - 100)
+          return newStack.length > maxStackSize
+            ? newStack.slice(newStack.length - maxStackSize)
             : newStack;
         }
         return context.历史堆栈;
       },
       历史指针: ({ context, event }) => {
         if (event.type === '推入历史记录') {
-          return Math.min(context.历史指针 + 1, 99);
+          return Math.min(context.历史指针 + 1, maxStackSize - 1);
         }
         return context.历史指针;
       },
