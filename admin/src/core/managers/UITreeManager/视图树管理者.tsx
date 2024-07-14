@@ -23,6 +23,9 @@ import { 验证管理者 } from '../验证管理者';
 import { DocumentEnv } from '@/core/envs';
 import { UIStoreManager } from '../UIStoreManager';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
+import { ViewEditor } from './root/(admin)/Layout/内容区域组件/view-editor';
+import { BluemapEditor } from './root/(admin)/Layout/内容区域组件/bluemap-editor';
+import { DataTableEditor } from './root/(admin)/Layout/内容区域组件/data-table-editor';
 
 export class UITreeManager implements Manager {
   async work(
@@ -51,6 +54,20 @@ export class UITreeManager implements Manager {
                           <Route path={paths.root} element={<Root />}>
                             {/* <Route path="test" element={<Test />}></Route> */}
                             <Route index element={<Admin />}></Route>
+                            <Route element={<Admin />}>
+                              <Route
+                                path={paths['view-editor']}
+                                element={<ViewEditor />}
+                              ></Route>
+                              <Route
+                                path={paths['bluemap-editor']}
+                                element={<BluemapEditor />}
+                              ></Route>
+                              <Route
+                                path={paths['data-table-editor']}
+                                element={<DataTableEditor />}
+                              ></Route>
+                            </Route>
                             <Route element={<Auth />}>
                               <Route index element={<Login />}></Route>
                               <Route
@@ -62,7 +79,6 @@ export class UITreeManager implements Manager {
                                 element={<Register />}
                               ></Route>
                             </Route>
-                            {/* 404 路由放在最后，捕获所有未匹配的路径 */}
                             <Route path="*" element={<NotFound />} />
                           </Route>
                         </Routes>

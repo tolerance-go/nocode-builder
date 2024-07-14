@@ -1,4 +1,4 @@
-import { fullPaths, authFullPaths } from '@/configs';
+import { fullPaths, authPaths } from '@/configs';
 
 /**
  * 判断给定的 URL 是否为登录相关的 URL。
@@ -6,7 +6,7 @@ import { fullPaths, authFullPaths } from '@/configs';
  * @returns 是否为登录相关的 URL。
  */
 export function isAuthRelatedPath(url: string): boolean {
-  const loginPaths = Object.values(authFullPaths);
+  const loginPaths = Object.values(authPaths);
   return loginPaths.some((path) => url.includes(path));
 }
 
