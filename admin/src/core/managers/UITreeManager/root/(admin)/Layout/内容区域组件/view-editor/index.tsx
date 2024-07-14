@@ -1,4 +1,5 @@
 import { layoutPadding } from '@/core/managers/UITreeManager/configs';
+import { 测试标识 } from '@cypress/shared/constants';
 import { theme } from 'antd';
 
 export const ViewEditor = () => {
@@ -11,6 +12,7 @@ export const ViewEditor = () => {
         height: '100%',
         width: '100%',
       }}
+      data-test-id={测试标识.视图编辑页面.区域}
     >
       <div
         style={{
@@ -24,6 +26,7 @@ export const ViewEditor = () => {
             display: 'flex',
             flexDirection: 'column',
           }}
+          data-test-id={测试标识.视图编辑页面.舞台.区域}
         >
           <div
             style={{
@@ -31,10 +34,11 @@ export const ViewEditor = () => {
               backgroundColor: token.colorBgContainer,
               padding: layoutPadding(token),
             }}
+            data-test-id={测试标识.视图编辑页面.舞台.头部}
           >
             header
           </div>
-          <div>stage</div>
+          <div data-test-id={测试标识.视图编辑页面.舞台.内容}>stage</div>
         </div>
         <div
           style={{
@@ -44,11 +48,13 @@ export const ViewEditor = () => {
             display: 'flex',
             flexDirection: 'column',
           }}
+          data-test-id={测试标识.视图编辑页面.配置栏目.区域}
         >
           <div
             style={{
               flexGrow: 1,
             }}
+            data-test-id={测试标识.视图编辑页面.配置栏目.上部}
           >
             toolPanel-top
           </div>
@@ -57,6 +63,7 @@ export const ViewEditor = () => {
               flexGrow: 1,
               borderTop: `1px solid ${token.colorBorderSecondary}`,
             }}
+            data-test-id={测试标识.视图编辑页面.配置栏目.下部}
           >
             toolPanel-bottom
           </div>
@@ -68,6 +75,7 @@ export const ViewEditor = () => {
           backgroundColor: token.colorBgContainer,
           padding: layoutPadding(token),
         }}
+        data-test-id={测试标识.视图编辑页面.底部}
       >
         footer
       </div>

@@ -30,6 +30,21 @@ export const 测试标识 = {
   重命名项目树节点标题菜单按钮: 'rename-project-tree-node-title-menu-btn',
 
   用户信息显示按钮: 'user-info-show-btn',
+
+  视图编辑页面: {
+    区域: 'view-edit-page-area',
+    舞台: {
+      区域: 'view-edit-page-stage-area',
+      头部: 'view-edit-page-stage-area-header',
+      内容: 'view-edit-page-stage-area-content',
+    },
+    底部: 'view-edit-page-footer',
+    配置栏目: {
+      区域: 'view-edit-page-tool-panel-area',
+      上部: 'view-edit-page-tool-panel-top-area',
+      下部: 'view-edit-page-tool-panel-bottom-area',
+    },
+  },
 };
 
 export const 测试类 = {
