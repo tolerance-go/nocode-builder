@@ -7,12 +7,19 @@ export interface ProjectStructureTreeDataNode extends TreeDataNode {
   children?: ProjectStructureTreeDataNode[];
 }
 
-export type ProjectTreeNodeDataRecordItem = {
+type ProjectTreeNodeDataRecordItemBase = {
   title: string;
   id: number;
-  type: 'file' | 'folder';
-  projectFileType?: ProjectFileType;
 };
+
+export type ProjectTreeNodeDataRecordItem =
+  | ({
+      type: 'folder';
+    } & ProjectTreeNodeDataRecordItemBase)
+  | ({
+      type: 'file';
+      projectFileType: ProjectFileType;
+    } & ProjectTreeNodeDataRecordItemBase);
 
 /** key 到树节点数据的映射 */
 export type ProjectTreeNodeDataRecord = Record<

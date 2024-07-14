@@ -8,5 +8,8 @@
   "editor.formatOnSave": true,
   "[feature]": {
     "editor.defaultFormatter": "korostylov.gherkin-highlight"
+  },
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
   }
 }
