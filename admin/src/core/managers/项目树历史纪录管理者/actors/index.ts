@@ -75,16 +75,19 @@ export const 历史状态机 = setup({
     添加历史: assign({
       历史堆栈: ({ context, event }) => {
         if (event.type === '推入历史记录') {
-          return [
+          const newStack = [
             ...context.历史堆栈.slice(0, context.历史指针 + 1),
             event.data,
           ];
+          return newStack.length > 100
+            ? newStack.slice(newStack.length - 100)
+            : newStack;
         }
         return context.历史堆栈;
       },
       历史指针: ({ context, event }) => {
         if (event.type === '推入历史记录') {
-          return context.历史指针 + 1;
+          return Math.min(context.历史指针 + 1, 99);
         }
         return context.历史指针;
       },
