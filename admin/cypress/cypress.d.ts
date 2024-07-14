@@ -31,6 +31,8 @@ declare global {
       获取添加项目的按钮(): Chainable<JQuery<HTMLElement>>;
 
       添加项目树视图项目(): Chainable<void>;
+      添加项目树蓝图项目(): Chainable<void>;
+      添加项目树数据表项目(): Chainable<void>;
 
       范围批量选中节点(fromTitle: string, toTitle: string): Chainable<void>;
       组合批量选中节点(titles: string[]): Chainable<void>;

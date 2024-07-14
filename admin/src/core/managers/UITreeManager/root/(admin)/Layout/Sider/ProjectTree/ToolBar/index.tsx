@@ -265,13 +265,21 @@ export const ToolBar = () => {
               },
               {
                 key: 'data-table',
-                label: <span>数据表</span>,
+                label: (
+                  <span data-test-id={测试标识.创建数据表项目节点的菜单项标题}>
+                    数据表
+                  </span>
+                ),
                 icon: 图标管理者实例.根据id获取组件('数据表项目节点'),
                 onClick: () => handleProjectFileCreateBtnClick('data-table'),
               },
               {
                 key: 'bluemap',
-                label: <span>蓝图</span>,
+                label: (
+                  <span data-test-id={测试标识.创建蓝图项目节点的菜单项标题}>
+                    蓝图
+                  </span>
+                ),
                 icon: 图标管理者实例.根据id获取组件('蓝图项目节点'),
                 onClick: () => handleProjectFileCreateBtnClick('bluemap'),
               },

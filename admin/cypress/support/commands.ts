@@ -49,6 +49,16 @@ Cypress.Commands.add('添加项目树视图项目', () => {
   cy.获取测试标识(测试标识.创建视图项目节点的菜单项标题).click();
 });
 
+Cypress.Commands.add('添加项目树蓝图项目', () => {
+  cy.获取添加项目的按钮().click();
+  cy.获取测试标识(测试标识.创建蓝图项目节点的菜单项标题).click();
+});
+
+Cypress.Commands.add('添加项目树数据表项目', () => {
+  cy.获取添加项目的按钮().click();
+  cy.获取测试标识(测试标识.创建数据表项目节点的菜单项标题).click();
+});
+
 Cypress.Commands.add('组合批量选中节点', (titles) => {
   titles.forEach((title) => {
     cy.获取项目树节点通过标题(title).click({ ctrlKey: true });

@@ -24,6 +24,8 @@ export const 测试标识 = {
   内容区域组件: 'content-area',
 
   创建视图项目节点的菜单项标题: 'create-view-project-node-menu-item',
+  创建数据表项目节点的菜单项标题: 'create-data-table-project-node-menu-item',
+  创建蓝图项目节点的菜单项标题: 'create-bluemap-project-node-menu-item',
 
   重命名项目树节点标题菜单按钮: 'rename-project-tree-node-title-menu-btn',
 
