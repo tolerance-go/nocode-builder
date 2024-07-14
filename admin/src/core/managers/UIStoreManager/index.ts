@@ -10,6 +10,8 @@ import {
 } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
+import { 导航系统 } from '@/core/systems';
+import { paths } from '@/configs';
 
 export class UIStoreManager implements Manager {
   public store;
@@ -18,14 +20,19 @@ export class UIStoreManager implements Manager {
 
   public 全局事件系统实例;
 
-  constructor(全局事件系统实例: 全局事件系统) {
+  public 导航系统实例;
+
+  constructor(全局事件系统实例: 全局事件系统, 导航系统实例: 导航系统) {
     this.全局事件系统实例 = 全局事件系统实例;
+    this.导航系统实例 = 导航系统实例;
 
     this.slices = createSlices();
 
     const reducers = createReducers(this.slices);
 
     this.store = createStore(reducers, [this.handleMiddleware]);
+
+    this.监听项目节点激活状态变化并修改url();
 
     this.全局事件系统实例.on('项目树历史记录管理者/指针移动', (event) => {
       this.store.dispatch(
@@ -143,6 +150,32 @@ export class UIStoreManager implements Manager {
     if (token) {
       this.store.dispatch(this.slices.userInfo.actions.更新token(token));
     }
+  }
+
+  监听项目节点激活状态变化并修改url() {
+    let previousState = this.store.getState(); // 初始化之前的 state
+    this.store.subscribe(() => {
+      const currentState = this.store.getState(); // 获取当前的 state
+
+      if (
+        currentState.projectTree.激活的节点的key !==
+        previousState.projectTree.激活的节点的key
+      ) {
+        if (currentState.projectTree.激活的节点的key) {
+          const nodeData =
+            currentState.projectTree.项目树节点数据[
+              currentState.projectTree.激活的节点的key
+            ];
+          if (nodeData.type === 'file') {
+            if (nodeData.projectFileType === 'view') {
+              this.导航系统实例.navigateTo(paths['view-editor']);
+            }
+          }
+        }
+      }
+
+      previousState = currentState; // 更新之前的 state
+    });
   }
 }
 
