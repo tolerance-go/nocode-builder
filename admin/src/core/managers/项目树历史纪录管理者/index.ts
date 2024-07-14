@@ -11,16 +11,17 @@ export class 项目树历史纪录管理者 implements Manager {
 
   private 历史堆栈: 历史记录[] = [];
 
-  历史状态机Actor = createActor(历史状态机, {
-    inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
-    input: {
-      历史堆栈: this.历史堆栈,
-      历史指针: this.历史指针,
-    },
-  });
+  private 历史状态机Actor;
 
   public constructor(全局事件系统实例: 全局事件系统) {
     this.全局事件系统实例 = 全局事件系统实例;
+    this.历史状态机Actor = createActor(历史状态机, {
+      inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
+      input: {
+        历史堆栈: this.历史堆栈,
+        历史指针: this.历史指针,
+      },
+    });
   }
 
   async work() {
@@ -41,21 +42,18 @@ export class 项目树历史纪录管理者 implements Manager {
     this.全局事件系统实例.on(
       '界面状态管理者/新增节点',
       ({ nodeKey, parentKey, nodeData, treeNodes, treeDataRecord, index }) => {
-        this.历史状态机Actor.send({
-          type: '推入历史记录',
-          data: {
-            state: {
-              treeNodes,
-              treeDataRecord,
-            },
-            操作: {
-              type: '插入',
-              detail: {
-                节点key: nodeKey,
-                父节点key: parentKey,
-                index,
-                recordItem: nodeData,
-              },
+        this.addRecordToHistory({
+          state: {
+            treeNodes,
+            treeDataRecord,
+          },
+          操作: {
+            type: '插入',
+            detail: {
+              节点key: nodeKey,
+              父节点key: parentKey,
+              index,
+              recordItem: nodeData,
             },
           },
         });
@@ -71,20 +69,17 @@ export class 项目树历史纪录管理者 implements Manager {
         treeNodes,
         treeDataRecord,
       }) => {
-        this.历史状态机Actor.send({
-          type: '推入历史记录',
-          data: {
-            state: {
-              treeNodes,
-              treeDataRecord,
-            },
-            操作: {
-              type: '更新',
-              detail: {
-                节点key: nodeKey,
-                oldRecordItem: oldTreeNodeData,
-                newRecordItem: newTreeNodeData,
-              },
+        this.addRecordToHistory({
+          state: {
+            treeNodes,
+            treeDataRecord,
+          },
+          操作: {
+            type: '更新',
+            detail: {
+              节点key: nodeKey,
+              oldRecordItem: oldTreeNodeData,
+              newRecordItem: newTreeNodeData,
             },
           },
         });
@@ -94,18 +89,15 @@ export class 项目树历史纪录管理者 implements Manager {
     this.全局事件系统实例.on(
       '界面状态管理者/删除节点',
       ({ nodeKeys, treeNodes, treeDataRecord }) => {
-        this.历史状态机Actor.send({
-          type: '推入历史记录',
-          data: {
-            state: {
-              treeNodes,
-              treeDataRecord,
-            },
-            操作: {
-              type: '删除',
-              detail: {
-                节点keys: nodeKeys,
-              },
+        this.addRecordToHistory({
+          state: {
+            treeNodes,
+            treeDataRecord,
+          },
+          操作: {
+            type: '删除',
+            detail: {
+              节点keys: nodeKeys,
             },
           },
         });
@@ -115,20 +107,17 @@ export class 项目树历史纪录管理者 implements Manager {
     this.全局事件系统实例.on(
       '界面状态管理者/移动节点',
       ({ 节点keys, 目标父节点key, index, treeNodes, treeDataRecord }) => {
-        this.历史状态机Actor.send({
-          type: '推入历史记录',
-          data: {
-            state: {
-              treeNodes,
-              treeDataRecord,
-            },
-            操作: {
-              type: '移动',
-              detail: {
-                节点keys,
-                目标父节点key,
-                index,
-              },
+        this.addRecordToHistory({
+          state: {
+            treeNodes,
+            treeDataRecord,
+          },
+          操作: {
+            type: '移动',
+            detail: {
+              节点keys,
+              目标父节点key,
+              index,
             },
           },
         });
