@@ -19,7 +19,11 @@ export class 项目树历史纪录管理者 implements Manager {
 
   public constructor(全局事件系统实例: 全局事件系统) {
     this.全局事件系统实例 = 全局事件系统实例;
+  }
+
+  async work() {
     this.历史状态机Actor.start();
+
     this.历史状态机Actor.subscribe((state) => {
       if (this.历史指针 !== state.context.历史指针) {
         this.全局事件系统实例.emit('项目树历史记录管理者/指针移动', {
@@ -30,9 +34,7 @@ export class 项目树历史纪录管理者 implements Manager {
 
       this.历史指针 = state.context.历史指针;
     });
-  }
 
-  async work() {
     this.全局事件系统实例.on(
       '界面状态管理者/新增节点',
       ({ nodeKey, parentKey, nodeData, treeNodes, treeDataRecord, index }) => {
