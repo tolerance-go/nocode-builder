@@ -169,6 +169,10 @@ export class UIStoreManager implements Manager {
           if (nodeData.type === 'file') {
             if (nodeData.projectFileType === 'view') {
               this.导航系统实例.navigateTo(paths['view-editor']);
+            } else if (nodeData.projectFileType === 'bluemap') {
+              this.导航系统实例.navigateTo(paths['bluemap-editor']);
+            } else if (nodeData.projectFileType === 'data-table') {
+              this.导航系统实例.navigateTo(paths['data-table-editor']);
             }
           }
         }
