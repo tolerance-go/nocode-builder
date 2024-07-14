@@ -41,25 +41,6 @@ export class UIStoreManager implements Manager {
       [this.handleMiddleware],
       localState ?? {},
     );
-
-    this.监听项目节点激活状态变化并修改url();
-    this.注册监听保存状态到本地();
-
-    this.全局事件系统实例.on('项目树历史记录管理者/指针移动', (event) => {
-      this.store.dispatch(
-        this.slices.projectTree.actions.更新项目节点树(
-          event.历史指针 === -1
-            ? {
-                结构树: [],
-                节点数据: {},
-              }
-            : {
-                结构树: event.历史堆栈[event.历史指针].state.treeNodes,
-                节点数据: event.历史堆栈[event.历史指针].state.treeDataRecord,
-              },
-        ),
-      );
-    });
   }
 
   handleMiddleware: AppMiddleware = (store) => (next) => (action) => {
@@ -139,6 +120,29 @@ export class UIStoreManager implements Manager {
   async work() {
     projectTreeOnWork(this.store, this.slices);
 
+    this.监听项目节点激活状态变化并修改url();
+    this.注册监听保存状态到本地();
+    this.注册同步用户信息监听();
+    this.检查本地用户token同步到内存中();
+
+    this.全局事件系统实例.on('项目树历史记录管理者/指针移动', (event) => {
+      this.store.dispatch(
+        this.slices.projectTree.actions.更新项目节点树(
+          event.历史指针 === -1
+            ? {
+                结构树: [],
+                节点数据: {},
+              }
+            : {
+                结构树: event.历史堆栈[event.历史指针].state.treeNodes,
+                节点数据: event.历史堆栈[event.历史指针].state.treeDataRecord,
+              },
+        ),
+      );
+    });
+  }
+
+  注册同步用户信息监听() {
     let prevState = this.store.getState();
     this.store.subscribe(() => {
       const nextState = this.store.getState();
@@ -147,8 +151,6 @@ export class UIStoreManager implements Manager {
       }
       prevState = nextState;
     });
-
-    this.检查本地用户token同步到内存中();
   }
 
   async 请求同步用户信息() {
