@@ -32,7 +32,9 @@ export class ProjectCreateDto {
   @IsOptional()
   updatedAt?: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    enum: ProjectType,
+  })
   @IsEnum(ProjectType)
   type: ProjectType;
 }

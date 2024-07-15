@@ -1,3 +1,4 @@
+import { ProjectTypeEnum } from '@/_gen/models';
 import {
   useAppSelector,
   useAppDispatch,
@@ -259,7 +260,8 @@ export const ToolBar = () => {
                     视图
                   </span>
                 ),
-                onClick: () => handleProjectFileCreateBtnClick('view'),
+                onClick: () =>
+                  handleProjectFileCreateBtnClick(ProjectTypeEnum.View),
                 icon: 图标管理者实例.根据id获取组件('视图项目节点'),
                 className: 组件类名.创建视图项目节点的菜单项,
               },
@@ -271,7 +273,8 @@ export const ToolBar = () => {
                   </span>
                 ),
                 icon: 图标管理者实例.根据id获取组件('数据表项目节点'),
-                onClick: () => handleProjectFileCreateBtnClick('data-table'),
+                onClick: () =>
+                  handleProjectFileCreateBtnClick(ProjectTypeEnum.DataTable),
               },
               {
                 key: 'bluemap',
@@ -281,7 +284,8 @@ export const ToolBar = () => {
                   </span>
                 ),
                 icon: 图标管理者实例.根据id获取组件('蓝图项目节点'),
-                onClick: () => handleProjectFileCreateBtnClick('bluemap'),
+                onClick: () =>
+                  handleProjectFileCreateBtnClick(ProjectTypeEnum.Bluemap),
               },
             ],
           }}

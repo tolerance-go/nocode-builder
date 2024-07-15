@@ -9,7 +9,7 @@ export interface ProjectCreateDto {
   projectGroupId?: number;
   createdAt?: string;
   updatedAt?: string;
-  type: string;
+  type: 'View' | 'DataTable' | 'Bluemap';
 }
 
 export interface ProjectGroupCreateDto {
