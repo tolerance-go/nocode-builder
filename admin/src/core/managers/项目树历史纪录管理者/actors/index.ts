@@ -37,6 +37,7 @@ export type 历史记录操作详情 =
   | { type: '移动'; detail: 历史记录移动操作详情 };
 
 export type 历史记录 = {
+  createTime: number;
   state: {
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
@@ -96,9 +97,10 @@ export const 历史状态机 = setup({
     }),
   },
   guards: {
-    可以撤销: ({ context }) => context.历史指针 > -1,
+    可以撤销: ({ context }) => context.历史指针 > 0,
     可以重做: ({ context }) => context.历史指针 < context.历史堆栈.length - 1,
-    是否浏览中: ({ context }) => context.历史指针 < context.历史堆栈.length - 1,
+    是否浏览历史中: ({ context }) =>
+      context.历史指针 < context.历史堆栈.length - 1,
   },
 }).createMachine({
   id: '历史',
@@ -114,10 +116,6 @@ export const 历史状态机 = setup({
           target: '撤销中',
           guard: '可以撤销',
         },
-        重做请求: {
-          target: '重做中',
-          guard: '可以重做',
-        },
         推入历史记录: {
           actions: '添加历史',
         },
@@ -125,29 +123,23 @@ export const 历史状态机 = setup({
     },
     撤销中: {
       entry: '执行撤销',
-      always: [
-        {
-          target: '浏览中',
-          guard: '是否浏览中',
-        },
-        {
-          target: '待机',
-        },
-      ],
+      always: {
+        target: '浏览历史中',
+      },
     },
     重做中: {
       entry: '执行重做',
       always: [
         {
-          target: '浏览中',
-          guard: '是否浏览中',
+          target: '浏览历史中',
+          guard: '是否浏览历史中',
         },
         {
           target: '待机',
         },
       ],
     },
-    浏览中: {
+    浏览历史中: {
       on: {
         推入历史记录: {
           actions: '添加历史',

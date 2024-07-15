@@ -43,6 +43,7 @@ export class 项目树历史纪录管理者 implements Manager {
       '界面状态管理者/新增节点',
       ({ nodeKey, parentKey, nodeData, treeNodes, treeDataRecord, index }) => {
         this.addRecordToHistory({
+          createTime: Date.now(),
           state: {
             treeNodes,
             treeDataRecord,
@@ -70,6 +71,7 @@ export class 项目树历史纪录管理者 implements Manager {
         treeDataRecord,
       }) => {
         this.addRecordToHistory({
+          createTime: Date.now(),
           state: {
             treeNodes,
             treeDataRecord,
@@ -90,6 +92,7 @@ export class 项目树历史纪录管理者 implements Manager {
       '界面状态管理者/删除节点',
       ({ nodeKeys, treeNodes, treeDataRecord }) => {
         this.addRecordToHistory({
+          createTime: Date.now(),
           state: {
             treeNodes,
             treeDataRecord,
@@ -108,6 +111,7 @@ export class 项目树历史纪录管理者 implements Manager {
       '界面状态管理者/移动节点',
       ({ 节点keys, 目标父节点key, index, treeNodes, treeDataRecord }) => {
         this.addRecordToHistory({
+          createTime: Date.now(),
           state: {
             treeNodes,
             treeDataRecord,

@@ -19,6 +19,7 @@ describe('历史状态机', () => {
   });
 
   const 创建Mock历史记录 = (key: string): 历史记录 => ({
+    createTime: Date.now(),
     state: 创建Mock记录(key),
     操作: {
       type: '插入',
