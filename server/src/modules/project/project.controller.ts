@@ -20,7 +20,7 @@ import {
   ProjectCreateDto,
   ProjectUpdateDto,
 } from './dtos';
-import { toProjectDto } from './utils/toProjectDto';
+import { toProjectDto } from './utils';
 
 @Controller('projects')
 export class ProjectController {

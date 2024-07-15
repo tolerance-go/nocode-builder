@@ -13,12 +13,14 @@ import {
 import { ApiResponse } from '@nestjs/swagger';
 import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ProjectGroupCreateDto } from './dtos/project-group-create.dto';
-import { ProjectGroupQueryDto } from './dtos/project-group-query.dto';
-import { ProjectGroupUpdateDto } from './dtos/project-group-update.dto';
-import { ProjectGroupDto } from './dtos/project-group.dto';
 import { ProjectGroupService } from './project-group.service';
-import { toProjectGroupDto } from './utils/toProjectGroupDto';
+import { toProjectGroupDto } from './utils';
+import {
+  ProjectGroupDto,
+  ProjectGroupQueryDto,
+  ProjectGroupCreateDto,
+  ProjectGroupUpdateDto,
+} from './dtos';
 
 @Controller('project-groups')
 export class ProjectGroupController {

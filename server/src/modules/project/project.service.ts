@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Project, Prisma } from '@prisma/client';
+import { Prisma, Project } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
@@ -8,21 +8,27 @@ export class ProjectService {
 
   async project(
     postWhereUniqueInput: Prisma.ProjectWhereUniqueInput,
+    tx?: Prisma.TransactionClient,
   ): Promise<Project | null> {
-    return this.prisma.project.findUnique({
+    const client = tx || this.prisma;
+    return client.project.findUnique({
       where: postWhereUniqueInput,
     });
   }
 
-  async projects(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.ProjectWhereUniqueInput;
-    where?: Prisma.ProjectWhereInput;
-    orderBy?: Prisma.ProjectOrderByWithRelationInput;
-  }): Promise<Project[]> {
+  async projects(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.ProjectWhereUniqueInput;
+      where?: Prisma.ProjectWhereInput;
+      orderBy?: Prisma.ProjectOrderByWithRelationInput;
+    },
+    tx?: Prisma.TransactionClient,
+  ): Promise<Project[]> {
     const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.project.findMany({
+    const client = tx || this.prisma;
+    return client.project.findMany({
       skip,
       take,
       cursor,
@@ -31,25 +37,37 @@ export class ProjectService {
     });
   }
 
-  async createProject(data: Prisma.ProjectCreateInput): Promise<Project> {
-    return this.prisma.project.create({
+  async createProject(
+    data: Prisma.ProjectCreateInput,
+    tx?: Prisma.TransactionClient,
+  ): Promise<Project> {
+    const client = tx || this.prisma;
+    return client.project.create({
       data,
     });
   }
 
-  async updateProject(params: {
-    where: Prisma.ProjectWhereUniqueInput;
-    data: Prisma.ProjectUpdateInput;
-  }): Promise<Project> {
+  async updateProject(
+    params: {
+      where: Prisma.ProjectWhereUniqueInput;
+      data: Prisma.ProjectUpdateInput;
+    },
+    tx?: Prisma.TransactionClient,
+  ): Promise<Project> {
     const { data, where } = params;
-    return this.prisma.project.update({
+    const client = tx || this.prisma;
+    return client.project.update({
       data,
       where,
     });
   }
 
-  async deleteProject(where: Prisma.ProjectWhereUniqueInput): Promise<Project> {
-    return this.prisma.project.delete({
+  async deleteProject(
+    where: Prisma.ProjectWhereUniqueInput,
+    tx?: Prisma.TransactionClient,
+  ): Promise<Project> {
+    const client = tx || this.prisma;
+    return client.project.delete({
       where,
     });
   }

@@ -1,17 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProjectType } from '@prisma/client';
 import {
+  IsDateString,
+  IsIn,
   IsInt,
   IsNotEmpty,
   IsOptional,
   IsString,
-  IsDateString,
-  IsIn,
   Min,
-  IsEnum,
 } from 'class-validator';
 
-export class ProjectCreateDto {
+export class ProjectGroupCreateDto {
   @ApiProperty()
   @IsString()
   @IsNotEmpty()
@@ -20,7 +18,7 @@ export class ProjectCreateDto {
   @ApiProperty({ required: false })
   @IsInt()
   @IsOptional()
-  projectGroupId?: number;
+  parentGroupId?: number;
 
   @ApiProperty({ required: false })
   @IsDateString()
@@ -31,14 +29,12 @@ export class ProjectCreateDto {
   @IsDateString()
   @IsOptional()
   updatedAt?: string;
-
-  @ApiProperty()
-  @IsEnum(ProjectType)
-  type: ProjectType;
 }
 
-export class ProjectQueryDto {
+export class ProjectGroupQueryDto {
   @ApiProperty({
+    description: 'Number of records to skip for pagination',
+    example: 0,
     required: false,
   })
   @IsOptional()
@@ -47,6 +43,8 @@ export class ProjectQueryDto {
   skip?: number;
 
   @ApiProperty({
+    description: 'Number of records to take for pagination',
+    example: 10,
     required: false,
   })
   @IsOptional()
@@ -55,6 +53,8 @@ export class ProjectQueryDto {
   take?: number;
 
   @ApiProperty({
+    description: 'Field by which to order the results',
+    example: 'createdAt',
     required: false,
   })
   @IsOptional()
@@ -63,6 +63,8 @@ export class ProjectQueryDto {
   orderBy?: string;
 
   @ApiProperty({
+    description: 'Filter condition',
+    example: 'Project Group 1',
     required: false,
   })
   @IsOptional()
@@ -70,7 +72,7 @@ export class ProjectQueryDto {
   filter?: string;
 }
 
-export class ProjectUpdateDto {
+export class ProjectGroupUpdateDto {
   @ApiProperty({
     required: false,
   })
@@ -79,24 +81,21 @@ export class ProjectUpdateDto {
   name?: string;
 
   @ApiProperty({
-    example: 1,
     required: false,
   })
   @IsOptional()
   @IsInt()
-  projectGroupId?: number;
+  parentGroupId?: number;
 }
 
-export class ProjectUpdateWithIdDto extends ProjectUpdateDto {
+export class ProjectGroupUpdateWithIdDto extends ProjectGroupUpdateDto {
   @ApiProperty({})
   @IsInt()
   id: number;
 }
 
-export class ProjectDto {
-  @ApiProperty({
-    example: 1,
-  })
+export class ProjectGroupDto {
+  @ApiProperty({})
   @IsInt()
   id: number;
 
@@ -107,11 +106,10 @@ export class ProjectDto {
   @ApiProperty({
     required: false,
     nullable: true,
-    example: 1,
   })
   @IsInt()
   @IsOptional()
-  projectGroupId?: number;
+  parentGroupId?: number;
 
   @ApiProperty({})
   @IsInt()

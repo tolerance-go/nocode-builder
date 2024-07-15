@@ -6,11 +6,13 @@ import { ProjectModule } from './modules/project/project.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './modules/auth/auth.module';
 import { ProjectGroupModule } from './modules/project-group/project-group.module';
+import { SyncModule } from './modules/sync/sync.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true, // 全局可用
     }),
+    SyncModule,
     AuthModule,
     ProjectModule,
     ProjectGroupModule,

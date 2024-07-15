@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma, ProjectGroup } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-import { ProjectGroup, Prisma } from '@prisma/client';
 
 @Injectable()
 export class ProjectGroupService {
@@ -8,21 +8,27 @@ export class ProjectGroupService {
 
   async projectGroup(
     projectGroupWhereUniqueInput: Prisma.ProjectGroupWhereUniqueInput,
+    tx?: Prisma.TransactionClient,
   ): Promise<ProjectGroup | null> {
-    return this.prisma.projectGroup.findUnique({
+    const client = tx || this.prisma;
+    return client.projectGroup.findUnique({
       where: projectGroupWhereUniqueInput,
     });
   }
 
-  async projectGroups(params: {
-    skip?: number;
-    take?: number;
-    cursor?: Prisma.ProjectGroupWhereUniqueInput;
-    where?: Prisma.ProjectGroupWhereInput;
-    orderBy?: Prisma.ProjectGroupOrderByWithRelationInput;
-  }): Promise<ProjectGroup[]> {
+  async projectGroups(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.ProjectGroupWhereUniqueInput;
+      where?: Prisma.ProjectGroupWhereInput;
+      orderBy?: Prisma.ProjectGroupOrderByWithRelationInput;
+    },
+    tx?: Prisma.TransactionClient,
+  ): Promise<ProjectGroup[]> {
     const { skip, take, cursor, where, orderBy } = params;
-    return this.prisma.projectGroup.findMany({
+    const client = tx || this.prisma;
+    return client.projectGroup.findMany({
       skip,
       take,
       cursor,
@@ -33,18 +39,24 @@ export class ProjectGroupService {
 
   async createProjectGroup(
     data: Prisma.ProjectGroupCreateInput,
+    tx?: Prisma.TransactionClient,
   ): Promise<ProjectGroup> {
-    return this.prisma.projectGroup.create({
+    const client = tx || this.prisma;
+    return client.projectGroup.create({
       data,
     });
   }
 
-  async updateProjectGroup(params: {
-    where: Prisma.ProjectGroupWhereUniqueInput;
-    data: Prisma.ProjectGroupUpdateInput;
-  }): Promise<ProjectGroup> {
+  async updateProjectGroup(
+    params: {
+      where: Prisma.ProjectGroupWhereUniqueInput;
+      data: Prisma.ProjectGroupUpdateInput;
+    },
+    tx?: Prisma.TransactionClient,
+  ): Promise<ProjectGroup> {
     const { where, data } = params;
-    return this.prisma.projectGroup.update({
+    const client = tx || this.prisma;
+    return client.projectGroup.update({
       data,
       where,
     });
@@ -52,8 +64,10 @@ export class ProjectGroupService {
 
   async deleteProjectGroup(
     where: Prisma.ProjectGroupWhereUniqueInput,
+    tx?: Prisma.TransactionClient,
   ): Promise<ProjectGroup> {
-    return this.prisma.projectGroup.delete({
+    const client = tx || this.prisma;
+    return client.projectGroup.delete({
       where,
     });
   }

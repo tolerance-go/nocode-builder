@@ -1,5 +1,5 @@
 import { ProjectGroup } from '@prisma/client';
-import { ProjectGroupDto } from '../dtos/project-group.dto';
+import { ProjectGroupDto } from '../dtos';
 
 export function toProjectGroupDto(projectGroup: ProjectGroup): ProjectGroupDto {
   return {
