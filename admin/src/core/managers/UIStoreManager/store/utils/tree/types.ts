@@ -1,7 +1,7 @@
-import { DataKey } from '@/types';
+import { ViewKey } from '@/types';
 
 export type TreeNodeBase = {
-  key: DataKey;
+  key: ViewKey;
   children?: TreeNodeBase[];
 };
 
@@ -9,6 +9,6 @@ export type TreeNode<T extends TreeNodeBase = TreeNodeBase> = Omit<
   T,
   'children'
 > & {
-  key: DataKey;
+  key: ViewKey;
   children?: TreeNode<T>[];
 };

@@ -10,4 +10,4 @@ export interface EnvObject {
   activate(): Promise<void>;
 }
 
-export type DataKey = number | string;
+export type ViewKey = number | string;

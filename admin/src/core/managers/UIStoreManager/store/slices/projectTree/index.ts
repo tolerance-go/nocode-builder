@@ -8,26 +8,27 @@ import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
 } from '../../../types';
+import { ViewKey } from '@/types';
 
 export type ProjectTreeStates = {
   // 派生数据
-  derived_节点到父节点的映射: Record<string, string | null>;
+  derived_节点到父节点的映射: Record<ViewKey, ViewKey | null>;
   // 关联数据
   项目树节点数据: ProjectTreeNodeDataRecord;
   项目结构树: ProjectStructureTreeDataNode[];
-  所有已经选中的节点: string[];
-  所有展开的节点的key: string[];
-  当前正在编辑的项目树节点的key: string | null;
-  临时创建的节点的key: string | null;
+  所有已经选中的节点: ViewKey[];
+  所有展开的节点的key: ViewKey[];
+  当前正在编辑的项目树节点的key: ViewKey | null;
+  临时创建的节点的key: ViewKey | null;
   节点树容器的高度: number;
-  编辑节点标题之前暂存的选中的节点keys: string[] | null;
-  编辑节点标题之前暂存的聚焦的节点key: string | null;
-  当前输入的标题: string;
+  编辑节点标题之前暂存的选中的节点keys: ViewKey[] | null;
+  编辑节点标题之前暂存的聚焦的节点key: ViewKey | null;
+  当前输入的标题: ViewKey;
   是否选中了项目树容器: boolean;
-  激活的节点的key: string | null;
-  当前正在拖拽的节点key: string | null;
+  激活的节点的key: ViewKey | null;
+  当前正在拖拽的节点key: ViewKey | null;
   是否正在聚焦项目树区域: boolean;
-  当前聚焦的节点key: string | null;
+  当前聚焦的节点key: ViewKey | null;
 };
 
 const initialState: ProjectTreeStates = {
@@ -57,7 +58,7 @@ export const createProjectTreeSlice = () => {
       修改节点: (
         state,
         action: PayloadAction<{
-          nodeKey: string;
+          nodeKey: ViewKey;
           title: string;
         }>,
       ) => {
@@ -73,16 +74,19 @@ export const createProjectTreeSlice = () => {
         projectTreeSlice.caseReducers.停止节点编辑状态并清空输入内容(state);
       },
 
-      更新当前聚焦的节点key: (state, action: PayloadAction<string | null>) => {
+      更新当前聚焦的节点key: (state, action: PayloadAction<ViewKey | null>) => {
         state.当前聚焦的节点key = action.payload;
       },
       更新是否正在聚焦项目树区域: (state, action: PayloadAction<boolean>) => {
         state.是否正在聚焦项目树区域 = action.payload;
       },
-      更新当前正在拖拽的节点: (state, action: PayloadAction<string | null>) => {
+      更新当前正在拖拽的节点: (
+        state,
+        action: PayloadAction<ViewKey | null>,
+      ) => {
         state.当前正在拖拽的节点key = action.payload;
       },
-      更新激活的节点的key: (state, action: PayloadAction<string | null>) => {
+      更新激活的节点的key: (state, action: PayloadAction<ViewKey | null>) => {
         state.激活的节点的key = action.payload;
       },
       更新项目节点树: (
@@ -132,7 +136,7 @@ export const createProjectTreeSlice = () => {
       更新节点的数据: (
         state,
         action: PayloadAction<{
-          key: string;
+          key: ViewKey;
           data: Partial<Pick<ProjectTreeNodeDataRecordItem, 'title'>>;
         }>,
       ) => {
@@ -144,7 +148,7 @@ export const createProjectTreeSlice = () => {
           }
         }
       },
-      更新当前输入的标题: (state, action: PayloadAction<string>) => {
+      更新当前输入的标题: (state, action: PayloadAction<ViewKey>) => {
         state.当前输入的标题 = action.payload;
       },
       更新容器高度: (state, action: PayloadAction<number>) => {
@@ -152,13 +156,13 @@ export const createProjectTreeSlice = () => {
       },
       更新为了编辑创建的临时节点为: (
         state,
-        action: PayloadAction<string | null>,
+        action: PayloadAction<ViewKey | null>,
       ) => {
         state.临时创建的节点的key = action.payload;
       },
       更新当前编辑节点是哪个并更新输入框的值: (
         state,
-        action: PayloadAction<string | null>,
+        action: PayloadAction<ViewKey | null>,
       ) => {
         state.当前正在编辑的项目树节点的key = action.payload;
 
@@ -177,19 +181,19 @@ export const createProjectTreeSlice = () => {
           }
         }
       },
-      更新选中的节点是哪些: (state, action: PayloadAction<string[]>) => {
+      更新选中的节点是哪些: (state, action: PayloadAction<ViewKey[]>) => {
         state.所有已经选中的节点 = action.payload;
       },
-      更新展开的节点是哪些: (state, action: PayloadAction<string[]>) => {
+      更新展开的节点是哪些: (state, action: PayloadAction<ViewKey[]>) => {
         state.所有展开的节点的key = action.payload;
       },
       更新为了编辑临时创建节点之前选中的节点的key为: (
         state,
-        action: PayloadAction<string[] | null>,
+        action: PayloadAction<ViewKey[] | null>,
       ) => {
         state.编辑节点标题之前暂存的选中的节点keys = action.payload;
       },
-      删除节点: (state, action: PayloadAction<string[]>) => {
+      删除节点: (state, action: PayloadAction<ViewKey[]>) => {
         projectTreeSlice.caseReducers.批量删除项目树节点(state, {
           type: '',
           payload: action.payload,
@@ -203,7 +207,7 @@ export const createProjectTreeSlice = () => {
           });
         });
       },
-      删除单个节点: (state, action: PayloadAction<string>) => {
+      删除单个节点: (state, action: PayloadAction<ViewKey>) => {
         const nodeKey = action.payload;
 
         const removed = removeNode(state.项目结构树, nodeKey);
@@ -217,7 +221,7 @@ export const createProjectTreeSlice = () => {
           });
         }
       },
-      批量删除项目树节点: (state, action: PayloadAction<string[]>) => {
+      批量删除项目树节点: (state, action: PayloadAction<ViewKey[]>) => {
         const nodeKeys = action.payload;
 
         const results = 批量删除节点(state.项目结构树, nodeKeys);
@@ -288,7 +292,7 @@ export const createProjectTreeSlice = () => {
           });
         }
       },
-      删除选中的节点: (state, action: PayloadAction<string>) => {
+      删除选中的节点: (state, action: PayloadAction<ViewKey>) => {
         state.所有已经选中的节点 = state.所有已经选中的节点.filter(
           (key) => key !== action.payload,
         );
@@ -296,7 +300,7 @@ export const createProjectTreeSlice = () => {
       新增节点: (
         state,
         action: PayloadAction<{
-          nodeKey: string;
+          nodeKey: ViewKey;
           title: string;
         }>,
       ) => {
@@ -334,7 +338,7 @@ export const createProjectTreeSlice = () => {
       插入节点: (
         state,
         action: PayloadAction<{
-          parentKey: string | null;
+          parentKey: ViewKey | null;
           node: ProjectStructureTreeDataNode;
           index: number;
           recordItem: ProjectTreeNodeDataRecord[number];
@@ -365,7 +369,7 @@ export const createProjectTreeSlice = () => {
       插入节点并且默认展开父节点: (
         state,
         action: PayloadAction<{
-          parentKey: string | null;
+          parentKey: ViewKey | null;
           node: ProjectStructureTreeDataNode;
           index: number;
           recordItem: ProjectTreeNodeDataRecord[number];
@@ -386,7 +390,7 @@ export const createProjectTreeSlice = () => {
       插入节点到指定位置: (
         state,
         action: PayloadAction<{
-          parentKey: string | null;
+          parentKey: ViewKey | null;
           node: ProjectStructureTreeDataNode;
           index: number;
           recordItem: ProjectTreeNodeDataRecord[number];
@@ -413,8 +417,8 @@ export const createProjectTreeSlice = () => {
       移动节点: (
         state,
         action: PayloadAction<{
-          nodeKeys: string[];
-          newParentKey: string | null;
+          nodeKeys: ViewKey[];
+          newParentKey: ViewKey | null;
           newIndex: number;
         }>,
       ) => {
@@ -442,8 +446,8 @@ export const createProjectTreeSlice = () => {
       批量移动项目树节点: (
         state,
         action: PayloadAction<{
-          nodeKeys: string[];
-          newParentKey: string | null;
+          nodeKeys: ViewKey[];
+          newParentKey: ViewKey | null;
           newIndex: number;
         }>,
       ) => {
@@ -492,8 +496,8 @@ export const createProjectTreeSlice = () => {
       单个移动项目树节点: (
         state,
         action: PayloadAction<{
-          nodeKey: string;
-          newParentKey: string | null;
+          nodeKey: ViewKey;
+          newParentKey: ViewKey | null;
           newIndex: number;
         }>,
       ) => {
@@ -566,7 +570,7 @@ export const createProjectTreeSlice = () => {
         state.编辑节点标题之前暂存的聚焦的节点key = state.当前聚焦的节点key;
         state.当前聚焦的节点key = null;
       },
-      取消指定的节点的选中状态: (state, action: PayloadAction<string>) => {
+      取消指定的节点的选中状态: (state, action: PayloadAction<ViewKey>) => {
         state.所有已经选中的节点 = state.所有已经选中的节点.filter(
           (key) => key !== action.payload,
         );
