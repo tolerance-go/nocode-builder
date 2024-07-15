@@ -4,21 +4,6 @@
  * ---------------------------------------------------------------
  */
 
-export interface ProjectCreateDto {
-  name: string;
-  projectGroupId?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  type: 'View' | 'DataTable' | 'Bluemap';
-}
-
-export interface ProjectGroupCreateDto {
-  name: string;
-  parentGroupId?: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
 export interface ProjectUpdateWithIdDto {
   name?: string;
   projectGroupId?: number;
@@ -32,8 +17,7 @@ export interface ProjectGroupUpdateWithIdDto {
 }
 
 export interface ProjectDiffDto {
-  projectsToCreate: ProjectCreateDto[];
-  projectGroupsToCreate: ProjectGroupCreateDto[];
+  additions: (ProjectCreateDto | ProjectGroupCreateWithChildrenDto)[][];
   projectsToUpdate: ProjectUpdateWithIdDto[];
   projectGroupsToUpdate: ProjectGroupUpdateWithIdDto[];
   projectIdsToDelete: number[];
@@ -87,6 +71,14 @@ export interface ProjectDto {
   updatedAt: string;
 }
 
+export interface ProjectCreateDto {
+  name: string;
+  projectGroupId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  type: 'View' | 'DataTable' | 'Bluemap';
+}
+
 export interface ProjectUpdateDto {
   name?: string;
   projectGroupId?: number;
@@ -101,9 +93,24 @@ export interface ProjectGroupDto {
   updatedAt: string;
 }
 
+export interface ProjectGroupCreateDto {
+  name: string;
+  parentGroupId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
 export interface ProjectGroupUpdateDto {
   name?: string;
   parentGroupId?: number;
+}
+
+export interface ProjectGroupCreateWithChildrenDto {
+  name: string;
+  parentGroupId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  children?: (ProjectCreateDto | ProjectGroupCreateWithChildrenDto)[];
 }
 
 import type {

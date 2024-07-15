@@ -12,14 +12,18 @@ type ProjectTreeNodeDataRecordItemBase = {
   id: number;
 };
 
+export type ProjectTreeNodeFolderDataRecordItem = {
+  type: 'folder';
+} & ProjectTreeNodeDataRecordItemBase;
+
+export type ProjectTreeNodeFileDataRecordItem = {
+  type: 'file';
+  projectFileType: ProjectFileType;
+} & ProjectTreeNodeDataRecordItemBase;
+
 export type ProjectTreeNodeDataRecordItem =
-  | ({
-      type: 'folder';
-    } & ProjectTreeNodeDataRecordItemBase)
-  | ({
-      type: 'file';
-      projectFileType: ProjectFileType;
-    } & ProjectTreeNodeDataRecordItemBase);
+  | ProjectTreeNodeFolderDataRecordItem
+  | ProjectTreeNodeFileDataRecordItem;
 
 /** key 到树节点数据的映射 */
 export type ProjectTreeNodeDataRecord = Record<
