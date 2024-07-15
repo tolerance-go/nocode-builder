@@ -1,9 +1,5 @@
 import { 历史记录 } from '../machines';
 
-export type ProjectStructureTreeDataNode = unknown; // 根据实际定义替换
-export type ProjectTreeNodeDataRecord = unknown; // 根据实际定义替换
-export type 历史记录操作详情 = unknown; // 根据实际定义替换
-
 // 扩展历史记录，增加同步类型属性
 export type 扩展历史记录 = 历史记录 & {
   同步类型: '未同步' | '已同步' | '同步失败'; // 新增的同步类型属性
