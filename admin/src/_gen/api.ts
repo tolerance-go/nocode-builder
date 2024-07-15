@@ -21,7 +21,6 @@ export interface ProjectGroupCreateDto {
 
 export interface ProjectUpdateWithIdDto {
   name?: string;
-  /** @example 1 */
   projectGroupId?: number;
   id: number;
 }
@@ -74,29 +73,15 @@ export interface UserCreateDto {
 
 export interface UserUpdateDto {
   name?: string;
-  /**
-   * The email address of the user
-   * @example "johndoe@example.com"
-   */
   email?: string;
-  /**
-   * The password for the user
-   * @example "P@ssw0rd!"
-   */
   password?: string;
-  /**
-   * The last update date of the user record
-   * @example "2024-01-02T00:00:00Z"
-   */
   updatedAt?: string;
 }
 
 export interface ProjectDto {
-  /** @example 1 */
   id: number;
   name: string;
-  /** @example 1 */
-  projectGroupId?: number | null;
+  projectGroupId?: number;
   ownerId: number;
   createdAt: string;
   updatedAt: string;
@@ -104,7 +89,6 @@ export interface ProjectDto {
 
 export interface ProjectUpdateDto {
   name?: string;
-  /** @example 1 */
   projectGroupId?: number;
 }
 
@@ -613,25 +597,9 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      */
     getProjectGroups: (
       query?: {
-        /**
-         * Number of records to skip for pagination
-         * @example 0
-         */
         skip?: number;
-        /**
-         * Number of records to take for pagination
-         * @example 10
-         */
         take?: number;
-        /**
-         * Field by which to order the results
-         * @example "createdAt"
-         */
         orderBy?: string;
-        /**
-         * Filter condition
-         * @example "Project Group 1"
-         */
         filter?: string;
       },
       params: RequestParams = {},

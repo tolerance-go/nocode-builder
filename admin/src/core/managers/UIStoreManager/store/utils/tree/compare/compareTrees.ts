@@ -1,29 +1,29 @@
-import { Key } from 'react';
+import { DataKey } from '@/types';
 import { TreeNodeBase } from '../types';
 
 export type 操作类型 = '新增' | '删除' | '移动' | '更新';
 
 export interface 更新操作详情<T> {
-  节点key: Key;
+  节点key: DataKey;
   oldRecordItem: T;
   newRecordItem: T;
 }
 
 export interface 新增操作详情<T> {
-  父节点key: Key | null;
+  父节点key: DataKey | null;
   index: number;
   recordItems: T[];
-  节点keys: Key[];
+  节点keys: DataKey[];
 }
 
 export interface 删除操作详情<T> {
-  节点keys: Key[];
+  节点keys: DataKey[];
   recordItems: T[];
 }
 
 export interface 移动操作详情<T> {
-  节点keys: Key[];
-  目标父节点key: Key | null;
+  节点keys: DataKey[];
+  目标父节点key: DataKey | null;
   index: number;
   recordItems: T[];
 }
@@ -46,10 +46,10 @@ export function compareTrees<T extends TreeNodeBase>(
   newTree: T[],
   isNodeUpdated?: (oldNode: T, newNode: T) => boolean,
 ): DiffResult<T> {
-  const oldNodes = new Map<Key, T>();
-  const newNodes = new Map<Key, T>();
-  const oldParentMap = new Map<Key, Key | null>();
-  const newParentMap = new Map<Key, Key | null>();
+  const oldNodes = new Map<DataKey, T>();
+  const newNodes = new Map<DataKey, T>();
+  const oldParentMap = new Map<DataKey, DataKey | null>();
+  const newParentMap = new Map<DataKey, DataKey | null>();
   const 删除: 删除操作详情<T> = { 节点keys: [], recordItems: [] };
   const 移动: 移动操作详情<T>[] = [];
   const 新增: 新增操作详情<T>[] = [];
@@ -57,12 +57,12 @@ export function compareTrees<T extends TreeNodeBase>(
 
   function traverse<N extends TreeNodeBase>(
     node: N,
-    map: Map<Key, N>,
-    parentMap: Map<Key, Key | null>,
-    parentKey: Key | null = null,
+    map: Map<DataKey, N>,
+    parentMap: Map<DataKey, DataKey | null>,
+    parentDataKey: DataKey | null = null,
   ) {
     map.set(node.key, node);
-    parentMap.set(node.key, parentKey);
+    parentMap.set(node.key, parentDataKey);
     if (node.children) {
       node.children.forEach((child) =>
         traverse(child, map, parentMap, node.key),
@@ -76,8 +76,8 @@ export function compareTrees<T extends TreeNodeBase>(
   oldNodes.forEach((node, key) => {
     if (newNodes.has(key)) {
       const newNode = newNodes.get(key) as T;
-      const oldParentKey = oldParentMap.get(key);
-      const newParentKey = newParentMap.get(key);
+      const oldParentDataKey = oldParentMap.get(key);
+      const newParentDataKey = newParentMap.get(key);
 
       if (isNodeUpdated && isNodeUpdated(node, newNode)) {
         更新.push({
@@ -87,12 +87,12 @@ export function compareTrees<T extends TreeNodeBase>(
         });
       }
 
-      if (oldParentKey !== newParentKey) {
+      if (oldParentDataKey !== newParentDataKey) {
         const index = newParentMap.has(key) ? newTree.indexOf(newNode) : -1;
         const finalIndex = index === -1 ? 0 : index;
         移动.push({
           节点keys: [key],
-          目标父节点key: newParentKey as Key | null,
+          目标父节点key: newParentDataKey as DataKey | null,
           index: finalIndex,
           recordItems: [newNode],
         });
@@ -100,7 +100,7 @@ export function compareTrees<T extends TreeNodeBase>(
     } else {
       if (
         !oldParentMap.has(key) ||
-        !删除.节点keys.includes(oldParentMap.get(key) as Key)
+        !删除.节点keys.includes(oldParentMap.get(key) as DataKey)
       ) {
         删除.节点keys.push(key);
         删除.recordItems.push(node);
@@ -110,7 +110,7 @@ export function compareTrees<T extends TreeNodeBase>(
 
   newNodes.forEach((node, key) => {
     if (!oldNodes.has(key)) {
-      const 父节点key = newParentMap.get(key) as Key | null;
+      const 父节点key = newParentMap.get(key) as DataKey | null;
       const 父节点 = 父节点key ? newNodes.get(父节点key) : null;
       const index = 父节点
         ? 父节点.children?.indexOf(node) ?? 0

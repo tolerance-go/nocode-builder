@@ -9,3 +9,5 @@ export interface Manager {
 export interface EnvObject {
   activate(): Promise<void>;
 }
+
+export type DataKey = number | string;
