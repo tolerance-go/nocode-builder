@@ -76,7 +76,7 @@ describe('历史状态机', () => {
     expect(历史状态机Actor.getSnapshot().context.历史指针).toBe(0);
     expect(历史状态机Actor.getSnapshot().context.历史堆栈.length).toBe(1);
     历史状态机Actor.send({ type: '撤销请求' });
-    expect(历史状态机Actor.getSnapshot().value).toBe('浏览中');
+    expect(历史状态机Actor.getSnapshot().value).toBe('浏览历史中');
     expect(历史状态机Actor.getSnapshot().context.历史指针).toBe(-1);
     expect(历史状态机Actor.getSnapshot().context.历史堆栈.length).toBe(1);
   });
@@ -97,7 +97,7 @@ describe('历史状态机', () => {
     expect(历史状态机Actor.getSnapshot().context.历史指针).toBe(0);
     expect(历史状态机Actor.getSnapshot().context.历史堆栈.length).toBe(1);
     历史状态机Actor.send({ type: '撤销请求' });
-    expect(历史状态机Actor.getSnapshot().value).toBe('浏览中');
+    expect(历史状态机Actor.getSnapshot().value).toBe('浏览历史中');
     expect(历史状态机Actor.getSnapshot().context.历史指针).toBe(-1);
     expect(历史状态机Actor.getSnapshot().context.历史堆栈.length).toBe(1);
     历史状态机Actor.send({ type: '重做请求' });
@@ -106,7 +106,7 @@ describe('历史状态机', () => {
     expect(历史状态机Actor.getSnapshot().context.历史堆栈.length).toBe(1);
   });
 
-  it('当指针小于堆栈长度减 1 时应该移动到浏览中状态', () => {
+  it('当指针小于堆栈长度减 1 时应该移动到浏览历史中状态', () => {
     const 历史状态机Actor = createActor(历史状态机, {
       input: {
         历史堆栈: [],
@@ -121,11 +121,11 @@ describe('历史状态机', () => {
     历史状态机Actor.send({ type: '推入历史记录', data: 历史记录2 });
 
     历史状态机Actor.send({ type: '撤销请求' });
-    expect(历史状态机Actor.getSnapshot().value).toBe('浏览中');
+    expect(历史状态机Actor.getSnapshot().value).toBe('浏览历史中');
     expect(历史状态机Actor.getSnapshot().context.历史指针).toBe(0);
   });
 
-  it('应该在浏览中状态下处理推入历史记录并截断未来记录', () => {
+  it('应该在浏览历史中状态下处理推入历史记录并截断未来记录', () => {
     const 历史状态机Actor = createActor(历史状态机, {
       input: {
         历史堆栈: [],

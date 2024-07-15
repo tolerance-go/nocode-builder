@@ -207,4 +207,46 @@ describe('compareTrees', () => {
     const result = compareTrees(oldTree, newTree);
     expect(result).toEqual(expected);
   });
+
+  it('应在移动操作中返回最外层的节点', () => {
+    const oldTree: TreeNode[] = [
+      {
+        key: '1',
+        children: [
+          {
+            key: '1-1',
+            children: [
+              { key: '1-1-1', children: [{ key: '1-1-1-1', children: [] }] },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const newTree: TreeNode[] = [
+      {
+        key: '1',
+      },
+      {
+        key: '1-1',
+        children: [
+          { key: '1-1-1', children: [{ key: '1-1-1-1', children: [] }] },
+        ],
+      },
+    ];
+
+    const expected: DiffResult<TreeNode> = {
+      删除: { 节点keys: [], recordItems: [] },
+      移动: [
+        {
+          节点keys: ['1-1'],
+          目标父节点key: null,
+        },
+      ],
+      新增: [],
+    };
+
+    const result = compareTrees(oldTree, newTree);
+    expect(result).toEqual(expected);
+  });
 });

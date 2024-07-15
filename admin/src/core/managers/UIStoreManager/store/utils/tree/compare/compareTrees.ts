@@ -22,7 +22,7 @@ export interface 删除操作详情<T> {
 
 export interface 移动操作详情 {
   节点keys: string[];
-  目标父节点key: string;
+  目标父节点key: string | null;
 }
 
 export type 操作详情<T> =
@@ -74,7 +74,7 @@ export function compareTrees<T extends TreeNode<T>>(
       if (oldParentKey !== newParentKey) {
         移动.push({
           节点keys: [key as string],
-          目标父节点key: (newParentKey as string) || '',
+          目标父节点key: newParentKey as string | null,
         });
       }
     } else {
