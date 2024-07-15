@@ -97,7 +97,7 @@ export const 历史状态机 = setup({
     }),
   },
   guards: {
-    可以撤销: ({ context }) => context.历史指针 > 0,
+    可以撤销: ({ context }) => context.历史指针 > -1,
     可以重做: ({ context }) => context.历史指针 < context.历史堆栈.length - 1,
     是否浏览历史中: ({ context }) =>
       context.历史指针 < context.历史堆栈.length - 1,

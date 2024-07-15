@@ -1,7 +1,7 @@
 import { Manager } from '@/types';
 import { DocumentEnv } from '../envs';
 import { UITreeManager } from './UITreeManager';
-import { UIStoreManager } from './UIStoreManager';
+import { RootState, UIStoreManager } from './UIStoreManager';
 import { I18nSystem, 导航系统 } from '../systems';
 import { 跟随鼠标显示内容管理者 } from './跟随鼠标显示内容管理者';
 import { 图标管理者 } from './图标管理者';
@@ -19,7 +19,8 @@ export class AppManager implements Manager {
   }
 
   async work() {
-    const localState = await localforage.getItem(localStateFieldName);
+    const localState =
+      await localforage.getItem<RootState>(localStateFieldName);
 
     const 全局事件系统实例 = new 全局事件系统();
     const 导航系统实例 = new 导航系统();

@@ -37,11 +37,11 @@ export const createReducers = <T extends ReturnType<typeof createSlices>>(
 export const createStore = <T extends ReturnType<typeof createReducers>>(
   reducer: T,
   middlewares: AppMiddleware[] = [],
-  preloadedState: object,
+  preloadedState: object | null = null,
 ) =>
   configureStore({
     reducer,
-    preloadedState,
+    preloadedState: preloadedState ?? undefined,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(middlewares as Middleware[]),
   });

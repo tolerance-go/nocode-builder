@@ -1,19 +1,20 @@
+import { paths } from '@/configs';
+import { 导航系统 } from '@/core/systems';
+import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { api } from '@/globals';
 import { Manager } from '@/types';
+import localforage from 'localforage';
 import store from 'store2';
+import { localStateFieldName } from './configs';
 import {
   AppMiddleware,
   createReducers,
   createSlices,
   createStore,
   findNode,
+  RootState,
 } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
-import { 全局事件系统 } from '@/core/systems/全局事件系统';
-import { 导航系统 } from '@/core/systems';
-import { paths } from '@/configs';
-import localforage from 'localforage';
-import { localStateFieldName } from './configs';
 
 export class UIStoreManager implements Manager {
   public store;
@@ -24,10 +25,12 @@ export class UIStoreManager implements Manager {
 
   public 导航系统实例;
 
+  private initialState: RootState | null;
+
   constructor(
     全局事件系统实例: 全局事件系统,
     导航系统实例: 导航系统,
-    localState: unknown,
+    localState: RootState | null,
   ) {
     this.全局事件系统实例 = 全局事件系统实例;
     this.导航系统实例 = 导航系统实例;
@@ -36,10 +39,12 @@ export class UIStoreManager implements Manager {
 
     const reducers = createReducers(this.slices);
 
+    this.initialState = localState;
+
     this.store = createStore(
       reducers,
       [this.handleMiddleware],
-      localState ?? {},
+      this.initialState,
     );
   }
 
@@ -130,8 +135,8 @@ export class UIStoreManager implements Manager {
         this.slices.projectTree.actions.更新项目节点树(
           event.历史指针 === -1
             ? {
-                结构树: [],
-                节点数据: {},
+                结构树: this.initialState?.projectTree.项目结构树 ?? [],
+                节点数据: this.initialState?.projectTree.项目树节点数据 ?? {},
               }
             : {
                 结构树: event.历史堆栈[event.历史指针].state.treeNodes,
@@ -205,5 +210,5 @@ export class UIStoreManager implements Manager {
 
 export * from './hooks';
 export * from './store';
-export * from './utils';
 export * from './types';
+export * from './utils';
