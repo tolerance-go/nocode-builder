@@ -1,9 +1,11 @@
+import { Key } from 'react';
+
 export type TreeNodeBase = {
-  key: string | number;
+  key: Key;
   children?: TreeNodeBase[];
 };
 
-export type TreeNode<T = TreeNodeBase> = {
-  key: number | string;
-  children?: T[];
-} & Omit<T, 'key' | 'children'>;
+export type TreeNode<T extends TreeNodeBase = TreeNodeBase> = {
+  key: Key;
+  children?: TreeNode<T>[];
+} & Omit<T, 'children'>;
