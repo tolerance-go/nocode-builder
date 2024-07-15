@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { TreeNode } from '../types';
-import { DiffResult, compareTrees, UpdatedOptions } from './compareTrees';
+import { DiffResult, compareTrees } from './compareTrees';
 
 export type DataTreeNode = TreeNode<{
   key: string | number;
@@ -329,45 +329,30 @@ describe('compareTrees', () => {
       },
     ];
 
-    const updatedOptions: UpdatedOptions<
-      DataTreeNode,
-      { key: string | number; title: string }
-    > = {
-      isNodeUpdated: (
-        oldNode: { key: string | number; title: string },
-        newNode: { key: string | number; title: string },
-      ): boolean => {
-        return oldNode.title !== newNode.title;
-      },
-      getNodeData: (node: DataTreeNode) => ({
-        key: node.key,
-        title: node.title,
-      }),
-    };
-
-    const expected: DiffResult<
-      DataTreeNode,
-      { key: string | number; title: string }
-    > = {
+    const expected: DiffResult<DataTreeNode> = {
       删除: { 节点keys: [], recordItems: [] },
       移动: [],
       新增: [],
       更新: [
         {
           节点key: '2',
-          oldRecordItem: {
+          oldNode: {
             key: '2',
             title: 'title-2',
+            children: [],
           },
-          newRecordItem: {
+          newNode: {
             key: '2',
             title: 'title-2-new',
+            children: [],
           },
         },
       ],
     };
 
-    const result = compareTrees(oldTree, newTree, updatedOptions);
+    const result = compareTrees(oldTree, newTree, (oldNode, newNode) => {
+      return oldNode.title !== newNode.title;
+    });
     expect(result).toEqual(expected);
   });
 
@@ -390,50 +375,39 @@ describe('compareTrees', () => {
       },
     ];
 
-    const updatedOptions: UpdatedOptions<
-      DataTreeNode,
-      { key: string | number; title: string }
-    > = {
-      isNodeUpdated: (
-        oldNode: { key: string | number; title: string },
-        newNode: { key: string | number; title: string },
-      ): boolean => {
-        return oldNode.title !== newNode.title;
-      },
-      getNodeData: (node: DataTreeNode) => ({
-        key: node.key,
-        title: node.title,
-      }),
-    };
-
-    const expected: DiffResult<
-      DataTreeNode,
-      { key: string | number; title: string }
-    > = {
+    const expected: DiffResult<DataTreeNode> = {
       删除: { 节点keys: [], recordItems: [] },
       移动: [],
       新增: [],
       更新: [
         {
           节点key: '2',
-          oldRecordItem: {
+          oldNode: {
             key: '2',
             title: 'title-2',
+            children: [{ key: '2-1', children: [], title: 'title-2-1' }],
           },
-          newRecordItem: {
+          newNode: {
             key: '2',
             title: 'title-2-new',
+            children: [{ key: '2-1', children: [], title: 'title-2-1-new' }],
           },
         },
         {
           节点key: '2-1',
-          oldRecordItem: { key: '2-1', title: 'title-2-1' },
-          newRecordItem: { key: '2-1', title: 'title-2-1-new' },
+          oldNode: { key: '2-1', children: [], title: 'title-2-1' },
+          newNode: { key: '2-1', children: [], title: 'title-2-1-new' },
         },
       ],
     };
 
-    const result = compareTrees(oldTree, newTree, updatedOptions);
+    const result = compareTrees(
+      oldTree,
+      newTree,
+      (oldNode, newNode): boolean => {
+        return oldNode.title !== newNode.title;
+      },
+    );
     expect(result).toEqual(expected);
   });
 
@@ -445,7 +419,7 @@ describe('compareTrees', () => {
       { key: '2', children: [] },
     ];
 
-    const expected: DiffResult<TreeNode, unknown> = {
+    const expected: DiffResult<TreeNode> = {
       删除: { 节点keys: [], recordItems: [] },
       移动: [],
       新增: [
@@ -473,7 +447,7 @@ describe('compareTrees', () => {
 
     const newTree: TreeNode[] = [];
 
-    const expected: DiffResult<TreeNode, unknown> = {
+    const expected: DiffResult<TreeNode> = {
       删除: {
         节点keys: ['1', '2'],
         recordItems: [

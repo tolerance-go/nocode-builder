@@ -18,12 +18,13 @@ import { last } from 'lodash-es';
 /**
  * 将 DiffResult<ProjectStructureTreeDataNode> 转换为 ProjectDiffDto
  * @param diffResult - 比较树的结果
- * @param nodeDataRecord - key 到树节点数据的映射
+ * @param newNodeDataRecord - key 到树节点数据的映射
  * @returns ProjectDiffDto
  */
 function convertDiffResultToProjectDiffDto(
   diffResult: DiffResult<ProjectStructureTreeDataNode>,
-  nodeDataRecord: ProjectTreeNodeDataRecord,
+  oldNodeDataRecord?: ProjectTreeNodeDataRecord,
+  newNodeDataRecord?: ProjectTreeNodeDataRecord,
 ): ProjectDiffDto {
   const projectsToCreate: ProjectCreateDto[] = [];
   const projectGroupsToCreate: ProjectGroupCreateDto[] = [];
@@ -34,12 +35,12 @@ function convertDiffResultToProjectDiffDto(
 
   diffResult.新增.forEach((新增操作) => {
     新增操作.recordItems.forEach((node) => {
-      const recordItem = nodeDataRecord[node.key];
+      const recordItem = newNodeDataRecord![node.key];
       if (recordItem.type === 'file') {
         projectsToCreate.push({
           name: recordItem.title,
           projectGroupId: 新增操作.父节点key
-            ? nodeDataRecord[新增操作.父节点key].id
+            ? newNodeDataRecord![新增操作.父节点key].id
             : undefined,
           type: 'file', // assuming type is 'file', adjust accordingly
         });
@@ -47,7 +48,7 @@ function convertDiffResultToProjectDiffDto(
         projectGroupsToCreate.push({
           name: recordItem.title,
           parentGroupId: 新增操作.父节点key
-            ? nodeDataRecord[新增操作.父节点key].id
+            ? newNodeDataRecord![新增操作.父节点key].id
             : undefined,
         });
       }
@@ -55,29 +56,29 @@ function convertDiffResultToProjectDiffDto(
   });
 
   diffResult.更新?.forEach((更新操作) => {
-    const node = 更新操作.newRecordItem;
-    const recordItem = nodeDataRecord[node.key];
-    if (recordItem.type === 'file') {
+    const newNode = 更新操作.newNode;
+    const newNodeData = newNodeDataRecord![newNode.key];
+    if (newNodeData.type === 'file') {
       projectsToUpdate.push({
-        id: recordItem.id,
-        name: node.title,
+        id: newNodeData.id,
+        name: newNodeData.title,
         projectGroupId: 更新操作.节点key
-          ? nodeDataRecord[更新操作.节点key].id
+          ? newNodeDataRecord![更新操作.节点key].id
           : undefined,
       });
-    } else if (recordItem.type === 'folder') {
+    } else if (newNodeData.type === 'folder') {
       projectGroupsToUpdate.push({
-        id: recordItem.id,
-        name: node.title,
+        id: newNodeData.id,
+        name: newNodeData.title,
         parentGroupId: 更新操作.节点key
-          ? nodeDataRecord[更新操作.节点key].id
+          ? newNodeDataRecord![更新操作.节点key].id
           : undefined,
       });
     }
   });
 
   diffResult.删除.recordItems.forEach((node) => {
-    const recordItem = nodeDataRecord[node.key];
+    const recordItem = oldNodeDataRecord![node.key];
     if (recordItem.type === 'file') {
       projectIdsToDelete.push(recordItem.id);
     } else if (recordItem.type === 'folder') {
@@ -117,37 +118,48 @@ export class SyncHistoryManagerEmployee {
     const lastA = last(this.historyA);
     const lastB = last(this.historyB);
 
-    const results = compareTrees(
+    const results = compareTrees<ProjectStructureTreeDataNode>(
       lastA?.state.treeNodes ?? [],
       lastB?.state.treeNodes ?? [],
-      (nodeA, nodeB) =>
-        lastA?.state.treeDataRecord[nodeA.key].title !==
-        lastB?.state.treeDataRecord[nodeB.key].title,
+      (oldNode, newNode) => {
+        return (
+          lastA?.state.treeDataRecord[oldNode.key].title !==
+          lastB?.state.treeDataRecord[newNode.key].title
+        );
+      },
     );
 
     return {
-      ...results,
-      更新: results.更新?.map((更新操作) => ({
-        ...更新操作,
-        newRecordItem: lastB?.state.treeDataRecord[更新操作.节点key],
-        oldRecordItem: lastA?.state.treeDataRecord[更新操作.节点key],
-      })),
+      diffResults: results,
+      oldTreeDataRecord: lastA?.state.treeDataRecord,
+      newTreeDataRecord: lastB?.state.treeDataRecord,
     };
   }
 
   // 同步差异到远程数据库
   private async syncDifferences(
     differences: DiffResult<ProjectStructureTreeDataNode>,
+    oldTreeDataRecord?: ProjectTreeNodeDataRecord,
+    newTreeDataRecord?: ProjectTreeNodeDataRecord,
   ): Promise<void> {
     // 实现你的同步逻辑，例如通过 API 请求发送差异数据到远程数据库
-    console.log('同步差异:', differences);
-    api.syncs.applyProjectDiff();
+    api.syncs.applyProjectDiff(
+      convertDiffResultToProjectDiffDto(
+        differences,
+        oldTreeDataRecord,
+        newTreeDataRecord,
+      ),
+    );
   }
 
   // 执行同步操作
   public async sync(): Promise<void> {
-    const differences = this.compareHistories();
-    await this.syncDifferences(differences);
+    const results = this.compareHistories();
+    await this.syncDifferences(
+      results.diffResults,
+      results.oldTreeDataRecord,
+      results.newTreeDataRecord,
+    );
   }
 
   // 接受新的历史记录数组，并更新 A 和 B

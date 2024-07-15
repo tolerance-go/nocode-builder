@@ -3,10 +3,10 @@ import { TreeNodeBase } from '../types';
 
 export type 操作类型 = '新增' | '删除' | '移动' | '更新';
 
-export interface 更新操作详情<U> {
+export interface 更新操作详情<T> {
   节点key: DataKey;
-  oldRecordItem: U;
-  newRecordItem: U;
+  oldNode: T;
+  newNode: T;
 }
 
 export interface 新增操作详情<T> {
@@ -28,29 +28,24 @@ export interface 移动操作详情<T> {
   recordItems: T[];
 }
 
-export type 操作详情<T, U> =
+export type 操作详情<T> =
   | { type: '新增'; detail: 新增操作详情<T> }
   | { type: '删除'; detail: 删除操作详情<T> }
-  | { type: '更新'; detail: 更新操作详情<U> }
+  | { type: '更新'; detail: 更新操作详情<T> }
   | { type: '移动'; detail: 移动操作详情<T> };
 
-export interface DiffResult<T, U = unknown> {
+export interface DiffResult<T> {
   删除: 删除操作详情<T>;
   移动: 移动操作详情<T>[];
   新增: 新增操作详情<T>[];
-  更新?: 更新操作详情<U>[];
+  更新?: 更新操作详情<T>[];
 }
 
-export interface UpdatedOptions<T, U> {
-  isNodeUpdated: (oldNodeData: U, newNodeData: U) => boolean;
-  getNodeData: (node: T) => U;
-}
-
-export function compareTrees<T extends TreeNodeBase, U = unknown>(
+export function compareTrees<T extends TreeNodeBase>(
   oldTree: T[],
   newTree: T[],
-  updatedOptions?: UpdatedOptions<T, U>,
-): DiffResult<T, U> {
+  isNodeUpdated?: (oldNode: T, newNode: T) => boolean,
+): DiffResult<T> {
   const oldNodes = new Map<DataKey, T>();
   const newNodes = new Map<DataKey, T>();
   const oldParentMap = new Map<DataKey, DataKey | null>();
@@ -58,7 +53,7 @@ export function compareTrees<T extends TreeNodeBase, U = unknown>(
   const 删除: 删除操作详情<T> = { 节点keys: [], recordItems: [] };
   const 移动: 移动操作详情<T>[] = [];
   const 新增: 新增操作详情<T>[] = [];
-  const 更新: 更新操作详情<U>[] = [];
+  const 更新: 更新操作详情<T>[] = [];
 
   function traverse<N extends TreeNodeBase>(
     node: N,
@@ -84,19 +79,12 @@ export function compareTrees<T extends TreeNodeBase, U = unknown>(
       const oldParentDataKey = oldParentMap.get(key);
       const newParentDataKey = newParentMap.get(key);
 
-      if (updatedOptions) {
-        const { isNodeUpdated, getNodeData } = updatedOptions;
-
-        const oldNodeData = getNodeData(node);
-        const newNodeData = getNodeData(newNode);
-
-        if (isNodeUpdated(oldNodeData, newNodeData)) {
-          更新.push({
-            节点key: key,
-            oldRecordItem: oldNodeData,
-            newRecordItem: newNodeData,
-          });
-        }
+      if (isNodeUpdated?.(node, newNode)) {
+        更新.push({
+          节点key: key,
+          newNode,
+          oldNode: node,
+        });
       }
 
       if (oldParentDataKey !== newParentDataKey) {
@@ -149,8 +137,8 @@ export function compareTrees<T extends TreeNodeBase, U = unknown>(
     }
   });
 
-  const result: DiffResult<T, U> = { 删除, 移动, 新增 };
-  if (updatedOptions) {
+  const result: DiffResult<T> = { 删除, 移动, 新增 };
+  if (isNodeUpdated) {
     result.更新 = 更新;
   }
 
