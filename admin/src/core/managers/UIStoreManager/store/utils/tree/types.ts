@@ -5,7 +5,10 @@ export type TreeNodeBase = {
   children?: TreeNodeBase[];
 };
 
-export type TreeNode<T extends TreeNodeBase = TreeNodeBase> = {
+export type TreeNode<T extends TreeNodeBase = TreeNodeBase> = Omit<
+  T,
+  'children'
+> & {
   key: Key;
   children?: TreeNode<T>[];
-} & Omit<T, 'children'>;
+};

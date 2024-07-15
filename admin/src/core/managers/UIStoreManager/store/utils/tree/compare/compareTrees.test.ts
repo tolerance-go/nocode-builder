@@ -313,12 +313,20 @@ describe('compareTrees', () => {
   it('应正确检测更新操作', () => {
     const oldTree: DataTreeNode[] = [
       { key: '1', children: [], title: 'title-1' },
-      { key: '2', children: [], title: 'title-2' },
+      {
+        key: '2',
+        children: [],
+        title: 'title-2',
+      },
     ];
 
     const newTree: DataTreeNode[] = [
       { key: '1', children: [], title: 'title-1' },
-      { key: '2', children: [], title: 'title-2-new' },
+      {
+        key: '2',
+        children: [],
+        title: 'title-2-new',
+      },
     ];
 
     const isNodeUpdated = (
@@ -335,8 +343,72 @@ describe('compareTrees', () => {
       更新: [
         {
           节点key: '2',
-          oldRecordItem: { key: '2', children: [], title: 'title-2' },
-          newRecordItem: { key: '2', children: [], title: 'title-2-new' },
+          oldRecordItem: {
+            key: '2',
+            children: [],
+            title: 'title-2',
+          },
+          newRecordItem: {
+            key: '2',
+            children: [],
+            title: 'title-2-new',
+          },
+        },
+      ],
+    };
+
+    const result = compareTrees(oldTree, newTree, isNodeUpdated);
+    expect(result).toEqual(expected);
+  });
+
+  it('应该检测所有节点更新', () => {
+    const oldTree: DataTreeNode[] = [
+      { key: '1', children: [], title: 'title-1' },
+      {
+        key: '2',
+        children: [{ key: '2-1', children: [], title: 'title-2-1' }],
+        title: 'title-2',
+      },
+    ];
+
+    const newTree: DataTreeNode[] = [
+      { key: '1', children: [], title: 'title-1' },
+      {
+        key: '2',
+        children: [{ key: '2-1', children: [], title: 'title-2-1-new' }],
+        title: 'title-2-new',
+      },
+    ];
+
+    const isNodeUpdated = (
+      oldNode: DataTreeNode,
+      newNode: DataTreeNode,
+    ): boolean => {
+      return oldNode.title !== newNode.title;
+    };
+
+    const expected: DiffResult<DataTreeNode> = {
+      删除: { 节点keys: [], recordItems: [] },
+      移动: [],
+      新增: [],
+      更新: [
+        {
+          节点key: '2',
+          oldRecordItem: {
+            key: '2',
+            children: [{ key: '2-1', children: [], title: 'title-2-1' }],
+            title: 'title-2',
+          },
+          newRecordItem: {
+            key: '2',
+            children: [{ key: '2-1', children: [], title: 'title-2-1-new' }],
+            title: 'title-2-new',
+          },
+        },
+        {
+          节点key: '2-1',
+          oldRecordItem: { key: '2-1', children: [], title: 'title-2-1' },
+          newRecordItem: { key: '2-1', children: [], title: 'title-2-1-new' },
         },
       ],
     };
