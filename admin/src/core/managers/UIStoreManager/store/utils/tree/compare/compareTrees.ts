@@ -1,28 +1,29 @@
+import { Key } from 'react';
 import { TreeNode } from '../types';
 
 export type 操作类型 = '新增' | '删除' | '移动';
 
 export interface 更新操作详情<T> {
-  节点key: string;
+  节点key: Key;
   oldRecordItem: T;
   newRecordItem: T;
 }
 
 export interface 新增操作详情<T> {
-  父节点key: string | null;
+  父节点key: Key | null;
   index: number;
   recordItems: T[];
-  节点keys: string[];
+  节点keys: Key[];
 }
 
 export interface 删除操作详情<T> {
-  节点keys: string[];
+  节点keys: Key[];
   recordItems: T[];
 }
 
 export interface 移动操作详情<T> {
-  节点keys: string[];
-  目标父节点key: string | null;
+  节点keys: Key[];
+  目标父节点key: Key | null;
   index: number;
   recordItems: T[];
 }
@@ -43,19 +44,19 @@ export function compareTrees<T extends TreeNode<T>>(
   oldTree: T[],
   newTree: T[],
 ): DiffResult<T> {
-  const oldNodes = new Map<string | number, T>();
-  const newNodes = new Map<string | number, T>();
-  const oldParentMap = new Map<string | number, string | number | null>();
-  const newParentMap = new Map<string | number, string | number | null>();
+  const oldNodes = new Map<Key, T>();
+  const newNodes = new Map<Key, T>();
+  const oldParentMap = new Map<Key, Key | null>();
+  const newParentMap = new Map<Key, Key | null>();
   const 删除: 删除操作详情<T> = { 节点keys: [], recordItems: [] };
   const 移动: 移动操作详情<T>[] = [];
   const 新增: 新增操作详情<T>[] = [];
 
   function traverse(
     node: T,
-    map: Map<string | number, T>,
-    parentMap: Map<string | number, string | number | null>,
-    parentKey: string | number | null = null,
+    map: Map<Key, T>,
+    parentMap: Map<Key, Key | null>,
+    parentKey: Key | null = null,
   ) {
     map.set(node.key, node);
     parentMap.set(node.key, parentKey);
@@ -79,8 +80,8 @@ export function compareTrees<T extends TreeNode<T>>(
 
         const finalIndex = index === -1 ? 0 : index;
         移动.push({
-          节点keys: [key as string],
-          目标父节点key: newParentKey as string | null,
+          节点keys: [key],
+          目标父节点key: newParentKey as Key | null,
           index: finalIndex,
           recordItems: [node],
         });
@@ -88,9 +89,9 @@ export function compareTrees<T extends TreeNode<T>>(
     } else {
       if (
         !oldParentMap.has(key) ||
-        !删除.节点keys.includes(oldParentMap.get(key) as string)
+        !删除.节点keys.includes(oldParentMap.get(key) as Key)
       ) {
-        删除.节点keys.push(key as string);
+        删除.节点keys.push(key);
         删除.recordItems.push(node);
       }
     }
@@ -98,26 +99,29 @@ export function compareTrees<T extends TreeNode<T>>(
 
   newNodes.forEach((node, key) => {
     if (!oldNodes.has(key)) {
-      const 父节点key = newParentMap.get(key) as string | null;
+      const 父节点key = newParentMap.get(key) as Key | null;
       const 父节点 = 父节点key ? newNodes.get(父节点key) : null;
       const index = 父节点
         ? 父节点.children?.indexOf(node) ?? 0
         : newTree.indexOf(node);
 
-      const existingInsert = 新增.find(
-        (insert) => insert.父节点key === 父节点key,
-      );
+      const parentExistsInOldTree = 父节点key ? oldNodes.has(父节点key) : true;
+      if (parentExistsInOldTree) {
+        const existingInsert = 新增.find(
+          (insert) => insert.父节点key === 父节点key,
+        );
 
-      if (existingInsert) {
-        existingInsert.recordItems.push(node);
-        existingInsert.节点keys.push(key as string);
-      } else {
-        新增.push({
-          父节点key,
-          index,
-          recordItems: [node],
-          节点keys: [key as string],
-        });
+        if (existingInsert) {
+          existingInsert.recordItems.push(node);
+          existingInsert.节点keys.push(key);
+        } else {
+          新增.push({
+            父节点key,
+            index,
+            recordItems: [node],
+            节点keys: [key],
+          });
+        }
       }
     }
   });
