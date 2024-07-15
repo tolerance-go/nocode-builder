@@ -416,4 +416,56 @@ describe('compareTrees', () => {
     const result = compareTrees(oldTree, newTree, isNodeUpdated);
     expect(result).toEqual(expected);
   });
+
+  it('应正确处理从空数组到有数据的情况', () => {
+    const oldTree: TreeNode[] = [];
+
+    const newTree: TreeNode[] = [
+      { key: '1', children: [] },
+      { key: '2', children: [] },
+    ];
+
+    const expected: DiffResult<TreeNode> = {
+      删除: { 节点keys: [], recordItems: [] },
+      移动: [],
+      新增: [
+        {
+          父节点key: null,
+          index: 0,
+          recordItems: [
+            { key: '1', children: [] },
+            { key: '2', children: [] },
+          ],
+          节点keys: ['1', '2'],
+        },
+      ],
+    };
+
+    const result = compareTrees(oldTree, newTree);
+    expect(result).toEqual(expected);
+  });
+
+  it('应正确处理从有数据到空数组的情况', () => {
+    const oldTree: TreeNode[] = [
+      { key: '1', children: [] },
+      { key: '2', children: [] },
+    ];
+
+    const newTree: TreeNode[] = [];
+
+    const expected: DiffResult<TreeNode> = {
+      删除: {
+        节点keys: ['1', '2'],
+        recordItems: [
+          { key: '1', children: [] },
+          { key: '2', children: [] },
+        ],
+      },
+      移动: [],
+      新增: [],
+    };
+
+    const result = compareTrees(oldTree, newTree);
+    expect(result).toEqual(expected);
+  });
 });

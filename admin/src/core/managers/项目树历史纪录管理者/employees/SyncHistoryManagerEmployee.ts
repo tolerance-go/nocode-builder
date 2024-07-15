@@ -1,3 +1,9 @@
+import { api } from '@/globals';
+import {
+  compareTrees,
+  DiffResult,
+  ProjectStructureTreeDataNode,
+} from '../../UIStoreManager';
 import { 历史记录 } from '../machines';
 
 // 扩展历史记录，增加同步类型属性
@@ -18,15 +24,34 @@ export class SyncHistoryManagerEmployee {
   }
 
   // 比较 historyA 和 historyB 的差异
-  private compareHistories(): unknown {
-    // 实现你的差异比较逻辑，返回差异数据
-    // 这里仅作为占位，具体实现根据你的业务逻辑来完成
-    return {};
+  private compareHistories() {
+    const results = compareTrees(
+      this.historyA.length
+        ? this.historyA[this.historyA.length - 1].state.treeNodes
+        : [],
+      this.historyB.length
+        ? this.historyB[this.historyB.length - 1].state.treeNodes
+        : [],
+      (nodeA, nodeB) => nodeA.title !== nodeB.title,
+    );
+
+    return results;
   }
 
   // 同步差异到远程数据库
-  private async syncDifferences(differences: unknown): Promise<void> {
+  private async syncDifferences(
+    differences: DiffResult<ProjectStructureTreeDataNode>,
+  ): Promise<void> {
     // 实现你的同步逻辑，例如通过 API 请求发送差异数据到远程数据库
+    console.log('同步差异:', differences);
+    const requests: ((...args: unknown[]) => Promise<void>)[] = [];
+    if (differences.新增) {
+      differences.新增.forEach((item) => {
+        requests.push(async () => {
+          api.projects.createProject;
+        });
+      });
+    }
   }
 
   // 执行同步操作

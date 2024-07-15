@@ -1,5 +1,5 @@
 import { Key } from 'react';
-import { TreeNode, TreeNodeBase } from '../types';
+import { TreeNodeBase } from '../types';
 
 export type 操作类型 = '新增' | '删除' | '移动' | '更新';
 
@@ -42,22 +42,22 @@ export interface DiffResult<T> {
 }
 
 export function compareTrees<T extends TreeNodeBase>(
-  oldTree: TreeNode<T>[],
-  newTree: TreeNode<T>[],
-  isNodeUpdated?: (oldNode: TreeNode<T>, newNode: TreeNode<T>) => boolean,
-): DiffResult<TreeNode<T>> {
-  const oldNodes = new Map<Key, TreeNode<T>>();
-  const newNodes = new Map<Key, TreeNode<T>>();
+  oldTree: T[],
+  newTree: T[],
+  isNodeUpdated?: (oldNode: T, newNode: T) => boolean,
+): DiffResult<T> {
+  const oldNodes = new Map<Key, T>();
+  const newNodes = new Map<Key, T>();
   const oldParentMap = new Map<Key, Key | null>();
   const newParentMap = new Map<Key, Key | null>();
-  const 删除: 删除操作详情<TreeNode<T>> = { 节点keys: [], recordItems: [] };
-  const 移动: 移动操作详情<TreeNode<T>>[] = [];
-  const 新增: 新增操作详情<TreeNode<T>>[] = [];
-  const 更新: 更新操作详情<TreeNode<T>>[] = [];
+  const 删除: 删除操作详情<T> = { 节点keys: [], recordItems: [] };
+  const 移动: 移动操作详情<T>[] = [];
+  const 新增: 新增操作详情<T>[] = [];
+  const 更新: 更新操作详情<T>[] = [];
 
-  function traverse(
-    node: TreeNode<T>,
-    map: Map<Key, TreeNode<T>>,
+  function traverse<N extends TreeNodeBase>(
+    node: N,
+    map: Map<Key, N>,
     parentMap: Map<Key, Key | null>,
     parentKey: Key | null = null,
   ) {
@@ -75,7 +75,7 @@ export function compareTrees<T extends TreeNodeBase>(
 
   oldNodes.forEach((node, key) => {
     if (newNodes.has(key)) {
-      const newNode = newNodes.get(key) as TreeNode<T>;
+      const newNode = newNodes.get(key) as T;
       const oldParentKey = oldParentMap.get(key);
       const newParentKey = newParentMap.get(key);
 
@@ -137,7 +137,7 @@ export function compareTrees<T extends TreeNodeBase>(
     }
   });
 
-  const result: DiffResult<TreeNode<T>> = { 删除, 移动, 新增 };
+  const result: DiffResult<T> = { 删除, 移动, 新增 };
   if (isNodeUpdated) {
     result.更新 = 更新;
   }
