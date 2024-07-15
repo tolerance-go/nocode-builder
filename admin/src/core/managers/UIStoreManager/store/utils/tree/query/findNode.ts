@@ -10,7 +10,7 @@ export const findNode = <T extends TreeNode<T>>(
       return n;
     }
     if (n.children) {
-      const result = findNode(n.children, nodeKey);
+      const result = findNode(n.children as T[], nodeKey);
       if (result) {
         return result;
       }

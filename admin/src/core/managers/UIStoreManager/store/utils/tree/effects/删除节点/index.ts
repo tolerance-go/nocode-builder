@@ -16,7 +16,7 @@ export const removeNode = <T extends TreeNode<T>>(
       return { removedNode, index: i };
     }
     if (n.children) {
-      const result = removeNode(n.children, nodeKey);
+      const result = removeNode(n.children as T[], nodeKey);
       if (result) {
         return result;
       }

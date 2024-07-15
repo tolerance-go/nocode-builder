@@ -1,5 +1,5 @@
 import { ViewKey } from '@/types';
-import { TreeNodeBase } from '../types';
+import { TreeNode } from '../types';
 
 export type 操作类型 = '新增' | '删除' | '移动' | '更新';
 
@@ -41,7 +41,7 @@ export interface DiffResult<T> {
   更新?: 更新操作详情<T>[];
 }
 
-export function compareTrees<T extends TreeNodeBase>(
+export function compareTrees<T extends TreeNode<T>>(
   oldTree: T[],
   newTree: T[],
   isNodeUpdated?: (oldNode: T, newNode: T) => boolean,
@@ -55,7 +55,7 @@ export function compareTrees<T extends TreeNodeBase>(
   const 新增: 新增操作详情<T>[] = [];
   const 更新: 更新操作详情<T>[] = [];
 
-  function traverse<N extends TreeNodeBase>(
+  function traverse<N extends TreeNode<T>>(
     node: N,
     map: Map<ViewKey, N>,
     parentMap: Map<ViewKey, ViewKey | null>,

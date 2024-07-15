@@ -13,6 +13,7 @@ import {
 } from '@/core/managers/UIStoreManager';
 import { ProjectStructureTreeDataNode } from '@/core/managers/UIStoreManager/types';
 import { ViewKey } from '@/types';
+import { ProjectTypeEnum } from '@/_gen/models';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 
@@ -246,7 +247,7 @@ export const DirectoryTree = () => {
             finalIndex = 0;
           }
 
-          let dragKeys = [info.dragNode.key];
+          let dragKeys: ViewKey[] = [info.dragNode.key];
 
           // 如果移动的节点是选中的
           // 并且选中的节点包含多个
@@ -291,13 +292,13 @@ export const DirectoryTree = () => {
 
         const nodeData = connected_树节点key到节点数据的映射[nodeKey];
         if (nodeData.type === 'file') {
-          if (nodeData.projectFileType === 'view') {
+          if (nodeData.projectFileType === ProjectTypeEnum.View) {
             return 图标管理者实例.根据id获取组件('视图项目节点');
           }
-          if (nodeData.projectFileType === 'data-table') {
+          if (nodeData.projectFileType === ProjectTypeEnum.DataTable) {
             return 图标管理者实例.根据id获取组件('数据表项目节点');
           }
-          if (nodeData.projectFileType === 'bluemap') {
+          if (nodeData.projectFileType === ProjectTypeEnum.Bluemap) {
             return 图标管理者实例.根据id获取组件('蓝图项目节点');
           }
         } else {

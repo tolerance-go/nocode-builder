@@ -1,3 +1,4 @@
+import { ViewKey } from '@/types';
 import { TreeNode } from '../../types';
 
 interface BatchRemoveResult<T> {
@@ -8,7 +9,7 @@ interface BatchRemoveResult<T> {
 
 export const 批量删除节点 = <T extends TreeNode<T>>(
   nodes: T[],
-  nodeKeys: (number | string)[],
+  nodeKeys: ViewKey[],
 ): BatchRemoveResult<T> => {
   const removedNodes: T[] = [];
   const indices: number[] = [];
@@ -32,7 +33,7 @@ export const 批量删除节点 = <T extends TreeNode<T>>(
           nodes.splice(i, 1);
         }
       } else if (n.children) {
-        traverse(n.children, n);
+        traverse(n.children as T[], n);
       }
     }
   };
