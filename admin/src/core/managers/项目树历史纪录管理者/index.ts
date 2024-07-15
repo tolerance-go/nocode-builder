@@ -2,7 +2,7 @@ import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { Manager } from '@/types';
 import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
-import { 历史状态机, 历史记录 } from './actors';
+import { 历史状态机, 历史记录 } from './machines';
 
 export class 项目树历史纪录管理者 implements Manager {
   public 全局事件系统实例;
@@ -149,4 +149,4 @@ export class 项目树历史纪录管理者 implements Manager {
   }
 }
 
-export * from './actors';
+export * from './machines';
