@@ -186,7 +186,7 @@ describe('compareTrees', () => {
     expect(result).toEqual(expected);
   });
 
-  it('应正确处理嵌套节点的新增和删除，并返回最外层的父节点', () => {
+  it('应正确处理嵌套节点的删除，并返回最外层的父节点', () => {
     const oldTree: TreeNode[] = [
       { key: '1', children: [] },
       {
