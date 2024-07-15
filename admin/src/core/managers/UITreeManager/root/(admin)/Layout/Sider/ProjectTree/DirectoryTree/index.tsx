@@ -12,6 +12,7 @@ import {
   节点是不是文件,
 } from '@/core/managers/UIStoreManager';
 import { ProjectStructureTreeDataNode } from '@/core/managers/UIStoreManager/types';
+import { ViewKey } from '@/types';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 
@@ -213,7 +214,7 @@ export const DirectoryTree = () => {
             return;
           }
 
-          let dragKeys = [info.dragNode.key];
+          let dragKeys: ViewKey[] = [info.dragNode.key];
 
           // 如果移动的节点是选中的
           // 并且选中的节点包含多个

@@ -1,3 +1,4 @@
+import { ViewKey } from '@/types';
 import { ProjectTreeNodeDataRecord } from '../../..';
 import { AppSlices, AppStore } from '../../types';
 
@@ -31,7 +32,7 @@ export const onWork = (reduxStore: AppStore, slices: AppSlices) => {
         } else {
           const 获取节点数据通过key如果找不到抛出异常 = (
             records: ProjectTreeNodeDataRecord,
-            key: string,
+            key: ViewKey,
           ) => {
             if (key in records) {
               return records[key];

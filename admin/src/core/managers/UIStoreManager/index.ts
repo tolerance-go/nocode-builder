@@ -15,6 +15,7 @@ import {
   RootState,
 } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
+import { ProjectTypeEnum } from '@/_gen/models';
 
 export class UIStoreManager implements Manager {
   public store;
@@ -185,11 +186,11 @@ export class UIStoreManager implements Manager {
               currentState.projectTree.激活的节点的key
             ];
           if (nodeData.type === 'file') {
-            if (nodeData.projectFileType === 'view') {
+            if (nodeData.projectFileType === ProjectTypeEnum.View) {
               this.导航系统实例.navigateTo(paths['view-editor']);
-            } else if (nodeData.projectFileType === 'bluemap') {
+            } else if (nodeData.projectFileType === ProjectTypeEnum.Bluemap) {
               this.导航系统实例.navigateTo(paths['bluemap-editor']);
-            } else if (nodeData.projectFileType === 'data-table') {
+            } else if (nodeData.projectFileType === ProjectTypeEnum.DataTable) {
               this.导航系统实例.navigateTo(paths['data-table-editor']);
             }
           }

@@ -4,35 +4,35 @@ import {
   ProjectTreeNodeDataRecordItem,
 } from '@/core/managers/UIStoreManager/types';
 import { 历史记录 } from '@/core/managers/项目树历史纪录管理者';
-import { System } from '@/types';
+import { System, ViewKey } from '@/types';
 import Emittery from 'emittery';
 
 export type 全局事件映射 = {
   '界面状态管理者/新增节点': {
-    nodeKey: string;
+    nodeKey: ViewKey;
     nodeData: ProjectTreeNodeDataRecordItem;
-    parentKey: string | null;
+    parentKey: ViewKey | null;
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
     index: number;
   };
   '界面状态管理者/修改节点': {
-    nodeKey: string;
+    nodeKey: ViewKey;
     oldTreeNodeData: ProjectTreeNodeDataRecordItem;
     newTreeNodeData: ProjectTreeNodeDataRecordItem;
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   };
   '界面状态管理者/删除节点': {
-    nodeKeys: string[];
+    nodeKeys: ViewKey[];
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   };
   '界面状态管理者/移动节点': {
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
-    节点keys: string[];
-    目标父节点key: string | null;
+    节点keys: ViewKey[];
+    目标父节点key: ViewKey | null;
     index: number;
   };
   '界面视图管理者/用户撤销项目树': undefined;
