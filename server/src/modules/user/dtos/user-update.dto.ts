@@ -16,8 +16,6 @@ export class UserUpdateDto {
   name?: string;
 
   @ApiProperty({
-    description: 'The email address of the user',
-    example: 'johndoe@example.com',
     required: false,
   })
   @IsOptional()
@@ -25,8 +23,6 @@ export class UserUpdateDto {
   email?: string;
 
   @ApiProperty({
-    description: 'The password for the user',
-    example: 'P@ssw0rd!',
     required: false,
   })
   @IsOptional()
@@ -35,8 +31,6 @@ export class UserUpdateDto {
   password?: string;
 
   @ApiProperty({
-    description: 'The last update date of the user record',
-    example: '2024-01-02T00:00:00Z',
     required: false,
   })
   @IsOptional()

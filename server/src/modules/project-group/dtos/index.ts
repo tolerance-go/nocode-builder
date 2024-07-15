@@ -33,8 +33,6 @@ export class ProjectGroupCreateDto {
 
 export class ProjectGroupQueryDto {
   @ApiProperty({
-    description: 'Number of records to skip for pagination',
-    example: 0,
     required: false,
   })
   @IsOptional()
@@ -43,8 +41,6 @@ export class ProjectGroupQueryDto {
   skip?: number;
 
   @ApiProperty({
-    description: 'Number of records to take for pagination',
-    example: 10,
     required: false,
   })
   @IsOptional()
@@ -53,8 +49,6 @@ export class ProjectGroupQueryDto {
   take?: number;
 
   @ApiProperty({
-    description: 'Field by which to order the results',
-    example: 'createdAt',
     required: false,
   })
   @IsOptional()
@@ -63,8 +57,6 @@ export class ProjectGroupQueryDto {
   orderBy?: string;
 
   @ApiProperty({
-    description: 'Filter condition',
-    example: 'Project Group 1',
     required: false,
   })
   @IsOptional()

@@ -79,7 +79,6 @@ export class ProjectUpdateDto {
   name?: string;
 
   @ApiProperty({
-    example: 1,
     required: false,
   })
   @IsOptional()
@@ -94,9 +93,7 @@ export class ProjectUpdateWithIdDto extends ProjectUpdateDto {
 }
 
 export class ProjectDto {
-  @ApiProperty({
-    example: 1,
-  })
+  @ApiProperty({})
   @IsInt()
   id: number;
 
@@ -106,8 +103,6 @@ export class ProjectDto {
 
   @ApiProperty({
     required: false,
-    nullable: true,
-    example: 1,
   })
   @IsInt()
   @IsOptional()

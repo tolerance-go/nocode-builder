@@ -4,6 +4,43 @@
  * ---------------------------------------------------------------
  */
 
+export interface ProjectCreateDto {
+  name: string;
+  projectGroupId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  type: string;
+}
+
+export interface ProjectGroupCreateDto {
+  name: string;
+  parentGroupId?: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ProjectUpdateWithIdDto {
+  name?: string;
+  /** @example 1 */
+  projectGroupId?: number;
+  id: number;
+}
+
+export interface ProjectGroupUpdateWithIdDto {
+  name?: string;
+  parentGroupId?: number;
+  id: number;
+}
+
+export interface ProjectDiffDto {
+  projectsToCreate: ProjectCreateDto[];
+  projectGroupsToCreate: ProjectGroupCreateDto[];
+  projectsToUpdate: ProjectUpdateWithIdDto[];
+  projectGroupsToUpdate: ProjectGroupUpdateWithIdDto[];
+  projectIdsToDelete: number[];
+  projectGroupIdsToDelete: number[];
+}
+
 export interface LoginDto {
   username: string;
   password: string;
@@ -55,108 +92,33 @@ export interface UserUpdateDto {
 }
 
 export interface ProjectDto {
-  /**
-   * The unique identifier of the project
-   * @example 1
-   */
+  /** @example 1 */
   id: number;
-  /**
-   * The name of the project
-   * @example "Project 1"
-   */
   name: string;
-  /**
-   * The project group ID of the project
-   * @example 1
-   */
+  /** @example 1 */
   projectGroupId?: number | null;
-  /**
-   * The owner ID of the project
-   * @example 1
-   */
   ownerId: number;
-  /**
-   * The date and time when the project was created
-   * @example "2024-01-01T00:00:00Z"
-   */
   createdAt: string;
-  /**
-   * The date and time when the project was last updated
-   * @example "2024-01-02T00:00:00Z"
-   */
   updatedAt: string;
 }
 
-export interface ProjectCreateDto {
-  name: string;
-  projectGroupId?: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
 export interface ProjectUpdateDto {
-  /**
-   * The name of the project
-   * @example "Project 1"
-   */
   name?: string;
-  /**
-   * The project group ID of the project
-   * @example 1
-   */
+  /** @example 1 */
   projectGroupId?: number;
 }
 
 export interface ProjectGroupDto {
-  /**
-   * The unique identifier of the project group
-   * @example 1
-   */
   id: number;
-  /**
-   * The name of the project group
-   * @example "Project Group 1"
-   */
   name: string;
-  /**
-   * The parent group ID of the project group
-   * @example 1
-   */
   parentGroupId?: number | null;
-  /**
-   * The owner ID of the project group
-   * @example 1
-   */
   ownerId: number;
-  /**
-   * The date and time when the project group was created
-   * @example "2024-01-01T00:00:00Z"
-   */
   createdAt: string;
-  /**
-   * The date and time when the project group was last updated
-   * @example "2024-01-02T00:00:00Z"
-   */
   updatedAt: string;
 }
 
-export interface ProjectGroupCreateDto {
-  name: string;
-  parentGroupId?: number;
-  createdAt?: string;
-  updatedAt?: string;
-}
-
 export interface ProjectGroupUpdateDto {
-  /**
-   * The name of the project group
-   * @example "Project Group 1"
-   */
   name?: string;
-  /**
-   * The parent group ID of the project group
-   * @example 1
-   */
   parentGroupId?: number;
 }
 
@@ -359,6 +321,22 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
       ...params,
     });
 
+  syncs = {
+    /**
+     * No description
+     *
+     * @name SyncControllerApplyProjectDiff
+     * @request POST:/syncs/apply-project-diff
+     */
+    applyProjectDiff: (data: ProjectDiffDto, params: RequestParams = {}) =>
+      this.request<void, void>({
+        path: `/syncs/apply-project-diff`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        ...params,
+      }),
+  };
   auth = {
     /**
      * No description
@@ -547,25 +525,9 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      */
     getProjects: (
       query?: {
-        /**
-         * Number of records to skip for pagination
-         * @example 0
-         */
         skip?: number;
-        /**
-         * Number of records to take for pagination
-         * @example 10
-         */
         take?: number;
-        /**
-         * Field by which to order the results
-         * @example "createdAt"
-         */
         orderBy?: string;
-        /**
-         * Filter condition
-         * @example "Project 1"
-         */
         filter?: string;
       },
       params: RequestParams = {},
