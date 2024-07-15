@@ -52,6 +52,8 @@ describe('compareTrees', () => {
         {
           节点keys: ['1-1'],
           目标父节点key: '2',
+          index: 0,
+          recordItems: [{ key: '1-1', children: [] }],
         },
       ],
       新增: [],
@@ -226,6 +228,7 @@ describe('compareTrees', () => {
     const newTree: TreeNode[] = [
       {
         key: '1',
+        children: [],
       },
       {
         key: '1-1',
@@ -241,9 +244,61 @@ describe('compareTrees', () => {
         {
           节点keys: ['1-1'],
           目标父节点key: null,
+          index: 1,
+          recordItems: [
+            {
+              key: '1-1',
+              children: [
+                { key: '1-1-1', children: [{ key: '1-1-1-1', children: [] }] },
+              ],
+            },
+          ],
         },
       ],
       新增: [],
+    };
+
+    const result = compareTrees(oldTree, newTree);
+    expect(result).toEqual(expected);
+  });
+
+  it('应在新增操作中返回最外层的节点', () => {
+    const oldTree: TreeNode[] = [
+      {
+        key: '1',
+        children: [],
+      },
+    ];
+
+    const newTree: TreeNode[] = [
+      {
+        key: '1',
+        children: [],
+      },
+      {
+        key: '2',
+        children: [{ key: '2-1', children: [{ key: '2-1-1', children: [] }] }],
+      },
+    ];
+
+    const expected: DiffResult<TreeNode> = {
+      删除: { 节点keys: [], recordItems: [] },
+      移动: [],
+      新增: [
+        {
+          节点keys: ['2'],
+          父节点key: null,
+          index: 1,
+          recordItems: [
+            {
+              key: '2',
+              children: [
+                { key: '2-1', children: [{ key: '2-1-1', children: [] }] },
+              ],
+            },
+          ],
+        },
+      ],
     };
 
     const result = compareTrees(oldTree, newTree);

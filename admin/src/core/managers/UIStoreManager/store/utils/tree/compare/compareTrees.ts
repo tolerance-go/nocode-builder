@@ -20,20 +20,22 @@ export interface 删除操作详情<T> {
   recordItems: T[];
 }
 
-export interface 移动操作详情 {
+export interface 移动操作详情<T> {
   节点keys: string[];
   目标父节点key: string | null;
+  index: number;
+  recordItems: T[];
 }
 
 export type 操作详情<T> =
   | { type: '新增'; detail: 新增操作详情<T> }
   | { type: '删除'; detail: 删除操作详情<T> }
   | { type: '更新'; detail: 更新操作详情<T> }
-  | { type: '移动'; detail: 移动操作详情 };
+  | { type: '移动'; detail: 移动操作详情<T> };
 
 export interface DiffResult<T> {
   删除: 删除操作详情<T>;
-  移动: 移动操作详情[];
+  移动: 移动操作详情<T>[];
   新增: 新增操作详情<T>[];
 }
 
@@ -46,7 +48,7 @@ export function compareTrees<T extends TreeNode<T>>(
   const oldParentMap = new Map<string | number, string | number | null>();
   const newParentMap = new Map<string | number, string | number | null>();
   const 删除: 删除操作详情<T> = { 节点keys: [], recordItems: [] };
-  const 移动: 移动操作详情[] = [];
+  const 移动: 移动操作详情<T>[] = [];
   const 新增: 新增操作详情<T>[] = [];
 
   function traverse(
@@ -72,9 +74,15 @@ export function compareTrees<T extends TreeNode<T>>(
       const oldParentKey = oldParentMap.get(key);
       const newParentKey = newParentMap.get(key);
       if (oldParentKey !== newParentKey) {
+        const node = newNodes.get(key) as T;
+        const index = newParentMap.has(key) ? newTree.indexOf(node) : -1;
+
+        const finalIndex = index === -1 ? 0 : index;
         移动.push({
           节点keys: [key as string],
           目标父节点key: newParentKey as string | null,
+          index: finalIndex,
+          recordItems: [node],
         });
       }
     } else {
