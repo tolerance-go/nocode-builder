@@ -45,6 +45,18 @@ type ScenarioFunction = (
  */
 export const 使用场景: ScenarioFunction = (description, steps) => {
   describe(description, () => {
+    beforeEach(() => {
+      // 清除 localStorage
+      cy.clearLocalStorage();
+
+      cy.window().then((win) => {
+        const databases = ['localforage']; // 列出你要清除的数据库名称
+        databases.forEach((dbName) => {
+          win.indexedDB.deleteDatabase(dbName);
+        });
+      });
+    });
+
     const createGivenFunction = (
       itFunction: (desc: string, cb: () => void) => void,
     ): StepFunctionWithOnly<GivenCallbackArgs> => {
