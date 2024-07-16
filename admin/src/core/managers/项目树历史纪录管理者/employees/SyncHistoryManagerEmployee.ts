@@ -114,7 +114,7 @@ export class SyncHistoryManagerEmployee implements Manager {
       await this.commitPendingUpdate();
     } catch (error) {
       await this.updateState({ syncStatus: '同步失败' });
-      await this.retrySync();
+      this.retryCallback(this.startSync.bind(this));
     }
   }
 
@@ -145,7 +145,7 @@ export class SyncHistoryManagerEmployee implements Manager {
         pendingUpdate: null,
       });
     }
-    this.retryCallback(this.startSync.bind(this));
+    await this.startSync();
   }
 
   // 接受新的历史记录数组，并更新 A 和 B

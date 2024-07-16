@@ -1,7 +1,9 @@
 import { System } from '@/types';
+import { 测试标识 } from '@shared/constants';
 import { MessageInstance } from 'antd/es/message/interface';
 import { HookAPI } from 'antd/es/modal/useModal';
 import { NotificationInstance } from 'antd/es/notification/interface';
+import { createElement } from 'react';
 
 interface MessageOptions {
   type: 'success' | 'error' | 'info' | 'warning' | 'loading';
@@ -63,7 +65,10 @@ export class 界面通知系统 implements System {
         if (this.messageApi) {
           this.messageApi.open({
             type: options.type,
-            content: options.content,
+            content: createElement('span', {
+              'data-test-id': 测试标识.全局消息框标题,
+              children: options.content,
+            }),
             duration: options.duration,
           });
           resolve();
@@ -83,7 +88,10 @@ export class 界面通知系统 implements System {
       const action = () => {
         if (this.notificationApi) {
           this.notificationApi[type]({
-            message: rest.message,
+            message: createElement('span', {
+              'data-test-id': 测试标识.全局通知框标题,
+              children: rest.message,
+            }),
             description: rest.description,
             duration: rest.duration,
           });
@@ -101,7 +109,10 @@ export class 界面通知系统 implements System {
       const action = () => {
         if (this.modalApi) {
           this.modalApi[type]({
-            title: rest.title,
+            title: createElement('span', {
+              'data-test-id': 测试标识.全局模态框标题,
+              children: rest.title,
+            }),
             content: rest.content,
             onOk: rest.onOk,
             onCancel: rest.onCancel,

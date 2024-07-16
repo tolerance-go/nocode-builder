@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/core/managers/UIStoreManager';
 import { 组件类名 } from '@/core/managers/UITreeManager/constants';
 import { use界面状态管理者 } from '@/core/managers/UITreeManager/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
-import { 测试标识, 测试类 } from '@shared/constants';
+import { 测试标识, 测试类名 } from '@shared/constants';
 import { cx } from '@emotion/css';
 import { Dropdown, Flex, Typography, theme } from 'antd';
 import { TitleInput } from './TitleInput';
@@ -94,9 +94,9 @@ export const Title = ({ nodeKey }: { nodeKey: string }) => {
     >
       <span
         data-test-class={cx(
-          测试类.项目树节点标题,
+          测试类名.项目树节点标题,
           编辑临时创建节点之前选中的节点是否为自身 &&
-            测试类.编辑临时创建节点之前选中的节点,
+            测试类名.编辑临时创建节点之前选中的节点,
         )}
         style={{
           display: 'inline-block',

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { 测试标识, 测试类 } from '@shared/constants';
+import { 测试标识, 测试类名 } from '@shared/constants';
 import { BASE_API } from './constants';
 
 // ***********************************************
@@ -202,7 +202,7 @@ Cypress.Commands.add('登录', (username: string, password: string) => {
 
 Cypress.Commands.add('获取项目树节点标题元素', (name: string) => {
   return cy
-    .get(`[data-test-class*="${测试类.项目树节点标题}"]`)
+    .get(`[data-test-class*="${测试类名.项目树节点标题}"]`)
     .filter((_index, element) => {
       return element.textContent === name;
     });

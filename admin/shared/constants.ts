@@ -23,6 +23,10 @@ export const 测试标识 = {
 
   内容区域组件: 'content-area',
 
+  全局模态框标题: 'global-modal-title',
+  全局通知框标题: 'global-notification-title',
+  全局消息框标题: 'global-message-title',
+
   创建视图项目节点的菜单项标题: 'create-view-project-node-menu-item',
   创建数据表项目节点的菜单项标题: 'create-data-table-project-node-menu-item',
   创建蓝图项目节点的菜单项标题: 'create-bluemap-project-node-menu-item',
@@ -47,7 +51,11 @@ export const 测试标识 = {
   },
 };
 
-export const 测试类 = {
+export const 测试类名 = {
   项目树节点标题: 'project-tree-title',
   编辑临时创建节点之前选中的节点: 'previous-selected-node',
 };
+
+export const 组件标识 = {};
+
+export const 组件类名 = {};

@@ -1,20 +1,19 @@
+import { localKeys } from '@/configs';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
+import { 界面通知系统 } from '@/core/systems/界面通知系统';
+import { api } from '@/globals';
 import { Manager } from '@/types';
 import { createBrowserInspector } from '@statelyai/inspect';
-import { Modal } from 'antd';
+import localforage from 'localforage';
 import { createActor } from 'xstate';
-import { SyncHistoryManagerEmployee } from './employees/SyncHistoryManagerEmployee';
-import { 历史状态机, 历史记录 } from './machines';
-import { api } from '@/globals';
-import { convertDiffResultToProjectDiffDto } from './employees/utils';
 import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
 } from '../UIStoreManager';
-import localforage from 'localforage';
-import { localKeys } from '@/configs';
-import { 界面通知系统 } from '@/core/systems/界面通知系统';
+import { SyncHistoryManagerEmployee } from './employees/SyncHistoryManagerEmployee';
+import { convertDiffResultToProjectDiffDto } from './employees/utils';
+import { 历史状态机, 历史记录 } from './machines';
 
 export class 项目树历史纪录管理者 implements Manager {
   public 全局事件系统实例;

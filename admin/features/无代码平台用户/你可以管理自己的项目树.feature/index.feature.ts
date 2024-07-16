@@ -1,4 +1,4 @@
-import { 测试类, 测试标识 } from '@shared/constants';
+import { 测试类名, 测试标识 } from '@shared/constants';
 import {
   getTreeNodeParent,
   getTreeNodeChildren,
@@ -99,7 +99,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
 
       那么('项目节点应该被激活', () => {
         cy.获取项目树节点通过标题('项目节点')
-          .find(`[data-test-class="${测试类.项目树节点标题}"]`)
+          .find(`[data-test-class="${测试类名.项目树节点标题}"]`)
           .should('have.class', 'active');
       });
 
@@ -128,7 +128,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
 
     那么('项目节点应该被激活', () => {
       cy.获取项目树节点通过标题('项目节点')
-        .find(`[data-test-class="${测试类.项目树节点标题}"]`)
+        .find(`[data-test-class="${测试类名.项目树节点标题}"]`)
         .should('have.class', 'active');
     });
 
@@ -138,7 +138,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
 
     那么('项目节点应该失去激活状态', () => {
       cy.获取项目树节点通过标题('项目节点')
-        .find(`[data-test-class="${测试类.项目树节点标题}"]`)
+        .find(`[data-test-class="${测试类名.项目树节点标题}"]`)
         .should('not.have.class', 'active');
     });
 
@@ -148,7 +148,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
 
     那么('项目节点应该再次进入激活状态', () => {
       cy.获取项目树节点通过标题('项目节点')
-        .find(`[data-test-class="${测试类.项目树节点标题}"]`)
+        .find(`[data-test-class="${测试类名.项目树节点标题}"]`)
         .should('have.class', 'active');
     });
   });
@@ -177,7 +177,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取项目树标题输入框().type('{enter}');
     });
     那么('用户应该能看到分组名称在项目树中', () => {
-      cy.获取测试类(测试类.项目树节点标题)
+      cy.获取测试类(测试类名.项目树节点标题)
         .should('have.length', 1)
         .and('contain.text', 'Test Group');
     });

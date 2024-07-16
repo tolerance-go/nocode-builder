@@ -1,4 +1,4 @@
-import { 测试标识, 测试类 } from '@shared/constants';
+import { 测试标识, 测试类名 } from '@shared/constants';
 import { getTreeNodeParent } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
@@ -162,7 +162,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
             const $parent = getTreeNodeParent($file);
             expect(
               $parent
-                .find(`[data-test-class*="${测试类.项目树节点标题}"]`)
+                .find(`[data-test-class*="${测试类名.项目树节点标题}"]`)
                 .text(),
             ).equal('folder');
           });
@@ -236,7 +236,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
             const $parent = getTreeNodeParent($file);
             expect(
               $parent
-                .find(`[data-test-class*="${测试类.项目树节点标题}"]`)
+                .find(`[data-test-class*="${测试类名.项目树节点标题}"]`)
                 .text(),
             ).equal('folder');
           });
@@ -328,7 +328,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取项目树节点通过标题('file').then(($file) => {
         const $parent = getTreeNodeParent($file);
         expect(
-          $parent.find(`[data-test-class="${测试类.项目树节点标题}"]`).text(),
+          $parent.find(`[data-test-class="${测试类名.项目树节点标题}"]`).text(),
         ).equal('folder');
       });
     });

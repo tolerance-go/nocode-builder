@@ -1,4 +1,4 @@
-import { 测试标识, 测试类 } from '@shared/constants';
+import { 测试标识, 测试类名 } from '@shared/constants';
 import {
   getTreeNodeChildren,
   getTreeNodeParent,
@@ -43,7 +43,9 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取项目树节点通过标题('项目节点').then(($file) => {
         const $parent = getTreeNodeParent($file);
         expect(
-          $parent.find(`[data-test-class*="${测试类.项目树节点标题}"]`).text(),
+          $parent
+            .find(`[data-test-class*="${测试类名.项目树节点标题}"]`)
+            .text(),
         ).equal('文件夹节点');
       });
     });
@@ -77,7 +79,9 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       cy.获取项目树节点通过标题('项目节点').then(($file) => {
         const $parent = getTreeNodeParent($file);
         expect(
-          $parent.find(`[data-test-class*="${测试类.项目树节点标题}"]`).text(),
+          $parent
+            .find(`[data-test-class*="${测试类名.项目树节点标题}"]`)
+            .text(),
         ).equal('文件夹节点');
       });
     });
@@ -704,7 +708,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
 
       那么('选中的文件夹应该被删除', () => {
         cy.获取项目树节点通过标题('文件夹0').should('exist');
-        cy.获取测试类(测试类.项目树节点标题).should('have.length', 1);
+        cy.获取测试类(测试类名.项目树节点标题).should('have.length', 1);
       });
     },
   );
@@ -1016,7 +1020,9 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       那么('之前选中的项目节点应该处于“之前选中”的状态', () => {
         cy.获取项目树节点通过标题('项目节点')
           .should('not.have.class', 'ant-tree-treenode-selected')
-          .find(`[data-test-class*="${测试类.编辑临时创建节点之前选中的节点}"]`)
+          .find(
+            `[data-test-class*="${测试类名.编辑临时创建节点之前选中的节点}"]`,
+          )
           .should('exist');
       });
 
@@ -1027,7 +1033,9 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
       那么('之前选中的项目节点应该重新被选中，而非“之前选中”的状态', () => {
         cy.获取项目树节点通过标题('项目节点')
           .should('have.class', 'ant-tree-treenode-selected')
-          .find(`[data-test-class*="${测试类.编辑临时创建节点之前选中的节点}"]`)
+          .find(
+            `[data-test-class*="${测试类名.编辑临时创建节点之前选中的节点}"]`,
+          )
           .should('not.exist');
       });
     },
