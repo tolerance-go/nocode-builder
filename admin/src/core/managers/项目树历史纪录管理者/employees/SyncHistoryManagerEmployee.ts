@@ -1,5 +1,4 @@
 import { Manager } from '@/types';
-import localforage from 'localforage';
 import { last } from 'lodash-es';
 import {
   compareTrees,
@@ -21,6 +20,8 @@ interface SyncHistoryManagerEmployeeParams {
   initialHistoryB: 历史记录[];
   retryCallback: RetryCallback;
   syncFunction: SyncFunction;
+  saveStateFunction: (state: SyncHistoryManagerState) => Promise<void>;
+  loadStateFunction: () => Promise<SyncHistoryManagerState | null>;
 }
 
 type RetryCallback = (retry: () => void) => void;
@@ -39,34 +40,41 @@ export class SyncHistoryManagerEmployee implements Manager {
   };
   private readonly retryCallback: RetryCallback; // 重试回调函数
   private readonly syncFunction: SyncFunction; // 同步函数
+  private readonly saveStateFunction: (
+    state: SyncHistoryManagerState,
+  ) => Promise<void>; // 持久化函数
+  private readonly loadStateFunction: () => Promise<SyncHistoryManagerState | null>; // 加载持久化状态函数
 
   constructor(params: SyncHistoryManagerEmployeeParams) {
-    const { initialHistoryA, initialHistoryB, retryCallback, syncFunction } =
-      params;
+    const {
+      initialHistoryA,
+      initialHistoryB,
+      retryCallback,
+      syncFunction,
+      saveStateFunction,
+      loadStateFunction,
+    } = params;
     this.state.historyA = initialHistoryA;
     this.state.historyB = initialHistoryB;
     this.retryCallback = retryCallback;
     this.syncFunction = syncFunction;
-  }
-
-  private async saveStateToStorage(): Promise<void> {
-    await localforage.setItem('syncHistoryManagerEmployee_state', this.state);
-  }
-
-  private async loadStateFromStorage(): Promise<void> {
-    const state: SyncHistoryManagerState | null = await localforage.getItem(
-      'syncHistoryManagerEmployee_state',
-    );
-    if (state) {
-      this.state = state;
-    }
+    this.saveStateFunction = saveStateFunction;
+    this.loadStateFunction = loadStateFunction;
   }
 
   private async updateState(
     updates: Partial<SyncHistoryManagerState>,
   ): Promise<void> {
     this.state = { ...this.state, ...updates };
-    await this.saveStateToStorage();
+    await this.saveStateFunction(this.state);
+  }
+
+  private async loadState(): Promise<void> {
+    const state: SyncHistoryManagerState | null =
+      await this.loadStateFunction();
+    if (state) {
+      this.state = state;
+    }
   }
 
   // 比较 historyA 和 historyB 的差异
@@ -158,7 +166,7 @@ export class SyncHistoryManagerEmployee implements Manager {
 
   // 执行同步任务
   public async work(): Promise<void> {
-    await this.loadStateFromStorage();
+    await this.loadState();
     if (this.state.syncStatus === '同步失败') {
       await this.retrySync();
     } else if (

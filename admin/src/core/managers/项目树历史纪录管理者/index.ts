@@ -12,6 +12,7 @@ import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
 } from '../UIStoreManager';
+import localforage from 'localforage';
 
 export class 项目树历史纪录管理者 implements Manager {
   public 全局事件系统实例;
@@ -48,6 +49,12 @@ export class 项目树历史纪录管理者 implements Manager {
             newTreeDataRecord,
           ),
         );
+      },
+      saveStateFunction: async (state) => {
+        await localforage.setItem('syncHistoryManagerEmployee_state', state);
+      },
+      loadStateFunction: async () => {
+        return await localforage.getItem('syncHistoryManagerEmployee_state');
       },
     });
 
