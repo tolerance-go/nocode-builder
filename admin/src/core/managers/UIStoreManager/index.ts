@@ -23,6 +23,8 @@ export class UIStoreManager implements Manager {
     return this.working;
   }
 
+  private currentPathname: string | null = null;
+
   public store;
 
   public slices;
@@ -136,7 +138,12 @@ export class UIStoreManager implements Manager {
     this.注册同步用户信息监听();
     this.检查本地用户token同步到内存中();
     this.注册路由更新监听();
+    this.注册指针移动监听();
 
+    this.working = true;
+  }
+
+  注册指针移动监听() {
     this.全局事件系统实例.on('项目树历史记录管理者/指针移动', (event) => {
       this.store.dispatch(
         this.slices.projectTree.actions.更新项目节点树(
@@ -152,25 +159,30 @@ export class UIStoreManager implements Manager {
         ),
       );
     });
-
-    this.working = true;
   }
 
   注册路由更新监听() {
-    let prevState = this.store.getState();
-    this.store.subscribe(() => {
-      const nextState = this.store.getState();
+    const 判断路由是否变化 = () => {
+      const state = this.store.getState();
 
-      if (
-        nextState.location.pathname &&
-        nextState.location.pathname !== prevState.location.pathname
-      ) {
-        this.全局事件系统实例.emit('界面状态管理者/路由更新', {
-          pathname: nextState.location.pathname,
-        });
+      /**
+       * state 的初始值可能来自本地，所以初始值可能不为 null
+       */
+      if (this.currentPathname !== state.location.pathname) {
+        this.currentPathname = state.location.pathname;
+
+        if (this.currentPathname) {
+          this.全局事件系统实例.emit('界面状态管理者/路由更新', {
+            pathname: this.currentPathname,
+          });
+        }
       }
+    };
 
-      prevState = nextState;
+    判断路由是否变化();
+
+    this.store.subscribe(() => {
+      判断路由是否变化();
     });
   }
 

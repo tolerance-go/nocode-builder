@@ -65,7 +65,7 @@ export class 全局事件系统<T extends Record<string, unknown> = 全局事件
 
     // 按顺序发送缓存的事件
     for (const { eventName, eventData } of this.eventCache) {
-      await this.emitter.emit(eventName, eventData);
+      await this.sendEvent(eventName, eventData);
     }
 
     // 清空缓存
@@ -91,10 +91,19 @@ export class 全局事件系统<T extends Record<string, unknown> = 全局事件
     eventData: T[EventName],
   ): Promise<void> {
     if (this.isLaunched) {
-      return this.emitter.emit(eventName, eventData);
+      return this.sendEvent(eventName, eventData);
     } else {
       // 缓存事件
       this.eventCache.push({ eventName, eventData } as EventCacheItem<T>);
     }
+  }
+
+  // 内部方法，用于发送事件并打印
+  private async sendEvent<EventName extends keyof T>(
+    eventName: EventName,
+    eventData: T[EventName],
+  ): Promise<void> {
+    console.log(`Sending event: ${String(eventName)}`, eventData);
+    return await this.emitter.emit(eventName, eventData);
   }
 }
