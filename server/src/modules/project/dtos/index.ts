@@ -36,6 +36,7 @@ export class ProjectCreateDto {
     enum: ProjectType,
   })
   @IsEnum(ProjectType)
+  @IsNotEmpty()
   type: ProjectType;
 }
 

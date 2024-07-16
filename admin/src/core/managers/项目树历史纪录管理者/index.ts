@@ -3,6 +3,7 @@ import { Manager } from '@/types';
 import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
 import { 历史状态机, 历史记录 } from './machines';
+import { SyncHistoryManagerEmployee } from './employees/SyncHistoryManagerEmployee';
 
 export class 项目树历史纪录管理者 implements Manager {
   public 全局事件系统实例;
@@ -13,7 +14,10 @@ export class 项目树历史纪录管理者 implements Manager {
 
   private 历史状态机Actor;
 
+  private syncHistoryManagerEmployee: SyncHistoryManagerEmployee;
+
   public constructor(全局事件系统实例: 全局事件系统) {
+    this.syncHistoryManagerEmployee = new SyncHistoryManagerEmployee([], []);
     this.全局事件系统实例 = 全局事件系统实例;
     this.历史状态机Actor = createActor(历史状态机, {
       inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
@@ -37,6 +41,8 @@ export class 项目树历史纪录管理者 implements Manager {
 
       this.历史堆栈 = state.context.历史堆栈;
       this.历史指针 = state.context.历史指针;
+
+      this.syncHistoryManagerEmployee.updateHistories(this.历史堆栈);
     });
 
     this.全局事件系统实例.on(

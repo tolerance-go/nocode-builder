@@ -9,19 +9,15 @@ import {
 import { 历史记录 } from '../machines';
 import { convertDiffResultToProjectDiffDto } from './utils';
 
-// 扩展历史记录，增加同步类型属性
-export type 扩展历史记录 = 历史记录 & {
-  同步类型: '未同步' | '已同步' | '同步失败'; // 新增的同步类型属性
-};
-
 export class SyncHistoryManagerEmployee {
-  private historyA: 扩展历史记录[] = [];
-  private historyB: 扩展历史记录[] = [];
+  private historyA: 历史记录[] = [];
+  private historyB: 历史记录[] = [];
+  private pendingUpdate: 历史记录[] | null = null; // 待更新的历史记录数组
+  private syncStatus: '未同步' | '已同步' | '同步失败' | '同步中' = '未同步'; // 同步状态属性
+  private retryCount: number = 0; // 重试计数
+  private readonly maxRetries: number = 3; // 最大重试次数
 
-  constructor(
-    initialHistoryA: 扩展历史记录[],
-    initialHistoryB: 扩展历史记录[],
-  ) {
+  constructor(initialHistoryA: 历史记录[], initialHistoryB: 历史记录[]) {
     this.historyA = initialHistoryA;
     this.historyB = initialHistoryB;
   }
@@ -66,18 +62,74 @@ export class SyncHistoryManagerEmployee {
   }
 
   // 执行同步操作
-  public async sync(): Promise<void> {
+  private async sync(): Promise<void> {
     const results = this.compareHistories();
-    await this.syncDifferences(
-      results.diffResults,
-      results.oldTreeDataRecord,
-      results.newTreeDataRecord,
-    );
+    this.setSyncStatus('同步中');
+    try {
+      await this.syncDifferences(
+        results.diffResults,
+        results.oldTreeDataRecord,
+        results.newTreeDataRecord,
+      );
+      this.setSyncStatus('已同步');
+      this.retryCount = 0; // 重置重试计数
+      this.commitPendingUpdate();
+    } catch (error) {
+      this.setSyncStatus('同步失败');
+      this.handleSyncError();
+    }
+  }
+
+  // 更新同步状态
+  private setSyncStatus(
+    status: '未同步' | '已同步' | '同步失败' | '同步中',
+  ): void {
+    this.syncStatus = status;
+  }
+
+  // 提交待更新的历史记录
+  private commitPendingUpdate(): void {
+    if (this.pendingUpdate) {
+      this.historyA = this.historyB;
+      this.historyB = this.pendingUpdate;
+      this.pendingUpdate = null;
+      this.startSync();
+    } else {
+      this.historyA = this.historyB;
+    }
+  }
+
+  private handleSyncError() {
+    if (this.pendingUpdate) {
+      this.historyB = this.pendingUpdate;
+      this.pendingUpdate = null;
+    }
+    this.retrySync();
+  }
+
+  private startSync() {
+    if (this.syncStatus !== '同步中') {
+      this.sync();
+    }
+  }
+
+  private retrySync() {
+    if (this.retryCount < this.maxRetries) {
+      this.retryCount++;
+      this.startSync();
+    } else {
+      throw new Error(`同步失败超过最大重试次数：${this.maxRetries}`);
+    }
   }
 
   // 接受新的历史记录数组，并更新 A 和 B
-  public updateHistories(newHistory: 扩展历史记录[]): void {
-    this.historyA = this.historyB;
-    this.historyB = newHistory;
+  public updateHistories(newHistory: 历史记录[]): void {
+    if (this.syncStatus === '同步中') {
+      this.pendingUpdate = newHistory;
+    } else {
+      this.historyA = this.historyB;
+      this.historyB = newHistory;
+      this.startSync();
+    }
   }
 }
