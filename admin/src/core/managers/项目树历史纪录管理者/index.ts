@@ -73,7 +73,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
     return super.requires(界面通知系统实例, 全局事件系统实例);
   }
 
-  retryCallback(startSync: () => void) {
+  retryCallback = (startSync: () => void) => {
     this.requireActor(界面通知系统).showModal({
       type: 'confirm',
       title: '同步失败，是否重试？',
@@ -81,7 +81,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
         startSync();
       },
     });
-  }
+  };
 
   protected async onSetup(): Promise<void> {
     this.历史状态机Actor.start();

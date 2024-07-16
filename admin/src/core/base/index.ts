@@ -4,12 +4,18 @@ export abstract class ActorBase implements Actor {
   private requiredActors: Set<Actor> = new Set(); // 当前 Actor 依赖的 Actors
   private dependentActors: Set<Actor> = new Set(); // 依赖当前 Actor 的 Actors
   setupProcessing: Promise<void>;
+  startProcessing: Promise<void>;
   private setupProcessingResolve!: () => void;
+  private startProcessingResolve!: () => void;
   private hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
+  private hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   constructor() {
     this.setupProcessing = new Promise<void>((resolve) => {
       this.setupProcessingResolve = resolve;
+    });
+    this.startProcessing = new Promise<void>((resolve) => {
+      this.startProcessingResolve = resolve;
     });
   }
 
@@ -44,8 +50,8 @@ export abstract class ActorBase implements Actor {
 
   // 启动
   async setup(): Promise<void> {
-    if (this.hasStarted) {
-      throw new Error('Actor already started');
+    if (this.hasSetup) {
+      throw new Error('Actor already setup');
     }
 
     try {
@@ -54,6 +60,24 @@ export abstract class ActorBase implements Actor {
       );
       await this.onSetup(); // 调用 start 逻辑函数
       this.setupProcessingResolve();
+      this.hasSetup = true; // 标记为已启动
+    } catch (error) {
+      // 处理启动过程中出现的错误
+      console.error('Error starting actors:', error);
+    }
+  }
+
+  async start(): Promise<void> {
+    if (this.hasStarted) {
+      throw new Error('Actor already started');
+    }
+
+    try {
+      await Promise.all(
+        Array.from(this.requiredActors).map((actor) => actor.startProcessing),
+      );
+      await this.onStart(); // 调用 start 逻辑函数
+      this.startProcessingResolve();
       this.hasStarted = true; // 标记为已启动
     } catch (error) {
       // 处理启动过程中出现的错误
@@ -62,17 +86,12 @@ export abstract class ActorBase implements Actor {
   }
 
   // 抽象的 start 逻辑函数，需要在继承类中实现
-  protected abstract onSetup(): Promise<void>;
+  protected async onSetup(): Promise<void> {}
+  protected async onStart(): Promise<void> {}
 }
 
-export class SystemBase extends ActorBase implements System {
-  protected async onSetup(): Promise<void> {}
-}
+export class SystemBase extends ActorBase implements System {}
 
-export class ManagerBase extends ActorBase implements Manager {
-  protected async onSetup(): Promise<void> {}
-}
+export class ManagerBase extends ActorBase implements Manager {}
 
-export class EnvObjectBase extends ActorBase implements EnvObject {
-  protected async onSetup(): Promise<void> {}
-}
+export class EnvObjectBase extends ActorBase implements EnvObject {}

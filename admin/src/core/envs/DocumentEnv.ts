@@ -20,7 +20,7 @@ export class 文档环境 extends EnvObjectBase {
     return this._document;
   }
 
-  protected async onSetup(): Promise<void> {
+  protected async onStart(): Promise<void> {
     this.addPageLoadCompleteEventListener();
   }
 
