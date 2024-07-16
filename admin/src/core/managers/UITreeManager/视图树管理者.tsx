@@ -40,7 +40,7 @@ export class UITreeManager extends ManagerBase {
     全局事件系统实例: 全局事件系统,
     界面导航系统实例: 界面导航系统,
   ): this {
-    return super.requires(
+    return super.requireActors(
       界面通知系统实例,
       验证管理者单例,
       图标管理者单例,

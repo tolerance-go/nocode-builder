@@ -41,11 +41,11 @@ export class UIStoreManager extends ManagerBase {
     );
   }
 
-  requires(
+  requireActors(
     全局事件系统实例: 全局事件系统,
     界面导航系统实例: 界面导航系统,
   ): this {
-    return super.requires(全局事件系统实例, 界面导航系统实例);
+    return super.requireActors(全局事件系统实例, 界面导航系统实例);
   }
 
   protected async onSetup(): Promise<void> {

@@ -1,10 +1,11 @@
 import { Actor, EnvObject, Manager, System } from '@/types';
 
 export abstract class ActorBase implements Actor {
+  public setupProcessing: Promise<void>;
+  public startProcessing: Promise<void>;
+
   private requiredActors: Set<Actor> = new Set(); // 当前 Actor 依赖的 Actors
   private dependentActors: Set<Actor> = new Set(); // 依赖当前 Actor 的 Actors
-  setupProcessing: Promise<void>;
-  startProcessing: Promise<void>;
   private setupProcessingResolve!: () => void;
   private startProcessingResolve!: () => void;
   private hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
@@ -20,7 +21,7 @@ export abstract class ActorBase implements Actor {
   }
 
   // 导入其他 Actor
-  requires(...actors: Actor[]): this {
+  requireActors(...actors: Actor[]): this {
     actors.forEach((actor) => {
       if (!this.requiredActors.has(actor)) {
         this.requiredActors.add(actor);
@@ -31,6 +32,8 @@ export abstract class ActorBase implements Actor {
     });
     return this;
   }
+
+  abstract requires(...actors: Actor[]): this;
 
   // 添加依赖当前 Actor 的 Actor
   private addDependentActor(actor: Actor): void {
@@ -90,8 +93,8 @@ export abstract class ActorBase implements Actor {
   protected async onStart(): Promise<void> {}
 }
 
-export class SystemBase extends ActorBase implements System {}
+export abstract class SystemBase extends ActorBase implements System {}
 
-export class ManagerBase extends ActorBase implements Manager {}
+export abstract class ManagerBase extends ActorBase implements Manager {}
 
-export class EnvObjectBase extends ActorBase implements EnvObject {}
+export abstract class EnvObjectBase extends ActorBase implements EnvObject {}

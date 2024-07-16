@@ -10,7 +10,7 @@ export class 文档环境 extends EnvObjectBase {
   }
 
   requires(全局事件系统实例: 全局事件系统): this {
-    return super.requires(全局事件系统实例);
+    return super.requireActors(全局事件系统实例);
   }
 
   public get document() {
