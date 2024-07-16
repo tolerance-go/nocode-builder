@@ -93,7 +93,7 @@ export class 全局事件系统<
     eventName: EventName,
     eventData: T[EventName],
   ): Promise<void> {
-    if (this.hasSetup) {
+    if (this.hasStarted) {
       return this.sendEvent(eventName, eventData);
     } else {
       // 缓存事件

@@ -63,10 +63,11 @@ export abstract class ActorBase implements Actor {
       );
       await this.onSetup(); // 调用 start 逻辑函数
       this.setupProcessingResolve();
-      this.hasSetup = true; // 标记为已启动
     } catch (error) {
       // 处理启动过程中出现的错误
       console.error('Error starting actors:', error);
+    } finally {
+      this.hasSetup = true; // 标记为已启动
     }
   }
 
@@ -81,10 +82,11 @@ export abstract class ActorBase implements Actor {
       );
       await this.onStart(); // 调用 start 逻辑函数
       this.startProcessingResolve();
-      this.hasStarted = true; // 标记为已启动
     } catch (error) {
       // 处理启动过程中出现的错误
       console.error('Error starting actors:', error);
+    } finally {
+      this.hasStarted = true; // 标记为已启动
     }
   }
 
