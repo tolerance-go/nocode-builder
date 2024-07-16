@@ -7,6 +7,8 @@ import {
   ProjectTreeNodeDataRecord,
 } from '../../UIStoreManager';
 import { 历史记录 } from '../machines';
+import { 全局事件系统 } from '@/core/systems';
+import { authPathnames } from '@shared/configs';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];
@@ -32,6 +34,8 @@ type SyncFunction = (
 ) => Promise<void>;
 
 export class SyncHistoryManagerEmployee implements Manager {
+  private currentPathname: string | null = null;
+
   private working: boolean = false;
   isWorking(): boolean {
     return this.working;
@@ -170,8 +174,46 @@ export class SyncHistoryManagerEmployee implements Manager {
   }
 
   // 执行同步任务
-  public async work(): Promise<void> {
+  public async work(全局事件系统实例: 全局事件系统): Promise<void> {
+    this.working = true;
+
     await this.loadState();
+
+    全局事件系统实例.on('界面状态管理者/路由更新', async ({ pathname }) => {
+      const prevPathname = this.currentPathname;
+
+      if (prevPathname) {
+        if (prevPathname !== pathname) {
+          // 从授权页面进入系统页面
+          if (
+            Object.values(authPathnames).includes(prevPathname) &&
+            !Object.values(authPathnames).includes(pathname)
+          ) {
+            await this.检查同步状态并启动();
+          }
+
+          // 从系统页面进入授权页面
+          if (
+            !Object.values(authPathnames).includes(prevPathname) &&
+            Object.values(authPathnames).includes(pathname)
+          ) {
+            /* empty */
+          }
+        }
+      } else {
+        // 首次进入系统页面
+        if (Object.values(authPathnames).includes(pathname)) {
+          /* empty */
+        } else {
+          await this.检查同步状态并启动();
+        }
+      }
+
+      this.currentPathname = pathname;
+    });
+  }
+
+  async 检查同步状态并启动() {
     if (this.state.syncStatus === '同步失败') {
       await this.retrySync();
     } else if (
@@ -180,7 +222,5 @@ export class SyncHistoryManagerEmployee implements Manager {
     ) {
       await this.startSync();
     }
-
-    this.working = true;
   }
 }

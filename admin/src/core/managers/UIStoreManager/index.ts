@@ -16,6 +16,7 @@ import {
 } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
 import { ProjectTypeEnum } from '@/_gen/models';
+import { produce } from 'immer';
 
 export class UIStoreManager implements Manager {
   private working: boolean = false;
@@ -131,6 +132,7 @@ export class UIStoreManager implements Manager {
   };
 
   async work() {
+    this.working = true;
     projectTreeOnWork(this.store, this.slices);
 
     this.监听项目节点激活状态变化并修改url();
@@ -139,8 +141,6 @@ export class UIStoreManager implements Manager {
     this.检查本地用户token同步到内存中();
     this.注册路由更新监听();
     this.注册指针移动监听();
-
-    this.working = true;
   }
 
   注册指针移动监听() {
@@ -162,27 +162,18 @@ export class UIStoreManager implements Manager {
   }
 
   注册路由更新监听() {
-    const 判断路由是否变化 = () => {
-      const state = this.store.getState();
-
-      /**
-       * state 的初始值可能来自本地，所以初始值可能不为 null
-       */
-      if (this.currentPathname !== state.location.pathname) {
-        this.currentPathname = state.location.pathname;
-
-        if (this.currentPathname) {
-          this.全局事件系统实例.emit('界面状态管理者/路由更新', {
-            pathname: this.currentPathname,
-          });
-        }
-      }
-    };
-
-    判断路由是否变化();
-
+    let prevState = this.store.getState();
     this.store.subscribe(() => {
-      判断路由是否变化();
+      const nextState = this.store.getState();
+      if (
+        nextState.location.pathname !== prevState.location.pathname &&
+        nextState.location.pathname
+      ) {
+        this.全局事件系统实例.emit('界面状态管理者/路由更新', {
+          pathname: nextState.location.pathname,
+        });
+      }
+      prevState = nextState;
     });
   }
 
@@ -242,7 +233,16 @@ export class UIStoreManager implements Manager {
   注册监听保存状态到本地() {
     this.store.subscribe(() => {
       const state = this.store.getState();
-      localforage.setItem(localStateFieldName, state);
+
+      const next = this.过滤掉某些不存储到本地的state(state);
+
+      localforage.setItem(localStateFieldName, next);
+    });
+  }
+
+  过滤掉某些不存储到本地的state(state: RootState): RootState {
+    return produce(state, (draft) => {
+      draft.location.pathname = null;
     });
   }
 }

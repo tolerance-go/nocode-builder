@@ -1,5 +1,6 @@
 import { 测试标识 } from '@shared/constants';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
+import { fullPathnames } from '@shared/configs';
 
 使用场景('用户登录流程', ({ 假如 }) => {
   假如(
@@ -71,11 +72,7 @@ import { 使用场景 } from '@cypress/support/scenarioUtils';
         cy.获取测试标识(测试标识.登录提交按钮).click();
       });
       那么('用户应该被重定向到主页并看到欢迎信息', () => {
-        cy.location().should((loc) => {
-          expect(loc.pathname).to.eq(
-            new URL(Cypress.config().baseUrl!).pathname,
-          );
-        });
+        cy.location('pathname').should('eq', fullPathnames.root);
       });
     },
   );

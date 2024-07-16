@@ -28,6 +28,7 @@ export class AppManager implements Manager {
   }
 
   async work() {
+    this.working = true;
     const localState =
       await localforage.getItem<RootState>(localStateFieldName);
 
@@ -74,7 +75,5 @@ export class AppManager implements Manager {
       界面导航系统实例.launch(),
       文档环境实例.activate(),
     ]);
-
-    this.working = true;
   }
 }
