@@ -1,6 +1,7 @@
 import { api } from '@/globals';
-import { last } from 'lodash-es';
+import { Manager } from '@/types';
 import localforage from 'localforage';
+import { last } from 'lodash-es';
 import {
   compareTrees,
   DiffResult,
@@ -17,20 +18,25 @@ interface SyncHistoryManagerState {
   syncStatus: '未同步' | '已同步' | '同步失败' | '同步中';
 }
 
-export class SyncHistoryManagerEmployee {
+type RetryCallback = (retry: () => void) => void;
+
+export class SyncHistoryManagerEmployee implements Manager {
   private state: SyncHistoryManagerState = {
     historyA: [],
     historyB: [],
     pendingUpdate: null,
     syncStatus: '未同步',
   };
-  private retryCount: number = 0; // 重试计数
-  private readonly maxRetries: number = 3; // 最大重试次数
-  private readonly retryDelay: number = 1000; // 重试延迟时间，单位为毫秒
+  private readonly retryCallback: RetryCallback; // 重试回调函数
 
-  constructor(initialHistoryA: 历史记录[], initialHistoryB: 历史记录[]) {
+  constructor(
+    initialHistoryA: 历史记录[],
+    initialHistoryB: 历史记录[],
+    retryCallback: RetryCallback,
+  ) {
     this.state.historyA = initialHistoryA;
     this.state.historyB = initialHistoryB;
+    this.retryCallback = retryCallback;
   }
 
   private async saveStateToStorage(): Promise<void> {
@@ -103,11 +109,10 @@ export class SyncHistoryManagerEmployee {
         results.newTreeDataRecord,
       );
       await this.updateState({ syncStatus: '已同步' });
-      this.retryCount = 0; // 重置重试计数
       await this.commitPendingUpdate();
     } catch (error) {
       await this.updateState({ syncStatus: '同步失败' });
-      await this.handleSyncError();
+      await this.retrySync();
     }
   }
 
@@ -125,37 +130,29 @@ export class SyncHistoryManagerEmployee {
     }
   }
 
-  private async handleSyncError(): Promise<void> {
-    if (this.state.pendingUpdate) {
-      await this.updateState({
-        historyB: this.state.pendingUpdate,
-        pendingUpdate: null,
-      });
-    }
-    this.retrySync();
-  }
-
   private async startSync(): Promise<void> {
     if (this.state.syncStatus !== '同步中') {
       await this.sync();
     }
   }
 
-  private retrySync() {
-    if (this.retryCount < this.maxRetries) {
-      this.retryCount++;
-      setTimeout(() => {
-        this.startSync();
-      }, this.retryDelay);
-    } else {
-      throw new Error(`同步失败超过最大重试次数：${this.maxRetries}`);
+  private async retrySync() {
+    if (this.state.pendingUpdate) {
+      await this.updateState({
+        historyB: this.state.pendingUpdate,
+        pendingUpdate: null,
+      });
     }
+    this.retryCallback(this.startSync.bind(this));
   }
 
   // 接受新的历史记录数组，并更新 A 和 B
   public async updateHistories(newHistory: 历史记录[]): Promise<void> {
     if (this.state.syncStatus === '同步中') {
       await this.updateState({ pendingUpdate: newHistory });
+    } else if (this.state.syncStatus === '同步失败') {
+      await this.updateState({ historyB: newHistory });
+      await this.startSync();
     } else {
       await this.updateState({
         historyA: this.state.historyB,
@@ -169,7 +166,7 @@ export class SyncHistoryManagerEmployee {
   public async work(): Promise<void> {
     await this.loadStateFromStorage();
     if (this.state.syncStatus === '同步失败') {
-      this.retrySync();
+      await this.retrySync();
     } else if (
       this.state.syncStatus === '未同步' &&
       this.state.historyB.length > 0

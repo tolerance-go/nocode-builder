@@ -1,9 +1,10 @@
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { Manager } from '@/types';
 import { createBrowserInspector } from '@statelyai/inspect';
+import { Modal } from 'antd';
 import { createActor } from 'xstate';
-import { 历史状态机, 历史记录 } from './machines';
 import { SyncHistoryManagerEmployee } from './employees/SyncHistoryManagerEmployee';
+import { 历史状态机, 历史记录 } from './machines';
 
 export class 项目树历史纪录管理者 implements Manager {
   public 全局事件系统实例;
@@ -17,7 +18,18 @@ export class 项目树历史纪录管理者 implements Manager {
   private syncHistoryManagerEmployee: SyncHistoryManagerEmployee;
 
   public constructor(全局事件系统实例: 全局事件系统) {
-    this.syncHistoryManagerEmployee = new SyncHistoryManagerEmployee([], []);
+    this.syncHistoryManagerEmployee = new SyncHistoryManagerEmployee(
+      [],
+      [],
+      (startSync) => {
+        Modal.confirm({
+          title: '同步失败，是否重试？',
+          onOk: () => {
+            startSync();
+          },
+        });
+      },
+    );
     this.全局事件系统实例 = 全局事件系统实例;
     this.历史状态机Actor = createActor(历史状态机, {
       inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
@@ -31,6 +43,12 @@ export class 项目树历史纪录管理者 implements Manager {
   async work() {
     this.历史状态机Actor.start();
 
+    this.注册监听();
+
+    await this.syncHistoryManagerEmployee.work();
+  }
+
+  注册监听() {
     this.历史状态机Actor.subscribe((state) => {
       if (this.历史指针 !== state.context.历史指针) {
         this.全局事件系统实例.emit('项目树历史记录管理者/指针移动', {
