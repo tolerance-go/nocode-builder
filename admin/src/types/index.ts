@@ -3,6 +3,7 @@ export interface System {
 }
 
 export interface Manager {
+  isWorking(): boolean;
   work(...args: unknown[]): Promise<void>;
 }
 

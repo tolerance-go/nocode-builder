@@ -1,5 +1,5 @@
 import { paths } from '@/configs';
-import { 导航系统 } from '@/core/systems';
+import { 界面导航系统 } from '@/core/systems';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { api } from '@/globals';
 import { Manager } from '@/types';
@@ -16,9 +16,13 @@ import {
 } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
 import { ProjectTypeEnum } from '@/_gen/models';
-import { 界面通知系统 } from '@/core/systems/界面通知系统';
 
 export class UIStoreManager implements Manager {
+  private working: boolean = false;
+  isWorking(): boolean {
+    return this.working;
+  }
+
   public store;
 
   public slices;
@@ -31,7 +35,7 @@ export class UIStoreManager implements Manager {
 
   constructor(
     全局事件系统实例: 全局事件系统,
-    导航系统实例: 导航系统,
+    导航系统实例: 界面导航系统,
     localState: RootState | null,
   ) {
     this.全局事件系统实例 = 全局事件系统实例;
@@ -131,6 +135,7 @@ export class UIStoreManager implements Manager {
     this.注册监听保存状态到本地();
     this.注册同步用户信息监听();
     this.检查本地用户token同步到内存中();
+    this.注册路由更新监听();
 
     this.全局事件系统实例.on('项目树历史记录管理者/指针移动', (event) => {
       this.store.dispatch(
@@ -146,6 +151,26 @@ export class UIStoreManager implements Manager {
               },
         ),
       );
+    });
+
+    this.working = true;
+  }
+
+  注册路由更新监听() {
+    let prevState = this.store.getState();
+    this.store.subscribe(() => {
+      const nextState = this.store.getState();
+
+      if (
+        nextState.location.pathname &&
+        nextState.location.pathname !== prevState.location.pathname
+      ) {
+        this.全局事件系统实例.emit('界面状态管理者/路由更新', {
+          pathname: nextState.location.pathname,
+        });
+      }
+
+      prevState = nextState;
     });
   }
 

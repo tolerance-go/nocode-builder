@@ -1,4 +1,4 @@
-import { localKeys } from '@/configs';
+import { authPathnames, localKeys, paths } from '@/configs';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { 界面通知系统 } from '@/core/systems/界面通知系统';
 import { api } from '@/globals';
@@ -16,6 +16,8 @@ import { convertDiffResultToProjectDiffDto } from './employees/utils';
 import { 历史状态机, 历史记录 } from './machines';
 
 export class 项目树历史纪录管理者 implements Manager {
+  private working: boolean = false;
+
   public 全局事件系统实例;
 
   public 界面通知系统实例;
@@ -87,7 +89,19 @@ export class 项目树历史纪录管理者 implements Manager {
 
     this.注册监听();
 
-    await this.syncHistoryManagerEmployee.work();
+    this.全局事件系统实例.on('界面状态管理者/路由更新', ({ pathname }) => {
+      if (!Object.values(authPathnames).includes(pathname)) {
+        if (this.syncHistoryManagerEmployee.isWorking() === false) {
+          this.syncHistoryManagerEmployee.work();
+        }
+      }
+    });
+
+    this.working = true;
+  }
+
+  isWorking(): boolean {
+    return this.working;
   }
 
   注册监听() {

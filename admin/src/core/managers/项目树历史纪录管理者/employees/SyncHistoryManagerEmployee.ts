@@ -32,6 +32,11 @@ type SyncFunction = (
 ) => Promise<void>;
 
 export class SyncHistoryManagerEmployee implements Manager {
+  private working: boolean = false;
+  isWorking(): boolean {
+    return this.working;
+  }
+
   private state: SyncHistoryManagerState = {
     historyA: [],
     historyB: [],
@@ -175,5 +180,7 @@ export class SyncHistoryManagerEmployee implements Manager {
     ) {
       await this.startSync();
     }
+
+    this.working = true;
   }
 }

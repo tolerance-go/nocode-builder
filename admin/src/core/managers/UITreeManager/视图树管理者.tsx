@@ -1,4 +1,4 @@
-import { paths } from '@/configs';
+import { fullPathnames, paths } from '@/configs';
 import { Manager } from '@/types';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -28,7 +28,7 @@ import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { ViewEditor } from './root/(admin)/Layout/内容区域组件/view-editor';
 import { BluemapEditor } from './root/(admin)/Layout/内容区域组件/bluemap-editor';
 import { DataTableEditor } from './root/(admin)/Layout/内容区域组件/data-table-editor';
-import { 导航系统 } from '@/core/systems';
+import { 界面导航系统 } from '@/core/systems';
 import { 界面通知系统 } from '@/core/systems/界面通知系统';
 
 export class UITreeManager implements Manager {
@@ -45,7 +45,7 @@ export class UITreeManager implements Manager {
     跟随鼠标显示内容管理者实例: 跟随鼠标显示内容管理者,
     界面状态管理者实例: UIStoreManager,
     全局事件系统实例: 全局事件系统,
-    导航系统实例: 导航系统,
+    导航系统实例: 界面导航系统,
   ) {
     文档环境实例.emitter.on('pageLoadComplete', () => {
       ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -70,7 +70,10 @@ export class UITreeManager implements Manager {
                             basename={import.meta.env.DEV ? '' : '/admin'}
                           >
                             <Routes>
-                              <Route path={paths.root} element={<Root />}>
+                              <Route
+                                path={fullPathnames.root}
+                                element={<Root />}
+                              >
                                 {/* <Route path="test" element={<Test />}></Route> */}
                                 <Route index element={<Admin />}></Route>
                                 <Route element={<Admin />}>

@@ -5,6 +5,11 @@ import { 其他拖拽显示的组件 } from './其他拖拽显示的组件';
 import { 拖拽提示显示组件 } from './拖拽提示显示组件';
 
 export class 跟随鼠标显示内容管理者 implements Manager {
+  private working: boolean = false;
+  isWorking(): boolean {
+    return this.working;
+  }
+
   private static 跟随组件id到组件映射: {
     [K in 鼠标跟随组件id联合类型]: React.FC<鼠标跟随组件参数通过id获取<K>>;
   } = {
@@ -20,7 +25,9 @@ export class 跟随鼠标显示内容管理者 implements Manager {
     return createElement(Component, props);
   }
 
-  async work() {}
+  async work() {
+    this.working = true;
+  }
 }
 
 export * from './types';

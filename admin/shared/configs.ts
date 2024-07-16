@@ -1,5 +1,4 @@
 export const paths = {
-  root: '/',
   login: 'login',
   register: 'register',
   'view-editor': 'view-editor',
@@ -7,21 +6,21 @@ export const paths = {
   'bluemap-editor': 'bluemap-editor',
 };
 
-export const editorPaths = {
+export const editorPathnames = {
   'root.view-editor': '/view-editor',
   'root.data-table-editor': '/data-table-editor',
   'root.bluemap-editor': '/bluemap-editor',
 };
 
-export const authPaths = {
+export const authPathnames = {
   'root.login': '/login',
   'root.register': '/register',
 };
 
-export const fullPaths = {
+export const fullPathnames = {
   root: '/',
-  ...authPaths,
-  ...editorPaths,
+  ...authPathnames,
+  ...editorPathnames,
 };
 
 export const localKeys = {

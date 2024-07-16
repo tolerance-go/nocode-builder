@@ -8,6 +8,9 @@ import { System, ViewKey } from '@/types';
 import Emittery from 'emittery';
 
 export type 全局事件映射 = {
+  '界面状态管理者/路由更新': {
+    pathname: string;
+  };
   '界面状态管理者/新增节点': {
     nodeKey: ViewKey;
     nodeData: ProjectTreeNodeDataRecordItem;

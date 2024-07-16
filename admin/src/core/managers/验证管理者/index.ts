@@ -21,6 +21,11 @@ const illegalPostgresqlChars = [
 ];
 
 export class 验证管理者 implements Manager {
+  private working: boolean = false;
+  isWorking(): boolean {
+    return this.working;
+  }
+
   项目树节点标题是否有效(input: string): string | null {
     if (!input.trim()) {
       return '必须提供项目或者项目组名';
@@ -36,5 +41,7 @@ export class 验证管理者 implements Manager {
     return null;
   }
 
-  async work() {}
+  async work() {
+    this.working = true;
+  }
 }

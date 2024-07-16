@@ -1,6 +1,6 @@
 import { System } from '@/types';
 
-export class 导航系统 implements System {
+export class 界面导航系统 implements System {
   navigateFunction: ((url: string) => void) | null = null;
 
   setNavigate = (navigate: (url: string) => void): void => {
