@@ -27,6 +27,10 @@ interface ModalOptions {
 }
 
 export class 界面通知系统 extends SystemBase {
+  requires(): this {
+    return super.requireActors();
+  }
+
   private messageApi: MessageInstance | null = null;
   private notificationApi: NotificationInstance | null = null;
   private modalApi: HookAPI | null = null;

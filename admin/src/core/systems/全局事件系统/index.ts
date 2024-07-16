@@ -58,6 +58,10 @@ type EventCacheItem<T> = {
 export class 全局事件系统<
   T extends Record<string, unknown> = 全局事件映射,
 > extends SystemBase {
+  requires(): this {
+    return super.requireActors();
+  }
+
   private emitter = new Emittery<T>();
   private eventCache: EventCacheItem<T>[] = [];
   private isLaunched = false;

@@ -21,7 +21,7 @@ export abstract class ActorBase implements Actor {
   }
 
   // 导入其他 Actor
-  requireActors(...actors: Actor[]): this {
+  protected requireActors(...actors: Actor[]): this {
     actors.forEach((actor) => {
       if (!this.requiredActors.has(actor)) {
         this.requiredActors.add(actor);

@@ -21,11 +21,11 @@ const localState = await localforage.getItem<RootState>(localStateFieldName);
 const 界面通知系统实例 = new 界面通知系统();
 const 全局事件系统实例 = new 全局事件系统();
 const 界面导航系统实例 = new 界面导航系统();
-const 文档环境实例 = new 文档环境(document).requireActors(全局事件系统实例);
+const 文档环境实例 = new 文档环境(document).requires(全局事件系统实例);
 const 验证管理者实例 = new 验证管理者();
 const 跟随鼠标显示内容管理者实例 = new 跟随鼠标显示内容管理者();
 const 图标管理者实例 = new 图标管理者();
-const 界面状态管理者实例 = new UIStoreManager(localState).requireActors(
+const 界面状态管理者实例 = new UIStoreManager(localState).requires(
   全局事件系统实例,
   界面导航系统实例,
 );
@@ -40,8 +40,8 @@ const actors = [
   跟随鼠标显示内容管理者实例,
   图标管理者实例,
   界面状态管理者实例,
-  new 项目树历史纪录管理者().requireActors(全局事件系统实例, 界面通知系统实例),
-  new UITreeManager().requireActors(
+  new 项目树历史纪录管理者().requires(全局事件系统实例, 界面通知系统实例),
+  new UITreeManager().requires(
     界面通知系统实例,
     验证管理者实例,
     图标管理者实例,
