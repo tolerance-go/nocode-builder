@@ -8,8 +8,8 @@ export abstract class ActorBase implements Actor {
   private dependentActors: Set<Actor> = new Set(); // 依赖当前 Actor 的 Actors
   private setupProcessingResolve!: () => void;
   private startProcessingResolve!: () => void;
-  private hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
-  private hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
+  protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
+  protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   constructor() {
     this.setupProcessing = new Promise<void>((resolve) => {

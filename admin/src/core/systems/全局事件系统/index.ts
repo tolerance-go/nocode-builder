@@ -64,11 +64,8 @@ export class 全局事件系统<
 
   private emitter = new Emittery<T>();
   private eventCache: EventCacheItem<T>[] = [];
-  private isLaunched = false;
 
-  protected async onSetup() {
-    this.isLaunched = true;
-
+  protected async onStart() {
     // 按顺序发送缓存的事件
     for (const { eventName, eventData } of this.eventCache) {
       await this.sendEvent(eventName, eventData);
@@ -96,7 +93,7 @@ export class 全局事件系统<
     eventName: EventName,
     eventData: T[EventName],
   ): Promise<void> {
-    if (this.isLaunched) {
+    if (this.hasSetup) {
       return this.sendEvent(eventName, eventData);
     } else {
       // 缓存事件

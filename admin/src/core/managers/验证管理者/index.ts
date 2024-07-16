@@ -1,5 +1,4 @@
 import { ManagerBase } from '@/core/base';
-import { Manager } from '@/types';
 // 定义PostgreSQL非法字符
 const illegalPostgresqlChars = [
   '\x00',

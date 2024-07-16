@@ -52,7 +52,6 @@ export const use导航系统 = () => {
 };
 
 export const 获取系统上下文 = () => {
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const 系统上下文对象 = useContext(系统上下文);
   if (!系统上下文对象) throw new Error('系统上下文未初始化');
   return 系统上下文对象;
