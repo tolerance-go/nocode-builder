@@ -1,4 +1,6 @@
-import { Manager } from '@/types';
+import { ManagerBase } from '@/core/base';
+import { 全局事件系统 } from '@/core/systems';
+import { authPathnames } from '@shared/configs';
 import { last } from 'lodash-es';
 import {
   compareTrees,
@@ -7,8 +9,6 @@ import {
   ProjectTreeNodeDataRecord,
 } from '../../UIStoreManager';
 import { 历史记录 } from '../machines';
-import { 全局事件系统 } from '@/core/systems';
-import { authPathnames } from '@shared/configs';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];
@@ -33,13 +33,8 @@ type SyncFunction = (
   newTreeDataRecord?: ProjectTreeNodeDataRecord,
 ) => Promise<void>;
 
-export class SyncHistoryManagerEmployee implements Manager {
+export class SyncHistoryManagerEmployee extends ManagerBase {
   private currentPathname: string | null = null;
-
-  private working: boolean = false;
-  isWorking(): boolean {
-    return this.working;
-  }
 
   private state: SyncHistoryManagerState = {
     historyA: [],
@@ -54,7 +49,12 @@ export class SyncHistoryManagerEmployee implements Manager {
   ) => Promise<void>; // 持久化函数
   private readonly loadStateFunction: () => Promise<SyncHistoryManagerState | null>; // 加载持久化状态函数
 
+  requires(全局事件系统实例: 全局事件系统): this {
+    return super.requireActors(全局事件系统实例);
+  }
+
   constructor(params: SyncHistoryManagerEmployeeParams) {
+    super();
     const {
       initialHistoryA,
       initialHistoryB,
@@ -174,43 +174,44 @@ export class SyncHistoryManagerEmployee implements Manager {
   }
 
   // 执行同步任务
-  public async work(全局事件系统实例: 全局事件系统): Promise<void> {
-    this.working = true;
-
+  async onSetup(): Promise<void> {
     await this.loadState();
 
-    全局事件系统实例.on('界面状态管理者/路由更新', async ({ pathname }) => {
-      const prevPathname = this.currentPathname;
+    this.requireActor(全局事件系统).on(
+      '界面状态管理者/路由更新',
+      async ({ pathname }) => {
+        const prevPathname = this.currentPathname;
 
-      if (prevPathname) {
-        if (prevPathname !== pathname) {
-          // 从授权页面进入系统页面
-          if (
-            Object.values(authPathnames).includes(prevPathname) &&
-            !Object.values(authPathnames).includes(pathname)
-          ) {
+        if (prevPathname) {
+          if (prevPathname !== pathname) {
+            // 从授权页面进入系统页面
+            if (
+              Object.values(authPathnames).includes(prevPathname) &&
+              !Object.values(authPathnames).includes(pathname)
+            ) {
+              await this.检查同步状态并启动();
+            }
+
+            // 从系统页面进入授权页面
+            if (
+              !Object.values(authPathnames).includes(prevPathname) &&
+              Object.values(authPathnames).includes(pathname)
+            ) {
+              /* empty */
+            }
+          }
+        } else {
+          // 首次进入系统页面
+          if (Object.values(authPathnames).includes(pathname)) {
+            /* empty */
+          } else {
             await this.检查同步状态并启动();
           }
-
-          // 从系统页面进入授权页面
-          if (
-            !Object.values(authPathnames).includes(prevPathname) &&
-            Object.values(authPathnames).includes(pathname)
-          ) {
-            /* empty */
-          }
         }
-      } else {
-        // 首次进入系统页面
-        if (Object.values(authPathnames).includes(pathname)) {
-          /* empty */
-        } else {
-          await this.检查同步状态并启动();
-        }
-      }
 
-      this.currentPathname = pathname;
-    });
+        this.currentPathname = pathname;
+      },
+    );
   }
 
   async 检查同步状态并启动() {

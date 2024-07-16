@@ -22,40 +22,8 @@ export class 项目树历史纪录管理者 extends ManagerBase {
 
   private 历史状态机Actor;
 
-  private syncHistoryManagerEmployee: SyncHistoryManagerEmployee;
-
   public constructor() {
     super();
-
-    this.syncHistoryManagerEmployee = new SyncHistoryManagerEmployee({
-      initialHistoryA: [],
-      initialHistoryB: [],
-      retryCallback: this.retryCallback,
-      syncFunction: async (
-        differences: DiffResult<ProjectStructureTreeDataNode>,
-        oldTreeDataRecord?: ProjectTreeNodeDataRecord,
-        newTreeDataRecord?: ProjectTreeNodeDataRecord,
-      ) => {
-        await api.syncs.applyProjectDiff(
-          convertDiffResultToProjectDiffDto(
-            differences,
-            oldTreeDataRecord,
-            newTreeDataRecord,
-          ),
-        );
-      },
-      saveStateFunction: async (state) => {
-        await localforage.setItem(
-          localKeys.syncHistoryManagerEmployee_state,
-          state,
-        );
-      },
-      loadStateFunction: async () => {
-        return await localforage.getItem(
-          localKeys.syncHistoryManagerEmployee_state,
-        );
-      },
-    });
 
     this.历史状态机Actor = createActor(历史状态机, {
       inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
@@ -70,7 +38,39 @@ export class 项目树历史纪录管理者 extends ManagerBase {
     全局事件系统实例: 全局事件系统,
     界面通知系统实例: 界面通知系统,
   ): this {
-    return super.requireActors(界面通知系统实例, 全局事件系统实例);
+    return super.requireActors(
+      界面通知系统实例,
+      全局事件系统实例,
+      new SyncHistoryManagerEmployee({
+        initialHistoryA: [],
+        initialHistoryB: [],
+        retryCallback: this.retryCallback,
+        syncFunction: async (
+          differences: DiffResult<ProjectStructureTreeDataNode>,
+          oldTreeDataRecord?: ProjectTreeNodeDataRecord,
+          newTreeDataRecord?: ProjectTreeNodeDataRecord,
+        ) => {
+          await api.syncs.applyProjectDiff(
+            convertDiffResultToProjectDiffDto(
+              differences,
+              oldTreeDataRecord,
+              newTreeDataRecord,
+            ),
+          );
+        },
+        saveStateFunction: async (state) => {
+          await localforage.setItem(
+            localKeys.syncHistoryManagerEmployee_state,
+            state,
+          );
+        },
+        loadStateFunction: async () => {
+          return await localforage.getItem(
+            localKeys.syncHistoryManagerEmployee_state,
+          );
+        },
+      }).requires(全局事件系统实例),
+    );
   }
 
   retryCallback = (startSync: () => void) => {
@@ -86,12 +86,6 @@ export class 项目树历史纪录管理者 extends ManagerBase {
   protected async onSetup(): Promise<void> {
     this.历史状态机Actor.start();
 
-    this.注册相关监听();
-
-    await this.syncHistoryManagerEmployee.work(this.requireActor(全局事件系统));
-  }
-
-  注册相关监听() {
     this.历史状态机Actor.subscribe((state) => {
       if (this.历史指针 !== state.context.历史指针) {
         this.requireActor(全局事件系统).emit('项目树历史记录管理者/指针移动', {
@@ -103,7 +97,9 @@ export class 项目树历史纪录管理者 extends ManagerBase {
       this.历史堆栈 = state.context.历史堆栈;
       this.历史指针 = state.context.历史指针;
 
-      this.syncHistoryManagerEmployee.updateHistories(this.历史堆栈);
+      this.requireActor(SyncHistoryManagerEmployee).updateHistories(
+        this.历史堆栈,
+      );
     });
 
     this.requireActor(全局事件系统).on(

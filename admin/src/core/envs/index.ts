@@ -1,1 +1,1 @@
-export * from './DocumentEnv';
+export * from './文档环境';
