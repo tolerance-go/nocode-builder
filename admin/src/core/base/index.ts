@@ -3,13 +3,13 @@ import { Actor, EnvObject, Manager, System } from '@/types';
 export abstract class ActorBase implements Actor {
   private requiredActors: Set<Actor> = new Set(); // 当前 Actor 依赖的 Actors
   private dependentActors: Set<Actor> = new Set(); // 依赖当前 Actor 的 Actors
-  startProcessing: Promise<void>;
-  private startProcessingResolve!: () => void;
+  setupProcessing: Promise<void>;
+  private setupProcessingResolve!: () => void;
   private hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   constructor() {
-    this.startProcessing = new Promise<void>((resolve) => {
-      this.startProcessingResolve = resolve;
+    this.setupProcessing = new Promise<void>((resolve) => {
+      this.setupProcessingResolve = resolve;
     });
   }
 
@@ -50,10 +50,10 @@ export abstract class ActorBase implements Actor {
 
     try {
       await Promise.all(
-        Array.from(this.requiredActors).map((actor) => actor.startProcessing),
+        Array.from(this.requiredActors).map((actor) => actor.setupProcessing),
       );
       await this.onSetup(); // 调用 start 逻辑函数
-      this.startProcessingResolve();
+      this.setupProcessingResolve();
       this.hasStarted = true; // 标记为已启动
     } catch (error) {
       // 处理启动过程中出现的错误

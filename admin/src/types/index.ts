@@ -1,6 +1,6 @@
 export interface Actor {
   requires(...actors: Actor[]): this;
-  startProcessing: Promise<void>;
+  setupProcessing: Promise<void>;
   setup(...args: unknown[]): Promise<void>;
   requireActor<T extends Actor>(actorClass: new (...args: unknown[]) => T): T;
 }
