@@ -1,4 +1,3 @@
-import { api } from '@/globals';
 import { Manager } from '@/types';
 import localforage from 'localforage';
 import { last } from 'lodash-es';
@@ -9,7 +8,6 @@ import {
   ProjectTreeNodeDataRecord,
 } from '../../UIStoreManager';
 import { 历史记录 } from '../machines';
-import { convertDiffResultToProjectDiffDto } from './utils';
 
 interface SyncHistoryManagerState {
   historyA: 历史记录[];
@@ -18,7 +16,19 @@ interface SyncHistoryManagerState {
   syncStatus: '未同步' | '已同步' | '同步失败' | '同步中';
 }
 
+interface SyncHistoryManagerEmployeeParams {
+  initialHistoryA: 历史记录[];
+  initialHistoryB: 历史记录[];
+  retryCallback: RetryCallback;
+  syncFunction: SyncFunction;
+}
+
 type RetryCallback = (retry: () => void) => void;
+type SyncFunction = (
+  differences: DiffResult<ProjectStructureTreeDataNode>,
+  oldTreeDataRecord?: ProjectTreeNodeDataRecord,
+  newTreeDataRecord?: ProjectTreeNodeDataRecord,
+) => Promise<void>;
 
 export class SyncHistoryManagerEmployee implements Manager {
   private state: SyncHistoryManagerState = {
@@ -28,15 +38,15 @@ export class SyncHistoryManagerEmployee implements Manager {
     syncStatus: '未同步',
   };
   private readonly retryCallback: RetryCallback; // 重试回调函数
+  private readonly syncFunction: SyncFunction; // 同步函数
 
-  constructor(
-    initialHistoryA: 历史记录[],
-    initialHistoryB: 历史记录[],
-    retryCallback: RetryCallback,
-  ) {
+  constructor(params: SyncHistoryManagerEmployeeParams) {
+    const { initialHistoryA, initialHistoryB, retryCallback, syncFunction } =
+      params;
     this.state.historyA = initialHistoryA;
     this.state.historyB = initialHistoryB;
     this.retryCallback = retryCallback;
+    this.syncFunction = syncFunction;
   }
 
   private async saveStateToStorage(): Promise<void> {
@@ -82,28 +92,12 @@ export class SyncHistoryManagerEmployee implements Manager {
     };
   }
 
-  // 同步差异到远程数据库
-  private async syncDifferences(
-    differences: DiffResult<ProjectStructureTreeDataNode>,
-    oldTreeDataRecord?: ProjectTreeNodeDataRecord,
-    newTreeDataRecord?: ProjectTreeNodeDataRecord,
-  ): Promise<void> {
-    // 实现你的同步逻辑，例如通过 API 请求发送差异数据到远程数据库
-    await api.syncs.applyProjectDiff(
-      convertDiffResultToProjectDiffDto(
-        differences,
-        oldTreeDataRecord,
-        newTreeDataRecord,
-      ),
-    );
-  }
-
   // 执行同步操作
   private async sync(): Promise<void> {
     const results = this.compareHistories();
     await this.updateState({ syncStatus: '同步中' });
     try {
-      await this.syncDifferences(
+      await this.syncFunction(
         results.diffResults,
         results.oldTreeDataRecord,
         results.newTreeDataRecord,

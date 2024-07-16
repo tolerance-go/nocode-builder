@@ -5,6 +5,13 @@ import { Modal } from 'antd';
 import { createActor } from 'xstate';
 import { SyncHistoryManagerEmployee } from './employees/SyncHistoryManagerEmployee';
 import { 历史状态机, 历史记录 } from './machines';
+import { api } from '@/globals';
+import { convertDiffResultToProjectDiffDto } from './employees/utils';
+import {
+  DiffResult,
+  ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecord,
+} from '../UIStoreManager';
 
 export class 项目树历史纪录管理者 implements Manager {
   public 全局事件系统实例;
@@ -18,10 +25,10 @@ export class 项目树历史纪录管理者 implements Manager {
   private syncHistoryManagerEmployee: SyncHistoryManagerEmployee;
 
   public constructor(全局事件系统实例: 全局事件系统) {
-    this.syncHistoryManagerEmployee = new SyncHistoryManagerEmployee(
-      [],
-      [],
-      (startSync) => {
+    this.syncHistoryManagerEmployee = new SyncHistoryManagerEmployee({
+      initialHistoryA: [],
+      initialHistoryB: [],
+      retryCallback: (startSync) => {
         Modal.confirm({
           title: '同步失败，是否重试？',
           onOk: () => {
@@ -29,7 +36,21 @@ export class 项目树历史纪录管理者 implements Manager {
           },
         });
       },
-    );
+      syncFunction: async (
+        differences: DiffResult<ProjectStructureTreeDataNode>,
+        oldTreeDataRecord?: ProjectTreeNodeDataRecord,
+        newTreeDataRecord?: ProjectTreeNodeDataRecord,
+      ) => {
+        await api.syncs.applyProjectDiff(
+          convertDiffResultToProjectDiffDto(
+            differences,
+            oldTreeDataRecord,
+            newTreeDataRecord,
+          ),
+        );
+      },
+    });
+
     this.全局事件系统实例 = 全局事件系统实例;
     this.历史状态机Actor = createActor(历史状态机, {
       inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
