@@ -4,7 +4,7 @@ import {
   use验证管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
-import { 测试标识 } from '@cypress/shared/constants';
+import { 测试标识 } from '@shared/constants';
 import { Flex, Input, InputRef, theme } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import MagneticComponent from './MagneticComponent';

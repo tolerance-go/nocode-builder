@@ -23,7 +23,8 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@/*": ["src/*"],
-      "@cypress/*": ["cypress/*"]
+      "@cypress/*": ["cypress/*"],
+      "@shared/*": ["shared/*"]
     }
   },
   "include": [
@@ -32,7 +33,9 @@
     "cypress",
     "stories",
     "features",
-    "cypress/cypress.d.ts"
+    "cypress/cypress.d.ts",
+    "shared/constants.ts",
+    "shared/configs.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

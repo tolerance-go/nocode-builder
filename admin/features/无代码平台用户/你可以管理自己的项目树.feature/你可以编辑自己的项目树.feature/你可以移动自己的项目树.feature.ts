@@ -1,4 +1,4 @@
-import { 测试标识, 测试类 } from '@cypress/shared/constants';
+import { 测试标识, 测试类 } from '@shared/constants';
 import { getTreeNodeParent } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 

@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { 测试标识, 测试类 } from '@cypress/shared/constants';
+import { 测试标识, 测试类 } from '@shared/constants';
 import { BASE_API } from './constants';
 
 // ***********************************************

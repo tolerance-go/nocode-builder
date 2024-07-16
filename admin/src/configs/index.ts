@@ -1,1 +1,1 @@
-export * from '@cypress/shared/configs';
+export * from '@shared/configs';

@@ -1,4 +1,4 @@
-import { 测试标识 } from '@cypress/shared/constants';
+import { 测试标识 } from '@shared/constants';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
 
 使用场景('用户登录流程', ({ 假如 }) => {

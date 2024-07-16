@@ -1,7 +1,7 @@
 import { useAppSelector } from '@/core/managers/UIStoreManager';
 import { layoutPadding } from '@/core/managers/UITreeManager/configs';
 import { EllipsisOutlined } from '@ant-design/icons';
-import { 测试标识 } from '@cypress/shared/constants';
+import { 测试标识 } from '@shared/constants';
 import { Button, Dropdown, Flex, theme } from 'antd';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,5 +1,5 @@
 import { layoutPadding } from '@/core/managers/UITreeManager/configs';
-import { 测试标识 } from '@cypress/shared/constants';
+import { 测试标识 } from '@shared/constants';
 import { theme } from 'antd';
 
 export const ViewEditor = () => {

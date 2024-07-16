@@ -1,4 +1,4 @@
-import { 测试类, 测试标识 } from '@cypress/shared/constants';
+import { 测试类, 测试标识 } from '@shared/constants';
 import {
   getTreeNodeParent,
   getTreeNodeChildren,

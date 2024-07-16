@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/core/managers/UIStoreManager';
 import { 组件类名 } from '@/core/managers/UITreeManager/constants';
 import { use界面状态管理者 } from '@/core/managers/UITreeManager/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/core/managers/UITreeManager/selectors';
-import { 测试标识, 测试类 } from '@cypress/shared/constants';
+import { 测试标识, 测试类 } from '@shared/constants';
 import { cx } from '@emotion/css';
 import { Dropdown, Flex, Typography, theme } from 'antd';
 import { TitleInput } from './TitleInput';
