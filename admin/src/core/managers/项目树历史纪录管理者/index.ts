@@ -1,8 +1,8 @@
 import { localKeys } from '@/configs';
+import { ManagerBase } from '@/core/base';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { 界面通知系统 } from '@/core/systems/界面通知系统';
 import { api } from '@/globals';
-import { Manager } from '@/types';
 import { createBrowserInspector } from '@statelyai/inspect';
 import localforage from 'localforage';
 import { createActor } from 'xstate';
@@ -14,14 +14,9 @@ import {
 import { SyncHistoryManagerEmployee } from './employees/SyncHistoryManagerEmployee';
 import { convertDiffResultToProjectDiffDto } from './employees/utils';
 import { 历史状态机, 历史记录 } from './machines';
+import { Actor } from '@/types';
 
-export class 项目树历史纪录管理者 implements Manager {
-  private working: boolean = false;
-
-  public 全局事件系统实例;
-
-  public 界面通知系统实例;
-
+export class 项目树历史纪录管理者 extends ManagerBase {
   private 历史指针: number = -1;
 
   private 历史堆栈: 历史记录[] = [];
@@ -30,24 +25,13 @@ export class 项目树历史纪录管理者 implements Manager {
 
   private syncHistoryManagerEmployee: SyncHistoryManagerEmployee;
 
-  public constructor(
-    全局事件系统实例: 全局事件系统,
-    界面通知系统实例: 界面通知系统,
-  ) {
-    this.界面通知系统实例 = 界面通知系统实例;
+  public constructor() {
+    super();
 
     this.syncHistoryManagerEmployee = new SyncHistoryManagerEmployee({
       initialHistoryA: [],
       initialHistoryB: [],
-      retryCallback: (startSync) => {
-        this.界面通知系统实例.showModal({
-          type: 'confirm',
-          title: '同步失败，是否重试？',
-          onOk: () => {
-            startSync();
-          },
-        });
-      },
+      retryCallback: this.retryCallback,
       syncFunction: async (
         differences: DiffResult<ProjectStructureTreeDataNode>,
         oldTreeDataRecord?: ProjectTreeNodeDataRecord,
@@ -74,7 +58,6 @@ export class 项目树历史纪录管理者 implements Manager {
       },
     });
 
-    this.全局事件系统实例 = 全局事件系统实例;
     this.历史状态机Actor = createActor(历史状态机, {
       inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
       input: {
@@ -84,23 +67,35 @@ export class 项目树历史纪录管理者 implements Manager {
     });
   }
 
-  async work() {
-    this.working = true;
+  requires(
+    全局事件系统实例: 全局事件系统,
+    界面通知系统实例: 界面通知系统,
+  ): this {
+    return super.requires(界面通知系统实例, 全局事件系统实例);
+  }
+
+  retryCallback(startSync: () => void) {
+    this.requireActor(界面通知系统).showModal({
+      type: 'confirm',
+      title: '同步失败，是否重试？',
+      onOk: () => {
+        startSync();
+      },
+    });
+  }
+
+  protected async onStart(): Promise<void> {
     this.历史状态机Actor.start();
 
     this.注册相关监听();
 
-    await this.syncHistoryManagerEmployee.work(this.全局事件系统实例);
-  }
-
-  isWorking(): boolean {
-    return this.working;
+    await this.syncHistoryManagerEmployee.work(this.requireActor(全局事件系统));
   }
 
   注册相关监听() {
     this.历史状态机Actor.subscribe((state) => {
       if (this.历史指针 !== state.context.历史指针) {
-        this.全局事件系统实例.emit('项目树历史记录管理者/指针移动', {
+        this.requireActor(全局事件系统).emit('项目树历史记录管理者/指针移动', {
           历史指针: state.context.历史指针,
           历史堆栈: state.context.历史堆栈,
         });
@@ -112,7 +107,7 @@ export class 项目树历史纪录管理者 implements Manager {
       this.syncHistoryManagerEmployee.updateHistories(this.历史堆栈);
     });
 
-    this.全局事件系统实例.on(
+    this.requireActor(全局事件系统).on(
       '界面状态管理者/新增节点',
       ({ nodeKey, parentKey, nodeData, treeNodes, treeDataRecord, index }) => {
         this.addRecordToHistory({
@@ -134,7 +129,7 @@ export class 项目树历史纪录管理者 implements Manager {
       },
     );
 
-    this.全局事件系统实例.on(
+    this.requireActor(全局事件系统).on(
       '界面状态管理者/修改节点',
       ({
         nodeKey,
@@ -161,7 +156,7 @@ export class 项目树历史纪录管理者 implements Manager {
       },
     );
 
-    this.全局事件系统实例.on(
+    this.requireActor(全局事件系统).on(
       '界面状态管理者/删除节点',
       ({ nodeKeys, treeNodes, treeDataRecord }) => {
         this.addRecordToHistory({
@@ -180,7 +175,7 @@ export class 项目树历史纪录管理者 implements Manager {
       },
     );
 
-    this.全局事件系统实例.on(
+    this.requireActor(全局事件系统).on(
       '界面状态管理者/移动节点',
       ({ 节点keys, 目标父节点key, index, treeNodes, treeDataRecord }) => {
         this.addRecordToHistory({
@@ -201,13 +196,13 @@ export class 项目树历史纪录管理者 implements Manager {
       },
     );
 
-    this.全局事件系统实例.on('界面视图管理者/用户撤销项目树', () => {
+    this.requireActor(全局事件系统).on('界面视图管理者/用户撤销项目树', () => {
       this.历史状态机Actor.send({
         type: '撤销请求',
       });
     });
 
-    this.全局事件系统实例.on('界面视图管理者/用户重做项目树', () => {
+    this.requireActor(全局事件系统).on('界面视图管理者/用户重做项目树', () => {
       this.历史状态机Actor.send({
         type: '重做请求',
       });

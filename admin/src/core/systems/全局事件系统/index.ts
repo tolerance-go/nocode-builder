@@ -1,10 +1,11 @@
+import { SystemBase } from '@/core/base';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '@/core/managers/UIStoreManager/types';
 import { 历史记录 } from '@/core/managers/项目树历史纪录管理者';
-import { System, ViewKey } from '@/types';
+import { ViewKey } from '@/types';
 import Emittery from 'emittery';
 
 export type 全局事件映射 = {
@@ -44,6 +45,7 @@ export type 全局事件映射 = {
     历史堆栈: 历史记录[];
     历史指针: number;
   };
+  '文档环境/pageLoadComplete': undefined;
 };
 
 export type UnsubscribeFn = () => void;
@@ -53,14 +55,14 @@ type EventCacheItem<T> = {
   [K in keyof T]: { eventName: K; eventData: T[K] };
 }[keyof T];
 
-export class 全局事件系统<T extends Record<string, unknown> = 全局事件映射>
-  implements System
-{
+export class 全局事件系统<
+  T extends Record<string, unknown> = 全局事件映射,
+> extends SystemBase {
   private emitter = new Emittery<T>();
   private eventCache: EventCacheItem<T>[] = [];
   private isLaunched = false;
 
-  public async launch() {
+  protected async onStart() {
     this.isLaunched = true;
 
     // 按顺序发送缓存的事件

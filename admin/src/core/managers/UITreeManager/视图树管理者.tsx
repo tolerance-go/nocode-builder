@@ -1,11 +1,15 @@
 import { fullPathnames, paths } from '@/configs';
-import { Manager } from '@/types';
+import { ManagerBase } from '@/core/base';
+import { 界面导航系统 } from '@/core/systems';
+import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { UIStoreManager } from '../UIStoreManager';
 import { 图标管理者 } from '../图标管理者';
 import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
+import { 验证管理者 } from '../验证管理者';
 import {
   UIStoreManagerContext,
   全局事件系统Context,
@@ -17,44 +21,54 @@ import {
 } from './contexts';
 import { Root } from './root';
 import { Admin } from './root/(admin)';
+import { BluemapEditor } from './root/(admin)/Layout/内容区域组件/bluemap-editor';
+import { DataTableEditor } from './root/(admin)/Layout/内容区域组件/data-table-editor';
+import { ViewEditor } from './root/(admin)/Layout/内容区域组件/view-editor';
 import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
-import { 验证管理者 } from '../验证管理者';
-import { DocumentEnv } from '@/core/envs';
-import { UIStoreManager } from '../UIStoreManager';
-import { 全局事件系统 } from '@/core/systems/全局事件系统';
-import { ViewEditor } from './root/(admin)/Layout/内容区域组件/view-editor';
-import { BluemapEditor } from './root/(admin)/Layout/内容区域组件/bluemap-editor';
-import { DataTableEditor } from './root/(admin)/Layout/内容区域组件/data-table-editor';
-import { 界面导航系统 } from '@/core/systems';
 import { 界面通知系统 } from '@/core/systems/界面通知系统';
 
-export class UITreeManager implements Manager {
-  private 界面通知系统实例: 界面通知系统;
-
-  constructor(界面通知系统实例: 界面通知系统) {
-    this.界面通知系统实例 = 界面通知系统实例;
-  }
-
-  async work(
-    文档环境实例: DocumentEnv,
-    验证管理者实例: 验证管理者,
-    图标管理者实例: 图标管理者,
-    跟随鼠标显示内容管理者实例: 跟随鼠标显示内容管理者,
+export class UITreeManager extends ManagerBase {
+  requires(
+    界面通知系统实例: 界面通知系统,
+    验证管理者单例: 验证管理者,
+    图标管理者单例: 图标管理者,
+    跟随鼠标显示内容管理者单例: 跟随鼠标显示内容管理者,
     界面状态管理者实例: UIStoreManager,
     全局事件系统实例: 全局事件系统,
-    导航系统实例: 界面导航系统,
-  ) {
-    文档环境实例.emitter.on('pageLoadComplete', () => {
+    界面导航系统实例: 界面导航系统,
+  ): this {
+    return super.requires(
+      界面通知系统实例,
+      验证管理者单例,
+      图标管理者单例,
+      跟随鼠标显示内容管理者单例,
+      界面状态管理者实例,
+      全局事件系统实例,
+      界面导航系统实例,
+    );
+  }
+
+  protected async onStart() {
+    const 验证管理者实例 = this.requireActor(验证管理者);
+    const 图标管理者实例 = this.requireActor(图标管理者);
+    const 跟随鼠标显示内容管理者实例 =
+      this.requireActor(跟随鼠标显示内容管理者);
+    const 界面状态管理者实例 = this.requireActor(UIStoreManager);
+    const 全局事件系统实例 = this.requireActor(全局事件系统);
+    const 导航系统实例 = this.requireActor(界面导航系统);
+    const 界面通知系统实例 = this.requireActor(界面通知系统);
+
+    全局事件系统实例.on('文档环境/pageLoadComplete', () => {
       ReactDOM.createRoot(document.getElementById('root')!).render(
         <React.StrictMode>
           <系统上下文.Provider
             value={{
               导航系统: 导航系统实例,
               全局事件系统: 全局事件系统实例,
-              界面通知系统: this.界面通知系统实例,
+              界面通知系统: 界面通知系统实例,
             }}
           >
             <导航系统Context.Provider value={导航系统实例}>

@@ -1,17 +1,16 @@
-import { EnvObject } from '@/types';
-import Emittery from 'emittery';
+import { EnvObjectBase } from '../base';
+import { 全局事件系统 } from '../systems';
 
-interface DocumentEnvEvents {
-  pageLoadComplete: undefined;
-}
-
-export class DocumentEnv implements EnvObject {
-  public emitter: Emittery<DocumentEnvEvents>;
+export class 文档环境 extends EnvObjectBase {
   private _document?: Document;
 
   public constructor(document: Document) {
-    this.emitter = new Emittery<DocumentEnvEvents>();
+    super();
     this._document = document;
+  }
+
+  requires(全局事件系统实例: 全局事件系统): this {
+    return super.requires(全局事件系统实例);
   }
 
   public get document() {
@@ -21,7 +20,7 @@ export class DocumentEnv implements EnvObject {
     return this._document;
   }
 
-  public async activate() {
+  protected async onStart(): Promise<void> {
     this.addPageLoadCompleteEventListener();
   }
 
@@ -29,10 +28,16 @@ export class DocumentEnv implements EnvObject {
     if (document.readyState === 'loading') {
       // 添加事件监听器，当页面完全加载时触发
       this.document.addEventListener('DOMContentLoaded', () => {
-        this.emitter.emit('pageLoadComplete');
+        this.requireActor(全局事件系统).emit(
+          '文档环境/pageLoadComplete',
+          undefined,
+        );
       });
     } else {
-      this.emitter.emit('pageLoadComplete');
+      this.requireActor(全局事件系统).emit(
+        '文档环境/pageLoadComplete',
+        undefined,
+      );
     }
   }
 }

@@ -1,4 +1,4 @@
-import { System } from '@/types';
+import { SystemBase } from '@/core/base';
 import { 测试标识 } from '@shared/constants';
 import { MessageInstance } from 'antd/es/message/interface';
 import { HookAPI } from 'antd/es/modal/useModal';
@@ -26,7 +26,7 @@ interface ModalOptions {
   onCancel?: () => void;
 }
 
-export class 界面通知系统 implements System {
+export class 界面通知系统 extends SystemBase {
   private messageApi: MessageInstance | null = null;
   private notificationApi: NotificationInstance | null = null;
   private modalApi: HookAPI | null = null;
@@ -125,8 +125,4 @@ export class 界面通知系统 implements System {
       action();
     });
   };
-
-  public async launch() {
-    // 启动逻辑
-  }
 }

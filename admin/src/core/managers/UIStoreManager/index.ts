@@ -1,8 +1,10 @@
+import { ProjectTypeEnum } from '@/_gen/models';
 import { paths } from '@/configs';
+import { ManagerBase } from '@/core/base';
 import { 界面导航系统 } from '@/core/systems';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { api } from '@/globals';
-import { Manager } from '@/types';
+import { produce } from 'immer';
 import localforage from 'localforage';
 import store from 'store2';
 import { localStateFieldName } from './configs';
@@ -15,34 +17,16 @@ import {
   RootState,
 } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
-import { ProjectTypeEnum } from '@/_gen/models';
-import { produce } from 'immer';
 
-export class UIStoreManager implements Manager {
-  private working: boolean = false;
-  isWorking(): boolean {
-    return this.working;
-  }
-
-  private currentPathname: string | null = null;
-
+export class UIStoreManager extends ManagerBase {
   public store;
 
   public slices;
 
-  public 全局事件系统实例;
-
-  public 导航系统实例;
-
   private initialState: RootState | null;
 
-  constructor(
-    全局事件系统实例: 全局事件系统,
-    导航系统实例: 界面导航系统,
-    localState: RootState | null,
-  ) {
-    this.全局事件系统实例 = 全局事件系统实例;
-    this.导航系统实例 = 导航系统实例;
+  constructor(localState: RootState | null) {
+    super();
 
     this.slices = createSlices();
 
@@ -55,6 +39,24 @@ export class UIStoreManager implements Manager {
       [this.handleMiddleware],
       this.initialState,
     );
+  }
+
+  requires(
+    全局事件系统实例: 全局事件系统,
+    界面导航系统实例: 界面导航系统,
+  ): this {
+    return super.requires(全局事件系统实例, 界面导航系统实例);
+  }
+
+  protected async onStart(): Promise<void> {
+    projectTreeOnWork(this.store, this.slices);
+
+    this.监听项目节点激活状态变化并修改url();
+    this.注册监听保存状态到本地();
+    this.注册同步用户信息监听();
+    this.检查本地用户token同步到内存中();
+    this.注册路由更新监听();
+    this.注册指针移动监听();
   }
 
   handleMiddleware: AppMiddleware = (store) => (next) => (action) => {
@@ -131,34 +133,25 @@ export class UIStoreManager implements Manager {
     return result;
   };
 
-  async work() {
-    this.working = true;
-    projectTreeOnWork(this.store, this.slices);
-
-    this.监听项目节点激活状态变化并修改url();
-    this.注册监听保存状态到本地();
-    this.注册同步用户信息监听();
-    this.检查本地用户token同步到内存中();
-    this.注册路由更新监听();
-    this.注册指针移动监听();
-  }
-
   注册指针移动监听() {
-    this.全局事件系统实例.on('项目树历史记录管理者/指针移动', (event) => {
-      this.store.dispatch(
-        this.slices.projectTree.actions.更新项目节点树(
-          event.历史指针 === -1
-            ? {
-                结构树: this.initialState?.projectTree.项目结构树 ?? [],
-                节点数据: this.initialState?.projectTree.项目树节点数据 ?? {},
-              }
-            : {
-                结构树: event.历史堆栈[event.历史指针].state.treeNodes,
-                节点数据: event.历史堆栈[event.历史指针].state.treeDataRecord,
-              },
-        ),
-      );
-    });
+    this.requireActor(全局事件系统).on(
+      '项目树历史记录管理者/指针移动',
+      (event) => {
+        this.store.dispatch(
+          this.slices.projectTree.actions.更新项目节点树(
+            event.历史指针 === -1
+              ? {
+                  结构树: this.initialState?.projectTree.项目结构树 ?? [],
+                  节点数据: this.initialState?.projectTree.项目树节点数据 ?? {},
+                }
+              : {
+                  结构树: event.历史堆栈[event.历史指针].state.treeNodes,
+                  节点数据: event.历史堆栈[event.历史指针].state.treeDataRecord,
+                },
+          ),
+        );
+      },
+    );
   }
 
   注册路由更新监听() {
@@ -169,7 +162,7 @@ export class UIStoreManager implements Manager {
         nextState.location.pathname !== prevState.location.pathname &&
         nextState.location.pathname
       ) {
-        this.全局事件系统实例.emit('界面状态管理者/路由更新', {
+        this.requireActor(全局事件系统).emit('界面状态管理者/路由更新', {
           pathname: nextState.location.pathname,
         });
       }
@@ -216,11 +209,15 @@ export class UIStoreManager implements Manager {
             ];
           if (nodeData.type === 'file') {
             if (nodeData.projectFileType === ProjectTypeEnum.View) {
-              this.导航系统实例.navigateTo(paths['view-editor']);
+              this.requireActor(界面导航系统).navigateTo(paths['view-editor']);
             } else if (nodeData.projectFileType === ProjectTypeEnum.Bluemap) {
-              this.导航系统实例.navigateTo(paths['bluemap-editor']);
+              this.requireActor(界面导航系统).navigateTo(
+                paths['bluemap-editor'],
+              );
             } else if (nodeData.projectFileType === ProjectTypeEnum.DataTable) {
-              this.导航系统实例.navigateTo(paths['data-table-editor']);
+              this.requireActor(界面导航系统).navigateTo(
+                paths['data-table-editor'],
+              );
             }
           }
         }

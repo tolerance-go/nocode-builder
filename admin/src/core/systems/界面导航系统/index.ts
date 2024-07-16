@@ -1,6 +1,6 @@
-import { System } from '@/types';
+import { SystemBase } from '@/core/base';
 
-export class 界面导航系统 implements System {
+export class 界面导航系统 extends SystemBase {
   navigateFunction: ((url: string) => void) | null = null;
 
   setNavigate = (navigate: (url: string) => void): void => {
@@ -14,8 +14,4 @@ export class 界面导航系统 implements System {
       console.error('Navigate function is not set');
     }
   };
-
-  public async launch() {
-    // 启动逻辑
-  }
 }
