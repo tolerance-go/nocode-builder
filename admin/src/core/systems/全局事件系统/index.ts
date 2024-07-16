@@ -62,7 +62,7 @@ export class 全局事件系统<
   private eventCache: EventCacheItem<T>[] = [];
   private isLaunched = false;
 
-  protected async onStart() {
+  protected async onSetup() {
     this.isLaunched = true;
 
     // 按顺序发送缓存的事件

@@ -14,7 +14,6 @@ import {
 import { SyncHistoryManagerEmployee } from './employees/SyncHistoryManagerEmployee';
 import { convertDiffResultToProjectDiffDto } from './employees/utils';
 import { 历史状态机, 历史记录 } from './machines';
-import { Actor } from '@/types';
 
 export class 项目树历史纪录管理者 extends ManagerBase {
   private 历史指针: number = -1;
@@ -84,7 +83,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
     });
   }
 
-  protected async onStart(): Promise<void> {
+  protected async onSetup(): Promise<void> {
     this.历史状态机Actor.start();
 
     this.注册相关监听();

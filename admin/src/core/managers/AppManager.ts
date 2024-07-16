@@ -24,7 +24,7 @@ export class AppManager extends ManagerBase {
     this.document = document;
   }
 
-  protected async onStart(): Promise<void> {
+  protected async onSetup(): Promise<void> {
     const localState =
       await localforage.getItem<RootState>(localStateFieldName);
 
@@ -61,6 +61,6 @@ export class AppManager extends ManagerBase {
         全局事件系统实例,
         界面导航系统实例,
       ),
-    ].forEach((actor) => actor.start());
+    ].forEach((actor) => actor.setup());
   }
 }

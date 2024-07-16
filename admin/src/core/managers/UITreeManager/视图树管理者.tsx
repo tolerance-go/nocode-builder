@@ -51,7 +51,7 @@ export class UITreeManager extends ManagerBase {
     );
   }
 
-  protected async onStart() {
+  protected async onSetup() {
     const 验证管理者实例 = this.requireActor(验证管理者);
     const 图标管理者实例 = this.requireActor(图标管理者);
     const 跟随鼠标显示内容管理者实例 =

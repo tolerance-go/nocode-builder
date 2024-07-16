@@ -43,16 +43,16 @@ export abstract class ActorBase implements Actor {
   }
 
   // 启动
-  async start(): Promise<void> {
+  async setup(): Promise<void> {
     if (this.hasStarted) {
-      return; // 如果已经执行过 start，则跳过
+      throw new Error('Actor already started');
     }
 
     try {
       await Promise.all(
         Array.from(this.requiredActors).map((actor) => actor.startProcessing),
       );
-      await this.onStart(); // 调用 start 逻辑函数
+      await this.onSetup(); // 调用 start 逻辑函数
       this.startProcessingResolve();
       this.hasStarted = true; // 标记为已启动
     } catch (error) {
@@ -62,29 +62,17 @@ export abstract class ActorBase implements Actor {
   }
 
   // 抽象的 start 逻辑函数，需要在继承类中实现
-  protected abstract onStart(): Promise<void>;
+  protected abstract onSetup(): Promise<void>;
 }
 
 export class SystemBase extends ActorBase implements System {
-  async launch(): Promise<void> {
-    await this.start();
-  }
-
-  protected async onStart(): Promise<void> {}
+  protected async onSetup(): Promise<void> {}
 }
 
 export class ManagerBase extends ActorBase implements Manager {
-  async work(): Promise<void> {
-    await this.start();
-  }
-
-  protected async onStart(): Promise<void> {}
+  protected async onSetup(): Promise<void> {}
 }
 
 export class EnvObjectBase extends ActorBase implements EnvObject {
-  async activate(): Promise<void> {
-    await this.start();
-  }
-
-  protected async onStart(): Promise<void> {}
+  protected async onSetup(): Promise<void> {}
 }

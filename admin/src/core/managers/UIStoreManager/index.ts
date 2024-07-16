@@ -48,7 +48,7 @@ export class UIStoreManager extends ManagerBase {
     return super.requires(全局事件系统实例, 界面导航系统实例);
   }
 
-  protected async onStart(): Promise<void> {
+  protected async onSetup(): Promise<void> {
     projectTreeOnWork(this.store, this.slices);
 
     this.监听项目节点激活状态变化并修改url();
@@ -95,7 +95,7 @@ export class UIStoreManager extends ManagerBase {
         throw new Error('位置非法');
       }
 
-      this.全局事件系统实例.emit('界面状态管理者/新增节点', {
+      this.requireActor(全局事件系统).emit('界面状态管理者/新增节点', {
         nodeKey: action.payload.nodeKey,
         nodeData,
         parentKey,
@@ -107,7 +107,7 @@ export class UIStoreManager extends ManagerBase {
       const { nodeKey } = action.payload;
       const newNodeData = nextState.projectTree.项目树节点数据[nodeKey];
       const oldNodeData = prevState.projectTree.项目树节点数据[nodeKey];
-      this.全局事件系统实例.emit('界面状态管理者/修改节点', {
+      this.requireActor(全局事件系统).emit('界面状态管理者/修改节点', {
         nodeKey: action.payload.nodeKey,
         newTreeNodeData: newNodeData,
         oldTreeNodeData: oldNodeData,
@@ -115,13 +115,13 @@ export class UIStoreManager extends ManagerBase {
         treeDataRecord: nextState.projectTree.项目树节点数据,
       });
     } else if (action.type === 'projectTree/删除节点') {
-      this.全局事件系统实例.emit('界面状态管理者/删除节点', {
+      this.requireActor(全局事件系统).emit('界面状态管理者/删除节点', {
         nodeKeys: action.payload,
         treeNodes: nextState.projectTree.项目结构树,
         treeDataRecord: nextState.projectTree.项目树节点数据,
       });
     } else if (action.type === 'projectTree/移动节点') {
-      this.全局事件系统实例.emit('界面状态管理者/移动节点', {
+      this.requireActor(全局事件系统).emit('界面状态管理者/移动节点', {
         节点keys: action.payload.nodeKeys,
         目标父节点key: action.payload.newParentKey,
         index: action.payload.newIndex,
