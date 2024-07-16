@@ -41,7 +41,7 @@ export class UIStoreManager extends ManagerBase {
     );
   }
 
-  requireActors(
+  requires(
     全局事件系统实例: 全局事件系统,
     界面导航系统实例: 界面导航系统,
   ): this {
