@@ -4,7 +4,7 @@ import {
   ProjectTreeNodeDataRecord,
 } from '@/core/managers/UIStoreManager';
 import { describe, expect, it } from 'vitest';
-import { handleAdditions } from './handleAdditions';
+import { handleAdditions } from '.';
 import { ProjectTypeEnum } from '@/_gen/models';
 
 describe('handleAdditions', () => {
