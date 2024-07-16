@@ -23,3 +23,7 @@ export const fullPaths = {
   ...authPaths,
   ...editorPaths,
 };
+
+export const localKeys = {
+  syncHistoryManagerEmployee_state: 'syncHistoryManagerEmployee_state',
+};

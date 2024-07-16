@@ -8,7 +8,7 @@ import {
 } from '../../UIStoreManager';
 import { 历史记录 } from '../machines';
 
-interface SyncHistoryManagerState {
+export interface SyncHistoryManagerState {
   historyA: 历史记录[];
   historyB: 历史记录[];
   pendingUpdate: 历史记录[] | null;
