@@ -16,6 +16,7 @@ import {
 } from './store';
 import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
 import { ProjectTypeEnum } from '@/_gen/models';
+import { 界面通知系统 } from '@/core/systems/界面通知系统';
 
 export class UIStoreManager implements Manager {
   public store;

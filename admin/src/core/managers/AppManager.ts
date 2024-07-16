@@ -10,12 +10,16 @@ import { 项目树历史纪录管理者 } from './项目树历史纪录管理者
 import { 全局事件系统 } from '../systems/全局事件系统';
 import localforage from 'localforage';
 import { localStateFieldName } from './UIStoreManager/configs';
+import { 界面通知系统 } from '../systems/界面通知系统';
 
 export class AppManager implements Manager {
   document: Document;
 
-  public constructor(document: Document) {
+  public 界面通知系统实例: 界面通知系统;
+
+  public constructor(document: Document, 界面通知系统实例: 界面通知系统) {
     this.document = document;
+    this.界面通知系统实例 = 界面通知系统实例;
   }
 
   async work() {
@@ -35,8 +39,11 @@ export class AppManager implements Manager {
       导航系统实例,
       localState,
     );
-    const 项目树历史纪录管理者实例 = new 项目树历史纪录管理者(全局事件系统实例);
-    const UITreeManager实例 = new UITreeManager();
+    const 项目树历史纪录管理者实例 = new 项目树历史纪录管理者(
+      全局事件系统实例,
+      this.界面通知系统实例,
+    );
+    const UITreeManager实例 = new UITreeManager(this.界面通知系统实例);
 
     await Promise.all([
       验证管理者单例.work(),
@@ -58,6 +65,7 @@ export class AppManager implements Manager {
     await Promise.all([
       i18n系统单例.launch(),
       全局事件系统实例.launch(),
+      this.界面通知系统实例.launch(),
       导航系统实例.launch(),
       文档环境实例.activate(),
     ]);

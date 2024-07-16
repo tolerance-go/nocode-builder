@@ -14,9 +14,12 @@ import {
 } from '../UIStoreManager';
 import localforage from 'localforage';
 import { localKeys } from '@/configs';
+import { 界面通知系统 } from '@/core/systems/界面通知系统';
 
 export class 项目树历史纪录管理者 implements Manager {
   public 全局事件系统实例;
+
+  public 界面通知系统实例;
 
   private 历史指针: number = -1;
 
@@ -26,12 +29,18 @@ export class 项目树历史纪录管理者 implements Manager {
 
   private syncHistoryManagerEmployee: SyncHistoryManagerEmployee;
 
-  public constructor(全局事件系统实例: 全局事件系统) {
+  public constructor(
+    全局事件系统实例: 全局事件系统,
+    界面通知系统实例: 界面通知系统,
+  ) {
+    this.界面通知系统实例 = 界面通知系统实例;
+
     this.syncHistoryManagerEmployee = new SyncHistoryManagerEmployee({
       initialHistoryA: [],
       initialHistoryB: [],
       retryCallback: (startSync) => {
-        Modal.confirm({
+        this.界面通知系统实例.showModal({
+          type: 'confirm',
           title: '同步失败，是否重试？',
           onOk: () => {
             startSync();

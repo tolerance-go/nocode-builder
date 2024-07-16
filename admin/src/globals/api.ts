@@ -1,6 +1,6 @@
 import { Api } from '@/_gen/api';
-import { notification } from 'antd';
 import store from 'store2';
+import { 全局界面通知系统 } from './systems';
 
 const api = new Api({
   baseURL: import.meta.env.DEV ? 'http://localhost:3000' : '/api', // 替换为你的 API 基础 URL
@@ -36,7 +36,8 @@ api.instance.interceptors.response.use(
   (error) => {
     // 对响应错误做些什么
     // 可以统一处理错误信息，比如显示通知
-    notification.error({
+    全局界面通知系统.showNotification({
+      type: 'error',
       message: '请求错误',
       description: error.response?.data?.message || error.message || '未知问题',
     });

@@ -4,6 +4,7 @@ import {
   全局事件系统Context,
   图标管理者Context,
   导航系统Context,
+  系统上下文,
   跟随鼠标显示内容管理者Context,
   验证管理者Context,
 } from './contexts';
@@ -48,4 +49,11 @@ export const use导航系统 = () => {
   const 导航系统 = useContext(导航系统Context);
   if (!导航系统) throw new Error('导航系统未初始化');
   return 导航系统;
+};
+
+export const 获取系统上下文 = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const 系统上下文对象 = useContext(系统上下文);
+  if (!系统上下文对象) throw new Error('系统上下文未初始化');
+  return 系统上下文对象;
 };
