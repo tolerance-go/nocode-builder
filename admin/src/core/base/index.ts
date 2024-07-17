@@ -1,23 +1,17 @@
 import { Actor, EnvObject, Manager, System } from '@/types';
 
 export abstract class ActorBase implements Actor {
-  public setupProcessing: Promise<void>;
-  public startProcessing: Promise<void>;
+  public setupProcessing: PromiseWithResolvers<void>;
+  public startProcessing: PromiseWithResolvers<void>;
 
   private requiredActors: Set<Actor> = new Set(); // 当前 Actor 依赖的 Actors
   private dependentActors: Set<Actor> = new Set(); // 依赖当前 Actor 的 Actors
-  private setupProcessingResolve!: () => void;
-  private startProcessingResolve!: () => void;
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   constructor() {
-    this.setupProcessing = new Promise<void>((resolve) => {
-      this.setupProcessingResolve = resolve;
-    });
-    this.startProcessing = new Promise<void>((resolve) => {
-      this.startProcessingResolve = resolve;
-    });
+    this.setupProcessing = Promise.withResolvers<void>();
+    this.startProcessing = Promise.withResolvers<void>();
   }
 
   // 导入其他 Actor
@@ -57,18 +51,14 @@ export abstract class ActorBase implements Actor {
       throw new Error('Actor already setup');
     }
 
-    try {
-      await Promise.all(
-        Array.from(this.requiredActors).map((actor) => actor.setupProcessing),
-      );
-      await this.onSetup(); // 调用 start 逻辑函数
-      this.setupProcessingResolve();
-    } catch (error) {
-      // 处理启动过程中出现的错误
-      console.error('Error starting actors:', error);
-    } finally {
-      this.hasSetup = true; // 标记为已启动
-    }
+    await Promise.all(
+      Array.from(this.requiredActors).map(
+        (actor) => actor.setupProcessing.promise,
+      ),
+    );
+    await this.onSetup(); // 调用 start 逻辑函数
+    this.setupProcessing.resolve();
+    this.hasSetup = true; // 标记为已启动
   }
 
   async start(): Promise<void> {
@@ -76,18 +66,14 @@ export abstract class ActorBase implements Actor {
       throw new Error('Actor already started');
     }
 
-    try {
-      await Promise.all(
-        Array.from(this.requiredActors).map((actor) => actor.startProcessing),
-      );
-      await this.onStart(); // 调用 start 逻辑函数
-      this.startProcessingResolve();
-    } catch (error) {
-      // 处理启动过程中出现的错误
-      console.error('Error starting actors:', error);
-    } finally {
-      this.hasStarted = true; // 标记为已启动
-    }
+    await Promise.all(
+      Array.from(this.requiredActors).map(
+        (actor) => actor.startProcessing.promise,
+      ),
+    );
+    await this.onStart(); // 调用 start 逻辑函数
+    this.startProcessing.resolve();
+    this.hasStarted = true; // 标记为已启动
   }
 
   // 抽象的 start 逻辑函数，需要在继承类中实现
