@@ -32,7 +32,7 @@ generateApi({
   .then(async ({ files }) => {
     // 读取 prettier 配置
     const prettierConfig = await resolveConfig(path.resolve());
-    const outputDir = path.resolve('src/_gen');
+    const outputDir = path.resolve('cypress/support/_gen');
 
     files.forEach(async ({ fileName, fileContent, fileExtension }) => {
       fs.writeFileSync(
