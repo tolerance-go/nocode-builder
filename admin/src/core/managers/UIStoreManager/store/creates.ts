@@ -5,7 +5,7 @@ import {
   createProjectTreeSlice,
   createUserInfoSlice,
 } from './slices';
-import { AppMiddleware } from './types';
+import { AppMiddleware } from './types/AppMiddleware';
 
 export const createSlices = () => {
   const projectSlice = createProjectTreeSlice();

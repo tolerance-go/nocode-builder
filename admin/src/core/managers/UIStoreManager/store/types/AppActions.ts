@@ -1,14 +1,4 @@
-import { MiddlewareAPI } from '@reduxjs/toolkit';
-import { createSlices, createStore } from './createStore';
-
-export type AppSlices = ReturnType<typeof createSlices>;
-export type AppStore = ReturnType<typeof createStore>;
-export type RootState = ReturnType<ReturnType<typeof createStore>['getState']>;
-export type AppDispatch = ReturnType<typeof createStore>['dispatch'];
-
-export type AppMiddleware = (
-  api: MiddlewareAPI<AppDispatch, RootState>,
-) => (next: (action: AppActions) => unknown) => (action: AppActions) => unknown;
+import { AppSlices } from './creates';
 
 type SliceActions<Slice> = Slice extends { actions: infer A } ? A : never;
 
