@@ -15,7 +15,7 @@ WORKDIR /workspace/server
 COPY ./server/package.json ./
 
 # 安装依赖
-RUN pnpm install --frozen-lockfile --ignore-scripts
+RUN pnpm install --frozen-lockfile
 
 # 复制所有文件到工作目录
 COPY ./server .

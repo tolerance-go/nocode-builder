@@ -31,8 +31,7 @@
     "prisma:db:pull": "prisma db pull",
     "prisma:db:push": "prisma db push",
     "prisma:db:seed": "prisma db seed",
-    "prisma:studio": "prisma studio",
-    "postinstall": "pnpm prisma:generate"
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
