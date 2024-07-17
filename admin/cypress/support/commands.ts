@@ -247,7 +247,7 @@ Cypress.Commands.add('获取antd通知框描述', () => {
 });
 
 Cypress.Commands.add('当前访问应该为主页', () => {
-  cy.页面路径应该为(fullPathnames.root);
+  return cy.页面路径应该为(fullPathnames.root);
 });
 
 Cypress.Commands.add('页面路径应该为', (pathname) => {
@@ -255,5 +255,7 @@ Cypress.Commands.add('页面路径应该为', (pathname) => {
   if (!baseUrl) {
     throw new Error('Cypress.config().baseUrl 未配置');
   }
-  cy.location('pathname').should('eq', constructPathname(baseUrl, pathname));
+  return cy
+    .location('pathname')
+    .should('eq', constructPathname(baseUrl, pathname));
 });

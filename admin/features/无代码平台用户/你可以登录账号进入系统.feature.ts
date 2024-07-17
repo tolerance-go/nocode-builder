@@ -1,33 +1,29 @@
-import { 测试标识 } from '@/constants';
-import { fullPathnames } from '@/constants';
+import { fullPathnames, 测试标识 } from '@/constants';
+import { RootState } from '@/core/managers/UIStoreManager/types';
+import { localStateFieldName } from '@/core/managers/UIStoreManager/constants';
 import { 使用场景 } from '@cypress/support/utils';
 import localforage from 'localforage';
-import { localStateFieldName } from '@/core/managers/UIStoreManager/configs';
 
 使用场景('用户登录流程', ({ 假如 }) => {
-  /**
-   * 假如 用户登录后，应该过滤掉某些属性后保存到本地 state
-   * 当 用户登录成功后
-   * 那么 本地 state 中不包括 userInfo.token 和 location.pathname
-   */
+  假如('用户登录后，应该过滤掉某些属性后保存到本地 state', ({ 当, 那么 }) => {
+    当('用户登录成功后', () => {
+      cy.visit('/login');
+      cy.获取测试标识(测试标识.登录用户名输入框).type('yb');
+      cy.获取测试标识(测试标识.登录密码输入框).type('123456');
+      cy.获取测试标识(测试标识.登录提交按钮).click();
+    });
 
-  假如(
-    '用户登录后，应该过滤掉某些属性后保存到本地 state',
-    ({ 当, 那么, 并且 }) => {
-      当('用户登录成功后', () => {
-        cy.visit('/login');
-        cy.获取测试标识(测试标识.登录用户名输入框).type('yb');
-        cy.获取测试标识(测试标识.登录密码输入框).type('123456');
-        cy.获取测试标识(测试标识.登录提交按钮).click();
-        cy.当前访问应该为主页();
+    那么('本地 state 中不包括 userInfo.token 和 location.pathname', () => {
+      cy.当前访问应该为主页().then(() => {
+        return localforage
+          .getItem<RootState>(localStateFieldName)
+          .then((state) => {
+            expect(state!.userInfo.token).to.eq(null);
+            expect(state!.location.pathname).to.eq(null);
+          });
       });
-      那么('本地 state 中不包括 userInfo.token 和 location.pathname', () => {
-        const localState = localforage.getItem(localStateFieldName);
-        expect(localState).to.not.include('token');
-        expect(localState).to.not.include('pathname');
-      });
-    },
-  );
+    });
+  });
 
   假如(
     '用户登录到系统，应该看到用户栏目显示自己的姓名',

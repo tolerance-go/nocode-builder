@@ -17,7 +17,7 @@ declare global {
           notDrop?: boolean;
         },
       ): Chainable<void>;
-      页面路径应该为(pathname: string): Chainable<void>;
+      页面路径应该为(pathname: string): Chainable<string>;
       拦截请求(
         options: {
           method: 'post' | 'get' | 'delete' | 'put';
@@ -40,7 +40,9 @@ declare global {
       添加项目树数据表项目(): Chainable<void>;
       范围批量选中节点(fromTitle: string, toTitle: string): Chainable<void>;
       组合批量选中节点(titles: string[]): Chainable<void>;
-      当前访问应该为主页(): Chainable<void>;
+
+      // 业务断言
+      当前访问应该为主页(): Chainable<string>;
       /**
        * 标识选择
        */
