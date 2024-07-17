@@ -79,7 +79,7 @@ import { 测试标识 } from '@shared/constants';
       });
 
       那么('应该自动触发同步操作', () => {
-        cy.location('pathname').should('eq', fullPathnames.root);
+        cy.页面路径应该为(fullPathnames.root);
         cy.wait('@applyProjectDiff')
           .its('response.statusCode')
           .should('equal', 500);

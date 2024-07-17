@@ -1,6 +1,6 @@
 import { 测试标识 } from '@shared/constants';
-import { 使用场景 } from '@cypress/support/scenarioUtils';
 import { fullPathnames } from '@shared/configs';
+import { 使用场景 } from '@cypress/support/utils';
 
 使用场景('用户登录流程', ({ 假如 }) => {
   假如(

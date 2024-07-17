@@ -1,6 +1,5 @@
 import { apiUrls } from '@cypress/support/_gen/apiUrls';
-import { BASE_API } from '@cypress/support/constants';
-import { 使用场景 } from '@cypress/support/scenarioUtils';
+import { 使用场景 } from '@cypress/support/utils';
 import { random } from 'lodash-es';
 
 使用场景('注册账号流程', ({ 假如 }) => {

@@ -4,6 +4,9 @@ export {};
 declare global {
   namespace Cypress {
     interface Chainable {
+      /**
+       * 工具指令
+       */
       拖拽到(
         target: Chainable<JQuery<HTMLElement>>,
         position: {
@@ -14,30 +17,6 @@ declare global {
           notDrop?: boolean;
         },
       ): Chainable<void>;
-
-      /**
-       * 业务操作
-       */
-      登录(username: string, password: string): Chainable<void>;
-
-      获取项目树容器(): Chainable<JQuery<HTMLElement>>;
-
-      获取项目树节点标题元素(title: string): Chainable<JQuery<HTMLElement>>;
-
-      获取项目树节点通过标题(title: string): Chainable<JQuery<HTMLElement>>;
-
-      获取项目树标题输入框(): Chainable<JQuery<HTMLElement>>;
-      获取添加项目组的按钮(): Chainable<JQuery<HTMLElement>>;
-      获取添加项目的按钮(): Chainable<JQuery<HTMLElement>>;
-
-      添加项目树视图项目(): Chainable<void>;
-      添加项目树蓝图项目(): Chainable<void>;
-      添加项目树数据表项目(): Chainable<void>;
-
-      范围批量选中节点(fromTitle: string, toTitle: string): Chainable<void>;
-      组合批量选中节点(titles: string[]): Chainable<void>;
-      当前访问应该为主页(): Chainable<void>;
-
       页面路径应该为(pathname: string): Chainable<void>;
       拦截请求(
         options: {
@@ -46,7 +25,22 @@ declare global {
         },
         body: Parameters<typeof cy.intercept>[2],
       ): Chainable<void>;
-
+      /**
+       * 业务操作
+       */
+      登录(username: string, password: string): Chainable<void>;
+      获取项目树容器(): Chainable<JQuery<HTMLElement>>;
+      获取项目树节点标题元素(title: string): Chainable<JQuery<HTMLElement>>;
+      获取项目树节点通过标题(title: string): Chainable<JQuery<HTMLElement>>;
+      获取项目树标题输入框(): Chainable<JQuery<HTMLElement>>;
+      获取添加项目组的按钮(): Chainable<JQuery<HTMLElement>>;
+      获取添加项目的按钮(): Chainable<JQuery<HTMLElement>>;
+      添加项目树视图项目(): Chainable<void>;
+      添加项目树蓝图项目(): Chainable<void>;
+      添加项目树数据表项目(): Chainable<void>;
+      范围批量选中节点(fromTitle: string, toTitle: string): Chainable<void>;
+      组合批量选中节点(titles: string[]): Chainable<void>;
+      当前访问应该为主页(): Chainable<void>;
       /**
        * 标识选择
        */
