@@ -1,5 +1,5 @@
 import { ProjectTypeEnum } from '@/_gen/models';
-import { paths } from '@/configs';
+import { paths } from '@/constants';
 import { ManagerBase } from '@/core/base';
 import { 界面导航系统 } from '@/core/systems';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
@@ -240,6 +240,7 @@ export class UIStoreManager extends ManagerBase {
   过滤掉某些不存储到本地的state(state: RootState): RootState {
     return produce(state, (draft) => {
       draft.location.pathname = null;
+      draft.userInfo.token = null;
     });
   }
 }

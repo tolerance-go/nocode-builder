@@ -1,7 +1,7 @@
 import { apiUrls } from '@cypress/support/_gen/apiUrls';
 import { 使用场景 } from '@cypress/support/utils';
-import { fullPathnames } from '@shared/configs';
-import { 测试标识 } from '@shared/constants';
+import { fullPathnames } from '@/constants';
+import { 测试标识 } from '@/constants';
 
 使用场景('项目树远程同步流程', ({ 假如 }) => {
   假如('用户上次同步失败，直接进入主页，应该自动同步', ({ 当, 那么 }) => {

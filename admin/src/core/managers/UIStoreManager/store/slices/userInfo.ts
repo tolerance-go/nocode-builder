@@ -5,7 +5,7 @@ export type UserInfoStates = {
   token: null | string;
 };
 
-const initialState: UserInfoStates = {
+export const userInfoInitialState: UserInfoStates = {
   username: '',
   token: null,
 };
@@ -13,7 +13,7 @@ const initialState: UserInfoStates = {
 export const createUserInfoSlice = () =>
   createSlice({
     name: 'userInfo',
-    initialState,
+    initialState: userInfoInitialState,
     reducers: {
       更新用户名: (state, action: PayloadAction<string>) => {
         state.username = action.payload;

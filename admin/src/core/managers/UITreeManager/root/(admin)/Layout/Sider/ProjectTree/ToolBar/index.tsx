@@ -18,7 +18,7 @@ import {
 import { ProjectFileType } from '@/core/managers/UITreeManager/types';
 
 import { FolderAddOutlined, PlusOutlined } from '@ant-design/icons';
-import { 测试标识 } from '@shared/constants';
+import { 测试标识 } from '@/constants';
 import { Button, Dropdown, Flex, Space, theme } from 'antd';
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */

@@ -33,9 +33,7 @@
     "cypress",
     "stories",
     "features",
-    "cypress/cypress.d.ts",
-    "shared/constants.ts",
-    "shared/configs.ts"
+    "cypress/cypress.d.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

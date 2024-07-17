@@ -9,7 +9,7 @@ import {
   use界面状态管理者,
 } from '@/core/managers/UITreeManager/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/hooks';
-import { 测试标识 } from '@shared/constants';
+import { 测试标识 } from '@/constants';
 import { css, cx } from '@emotion/css';
 import { theme } from 'antd';
 import { debounce } from 'lodash-es';

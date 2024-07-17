@@ -10,7 +10,6 @@ export default defineConfig({
     alias: {
       '@': path.resolve('src'),
       '@cypress': path.resolve('cypress'),
-      '@shared': path.resolve('shared'),
     },
   },
   server: {

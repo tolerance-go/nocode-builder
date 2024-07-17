@@ -1,6 +1,6 @@
 import { ManagerBase } from '@/core/base';
 import { 全局事件系统 } from '@/core/systems';
-import { authPathnames } from '@shared/configs';
+import { authPathnames } from '@/constants';
 import { last } from 'lodash-es';
 import {
   compareTrees,

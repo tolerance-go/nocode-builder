@@ -1,5 +1,5 @@
 import { SystemBase } from '@/core/base';
-import { 测试标识 } from '@shared/constants';
+import { 测试标识 } from '@/constants';
 import { MessageInstance } from 'antd/es/message/interface';
 import { HookAPI } from 'antd/es/modal/useModal';
 import { NotificationInstance } from 'antd/es/notification/interface';

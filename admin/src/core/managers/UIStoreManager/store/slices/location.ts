@@ -4,14 +4,14 @@ export type LocationStates = {
   pathname: string | null;
 };
 
-const initialState: LocationStates = {
+export const locationInitialState: LocationStates = {
   pathname: null,
 };
 
 export const createLocationSlice = () =>
   createSlice({
     name: 'location',
-    initialState,
+    initialState: locationInitialState,
     reducers: {
       updatePathname: (state, action: PayloadAction<string>) => {
         state.pathname = action.payload;

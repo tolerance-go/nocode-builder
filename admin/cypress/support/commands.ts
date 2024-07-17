@@ -1,8 +1,8 @@
 /// <reference types="cypress" />
 
-import { 测试标识, 测试类名 } from '@shared/constants';
+import { 测试标识, 测试类名 } from '@/constants';
 import { BASE_API } from './constants';
-import { fullPathnames } from '@shared/configs';
+import { fullPathnames } from '@/constants';
 import { constructPathname } from './utils';
 
 // ***********************************************

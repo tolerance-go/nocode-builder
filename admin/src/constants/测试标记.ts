@@ -55,7 +55,3 @@ export const 测试类名 = {
   项目树节点标题: 'project-tree-title',
   编辑临时创建节点之前选中的节点: 'previous-selected-node',
 };
-
-export const 组件标识 = {};
-
-export const 组件类名 = {};

@@ -1,5 +1,5 @@
-import { editorPathnames } from '@shared/configs';
-import { 测试标识 } from '@shared/constants';
+import { editorPathnames } from '@/constants';
+import { 测试标识 } from '@/constants';
 import { 验证元素可见性 } from '@cypress/support/helpers';
 import { 使用场景 } from '@cypress/support/utils';
 

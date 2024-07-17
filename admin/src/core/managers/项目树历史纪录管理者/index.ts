@@ -1,4 +1,4 @@
-import { localKeys } from '@/configs';
+import { localKeys } from '@/constants';
 import { ManagerBase } from '@/core/base';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { 界面通知系统 } from '@/core/systems/界面通知系统';

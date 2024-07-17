@@ -1,4 +1,4 @@
-import { fullPathnames, paths } from '@/configs';
+import { fullPathnames, paths } from '@/constants';
 import { ManagerBase } from '@/core/base';
 import { 界面导航系统 } from '@/core/systems';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
