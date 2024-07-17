@@ -54,6 +54,7 @@
     "xstate": "^5.14.0"
   },
   "devDependencies": {
+    "@ungap/with-resolvers": "^0.1.0",
     "@rollup/plugin-alias": "^5.1.0",
     "@statelyai/inspect": "^0.4.0",
     "@testing-library/jest-dom": "^6.4.6",
