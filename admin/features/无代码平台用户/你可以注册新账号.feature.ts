@@ -39,16 +39,12 @@ import { random } from 'lodash-es';
       cy.get('input#confirm').type('123456a.');
     });
 
-    cy.intercept(
-      apiUrls.AuthController_register.method,
-      apiUrls.AuthController_register.path,
-      {
-        statusCode: 409,
-        body: {
-          message: '用户名已被占用',
-        },
+    cy.拦截请求(apiUrls.AuthController_register, {
+      statusCode: 409,
+      body: {
+        message: '用户名已被占用',
       },
-    ).as('registerRequest');
+    }).as('registerRequest');
 
     并且('点击注册按钮，等待请求返回', () => {
       cy.get('button[type="submit"]').click();
@@ -82,7 +78,7 @@ import { random } from 'lodash-es';
       cy.get('input#confirm').type('123456a.');
     });
 
-    cy.intercept('POST', `${BASE_API}/auth/register`, {
+    cy.拦截请求(apiUrls.AuthController_register, {
       statusCode: 201,
     }).as('registerRequest');
 
@@ -123,7 +119,7 @@ import { random } from 'lodash-es';
       cy.get('input#confirm').type('123456a.');
     });
 
-    cy.intercept('POST', `${BASE_API}/auth/register`, {
+    cy.拦截请求(apiUrls.AuthController_register, {
       statusCode: 201,
     }).as('registerRequest');
 
@@ -158,7 +154,7 @@ import { random } from 'lodash-es';
       cy.get('input#autoLogin').uncheck();
     });
 
-    cy.intercept('POST', `${BASE_API}/auth/register`, {
+    cy.拦截请求(apiUrls.AuthController_register, {
       statusCode: 201,
     }).as('registerRequest');
 

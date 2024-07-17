@@ -1,20 +1,16 @@
 import { 测试标识, 测试类名 } from '@shared/constants';
+import { apiUrls } from '@cypress/support/_gen/apiUrls';
 import {
   getTreeNodeChildren,
   getTreeNodeParent,
-} from '@cypress/support/antdUtils';
-import { 使用场景 } from '@cypress/support/scenarioUtils';
-import { apiUrls } from '@cypress/support/_gen/apiUrls';
+  使用场景,
+} from '@cypress/support/utils';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
   beforeEach(() => {
-    cy.intercept(
-      apiUrls.SyncController_applyProjectDiff.method,
-      apiUrls.SyncController_applyProjectDiff.path,
-      {
-        statusCode: 200,
-      },
-    );
+    cy.拦截请求(apiUrls.SyncController_applyProjectDiff, {
+      statusCode: 200,
+    });
   });
 
   假如('用户移动一个节点到文件夹下，应该可以回撤和重做', ({ 当, 那么 }) => {

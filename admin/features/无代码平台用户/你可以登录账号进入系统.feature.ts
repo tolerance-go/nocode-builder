@@ -72,7 +72,7 @@ import { fullPathnames } from '@shared/configs';
         cy.获取测试标识(测试标识.登录提交按钮).click();
       });
       那么('用户应该被重定向到主页并看到欢迎信息', () => {
-        cy.location('pathname').should('eq', fullPathnames.root);
+        cy.页面路径应该为(fullPathnames.root);
       });
     },
   );

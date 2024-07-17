@@ -2,6 +2,8 @@
 
 import { 测试标识, 测试类名 } from '@shared/constants';
 import { BASE_API } from './constants';
+import { fullPathnames } from '@shared/configs';
+import { constructPathname } from './utils';
 
 // ***********************************************
 // This example commands.ts shows you how to
@@ -39,6 +41,10 @@ import { BASE_API } from './constants';
 //     }
 //   }
 // }
+
+Cypress.Commands.add('拦截请求', (options, body) => {
+  cy.intercept(options.method, constructPathname(BASE_API, options.path), body);
+});
 
 Cypress.Commands.add('获取项目树容器', () => {
   return cy.获取测试标识(测试标识.项目树容器);
@@ -241,11 +247,13 @@ Cypress.Commands.add('获取antd通知框描述', () => {
 });
 
 Cypress.Commands.add('当前访问应该为主页', () => {
-  cy.location().should((loc) => {
-    const baseUrl = Cypress.config().baseUrl;
-    if (!baseUrl) {
-      throw new Error('Cypress.config().baseUrl 未配置');
-    }
-    expect(loc.pathname).to.eq(new URL(baseUrl).pathname);
-  });
+  cy.页面路径应该为(fullPathnames.root);
+});
+
+Cypress.Commands.add('页面路径应该为', (pathname) => {
+  const baseUrl = Cypress.config().baseUrl;
+  if (!baseUrl) {
+    throw new Error('Cypress.config().baseUrl 未配置');
+  }
+  cy.location('pathname').should('eq', constructPathname(baseUrl, pathname));
 });

@@ -3,13 +3,9 @@ import { apiUrls } from '@cypress/support/_gen/apiUrls';
 
 使用场景('指令调用', ({ 假如 }) => {
   假如('批量选中节点，应该模拟用户键盘操作批量选中多个节点', ({ 当, 那么 }) => {
-    cy.intercept(
-      apiUrls.SyncController_applyProjectDiff.method,
-      apiUrls.SyncController_applyProjectDiff.path,
-      {
-        statusCode: 200,
-      },
-    );
+    cy.拦截请求(apiUrls.SyncController_applyProjectDiff, {
+      statusCode: 200,
+    });
 
     当('用户已经登录', () => {
       cy.登录('yb', '123456');

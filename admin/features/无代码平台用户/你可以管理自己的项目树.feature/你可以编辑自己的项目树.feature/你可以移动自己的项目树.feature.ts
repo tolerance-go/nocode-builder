@@ -1,17 +1,12 @@
 import { 测试标识, 测试类名 } from '@shared/constants';
-import { getTreeNodeParent } from '@cypress/support/antdUtils';
-import { 使用场景 } from '@cypress/support/scenarioUtils';
 import { apiUrls } from '@cypress/support/_gen/apiUrls';
+import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
 
 使用场景('项目树移动流程', ({ 假如 }) => {
   beforeEach(() => {
-    cy.intercept(
-      apiUrls.SyncController_applyProjectDiff.method,
-      apiUrls.SyncController_applyProjectDiff.path,
-      {
-        statusCode: 200,
-      },
-    );
+    cy.拦截请求(apiUrls.SyncController_applyProjectDiff, {
+      statusCode: 200,
+    });
   });
 
   假如(

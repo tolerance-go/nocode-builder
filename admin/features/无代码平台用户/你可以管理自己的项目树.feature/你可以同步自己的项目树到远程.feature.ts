@@ -1,11 +1,12 @@
-import { 使用场景 } from '@cypress/support/scenarioUtils';
+import { apiUrls } from '@cypress/support/_gen/apiUrls';
+import { 使用场景 } from '@cypress/support/utils';
 import { fullPathnames } from '@shared/configs';
 import { 测试标识 } from '@shared/constants';
 
 使用场景('项目树远程同步流程', ({ 假如 }) => {
   假如('用户上次同步失败，直接进入主页，应该自动同步', ({ 当, 那么 }) => {
     当('用户上次项目树同步失败', () => {
-      cy.intercept('POST', '/syncs/apply-project-diff', {
+      cy.拦截请求(apiUrls.SyncController_applyProjectDiff, {
         statusCode: 500,
         body: { statusCode: 500, message: 'Internal server error' },
       }).as('applyProjectDiff');
@@ -46,7 +47,7 @@ import { 测试标识 } from '@shared/constants';
     '用户上次同步失败，直接进入登录页面并成功登录跳转到主页，应该自动同步一次',
     ({ 当, 那么, 并且 }) => {
       当('用户上次项目树同步失败', () => {
-        cy.intercept('POST', '/syncs/apply-project-diff', {
+        cy.拦截请求(apiUrls.SyncController_applyProjectDiff, {
           statusCode: 500,
           body: { statusCode: 500, message: 'Internal server error' },
         }).as('applyProjectDiff');
@@ -89,7 +90,7 @@ import { 测试标识 } from '@shared/constants';
 
   假如('用户上次同步失败，直接进入登录页面，不应该自动同步', ({ 当, 那么 }) => {
     当('用户上次项目树同步失败', () => {
-      cy.intercept('POST', '/syncs/apply-project-diff', {
+      cy.拦截请求(apiUrls.SyncController_applyProjectDiff, {
         statusCode: 500,
         body: { statusCode: 500, message: 'Internal server error' },
       }).as('applyProjectDiff');
@@ -121,7 +122,7 @@ import { 测试标识 } from '@shared/constants';
 
   假如('用户项目树同步失败的话，应该弹出提示', ({ 当, 那么 }) => {
     当('用户直接访问页面并访问主页', () => {
-      cy.intercept('POST', '/syncs/apply-project-diff', {
+      cy.拦截请求(apiUrls.SyncController_applyProjectDiff, {
         statusCode: 500,
         body: { statusCode: 500, message: 'Internal server error' },
       }).as('applyProjectDiff');

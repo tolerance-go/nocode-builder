@@ -38,6 +38,15 @@ declare global {
       组合批量选中节点(titles: string[]): Chainable<void>;
       当前访问应该为主页(): Chainable<void>;
 
+      页面路径应该为(pathname: string): Chainable<void>;
+      拦截请求(
+        options: {
+          method: 'post' | 'get' | 'delete' | 'put';
+          path: string;
+        },
+        body: Parameters<typeof cy.intercept>[2],
+      ): Chainable<void>;
+
       /**
        * 标识选择
        */
