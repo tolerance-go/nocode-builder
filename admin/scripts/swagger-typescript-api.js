@@ -53,13 +53,23 @@ ${fileContent}
         ),
       );
     });
-    const outputFilePath = path.resolve(outputDir, 'apiUrls.json');
+    const outputFilePath = path.resolve(outputDir, 'apiUrls.ts');
     fs.writeFileSync(
       outputFilePath,
-      await format(JSON.stringify(apiUrls), {
-        ...prettierConfig,
-        parser: 'json',
-      }),
+      await format(
+        `/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED        ##
+ * ---------------------------------------------------------------
+ */
+
+export const apiUrls = ${JSON.stringify(apiUrls, null, 2)} as const;
+`,
+        {
+          ...prettierConfig,
+          parser: 'typescript',
+        },
+      ),
     );
   })
   .catch((e) => console.error(e));

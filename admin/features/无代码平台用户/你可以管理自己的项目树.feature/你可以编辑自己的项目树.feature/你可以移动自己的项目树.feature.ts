@@ -1,8 +1,19 @@
 import { 测试标识, 测试类名 } from '@shared/constants';
 import { getTreeNodeParent } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
+import { apiUrls } from '@cypress/support/_gen/apiUrls';
 
 使用场景('项目树移动流程', ({ 假如 }) => {
+  beforeEach(() => {
+    cy.intercept(
+      apiUrls.SyncController_applyProjectDiff.method,
+      apiUrls.SyncController_applyProjectDiff.path,
+      {
+        statusCode: 200,
+      },
+    );
+  });
+
   假如(
     '用户批量移动选中的节点，那么鼠标附近应该出现提示数量',
     ({ 当, 那么 }) => {

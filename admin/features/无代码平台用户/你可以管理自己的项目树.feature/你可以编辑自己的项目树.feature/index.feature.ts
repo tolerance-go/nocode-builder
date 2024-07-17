@@ -4,8 +4,19 @@ import {
   getTreeNodeParent,
 } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
+import { apiUrls } from '@cypress/support/_gen/apiUrls';
 
 使用场景('项目树编辑流程', ({ 假如 }) => {
+  beforeEach(() => {
+    cy.intercept(
+      apiUrls.SyncController_applyProjectDiff.method,
+      apiUrls.SyncController_applyProjectDiff.path,
+      {
+        statusCode: 200,
+      },
+    );
+  });
+
   假如('用户移动一个节点到文件夹下，应该可以回撤和重做', ({ 当, 那么 }) => {
     当('用户登录并访问主页', () => {
       cy.登录('yb', '123456');

@@ -4,8 +4,19 @@ import {
   getTreeNodeChildren,
 } from '@cypress/support/antdUtils';
 import { 使用场景 } from '@cypress/support/scenarioUtils';
+import { apiUrls } from '@cypress/support/_gen/apiUrls';
 
 使用场景('项目树管理流程', ({ 假如 }) => {
+  beforeEach(() => {
+    cy.intercept(
+      apiUrls.SyncController_applyProjectDiff.method,
+      apiUrls.SyncController_applyProjectDiff.path,
+      {
+        statusCode: 200,
+      },
+    );
+  });
+
   假如('用户创建项目树节点，应该可以持久化保存', ({ 当, 那么 }) => {
     当('用户登录并创建一个项目树节点', () => {
       cy.登录('yb', '123456');
