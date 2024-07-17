@@ -1,5 +1,7 @@
-import localforage from 'localforage';
 import 'normalize.css';
+import './index.css';
+import '@ungap/with-resolvers';
+import localforage from 'localforage';
 import { 文档环境 } from './core/envs';
 import {
   AppManager,
@@ -14,7 +16,6 @@ import { 跟随鼠标显示内容管理者 } from './core/managers/跟随鼠标�
 import { 验证管理者 } from './core/managers/验证管理者';
 import { I18nSystem, 全局事件系统, 界面导航系统 } from './core/systems';
 import { 界面通知系统 } from './core/systems/界面通知系统';
-import './index.css';
 import { Engine } from './core/base';
 
 (async () => {
