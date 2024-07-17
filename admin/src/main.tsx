@@ -10,7 +10,7 @@ import {
   UITreeManager,
   项目树历史纪录管理者,
 } from './core/managers';
-import { localStateFieldName } from './core/managers/UIStoreManager/configs';
+import { localStateFieldName } from './core/managers/UIStoreManager/constants';
 import { 图标管理者 } from './core/managers/图标管理者';
 import { 跟随鼠标显示内容管理者 } from './core/managers/跟随鼠标显示内容管理者';
 import { 验证管理者 } from './core/managers/验证管理者';

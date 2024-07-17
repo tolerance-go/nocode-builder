@@ -7,7 +7,7 @@ import { api } from '@/globals';
 import { produce } from 'immer';
 import localforage from 'localforage';
 import store from 'store2';
-import { localStateFieldName } from './configs';
+import { localStateFieldName } from './constants';
 import {
   AppMiddleware,
   createReducers,
