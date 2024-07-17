@@ -40,7 +40,7 @@ const mockLoadStateFunction = vi.fn(
 describe('SyncHistoryManagerEmployee', () => {
   let manager: SyncHistoryManagerEmployee;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     manager = new SyncHistoryManagerEmployee({
       initialHistoryA: createMockHistory(),
       initialHistoryB: createMockHistory(),
@@ -50,12 +50,10 @@ describe('SyncHistoryManagerEmployee', () => {
       loadStateFunction: mockLoadStateFunction,
     }).requires(new 全局事件系统());
 
-    new Engine(manager).launch();
+    await new Engine(manager).launch();
   });
 
   it('应该使用给定的初始历史记录进行初始化', async () => {
-    await manager.setup();
-    await manager.start();
     expect(manager['state'].historyA).toHaveLength(1);
     expect(manager['state'].historyB).toHaveLength(1);
   });
