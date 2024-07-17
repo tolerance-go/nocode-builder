@@ -3,6 +3,8 @@ import path from 'node:path';
 import { generateApi } from 'swagger-typescript-api';
 import { format, resolveConfig } from 'prettier';
 
+const apiUrls = {};
+
 /* NOTE: all fields are optional expect one of `input`, `url`, `spec` */
 generateApi({
   name: 'api.ts',
@@ -16,10 +18,21 @@ generateApi({
       Any: 'unknown',
     },
   }),
+  hooks: {
+    onCreateRoute: (routeData) => {
+      const { raw, request } = routeData;
+      apiUrls[raw.operationId] = {
+        method: raw.method,
+        route: raw.route,
+        path: request.path,
+      };
+    },
+  },
 })
   .then(async ({ files }) => {
     // 读取 prettier 配置
     const prettierConfig = await resolveConfig(path.resolve());
+    const outputDir = path.resolve('src/_gen');
 
     files.forEach(async ({ fileName, fileContent, fileExtension }) => {
       fs.writeFileSync(
@@ -40,5 +53,13 @@ ${fileContent}
         ),
       );
     });
+    const outputFilePath = path.resolve(outputDir, 'apiUrls.json');
+    fs.writeFileSync(
+      outputFilePath,
+      await format(JSON.stringify(apiUrls), {
+        ...prettierConfig,
+        parser: 'json',
+      }),
+    );
   })
   .catch((e) => console.error(e));
