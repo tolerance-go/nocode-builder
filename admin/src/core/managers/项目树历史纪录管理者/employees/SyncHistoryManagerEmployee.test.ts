@@ -5,6 +5,8 @@ import {
   SyncHistoryManagerEmployee,
   SyncHistoryManagerState,
 } from './SyncHistoryManagerEmployee';
+import { 全局事件系统 } from '@/core/systems';
+import { Engine } from '@/core/base';
 
 // 创建模拟数据和函数
 const createMockHistory = (): 历史记录[] => [
@@ -46,11 +48,14 @@ describe('SyncHistoryManagerEmployee', () => {
       syncFunction: mockSyncFunction,
       saveStateFunction: mockSaveStateFunction,
       loadStateFunction: mockLoadStateFunction,
-    });
+    }).requires(new 全局事件系统());
+
+    new Engine(manager).launch();
   });
 
   it('应该使用给定的初始历史记录进行初始化', async () => {
-    await manager.work();
+    await manager.setup();
+    await manager.start();
     expect(manager['state'].historyA).toHaveLength(1);
     expect(manager['state'].historyB).toHaveLength(1);
   });

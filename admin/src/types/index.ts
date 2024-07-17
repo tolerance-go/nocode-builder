@@ -1,4 +1,6 @@
 export interface Actor {
+  requiredActors: Set<Actor>; // 当前 Actor 依赖的 Actors
+  dependentActors: Set<Actor>; // 依赖当前 Actor 的 Actors
   requires(...actors: Actor[]): this;
   setupProcessing: PromiseWithResolvers<void>;
   startProcessing: PromiseWithResolvers<void>;

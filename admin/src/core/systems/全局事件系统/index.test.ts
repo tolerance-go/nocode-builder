@@ -9,6 +9,8 @@ type 测试事件映射 = {
 describe('全局事件系统', () => {
   it('应该注册和触发事件', async () => {
     const 系统 = new 全局事件系统<测试事件映射>();
+    await 系统.setup();
+    await 系统.start();
 
     const 用户登录处理器 = vi.fn();
     const 用户登出处理器 = vi.fn();
@@ -25,6 +27,8 @@ describe('全局事件系统', () => {
 
   it('应该取消注册事件', async () => {
     const 系统 = new 全局事件系统<测试事件映射>();
+    await 系统.setup();
+    await 系统.start();
 
     const 用户登录处理器 = vi.fn();
 
@@ -38,6 +42,8 @@ describe('全局事件系统', () => {
 
   it('应该允许重新注册事件', async () => {
     const 系统 = new 全局事件系统<测试事件映射>();
+    await 系统.setup();
+    await 系统.start();
 
     const 用户登录处理器 = vi.fn();
 
@@ -52,6 +58,7 @@ describe('全局事件系统', () => {
 
   it('应该在启动前缓存事件并在启动后按顺序发送', async () => {
     const 系统 = new 全局事件系统<测试事件映射>();
+    await 系统.setup();
 
     const 用户登录处理器 = vi.fn();
     const 用户登出处理器 = vi.fn();
@@ -64,6 +71,8 @@ describe('全局事件系统', () => {
 
     expect(用户登录处理器).not.toHaveBeenCalled();
     expect(用户登出处理器).not.toHaveBeenCalled();
+
+    await 系统.start();
 
     expect(用户登录处理器).toHaveBeenCalledWith({ 用户ID: '12345' });
     expect(用户登出处理器).toHaveBeenCalledWith({ 用户ID: '67890' });
