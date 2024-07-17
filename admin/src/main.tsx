@@ -17,24 +17,29 @@ import { 界面通知系统 } from './core/systems/界面通知系统';
 import './index.css';
 import { Engine } from './core/base';
 
-const localState = await localforage.getItem<RootState>(localStateFieldName);
+(async () => {
+  const localState = await localforage.getItem<RootState>(localStateFieldName);
 
-const 界面通知系统实例 = new 界面通知系统();
-const 全局事件系统实例 = new 全局事件系统();
-const 界面导航系统实例 = new 界面导航系统();
+  const 界面通知系统实例 = new 界面通知系统();
+  const 全局事件系统实例 = new 全局事件系统();
+  const 界面导航系统实例 = new 界面导航系统();
 
-new Engine(
-  new 文档环境(document).requires(全局事件系统实例),
-  new AppManager(),
-  new I18nSystem(),
-  new 项目树历史纪录管理者().requires(全局事件系统实例, 界面通知系统实例),
-  new UITreeManager().requires(
-    界面通知系统实例,
-    new 验证管理者(),
-    new 图标管理者(),
-    new 跟随鼠标显示内容管理者(),
-    new UIStoreManager(localState).requires(全局事件系统实例, 界面导航系统实例),
-    全局事件系统实例,
-    界面导航系统实例,
-  ),
-).launch();
+  new Engine(
+    new 文档环境(document).requires(全局事件系统实例),
+    new AppManager(),
+    new I18nSystem(),
+    new 项目树历史纪录管理者().requires(全局事件系统实例, 界面通知系统实例),
+    new UITreeManager().requires(
+      界面通知系统实例,
+      new 验证管理者(),
+      new 图标管理者(),
+      new 跟随鼠标显示内容管理者(),
+      new UIStoreManager(localState).requires(
+        全局事件系统实例,
+        界面导航系统实例,
+      ),
+      全局事件系统实例,
+      界面导航系统实例,
+    ),
+  ).launch();
+})();
