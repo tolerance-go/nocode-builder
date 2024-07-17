@@ -1,5 +1,5 @@
 export function constructPathname(base: string, path: string): string {
-  const url = new URL(`${base}${removeTrailingSlash(path)}`.replace('//', '/'));
+  const url = new URL(`${base}${removeTrailingSlash(path)}`);
   return url.pathname;
 }
 
