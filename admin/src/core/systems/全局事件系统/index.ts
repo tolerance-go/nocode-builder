@@ -5,7 +5,7 @@ import {
   ProjectTreeNodeDataRecordItem,
 } from '@/core/managers/UIStoreManager/types';
 import { 历史记录 } from '@/core/managers/项目树历史纪录管理者';
-import { ViewKey } from '@/types';
+import { ViewKey } from '@/common/types';
 import Emittery from 'emittery';
 
 export type 全局事件映射 = {

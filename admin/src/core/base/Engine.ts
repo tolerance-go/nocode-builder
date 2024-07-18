@@ -1,4 +1,4 @@
-import { Actor } from '@/types';
+import { Actor } from '@/common/types';
 
 export class Engine {
   private actors: Set<Actor>;

@@ -1,4 +1,4 @@
-import { ViewKey } from '@/types';
+import { ViewKey } from '@/common/types';
 import { ProjectStructureTreeDataNode } from '../../types';
 import { ProjectTreeStates } from '../slices/projectTree';
 import { findNode } from './tree';

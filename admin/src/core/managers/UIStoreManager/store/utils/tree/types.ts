@@ -1,4 +1,4 @@
-import { ViewKey } from '@/types';
+import { ViewKey } from '@/common/types';
 
 export type TreeNodeBase = {
   key: ViewKey;

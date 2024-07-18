@@ -4,7 +4,7 @@ import {
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '../../UIStoreManager/types';
-import { ViewKey } from '@/types';
+import { ViewKey } from '@/common/types';
 
 export type 历史记录操作类型 = '插入' | '删除' | '移动' | '更新';
 

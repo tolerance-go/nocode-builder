@@ -12,7 +12,7 @@ import {
   节点是不是文件,
 } from '@/core/managers/UIStoreManager';
 import { ProjectStructureTreeDataNode } from '@/core/managers/UIStoreManager/types';
-import { ViewKey } from '@/types';
+import { ViewKey } from '@/common/types';
 import { ProjectTypeEnum } from '@/_gen/models';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;

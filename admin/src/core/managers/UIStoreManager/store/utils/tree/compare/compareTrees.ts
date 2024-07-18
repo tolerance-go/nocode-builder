@@ -1,4 +1,4 @@
-import { ViewKey } from '@/types';
+import { ViewKey } from '@/common/types';
 import { TreeNode } from '../types';
 
 export type 操作类型 = '新增' | '删除' | '移动' | '更新';

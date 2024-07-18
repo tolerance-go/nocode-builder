@@ -1,4 +1,4 @@
-import { ViewKey } from '@/types';
+import { ViewKey } from '@/common/types';
 import { ProjectTreeNodeDataRecord } from '../../..';
 import { AppSlices, AppStore } from '../../types';
 

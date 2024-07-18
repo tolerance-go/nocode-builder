@@ -8,7 +8,7 @@ import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecordItem,
 } from '../../../types';
-import { ViewKey } from '@/types';
+import { ViewKey } from '@/common/types';
 
 export type ProjectTreeStates = {
   // 派生数据
