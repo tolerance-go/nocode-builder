@@ -1,4 +1,4 @@
-import { 测试标识, 测试类名 } from '@/constants';
+import { 测试标识, 测试类名 } from '@/common/constants';
 import { apiUrls } from '@cypress/support/_gen/apiUrls';
 import {
   getTreeNodeChildren,

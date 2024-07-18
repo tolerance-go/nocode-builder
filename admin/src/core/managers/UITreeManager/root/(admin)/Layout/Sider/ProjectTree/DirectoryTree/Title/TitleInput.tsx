@@ -3,8 +3,8 @@ import {
   use界面状态管理者,
   use验证管理者,
 } from '@/core/managers/UITreeManager/hooks';
-import { useKeyPressEventByKeyboardJs } from '@/hooks';
-import { 测试标识 } from '@/constants';
+import { useKeyPressEventByKeyboardJs } from '@/common/hooks';
+import { 测试标识 } from '@/common/constants';
 import { Flex, Input, InputRef, theme } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import MagneticComponent from './MagneticComponent';

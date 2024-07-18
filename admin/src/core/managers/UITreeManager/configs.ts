@@ -1,4 +1,4 @@
-import { hexToRgb } from '@/utils';
+import { hexToRgb } from '@/common/utils';
 import { GlobalToken, theme } from 'antd';
 
 const { getDesignToken } = theme;

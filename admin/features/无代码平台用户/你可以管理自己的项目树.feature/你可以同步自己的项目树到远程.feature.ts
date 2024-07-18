@@ -1,7 +1,7 @@
 import { apiUrls } from '@cypress/support/_gen/apiUrls';
 import { 使用场景 } from '@cypress/support/utils';
-import { fullPathnames } from '@/constants';
-import { 测试标识 } from '@/constants';
+import { fullPathnames } from '@/common/constants';
+import { 测试标识 } from '@/common/constants';
 
 使用场景('项目树远程同步流程', ({ 假如 }) => {
   假如('用户上次同步失败，直接进入主页，应该自动同步', ({ 当, 那么 }) => {
@@ -37,7 +37,7 @@ import { 测试标识 } from '@/constants';
       cy.获取测试标识(测试标识.全局通知框标题).should('be.visible');
       cy.获取测试标识(测试标识.全局模态框标题).should(
         'contain.text',
-        '同步失败，是否重试？',
+        '正在保存服务器数据...',
       );
       cy.get('@applyProjectDiff.all').should('have.length', 2);
     });
@@ -142,7 +142,7 @@ import { 测试标识 } from '@/constants';
       cy.获取测试标识(测试标识.全局通知框标题).should('be.visible');
       cy.获取测试标识(测试标识.全局模态框标题).should(
         'contain.text',
-        '同步失败，是否重试？',
+        '正在保存服务器数据...',
       );
       cy.get('@applyProjectDiff.all').should('have.length', 1);
     });

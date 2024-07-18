@@ -1,9 +1,10 @@
 import { SystemBase } from '@/core/base';
-import { 测试标识 } from '@/constants';
+import { 测试标识 } from '@/common/constants';
 import { MessageInstance } from 'antd/es/message/interface';
 import { HookAPI } from 'antd/es/modal/useModal';
 import { NotificationInstance } from 'antd/es/notification/interface';
 import { createElement } from 'react';
+import { ModalFuncProps } from 'antd';
 
 interface MessageOptions {
   type: 'success' | 'error' | 'info' | 'warning' | 'loading';
@@ -18,13 +19,9 @@ interface NotificationOptions {
   duration?: number;
 }
 
-interface ModalOptions {
+type ModalOptions = ModalFuncProps & {
   type: 'info' | 'success' | 'error' | 'warning' | 'confirm';
-  title: string;
-  content?: string;
-  onOk?: () => void;
-  onCancel?: () => void;
-}
+};
 
 export class 界面通知系统 extends SystemBase {
   requires(): this {
@@ -113,6 +110,7 @@ export class 界面通知系统 extends SystemBase {
       const action = () => {
         if (this.modalApi) {
           this.modalApi[type]({
+            ...rest,
             title: createElement('span', {
               'data-test-id': 测试标识.全局模态框标题,
               children: rest.title,

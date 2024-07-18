@@ -5,6 +5,7 @@ import { useAppDispatch } from '../../UIStoreManager';
 import { themeConfig } from '../configs';
 import { use导航系统, use界面状态管理者, 获取系统上下文 } from '../hooks';
 // import '@antv/s2-react/dist/style.min.css';
+import zhCN from 'antd/locale/zh_CN';
 
 export function Root() {
   const location = useLocation();
@@ -46,7 +47,7 @@ export function Root() {
   }, [notificationApi, 界面通知系统]);
 
   return (
-    <ConfigProvider theme={themeConfig}>
+    <ConfigProvider theme={themeConfig} locale={zhCN}>
       <Outlet />
       {msgContextHolder}
       {modalContextHolder}

@@ -1,4 +1,4 @@
-import { fullPathnames, 测试标识 } from '@/constants';
+import { fullPathnames, 测试标识 } from '@/common/constants';
 import { RootState } from '@/core/managers/UIStoreManager/types';
 import { localStateFieldName } from '@/core/managers/UIStoreManager/constants';
 import { 使用场景 } from '@cypress/support/utils';

@@ -1,4 +1,4 @@
-import { 测试类名, 测试标识 } from '@/constants';
+import { 测试类名, 测试标识 } from '@/common/constants';
 import { apiUrls } from '@cypress/support/_gen/apiUrls';
 import {
   使用场景,

@@ -8,8 +8,8 @@ import {
   use全局事件系统,
   use界面状态管理者,
 } from '@/core/managers/UITreeManager/hooks';
-import { useKeyPressEventByKeyboardJs } from '@/hooks';
-import { 测试标识 } from '@/constants';
+import { useKeyPressEventByKeyboardJs } from '@/common/hooks';
+import { 测试标识 } from '@/common/constants';
 import { css, cx } from '@emotion/css';
 import { theme } from 'antd';
 import { debounce } from 'lodash-es';

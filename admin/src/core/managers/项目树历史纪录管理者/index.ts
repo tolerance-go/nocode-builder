@@ -1,4 +1,4 @@
-import { localKeys } from '@/constants';
+import { localKeys } from '@/common/constants';
 import { ManagerBase } from '@/core/base';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { 界面通知系统 } from '@/core/systems/界面通知系统';
@@ -75,11 +75,14 @@ export class 项目树历史纪录管理者 extends ManagerBase {
 
   retryCallback = (startSync: () => void) => {
     this.requireActor(界面通知系统).showModal({
-      type: 'confirm',
-      title: '同步失败，是否重试？',
+      type: 'info',
+      title: '正在保存服务器数据...',
       onOk: () => {
         startSync();
       },
+      // okButtonProps: {
+      //   loading: true,
+      // },
     });
   };
 

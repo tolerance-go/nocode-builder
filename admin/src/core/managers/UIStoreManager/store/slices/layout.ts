@@ -1,5 +1,5 @@
 import { 鼠标跟随组件id到组件参数 } from '@/core/managers/跟随鼠标显示内容管理者';
-import { Entries } from '@/utils';
+import { Entries } from '@/common/utils';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export type LayoutStates = {

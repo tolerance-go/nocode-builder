@@ -1,4 +1,4 @@
-import { 测试标识 } from '@/constants';
+import { 测试标识 } from '@/common/constants';
 import { Outlet } from 'react-router-dom';
 
 export const 内容区域组件 = () => {

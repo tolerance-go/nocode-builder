@@ -1,5 +1,5 @@
 import { ProjectTypeEnum } from '@/_gen/models';
-import { paths } from '@/constants';
+import { paths } from '@/common/constants';
 import { ManagerBase } from '@/core/base';
 import { 界面导航系统 } from '@/core/systems';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';

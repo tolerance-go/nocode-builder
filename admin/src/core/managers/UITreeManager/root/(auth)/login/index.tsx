@@ -1,6 +1,6 @@
 import { api } from '@/globals';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { 测试标识 } from '@/constants';
+import { 测试标识 } from '@/common/constants';
 import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';

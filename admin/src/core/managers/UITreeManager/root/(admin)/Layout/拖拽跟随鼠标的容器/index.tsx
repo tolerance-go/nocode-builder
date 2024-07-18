@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/core/managers/UIStoreManager';
 import { use跟随鼠标显示内容管理者 } from '@/core/managers/UITreeManager/hooks';
-import { 测试标识 } from '@/constants';
+import { 测试标识 } from '@/common/constants';
 import { theme } from 'antd';
 import { useLayoutEffect, useState } from 'react';
 

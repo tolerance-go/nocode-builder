@@ -1,4 +1,4 @@
-import { fullPathnames, authPathnames } from '@/constants';
+import { fullPathnames, authPathnames } from '@/common/constants';
 
 /**
  * 判断给定的 URL 是否为登录相关的 URL。
