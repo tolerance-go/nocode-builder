@@ -7,8 +7,8 @@ import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '../../UIStoreManager';
-import { 历史记录 } from '../machines';
+} from '../../../UIStoreManager';
+import { 历史记录 } from './machines';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];
@@ -35,7 +35,7 @@ type SyncFunction = (
   newTreeDataRecord?: ProjectTreeNodeDataRecord,
 ) => Promise<void>;
 
-export class 历史记录同步管理者 extends ManagerBase {
+export class 历史记录远程同步管理者 extends ManagerBase {
   private currentPathname: string | null = null;
 
   private state: SyncHistoryManagerState = {
