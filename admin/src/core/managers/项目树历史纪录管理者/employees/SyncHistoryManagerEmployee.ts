@@ -1,4 +1,4 @@
-import { ManagerBase } from '@/core/base';
+import { EmployeeBase, ManagerBase } from '@/core/base';
 import { 全局事件系统 } from '@/core/systems';
 import { authPathnames } from '@/common/constants';
 import { last } from 'lodash-es';
@@ -33,7 +33,7 @@ type SyncFunction = (
   newTreeDataRecord?: ProjectTreeNodeDataRecord,
 ) => Promise<void>;
 
-export class SyncHistoryManagerEmployee extends ManagerBase {
+export class SyncHistoryManagerEmployee extends EmployeeBase {
   private currentPathname: string | null = null;
 
   private state: SyncHistoryManagerState = {

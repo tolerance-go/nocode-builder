@@ -12,6 +12,7 @@ export interface Actor {
 export interface System extends Actor {}
 
 export interface Manager extends Actor {}
+export interface Employee extends Actor {}
 
 export interface EnvObject extends Actor {}
 

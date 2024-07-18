@@ -1,4 +1,4 @@
-import { Actor, EnvObject, Manager, System } from '@/common/types';
+import { Actor, Employee, EnvObject, Manager, System } from '@/common/types';
 
 export abstract class ActorBase implements Actor {
   public setupProcessing: PromiseWithResolvers<void>;
@@ -85,5 +85,7 @@ export abstract class ActorBase implements Actor {
 export abstract class SystemBase extends ActorBase implements System {}
 
 export abstract class ManagerBase extends ActorBase implements Manager {}
+
+export abstract class EmployeeBase extends ActorBase implements Employee {}
 
 export abstract class EnvObjectBase extends ActorBase implements EnvObject {}
