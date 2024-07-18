@@ -1,21 +1,20 @@
-import { localKeys } from '@/common/constants';
 import { ManagerBase } from '@/core/base';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { 界面通知系统 } from '@/core/systems/界面通知系统';
 import { api } from '@/globals';
 import { createBrowserInspector } from '@statelyai/inspect';
-import localforage from 'localforage';
 import { createActor } from 'xstate';
 import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
 } from '../UIStoreManager';
-import { 历史状态机, 历史记录 } from './machines';
+import { 历史状态机 } from './machines';
 import {
   convertDiffResultToProjectDiffDto,
   历史记录远程同步管理者,
 } from './sub-managers/历史记录远程同步管理者';
+import { 历史记录 } from './types';
 
 export class 项目树历史纪录管理者 extends ManagerBase {
   private 历史指针: number = -1;
@@ -46,7 +45,8 @@ export class 项目树历史纪录管理者 extends ManagerBase {
       new 历史记录远程同步管理者({
         initialHistoryA: [],
         initialHistoryB: [],
-        retryCallback: this.retryCallback,
+        retryStartCallback: this.retryStartCallback,
+        retryFailCallback: this.retryFailCallback,
         syncFunction: async (
           differences: DiffResult<ProjectStructureTreeDataNode>,
           oldTreeDataRecord?: ProjectTreeNodeDataRecord,
@@ -60,28 +60,17 @@ export class 项目树历史纪录管理者 extends ManagerBase {
             ),
           );
         },
-        saveStateFunction: async (state) => {
-          await localforage.setItem(
-            localKeys.syncHistoryManagerEmployee_state,
-            state,
-          );
-        },
-        loadStateFunction: async () => {
-          return await localforage.getItem(
-            localKeys.syncHistoryManagerEmployee_state,
-          );
-        },
       }).requires(全局事件系统实例),
     );
   }
 
-  retryCallback = (startSync: () => void) => {
+  retryFailCallback = () => {};
+
+  retryStartCallback = () => {
     this.requireActor(界面通知系统).showModal({
       type: 'info',
       title: '正在保存服务器数据...',
-      onOk: () => {
-        startSync();
-      },
+      onOk: () => {},
       // okButtonProps: {
       //   loading: true,
       // },

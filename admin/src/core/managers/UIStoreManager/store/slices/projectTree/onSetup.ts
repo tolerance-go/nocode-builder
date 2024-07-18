@@ -2,7 +2,7 @@ import { ViewKey } from '@/common/types';
 import { ProjectTreeNodeDataRecord } from '../../..';
 import { AppSlices, AppStore } from '../../types';
 
-export const onWork = (reduxStore: AppStore, slices: AppSlices) => {
+export const onSetup = (reduxStore: AppStore, slices: AppSlices) => {
   let previousState = reduxStore.getState(); // 初始化之前的 state
 
   reduxStore.subscribe(() => {

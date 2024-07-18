@@ -16,7 +16,7 @@ import {
   findNode,
   RootState,
 } from './store';
-import { onWork as projectTreeOnWork } from './store/slices/projectTree/onWork';
+import { onSetup as projectTreeOnSetup } from './store/slices/projectTree/onSetup';
 
 export class UIStoreManager extends ManagerBase {
   public store;
@@ -49,7 +49,7 @@ export class UIStoreManager extends ManagerBase {
   }
 
   protected async onSetup(): Promise<void> {
-    projectTreeOnWork(this.store, this.slices);
+    projectTreeOnSetup(this.store, this.slices);
 
     this.监听项目节点激活状态变化并修改url();
     this.注册监听保存状态到本地();
