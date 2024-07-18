@@ -86,6 +86,4 @@ export abstract class SystemBase extends ActorBase implements System {}
 
 export abstract class ManagerBase extends ActorBase implements Manager {}
 
-export abstract class EmployeeBase extends ActorBase implements Employee {}
-
 export abstract class EnvObjectBase extends ActorBase implements EnvObject {}

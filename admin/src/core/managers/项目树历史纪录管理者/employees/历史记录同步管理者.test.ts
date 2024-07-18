@@ -2,9 +2,9 @@ import { ProjectTypeEnum } from '@/_gen/models';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { 历史记录 } from '../machines';
 import {
-  SyncHistoryManagerEmployee,
+  历史记录同步管理者,
   SyncHistoryManagerState,
-} from './SyncHistoryManagerEmployee';
+} from './历史记录同步管理者';
 import { 全局事件系统 } from '@/core/systems';
 import { Engine } from '@/core/base';
 
@@ -38,10 +38,10 @@ const mockLoadStateFunction = vi.fn(
 );
 
 describe('SyncHistoryManagerEmployee', () => {
-  let manager: SyncHistoryManagerEmployee;
+  let manager: 历史记录同步管理者;
 
   beforeEach(async () => {
-    manager = new SyncHistoryManagerEmployee({
+    manager = new 历史记录同步管理者({
       initialHistoryA: createMockHistory(),
       initialHistoryB: createMockHistory(),
       retryCallback: mockRetryCallback,

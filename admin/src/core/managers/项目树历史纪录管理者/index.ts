@@ -11,7 +11,7 @@ import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
 } from '../UIStoreManager';
-import { SyncHistoryManagerEmployee } from './employees/SyncHistoryManagerEmployee';
+import { 历史记录同步管理者 } from './employees/历史记录同步管理者';
 import { convertDiffResultToProjectDiffDto } from './employees/utils';
 import { 历史状态机, 历史记录 } from './machines';
 
@@ -41,7 +41,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
     return super.requireActors(
       界面通知系统实例,
       全局事件系统实例,
-      new SyncHistoryManagerEmployee({
+      new 历史记录同步管理者({
         initialHistoryA: [],
         initialHistoryB: [],
         retryCallback: this.retryCallback,
@@ -100,9 +100,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
       this.历史堆栈 = state.context.历史堆栈;
       this.历史指针 = state.context.历史指针;
 
-      this.requireActor(SyncHistoryManagerEmployee).updateHistories(
-        this.历史堆栈,
-      );
+      this.requireActor(历史记录同步管理者).updateHistories(this.历史堆栈);
     });
 
     this.requireActor(全局事件系统).on(

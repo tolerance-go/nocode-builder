@@ -1,4 +1,4 @@
-import { EmployeeBase, ManagerBase } from '@/core/base';
+import { ManagerBase } from '@/core/base';
 import { 全局事件系统 } from '@/core/systems';
 import { authPathnames } from '@/common/constants';
 import { last } from 'lodash-es';
@@ -14,26 +14,28 @@ export interface SyncHistoryManagerState {
   historyA: 历史记录[];
   historyB: 历史记录[];
   pendingUpdate: 历史记录[] | null;
-  syncStatus: '未同步' | '已同步' | '同步失败' | '同步中';
+  syncStatus: '未同步' | '已同步' | '同步失败' | '同步中' | '重试中';
 }
 
 interface SyncHistoryManagerEmployeeParams {
   initialHistoryA: 历史记录[];
   initialHistoryB: 历史记录[];
-  retryCallback: RetryCallback;
+  retryStartCallback: RetryStartCallback;
+  retryFailCallback: RetryFailCallback;
   syncFunction: SyncFunction;
   saveStateFunction: (state: SyncHistoryManagerState) => Promise<void>;
   loadStateFunction: () => Promise<SyncHistoryManagerState | null>;
 }
 
-type RetryCallback = (retry: () => void) => void;
+type RetryStartCallback = (retry: () => void) => void;
+type RetryFailCallback = () => void;
 type SyncFunction = (
   differences: DiffResult<ProjectStructureTreeDataNode>,
   oldTreeDataRecord?: ProjectTreeNodeDataRecord,
   newTreeDataRecord?: ProjectTreeNodeDataRecord,
 ) => Promise<void>;
 
-export class SyncHistoryManagerEmployee extends EmployeeBase {
+export class 历史记录同步管理者 extends ManagerBase {
   private currentPathname: string | null = null;
 
   private state: SyncHistoryManagerState = {
@@ -42,12 +44,15 @@ export class SyncHistoryManagerEmployee extends EmployeeBase {
     pendingUpdate: null,
     syncStatus: '未同步',
   };
-  private readonly retryCallback: RetryCallback; // 重试回调函数
+  private readonly retryStartCallback: RetryStartCallback; // 初始重试回调函数
+  private readonly retryFailCallback: RetryFailCallback; // 重试失败回调函数
   private readonly syncFunction: SyncFunction; // 同步函数
   private readonly saveStateFunction: (
     state: SyncHistoryManagerState,
   ) => Promise<void>; // 持久化函数
   private readonly loadStateFunction: () => Promise<SyncHistoryManagerState | null>; // 加载持久化状态函数
+  private retryCount = 0;
+  private maxRetryCount = 3;
 
   requires(全局事件系统实例: 全局事件系统): this {
     return super.requireActors(全局事件系统实例);
@@ -58,14 +63,16 @@ export class SyncHistoryManagerEmployee extends EmployeeBase {
     const {
       initialHistoryA,
       initialHistoryB,
-      retryCallback,
+      retryStartCallback,
+      retryFailCallback,
       syncFunction,
       saveStateFunction,
       loadStateFunction,
     } = params;
     this.state.historyA = initialHistoryA;
     this.state.historyB = initialHistoryB;
-    this.retryCallback = retryCallback;
+    this.retryStartCallback = retryStartCallback;
+    this.retryFailCallback = retryFailCallback;
     this.syncFunction = syncFunction;
     this.saveStateFunction = saveStateFunction;
     this.loadStateFunction = loadStateFunction;
@@ -123,7 +130,17 @@ export class SyncHistoryManagerEmployee extends EmployeeBase {
       await this.commitPendingUpdate();
     } catch (error) {
       await this.updateState({ syncStatus: '同步失败' });
-      this.retryCallback(this.startSync.bind(this));
+      if (this.retryCount < this.maxRetryCount) {
+        this.retryCount++;
+        await this.updateState({ syncStatus: '重试中' });
+        if (this.retryCount === 1) {
+          this.retryStartCallback(this.startSync.bind(this));
+        } else {
+          await this.startSync();
+        }
+      } else {
+        this.retryFailCallback();
+      }
     }
   }
 
@@ -159,7 +176,10 @@ export class SyncHistoryManagerEmployee extends EmployeeBase {
 
   // 接受新的历史记录数组，并更新 A 和 B
   public async updateHistories(newHistory: 历史记录[]): Promise<void> {
-    if (this.state.syncStatus === '同步中') {
+    if (
+      this.state.syncStatus === '同步中' ||
+      this.state.syncStatus === '重试中'
+    ) {
       await this.updateState({ pendingUpdate: newHistory });
     } else if (this.state.syncStatus === '同步失败') {
       await this.updateState({ historyB: newHistory });
