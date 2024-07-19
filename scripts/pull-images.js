@@ -34,9 +34,8 @@ const extractImages = (composeConfig, version) => {
 // 拉取镜像
 const pullImages = async (images) => {
   for (const image of images) {
-    const imageName = minimatch(image, localImagePattern)
-      ? `${remoteRegistry}/${namespace}/${image}`
-      : image;
+    const imageName = `${remoteRegistry}/${namespace}/${image}`;
+
     await executeCommand('docker', ['pull', imageName]);
   }
 };
@@ -52,7 +51,9 @@ try {
   const images = extractImages(composeConfig, version);
 
   // 拉取镜像
-  await pullImages(images);
+  await pullImages(
+    images.filter((image) => minimatch(image, localImagePattern)),
+  );
 
   console.log('所有镜像拉取完毕');
 } catch (error) {

@@ -1,21 +1,4 @@
-import { spawn } from 'child_process';
-import { getVersion } from './utils.js';
-
-// 执行命令行命令并实时打印输出
-const executeCommand = async (command, args) => {
-  console.log(`执行命令: ${command} ${args.join(' ')}`);
-  return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { stdio: 'inherit' });
-
-    child.on('close', (code) => {
-      if (code !== 0) {
-        reject(new Error(`命令失败，退出码: ${code}`));
-      } else {
-        resolve();
-      }
-    });
-  });
-};
+import { getVersion, executeCommand } from './utils.js';
 
 try {
   // 获取版本号
