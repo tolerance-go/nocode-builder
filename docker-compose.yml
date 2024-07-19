@@ -22,16 +22,13 @@ services:
       - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
-
-  # nginx:
-  #   image: nginx:1.27.0-alpine
-  #   ports:
-  #     - '80:80'
-  #   volumes:
-  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
-  #   depends_on:
-  #     - admin
-  #     - server
+  nginx:
+    image: ${REGISTRY_PATH}/nocode-builder-nginx:${APP_TAG}
+    ports:
+      - '80:80'
+    depends_on:
+      - admin
+      - server
 
 volumes:
   pgdata:
