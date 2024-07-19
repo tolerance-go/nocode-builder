@@ -37,6 +37,7 @@ export const Login: React.FC = () => {
         rules={[{ required: true, message: '请输入你的用户名!' }]}
       >
         <Input
+          autoComplete="off"
           data-test-id={测试标识.登录用户名输入框}
           autoFocus
           prefix={<UserOutlined className="site-form-item-icon" />}
@@ -48,6 +49,7 @@ export const Login: React.FC = () => {
         rules={[{ required: true, message: '请输入你的密码!' }]}
       >
         <Input
+          autoComplete="off"
           data-test-id={测试标识.登录密码输入框}
           prefix={<LockOutlined />}
           type="password"

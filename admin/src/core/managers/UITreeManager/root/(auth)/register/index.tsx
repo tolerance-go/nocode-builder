@@ -49,6 +49,7 @@ export const Register: React.FC = () => {
         rules={[{ required: true, message: '用户名不能为空' }]}
       >
         <Input
+          autoComplete="off"
           autoFocus
           prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="用户名"
@@ -58,7 +59,12 @@ export const Register: React.FC = () => {
         name="password"
         rules={[{ required: true, message: '请输入你的密码!' }]}
       >
-        <Input prefix={<LockOutlined />} type="password" placeholder="密码" />
+        <Input
+          autoComplete="off"
+          prefix={<LockOutlined />}
+          type="password"
+          placeholder="密码"
+        />
       </Form.Item>
       <Form.Item
         name="confirm"
@@ -77,6 +83,7 @@ export const Register: React.FC = () => {
         ]}
       >
         <Input
+          autoComplete="off"
           prefix={<LockOutlined />}
           type="password"
           placeholder="确认密码"
