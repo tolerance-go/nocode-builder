@@ -1,6 +1,6 @@
 services:
   admin:
-    image: nocode-builder-admin:${APP_TAG}
+    image: ${REGISTRY_PATH}/nocode-builder-admin:${APP_TAG}
     ports:
       - '3001:80'
     environment:
@@ -8,7 +8,7 @@ services:
     depends_on:
       - server
   server:
-    image: nocode-builder-server:${APP_TAG}
+    image: ${REGISTRY_PATH}/nocode-builder-server:${APP_TAG}
     ports:
       - '3000:3000'
     environment:
@@ -17,7 +17,7 @@ services:
     depends_on:
       - postgres
   postgres:
-    image: nocode-builder-postgres:${APP_TAG}
+    image: ${REGISTRY_PATH}/nocode-builder-postgres:${APP_TAG}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
