@@ -17,38 +17,32 @@ const executeCommand = async (command, args) => {
   });
 };
 
-// 主函数
-const main = async () => {
-  try {
-    // 获取版本号
-    const version = await getVersion();
-    console.log(`当前版本号: ${version}`);
+try {
+  // 获取版本号
+  const version = await getVersion();
+  console.log(`当前版本号: ${version}`);
 
-    // 构建镜像
-    await executeCommand('docker-compose', ['build']);
-    console.log('镜像构建成功');
+  // 构建镜像
+  await executeCommand('docker-compose', ['build']);
+  console.log('镜像构建成功');
 
-    // 定义镜像列表
-    const images = [
-      'nocode-builder-admin',
-      'nocode-builder-server',
-      'nocode-builder-postgres',
-    ];
+  // 定义镜像列表
+  const images = [
+    'nocode-builder-admin',
+    'nocode-builder-server',
+    'nocode-builder-postgres',
+  ];
 
-    // 为每个镜像添加版本号标签
-    for (const image of images) {
-      const tagCommand = `docker tag ${image}:latest ${image}:${version}`;
-      await executeCommand('docker', [
-        'tag',
-        `${image}:latest`,
-        `${image}:${version}`,
-      ]);
-      console.log(`镜像 ${image}:latest 成功打标签为 ${image}:${version}`);
-    }
-  } catch (error) {
-    console.error('操作失败:', error);
+  // 为每个镜像添加版本号标签
+  for (const image of images) {
+    const tagCommand = `docker tag ${image}:latest ${image}:${version}`;
+    await executeCommand('docker', [
+      'tag',
+      `${image}:latest`,
+      `${image}:${version}`,
+    ]);
+    console.log(`镜像 ${image}:latest 成功打标签为 ${image}:${version}`);
   }
-};
-
-// 执行主函数
-main();
+} catch (error) {
+  console.error('操作失败:', error);
+}

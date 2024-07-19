@@ -125,41 +125,32 @@ const getLocalImages = async () => {
   return output.split('\n').filter(Boolean);
 };
 
-/**
- * 主函数
- * @param {string} localImagePattern - 本地镜像 ID 的通配符模式
- * @param {string} version - 要推送的镜像版本号
- */
-const main = async (localImagePattern) => {
-  try {
-    const version = await getVersion();
-    await loginToRegistry();
-    const localImages = await getLocalImages();
-    const matchedImages = localImages.filter((image) => {
-      const [name, tag] = image.split(':');
-      return minimatch(name, localImagePattern) && tag === version;
-    });
-
-    if (matchedImages.length === 0) {
-      console.log(
-        `没有匹配的本地镜像: ${localImagePattern} 和版本号: ${version}`,
-      );
-      return;
-    }
-
-    for (const localImageId of matchedImages) {
-      const [name] = localImageId.split(':');
-      await tagAndPushImage(localImageId, name, version);
-      console.log(
-        `镜像 ${localImageId} 成功推送到 ${remoteRegistry}/${namespace}/${name}:${version}`,
-      );
-    }
-  } catch (error) {
-    console.error('操作失败:', error);
-  }
-};
-
 // 传递本地镜像 ID 的通配符模式
 const localImagePattern = 'nocode-builder-*'; // 替换为你的本地镜像 ID 通配符模式
 
-main(localImagePattern);
+try {
+  const version = await getVersion();
+  await loginToRegistry();
+  const localImages = await getLocalImages();
+  const matchedImages = localImages.filter((image) => {
+    const [name, tag] = image.split(':');
+    return minimatch(name, localImagePattern) && tag === version;
+  });
+
+  if (matchedImages.length === 0) {
+    console.log(
+      `没有匹配的本地镜像: ${localImagePattern} 和版本号: ${version}`,
+    );
+    return;
+  }
+
+  for (const localImageId of matchedImages) {
+    const [name] = localImageId.split(':');
+    await tagAndPushImage(localImageId, name, version);
+    console.log(
+      `镜像 ${localImageId} 成功推送到 ${remoteRegistry}/${namespace}/${name}:${version}`,
+    );
+  }
+} catch (error) {
+  console.error('操作失败:', error);
+}

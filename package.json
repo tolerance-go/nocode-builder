@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "start": "node ./scripts/start-with-version.js",
     "image:build-remote": "node ./scripts/image-build-remote.js",
     "image:build-and-tag": "node ./scripts/image-build-and-tag.js",
-    "start": "docker-compose up -d",
     "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
     "docker:db": "docker-compose down && docker-compose up postgres --build -d --remove-orphans",
     "docker:server": "docker-compose down && docker-compose up server --build -d --remove-orphans",
@@ -25,6 +25,7 @@
   "devDependencies": {
     "concurrently": "^8.2.2",
     "cross-env": "^7.0.3",
+    "execa": "^9.3.0",
     "glob": "^10.4.2",
     "js-yaml": "^4.1.0",
     "minimatch": "^10.0.1",
