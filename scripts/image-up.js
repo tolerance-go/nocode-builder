@@ -6,7 +6,7 @@ const version = await getVersion();
 
 // 设置环境变量并运行 docker-compose up -d
 await executeCommand('cross-env', [
-  `APP_TAG=${version}`,
+  `VERSION=${version}`,
   `REGISTRY_PATH=${remoteRegistry}/${namespace}`,
   'docker-compose',
   '-f',

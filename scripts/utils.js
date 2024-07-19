@@ -44,7 +44,7 @@ export const extractImages = (composeConfig, version) => {
     if (service.image) {
       const image = service.image
         .replace('${REGISTRY_PATH}', `${remoteRegistry}/${namespace}`)
-        .replace('${APP_TAG}', version);
+        .replace('${VERSION}', version);
       images.push(image);
     }
   }

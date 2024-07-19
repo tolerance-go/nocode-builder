@@ -1,9 +1,9 @@
 services:
   admin:
-    image: ${REGISTRY_PATH}/nocode-builder-admin:${APP_TAG}
+    image: ${REGISTRY_PATH}/nocode-builder-admin:${VERSION}
   server:
-    image: ${REGISTRY_PATH}/nocode-builder-server:${APP_TAG}
+    image: ${REGISTRY_PATH}/nocode-builder-server:${VERSION}
   postgres:
-    image: ${REGISTRY_PATH}/nocode-builder-postgres:${APP_TAG}
+    image: ${REGISTRY_PATH}/nocode-builder-postgres:${VERSION}
   nginx:
-    image: ${REGISTRY_PATH}/nocode-builder-nginx:${APP_TAG}
+    image: ${REGISTRY_PATH}/nocode-builder-nginx:${VERSION}
