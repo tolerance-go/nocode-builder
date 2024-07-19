@@ -26,8 +26,6 @@ services:
     image: ${REGISTRY_PATH}/nocode-builder-nginx:${APP_TAG}
     ports:
       - '80:80'
-    volumes:
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
       - admin
       - server
