@@ -1,11 +1,11 @@
 import { Actor } from '@/common/types';
 import { LocalState } from './LocalState';
 
-type ActorConstructor = Actor | ((engineAPI: EngineAPI) => Actor);
+export type ActorConstructor = Actor | ((engineAPI: EngineAPI) => Actor);
 
-interface EngineAPI {
-  setLocalState: (key: string, value: unknown) => void;
-  getLocalState: (key: string) => unknown;
+export interface EngineAPI {
+  setLocalStateItem: (key: string, value: unknown) => void;
+  getLocalStateItem: <T>(key: string) => T | null;
 }
 
 export class Engine {
@@ -13,13 +13,14 @@ export class Engine {
   private dependencies: Map<Actor, Set<Actor>>;
   private dependents: Map<Actor, Set<Actor>>;
   private localState: LocalState;
+  private initializePromise: Promise<void>;
 
   constructor(...actorConstructors: ActorConstructor[]) {
     this.actors = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
     this.localState = new LocalState();
-    this.initActors(actorConstructors);
+    this.initializePromise = this.initActors(actorConstructors);
   }
 
   private async initActors(actorConstructors: ActorConstructor[]) {
@@ -56,6 +57,7 @@ export class Engine {
   }
 
   public async launch() {
+    await this.initializePromise;
     const sortedActors = this.topologicalSort();
     await this.setupActors(sortedActors);
     await this.startActors(sortedActors);
@@ -98,8 +100,8 @@ export class Engine {
 
   private getEngineAPI(): EngineAPI {
     return {
-      setLocalState: this.localState.set.bind(this.localState),
-      getLocalState: this.localState.get.bind(this.localState),
+      setLocalStateItem: this.localState.set.bind(this.localState),
+      getLocalStateItem: this.localState.get.bind(this.localState),
     };
   }
 }

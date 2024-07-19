@@ -1,11 +1,10 @@
 import { ProjectTypeEnum } from '@/_gen/models';
 import { paths } from '@/common/constants';
-import { ManagerBase } from '@/core/base';
+import { EngineAPI, ManagerBase } from '@/core/base';
 import { 界面导航系统 } from '@/core/systems';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { api } from '@/globals';
 import { produce } from 'immer';
-import localforage from 'localforage';
 import store from 'store2';
 import { localStateFieldName } from './constants';
 import {
@@ -25,12 +24,19 @@ export class UIStoreManager extends ManagerBase {
 
   private initialState: RootState | null;
 
-  constructor(localState: RootState | null) {
+  private engineApi: EngineAPI;
+
+  constructor(engineApi: EngineAPI) {
     super();
+
+    this.engineApi = engineApi;
 
     this.slices = createSlices();
 
     const reducers = createReducers(this.slices);
+
+    const localState =
+      engineApi.getLocalStateItem<RootState>(localStateFieldName);
 
     this.initialState = localState;
 
@@ -233,7 +239,7 @@ export class UIStoreManager extends ManagerBase {
 
       const next = this.过滤掉某些不存储到本地的state(state);
 
-      localforage.setItem(localStateFieldName, next);
+      this.engineApi.setLocalStateItem(localStateFieldName, next);
     });
   }
 

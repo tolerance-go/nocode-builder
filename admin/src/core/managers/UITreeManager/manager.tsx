@@ -1,5 +1,5 @@
 import { fullPathnames, paths } from '@/common/constants';
-import { ManagerBase } from '@/core/base';
+import { EngineAPI, ManagerBase } from '@/core/base';
 import { 界面导航系统 } from '@/core/systems';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import React from 'react';
