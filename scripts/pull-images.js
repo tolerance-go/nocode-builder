@@ -1,4 +1,9 @@
-import { executeCommand, getVersion, readComposeFile } from './utils.js';
+import {
+  executeCommand,
+  extractImages,
+  getVersion,
+  readComposeFile,
+} from './utils.js';
 
 // 拉取镜像
 const pullImages = async (images) => {
