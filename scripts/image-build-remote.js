@@ -1,18 +1,48 @@
 import { exec } from 'child_process';
-import util from 'util';
-import minimatch from 'minimatch';
+import { promisify } from 'util';
+import { minimatch } from 'minimatch';
 
-const execPromise = util.promisify(exec);
+const execPromise = promisify(exec);
 
 const username = '13956233265';
 const remoteRegistry = 'registry.cn-heyuan.aliyuncs.com';
 
 /**
- * 执行命令行命令
+ * 执行命令行命令并实时打印输出
+ * @param {string} command - 要执行的命令
+ * @param {string[]} args - 命令参数
+ * @returns {Promise<string>}
+ */
+const executeCommand = async (command, args) => {
+  console.log(`执行命令: ${command} ${args.join(' ')}`);
+  return new Promise((resolve, reject) => {
+    const child = exec(`${command} ${args.join(' ')}`);
+
+    child.stdout.on('data', (data) => {
+      console.log(data.toString());
+    });
+
+    child.stderr.on('data', (data) => {
+      console.error(data.toString());
+    });
+
+    child.on('close', (code) => {
+      if (code !== 0) {
+        reject(new Error(`命令失败，退出码: ${code}`));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+/**
+ * 执行命令行命令并返回输出
  * @param {string} command - 要执行的命令
  * @returns {Promise<string>}
  */
-const executeCommand = async (command) => {
+const executeCommandWithOutput = async (command) => {
+  console.log(`执行命令: ${command}`);
   try {
     const { stdout, stderr } = await execPromise(command);
     if (stderr) {
@@ -31,7 +61,7 @@ const executeCommand = async (command) => {
  */
 const loginToRegistry = async () => {
   const loginCommand = `docker login --username=${username} ${remoteRegistry}`;
-  await executeCommand(loginCommand);
+  await executeCommandWithOutput(loginCommand);
 };
 
 /**
@@ -43,11 +73,12 @@ const loginToRegistry = async () => {
  */
 const tagAndPushImage = async (localImageId, repositoryName, version) => {
   const vpcRegistryPath = `registry-vpc.cn-heyuan.aliyuncs.com/unocode/${repositoryName}`;
-  const tagCommand = `docker tag ${localImageId} ${vpcRegistryPath}:${version}`;
-  await executeCommand(tagCommand);
-
-  const pushCommand = `docker push ${vpcRegistryPath}:${version}`;
-  await executeCommand(pushCommand);
+  await executeCommand('docker', [
+    'tag',
+    localImageId,
+    `${vpcRegistryPath}:${version}`,
+  ]);
+  await executeCommand('docker', ['push', `${vpcRegistryPath}:${version}`]);
 };
 
 /**
@@ -55,8 +86,9 @@ const tagAndPushImage = async (localImageId, repositoryName, version) => {
  * @returns {Promise<string[]>}
  */
 const getLocalImages = async () => {
-  const imagesCommand = `docker images --format "{{.Repository}}:{{.Tag}}"`;
-  const output = await executeCommand(imagesCommand);
+  const output = await executeCommandWithOutput(
+    'docker images --format "{{.Repository}}:{{.Tag}}"',
+  );
   return output.split('\n').filter(Boolean);
 };
 

@@ -15,7 +15,7 @@ WORKDIR /workspace/admin
 COPY ./admin/package.json ./
 
 # 安装依赖
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --filter '!cypress'
 
 # 复制所有文件到工作目录
 COPY ./admin .

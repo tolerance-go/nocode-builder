@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "image:build-remote": "node ./scripts/create-image.js --version $(node -pe 'require(\"./package.json\").version')",
-    "image:build-and-tag": "docker-compose build && VERSION=$(node -pe 'require(\"./package.json\").version') && IMAGES=(nocode-builder-admin nocode-builder-server nocode-builder-postgres) && for IMAGE in ${IMAGES[@]}; do docker tag $IMAGE:latest $IMAGE:$VERSION; done",
+    "image:build-remote": "node ./scripts/image-build-remote.js --version $(node -pe 'require(\"./package.json\").version')",
+    "image:build-and-tag": "node ./scripts/image-build-and-tag.js",
     "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
     "docker:db": "docker-compose down && docker-compose up postgres --build -d --remove-orphans",
     "docker:server": "docker-compose down && docker-compose up server --build -d --remove-orphans",
@@ -23,8 +23,10 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "glob": "^10.4.2",
     "js-yaml": "^4.1.0",
+    "minimatch": "^10.0.1",
     "prettier": "^3.0.0"
   }
 }
