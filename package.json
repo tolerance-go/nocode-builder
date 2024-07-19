@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
-    "start": "node ./scripts/start-with-version.js",
+    "remote::start": "node ./scripts/start-with-version.js",
     "remote::pull-images": "node ./scripts/pull-images.js",
+    "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
     "image:tag-and-push-remote": "node ./scripts/tag-and-push-remote.js",
     "image:build-and-tag": "node ./scripts/image-build-and-tag.js",
     "docker": "docker-compose up --build -d --remove-orphans",
