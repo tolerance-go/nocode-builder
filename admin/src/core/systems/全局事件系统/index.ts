@@ -4,9 +4,9 @@ import {
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '@/core/managers/UIStoreManager/types';
-import { 历史记录 } from '@/core/managers/项目树历史纪录管理者';
 import { ViewKey } from '@/common/types';
 import Emittery from 'emittery';
+import { 历史记录 } from '@/core/managers/项目树历史纪录管理者/types';
 
 export type 全局事件映射 = {
   '界面状态管理者/路由更新': {

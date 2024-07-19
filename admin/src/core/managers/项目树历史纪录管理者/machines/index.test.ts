@@ -1,11 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { createActor } from 'xstate';
-import { 历史记录, 历史状态机 } from '.';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '../../UIStoreManager';
+import { 历史状态机 } from '.';
+import { 历史记录 } from '../types';
 
 describe('历史状态机', () => {
   const 创建Mock记录 = (

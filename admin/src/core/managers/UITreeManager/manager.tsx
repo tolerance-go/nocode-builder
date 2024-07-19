@@ -1,7 +1,8 @@
 import { fullPathnames, paths } from '@/common/constants';
-import { EngineAPI, ManagerBase } from '@/core/base';
+import { ManagerBase } from '@/core/base';
 import { 界面导航系统 } from '@/core/systems';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
+import { 界面通知系统 } from '@/core/systems/界面通知系统';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -28,7 +29,6 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
-import { 界面通知系统 } from '@/core/systems/界面通知系统';
 
 export class UITreeManager extends ManagerBase {
   requires(
