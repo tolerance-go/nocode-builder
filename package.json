@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "image:build-remote": "node ./scripts/image-build-remote.js --version $(node -pe 'require(\"./package.json\").version')",
+    "image:build-remote": "node ./scripts/image-build-remote.js",
     "image:build-and-tag": "node ./scripts/image-build-and-tag.js",
     "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
     "docker:db": "docker-compose down && docker-compose up postgres --build -d --remove-orphans",

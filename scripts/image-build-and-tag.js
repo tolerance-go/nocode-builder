@@ -1,13 +1,5 @@
 import { spawn } from 'child_process';
-import { readFile } from 'fs/promises';
-
-// 获取 package.json 中的版本号
-const getVersion = async () => {
-  const packageJson = JSON.parse(
-    await readFile(new URL('../package.json', import.meta.url)),
-  );
-  return packageJson.version;
-};
+import { getVersion } from './utils.js';
 
 // 执行命令行命令并实时打印输出
 const executeCommand = async (command, args) => {
