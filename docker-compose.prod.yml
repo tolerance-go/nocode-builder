@@ -1,34 +1,9 @@
 services:
   admin:
     image: ${REGISTRY_PATH}/nocode-builder-admin:${APP_TAG}
-    ports:
-      - '3001:80'
-    environment:
-      - NODE_ENV=production
-    depends_on:
-      - server
   server:
     image: ${REGISTRY_PATH}/nocode-builder-server:${APP_TAG}
-    ports:
-      - '3000:3000'
-    environment:
-      - NODE_ENV=production
-      - DATABASE_URL=postgresql://yarnb:123456a.@postgres:5432/local?schema=public
-    depends_on:
-      - postgres
   postgres:
     image: ${REGISTRY_PATH}/nocode-builder-postgres:${APP_TAG}
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    ports:
-      - '5432:5432'
   nginx:
     image: ${REGISTRY_PATH}/nocode-builder-nginx:${APP_TAG}
-    ports:
-      - '80:80'
-    depends_on:
-      - admin
-      - server
-
-volumes:
-  pgdata:

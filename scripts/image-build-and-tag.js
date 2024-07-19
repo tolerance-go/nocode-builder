@@ -11,7 +11,13 @@ try {
   console.log(`当前版本号: ${version}`);
 
   // 构建镜像
-  await executeCommand('docker-compose', ['build']);
+  await executeCommand('docker-compose', [
+    '-f',
+    'docker-compose.yml',
+    '-f',
+    'docker-compose.local.yml',
+    'build',
+  ]);
   console.log('镜像构建成功');
 
   const composeConfig = await readComposeFile();

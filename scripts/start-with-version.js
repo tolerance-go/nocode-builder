@@ -10,6 +10,8 @@ await executeCommand('cross-env', [
   `REGISTRY_PATH=${remoteRegistry}/${namespace}`,
   'docker-compose',
   '-f',
+  'docker-compose.yml',
+  '-f',
   'docker-compose.prod.yml',
   'up',
   '-d',

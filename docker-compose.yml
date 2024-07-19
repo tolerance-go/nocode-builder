@@ -1,8 +1,5 @@
 services:
   admin:
-    build:
-      context: .
-      dockerfile: ./admin/Dockerfile
     ports:
       - '3001:80'
     environment:
@@ -10,9 +7,6 @@ services:
     depends_on:
       - server
   server:
-    build:
-      context: .
-      dockerfile: ./server/Dockerfile
     ports:
       - '3000:3000'
     environment:
@@ -21,17 +15,11 @@ services:
     depends_on:
       - postgres
   postgres:
-    build:
-      context: .
-      dockerfile: ./db/postgres/Dockerfile
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
   nginx:
-    build:
-      context: .
-      dockerfile: ./nginx/Dockerfile
     ports:
       - '80:80'
     depends_on:
