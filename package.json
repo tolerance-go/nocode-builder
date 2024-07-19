@@ -1,10 +1,12 @@
 {
   "name": "nocode-builder",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "image:build-remote": "node ./scripts/create-image.js --version $(node -pe 'require(\"./package.json\").version')",
+    "image:build-and-tag": "docker-compose build && VERSION=$(node -pe 'require(\"./package.json\").version') && IMAGES=(nocode-builder-admin nocode-builder-server nocode-builder-postgres) && for IMAGE in ${IMAGES[@]}; do docker tag $IMAGE:latest $IMAGE:$VERSION; done",
     "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
     "docker:db": "docker-compose down && docker-compose up postgres --build -d --remove-orphans",
     "docker:server": "docker-compose down && docker-compose up server --build -d --remove-orphans",
