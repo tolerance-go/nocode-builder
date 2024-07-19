@@ -1,14 +1,43 @@
 import { Actor } from '@/common/types';
+import { LocalState } from './LocalState';
+
+type ActorConstructor = Actor | ((engineAPI: EngineAPI) => Actor);
+
+interface EngineAPI {
+  setLocalState: (key: string, value: unknown) => void;
+  getLocalState: (key: string) => unknown;
+}
 
 export class Engine {
   private actors: Set<Actor>;
   private dependencies: Map<Actor, Set<Actor>>;
   private dependents: Map<Actor, Set<Actor>>;
+  private localState: LocalState;
 
-  constructor(...actors: Actor[]) {
-    this.actors = new Set(actors);
+  constructor(...actorConstructors: ActorConstructor[]) {
+    this.actors = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
+    this.localState = new LocalState();
+    this.initActors(actorConstructors);
+  }
+
+  private async initActors(actorConstructors: ActorConstructor[]) {
+    // 先加载本地状态
+    await this.localState.load();
+
+    // 初始化 Actors
+    actorConstructors.forEach((ctor) => {
+      let actor: Actor;
+      if (typeof ctor === 'function') {
+        actor = ctor(this.getEngineAPI());
+      } else {
+        actor = ctor;
+      }
+      this.actors.add(actor);
+    });
+
+    // 收集依赖关系
     this.collectDependencies();
   }
 
@@ -65,5 +94,12 @@ export class Engine {
     });
 
     return sorted;
+  }
+
+  private getEngineAPI(): EngineAPI {
+    return {
+      setLocalState: this.localState.set.bind(this.localState),
+      getLocalState: this.localState.get.bind(this.localState),
+    };
   }
 }
