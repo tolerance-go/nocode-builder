@@ -15,7 +15,7 @@ try {
     '-f',
     'docker-compose.yml',
     '-f',
-    'docker-compose.local.yml',
+    'docker-compose.dev.yml',
     'build',
   ]);
   console.log('镜像构建成功');
