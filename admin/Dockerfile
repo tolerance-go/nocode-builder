@@ -1,9 +1,8 @@
 # 使用 Node.js v21.6.1 作为基础镜像
 FROM node:21.6.1-alpine AS builder
 
-# 安装 jq 和 pnpm
-RUN apk add --no-cache jq \
-    && npm install -g pnpm@9
+# 安装 pnpm
+RUN npm install -g pnpm@9
 
 # 设置工作目录
 WORKDIR /workspace
@@ -22,7 +21,7 @@ ARG INSTALL_CYPRESS=false
 # 安装依赖
 RUN if [ "$INSTALL_CYPRESS" = "false" ]; then \
       echo "exclude cypress from install"; \
-      jq 'del(.dependencies.cypress, .devDependencies.cypress, .optionalDependencies.cypress)' package.json > temp.json && mv temp.json package.json; \
+      export CYPRESS_INSTALL_BINARY=0; \
     fi && \
     pnpm install --frozen-lockfile
 
