@@ -1,5 +1,8 @@
-import { spawn } from 'child_process';
+import { exec } from 'child_process';
+import { promisify } from 'util';
 import { minimatch } from 'minimatch';
+
+const execPromise = promisify(exec);
 
 const username = '13956233265';
 const remoteRegistry = 'registry.cn-heyuan.aliyuncs.com';
@@ -8,12 +11,20 @@ const remoteRegistry = 'registry.cn-heyuan.aliyuncs.com';
  * 执行命令行命令并实时打印输出
  * @param {string} command - 要执行的命令
  * @param {string[]} args - 命令参数
- * @returns {Promise<void>}
+ * @returns {Promise<string>}
  */
 const executeCommand = async (command, args) => {
   console.log(`执行命令: ${command} ${args.join(' ')}`);
   return new Promise((resolve, reject) => {
-    const child = spawn(command, args, { stdio: 'inherit' });
+    const child = exec(`${command} ${args.join(' ')}`);
+
+    child.stdout.on('data', (data) => {
+      console.log(data.toString());
+    });
+
+    child.stderr.on('data', (data) => {
+      console.error(data.toString());
+    });
 
     child.on('close', (code) => {
       if (code !== 0) {
@@ -26,12 +37,31 @@ const executeCommand = async (command, args) => {
 };
 
 /**
+ * 执行命令行命令并返回输出
+ * @param {string} command - 要执行的命令
+ * @returns {Promise<string>}
+ */
+const executeCommandWithOutput = async (command) => {
+  console.log(`执行命令: ${command}`);
+  try {
+    const { stdout, stderr } = await execPromise(command);
+    if (stderr) {
+      console.error(`标准错误输出: ${stderr}`);
+    }
+    return stdout;
+  } catch (error) {
+    console.error(`执行命令出错: ${error.message}`);
+    throw error;
+  }
+};
+
+/**
  * 登录到阿里云 Docker Registry
  * @returns {Promise<void>}
  */
 const loginToRegistry = async () => {
-  const loginCommand = ['login', `--username=${username}`, remoteRegistry];
-  await executeCommand('docker', loginCommand);
+  const loginCommand = `docker login --username=${username} ${remoteRegistry}`;
+  await executeCommandWithOutput(loginCommand);
 };
 
 /**
@@ -56,11 +86,9 @@ const tagAndPushImage = async (localImageId, repositoryName, version) => {
  * @returns {Promise<string[]>}
  */
 const getLocalImages = async () => {
-  const output = await executeCommand('docker', [
-    'images',
-    '--format',
-    '{{.Repository}}:{{.Tag}}',
-  ]);
+  const output = await executeCommandWithOutput(
+    'docker images --format "{{.Repository}}:{{.Tag}}"',
+  );
   return output.split('\n').filter(Boolean);
 };
 
