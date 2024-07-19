@@ -5,9 +5,9 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "remote::ci": "pnpm remote::pull-images && pnpm remote::image-up",
-    "remote::image-up": "node ./scripts/image-up.js",
-    "remote::pull-images": "node ./scripts/pull-images.js",
+    "remote::ci": "pnpm pull-cloud-images && pnpm image-up",
+    "image-up": "node ./scripts/image-up.js",
+    "pull-cloud-images": "node ./scripts/pull-cloud-images.js",
     "ci": "pnpm image:build-and-tag && pnpm image:tag-and-push-remote",
     "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
     "image:tag-and-push-remote": "node ./scripts/tag-and-push-remote.js",

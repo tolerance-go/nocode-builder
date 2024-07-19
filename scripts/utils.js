@@ -43,7 +43,7 @@ export const extractImages = (composeConfig, version) => {
     const service = services[serviceName];
     if (service.image) {
       const image = service.image
-        .replace('${REGISTRY_PATH}', `${remoteRegistry}/${namespace}`)
+        .replace('${REGISTRY}', `${remoteRegistry}/${namespace}/`)
         .replace('${VERSION}', version);
       images.push(image);
     }
