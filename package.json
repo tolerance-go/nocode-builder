@@ -1,6 +1,6 @@
 {
   "name": "nocode-builder",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "index.js",
   "type": "module",
