@@ -1,8 +1,9 @@
 # 使用 Node.js v21.6.1 作为基础镜像
 FROM node:21.6.1-alpine AS builder
 
-# 安装 pnpm
-RUN npm install -g pnpm@9
+# 安装 jq 和 pnpm
+RUN apk add --no-cache jq \
+    && npm install -g pnpm@9
 
 # 设置工作目录
 WORKDIR /workspace
