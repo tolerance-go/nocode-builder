@@ -1,6 +1,5 @@
 import { getVersion, executeCommand } from './utils.js';
-const remoteRegistry = 'registry.cn-heyuan.aliyuncs.com';
-const namespace = 'unocode';
+import { remoteRegistry, namespace } from './config.js';
 
 // 获取版本号
 const version = await getVersion();

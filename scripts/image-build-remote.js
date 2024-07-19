@@ -1,9 +1,7 @@
 import { minimatch } from 'minimatch';
 import { getVersion } from './utils.js';
 import { getVersion, executeCommand } from './utils.js';
-
-const remoteRegistry = 'registry.cn-heyuan.aliyuncs.com';
-const namespace = 'unocode';
+import { remoteRegistry, namespace, localImagePattern } from './config.js';
 
 /**
  * 为本地镜像设置别名并推送到远程仓库
@@ -34,9 +32,6 @@ const getLocalImages = async () => {
   ]);
   return output.split('\n').filter(Boolean);
 };
-
-// 传递本地镜像 ID 的通配符模式
-const localImagePattern = 'nocode-builder-*'; // 替换为你的本地镜像 ID 通配符模式
 
 try {
   const version = await getVersion();

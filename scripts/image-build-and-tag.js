@@ -1,4 +1,4 @@
-import { getVersion, executeCommand } from './utils.js';
+import { getVersion, executeCommand, extractImages } from './utils.js';
 
 try {
   // 获取版本号
@@ -9,15 +9,15 @@ try {
   await executeCommand('docker-compose', ['build']);
   console.log('镜像构建成功');
 
+  const images = await extractImages();
+
   // 定义镜像列表
-  const images = [
-    'nocode-builder-admin',
-    'nocode-builder-server',
-    'nocode-builder-postgres',
-  ];
+  const localImages = images.map((image) =>
+    image.split(':')[0].split('/').pop(),
+  );
 
   // 为每个镜像添加版本号标签
-  for (const image of images) {
+  for (const image of localImages) {
     await executeCommand('docker', [
       'tag',
       `${image}:latest`,

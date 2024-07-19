@@ -4,6 +4,7 @@ FROM node:21.6.1-alpine AS builder
 # 安装 pnpm
 RUN npm install -g pnpm@9
 
+# 设置工作目录
 WORKDIR /workspace
 
 # 复制 package.json 和 pnpm-lock.yaml 以及上级目录的 pnpm-workspace.yaml
@@ -14,8 +15,15 @@ WORKDIR /workspace/admin
 
 COPY ./admin/package.json ./
 
+# 环境变量以避免安装cypress相关的依赖
+ARG INSTALL_CYPRESS=false
+
 # 安装依赖
-RUN pnpm install --frozen-lockfile --filter '!cypress'
+RUN if [ "$INSTALL_CYPRESS" = "false" ]; then \
+      echo "exclude cypress from install"; \
+      jq 'del(.dependencies.cypress, .devDependencies.cypress, .optionalDependencies.cypress)' package.json > temp.json && mv temp.json package.json; \
+    fi && \
+    pnpm install --frozen-lockfile
 
 # 复制所有文件到工作目录
 COPY ./admin .

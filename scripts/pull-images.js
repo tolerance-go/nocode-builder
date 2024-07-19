@@ -1,35 +1,6 @@
-import { readFile } from 'fs/promises';
-import { load } from 'js-yaml';
-import { resolve } from 'path';
-import { getVersion, executeCommand } from './utils.js';
 import { minimatch } from 'minimatch';
-
-const remoteRegistry = 'registry.cn-heyuan.aliyuncs.com';
-const namespace = 'unocode';
-const localImagePattern = 'nocode-builder-*'; // 替换为你的本地镜像 ID 通配符模式
-
-// 读取并解析 docker-compose.yml 文件
-const readComposeFile = async () => {
-  const filePath = resolve('docker-compose.yml');
-  const fileContent = await readFile(filePath, 'utf8');
-  return load(fileContent);
-};
-
-// 从 docker-compose 配置中提取镜像信息
-const extractImages = (composeConfig, version) => {
-  const services = composeConfig.services;
-  const images = [];
-
-  for (const serviceName in services) {
-    const service = services[serviceName];
-    if (service.image) {
-      const image = service.image.replace('${APP_TAG}', version);
-      images.push(image);
-    }
-  }
-
-  return images;
-};
+import { executeCommand, getVersion } from './utils.js';
+import { remoteRegistry, namespace, localImagePattern } from './config.js';
 
 // 拉取镜像
 const pullImages = async (images) => {
