@@ -1,5 +1,4 @@
 import { minimatch } from 'minimatch';
-import { getVersion } from './utils.js';
 import { getVersion, executeCommand } from './utils.js';
 import { remoteRegistry, namespace, localImagePattern } from './config.js';
 
@@ -25,11 +24,11 @@ const tagAndPushImage = async (localImageId, repositoryName, version) => {
  * @returns {Promise<string[]>}
  */
 const getLocalImages = async () => {
-  const output = await executeCommand('docker', [
-    'images',
-    '--format',
-    '{{.Repository}}:{{.Tag}}',
-  ]);
+  const output = await executeCommand(
+    'docker',
+    ['images', '--format', '{{.Repository}}:{{.Tag}}'],
+    'pipe',
+  );
   return output.split('\n').filter(Boolean);
 };
 
@@ -41,11 +40,13 @@ try {
     return minimatch(name, localImagePattern) && tag === version;
   });
 
+  console.log('匹配的本地镜像:', matchedImages);
+
   if (matchedImages.length === 0) {
     console.log(
       `没有匹配的本地镜像: ${localImagePattern} 和版本号: ${version}`,
     );
-    return;
+    process.exit(1);
   }
 
   for (const localImageId of matchedImages) {

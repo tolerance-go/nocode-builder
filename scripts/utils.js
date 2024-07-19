@@ -13,11 +13,14 @@ export const getVersion = async () => {
 };
 
 // 执行命令行命令并实时打印输出
-export const executeCommand = async (command, args) => {
+export const executeCommand = async (command, args, stdio = 'inherit') => {
   console.log(`执行命令: ${command} ${args.join(' ')}`);
   try {
-    const { stdout } = await execa(command, args, { stdio: 'inherit' });
-    console.log(stdout);
+    const { stdout } = await execa(command, args, { stdio });
+    if (stdio === 'pipe') {
+      console.log(stdout); // 实时打印输出
+      return stdout;
+    }
   } catch (error) {
     console.error(`命令执行失败: ${error.message}`);
     process.exit(1);
