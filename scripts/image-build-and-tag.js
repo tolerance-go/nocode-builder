@@ -18,7 +18,6 @@ try {
 
   // 为每个镜像添加版本号标签
   for (const image of images) {
-    const tagCommand = `docker tag ${image}:latest ${image}:${version}`;
     await executeCommand('docker', [
       'tag',
       `${image}:latest`,

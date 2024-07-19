@@ -1,8 +1,6 @@
 services:
   admin:
-    build:
-      context: .
-      dockerfile: ./admin/Dockerfile
+    image: ${REGISTRY_PATH}/nocode-builder-admin:${APP_TAG}
     ports:
       - '3001:80'
     environment:
@@ -10,9 +8,7 @@ services:
     depends_on:
       - server
   server:
-    build:
-      context: .
-      dockerfile: ./server/Dockerfile
+    image: ${REGISTRY_PATH}/nocode-builder-server:${APP_TAG}
     ports:
       - '3000:3000'
     environment:
@@ -21,17 +17,13 @@ services:
     depends_on:
       - postgres
   postgres:
-    build:
-      context: .
-      dockerfile: ./db/postgres/Dockerfile
+    image: ${REGISTRY_PATH}/nocode-builder-postgres:${APP_TAG}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
       - '5432:5432'
   nginx:
-    build:
-      context: .
-      dockerfile: ./nginx/Dockerfile
+    image: ${REGISTRY_PATH}/nocode-builder-nginx:${APP_TAG}
     ports:
       - '80:80'
     volumes:
