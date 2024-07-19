@@ -1,4 +1,4 @@
-import { ManagerBase } from '@/core/base';
+import { EngineAPI, ManagerBase } from '@/core/base';
 import { 全局事件系统 } from '@/core/systems/全局事件系统';
 import { 界面通知系统 } from '@/core/systems/界面通知系统';
 import { api } from '@/globals';
@@ -18,22 +18,9 @@ import { 历史记录 } from './types';
 
 export class 项目树历史纪录管理者 extends ManagerBase {
   private 历史指针: number = -1;
-
   private 历史堆栈: 历史记录[] = [];
-
   private 历史状态机Actor;
-
-  public constructor() {
-    super();
-
-    this.历史状态机Actor = createActor(历史状态机, {
-      inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
-      input: {
-        历史堆栈: this.历史堆栈,
-        历史指针: this.历史指针,
-      },
-    });
-  }
+  private 引擎api: EngineAPI;
 
   requires(
     全局事件系统实例: 全局事件系统,
@@ -42,9 +29,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
     return super.requireActors(
       界面通知系统实例,
       全局事件系统实例,
-      new 历史记录远程同步管理者({
-        initialHistoryA: [],
-        initialHistoryB: [],
+      new 历史记录远程同步管理者(this.引擎api, {
         retryStartCallback: this.retryStartCallback,
         retryFailCallback: this.retryFailCallback,
         syncFunction: async (
@@ -64,6 +49,20 @@ export class 项目树历史纪录管理者 extends ManagerBase {
     );
   }
 
+  public constructor(引擎api: EngineAPI) {
+    super();
+
+    this.引擎api = 引擎api;
+
+    this.历史状态机Actor = createActor(历史状态机, {
+      inspect: window.Cypress ? undefined : createBrowserInspector().inspect,
+      input: {
+        历史堆栈: this.历史堆栈,
+        历史指针: this.历史指针,
+      },
+    });
+  }
+
   retryFailCallback = () => {};
 
   retryStartCallback = () => {
@@ -78,9 +77,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
   };
 
   protected async onSetup(): Promise<void> {
-    this.历史状态机Actor.start();
-
-    this.历史状态机Actor.subscribe((state) => {
+    this.历史状态机Actor.start().subscribe((state) => {
       if (this.历史指针 !== state.context.历史指针) {
         this.requireActor(全局事件系统).emit('项目树历史记录管理者/指针移动', {
           历史指针: state.context.历史指针,

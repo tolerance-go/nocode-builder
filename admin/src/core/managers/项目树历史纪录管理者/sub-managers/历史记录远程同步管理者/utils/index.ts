@@ -1,10 +1,11 @@
 import { ProjectDiffDto } from '@/_gen/api';
+
+import { handleAdditions } from './handleAdditions';
 import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '../../../UIStoreManager';
-import { handleAdditions } from './handleAdditions';
+} from '@/core/managers/UIStoreManager';
 // import { handleUpdates } from './handleUpdates';
 
 // /**

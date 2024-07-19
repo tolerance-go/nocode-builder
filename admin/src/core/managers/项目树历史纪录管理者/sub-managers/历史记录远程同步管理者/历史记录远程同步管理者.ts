@@ -1,4 +1,4 @@
-import { ManagerBase } from '@/core/base';
+import { EngineAPI, ManagerBase } from '@/core/base';
 import { 全局事件系统 } from '@/core/systems';
 import { authPathnames, localKeys } from '@/common/constants';
 import { last } from 'lodash-es';
@@ -17,7 +17,6 @@ import {
 } from './machines';
 import { StateController } from '@/common/controllers';
 import { delay } from '@/common/utils';
-import localforage from 'localforage';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];
@@ -26,8 +25,6 @@ export interface SyncHistoryManagerState {
 }
 
 interface SyncHistoryManagerEmployeeParams {
-  initialHistoryA: 历史记录[];
-  initialHistoryB: 历史记录[];
   retryStartCallback: RetryStartCallback;
   retryFailCallback: RetryFailCallback;
   syncFunction: SyncFunction;
@@ -49,17 +46,9 @@ export class 历史记录远程同步管理者 extends ManagerBase {
   private readonly syncFunction: SyncFunction; // 同步函数
   private retryCount = 0;
   private maxRetryCount = 3;
-  private _历史记录远程同步状态机: 历史记录远程同步状态机ActorType | null =
-    null;
+  private 历史记录远程同步状态机: 历史记录远程同步状态机ActorType;
   private stateController;
-
-  get 历史记录远程同步状态机(): 历史记录远程同步状态机ActorType {
-    if (!this._历史记录远程同步状态机) {
-      throw new Error('历史记录远程同步状态机未初始化');
-    }
-
-    return this._历史记录远程同步状态机;
-  }
+  private 引擎api: EngineAPI;
 
   get 当前同步状态() {
     return this.历史记录远程同步状态机.getSnapshot().value;
@@ -69,33 +58,38 @@ export class 历史记录远程同步管理者 extends ManagerBase {
     return super.requireActors(全局事件系统实例);
   }
 
-  constructor(params: SyncHistoryManagerEmployeeParams) {
+  constructor(引擎api: EngineAPI, params: SyncHistoryManagerEmployeeParams) {
     super();
-    const {
-      initialHistoryA,
-      initialHistoryB,
-      retryStartCallback,
-      retryFailCallback,
-      syncFunction,
-    } = params;
+
+    this.引擎api = 引擎api;
+
+    const { retryStartCallback, retryFailCallback, syncFunction } = params;
+
+    const restoredStateValue = 引擎api.getLocalStateItem<
+      历史记录远程同步状态机SnapshotType['value']
+    >(localKeys.历史记录远程同步管理者_state_value);
+
+    if (restoredStateValue) {
+      const resolvedState = 历史记录远程同步状态机.resolveState({
+        value: restoredStateValue,
+      });
+      this.历史记录远程同步状态机 = createActor(历史记录远程同步状态机, {
+        snapshot: resolvedState,
+      });
+    } else {
+      this.历史记录远程同步状态机 = createActor(历史记录远程同步状态机);
+    }
+
+    const initialState = 引擎api.getLocalStateItem<SyncHistoryManagerState>(
+      localKeys.历史记录远程同步管理者_state,
+    ) || {
+      historyA: [],
+      historyB: [],
+      pendingUpdate: null,
+    };
 
     this.stateController = new StateController({
-      initialState: {
-        historyA: initialHistoryA,
-        historyB: initialHistoryB,
-        pendingUpdate: null as 历史记录[] | null,
-      },
-      saveStateFunction: async (state) => {
-        await localforage.setItem(
-          localKeys.历史记录远程同步管理者_state,
-          state,
-        );
-      },
-      loadStateFunction: async () => {
-        return await localforage.getItem(
-          localKeys.历史记录远程同步管理者_state,
-        );
-      },
+      initialState,
     });
 
     this.retryStartCallback = retryStartCallback;
@@ -104,24 +98,21 @@ export class 历史记录远程同步管理者 extends ManagerBase {
   }
 
   async onSetup(): Promise<void> {
-    await this.stateController.loadState();
-
-    const restoredStateValue = await localforage.getItem<
-      历史记录远程同步状态机SnapshotType['value']
-    >(localKeys.历史记录远程同步管理者_state_value);
-
-    if (restoredStateValue) {
-      const resolvedState = 历史记录远程同步状态机.resolveState({
-        value: restoredStateValue,
-      });
-      this._历史记录远程同步状态机 = createActor(历史记录远程同步状态机, {
-        snapshot: resolvedState,
-      });
-    } else {
-      this._历史记录远程同步状态机 = createActor(历史记录远程同步状态机);
-    }
-
     this.历史记录远程同步状态机.start();
+
+    this.历史记录远程同步状态机.subscribe(() => {
+      this.引擎api.setLocalStateItem(
+        localKeys.历史记录远程同步管理者_state_value,
+        this.历史记录远程同步状态机.getSnapshot().value,
+      );
+    });
+
+    this.stateController.subscribe(() => {
+      this.引擎api.setLocalStateItem(
+        localKeys.历史记录远程同步管理者_state,
+        this.stateController.getState(),
+      );
+    });
 
     this.requireActor(全局事件系统).on(
       '界面状态管理者/路由更新',

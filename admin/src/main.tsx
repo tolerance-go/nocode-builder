@@ -22,7 +22,11 @@ new Engine(
   new 文档环境(document).requires(全局事件系统实例),
   new AppManager(),
   new I18nSystem(),
-  new 项目树历史纪录管理者().requires(全局事件系统实例, 全局界面通知系统实例),
+  (engineApi) =>
+    new 项目树历史纪录管理者(engineApi).requires(
+      全局事件系统实例,
+      全局界面通知系统实例,
+    ),
   (engineApi) =>
     new UITreeManager().requires(
       全局界面通知系统实例,
