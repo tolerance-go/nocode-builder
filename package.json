@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node ./scripts/start-with-version.js",
+    "pull-images": "node ./scripts/pull-images.js",
     "image:build-remote": "node ./scripts/image-build-remote.js",
     "image:build-and-tag": "node ./scripts/image-build-and-tag.js",
     "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
@@ -29,6 +30,7 @@
     "glob": "^10.4.2",
     "js-yaml": "^4.1.0",
     "minimatch": "^10.0.1",
-    "prettier": "^3.0.0"
+    "prettier": "^3.0.0",
+    "yaml": "^2.4.5"
   }
 }
