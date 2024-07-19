@@ -1,9 +1,13 @@
 services:
   admin:
     image: ${REGISTRY_PATH}/nocode-builder-admin:${VERSION}
+    restart: always
   server:
     image: ${REGISTRY_PATH}/nocode-builder-server:${VERSION}
+    restart: always
   postgres:
     image: ${REGISTRY_PATH}/nocode-builder-postgres:${VERSION}
+    restart: always
   nginx:
     image: ${REGISTRY_PATH}/nocode-builder-nginx:${VERSION}
+    restart: always
