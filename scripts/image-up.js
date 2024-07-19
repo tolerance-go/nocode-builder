@@ -1,5 +1,5 @@
 import { getVersion, executeCommand } from './utils.js';
-import { remoteRegistry, namespace } from './config.js';
+import { remoteRegistry, namespace } from '../config.js';
 
 // 获取版本号
 const version = await getVersion();

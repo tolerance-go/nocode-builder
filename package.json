@@ -5,8 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "remote::ci": "pnpm remote::pull-images && pnpm remote::start",
-    "remote::start": "node ./scripts/start-with-version.js",
+    "remote::ci": "pnpm remote::pull-images && pnpm remote::image-up",
+    "remote::image-up": "node ./scripts/image-up.js",
     "remote::pull-images": "node ./scripts/pull-images.js",
     "ci": "pnpm image:build-and-tag && pnpm image:tag-and-push-remote",
     "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",

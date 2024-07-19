@@ -1,6 +1,6 @@
 import { minimatch } from 'minimatch';
 import { getVersion, executeCommand } from './utils.js';
-import { remoteRegistry, namespace, localImagePattern } from './config.js';
+import { remoteRegistry, namespace, localImagePattern } from '../config.js';
 
 /**
  * 为本地镜像设置别名并推送到远程仓库

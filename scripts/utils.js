@@ -1,6 +1,6 @@
 import { readFile } from 'fs/promises';
 import { execa } from 'execa';
-import { remoteRegistry, namespace } from './config.js';
+import { remoteRegistry, namespace } from '../config.js';
 import { resolve } from 'path';
 import { load } from 'js-yaml';
 
