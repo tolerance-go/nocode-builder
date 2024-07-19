@@ -404,6 +404,9 @@ importers:
       change-case:
         specifier: ^5.4.4
         version: 5.4.4
+      cross-env:
+        specifier: ^7.0.3
+        version: 7.0.3
       eslint:
         specifier: ^8.42.0
         version: 8.57.0
