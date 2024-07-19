@@ -7,6 +7,7 @@
   "scripts": {
     "image:build-remote": "node ./scripts/image-build-remote.js",
     "image:build-and-tag": "node ./scripts/image-build-and-tag.js",
+    "start": "docker-compose up -d",
     "format": "prettier --write \"*/src/**/*.(ts|tsx)\"",
     "docker:db": "docker-compose down && docker-compose up postgres --build -d --remove-orphans",
     "docker:server": "docker-compose down && docker-compose up server --build -d --remove-orphans",

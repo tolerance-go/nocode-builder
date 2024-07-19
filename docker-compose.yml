@@ -1,38 +1,32 @@
 services:
   admin:
-    build:
-      context: .
-      dockerfile: ./admin/Dockerfile
+    image: nocode-builder-admin:${APP_TAG}
     ports:
-      - "3001:80"
+      - '3001:80'
     environment:
       - NODE_ENV=production
     depends_on:
       - server
   server:
-    build:
-      context: .
-      dockerfile: ./server/Dockerfile
+    image: nocode-builder-server:${APP_TAG}
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - NODE_ENV=production
       - DATABASE_URL=postgresql://yarnb:123456a.@postgres:5432/local?schema=public
     depends_on:
       - postgres
   postgres:
-    build:
-      context: .
-      dockerfile: ./db/postgres/Dockerfile
+    image: nocode-builder-postgres:${APP_TAG}
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
   nginx:
     image: nginx:1.27.0-alpine
     ports:
-      - "80:80"
+      - '80:80'
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
     depends_on:
