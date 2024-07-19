@@ -1,6 +1,11 @@
 import { minimatch } from 'minimatch';
 import { executeCommand, getVersion } from './utils.js';
-import { remoteRegistry, namespace, localImagePattern } from './config.js';
+import {
+  remoteRegistry,
+  namespace,
+  localImagePattern,
+  readComposeFile,
+} from './config.js';
 
 // 拉取镜像
 const pullImages = async (images) => {

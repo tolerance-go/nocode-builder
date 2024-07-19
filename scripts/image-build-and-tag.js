@@ -1,4 +1,9 @@
-import { getVersion, executeCommand, extractImages } from './utils.js';
+import {
+  getVersion,
+  executeCommand,
+  extractImages,
+  readComposeFile,
+} from './utils.js';
 
 try {
   // 获取版本号
@@ -9,7 +14,9 @@ try {
   await executeCommand('docker-compose', ['build']);
   console.log('镜像构建成功');
 
-  const images = await extractImages();
+  const composeConfig = await readComposeFile();
+
+  const images = await extractImages(composeConfig, version);
 
   // 定义镜像列表
   const localImages = images.map((image) =>
