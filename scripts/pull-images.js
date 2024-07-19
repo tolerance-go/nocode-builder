@@ -1,18 +1,9 @@
-import { minimatch } from 'minimatch';
-import { executeCommand, getVersion } from './utils.js';
-import {
-  remoteRegistry,
-  namespace,
-  localImagePattern,
-  readComposeFile,
-} from './config.js';
+import { executeCommand, getVersion, readComposeFile } from './utils.js';
 
 // 拉取镜像
 const pullImages = async (images) => {
   for (const image of images) {
-    const imageName = `${remoteRegistry}/${namespace}/${image}`;
-
-    await executeCommand('docker', ['pull', imageName]);
+    await executeCommand('docker', ['pull', image]);
   }
 };
 
@@ -27,9 +18,7 @@ try {
   const images = extractImages(composeConfig, version);
 
   // 拉取镜像
-  await pullImages(
-    images.filter((image) => minimatch(image, localImagePattern)),
-  );
+  await pullImages(images);
 
   console.log('所有镜像拉取完毕');
 } catch (error) {
