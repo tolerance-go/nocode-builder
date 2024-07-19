@@ -12,7 +12,8 @@ export class LocalState {
     name: 'engineLocalState',
   });
 
-  private cache: Map<string, unknown> = new Map();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private cache: Map<string, any> = new Map();
   private saveQueue: SaveTask[] = [];
   private isSaving = false;
 
@@ -25,7 +26,7 @@ export class LocalState {
     await Promise.all(promises);
   }
 
-  public set(key: string, value: unknown) {
+  public set<T>(key: string, value: T) {
     this.cache.set(key, value);
     this.enqueueSaveState(key, value);
   }
@@ -53,7 +54,7 @@ export class LocalState {
     this.isSaving = false;
   }
 
-  public get(key: string): unknown {
+  public get<T>(key: string): T | null {
     return this.cache.get(key);
   }
 }
