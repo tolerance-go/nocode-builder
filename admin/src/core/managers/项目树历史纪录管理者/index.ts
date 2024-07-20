@@ -9,7 +9,7 @@ import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
 } from '../UIStoreManager';
-import { 历史状态机 } from './machines';
+import { 历史状态机 } from './states';
 import {
   convertDiffResultToProjectDiffDto,
   历史记录远程同步管理者,
@@ -215,4 +215,4 @@ export class 项目树历史纪录管理者 extends ManagerBase {
   }
 }
 
-export * from './machines';
+export * from './states';
