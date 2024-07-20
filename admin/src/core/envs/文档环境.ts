@@ -1,7 +1,7 @@
-import { EnvObjectBase } from '../base';
+import { EnvironmentBase } from '../base';
 import { 全局事件系统 } from '../systems';
 
-export class 文档环境 extends EnvObjectBase {
+export class 文档环境 extends EnvironmentBase {
   private _document?: Document;
 
   public constructor(document: Document) {

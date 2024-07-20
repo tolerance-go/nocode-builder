@@ -15,7 +15,7 @@ import { 历史记录 } from '../../types';
 import {
   历史记录远程同步状态机,
   历史记录远程同步状态机SnapshotType,
-} from './machines';
+} from './states';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];

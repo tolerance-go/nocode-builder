@@ -44,7 +44,7 @@ export class Engine {
 
   private collectDependencies() {
     this.actors.forEach((actor) => {
-      const deps = actor.requiredActors;
+      const deps = actor.requiredModules;
       this.dependencies.set(actor, deps);
 
       deps.forEach((dep) => {

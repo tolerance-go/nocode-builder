@@ -1,11 +1,17 @@
-import { Module, EnvObject, Manager, System } from '@/common/types';
+import {
+  Module,
+  Environment,
+  Manager,
+  System,
+  Controller,
+} from '@/common/types';
 
 export abstract class ModuleBase implements Module {
   public setupProcessing: PromiseWithResolvers<void>;
   public startProcessing: PromiseWithResolvers<void>;
 
-  public requiredActors: Set<Module> = new Set(); // 当前 Actor 依赖的 Actors
-  public dependentActors: Set<Module> = new Set(); // 依赖当前 Actor 的 Actors
+  public requiredModules: Set<Module> = new Set(); // 当前 Actor 依赖的 Actors
+  public dependentModules: Set<Module> = new Set(); // 依赖当前 Actor 的 Actors
 
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
@@ -18,8 +24,8 @@ export abstract class ModuleBase implements Module {
   // 导入其他 Actor
   protected requireModules(...actors: Module[]): this {
     actors.forEach((actor) => {
-      if (!this.requiredActors.has(actor)) {
-        this.requiredActors.add(actor);
+      if (!this.requiredModules.has(actor)) {
+        this.requiredModules.add(actor);
         if (actor instanceof ModuleBase) {
           actor.addDependentActor(this);
         }
@@ -32,13 +38,13 @@ export abstract class ModuleBase implements Module {
 
   // 添加依赖当前 Actor 的 Actor
   private addDependentActor(actor: Module): void {
-    this.dependentActors.add(actor);
+    this.dependentModules.add(actor);
   }
 
   // 获取指定类型的 Actor 实例
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getDependModule<T extends Module>(actorClass: new (...args: any[]) => T): T {
-    for (const actor of this.requiredActors) {
+    for (const actor of this.requiredModules) {
       if (actor instanceof actorClass) {
         return actor;
       }
@@ -53,7 +59,7 @@ export abstract class ModuleBase implements Module {
     }
 
     await Promise.all(
-      Array.from(this.requiredActors).map(
+      Array.from(this.requiredModules).map(
         (actor) => actor.setupProcessing.promise,
       ),
     );
@@ -68,7 +74,7 @@ export abstract class ModuleBase implements Module {
     }
 
     await Promise.all(
-      Array.from(this.requiredActors).map(
+      Array.from(this.requiredModules).map(
         (actor) => actor.startProcessing.promise,
       ),
     );
@@ -86,4 +92,8 @@ export abstract class SystemBase extends ModuleBase implements System {}
 
 export abstract class ManagerBase extends ModuleBase implements Manager {}
 
-export abstract class EnvObjectBase extends ModuleBase implements EnvObject {}
+export abstract class EnvironmentBase
+  extends ModuleBase
+  implements Environment {}
+
+export abstract class ControllerBase extends ModuleBase implements Controller {}
