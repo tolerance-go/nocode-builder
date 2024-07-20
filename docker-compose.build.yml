@@ -1,0 +1,21 @@
+services:
+  admin:
+    build:
+      context: .
+      dockerfile: ./admin/Dockerfile
+  admin-gh:
+    build:
+      context: .
+      dockerfile: ./admin-gh/Dockerfile
+  server:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+  postgres:
+    build:
+      context: .
+      dockerfile: ./db/postgres/Dockerfile
+  nginx:
+    build:
+      context: .
+      dockerfile: ./nginx/Dockerfile

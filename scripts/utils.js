@@ -31,9 +31,8 @@ export const executeCommand = async (command, args, stdio = 'inherit') => {
   }
 };
 
-// 读取并解析 docker-compose.yml 文件
 export const readComposeFile = async () => {
-  const filePath = resolve('docker-compose.prod.yml');
+  const filePath = resolve('docker-compose.deploy.yml');
   const fileContent = await readFile(filePath, 'utf8');
   return load(fileContent);
 };

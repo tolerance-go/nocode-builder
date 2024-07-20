@@ -13,9 +13,9 @@ try {
   // 构建镜像
   await executeCommand('docker-compose', [
     '-f',
-    'docker-compose.yml',
+    'docker-compose.common.yml',
     '-f',
-    'docker-compose.dev.yml',
+    'docker-compose.build.yml',
     'build',
   ]);
   console.log('镜像构建成功');
