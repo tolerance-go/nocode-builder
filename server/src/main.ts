@@ -7,19 +7,22 @@ import { ProjectGroupCreateWithChildrenDto } from './modules/sync/dtos';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
-  const config = new DocumentBuilder()
-    .setTitle('UNOCODE api docs')
-    .setDescription('The UNOCODE API description')
-    .setVersion('1.0')
-    .build();
-  const document = SwaggerModule.createDocument(app, config, {
-    extraModels: [ProjectGroupCreateWithChildrenDto],
-  });
-  SwaggerModule.setup('api', app, document);
-
   const configService = app.get(ConfigService);
   const isDevelopment = configService.get('NODE_ENV') === 'development';
+  console.log('isDevelopment', isDevelopment);
+
+  if (isDevelopment) {
+    const config = new DocumentBuilder()
+      .setTitle('UNOCODE api docs')
+      .setDescription('The UNOCODE API description')
+      .setVersion('1.0')
+      .build();
+    const document = SwaggerModule.createDocument(app, config, {
+      extraModels: [ProjectGroupCreateWithChildrenDto],
+    });
+
+    SwaggerModule.setup('api', app, document);
+  }
 
   // 启用 CORS
   if (isDevelopment) {

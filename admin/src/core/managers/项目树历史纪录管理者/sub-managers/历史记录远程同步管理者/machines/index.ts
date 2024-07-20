@@ -1,4 +1,4 @@
-import { ActorRefFrom, setup, SnapshotFrom } from 'xstate';
+import { setup, SnapshotFrom } from 'xstate';
 
 export const 历史记录远程同步状态机 = setup({
   types: {
@@ -71,9 +71,5 @@ export const 历史记录远程同步状态机 = setup({
 });
 
 export type 历史记录远程同步状态机SnapshotType = SnapshotFrom<
-  typeof 历史记录远程同步状态机
->;
-
-export type 历史记录远程同步状态机ActorType = ActorRefFrom<
   typeof 历史记录远程同步状态机
 >;

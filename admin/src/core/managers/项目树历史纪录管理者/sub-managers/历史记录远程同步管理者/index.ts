@@ -1,2 +1,2 @@
-export * from './历史记录远程同步管理者';
+export * from './manager';
 export * from './utils';

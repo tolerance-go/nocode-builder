@@ -28,7 +28,7 @@ export abstract class ActorBase implements Actor {
     return this;
   }
 
-  abstract requires(...actors: Actor[]): this;
+  public abstract requires(...actors: Actor[]): this;
 
   // 添加依赖当前 Actor 的 Actor
   private addDependentActor(actor: Actor): void {
