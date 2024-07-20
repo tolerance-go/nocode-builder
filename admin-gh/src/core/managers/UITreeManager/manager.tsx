@@ -29,6 +29,7 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
+import { Help } from './root/help';
 
 export class UITreeManager extends ManagerBase {
   requires(
@@ -81,7 +82,7 @@ export class UITreeManager extends ManagerBase {
                       <图标管理者Context.Provider value={图标管理者实例}>
                         <Provider store={界面状态管理者实例.store}>
                           <BrowserRouter
-                            basename={import.meta.env.DEV ? '' : '/admin'}
+                            basename={import.meta.env.DEV ? '' : '/admin-gh'}
                           >
                             <Routes>
                               <Route
@@ -115,6 +116,10 @@ export class UITreeManager extends ManagerBase {
                                     element={<Register />}
                                   ></Route>
                                 </Route>
+                                <Route
+                                  path={paths.help}
+                                  element={<Help />}
+                                ></Route>
                                 <Route path="*" element={<NotFound />} />
                               </Route>
                             </Routes>

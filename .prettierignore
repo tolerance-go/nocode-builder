@@ -1,0 +1,9 @@
+**/*.svg
+.umi
+.umi-production
+**/dist
+**/lib
+**/es
+**\__snapshots__\**
+pnpm-lock.yaml
+pro-components/server

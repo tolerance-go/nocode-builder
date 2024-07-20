@@ -1,4 +1,4 @@
-import { ConfigProvider, message, Modal, notification } from 'antd';
+import { App, ConfigProvider, message, Modal, notification } from 'antd';
 import { useLayoutEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../UIStoreManager';
@@ -48,10 +48,12 @@ export function Root() {
 
   return (
     <ConfigProvider theme={themeConfig} locale={zhCN}>
-      <Outlet />
-      {msgContextHolder}
-      {modalContextHolder}
-      {notificationContextHolder}
+      <App>
+        <Outlet />
+        {msgContextHolder}
+        {modalContextHolder}
+        {notificationContextHolder}
+      </App>
     </ConfigProvider>
   );
 }

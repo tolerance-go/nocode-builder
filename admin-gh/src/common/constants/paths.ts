@@ -1,5 +1,6 @@
 export const paths = {
   login: 'login',
+  help: 'help',
   register: 'register',
   'view-editor': 'view-editor',
   'data-table-editor': 'data-table-editor',
