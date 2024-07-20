@@ -16,16 +16,21 @@ export class AllExceptionsFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
 
-    const status =
-      exception instanceof HttpException ? exception.getStatus() : 500;
-    const message =
-      exception instanceof HttpException
-        ? exception.getResponse()
-        : 'Internal server error';
+    let status = 500;
+    let message: unknown = 'Internal server error';
+    let stack: string | undefined;
+
+    if (exception instanceof HttpException) {
+      status = exception.getStatus();
+      message = exception.getResponse();
+    } else if (exception instanceof Error) {
+      stack = exception.stack;
+      message = exception.message;
+    }
 
     this.logger.error(
       `HTTP Status: ${status} Error Message: ${message}`,
-      (exception as Error).stack,
+      stack,
     );
 
     response.status(status).json({

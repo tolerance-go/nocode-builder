@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   HttpException,
-  HttpStatus,
   Post,
   Req,
   UseGuards,
@@ -28,6 +27,7 @@ export class SyncController {
     @Body() diffs: ProjectDiffDto,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<void> {
+    throw new HttpException('Not implemented', 501);
     await this.syncService.applyProjectDiff(diffs, req.user.id);
   }
 }
