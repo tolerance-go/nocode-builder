@@ -147,10 +147,19 @@ export class 历史记录远程同步管理者 extends ManagerBase {
     );
   }
 
+  protected async onStart(): Promise<void> {
+    const 当前的同步状态是同步中 = this.当前同步状态是否为同步中();
+
+    if (当前的同步状态是同步中) {
+      // 则继续开始同步
+      this.startSync();
+    }
+  }
+
   // 接受新的历史记录数组，并更新 A 和 B
   public async updateHistories(newHistory: 历史记录[]): Promise<void> {
     const state = this.stateController.getState();
-    if (this.当前是否为同步状态()) {
+    if (this.当前同步状态是否为同步中()) {
       this.stateController.updateState({ pendingUpdate: newHistory });
     } else if (this.当前同步状态 === '同步已失败') {
       this.stateController.updateState({ historyB: newHistory });
@@ -190,7 +199,7 @@ export class 历史记录远程同步管理者 extends ManagerBase {
   }
 
   // 执行同步操作
-  private async sync(): Promise<void> {
+  private async startSync(): Promise<void> {
     const results = this.compareHistories();
     this.历史记录远程同步状态机.send({
       type: '开始同步',
@@ -243,16 +252,10 @@ export class 历史记录远程同步管理者 extends ManagerBase {
     }
   }
 
-  private 当前是否为同步状态(): boolean {
+  private 当前同步状态是否为同步中(): boolean {
     return typeof this.当前同步状态 === 'object'
       ? !!this.当前同步状态.同步中
       : false;
-  }
-
-  private async startSync(): Promise<void> {
-    if (!this.当前是否为同步状态()) {
-      await this.sync();
-    }
   }
 
   private async retrySync() {

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { ProjectGroupService } from 'src/modules/project-group/project-group.service';
 import { ProjectService } from 'src/modules/project/project.service';
@@ -24,56 +24,56 @@ export class SyncService {
         }
       }
 
-      if (diff.projectsToUpdate) {
-        for (const projectData of diff.projectsToUpdate) {
-          const { id, projectGroupId, ...data } = projectData;
-          await this.projectService.updateProject(
-            {
-              where: { id },
-              data: {
-                ...data,
-                projectGroup: {
-                  connect: { id: projectGroupId },
-                },
-              },
-            },
-            tx,
-          );
-        }
-      }
+      // if (diff.projectsToUpdate) {
+      //   for (const projectData of diff.projectsToUpdate) {
+      //     const { id, projectGroupId, ...data } = projectData;
+      //     await this.projectService.updateProject(
+      //       {
+      //         where: { id },
+      //         data: {
+      //           ...data,
+      //           projectGroup: {
+      //             connect: { id: projectGroupId },
+      //           },
+      //         },
+      //       },
+      //       tx,
+      //     );
+      //   }
+      // }
 
-      if (diff.projectGroupsToUpdate) {
-        for (const projectGroupData of diff.projectGroupsToUpdate) {
-          const { id, parentGroupId, ...data } = projectGroupData;
-          await this.projectGroupService.updateProjectGroup(
-            {
-              where: { id },
-              data: {
-                ...data,
-                parentGroup: {
-                  connect: { id: parentGroupId },
-                },
-              },
-            },
-            tx,
-          );
-        }
-      }
+      // if (diff.projectGroupsToUpdate) {
+      //   for (const projectGroupData of diff.projectGroupsToUpdate) {
+      //     const { id, parentGroupId, ...data } = projectGroupData;
+      //     await this.projectGroupService.updateProjectGroup(
+      //       {
+      //         where: { id },
+      //         data: {
+      //           ...data,
+      //           parentGroup: {
+      //             connect: { id: parentGroupId },
+      //           },
+      //         },
+      //       },
+      //       tx,
+      //     );
+      //   }
+      // }
 
-      if (diff.projectIdsToDelete) {
-        for (const projectId of diff.projectIdsToDelete) {
-          await this.projectService.deleteProject({ id: projectId }, tx);
-        }
-      }
+      // if (diff.projectIdsToDelete) {
+      //   for (const projectId of diff.projectIdsToDelete) {
+      //     await this.projectService.deleteProject({ id: projectId }, tx);
+      //   }
+      // }
 
-      if (diff.projectGroupIdsToDelete) {
-        for (const projectGroupId of diff.projectGroupIdsToDelete) {
-          await this.projectGroupService.deleteProjectGroup(
-            { id: projectGroupId },
-            tx,
-          );
-        }
-      }
+      // if (diff.projectGroupIdsToDelete) {
+      //   for (const projectGroupId of diff.projectGroupIdsToDelete) {
+      //     await this.projectGroupService.deleteProjectGroup(
+      //       { id: projectGroupId },
+      //       tx,
+      //     );
+      //   }
+      // }
     });
   }
 

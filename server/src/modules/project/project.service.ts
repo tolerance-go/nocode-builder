@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Prisma, Project } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -41,10 +41,15 @@ export class ProjectService {
     data: Prisma.ProjectCreateInput,
     tx?: Prisma.TransactionClient,
   ): Promise<Project> {
-    const client = tx || this.prisma;
-    return client.project.create({
-      data,
-    });
+    try {
+      const client = tx || this.prisma;
+      const project = await client.project.create({
+        data,
+      });
+      return project;
+    } catch (error) {
+      throw new HttpException(`创建项目失败：${error.message}`, 500);
+    }
   }
 
   async updateProject(

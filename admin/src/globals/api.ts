@@ -4,7 +4,7 @@ import { 全局界面通知系统实例 } from './systems';
 
 const api = new Api({
   baseURL: import.meta.env.DEV ? 'http://localhost:3000' : '/api', // 替换为你的 API 基础 URL
-  timeout: 10000, // 请求超时时间
+  timeout: import.meta.env.DEV ? Infinity : 10000, // 请求超时时间
   headers: {
     'Content-Type': 'application/json',
   },
