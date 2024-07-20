@@ -9,33 +9,33 @@ export interface EngineAPI {
 }
 
 export class Engine {
-  private actors: Set<Module>;
+  private modules: Set<Module>;
   private dependencies: Map<Module, Set<Module>>;
   private dependents: Map<Module, Set<Module>>;
   private localState: LocalState;
   private initializePromise: Promise<void>;
 
-  constructor(...actorConstructors: ModuleConstructor[]) {
-    this.actors = new Set();
+  constructor(...moduleConstructors: ModuleConstructor[]) {
+    this.modules = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
     this.localState = new LocalState();
-    this.initializePromise = this.initActors(actorConstructors);
+    this.initializePromise = this.initModules(moduleConstructors);
   }
 
-  private async initActors(actorConstructors: ModuleConstructor[]) {
+  private async initModules(moduleConstructors: ModuleConstructor[]) {
     // 先加载本地状态
     await this.localState.load();
 
     // 初始化 Actors
-    actorConstructors.forEach((ctor) => {
-      let actor: Module;
+    moduleConstructors.forEach((ctor) => {
+      let module: Module;
       if (typeof ctor === 'function') {
-        actor = ctor(this.getEngineAPI());
+        module = ctor(this.getEngineAPI());
       } else {
-        actor = ctor;
+        module = ctor;
       }
-      this.actors.add(actor);
+      this.modules.add(module);
     });
 
     // 收集依赖关系
@@ -43,15 +43,15 @@ export class Engine {
   }
 
   private collectDependencies() {
-    this.actors.forEach((actor) => {
-      const deps = actor.requiredModules;
-      this.dependencies.set(actor, deps);
+    this.modules.forEach((module) => {
+      const deps = module.requiredModules;
+      this.dependencies.set(module, deps);
 
       deps.forEach((dep) => {
         if (!this.dependents.has(dep)) {
           this.dependents.set(dep, new Set());
         }
-        this.dependents.get(dep)?.add(actor);
+        this.dependents.get(dep)?.add(module);
       });
     });
   }
@@ -59,16 +59,16 @@ export class Engine {
   public async launch() {
     await this.initializePromise;
     const sortedActors = this.topologicalSort();
-    await this.setupActors(sortedActors);
-    await this.startActors(sortedActors);
+    await this.setupModules(sortedActors);
+    await this.startModules(sortedActors);
   }
 
-  private async setupActors(actors: Module[]) {
-    await Promise.all(actors.map((actor) => actor.setup()));
+  private async setupModules(modules: Module[]) {
+    await Promise.all(modules.map((module) => module.setup()));
   }
 
-  private async startActors(actors: Module[]) {
-    await Promise.all(actors.map((actor) => actor.start()));
+  private async startModules(modules: Module[]) {
+    await Promise.all(modules.map((module) => module.start()));
   }
 
   private topologicalSort(): Module[] {
@@ -76,22 +76,22 @@ export class Engine {
     const visited = new Set<Module>();
     const tempMarks = new Set<Module>();
 
-    const visit = (actor: Module) => {
-      if (tempMarks.has(actor)) {
+    const visit = (module: Module) => {
+      if (tempMarks.has(module)) {
         throw new Error('Circular dependency detected');
       }
-      if (!visited.has(actor)) {
-        tempMarks.add(actor);
-        this.dependencies.get(actor)?.forEach(visit);
-        tempMarks.delete(actor);
-        visited.add(actor);
-        sorted.push(actor);
+      if (!visited.has(module)) {
+        tempMarks.add(module);
+        this.dependencies.get(module)?.forEach(visit);
+        tempMarks.delete(module);
+        visited.add(module);
+        sorted.push(module);
       }
     };
 
-    this.actors.forEach((actor) => {
-      if (!visited.has(actor)) {
-        visit(actor);
+    this.modules.forEach((module) => {
+      if (!visited.has(module)) {
+        visit(module);
       }
     });
 
