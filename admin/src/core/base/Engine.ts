@@ -1,5 +1,5 @@
 import { Actor } from '@/common/types';
-import { LocalState } from './LocalState';
+import { LocalState } from '../../common/controllers/LocalState';
 
 export type ActorConstructor = Actor | ((engineAPI: EngineAPI) => Actor);
 
