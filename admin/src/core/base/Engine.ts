@@ -1,7 +1,7 @@
-import { Actor } from '@/common/types';
+import { Module } from '@/common/types';
 import { LocalState } from '../../common/controllers/LocalState';
 
-export type ActorConstructor = Actor | ((engineAPI: EngineAPI) => Actor);
+export type ModuleConstructor = Module | ((engineAPI: EngineAPI) => Module);
 
 export interface EngineAPI {
   setLocalStateItem: (key: string, value: unknown) => void;
@@ -9,13 +9,13 @@ export interface EngineAPI {
 }
 
 export class Engine {
-  private actors: Set<Actor>;
-  private dependencies: Map<Actor, Set<Actor>>;
-  private dependents: Map<Actor, Set<Actor>>;
+  private actors: Set<Module>;
+  private dependencies: Map<Module, Set<Module>>;
+  private dependents: Map<Module, Set<Module>>;
   private localState: LocalState;
   private initializePromise: Promise<void>;
 
-  constructor(...actorConstructors: ActorConstructor[]) {
+  constructor(...actorConstructors: ModuleConstructor[]) {
     this.actors = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
@@ -23,13 +23,13 @@ export class Engine {
     this.initializePromise = this.initActors(actorConstructors);
   }
 
-  private async initActors(actorConstructors: ActorConstructor[]) {
+  private async initActors(actorConstructors: ModuleConstructor[]) {
     // 先加载本地状态
     await this.localState.load();
 
     // 初始化 Actors
     actorConstructors.forEach((ctor) => {
-      let actor: Actor;
+      let actor: Module;
       if (typeof ctor === 'function') {
         actor = ctor(this.getEngineAPI());
       } else {
@@ -63,20 +63,20 @@ export class Engine {
     await this.startActors(sortedActors);
   }
 
-  private async setupActors(actors: Actor[]) {
+  private async setupActors(actors: Module[]) {
     await Promise.all(actors.map((actor) => actor.setup()));
   }
 
-  private async startActors(actors: Actor[]) {
+  private async startActors(actors: Module[]) {
     await Promise.all(actors.map((actor) => actor.start()));
   }
 
-  private topologicalSort(): Actor[] {
-    const sorted: Actor[] = [];
-    const visited = new Set<Actor>();
-    const tempMarks = new Set<Actor>();
+  private topologicalSort(): Module[] {
+    const sorted: Module[] = [];
+    const visited = new Set<Module>();
+    const tempMarks = new Set<Module>();
 
-    const visit = (actor: Actor) => {
+    const visit = (actor: Module) => {
       if (tempMarks.has(actor)) {
         throw new Error('Circular dependency detected');
       }

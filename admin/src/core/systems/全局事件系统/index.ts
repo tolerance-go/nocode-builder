@@ -59,7 +59,7 @@ export class 全局事件系统<
   T extends Record<string, unknown> = 全局事件映射,
 > extends SystemBase {
   requires(): this {
-    return super.requireActors();
+    return super.requireModules();
   }
 
   private emitter = new Emittery<T>();

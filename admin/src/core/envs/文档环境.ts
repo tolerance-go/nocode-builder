@@ -10,7 +10,7 @@ export class 文档环境 extends EnvObjectBase {
   }
 
   requires(全局事件系统实例: 全局事件系统): this {
-    return super.requireActors(全局事件系统实例);
+    return super.requireModules(全局事件系统实例);
   }
 
   public get document() {
@@ -28,13 +28,13 @@ export class 文档环境 extends EnvObjectBase {
     if (document.readyState === 'loading') {
       // 添加事件监听器，当页面完全加载时触发
       this.document.addEventListener('DOMContentLoaded', () => {
-        this.getDependActor(全局事件系统).emit(
+        this.getDependModule(全局事件系统).emit(
           '文档环境/pageLoadComplete',
           undefined,
         );
       });
     } else {
-      this.getDependActor(全局事件系统).emit(
+      this.getDependModule(全局事件系统).emit(
         '文档环境/pageLoadComplete',
         undefined,
       );

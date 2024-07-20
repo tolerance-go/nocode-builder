@@ -6,7 +6,7 @@ import { 拖拽提示显示组件 } from './拖拽提示显示组件';
 
 export class 跟随鼠标显示内容管理者 extends ManagerBase {
   requires(): this {
-    return super.requireActors();
+    return super.requireModules();
   }
 
   private static 跟随组件id到组件映射: {

@@ -6,6 +6,6 @@ export class AppManager extends ManagerBase {
   }
 
   requires(): this {
-    return super.requireActors();
+    return super.requireModules();
   }
 }

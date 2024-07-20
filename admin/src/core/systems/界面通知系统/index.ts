@@ -25,7 +25,7 @@ type ModalOptions = ModalFuncProps & {
 
 export class 界面通知系统 extends SystemBase {
   requires(): this {
-    return super.requireActors();
+    return super.requireModules();
   }
 
   private messageApi: MessageInstance | null = null;

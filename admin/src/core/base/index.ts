@@ -1,2 +1,2 @@
-export * from './Actors';
+export * from './Module';
 export * from './Engine';

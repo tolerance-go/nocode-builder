@@ -40,7 +40,7 @@ export class UITreeManager extends ManagerBase {
     全局事件系统实例: 全局事件系统,
     界面导航系统实例: 界面导航系统,
   ): this {
-    return super.requireActors(
+    return super.requireModules(
       界面通知系统实例,
       验证管理者单例,
       图标管理者单例,
@@ -52,14 +52,14 @@ export class UITreeManager extends ManagerBase {
   }
 
   protected async onSetup() {
-    const 验证管理者实例 = this.getDependActor(验证管理者);
-    const 图标管理者实例 = this.getDependActor(图标管理者);
+    const 验证管理者实例 = this.getDependModule(验证管理者);
+    const 图标管理者实例 = this.getDependModule(图标管理者);
     const 跟随鼠标显示内容管理者实例 =
-      this.getDependActor(跟随鼠标显示内容管理者);
-    const 界面状态管理者实例 = this.getDependActor(UIStoreManager);
-    const 全局事件系统实例 = this.getDependActor(全局事件系统);
-    const 导航系统实例 = this.getDependActor(界面导航系统);
-    const 界面通知系统实例 = this.getDependActor(界面通知系统);
+      this.getDependModule(跟随鼠标显示内容管理者);
+    const 界面状态管理者实例 = this.getDependModule(UIStoreManager);
+    const 全局事件系统实例 = this.getDependModule(全局事件系统);
+    const 导航系统实例 = this.getDependModule(界面导航系统);
+    const 界面通知系统实例 = this.getDependModule(界面通知系统);
 
     全局事件系统实例.on('文档环境/pageLoadComplete', () => {
       ReactDOM.createRoot(document.getElementById('root')!).render(

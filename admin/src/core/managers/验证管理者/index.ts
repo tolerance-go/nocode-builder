@@ -22,7 +22,7 @@ const illegalPostgresqlChars = [
 
 export class 验证管理者 extends ManagerBase {
   requires(): this {
-    return super.requireActors();
+    return super.requireModules();
   }
 
   项目树节点标题是否有效(input: string): string | null {

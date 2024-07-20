@@ -2,7 +2,7 @@ import { SystemBase } from '@/core/base';
 
 export class 界面导航系统 extends SystemBase {
   requires(): this {
-    return super.requireActors();
+    return super.requireModules();
   }
 
   navigateFunction: ((url: string) => void) | null = null;

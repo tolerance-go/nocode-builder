@@ -1,18 +1,20 @@
-export interface Actor {
-  requiredActors: Set<Actor>; // 当前 Actor 依赖的 Actors
-  dependentActors: Set<Actor>; // 依赖当前 Actor 的 Actors
-  requires(...actors: Actor[]): this;
+export interface Module {
+  requiredActors: Set<Module>; // 当前 Actor 依赖的 Actors
+  dependentActors: Set<Module>; // 依赖当前 Actor 的 Actors
+  requires(...actors: Module[]): this;
   setupProcessing: PromiseWithResolvers<void>;
   startProcessing: PromiseWithResolvers<void>;
   start(...args: unknown[]): Promise<void>;
   setup(...args: unknown[]): Promise<void>;
-  getDependActor<T extends Actor>(actorClass: new (...args: unknown[]) => T): T;
+  getDependModule<T extends Module>(
+    actorClass: new (...args: unknown[]) => T,
+  ): T;
 }
 
-export interface System extends Actor {}
+export interface System extends Module {}
 
-export interface Manager extends Actor {}
+export interface Manager extends Module {}
 
-export interface EnvObject extends Actor {}
+export interface EnvObject extends Module {}
 
 export type ViewKey = number | string;

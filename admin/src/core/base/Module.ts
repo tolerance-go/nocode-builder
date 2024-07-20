@@ -1,11 +1,11 @@
-import { Actor, EnvObject, Manager, System } from '@/common/types';
+import { Module, EnvObject, Manager, System } from '@/common/types';
 
-export abstract class ActorBase implements Actor {
+export abstract class ModuleBase implements Module {
   public setupProcessing: PromiseWithResolvers<void>;
   public startProcessing: PromiseWithResolvers<void>;
 
-  public requiredActors: Set<Actor> = new Set(); // 当前 Actor 依赖的 Actors
-  public dependentActors: Set<Actor> = new Set(); // 依赖当前 Actor 的 Actors
+  public requiredActors: Set<Module> = new Set(); // 当前 Actor 依赖的 Actors
+  public dependentActors: Set<Module> = new Set(); // 依赖当前 Actor 的 Actors
 
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
@@ -16,11 +16,11 @@ export abstract class ActorBase implements Actor {
   }
 
   // 导入其他 Actor
-  protected requireActors(...actors: Actor[]): this {
+  protected requireModules(...actors: Module[]): this {
     actors.forEach((actor) => {
       if (!this.requiredActors.has(actor)) {
         this.requiredActors.add(actor);
-        if (actor instanceof ActorBase) {
+        if (actor instanceof ModuleBase) {
           actor.addDependentActor(this);
         }
       }
@@ -28,16 +28,16 @@ export abstract class ActorBase implements Actor {
     return this;
   }
 
-  public abstract requires(...actors: Actor[]): this;
+  public abstract requires(...actors: Module[]): this;
 
   // 添加依赖当前 Actor 的 Actor
-  private addDependentActor(actor: Actor): void {
+  private addDependentActor(actor: Module): void {
     this.dependentActors.add(actor);
   }
 
   // 获取指定类型的 Actor 实例
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getDependActor<T extends Actor>(actorClass: new (...args: any[]) => T): T {
+  getDependModule<T extends Module>(actorClass: new (...args: any[]) => T): T {
     for (const actor of this.requiredActors) {
       if (actor instanceof actorClass) {
         return actor;
@@ -82,8 +82,8 @@ export abstract class ActorBase implements Actor {
   protected async onStart(): Promise<void> {}
 }
 
-export abstract class SystemBase extends ActorBase implements System {}
+export abstract class SystemBase extends ModuleBase implements System {}
 
-export abstract class ManagerBase extends ActorBase implements Manager {}
+export abstract class ManagerBase extends ModuleBase implements Manager {}
 
-export abstract class EnvObjectBase extends ActorBase implements EnvObject {}
+export abstract class EnvObjectBase extends ModuleBase implements EnvObject {}

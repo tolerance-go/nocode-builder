@@ -53,7 +53,7 @@ export class 历史记录远程同步管理者 extends ManagerBase {
   }
 
   public requires(全局事件系统实例: 全局事件系统): this {
-    return super.requireActors(全局事件系统实例);
+    return super.requireModules(全局事件系统实例);
   }
 
   constructor(引擎api: EngineAPI, params: SyncHistoryManagerEmployeeParams) {
@@ -110,7 +110,7 @@ export class 历史记录远程同步管理者 extends ManagerBase {
       );
     });
 
-    this.getDependActor(全局事件系统).on(
+    this.getDependModule(全局事件系统).on(
       '界面状态管理者/路由更新',
       async ({ pathname }) => {
         const prevPathname = this.currentPathname;
