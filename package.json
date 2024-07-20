@@ -17,7 +17,6 @@
     "docker:dev:server": "docker-compose -f docker-compose.build.yml -f docker-compose.common.yml up server -d --remove-orphans",
     "dev:e2e": "pnpm --filter admin cypress:open",
     "dev:admin": "pnpm --filter admin dev",
-    "dev:admin-story": "pnpm --filter admin-story dev",
     "dev:server": "pnpm --filter server start:dev",
     "daily:run": "pnpm format && pnpm --filter server recursive run daily:run && pnpm --filter=!server recursive run daily:run && pnpm docker:dev && pnpm cypress:run",
     "cypress:run": "pnpm --filter admin cypress:run"

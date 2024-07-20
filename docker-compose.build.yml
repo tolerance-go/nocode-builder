@@ -3,10 +3,6 @@ services:
     build:
       context: .
       dockerfile: ./admin/Dockerfile
-  admin-story:
-    build:
-      context: .
-      dockerfile: ./admin-story/Dockerfile
   server:
     build:
       context: .

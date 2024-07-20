@@ -6,13 +6,6 @@ services:
       - NODE_ENV=production
     depends_on:
       - server
-  admin-story:
-    ports:
-      - '3002:80'
-    environment:
-      - NODE_ENV=production
-    depends_on:
-      - server
   server:
     ports:
       - '3000:3000'

@@ -2,9 +2,6 @@ services:
   admin:
     image: ${REGISTRY}nocode-builder-admin:${VERSION}
     restart: always
-  admin-story:
-    image: ${REGISTRY}nocode-builder-admin-story:${VERSION}
-    restart: always
   server:
     image: ${REGISTRY}nocode-builder-server:${VERSION}
     restart: always
