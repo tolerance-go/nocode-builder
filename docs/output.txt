@@ -857,7 +857,7 @@ A parent state is symbolised by a labelled rectangle box that acts as a containe
 
 View the dog walk machine in Stately Studio.
 A parent state should also specify which child state is the initial state. In the on a walk parent state, the initial state is walking.
-Parent and child states are one of the features that make statecharts capable of handling more complexity than an everyday state machine.
+Parent and child states are one of the features that make statecharts capable of handling more complexity than an daily:run state machine.
 Read more about parent states.
 Atomic states​
 An atomic state is a state that doesn’t have any child states. Waiting, walk complete, walking and running are all atomic states.
