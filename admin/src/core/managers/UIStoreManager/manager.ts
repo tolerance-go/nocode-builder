@@ -101,7 +101,7 @@ export class UIStoreManager extends ManagerBase {
         throw new Error('位置非法');
       }
 
-      this.requireActor(全局事件系统).emit('界面状态管理者/新增节点', {
+      this.getDependActor(全局事件系统).emit('界面状态管理者/新增节点', {
         nodeKey: action.payload.nodeKey,
         nodeData,
         parentKey,
@@ -113,7 +113,7 @@ export class UIStoreManager extends ManagerBase {
       const { nodeKey } = action.payload;
       const newNodeData = nextState.projectTree.项目树节点数据[nodeKey];
       const oldNodeData = prevState.projectTree.项目树节点数据[nodeKey];
-      this.requireActor(全局事件系统).emit('界面状态管理者/修改节点', {
+      this.getDependActor(全局事件系统).emit('界面状态管理者/修改节点', {
         nodeKey: action.payload.nodeKey,
         newTreeNodeData: newNodeData,
         oldTreeNodeData: oldNodeData,
@@ -121,13 +121,13 @@ export class UIStoreManager extends ManagerBase {
         treeDataRecord: nextState.projectTree.项目树节点数据,
       });
     } else if (action.type === 'projectTree/删除节点') {
-      this.requireActor(全局事件系统).emit('界面状态管理者/删除节点', {
+      this.getDependActor(全局事件系统).emit('界面状态管理者/删除节点', {
         nodeKeys: action.payload,
         treeNodes: nextState.projectTree.项目结构树,
         treeDataRecord: nextState.projectTree.项目树节点数据,
       });
     } else if (action.type === 'projectTree/移动节点') {
-      this.requireActor(全局事件系统).emit('界面状态管理者/移动节点', {
+      this.getDependActor(全局事件系统).emit('界面状态管理者/移动节点', {
         节点keys: action.payload.nodeKeys,
         目标父节点key: action.payload.newParentKey,
         index: action.payload.newIndex,
@@ -140,7 +140,7 @@ export class UIStoreManager extends ManagerBase {
   };
 
   注册指针移动监听() {
-    this.requireActor(全局事件系统).on(
+    this.getDependActor(全局事件系统).on(
       '项目树历史记录管理者/指针移动',
       (event) => {
         this.store.dispatch(
@@ -168,7 +168,7 @@ export class UIStoreManager extends ManagerBase {
         nextState.location.pathname !== prevState.location.pathname &&
         nextState.location.pathname
       ) {
-        this.requireActor(全局事件系统).emit('界面状态管理者/路由更新', {
+        this.getDependActor(全局事件系统).emit('界面状态管理者/路由更新', {
           pathname: nextState.location.pathname,
         });
       }
@@ -215,13 +215,15 @@ export class UIStoreManager extends ManagerBase {
             ];
           if (nodeData.type === 'file') {
             if (nodeData.projectFileType === ProjectTypeEnum.View) {
-              this.requireActor(界面导航系统).navigateTo(paths['view-editor']);
+              this.getDependActor(界面导航系统).navigateTo(
+                paths['view-editor'],
+              );
             } else if (nodeData.projectFileType === ProjectTypeEnum.Bluemap) {
-              this.requireActor(界面导航系统).navigateTo(
+              this.getDependActor(界面导航系统).navigateTo(
                 paths['bluemap-editor'],
               );
             } else if (nodeData.projectFileType === ProjectTypeEnum.DataTable) {
-              this.requireActor(界面导航系统).navigateTo(
+              this.getDependActor(界面导航系统).navigateTo(
                 paths['data-table-editor'],
               );
             }

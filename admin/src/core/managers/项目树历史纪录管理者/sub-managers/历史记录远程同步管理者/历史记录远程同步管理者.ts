@@ -114,7 +114,7 @@ export class 历史记录远程同步管理者 extends ManagerBase {
       );
     });
 
-    this.requireActor(全局事件系统).on(
+    this.getDependActor(全局事件系统).on(
       '界面状态管理者/路由更新',
       async ({ pathname }) => {
         const prevPathname = this.currentPathname;

@@ -37,7 +37,7 @@ export abstract class ActorBase implements Actor {
 
   // 获取指定类型的 Actor 实例
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  requireActor<T extends Actor>(actorClass: new (...args: any[]) => T): T {
+  getDependActor<T extends Actor>(actorClass: new (...args: any[]) => T): T {
     for (const actor of this.requiredActors) {
       if (actor instanceof actorClass) {
         return actor;

@@ -28,13 +28,13 @@ export class 文档环境 extends EnvObjectBase {
     if (document.readyState === 'loading') {
       // 添加事件监听器，当页面完全加载时触发
       this.document.addEventListener('DOMContentLoaded', () => {
-        this.requireActor(全局事件系统).emit(
+        this.getDependActor(全局事件系统).emit(
           '文档环境/pageLoadComplete',
           undefined,
         );
       });
     } else {
-      this.requireActor(全局事件系统).emit(
+      this.getDependActor(全局事件系统).emit(
         '文档环境/pageLoadComplete',
         undefined,
       );

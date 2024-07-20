@@ -66,35 +66,27 @@ export class 项目树历史纪录管理者 extends ManagerBase {
     });
   }
 
-  retryFailCallback = () => {};
-
-  retryStartCallback = () => {
-    this.requireActor(界面通知系统).showModal({
-      type: 'info',
-      title: '正在保存服务器数据...',
-      onOk: () => {},
-      // okButtonProps: {
-      //   loading: true,
-      // },
-    });
-  };
-
   protected async onSetup(): Promise<void> {
     this.历史状态机Actor.start().subscribe((state) => {
       if (this.历史指针 !== state.context.历史指针) {
-        this.requireActor(全局事件系统).emit('项目树历史记录管理者/指针移动', {
-          历史指针: state.context.历史指针,
-          历史堆栈: state.context.历史堆栈,
-        });
+        this.getDependActor(全局事件系统).emit(
+          '项目树历史记录管理者/指针移动',
+          {
+            历史指针: state.context.历史指针,
+            历史堆栈: state.context.历史堆栈,
+          },
+        );
       }
 
       this.历史堆栈 = state.context.历史堆栈;
       this.历史指针 = state.context.历史指针;
 
-      this.requireActor(历史记录远程同步管理者).updateHistories(this.历史堆栈);
+      this.getDependActor(历史记录远程同步管理者).updateHistories(
+        this.历史堆栈,
+      );
     });
 
-    this.requireActor(全局事件系统).on(
+    this.getDependActor(全局事件系统).on(
       '界面状态管理者/新增节点',
       ({ nodeKey, parentKey, nodeData, treeNodes, treeDataRecord, index }) => {
         this.addRecordToHistory({
@@ -116,7 +108,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
       },
     );
 
-    this.requireActor(全局事件系统).on(
+    this.getDependActor(全局事件系统).on(
       '界面状态管理者/修改节点',
       ({
         nodeKey,
@@ -143,7 +135,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
       },
     );
 
-    this.requireActor(全局事件系统).on(
+    this.getDependActor(全局事件系统).on(
       '界面状态管理者/删除节点',
       ({ nodeKeys, treeNodes, treeDataRecord }) => {
         this.addRecordToHistory({
@@ -162,7 +154,7 @@ export class 项目树历史纪录管理者 extends ManagerBase {
       },
     );
 
-    this.requireActor(全局事件系统).on(
+    this.getDependActor(全局事件系统).on(
       '界面状态管理者/移动节点',
       ({ 节点keys, 目标父节点key, index, treeNodes, treeDataRecord }) => {
         this.addRecordToHistory({
@@ -183,18 +175,37 @@ export class 项目树历史纪录管理者 extends ManagerBase {
       },
     );
 
-    this.requireActor(全局事件系统).on('界面视图管理者/用户撤销项目树', () => {
-      this.历史状态机Actor.send({
-        type: '撤销请求',
-      });
-    });
+    this.getDependActor(全局事件系统).on(
+      '界面视图管理者/用户撤销项目树',
+      () => {
+        this.历史状态机Actor.send({
+          type: '撤销请求',
+        });
+      },
+    );
 
-    this.requireActor(全局事件系统).on('界面视图管理者/用户重做项目树', () => {
-      this.历史状态机Actor.send({
-        type: '重做请求',
-      });
-    });
+    this.getDependActor(全局事件系统).on(
+      '界面视图管理者/用户重做项目树',
+      () => {
+        this.历史状态机Actor.send({
+          type: '重做请求',
+        });
+      },
+    );
   }
+
+  retryFailCallback = () => {};
+
+  retryStartCallback = () => {
+    this.getDependActor(界面通知系统).showModal({
+      type: 'info',
+      title: '正在保存服务器数据...',
+      onOk: () => {},
+      // okButtonProps: {
+      //   loading: true,
+      // },
+    });
+  };
 
   addRecordToHistory(record: 历史记录) {
     this.历史状态机Actor.send({
