@@ -1,4 +1,4 @@
-import { ManagerBase } from '../base';
+import { ManagerBase } from '@/base';
 
 export class AppManager extends ManagerBase {
   public constructor() {

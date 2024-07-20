@@ -10,8 +10,8 @@ export abstract class ModuleBase implements Module {
   public setupProcessing: PromiseWithResolvers<void>;
   public startProcessing: PromiseWithResolvers<void>;
 
-  public requiredModules: Set<Module> = new Set(); // 当前 Actor 依赖的 Actors
-  public dependentModules: Set<Module> = new Set(); // 依赖当前 Actor 的 Actors
+  public requiredModules: Set<Module> = new Set(); // 当前 Module 依赖的 Modules
+  public dependentModules: Set<Module> = new Set(); // 依赖当前 Module 的 Modules
 
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
@@ -21,46 +21,46 @@ export abstract class ModuleBase implements Module {
     this.startProcessing = Promise.withResolvers<void>();
   }
 
-  // 导入其他 Actor
-  protected requireModules(...actors: Module[]): this {
-    actors.forEach((actor) => {
-      if (!this.requiredModules.has(actor)) {
-        this.requiredModules.add(actor);
-        if (actor instanceof ModuleBase) {
-          actor.addDependentActor(this);
+  // 导入其他 Module
+  protected requireModules(...modules: Module[]): this {
+    modules.forEach((module) => {
+      if (!this.requiredModules.has(module)) {
+        this.requiredModules.add(module);
+        if (module instanceof ModuleBase) {
+          module.addDependentModule(this);
         }
       }
     });
     return this;
   }
 
-  public abstract requires(...actors: Module[]): this;
+  public abstract requires(...modules: Module[]): this;
 
-  // 添加依赖当前 Actor 的 Actor
-  private addDependentActor(actor: Module): void {
-    this.dependentModules.add(actor);
+  // 添加依赖当前 Module 的 Module
+  private addDependentModule(module: Module): void {
+    this.dependentModules.add(module);
   }
 
-  // 获取指定类型的 Actor 实例
+  // 获取指定类型的 Module 实例
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getDependModule<T extends Module>(actorClass: new (...args: any[]) => T): T {
-    for (const actor of this.requiredModules) {
-      if (actor instanceof actorClass) {
-        return actor;
+  getDependModule<T extends Module>(moduleClass: new (...args: any[]) => T): T {
+    for (const module of this.requiredModules) {
+      if (module instanceof moduleClass) {
+        return module;
       }
     }
-    throw new Error(`Actor of type ${actorClass.name} not found`);
+    throw new Error(`Module of type ${moduleClass.name} not found`);
   }
 
   // 启动
   async setup(): Promise<void> {
     if (this.hasSetup) {
-      throw new Error('Actor already setup');
+      throw new Error('Module already setup');
     }
 
     await Promise.all(
       Array.from(this.requiredModules).map(
-        (actor) => actor.setupProcessing.promise,
+        (module) => module.setupProcessing.promise,
       ),
     );
     await this.onSetup(); // 调用 start 逻辑函数
@@ -70,12 +70,12 @@ export abstract class ModuleBase implements Module {
 
   async start(): Promise<void> {
     if (this.hasStarted) {
-      throw new Error('Actor already started');
+      throw new Error('Module already started');
     }
 
     await Promise.all(
       Array.from(this.requiredModules).map(
-        (actor) => actor.startProcessing.promise,
+        (module) => module.startProcessing.promise,
       ),
     );
     await this.onStart(); // 调用 start 逻辑函数

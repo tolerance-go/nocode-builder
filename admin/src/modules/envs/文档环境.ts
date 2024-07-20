@@ -1,4 +1,4 @@
-import { EnvironmentBase } from '../base';
+import { EnvironmentBase } from '@/base';
 import { 全局事件系统 } from '../systems';
 
 export class 文档环境 extends EnvironmentBase {
