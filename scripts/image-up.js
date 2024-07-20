@@ -1,6 +1,9 @@
 import { getVersion, executeCommand } from './utils.js';
-import { remoteRegistry, namespace } from '../config.js';
+import { config } from '../config.js';
 
+const {
+  docker: { remoteRegistry, namespace },
+} = config;
 // 获取版本号
 const version = await getVersion();
 

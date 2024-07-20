@@ -1,8 +1,12 @@
 import { readFile } from 'fs/promises';
 import { execa } from 'execa';
-import { remoteRegistry, namespace } from '../config.js';
+import { config } from '../config.js';
 import { resolve } from 'path';
 import { load } from 'js-yaml';
+
+const {
+  docker: { remoteRegistry, namespace },
+} = config;
 
 // 获取 package.json 中的版本号
 export const getVersion = async () => {
