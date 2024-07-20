@@ -1,5 +1,6 @@
 packages:
   - 'admin'
+  - 'admin-*'
   - 'server'
   - 'home'
   - 'docs'
