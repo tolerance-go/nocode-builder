@@ -82,7 +82,7 @@ export class UITreeManager extends ManagerBase {
                       <图标管理者Context.Provider value={图标管理者实例}>
                         <Provider store={界面状态管理者实例.store}>
                           <BrowserRouter
-                            basename={import.meta.env.DEV ? '' : '/admin-gh'}
+                            basename={import.meta.env.DEV ? '' : '/admin-story'}
                           >
                             <Routes>
                               <Route

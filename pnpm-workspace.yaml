@@ -4,5 +4,3 @@ packages:
   - 'server'
   - 'home'
   - 'docs'
-  - 'pro-components'
-  - 'pro-components/packages/*'

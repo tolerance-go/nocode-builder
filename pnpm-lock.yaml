@@ -232,7 +232,7 @@ importers:
         specifier: ^1.6.0
         version: 1.6.0(@types/node@20.14.2)(jsdom@24.1.0)(less@4.2.0)(sugarss@2.0.0)(terser@5.31.1)
 
-  admin-gh:
+  admin-story:
     dependencies:
       '@ant-design/icons':
         specifier: ^5.3.7
