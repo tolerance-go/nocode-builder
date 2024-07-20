@@ -1,6 +1,6 @@
 import { fullPathnames, 测试标识 } from '@/common/constants';
-import { RootState } from '@/core/managers/UIStoreManager/types';
-import { localStateFieldName } from '@/core/managers/UIStoreManager/constants';
+import { RootState } from '@/modules/managers/UIStoreManager/types';
+import { localStateFieldName } from '@/modules/managers/UIStoreManager/constants';
 import { 使用场景 } from '@cypress/support/utils';
 import localforage from 'localforage';
 
