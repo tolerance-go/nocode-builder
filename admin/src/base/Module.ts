@@ -1,10 +1,4 @@
-import {
-  Module,
-  Environment,
-  Manager,
-  System,
-  Controller,
-} from '@/common/types';
+import { Module, Environment, Manager, System, Controller } from './types';
 import { EngineBase } from './Engine';
 
 export abstract class ModuleBase implements Module {

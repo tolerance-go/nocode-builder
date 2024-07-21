@@ -1,6 +1,7 @@
-import { Engine, Module } from '@/common/types';
-import { topologicalSort, collectDependencies } from '@/common/utils';
 import { EngineManagerBase } from './EngineManager';
+import Module from 'module';
+import { Engine } from './types';
+import { collectDependencies, topologicalSort } from './utils';
 
 export abstract class EngineBase implements Engine {
   public requiredEngines: Set<Engine> = new Set(); // 当前 Engine 依赖的 Engines
