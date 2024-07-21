@@ -1,4 +1,4 @@
-import { StoreModule } from '../controllers/StoreController';
+import { StoreModule } from '../controllers/StoreModule';
 
 export type AppSlices = ReturnType<typeof StoreModule.createSlices>;
 export type AppStore = ReturnType<typeof StoreModule.createStore>;
