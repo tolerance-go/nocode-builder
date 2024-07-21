@@ -1,4 +1,4 @@
-import { EngineBase, ManagerBase } from '@/base';
+import { ManagerBase } from '@/base';
 import { fullPathnames, paths } from '@/common/constants';
 import {
   全局事件系统实例,
@@ -38,13 +38,6 @@ import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
 
 export class UITreeManager extends ManagerBase {
-  engine;
-
-  constructor(engine: EngineBase) {
-    super();
-    this.engine = engine;
-  }
-
   requireModules() {
     super.requireModules(
       new 项目树历史纪录管理者(this.engine),

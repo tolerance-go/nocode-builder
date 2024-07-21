@@ -5,21 +5,35 @@ import {
   System,
   Controller,
 } from '@/common/types';
+import { EngineBase } from './Engine';
 
 export abstract class ModuleBase implements Module {
   public setupProcessing: PromiseWithResolvers<void>;
   public startProcessing: PromiseWithResolvers<void>;
-
   public requiredModules: Set<Module> = new Set(); // 当前 Module 依赖的 Modules
   public dependentModules: Set<Module> = new Set(); // 依赖当前 Module 的 Modules
 
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
+  private engineInstance: EngineBase | null = null;
+
   constructor() {
     this.setupProcessing = Promise.withResolvers<void>();
     this.startProcessing = Promise.withResolvers<void>();
     this.requireModules();
+  }
+
+  set engine(instance: EngineBase) {
+    this.engineInstance = instance;
+  }
+
+  get engine(): EngineBase {
+    if (!this.engineInstance) {
+      throw new Error('Engine not set');
+    }
+
+    return this.engineInstance;
   }
 
   // 导入其他 Module

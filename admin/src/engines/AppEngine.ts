@@ -8,6 +8,6 @@ export class AppEngine extends EngineBase {
   }
 
   providerModules() {
-    super.providerModules((engine) => new UITreeManager(engine));
+    super.providerModules(new UITreeManager());
   }
 }

@@ -16,8 +16,6 @@ export class UIStoreManager extends ManagerBase {
 
   private engineApi: EngineAPI;
 
-  private storeController: StoreController;
-
   constructor(engineApi: EngineAPI) {
     super();
 
@@ -27,14 +25,13 @@ export class UIStoreManager extends ManagerBase {
     this.initialState = localState;
 
     this.engineApi = engineApi;
-    this.storeController = new StoreController(this.initialState);
   }
 
   requireModules() {
     super.requireModules(
       全局事件系统实例,
       全局界面导航系统实例,
-      this.storeController,
+      new StoreController(this.initialState),
     );
   }
 
@@ -51,8 +48,10 @@ export class UIStoreManager extends ManagerBase {
     this.getDependModule(全局事件系统).on(
       '项目树历史记录管理者/指针移动',
       (event) => {
-        this.storeController.store.dispatch(
-          this.storeController.slices.projectTree.actions.更新项目节点树(
+        this.getDependModule(StoreController).store.dispatch(
+          this.getDependModule(
+            StoreController,
+          ).slices.projectTree.actions.更新项目节点树(
             event.历史指针 === -1
               ? {
                   结构树: this.initialState?.projectTree.项目结构树 ?? [],
@@ -69,9 +68,9 @@ export class UIStoreManager extends ManagerBase {
   }
 
   注册路由更新监听() {
-    let prevState = this.storeController.store.getState();
-    this.storeController.store.subscribe(() => {
-      const nextState = this.storeController.store.getState();
+    let prevState = this.getDependModule(StoreController).store.getState();
+    this.getDependModule(StoreController).store.subscribe(() => {
+      const nextState = this.getDependModule(StoreController).store.getState();
       if (
         nextState.location.pathname !== prevState.location.pathname &&
         nextState.location.pathname
@@ -85,9 +84,9 @@ export class UIStoreManager extends ManagerBase {
   }
 
   注册同步用户信息监听() {
-    let prevState = this.storeController.store.getState();
-    this.storeController.store.subscribe(() => {
-      const nextState = this.storeController.store.getState();
+    let prevState = this.getDependModule(StoreController).store.getState();
+    this.getDependModule(StoreController).store.subscribe(() => {
+      const nextState = this.getDependModule(StoreController).store.getState();
       if (nextState.userInfo.token !== prevState.userInfo.token) {
         this.请求同步用户信息();
       }
@@ -97,24 +96,29 @@ export class UIStoreManager extends ManagerBase {
 
   async 请求同步用户信息() {
     const userInfo = await api.users.getUserByToken();
-    this.storeController.store.dispatch(
-      this.storeController.slices.userInfo.actions.更新用户名(userInfo.name),
+    this.getDependModule(StoreController).store.dispatch(
+      this.getDependModule(StoreController).slices.userInfo.actions.更新用户名(
+        userInfo.name,
+      ),
     );
   }
 
   检查本地用户token同步到内存中() {
     const token = store.get('token');
     if (token) {
-      this.storeController.store.dispatch(
-        this.storeController.slices.userInfo.actions.更新token(token),
+      this.getDependModule(StoreController).store.dispatch(
+        this.getDependModule(StoreController).slices.userInfo.actions.更新token(
+          token,
+        ),
       );
     }
   }
 
   监听项目节点激活状态变化并修改url() {
-    let previousState = this.storeController.store.getState(); // 初始化之前的 state
-    this.storeController.store.subscribe(() => {
-      const currentState = this.storeController.store.getState(); // 获取当前的 state
+    let previousState = this.getDependModule(StoreController).store.getState(); // 初始化之前的 state
+    this.getDependModule(StoreController).store.subscribe(() => {
+      const currentState =
+        this.getDependModule(StoreController).store.getState(); // 获取当前的 state
 
       if (
         currentState.projectTree.激活的节点的key !==
@@ -148,8 +152,8 @@ export class UIStoreManager extends ManagerBase {
   }
 
   注册监听保存状态到本地() {
-    this.storeController.store.subscribe(() => {
-      const state = this.storeController.store.getState();
+    this.getDependModule(StoreController).store.subscribe(() => {
+      const state = this.getDependModule(StoreController).store.getState();
 
       const next = this.过滤掉某些不存储到本地的state(state);
 

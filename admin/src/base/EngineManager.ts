@@ -1,31 +1,23 @@
-import { Engine } from '@/common/types';
+import { Engine, EngineManager } from '@/common/types';
 import { collectDependencies, topologicalSort } from '@/common/utils';
 
-export type EngineConstructor =
-  | Engine
-  | ((engineManager: EngineManager) => Engine);
-
-export class EngineManager {
+export class EngineManagerBase implements EngineManager {
   private engines: Set<Engine>;
   private dependencies: Map<Engine, Set<Engine>>;
   private dependents: Map<Engine, Set<Engine>>;
 
-  constructor(...engineConstructors: EngineConstructor[]) {
+  constructor(...engineConstructors: Engine[]) {
     this.engines = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
     this.initEngines(engineConstructors);
   }
 
-  private initEngines(engineConstructors: EngineConstructor[]) {
+  private initEngines(engineConstructors: Engine[]) {
     // 初始化 Actors
-    engineConstructors.forEach((ctor) => {
-      let engine: Engine;
-      if (typeof ctor === 'function') {
-        engine = ctor(this);
-      } else {
-        engine = ctor;
-      }
+    engineConstructors.forEach((engine) => {
+      engine.engineManager = this;
+
       this.engines.add(engine);
     });
 

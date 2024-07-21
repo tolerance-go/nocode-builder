@@ -1,16 +1,17 @@
 import { Engine, Module } from '@/common/types';
 import { topologicalSort, collectDependencies } from '@/common/utils';
-
-export type ModuleConstructor = Module | ((engine: EngineBase) => Module);
+import { EngineManagerBase } from './EngineManager';
 
 export abstract class EngineBase implements Engine {
-  private modules: Set<Module>;
-  private dependencies: Map<Module, Set<Module>>;
-  private dependents: Map<Module, Set<Module>>;
-
   public requiredEngines: Set<Engine> = new Set(); // 当前 Engine 依赖的 Engines
   public dependentEngines: Set<Engine> = new Set(); // 依赖当前 Engine 的 Engines
   public launchProcessing: PromiseWithResolvers<void>;
+
+  private modules: Set<Module>;
+  private dependencies: Map<Module, Set<Module>>;
+  private dependents: Map<Module, Set<Module>>;
+  private engineManagerInstance: EngineManagerBase | null = null;
+
   protected hasLaunched: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   constructor() {
@@ -19,6 +20,18 @@ export abstract class EngineBase implements Engine {
     this.dependents = new Map();
     this.launchProcessing = Promise.withResolvers<void>();
     this.requireEngines();
+  }
+
+  set engineManager(instance: EngineManagerBase) {
+    this.engineManagerInstance = instance;
+  }
+
+  get engineManager(): EngineManagerBase {
+    if (!this.engineManagerInstance) {
+      throw new Error('EngineManager not set');
+    }
+
+    return this.engineManagerInstance;
   }
 
   protected requireEngines(...engines: Engine[]) {
@@ -32,15 +45,11 @@ export abstract class EngineBase implements Engine {
     });
   }
 
-  protected providerModules(...moduleConstructors: ModuleConstructor[]) {
+  protected providerModules(...moduleConstructors: Module[]) {
     // 初始化 Actors
-    moduleConstructors.forEach((ctor) => {
-      let module: Module;
-      if (typeof ctor === 'function') {
-        module = ctor(this);
-      } else {
-        module = ctor;
-      }
+    moduleConstructors.forEach((module) => {
+      module.engine = this;
+
       this.modules.add(module);
     });
 
