@@ -5,10 +5,6 @@ import {
   全局界面导航系统实例,
   全局界面通知系统实例,
 } from '@/globals';
-import { 文档环境 } from '@/modules/envs';
-import { 界面导航系统 } from '@/modules/systems';
-import { 全局事件系统 } from '@/modules/systems/全局事件系统';
-import { 界面通知系统 } from '@/modules/systems/界面通知系统';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -36,17 +32,21 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
+import { 全局事件系统 } from '../全局事件系统';
+import { 界面导航系统 } from '../界面导航系统';
+import { 界面通知系统 } from '../界面通知系统';
+import { 文档环境模块 } from '../文档环境模块';
 
 export class UITreeManager extends ManagerBase {
   requireModules() {
     super.requireModules(
       new 项目树历史纪录管理者(this.engine),
-      new 文档环境(document),
+      new 文档环境模块(document),
       全局界面通知系统实例,
       new 验证管理者(),
       new 图标管理者(),
       new 跟随鼠标显示内容管理者(),
-      new UIStoreManager(this.engine),
+      new UIStoreManager(),
       全局事件系统实例,
       全局界面导航系统实例,
     );

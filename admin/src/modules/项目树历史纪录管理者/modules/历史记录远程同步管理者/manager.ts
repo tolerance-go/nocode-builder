@@ -1,14 +1,6 @@
 import { authPathnames, localKeys } from '@/common/constants';
 import { StateController } from '@/common/controllers';
 import { delay } from '@/common/utils';
-import { EngineAPI, ManagerBase } from '@/base';
-import {
-  compareTrees,
-  DiffResult,
-  ProjectStructureTreeDataNode,
-  ProjectTreeNodeDataRecord,
-} from '@/modules/managers/UIStoreManager';
-import { 全局事件系统 } from '@/core/systems';
 import { last } from 'lodash-es';
 import { createActor } from 'xstate';
 import { 历史记录 } from '../../types';
@@ -16,6 +8,14 @@ import {
   历史记录远程同步状态机,
   历史记录远程同步状态机SnapshotType,
 } from './states';
+import { ManagerBase } from '@/base';
+import {
+  DiffResult,
+  ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecord,
+  compareTrees,
+} from '@/modules/UIStoreManager';
+import { 全局事件系统 } from '@/modules/全局事件系统';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];
@@ -47,14 +47,6 @@ export class 历史记录远程同步管理者 extends ManagerBase {
   private 历史记录远程同步状态机;
   private stateController;
   private 引擎api: EngineAPI;
-
-  get 当前同步状态() {
-    return this.历史记录远程同步状态机.getSnapshot().value;
-  }
-
-  public requireModules(全局事件系统实例: 全局事件系统): this {
-    return super.requireModules(全局事件系统实例);
-  }
 
   constructor(引擎api: EngineAPI, params: SyncHistoryManagerEmployeeParams) {
     super();
@@ -93,6 +85,30 @@ export class 历史记录远程同步管理者 extends ManagerBase {
     this.retryStartCallback = retryStartCallback;
     this.retryFailCallback = retryFailCallback;
     this.syncFunction = syncFunction;
+  }
+
+  get 当前同步状态() {
+    return this.历史记录远程同步状态机.getSnapshot().value;
+  }
+
+  public requireModules(全局事件系统实例: 全局事件系统) {
+    super.requireModules(全局事件系统实例);
+  }
+
+  public async updateHistories(newHistory: 历史记录[]): Promise<void> {
+    const state = this.stateController.getState();
+    if (this.当前同步状态是否为同步中()) {
+      this.stateController.updateState({ pendingUpdate: newHistory });
+    } else if (this.当前同步状态 === '同步已失败') {
+      this.stateController.updateState({ historyB: newHistory });
+      await this.startSync();
+    } else {
+      this.stateController.updateState({
+        historyA: state.historyB,
+        historyB: newHistory,
+      });
+      await this.startSync();
+    }
   }
 
   async onSetup(): Promise<void> {
@@ -157,21 +173,6 @@ export class 历史记录远程同步管理者 extends ManagerBase {
   }
 
   // 接受新的历史记录数组，并更新 A 和 B
-  public async updateHistories(newHistory: 历史记录[]): Promise<void> {
-    const state = this.stateController.getState();
-    if (this.当前同步状态是否为同步中()) {
-      this.stateController.updateState({ pendingUpdate: newHistory });
-    } else if (this.当前同步状态 === '同步已失败') {
-      this.stateController.updateState({ historyB: newHistory });
-      await this.startSync();
-    } else {
-      this.stateController.updateState({
-        historyA: state.historyB,
-        historyB: newHistory,
-      });
-      await this.startSync();
-    }
-  }
 
   // 比较 historyA 和 historyB 的差异
   private compareHistories() {

@@ -24,18 +24,6 @@ type ModalOptions = ModalFuncProps & {
 };
 
 export class 界面通知系统 extends SystemBase {
-  requireModules(): this {
-    return super.requireModules();
-  }
-
-  private messageApi: MessageInstance | null = null;
-  private notificationApi: NotificationInstance | null = null;
-  private modalApi: HookAPI | null = null;
-
-  private messageQueue: Array<() => void> = [];
-  private notificationQueue: Array<() => void> = [];
-  private modalQueue: Array<() => void> = [];
-
   setMessageApi = (messageApi: MessageInstance): void => {
     this.messageApi = messageApi;
     this.processQueue(this.messageQueue);
@@ -50,15 +38,6 @@ export class 界面通知系统 extends SystemBase {
     this.modalApi = modalApi;
     this.processQueue(this.modalQueue);
   };
-
-  private processQueue(queue: Array<() => void>): void {
-    while (queue.length > 0) {
-      const action = queue.shift();
-      if (action) {
-        action();
-      }
-    }
-  }
 
   showMessage = (options: MessageOptions): Promise<void> => {
     return new Promise((resolve) => {
@@ -127,4 +106,21 @@ export class 界面通知系统 extends SystemBase {
       action();
     });
   };
+
+  private messageApi: MessageInstance | null = null;
+  private notificationApi: NotificationInstance | null = null;
+  private modalApi: HookAPI | null = null;
+
+  private messageQueue: Array<() => void> = [];
+  private notificationQueue: Array<() => void> = [];
+  private modalQueue: Array<() => void> = [];
+
+  private processQueue(queue: Array<() => void>): void {
+    while (queue.length > 0) {
+      const action = queue.shift();
+      if (action) {
+        action();
+      }
+    }
+  }
 }

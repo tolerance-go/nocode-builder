@@ -1,6 +1,6 @@
 import { EngineBase } from '@/base';
-import { UITreeManager } from '@/modules/managers';
 import { BaseEngine } from './BaseEngine';
+import { UITreeManager } from '@/modules/UITreeManager';
 
 export class AppEngine extends EngineBase {
   requireEngines() {

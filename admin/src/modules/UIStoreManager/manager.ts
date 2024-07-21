@@ -2,14 +2,14 @@ import { ProjectTypeEnum } from '@/_gen/models';
 import { ManagerBase } from '@/base';
 import { paths } from '@/common/constants';
 import { api, 全局事件系统实例, 全局界面导航系统实例 } from '@/globals';
-import { 界面导航系统 } from '@/modules/systems';
-import { 全局事件系统 } from '@/modules/systems/全局事件系统';
 import { produce } from 'immer';
 import store from 'store2';
 import { localStateFieldName } from './constants';
-import { StoreModule } from './controllers';
 import { RootState } from './types';
 import { BaseEngine } from '@/engines/BaseEngine';
+import { StoreModule } from '../StoreModule';
+import { 全局事件系统 } from '../全局事件系统';
+import { 界面导航系统 } from '../界面导航系统';
 
 export class UIStoreManager extends ManagerBase {
   private initialState: RootState | null;

@@ -11,10 +11,6 @@ import { createElement } from 'react';
 import { 图标id到组件的映射, 图标组件id联合 } from './types';
 
 export class 图标管理者 extends ManagerBase {
-  requireModules(): this {
-    return super.requireModules();
-  }
-
   public static 跟随组件id到组件映射: 图标id到组件的映射 = {
     视图项目节点: BuildOutlined,
     数据表项目节点: TableOutlined,

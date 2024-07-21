@@ -1,10 +1,6 @@
 import { SystemBase } from '@/base';
 
 export class 界面导航系统 extends SystemBase {
-  requireModules(): this {
-    return super.requireModules();
-  }
-
   navigateFunction: ((url: string) => void) | null = null;
 
   setNavigate = (navigate: (url: string) => void): void => {

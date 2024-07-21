@@ -1,16 +1,15 @@
-import { 全局事件系统 } from '@/modules/systems';
-import { configureStore, Middleware } from '@reduxjs/toolkit';
-import {
-  createLayoutSlice,
-  createLocationSlice,
-  createProjectTreeSlice,
-  createUserInfoSlice,
-} from './managers/UIStoreManager/states';
-import { AppMiddleware, RootState } from './managers/UIStoreManager/types';
-import { findNode } from './managers/UIStoreManager/utils';
-import { LayoutStateController } from './managers/UIStoreManager/controllers/LayoutStateController';
 import { ModuleBase } from '@/base';
 import { 全局事件系统实例 } from '@/globals';
+import { configureStore, Middleware } from '@reduxjs/toolkit';
+import { AppMiddleware, findNode, RootState } from './UIStoreManager';
+import { LayoutStateController } from './UIStoreManager/controllers';
+import {
+  createProjectTreeSlice,
+  createLayoutSlice,
+  createLocationSlice,
+  createUserInfoSlice,
+} from './UIStoreManager/states';
+import { 全局事件系统 } from './全局事件系统';
 
 export class StoreModule extends ModuleBase {
   static createSlices = () => {

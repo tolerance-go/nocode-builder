@@ -1,12 +1,13 @@
 import { SystemBase } from '@/base';
-import {
-  ProjectStructureTreeDataNode,
-  ProjectTreeNodeDataRecord,
-  ProjectTreeNodeDataRecordItem,
-} from '@/modules/managers/UIStoreManager/types';
+
 import { ViewKey } from '@/common/types';
 import Emittery from 'emittery';
-import { 历史记录 } from '@/modules/managers/项目树历史纪录管理者/types';
+import {
+  ProjectTreeNodeDataRecordItem,
+  ProjectStructureTreeDataNode,
+  ProjectTreeNodeDataRecord,
+} from '../UIStoreManager';
+import { 历史记录 } from '../项目树历史纪录管理者/types';
 
 export type 全局事件映射 = {
   '界面状态管理者/路由更新': {
@@ -58,22 +59,8 @@ type EventCacheItem<T> = {
 export class 全局事件系统<
   T extends Record<string, unknown> = 全局事件映射,
 > extends SystemBase {
-  requireModules(): this {
-    return super.requireModules();
-  }
-
   private emitter = new Emittery<T>();
   private eventCache: EventCacheItem<T>[] = [];
-
-  protected async onStart() {
-    // 按顺序发送缓存的事件
-    for (const { eventName, eventData } of this.eventCache) {
-      await this.sendEvent(eventName, eventData);
-    }
-
-    // 清空缓存
-    this.eventCache = [];
-  }
 
   public on<EventName extends keyof T>(
     eventName: EventName,
@@ -99,6 +86,16 @@ export class 全局事件系统<
       // 缓存事件
       this.eventCache.push({ eventName, eventData } as EventCacheItem<T>);
     }
+  }
+
+  protected async onStart() {
+    // 按顺序发送缓存的事件
+    for (const { eventName, eventData } of this.eventCache) {
+      await this.sendEvent(eventName, eventData);
+    }
+
+    // 清空缓存
+    this.eventCache = [];
   }
 
   // 内部方法，用于发送事件并打印

@@ -1,6 +1,4 @@
-import { EngineAPI, ManagerBase } from '@/base';
-import { 全局事件系统 } from '@/modules/systems/全局事件系统';
-import { 界面通知系统 } from '@/modules/systems/界面通知系统';
+import { ManagerBase } from '@/base';
 import { api, 全局事件系统实例, 全局界面通知系统实例 } from '@/globals';
 import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
@@ -10,17 +8,33 @@ import {
   ProjectTreeNodeDataRecord,
 } from '../UIStoreManager';
 import { 历史状态机 } from './states';
-import {
-  convertDiffResultToProjectDiffDto,
-  历史记录远程同步管理者,
-} from './sub-managers/历史记录远程同步管理者';
 import { 历史记录 } from './types';
+import { 全局事件系统 } from '../全局事件系统';
+import { 界面通知系统 } from '../界面通知系统';
+import {
+  历史记录远程同步管理者,
+  convertDiffResultToProjectDiffDto,
+} from './modules/历史记录远程同步管理者';
 
 export class 项目树历史纪录管理者 extends ManagerBase {
   private 历史指针: number = -1;
   private 历史堆栈: 历史记录[] = [];
   private 历史状态机Actor;
-  private 引擎api: EngineAPI;
+
+  public constructor() {
+    super();
+
+    this.历史状态机Actor = createActor(历史状态机, {
+      inspect:
+        window.Cypress || import.meta.env.PROD
+          ? undefined
+          : createBrowserInspector().inspect,
+      input: {
+        历史堆栈: this.历史堆栈,
+        历史指针: this.历史指针,
+      },
+    });
+  }
 
   requireModules() {
     super.requireModules(
@@ -44,23 +58,6 @@ export class 项目树历史纪录管理者 extends ManagerBase {
         },
       }).requires(全局事件系统实例),
     );
-  }
-
-  public constructor(引擎api: EngineAPI) {
-    super();
-
-    this.引擎api = 引擎api;
-
-    this.历史状态机Actor = createActor(历史状态机, {
-      inspect:
-        window.Cypress || import.meta.env.PROD
-          ? undefined
-          : createBrowserInspector().inspect,
-      input: {
-        历史堆栈: this.历史堆栈,
-        历史指针: this.历史指针,
-      },
-    });
   }
 
   protected async onSetup(): Promise<void> {
