@@ -1,4 +1,4 @@
-import { ManagerBase } from '@/base';
+import { ModuleBase } from '@/base';
 // 定义PostgreSQL非法字符
 const illegalPostgresqlChars = [
   '\x00',
@@ -20,7 +20,7 @@ const illegalPostgresqlChars = [
   ':',
 ];
 
-export class 验证管理者 extends ManagerBase {
+export class 验证管理者 extends ModuleBase {
   项目树节点标题是否有效(input: string): string | null {
     if (!input.trim()) {
       return '必须提供项目或者项目组名';

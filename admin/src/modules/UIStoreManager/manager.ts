@@ -1,5 +1,5 @@
 import { ProjectTypeEnum } from '@/_gen/models';
-import { ManagerBase } from '@/base';
+import { ModuleBase } from '@/base';
 import { paths } from '@/common/constants';
 import { api, 全局事件系统实例, 全局界面导航系统实例 } from '@/globals';
 import { produce } from 'immer';
@@ -11,7 +11,7 @@ import { StoreModule } from '../StoreModule';
 import { 全局事件系统 } from '../全局事件系统';
 import { 界面导航系统 } from '../界面导航系统';
 
-export class UIStoreManager extends ManagerBase {
+export class UIStoreManager extends ModuleBase {
   private initialState: RootState | null;
 
   constructor() {

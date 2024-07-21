@@ -7,7 +7,7 @@ import {
   历史记录远程同步状态机,
   历史记录远程同步状态机SnapshotType,
 } from './states';
-import { ManagerBase } from '@/base';
+import { ModuleBase } from '@/base';
 import {
   DiffResult,
   ProjectStructureTreeDataNode,
@@ -38,7 +38,7 @@ type SyncFunction = (
   newTreeDataRecord?: ProjectTreeNodeDataRecord,
 ) => Promise<void>;
 
-export class 历史记录远程同步管理者 extends ManagerBase {
+export class 历史记录远程同步管理者 extends ModuleBase {
   private currentPathname: string | null = null;
   private readonly retryStartCallback: RetryStartCallback; // 初始重试回调函数
   private readonly retryFailCallback: RetryFailCallback; // 重试失败回调函数

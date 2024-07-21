@@ -1,4 +1,4 @@
-import { ManagerBase } from '@/base';
+import { ModuleBase } from '@/base';
 import { api, 全局事件系统实例, 全局界面通知系统实例 } from '@/globals';
 import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
@@ -16,7 +16,7 @@ import {
   convertDiffResultToProjectDiffDto,
 } from './modules/历史记录远程同步管理者';
 
-export class 项目树历史纪录管理者 extends ManagerBase {
+export class 项目树历史纪录管理者 extends ModuleBase {
   private 历史指针: number = -1;
   private 历史堆栈: 历史记录[] = [];
   private 历史状态机Actor;

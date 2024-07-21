@@ -93,11 +93,3 @@ export abstract class ModuleBase implements Module {
     this.dependentModules.add(module);
   }
 }
-
-export abstract class SystemBase extends ModuleBase implements System {}
-
-export abstract class ManagerBase extends ModuleBase implements Manager {}
-
-export abstract class EnvironmentBase
-  extends ModuleBase
-  implements Environment {}

@@ -1,4 +1,4 @@
-import { ManagerBase } from '@/base';
+import { ModuleBase } from '@/base';
 import { fullPathnames, paths } from '@/common/constants';
 import {
   全局事件系统实例,
@@ -37,7 +37,7 @@ import { 界面导航系统 } from '../界面导航系统';
 import { 界面通知系统 } from '../界面通知系统';
 import { 文档环境模块 } from '../文档环境模块';
 
-export class UITreeManager extends ManagerBase {
+export class UITreeManager extends ModuleBase {
   requireModules() {
     super.requireModules(
       new 项目树历史纪录管理者(this.engine),
