@@ -4,4 +4,4 @@ export * from './图标管理者';
 export * from './验证管理者';
 export * from './UIStoreManager';
 export * from './UITreeManager';
-export * from './AppManager';
+export * from './AsyncStateManager';

@@ -9,11 +9,30 @@ module.exports = {
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
-  plugins: ['react-refresh'],
+  plugins: ['react-refresh', 'sort-class-members'],
   rules: {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
+    ],
+    'sort-class-members/sort-class-members': [
+      2,
+      {
+        order: [
+          '[static-properties]',
+          '[static-methods]',
+          '[properties]',
+          'constructor',
+          '[methods]',
+        ],
+        groups: {
+          'static-properties': [{ type: 'property', static: true }],
+          'static-methods': [{ type: 'method', static: true }],
+          properties: [{ type: 'property', static: false }],
+          methods: [{ type: 'method', static: false }],
+        },
+        accessorPairPositioning: 'getThenSet',
+      },
     ],
   },
 };

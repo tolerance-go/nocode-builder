@@ -1,13 +1,13 @@
 import { EngineBase } from '@/base';
-import { AsyncStateController } from '@/common/controllers/AsyncStateController';
+import { AsyncStateManager } from '@/modules/managers';
 
 export class BaseEngine extends EngineBase {
   providerModules() {
-    super.providerModules(new AsyncStateController());
+    super.providerModules(new AsyncStateManager());
   }
 
   protected async onLaunch(): Promise<void> {
-    const asyncStateController = this.getModule(AsyncStateController);
+    const asyncStateManager = this.getModule(AsyncStateManager);
   }
 
   updateState() {}

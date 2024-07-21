@@ -1,6 +1,5 @@
 import { EngineManagerBase } from './EngineManager';
-import Module from 'module';
-import { Engine } from './types';
+import { Engine, Module } from './types';
 import { collectDependencies, topologicalSort } from './utils';
 
 export abstract class EngineBase implements Engine {

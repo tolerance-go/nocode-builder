@@ -7,10 +7,12 @@ export class AsyncStateManager extends ManagerBase {
 
   constructor() {
     super();
-    this.异步同步状态 = createActor(异步同步状态机).start();
+    this.异步同步状态 = createActor(异步同步状态机);
   }
 
   protected async onSetup(): Promise<void> {
-    this.异步同步状态.start();
+    this.异步同步状态.start().subscribe(() => {
+      console.log('异步同步状态', this.异步同步状态.getSnapshot().value);
+    });
   }
 }
