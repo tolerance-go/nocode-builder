@@ -5,7 +5,8 @@ import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '@/modules/managers/UIStoreManager';
+} from '@/modules/UIStoreManager';
+
 // import { handleUpdates } from './handleUpdates';
 
 // /**

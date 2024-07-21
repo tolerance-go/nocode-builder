@@ -1,5 +1,5 @@
-import { TreeNode } from '../../../../types/tree-types';
-import { insertNodeAtIndex } from '../../misc/insertNodeAtIndex';
+import { TreeNode } from '@/modules/UIStoreManager/types';
+import { insertNodeAtIndex } from '../../misc';
 
 export const 插入节点 = <T extends TreeNode<T>>(
   nodes: T[],

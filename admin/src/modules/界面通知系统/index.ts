@@ -1,10 +1,10 @@
-import { SystemBase } from '@/base';
 import { 测试标识 } from '@/common/constants';
 import { MessageInstance } from 'antd/es/message/interface';
 import { HookAPI } from 'antd/es/modal/useModal';
 import { NotificationInstance } from 'antd/es/notification/interface';
 import { createElement } from 'react';
 import { ModalFuncProps } from 'antd';
+import { ModuleBase } from '@/base';
 
 interface MessageOptions {
   type: 'success' | 'error' | 'info' | 'warning' | 'loading';
@@ -23,7 +23,7 @@ type ModalOptions = ModalFuncProps & {
   type: 'info' | 'success' | 'error' | 'warning' | 'confirm';
 };
 
-export class 界面通知系统 extends SystemBase {
+export class 界面通知系统 extends ModuleBase {
   setMessageApi = (messageApi: MessageInstance): void => {
     this.messageApi = messageApi;
     this.processQueue(this.messageQueue);

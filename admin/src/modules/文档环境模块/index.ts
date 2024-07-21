@@ -1,8 +1,8 @@
-import { EnvironmentBase } from '@/base';
 import { 全局事件系统实例 } from '@/globals';
 import { 全局事件系统 } from '../全局事件系统';
+import { ModuleBase } from '@/base';
 
-export class 文档环境模块 extends EnvironmentBase {
+export class 文档环境模块 extends ModuleBase {
   private document: Document;
 
   public constructor(document: Document) {

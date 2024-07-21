@@ -1,4 +1,4 @@
-import { StoreModule } from '../../../StoreModule';
+import { StoreModule } from '@/modules/StoreModule';
 
 export type AppSlices = ReturnType<typeof StoreModule.createSlices>;
 export type AppStore = ReturnType<typeof StoreModule.createStore>;

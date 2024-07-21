@@ -6,7 +6,7 @@ import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '@/modules/managers/UIStoreManager';
+} from '@/modules/UIStoreManager';
 
 /**
  * 处理新增操作

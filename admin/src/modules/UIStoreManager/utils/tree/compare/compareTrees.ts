@@ -1,5 +1,5 @@
 import { ViewKey } from '@/common/types';
-import { TreeNode } from '../../../types/tree-types';
+import { TreeNode } from '@/modules/UIStoreManager/types';
 
 export type 操作类型 = '新增' | '删除' | '移动' | '更新';
 

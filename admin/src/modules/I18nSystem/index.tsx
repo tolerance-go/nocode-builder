@@ -1,9 +1,9 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 
-import { SystemBase } from '@/base';
 import en from './lng/en.json';
 import zh from './lng/zh.json';
+import { ModuleBase } from '@/base';
 
 export const resources = {
   en: {
@@ -23,6 +23,6 @@ i18n.use(initReactI18next).init({
   },
 });
 
-export class I18nSystem extends SystemBase {
+export class I18nSystem extends ModuleBase {
   i18n = i18n;
 }

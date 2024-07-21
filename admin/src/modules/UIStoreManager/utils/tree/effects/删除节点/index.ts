@@ -1,4 +1,4 @@
-import { TreeNode } from '../../../../types/tree-types';
+import { TreeNode } from '@/modules/UIStoreManager/types';
 
 interface RemoveResult<T> {
   removedNode: T;

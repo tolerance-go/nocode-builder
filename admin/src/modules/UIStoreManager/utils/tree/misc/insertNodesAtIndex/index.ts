@@ -1,4 +1,4 @@
-import { TreeNode } from '../../../../types/tree-types';
+import { TreeNode } from '@/modules/UIStoreManager/types';
 
 export function insertNodesAtIndex<T extends TreeNode<T>>(
   nodes: T[],
