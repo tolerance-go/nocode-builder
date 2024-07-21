@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { EngineManagerBase } from '.';
 import { EngineBase } from '../Engine';
 import { collectDependencies, topologicalSort } from '../utils';
+import { ModuleBase } from '../Module';
 
 class TestEngine extends EngineBase {
   protected async onLaunch() {
@@ -72,5 +73,66 @@ describe('EngineManagerBase', () => {
     await expect(engineManager.launch()).rejects.toThrow(
       'Engine already launch',
     );
+  });
+
+  it('应该处理引擎之间的依赖关系', async () => {
+    engineA['requireEngines'](engineB);
+    engineManager = new EngineManagerBase(engineA, engineB);
+
+    expect(engineB.dependentEngines.has(engineA)).toBe(true);
+    expect(engineA.requiredEngines.has(engineB)).toBe(true);
+
+    await engineManager.launch();
+    expect(engineA['hasLaunched']).toBe(true);
+    expect(engineB['hasLaunched']).toBe(true);
+
+    // 确保 B 在 A 之前启动
+    const sortedEngines = topologicalSort(
+      engineManager['engines'],
+      engineManager['dependencies'],
+    );
+    expect(sortedEngines.indexOf(engineB)).toBeLessThan(
+      sortedEngines.indexOf(engineA),
+    );
+  });
+
+  it('应该处理引擎内部的模块执行顺序', async () => {
+    engineA['requireEngines'](engineB);
+
+    let currentIndex = 0;
+    class TestModuleA extends ModuleBase {
+      public setupOrder: number = -1;
+      public startOrder: number = -1;
+      async onSetup() {
+        this.setupOrder = currentIndex++;
+      }
+
+      async onStart() {
+        this.startOrder = currentIndex++;
+      }
+    }
+    class TestModuleB extends ModuleBase {
+      public setupOrder: number = -1;
+      public startOrder: number = -1;
+      async onSetup() {
+        this.setupOrder = currentIndex++;
+      }
+
+      async onStart() {
+        this.startOrder = currentIndex++;
+      }
+    }
+    const moduleA = new TestModuleA();
+    const moduleB = new TestModuleB();
+
+    engineA['providerModules'](moduleA);
+    engineB['providerModules'](moduleB);
+
+    await engineManager.launch();
+
+    expect(moduleB.setupOrder).toBe(0);
+    expect(moduleB.startOrder).toBe(1);
+    expect(moduleA.setupOrder).toBe(2);
+    expect(moduleA.startOrder).toBe(3);
   });
 });
