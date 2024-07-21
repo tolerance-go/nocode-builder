@@ -5,7 +5,9 @@ import './index.css';
 import { EngineManager } from './base/EngineManager';
 
 const main = async () => {
-  await new EngineManager(new AppEngine()).launch();
+  await new EngineManager(
+    (engineManager) => new AppEngine(engineManager),
+  ).launch();
 };
 
 main();

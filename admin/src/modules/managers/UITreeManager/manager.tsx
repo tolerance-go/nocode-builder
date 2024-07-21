@@ -1,13 +1,16 @@
 import { ManagerBase } from '@/base';
+import { EngineManager } from '@/base/EngineManager';
 import { fullPathnames, paths } from '@/common/constants';
-import { 界面导航系统 } from '@/modules/systems';
-import { 全局事件系统 } from '@/modules/systems/全局事件系统';
-import { 界面通知系统 } from '@/modules/systems/界面通知系统';
+import { Engine } from '@/common/types';
 import {
   全局事件系统实例,
   全局界面导航系统实例,
   全局界面通知系统实例,
 } from '@/globals';
+import { 文档环境 } from '@/modules/envs';
+import { 界面导航系统 } from '@/modules/systems';
+import { 全局事件系统 } from '@/modules/systems/全局事件系统';
+import { 界面通知系统 } from '@/modules/systems/界面通知系统';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -15,6 +18,7 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { UIStoreManager } from '../UIStoreManager';
 import { 图标管理者 } from '../图标管理者';
 import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
+import { 项目树历史纪录管理者 } from '../项目树历史纪录管理者';
 import { 验证管理者 } from '../验证管理者';
 import {
   UIStoreManagerContext,
@@ -34,16 +38,15 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
-import { Engine } from '@/common/types';
-import { 文档环境 } from '@/modules/envs';
-import { 项目树历史纪录管理者 } from '../项目树历史纪录管理者';
 
 export class UITreeManager extends ManagerBase {
   engine;
+  engineManager;
 
-  constructor(engine: Engine) {
+  constructor(engineManager: EngineManager, engine: Engine) {
     super();
     this.engine = engine;
+    this.engineManager = engineManager;
   }
 
   requireModules() {
