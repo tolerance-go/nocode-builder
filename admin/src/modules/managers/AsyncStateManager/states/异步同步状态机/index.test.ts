@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { createActor } from 'xstate';
-import { 异步同步状态机 } from './异步同步状态机';
+import { 异步同步状态机 } from '.';
 
 describe('异步同步状态机', () => {
   it('应该从待机状态转移到同步中状态', () => {

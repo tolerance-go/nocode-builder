@@ -32,5 +32,3 @@ export interface System extends Module {}
 export interface Manager extends Module {}
 
 export interface Environment extends Module {}
-
-export interface Controller extends Module {}

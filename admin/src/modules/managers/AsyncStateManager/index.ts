@@ -1,8 +1,8 @@
-import { ControllerBase } from '@/base';
+import { ManagerBase } from '@/base';
 import { createActor } from 'xstate';
-import { 异步同步状态机 } from '../states';
+import { 异步同步状态机 } from './states';
 
-export class AsyncStateController extends ControllerBase {
+export class AsyncStateManager extends ManagerBase {
   public 异步同步状态;
 
   constructor() {

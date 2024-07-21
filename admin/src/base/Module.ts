@@ -1,5 +1,5 @@
-import { Module, Environment, Manager, System, Controller } from './types';
 import { EngineBase } from './Engine';
+import { Environment, Manager, Module, System } from './types';
 
 export abstract class ModuleBase implements Module {
   public setupProcessing: PromiseWithResolvers<void>;
@@ -101,5 +101,3 @@ export abstract class ManagerBase extends ModuleBase implements Manager {}
 export abstract class EnvironmentBase
   extends ModuleBase
   implements Environment {}
-
-export abstract class ControllerBase extends ModuleBase implements Controller {}
