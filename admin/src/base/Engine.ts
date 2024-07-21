@@ -1,5 +1,5 @@
 import { Engine, Module } from '@/common/types';
-import { topologicalSort } from '@/common/utils';
+import { topologicalSort, collectDependencies } from '@/common/utils';
 
 export type ModuleConstructor = Module | ((engine: EngineBase) => Module);
 
@@ -44,8 +44,12 @@ export abstract class EngineBase implements Engine {
       this.modules.add(module);
     });
 
-    // 收集依赖关系
-    this.collectDependencies();
+    collectDependencies(
+      this.modules,
+      this.dependencies,
+      this.dependents,
+      (module) => module.requiredModules,
+    );
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,20 +64,6 @@ export abstract class EngineBase implements Engine {
 
   private addDependentEngine(module: Engine): void {
     this.dependentEngines.add(module);
-  }
-
-  private collectDependencies() {
-    this.modules.forEach((module) => {
-      const deps = module.requiredModules;
-      this.dependencies.set(module, deps);
-
-      deps.forEach((dep) => {
-        if (!this.dependents.has(dep)) {
-          this.dependents.set(dep, new Set());
-        }
-        this.dependents.get(dep)?.add(module);
-      });
-    });
   }
 
   public async launch() {

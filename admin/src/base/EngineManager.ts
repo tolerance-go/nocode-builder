@@ -1,5 +1,5 @@
 import { Engine } from '@/common/types';
-import { topologicalSort } from '@/common/utils';
+import { collectDependencies, topologicalSort } from '@/common/utils';
 
 export type EngineConstructor =
   | Engine
@@ -30,21 +30,12 @@ export class EngineManager {
     });
 
     // 收集依赖关系
-    this.collectDependencies();
-  }
-
-  private collectDependencies() {
-    this.engines.forEach((engine) => {
-      const deps = engine.requiredEngines;
-      this.dependencies.set(engine, deps);
-
-      deps.forEach((dep) => {
-        if (!this.dependents.has(dep)) {
-          this.dependents.set(dep, new Set());
-        }
-        this.dependents.get(dep)?.add(engine);
-      });
-    });
+    collectDependencies(
+      this.engines,
+      this.dependencies,
+      this.dependents,
+      (engine) => engine.requiredEngines,
+    );
   }
 
   public async launch() {

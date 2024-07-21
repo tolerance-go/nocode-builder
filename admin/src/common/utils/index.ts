@@ -6,3 +6,4 @@ export * from './shallowEqual';
 export * from './delay';
 export * from './hexToRgb';
 export * from './topologicalSort';
+export * from './collectDependencies';
