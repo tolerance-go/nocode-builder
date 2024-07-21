@@ -26,9 +26,3 @@ export interface Module {
     actorClass: new (...args: unknown[]) => T,
   ): T;
 }
-
-export interface System extends Module {}
-
-export interface Manager extends Module {}
-
-export interface Environment extends Module {}
