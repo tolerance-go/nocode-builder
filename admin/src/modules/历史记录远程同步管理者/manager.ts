@@ -3,7 +3,6 @@ import { StateController } from '@/common/controllers';
 import { delay } from '@/common/utils';
 import { last } from 'lodash-es';
 import { createActor } from 'xstate';
-import { 历史记录 } from '../../types';
 import {
   历史记录远程同步状态机,
   历史记录远程同步状态机SnapshotType,
@@ -16,6 +15,7 @@ import {
   compareTrees,
 } from '@/modules/UIStoreManager';
 import { 全局事件系统 } from '@/modules/全局事件系统';
+import { 历史记录 } from '../项目树历史纪录管理者/types';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];
@@ -46,12 +46,9 @@ export class 历史记录远程同步管理者 extends ManagerBase {
   private maxRetryCount = 3;
   private 历史记录远程同步状态机;
   private stateController;
-  private 引擎api: EngineAPI;
 
-  constructor(引擎api: EngineAPI, params: SyncHistoryManagerEmployeeParams) {
+  constructor(params: SyncHistoryManagerEmployeeParams) {
     super();
-
-    this.引擎api = 引擎api;
 
     const { retryStartCallback, retryFailCallback, syncFunction } = params;
 
