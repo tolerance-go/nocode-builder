@@ -1,7 +1,5 @@
-import { ManagerBase } from '@/base';
-import { EngineManager } from '@/base/EngineManager';
+import { EngineBase, ManagerBase } from '@/base';
 import { fullPathnames, paths } from '@/common/constants';
-import { Engine } from '@/common/types';
 import {
   全局事件系统实例,
   全局界面导航系统实例,
@@ -41,12 +39,10 @@ import { NotFound } from './root/404';
 
 export class UITreeManager extends ManagerBase {
   engine;
-  engineManager;
 
-  constructor(engineManager: EngineManager, engine: Engine) {
+  constructor(engine: EngineBase) {
     super();
     this.engine = engine;
-    this.engineManager = engineManager;
   }
 
   requireModules() {

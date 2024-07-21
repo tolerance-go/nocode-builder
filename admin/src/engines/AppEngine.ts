@@ -1,14 +1,12 @@
 import { EngineBase } from '@/base';
+import { EngineManager } from '@/base/EngineManager';
 import { UITreeManager } from '@/modules/managers';
 import { BaseEngine } from './BaseEngine';
-import { EngineManager } from '@/base/EngineManager';
 
 export class AppEngine extends EngineBase {
-  private engineManager: EngineManager;
-
-  constructor(engineManager: EngineManager) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(_engineManager: EngineManager) {
     super();
-    this.engineManager = engineManager;
   }
 
   requireEngines() {
@@ -16,8 +14,6 @@ export class AppEngine extends EngineBase {
   }
 
   providerModules() {
-    super.providerModules(
-      (engine) => new UITreeManager(this.engineManager, engine),
-    );
+    super.providerModules((engine) => new UITreeManager(engine));
   }
 }

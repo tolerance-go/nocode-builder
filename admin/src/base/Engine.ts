@@ -21,6 +21,7 @@ export abstract class EngineBase implements Engine {
     this.dependents = new Map();
     this.setupProcessing = Promise.withResolvers<void>();
     this.launchProcessing = Promise.withResolvers<void>();
+    this.requireEngines();
   }
 
   protected requireEngines(...engines: Engine[]) {
@@ -103,14 +104,15 @@ export abstract class EngineBase implements Engine {
         (module) => module.launchProcessing.promise,
       ),
     );
-    await this.onLaunch(); // 调用 start 逻辑函数
-    this.launchProcessing.resolve();
-    this.hasLaunched = true; // 标记为已启动
 
-    this.requireEngines();
+    this.providerModules();
     const sortedActors = topologicalSort(this.modules, this.dependencies);
     await this.setupModules(sortedActors);
     await this.startModules(sortedActors);
+
+    await this.onLaunch(); // 调用 start 逻辑函数
+    this.launchProcessing.resolve();
+    this.hasLaunched = true; // 标记为已启动
   }
 
   private async setupModules(modules: Module[]) {

@@ -19,6 +19,7 @@ export abstract class ModuleBase implements Module {
   constructor() {
     this.setupProcessing = Promise.withResolvers<void>();
     this.startProcessing = Promise.withResolvers<void>();
+    this.requireModules();
   }
 
   // 导入其他 Module
