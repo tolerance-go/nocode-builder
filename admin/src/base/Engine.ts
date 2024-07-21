@@ -7,12 +7,12 @@ export abstract class EngineBase implements Engine {
   public dependentEngines: Set<Engine> = new Set(); // 依赖当前 Engine 的 Engines
   public launchProcessing: PromiseWithResolvers<void>;
 
+  protected hasLaunched: boolean = false; // 用于跟踪 start 方法是否已经执行过
+
   private modules: Set<Module>;
   private dependencies: Map<Module, Set<Module>>;
   private dependents: Map<Module, Set<Module>>;
   private engineManagerInstance: EngineManagerBase | null = null;
-
-  protected hasLaunched: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   constructor() {
     this.modules = new Set();
@@ -22,50 +22,21 @@ export abstract class EngineBase implements Engine {
     this.requireEngines();
   }
 
-  private addDependentEngine(module: Engine): void {
-    this.dependentEngines.add(module);
-  }
-
-  get engineManager(): EngineManagerBase {
+  public get engineManager(): EngineManagerBase {
     if (!this.engineManagerInstance) {
       throw new Error('EngineManager not set');
     }
 
     return this.engineManagerInstance;
   }
-  set engineManager(instance: EngineManagerBase) {
+  public set engineManager(instance: EngineManagerBase) {
     this.engineManagerInstance = instance;
   }
 
-  protected requireEngines(...engines: Engine[]) {
-    engines.forEach((engine) => {
-      if (!this.requiredEngines.has(engine)) {
-        this.requiredEngines.add(engine);
-        if (engine instanceof EngineBase) {
-          engine.addDependentEngine(this);
-        }
-      }
-    });
-  }
-
-  protected providerModules(...moduleConstructors: Module[]) {
-    // 初始化 Actors
-    moduleConstructors.forEach((module) => {
-      module.engine = this;
-
-      this.modules.add(module);
-    });
-
-    collectDependencies(
-      this.modules,
-      this.dependencies,
-      this.dependents,
-      (module) => module.requiredModules,
-    );
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getDependEngine<T extends Engine>(engineClass: new (...args: any[]) => T): T {
+  public getDependEngine<T extends Engine>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    engineClass: new (...args: any[]) => T,
+  ): T {
     for (const engine of this.requiredEngines) {
       if (engine instanceof engineClass) {
         return engine;
@@ -95,14 +66,6 @@ export abstract class EngineBase implements Engine {
     this.hasLaunched = true; // 标记为已启动
   }
 
-  private async setupModules(modules: Module[]) {
-    await Promise.all(modules.map((module) => module.setup()));
-  }
-
-  private async startModules(modules: Module[]) {
-    await Promise.all(modules.map((module) => module.start()));
-  }
-
   public getModule<T extends Module>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleClass: new (...args: any[]) => T,
@@ -116,4 +79,43 @@ export abstract class EngineBase implements Engine {
   }
 
   protected async onLaunch(): Promise<void> {}
+
+  protected requireEngines(...engines: Engine[]) {
+    engines.forEach((engine) => {
+      if (!this.requiredEngines.has(engine)) {
+        this.requiredEngines.add(engine);
+        if (engine instanceof EngineBase) {
+          engine.addDependentEngine(this);
+        }
+      }
+    });
+  }
+
+  protected providerModules(...moduleConstructors: Module[]) {
+    // 初始化 Actors
+    moduleConstructors.forEach((module) => {
+      module.engine = this;
+
+      this.modules.add(module);
+    });
+
+    collectDependencies(
+      this.modules,
+      this.dependencies,
+      this.dependents,
+      (module) => module.requiredModules,
+    );
+  }
+
+  private async setupModules(modules: Module[]) {
+    await Promise.all(modules.map((module) => module.setup()));
+  }
+
+  private async startModules(modules: Module[]) {
+    await Promise.all(modules.map((module) => module.start()));
+  }
+
+  private addDependentEngine(module: Engine): void {
+    this.dependentEngines.add(module);
+  }
 }
