@@ -1,7 +1,7 @@
 import { EngineBase } from '../Engine';
 import { Module } from '../types';
 
-export abstract class ModuleBase implements Module {
+export class ModuleBase implements Module {
   public setupProcessing: PromiseWithResolvers<void>;
   public startProcessing: PromiseWithResolvers<void>;
   public requiredModules: Set<Module> = new Set(); // 当前 Module 依赖的 Modules
