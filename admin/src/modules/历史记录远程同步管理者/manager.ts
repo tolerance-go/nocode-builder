@@ -16,6 +16,7 @@ import {
 } from '@/modules/UIStoreManager';
 import { 全局事件系统 } from '@/modules/全局事件系统';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
+import { BaseEngine } from '@/engines/BaseEngine';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];
@@ -52,9 +53,11 @@ export class 历史记录远程同步管理者 extends ManagerBase {
 
     const { retryStartCallback, retryFailCallback, syncFunction } = params;
 
-    const restoredStateValue = 引擎api.getLocalStateItem<
-      历史记录远程同步状态机SnapshotType['value']
-    >(localKeys.历史记录远程同步管理者_state_value);
+    const restoredStateValue = this.engine
+      .getDependEngine(BaseEngine)
+      .getLocalStateItem<
+        历史记录远程同步状态机SnapshotType['value']
+      >(localKeys.历史记录远程同步管理者_state_value);
 
     if (restoredStateValue) {
       const resolvedState = 历史记录远程同步状态机.resolveState({
