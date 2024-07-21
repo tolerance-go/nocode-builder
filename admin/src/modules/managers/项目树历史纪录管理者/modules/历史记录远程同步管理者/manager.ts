@@ -52,7 +52,7 @@ export class 历史记录远程同步管理者 extends ManagerBase {
     return this.历史记录远程同步状态机.getSnapshot().value;
   }
 
-  public requires(全局事件系统实例: 全局事件系统): this {
+  public requireModules(全局事件系统实例: 全局事件系统): this {
     return super.requireModules(全局事件系统实例);
   }
 

@@ -58,7 +58,7 @@ type EventCacheItem<T> = {
 export class 全局事件系统<
   T extends Record<string, unknown> = 全局事件映射,
 > extends SystemBase {
-  requires(): this {
+  requireModules(): this {
     return super.requireModules();
   }
 

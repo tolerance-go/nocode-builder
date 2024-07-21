@@ -1,23 +1,17 @@
 import { EnvironmentBase } from '@/base';
 import { 全局事件系统 } from '../systems';
+import { 全局事件系统实例 } from '@/globals';
 
 export class 文档环境 extends EnvironmentBase {
-  private _document?: Document;
+  private document: Document;
 
   public constructor(document: Document) {
     super();
-    this._document = document;
+    this.document = document;
   }
 
-  requires(全局事件系统实例: 全局事件系统): this {
-    return super.requireModules(全局事件系统实例);
-  }
-
-  public get document() {
-    if (!this._document) {
-      throw new Error('document 非法。');
-    }
-    return this._document;
+  requireModules() {
+    super.requireModules(全局事件系统实例);
   }
 
   protected async onStart(): Promise<void> {

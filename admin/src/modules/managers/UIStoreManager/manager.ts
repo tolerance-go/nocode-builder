@@ -1,7 +1,7 @@
 import { ProjectTypeEnum } from '@/_gen/models';
 import { EngineAPI, ManagerBase } from '@/base';
 import { paths } from '@/common/constants';
-import { api } from '@/globals';
+import { api, 全局事件系统实例, 全局界面导航系统实例 } from '@/globals';
 import { 界面导航系统 } from '@/modules/systems';
 import { 全局事件系统 } from '@/modules/systems/全局事件系统';
 import { produce } from 'immer';
@@ -30,13 +30,10 @@ export class UIStoreManager extends ManagerBase {
     this.storeController = new StoreController(this.initialState);
   }
 
-  requires(
-    全局事件系统实例: 全局事件系统,
-    界面导航系统实例: 界面导航系统,
-  ): this {
-    return super.requireModules(
+  requireModules() {
+    super.requireModules(
       全局事件系统实例,
-      界面导航系统实例,
+      全局界面导航系统实例,
       this.storeController,
     );
   }

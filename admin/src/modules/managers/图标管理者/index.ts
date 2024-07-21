@@ -11,7 +11,7 @@ import { createElement } from 'react';
 import { 图标id到组件的映射, 图标组件id联合 } from './types';
 
 export class 图标管理者 extends ManagerBase {
-  requires(): this {
+  requireModules(): this {
     return super.requireModules();
   }
 

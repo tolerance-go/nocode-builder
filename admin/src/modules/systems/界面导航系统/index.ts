@@ -1,7 +1,7 @@
 import { SystemBase } from '@/base';
 
 export class 界面导航系统 extends SystemBase {
-  requires(): this {
+  requireModules(): this {
     return super.requireModules();
   }
 

@@ -11,7 +11,7 @@ export class LayoutStateController extends StateControllerBase {
     super();
   }
 
-  public requires(): this {
+  public requireModules(): this {
     return this;
   }
 

@@ -5,7 +5,7 @@ import { 其他拖拽显示的组件 } from './其他拖拽显示的组件';
 import { 拖拽提示显示组件 } from './拖拽提示显示组件';
 
 export class 跟随鼠标显示内容管理者 extends ManagerBase {
-  requires(): this {
+  requireModules(): this {
     return super.requireModules();
   }
 

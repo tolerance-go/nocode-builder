@@ -24,7 +24,7 @@ i18n.use(initReactI18next).init({
 });
 
 export class I18nSystem extends SystemBase {
-  requires(): this {
+  requireModules(): this {
     return super.requireModules();
   }
 

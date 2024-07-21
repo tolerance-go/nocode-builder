@@ -21,7 +21,7 @@ const illegalPostgresqlChars = [
 ];
 
 export class 验证管理者 extends ManagerBase {
-  requires(): this {
+  requireModules(): this {
     return super.requireModules();
   }
 

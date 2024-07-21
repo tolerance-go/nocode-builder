@@ -1,37 +1,42 @@
-import { LocalState } from '@/common/controllers/LocalState';
-import { Module } from '@/common/types';
+import { Engine, Module } from '@/common/types';
+import { topologicalSort } from '@/common/utils';
 
-export type ModuleConstructor = Module | ((engineAPI: EngineAPI) => Module);
+export type ModuleConstructor = Module | ((engine: EngineBase) => Module);
 
-export interface EngineAPI {
-  setLocalStateItem: (key: string, value: unknown) => void;
-  getLocalStateItem: <T>(key: string) => T | null;
-}
-
-export class Engine {
+export abstract class EngineBase implements Engine {
   private modules: Set<Module>;
   private dependencies: Map<Module, Set<Module>>;
   private dependents: Map<Module, Set<Module>>;
-  private localState: LocalState;
-  private initializePromise: Promise<void>;
 
-  constructor(...moduleConstructors: ModuleConstructor[]) {
+  public requiredEngines: Set<Engine> = new Set(); // 当前 Engine 依赖的 Engines
+  public dependentEngines: Set<Engine> = new Set(); // 依赖当前 Engine 的 Engines
+  public launchProcessing: PromiseWithResolvers<void>;
+  protected hasLaunched: boolean = false; // 用于跟踪 start 方法是否已经执行过
+
+  constructor() {
     this.modules = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
-    this.localState = new LocalState();
-    this.initializePromise = this.initModules(moduleConstructors);
+    this.launchProcessing = Promise.withResolvers<void>();
   }
 
-  private async initModules(moduleConstructors: ModuleConstructor[]) {
-    // 先加载本地状态
-    await this.localState.load();
+  protected requireEngines(...engines: Engine[]) {
+    engines.forEach((engine) => {
+      if (!this.requiredEngines.has(engine)) {
+        this.requiredEngines.add(engine);
+        if (engine instanceof EngineBase) {
+          engine.addDependentEngine(this);
+        }
+      }
+    });
+  }
 
+  protected providerModules(...moduleConstructors: ModuleConstructor[]) {
     // 初始化 Actors
     moduleConstructors.forEach((ctor) => {
       let module: Module;
       if (typeof ctor === 'function') {
-        module = ctor(this.getEngineAPI());
+        module = ctor(this);
       } else {
         module = ctor;
       }
@@ -40,6 +45,20 @@ export class Engine {
 
     // 收集依赖关系
     this.collectDependencies();
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  getDependEngine<T extends Engine>(engineClass: new (...args: any[]) => T): T {
+    for (const engine of this.requiredEngines) {
+      if (engine instanceof engineClass) {
+        return engine;
+      }
+    }
+    throw new Error(`Module of type ${engineClass.name} not found`);
+  }
+
+  private addDependentEngine(module: Engine): void {
+    this.dependentEngines.add(module);
   }
 
   private collectDependencies() {
@@ -57,8 +76,21 @@ export class Engine {
   }
 
   public async launch() {
-    await this.initializePromise;
-    const sortedActors = this.topologicalSort();
+    if (this.hasLaunched) {
+      throw new Error('Engine already launch');
+    }
+
+    await Promise.all(
+      Array.from(this.requiredEngines).map(
+        (module) => module.launchProcessing.promise,
+      ),
+    );
+    await this.onLaunch(); // 调用 start 逻辑函数
+    this.launchProcessing.resolve();
+    this.hasLaunched = true; // 标记为已启动
+
+    this.requireEngines();
+    const sortedActors = topologicalSort(this.modules, this.dependencies);
     await this.setupModules(sortedActors);
     await this.startModules(sortedActors);
   }
@@ -71,37 +103,17 @@ export class Engine {
     await Promise.all(modules.map((module) => module.start()));
   }
 
-  private topologicalSort(): Module[] {
-    const sorted: Module[] = [];
-    const visited = new Set<Module>();
-    const tempMarks = new Set<Module>();
-
-    const visit = (module: Module) => {
-      if (tempMarks.has(module)) {
-        throw new Error('Circular dependency detected');
+  public getModule<T extends Module>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    moduleClass: new (...args: any[]) => T,
+  ): T {
+    for (const module of this.modules) {
+      if (module instanceof moduleClass) {
+        return module;
       }
-      if (!visited.has(module)) {
-        tempMarks.add(module);
-        this.dependencies.get(module)?.forEach(visit);
-        tempMarks.delete(module);
-        visited.add(module);
-        sorted.push(module);
-      }
-    };
-
-    this.modules.forEach((module) => {
-      if (!visited.has(module)) {
-        visit(module);
-      }
-    });
-
-    return sorted;
+    }
+    throw new Error(`Module of type ${moduleClass.name} not found`);
   }
 
-  private getEngineAPI(): EngineAPI {
-    return {
-      setLocalStateItem: this.localState.set.bind(this.localState),
-      getLocalStateItem: this.localState.get.bind(this.localState),
-    };
-  }
+  protected async onLaunch(): Promise<void> {}
 }

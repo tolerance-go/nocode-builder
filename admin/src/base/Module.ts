@@ -22,7 +22,7 @@ export abstract class ModuleBase implements Module {
   }
 
   // 导入其他 Module
-  protected requireModules(...modules: Module[]): this {
+  protected requireModules(...modules: Module[]) {
     modules.forEach((module) => {
       if (!this.requiredModules.has(module)) {
         this.requiredModules.add(module);
@@ -31,10 +31,7 @@ export abstract class ModuleBase implements Module {
         }
       }
     });
-    return this;
   }
-
-  public abstract requires(...modules: Module[]): this;
 
   // 添加依赖当前 Module 的 Module
   private addDependentModule(module: Module): void {

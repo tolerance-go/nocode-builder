@@ -1,7 +1,7 @@
 import { EngineAPI, ManagerBase } from '@/base';
-import { 全局事件系统 } from '@/core/systems/全局事件系统';
-import { 界面通知系统 } from '@/core/systems/界面通知系统';
-import { api } from '@/globals';
+import { 全局事件系统 } from '@/modules/systems/全局事件系统';
+import { 界面通知系统 } from '@/modules/systems/界面通知系统';
+import { api, 全局事件系统实例, 全局界面通知系统实例 } from '@/globals';
 import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
 import {
@@ -22,12 +22,9 @@ export class 项目树历史纪录管理者 extends ManagerBase {
   private 历史状态机Actor;
   private 引擎api: EngineAPI;
 
-  requires(
-    全局事件系统实例: 全局事件系统,
-    界面通知系统实例: 界面通知系统,
-  ): this {
-    return super.requireModules(
-      界面通知系统实例,
+  requireModules() {
+    super.requireModules(
+      全局界面通知系统实例,
       全局事件系统实例,
       new 历史记录远程同步管理者(this.引擎api, {
         retryStartCallback: this.retryStartCallback,

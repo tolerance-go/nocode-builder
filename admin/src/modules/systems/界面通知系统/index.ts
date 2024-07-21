@@ -24,7 +24,7 @@ type ModalOptions = ModalFuncProps & {
 };
 
 export class 界面通知系统 extends SystemBase {
-  requires(): this {
+  requireModules(): this {
     return super.requireModules();
   }
 

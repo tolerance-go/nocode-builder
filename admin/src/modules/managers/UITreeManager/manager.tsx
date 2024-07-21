@@ -1,8 +1,13 @@
-import { fullPathnames, paths } from '@/common/constants';
 import { ManagerBase } from '@/base';
-import { 界面导航系统 } from '@/core/systems';
-import { 全局事件系统 } from '@/core/systems/全局事件系统';
-import { 界面通知系统 } from '@/core/systems/界面通知系统';
+import { fullPathnames, paths } from '@/common/constants';
+import { 界面导航系统 } from '@/modules/systems';
+import { 全局事件系统 } from '@/modules/systems/全局事件系统';
+import { 界面通知系统 } from '@/modules/systems/界面通知系统';
+import {
+  全局事件系统实例,
+  全局界面导航系统实例,
+  全局界面通知系统实例,
+} from '@/globals';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
@@ -29,25 +34,29 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
+import { Engine } from '@/common/types';
+import { 文档环境 } from '@/modules/envs';
+import { 项目树历史纪录管理者 } from '../项目树历史纪录管理者';
 
 export class UITreeManager extends ManagerBase {
-  requires(
-    界面通知系统实例: 界面通知系统,
-    验证管理者单例: 验证管理者,
-    图标管理者单例: 图标管理者,
-    跟随鼠标显示内容管理者单例: 跟随鼠标显示内容管理者,
-    界面状态管理者实例: UIStoreManager,
-    全局事件系统实例: 全局事件系统,
-    界面导航系统实例: 界面导航系统,
-  ): this {
-    return super.requireModules(
-      界面通知系统实例,
-      验证管理者单例,
-      图标管理者单例,
-      跟随鼠标显示内容管理者单例,
-      界面状态管理者实例,
+  engine;
+
+  constructor(engine: Engine) {
+    super();
+    this.engine = engine;
+  }
+
+  requireModules() {
+    super.requireModules(
+      new 项目树历史纪录管理者(this.engine),
+      new 文档环境(document),
+      全局界面通知系统实例,
+      new 验证管理者(),
+      new 图标管理者(),
+      new 跟随鼠标显示内容管理者(),
+      new UIStoreManager(this.engine),
       全局事件系统实例,
-      界面导航系统实例,
+      全局界面导航系统实例,
     );
   }
 
