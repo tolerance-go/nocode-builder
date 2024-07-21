@@ -22,8 +22,8 @@ export abstract class EngineBase implements Engine {
     this.requireEngines();
   }
 
-  set engineManager(instance: EngineManagerBase) {
-    this.engineManagerInstance = instance;
+  private addDependentEngine(module: Engine): void {
+    this.dependentEngines.add(module);
   }
 
   get engineManager(): EngineManagerBase {
@@ -32,6 +32,9 @@ export abstract class EngineBase implements Engine {
     }
 
     return this.engineManagerInstance;
+  }
+  set engineManager(instance: EngineManagerBase) {
+    this.engineManagerInstance = instance;
   }
 
   protected requireEngines(...engines: Engine[]) {
@@ -69,10 +72,6 @@ export abstract class EngineBase implements Engine {
       }
     }
     throw new Error(`Module of type ${engineClass.name} not found`);
-  }
-
-  private addDependentEngine(module: Engine): void {
-    this.dependentEngines.add(module);
   }
 
   public async launch() {

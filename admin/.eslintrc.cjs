@@ -19,17 +19,57 @@ module.exports = {
       2,
       {
         order: [
-          '[static-properties]',
-          '[static-methods]',
-          '[properties]',
+          '[public-static-properties]',
+          '[protected-static-properties]',
+          '[private-static-properties]',
+          '[public-static-methods]',
+          '[protected-static-methods]',
+          '[private-static-methods]',
+          '[public-properties]',
+          '[protected-properties]',
+          '[private-properties]',
           'constructor',
-          '[methods]',
+          '[public-methods]',
+          '[protected-methods]',
+          '[private-methods]',
         ],
         groups: {
-          'static-properties': [{ type: 'property', static: true }],
-          'static-methods': [{ type: 'method', static: true }],
-          properties: [{ type: 'property', static: false }],
-          methods: [{ type: 'method', static: false }],
+          'public-static-properties': [
+            { type: 'property', static: true, accessibility: 'public' },
+          ],
+          'protected-static-properties': [
+            { type: 'property', static: true, accessibility: 'protected' },
+          ],
+          'private-static-properties': [
+            { type: 'property', static: true, accessibility: 'private' },
+          ],
+          'public-static-methods': [
+            { type: 'method', static: true, accessibility: 'public' },
+          ],
+          'protected-static-methods': [
+            { type: 'method', static: true, accessibility: 'protected' },
+          ],
+          'private-static-methods': [
+            { type: 'method', static: true, accessibility: 'private' },
+          ],
+          'public-properties': [
+            { type: 'property', static: false, accessibility: 'public' },
+          ],
+          'protected-properties': [
+            { type: 'property', static: false, accessibility: 'protected' },
+          ],
+          'private-properties': [
+            { type: 'property', static: false, accessibility: 'private' },
+          ],
+          'public-methods': [
+            { type: 'method', static: false, accessibility: 'public' },
+          ],
+          'protected-methods': [
+            { type: 'method', static: false, accessibility: 'protected' },
+          ],
+          'private-methods': [
+            { type: 'method', static: false, accessibility: 'private' },
+          ],
         },
         accessorPairPositioning: 'getThenSet',
       },
