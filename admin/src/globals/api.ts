@@ -1,6 +1,6 @@
 import { Api } from '@/_gen/api';
 import store from 'store2';
-import { 全局界面通知系统实例 } from './systems';
+import { 全局界面通知系统实例 } from './modules';
 
 const api = new Api({
   baseURL: import.meta.env.DEV ? 'http://localhost:3000' : '/api', // 替换为你的 API 基础 URL
