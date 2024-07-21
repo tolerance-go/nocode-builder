@@ -1,5 +1,3 @@
-import { SystemBase } from '@/base';
-
 import { ViewKey } from '@/common/types';
 import Emittery from 'emittery';
 import {
@@ -8,6 +6,7 @@ import {
   ProjectTreeNodeDataRecord,
 } from '../UIStoreManager';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
+import { ModuleBase } from '@/base';
 
 export type 全局事件映射 = {
   '界面状态管理者/路由更新': {
@@ -58,7 +57,7 @@ type EventCacheItem<T> = {
 
 export class 全局事件系统<
   T extends Record<string, unknown> = 全局事件映射,
-> extends SystemBase {
+> extends ModuleBase {
   private emitter = new Emittery<T>();
   private eventCache: EventCacheItem<T>[] = [];
 
