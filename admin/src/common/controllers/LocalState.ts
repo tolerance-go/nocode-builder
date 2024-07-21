@@ -17,6 +17,10 @@ export class LocalState {
   private saveQueue: SaveTask[] = [];
   private isSaving = false;
 
+  public get<T>(key: string): T | null {
+    return this.cache.get(key);
+  }
+
   public async load() {
     const keys = await this.store.keys();
     const promises = keys.map(async (key) => {
@@ -52,9 +56,5 @@ export class LocalState {
       }
     }
     this.isSaving = false;
-  }
-
-  public get<T>(key: string): T | null {
-    return this.cache.get(key);
   }
 }

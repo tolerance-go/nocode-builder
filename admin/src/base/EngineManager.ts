@@ -13,6 +13,23 @@ export class EngineManagerBase implements EngineManager {
     this.initEngines(engineConstructors);
   }
 
+  public async launch() {
+    const sortedActors = topologicalSort(this.engines, this.dependencies);
+    await this.launchEngines(sortedActors);
+  }
+
+  public getEngine<T extends Engine>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    engineClass: new (...args: any[]) => T,
+  ): T {
+    for (const engine of this.engines) {
+      if (engine instanceof engineClass) {
+        return engine;
+      }
+    }
+    throw new Error(`Engine of type ${engineClass.name} not found`);
+  }
+
   private initEngines(engineConstructors: Engine[]) {
     // 初始化 Actors
     engineConstructors.forEach((engine) => {
@@ -30,24 +47,7 @@ export class EngineManagerBase implements EngineManager {
     );
   }
 
-  public async launch() {
-    const sortedActors = topologicalSort(this.engines, this.dependencies);
-    await this.launchEngines(sortedActors);
-  }
-
   private async launchEngines(engines: Engine[]) {
     await Promise.all(engines.map((engine) => engine.launch()));
-  }
-
-  public getEngine<T extends Engine>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    engineClass: new (...args: any[]) => T,
-  ): T {
-    for (const engine of this.engines) {
-      if (engine instanceof engineClass) {
-        return engine;
-      }
-    }
-    throw new Error(`Engine of type ${engineClass.name} not found`);
   }
 }

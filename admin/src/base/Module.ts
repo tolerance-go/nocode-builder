@@ -18,10 +18,6 @@ export abstract class ModuleBase implements Module {
     this.requireModules();
   }
 
-  set engine(instance: EngineBase) {
-    this.engineInstance = instance;
-  }
-
   get engine(): EngineBase {
     if (!this.engineInstance) {
       throw new Error('Engine not set');
@@ -30,21 +26,8 @@ export abstract class ModuleBase implements Module {
     return this.engineInstance;
   }
 
-  // 导入其他 Module
-  protected requireModules(...modules: Module[]) {
-    modules.forEach((module) => {
-      if (!this.requiredModules.has(module)) {
-        this.requiredModules.add(module);
-        if (module instanceof ModuleBase) {
-          module.addDependentModule(this);
-        }
-      }
-    });
-  }
-
-  // 添加依赖当前 Module 的 Module
-  private addDependentModule(module: Module): void {
-    this.dependentModules.add(module);
+  set engine(instance: EngineBase) {
+    this.engineInstance = instance;
   }
 
   // 获取指定类型的 Module 实例
@@ -92,6 +75,23 @@ export abstract class ModuleBase implements Module {
   // 抽象的 start 逻辑函数，需要在继承类中实现
   protected async onSetup(): Promise<void> {}
   protected async onStart(): Promise<void> {}
+
+  // 导入其他 Module
+  protected requireModules(...modules: Module[]) {
+    modules.forEach((module) => {
+      if (!this.requiredModules.has(module)) {
+        this.requiredModules.add(module);
+        if (module instanceof ModuleBase) {
+          module.addDependentModule(this);
+        }
+      }
+    });
+  }
+
+  // 添加依赖当前 Module 的 Module
+  private addDependentModule(module: Module): void {
+    this.dependentModules.add(module);
+  }
 }
 
 export abstract class SystemBase extends ModuleBase implements System {}
