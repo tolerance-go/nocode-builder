@@ -1,5 +1,5 @@
-import { EngineManager, Engine } from './types';
-import { collectDependencies, topologicalSort } from './utils';
+import { EngineManager, Engine } from '../types';
+import { collectDependencies, topologicalSort } from '../utils';
 
 export class EngineManagerBase implements EngineManager {
   private engines: Set<Engine>;
