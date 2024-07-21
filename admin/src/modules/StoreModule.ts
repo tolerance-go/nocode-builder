@@ -5,10 +5,10 @@ import {
   createLocationSlice,
   createProjectTreeSlice,
   createUserInfoSlice,
-} from '../states';
-import { AppMiddleware, RootState } from '../types';
-import { findNode } from '../utils';
-import { LayoutStateController } from './LayoutStateController';
+} from './managers/UIStoreManager/states';
+import { AppMiddleware, RootState } from './managers/UIStoreManager/types';
+import { findNode } from './managers/UIStoreManager/utils';
+import { LayoutStateController } from './managers/UIStoreManager/controllers/LayoutStateController';
 import { ModuleBase } from '@/base';
 import { 全局事件系统实例 } from '@/globals';
 

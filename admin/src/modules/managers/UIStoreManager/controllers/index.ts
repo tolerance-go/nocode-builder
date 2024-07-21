@@ -1,2 +1,2 @@
 export * from './LayoutStateController';
-export * from './StoreModule';
+export * from '../../../StoreModule';
