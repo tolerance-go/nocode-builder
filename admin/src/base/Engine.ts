@@ -10,16 +10,13 @@ export abstract class EngineBase implements Engine {
 
   public requiredEngines: Set<Engine> = new Set(); // 当前 Engine 依赖的 Engines
   public dependentEngines: Set<Engine> = new Set(); // 依赖当前 Engine 的 Engines
-  public setupProcessing: PromiseWithResolvers<void>;
   public launchProcessing: PromiseWithResolvers<void>;
   protected hasLaunched: boolean = false; // 用于跟踪 start 方法是否已经执行过
-  protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   constructor() {
     this.modules = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
-    this.setupProcessing = Promise.withResolvers<void>();
     this.launchProcessing = Promise.withResolvers<void>();
     this.requireEngines();
   }
@@ -79,21 +76,6 @@ export abstract class EngineBase implements Engine {
     });
   }
 
-  async setup(): Promise<void> {
-    if (this.hasSetup) {
-      throw new Error('Module already setup');
-    }
-
-    await Promise.all(
-      Array.from(this.requiredEngines).map(
-        (module) => module.setupProcessing.promise,
-      ),
-    );
-    await this.onSetup(); // 调用 start 逻辑函数
-    this.setupProcessing.resolve();
-    this.hasSetup = true; // 标记为已启动
-  }
-
   public async launch() {
     if (this.hasLaunched) {
       throw new Error('Engine already launch');
@@ -136,5 +118,4 @@ export abstract class EngineBase implements Engine {
   }
 
   protected async onLaunch(): Promise<void> {}
-  protected async onSetup(): Promise<void> {}
 }

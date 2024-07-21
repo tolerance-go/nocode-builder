@@ -49,12 +49,7 @@ export class EngineManager {
 
   public async launch() {
     const sortedActors = topologicalSort(this.engines, this.dependencies);
-    await this.setupEngines(sortedActors);
     await this.launchEngines(sortedActors);
-  }
-
-  private async setupEngines(engines: Engine[]) {
-    await Promise.all(engines.map((engine) => engine.setup()));
   }
 
   private async launchEngines(engines: Engine[]) {

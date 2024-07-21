@@ -1,9 +1,7 @@
 export interface Engine {
   requiredEngines: Set<Engine>; // 当前 Actor 依赖的 Actors
   dependentEngines: Set<Engine>; // 依赖当前 Actor 的 Actors
-  setupProcessing: PromiseWithResolvers<void>;
   launchProcessing: PromiseWithResolvers<void>;
-  setup(...args: unknown[]): Promise<void>;
   launch(...args: unknown[]): Promise<void>;
   getDependEngine<T extends Engine>(
     actorClass: new (...args: unknown[]) => T,
