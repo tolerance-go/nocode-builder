@@ -1,4 +1,3 @@
-import { ControllerBase } from '@/base';
 import { 全局事件系统 } from '@/modules/systems';
 import { configureStore, Middleware } from '@reduxjs/toolkit';
 import {
@@ -10,8 +9,10 @@ import {
 import { AppMiddleware, RootState } from '../types';
 import { findNode } from '../utils';
 import { LayoutStateController } from './LayoutStateController';
+import { ModuleBase } from '@/base';
+import { 全局事件系统实例 } from '@/globals';
 
-export class StoreController extends ControllerBase {
+export class StoreModule extends ModuleBase {
   static createSlices = () => {
     const projectSlice = createProjectTreeSlice();
     const layoutSlice = createLayoutSlice();
@@ -27,7 +28,7 @@ export class StoreController extends ControllerBase {
   };
 
   static createReducers = <
-    T extends ReturnType<typeof StoreController.createSlices>,
+    T extends ReturnType<typeof StoreModule.createSlices>,
   >(
     slices: T,
   ) => {
@@ -42,7 +43,7 @@ export class StoreController extends ControllerBase {
   };
 
   static createStore = <
-    T extends ReturnType<typeof StoreController.createReducers>,
+    T extends ReturnType<typeof StoreModule.createReducers>,
   >(
     reducer: T,
     middlewares: AppMiddleware[] = [],
@@ -58,35 +59,8 @@ export class StoreController extends ControllerBase {
   slices;
   reducers;
   store;
-  private initialState: RootState | null;
 
-  constructor(initialState: RootState | null) {
-    super();
-
-    this.slices = StoreController.createSlices();
-
-    this.reducers = StoreController.createReducers(this.slices);
-    this.initialState = initialState;
-
-    this.store = StoreController.createStore(
-      this.reducers,
-      [this.handleMiddleware],
-      this.initialState,
-    );
-  }
-
-  public requireModules() {
-    super.requireModules(new LayoutStateController());
-  }
-
-  protected async onSetup(): Promise<void> {
-    await this.getDependModule(LayoutStateController).onCreateStore(
-      this.store,
-      this.slices,
-    );
-  }
-
-  handleMiddleware: AppMiddleware = (store) => (next) => (action) => {
+  public handleMiddleware: AppMiddleware = (store) => (next) => (action) => {
     const prevState = store.getState();
 
     const result = next(action);
@@ -159,4 +133,33 @@ export class StoreController extends ControllerBase {
 
     return result;
   };
+
+  private initialState: RootState | null;
+
+  private layoutStateController: LayoutStateController;
+
+  constructor(initialState: RootState | null) {
+    super();
+
+    this.slices = StoreModule.createSlices();
+
+    this.reducers = StoreModule.createReducers(this.slices);
+    this.initialState = initialState;
+
+    this.store = StoreModule.createStore(
+      this.reducers,
+      [this.handleMiddleware],
+      this.initialState,
+    );
+
+    this.layoutStateController = new LayoutStateController();
+  }
+
+  protected requireModules(): void {
+    super.requireModules(全局事件系统实例);
+  }
+
+  protected async onSetup(): Promise<void> {
+    await this.layoutStateController.onCreateStore(this.store, this.slices);
+  }
 }

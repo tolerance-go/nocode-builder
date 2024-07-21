@@ -7,14 +7,6 @@ import {
 import { ViewKey } from '@/common/types';
 
 export class LayoutStateController extends StateControllerBase {
-  constructor() {
-    super();
-  }
-
-  public requireModules(): this {
-    return this;
-  }
-
   async onCreateStore(reduxStore: AppStore, slices: AppSlices): Promise<void> {
     let previousState = reduxStore.getState(); // 初始化之前的 state
 

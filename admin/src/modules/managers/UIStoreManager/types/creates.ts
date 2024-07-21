@@ -1,10 +1,10 @@
-import { StoreController } from '../controllers/StoreController';
+import { StoreModule } from '../controllers/StoreController';
 
-export type AppSlices = ReturnType<typeof StoreController.createSlices>;
-export type AppStore = ReturnType<typeof StoreController.createStore>;
+export type AppSlices = ReturnType<typeof StoreModule.createSlices>;
+export type AppStore = ReturnType<typeof StoreModule.createStore>;
 export type RootState = ReturnType<
-  ReturnType<typeof StoreController.createStore>['getState']
+  ReturnType<typeof StoreModule.createStore>['getState']
 >;
 export type AppDispatch = ReturnType<
-  typeof StoreController.createStore
+  typeof StoreModule.createStore
 >['dispatch'];
