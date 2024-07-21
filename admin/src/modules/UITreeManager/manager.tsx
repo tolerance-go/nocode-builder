@@ -40,7 +40,7 @@ import { 文档环境模块 } from '../文档环境模块';
 export class UITreeManager extends ModuleBase {
   requireModules() {
     super.requireModules(
-      new 项目树历史纪录管理者(this.engine),
+      new 项目树历史纪录管理者(),
       new 文档环境模块(document),
       全局界面通知系统实例,
       new 验证管理者(),

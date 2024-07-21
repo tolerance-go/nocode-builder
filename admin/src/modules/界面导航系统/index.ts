@@ -1,6 +1,6 @@
-import { SystemBase } from '@/base';
+import { ModuleBase } from '@/base';
 
-export class 界面导航系统 extends SystemBase {
+export class 界面导航系统 extends ModuleBase {
   navigateFunction: ((url: string) => void) | null = null;
 
   setNavigate = (navigate: (url: string) => void): void => {
