@@ -75,8 +75,8 @@ export class StoreController extends ControllerBase {
     );
   }
 
-  public requireModules(): this {
-    return super.requireModules(new LayoutStateController());
+  public requireModules() {
+    super.requireModules(new LayoutStateController());
   }
 
   protected async onSetup(): Promise<void> {

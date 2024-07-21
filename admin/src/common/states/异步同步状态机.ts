@@ -35,6 +35,7 @@ export const 异步同步状态机 = setup({
     },
     同步中: {
       type: 'compound',
+      initial: '一般同步中',
       states: {
         一般同步中: {
           on: {
@@ -60,6 +61,7 @@ export const 异步同步状态机 = setup({
     },
     同步已失败: {
       type: 'compound',
+      initial: '一般同步已失败',
       states: {
         一般同步已失败: {
           target: '待机',

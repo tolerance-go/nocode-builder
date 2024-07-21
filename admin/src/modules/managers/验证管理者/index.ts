@@ -21,10 +21,6 @@ const illegalPostgresqlChars = [
 ];
 
 export class 验证管理者 extends ManagerBase {
-  requireModules(): this {
-    return super.requireModules();
-  }
-
   项目树节点标题是否有效(input: string): string | null {
     if (!input.trim()) {
       return '必须提供项目或者项目组名';
