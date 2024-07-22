@@ -14,6 +14,10 @@ export class TaskQueue {
     }
   }
 
+  // 增加 isIdle 方法
+  public isIdle(): boolean {
+    return !this.running && this.queue.length === 0;
+  }
   private async run(): Promise<void> {
     this.running = true;
     while (this.queue.length > 0) {

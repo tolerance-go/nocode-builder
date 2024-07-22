@@ -92,4 +92,21 @@ describe('TaskQueue', () => {
 
     expect(successCallback).toHaveBeenCalledTimes(4);
   });
+
+  it('应在队列为空时返回 isIdle 为 true', async () => {
+    const queue = new TaskQueue();
+    expect(queue.isIdle()).toBe(true);
+
+    const task1 = vi.fn<[], Promise<void>>(async () => {});
+    queue.add(task1);
+
+    // 在任务开始执行时，isIdle 应该为 false
+    expect(queue.isIdle()).toBe(false);
+
+    // 等待任务执行完毕
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    // 任务完成后，isIdle 应该为 true
+    expect(queue.isIdle()).toBe(true);
+  });
 });
