@@ -109,6 +109,11 @@ export class EngineBase implements Engine {
       this.dependents,
       (module) => module.requiredModules,
     );
+
+    // 将所有依赖模块添加到 allModules
+    this.dependencies.forEach((deps) => {
+      deps.forEach((dep) => this.allModules.add(dep));
+    });
   }
 
   private async setupModules(modules: Module[]) {

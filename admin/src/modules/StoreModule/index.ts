@@ -154,7 +154,7 @@ export class StoreModule extends ModuleBase {
   }
 
   protected requireModules(): void {
-    super.requireModules(全局事件系统实例);
+    super.requireModules(this.engine.getModule(全局事件系统));
   }
 
   protected async onSetup(): Promise<void> {

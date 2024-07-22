@@ -84,7 +84,7 @@ describe('EngineBase', () => {
     const engine = new TestEngine(engineManager);
     const testModule = new TestModule(engine);
     engine['providerModules'](testModule);
-    expect(engine['modules'].has(testModule)).toBe(true);
+    expect(engine['providedModules'].has(testModule)).toBe(true);
   });
 
   it('应该正确获取指定类型的模块', () => {
@@ -127,5 +127,24 @@ describe('EngineBase', () => {
     expect(fetchedEngines.length).toBe(2);
     expect(fetchedEngines).toContain(dependentEngine1);
     expect(fetchedEngines).toContain(dependentEngine2);
+  });
+
+  it('应该在 providerModules 中正确处理所有依赖模块', () => {
+    const engineManager = new TestEngineManager();
+    const engine = new TestEngine(engineManager);
+    const testModule = new TestModule(engine);
+    const dependentModule = new TestModule(engine);
+
+    // Mock getDependencies 方法，使其返回 dependentModule
+    vi.spyOn(testModule, 'requiredModules', 'get').mockReturnValue(
+      new Set([dependentModule]),
+    );
+
+    engine['providerModules'](testModule);
+
+    expect(engine['providedModules'].has(testModule)).toBe(true);
+    expect(engine['providedModules'].has(dependentModule)).toBe(false);
+    expect(engine['allModules'].has(testModule)).toBe(true);
+    expect(engine['allModules'].has(dependentModule)).toBe(true);
   });
 });
