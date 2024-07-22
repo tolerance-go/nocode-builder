@@ -12,7 +12,7 @@ export interface PersistTask<T> {
  *
  * 负责管理持久化任务的添加、处理和执行状态。
  */
-export class PersistTaskManager extends ModuleBase {
+export class 持久化本地状态持久化管理器模块 extends ModuleBase {
   private persistTasks: PersistTask<unknown>[] = []; // 内部任务队列
   private storageKey = 'persistTasks'; // 用于本地存储的键
 
