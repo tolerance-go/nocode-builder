@@ -92,7 +92,7 @@ export class 历史记录远程同步管理者 extends ModuleBase {
   }
 
   public requireModules() {
-    super.requireModules(this.engine.getModule(全局事件系统));
+    super.requireModules(this.engine.getModuleOrCreate(全局事件系统));
   }
 
   public async updateHistories(newHistory: 历史记录[]): Promise<void> {

@@ -82,6 +82,20 @@ export class EngineBase implements Engine {
     throw new Error(`Module of type ${moduleClass.name} not found`);
   }
 
+  public getModuleOrCreate<T extends Module>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    moduleClass: new (...args: any[]) => T,
+    createInstance: () => T = () => new moduleClass(this),
+  ): T {
+    for (const module of this.allModules) {
+      if (module instanceof moduleClass) {
+        return module;
+      }
+    }
+    const newModule = createInstance();
+    return newModule;
+  }
+
   protected async onLaunch(): Promise<void> {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 

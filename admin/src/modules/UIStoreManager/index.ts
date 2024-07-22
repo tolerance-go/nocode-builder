@@ -23,8 +23,8 @@ export class UIStoreManager extends ModuleBase {
 
   requireModules() {
     super.requireModules(
-      this.engine.getModule(全局事件系统),
-      this.engine.getModule(界面导航系统),
+      this.engine.getModuleOrCreate(全局事件系统),
+      this.engine.getModuleOrCreate(界面导航系统),
       new StoreModule(this.engine, this.initialState),
     );
   }

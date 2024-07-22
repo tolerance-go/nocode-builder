@@ -1,20 +1,11 @@
-import { ModuleBase } from '@/base';
-import { api, 全局事件系统实例, 全局界面通知系统实例 } from '@/globals';
+import { EngineBase, ModuleBase } from '@/base';
 import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
-import {
-  DiffResult,
-  ProjectStructureTreeDataNode,
-  ProjectTreeNodeDataRecord,
-} from '../UIStoreManager';
+import { 全局事件系统 } from '../全局事件系统';
+import { 历史记录远程同步管理者 } from '../历史记录远程同步管理者';
+import { 界面通知系统 } from '../界面通知系统';
 import { 历史状态机 } from './states';
 import { 历史记录 } from './types';
-import { 全局事件系统 } from '../全局事件系统';
-import { 界面通知系统 } from '../界面通知系统';
-import {
-  历史记录远程同步管理者,
-  convertDiffResultToProjectDiffDto,
-} from '../历史记录远程同步管理者';
 
 export class 项目树历史纪录管理者 extends ModuleBase {
   retryFailCallback = () => {};
@@ -34,8 +25,8 @@ export class 项目树历史纪录管理者 extends ModuleBase {
   private 历史堆栈: 历史记录[] = [];
   private 历史状态机Actor;
 
-  public constructor() {
-    super();
+  public constructor(engine: EngineBase) {
+    super(engine);
 
     this.历史状态机Actor = createActor(历史状态机, {
       inspect:
@@ -51,8 +42,8 @@ export class 项目树历史纪录管理者 extends ModuleBase {
 
   requireModules() {
     super.requireModules(
-      全局界面通知系统实例,
-      全局事件系统实例,
+      this.engine.getModuleOrCreate(界面通知系统),
+      this.engine.getModuleOrCreate(全局事件系统),
       // new 历史记录远程同步管理者({
       //   retryStartCallback: this.retryStartCallback,
       //   retryFailCallback: this.retryFailCallback,

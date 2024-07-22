@@ -13,28 +13,24 @@ import { 界面通知系统 } from '../界面通知系统';
 
 export class UITreeManager extends ModuleBase {
   requireModules() {
-    const 全局界面通知系统实例 = (window.全局界面通知系统实例 =
-      new 界面通知系统(this.engine));
-    const 全局事件系统实例 = (window.全局事件系统实例 = new 全局事件系统(
-      this.engine,
-    ));
-    const 全局界面导航系统实例 = (window.全局界面导航系统实例 =
-      new 界面导航系统(this.engine));
-
     super.requireModules(
-      new 项目树历史纪录管理者(),
-      new 文档环境模块(document),
-      全局界面通知系统实例,
+      this.engine.getModuleOrCreate(全局事件系统),
+      this.engine.getModuleOrCreate(界面导航系统),
+      new 项目树历史纪录管理者(this.engine),
+      new 文档环境模块(this.engine, document),
+      this.engine.getModuleOrCreate(界面通知系统),
       new 验证管理者(this.engine),
       new 图标管理者(this.engine),
       new 跟随鼠标显示内容管理者(this.engine),
       new UIStoreManager(this.engine),
-      全局事件系统实例,
-      全局界面导航系统实例,
     );
   }
 
   protected async onSetup() {
+    window.全局界面通知系统实例 = this.getDependModule(界面通知系统);
+    window.全局事件系统实例 = this.getDependModule(全局事件系统);
+    window.全局界面导航系统实例 = this.getDependModule(界面导航系统);
+
     this.getDependModule(全局事件系统).on('文档环境/pageLoadComplete', () => {
       ReactDOM.createRoot(document.getElementById('root')!).render(
         renderRoot(this),

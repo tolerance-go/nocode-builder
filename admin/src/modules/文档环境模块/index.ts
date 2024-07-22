@@ -1,17 +1,16 @@
-import { 全局事件系统实例 } from '@/globals';
 import { 全局事件系统 } from '../全局事件系统';
-import { ModuleBase } from '@/base';
+import { EngineBase, ModuleBase } from '@/base';
 
 export class 文档环境模块 extends ModuleBase {
   private document: Document;
 
-  public constructor(document: Document) {
-    super();
+  public constructor(engine: EngineBase, document: Document) {
+    super(engine);
     this.document = document;
   }
 
-  requireModules() {
-    super.requireModules(全局事件系统实例);
+  protected requireModules() {
+    super.requireModules(this.engine.getModuleOrCreate(全局事件系统));
   }
 
   protected async onStart(): Promise<void> {
