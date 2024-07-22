@@ -27,7 +27,12 @@ export class ModuleBase implements Module {
   }
 
   set engine(instance: EngineBase) {
+    if (!this.engineInstance) {
+      this.onAddedToEngine(instance); // 调用 onAddedToEngine hook
+    }
+
     this.engineInstance = instance;
+
     this.requiredModules.forEach((module) => {
       module.engine = this.engine;
     });
@@ -78,6 +83,9 @@ export class ModuleBase implements Module {
   // 抽象的 start 逻辑函数，需要在继承类中实现
   protected async onSetup(): Promise<void> {}
   protected async onStart(): Promise<void> {}
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected onAddedToEngine(_engine: EngineBase): void {} // 新增的 hook
 
   // 导入其他 Module
   protected requireModules(...modules: Module[]) {

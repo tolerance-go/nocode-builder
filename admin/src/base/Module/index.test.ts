@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { ModuleBase } from '.';
 import { EngineBase } from '../Engine';
 
@@ -11,6 +11,8 @@ class TestModule extends ModuleBase {
   async onStart() {
     // 自定义的 start 逻辑
   }
+
+  onAddedToEngine() {}
 }
 
 describe('ModuleBase', () => {
@@ -89,5 +91,20 @@ describe('ModuleBase', () => {
     await module.start();
 
     await expect(module.start()).rejects.toThrow('Module already started');
+  });
+
+  it('应该在首次设置 engine 时调用 onAddedToEngine', () => {
+    const engine = new TestEngine();
+    const onAddedToEngineSpy = vi.spyOn(module, 'onAddedToEngine');
+    module.engine = engine;
+    expect(onAddedToEngineSpy).toHaveBeenCalledWith(engine);
+  });
+
+  it('再次设置 engine 不应调用 onAddedToEngine', () => {
+    const engine = new TestEngine();
+    const onAddedToEngineSpy = vi.spyOn(module, 'onAddedToEngine');
+    module.engine = engine;
+    module.engine = engine; // 再次设置
+    expect(onAddedToEngineSpy).toHaveBeenCalledTimes(1);
   });
 });

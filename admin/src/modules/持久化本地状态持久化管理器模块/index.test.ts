@@ -2,7 +2,6 @@ import { EngineBase } from '@/base';
 import localforage from 'localforage';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PersistTask, 持久化本地状态持久化管理器模块 } from '.';
-import { cloneDeep } from 'lodash-es';
 import { clearMockLocalforageData, mockLocalforage } from '@/common/tests';
 
 class TestEngine extends EngineBase {
