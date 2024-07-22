@@ -12,7 +12,8 @@ class TestModule extends ModuleBase {
     // 自定义的 start 逻辑
   }
 
-  onAddedToEngine() {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onAddedToEngine(_engine: EngineBase) {}
 }
 
 describe('ModuleBase', () => {

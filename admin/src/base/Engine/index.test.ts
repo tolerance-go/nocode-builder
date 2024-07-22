@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { EngineBase } from '.';
 import { EngineManagerBase } from '../EngineManager';
 import { ModuleBase } from '../Module';
@@ -17,6 +17,9 @@ class TestModule extends ModuleBase {
 }
 
 class TestEngine extends EngineBase {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  onAddedToEngineManager(_engineManager: EngineManagerBase) {}
+
   protected async onLaunch() {
     // 自定义的 launch 逻辑
   }
@@ -101,5 +104,26 @@ describe('EngineBase', () => {
 
     expect(testModule.setupProcessing.promise).resolves.toBeUndefined();
     expect(testModule.startProcessing.promise).resolves.toBeUndefined();
+  });
+
+  it('应该在首次设置 engineManager 时调用 onAddedToEngineManager', () => {
+    const engineManager = new TestEngineManager();
+    const onAddedToEngineManagerSpy = vi.spyOn(
+      engine,
+      'onAddedToEngineManager',
+    );
+    engine.engineManager = engineManager;
+    expect(onAddedToEngineManagerSpy).toHaveBeenCalledWith(engineManager);
+  });
+
+  it('再次设置 engineManager 不应调用 onAddedToEngineManager', () => {
+    const engineManager = new TestEngineManager();
+    const onAddedToEngineManagerSpy = vi.spyOn(
+      engine,
+      'onAddedToEngineManager',
+    );
+    engine.engineManager = engineManager;
+    engine.engineManager = engineManager; // 再次设置
+    expect(onAddedToEngineManagerSpy).toHaveBeenCalledTimes(1);
   });
 });
