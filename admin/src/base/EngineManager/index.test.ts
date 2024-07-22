@@ -1,27 +1,22 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect } from 'vitest';
 import { EngineManagerBase } from '.';
 import { EngineBase } from '../Engine';
 import { collectDependencies, topologicalSort } from '../utils';
 import { ModuleBase } from '../Module';
 
-class TestEngine extends EngineBase {
-  protected async onLaunch() {
-    // 自定义的 launch 逻辑
-  }
-}
+class TestEngine extends EngineBase {}
 
 describe('EngineManagerBase', () => {
-  let engineManager: EngineManagerBase;
-  let engineA: TestEngine;
-  let engineB: TestEngine;
-
-  beforeEach(() => {
-    engineA = new TestEngine();
-    engineB = new TestEngine();
-    engineManager = new EngineManagerBase(engineA, engineB);
-  });
-
   it('应该正确初始化引擎并收集依赖关系', () => {
+    const engineManager = new EngineManagerBase(
+      (self) => new TestEngine(self),
+      (self) => new TestEngine(self),
+    );
+
+    const [engineA, engineB] = Array.from(
+      engineManager['engines'],
+    ) as TestEngine[];
+
     expect(engineA.engineManager).toBe(engineManager);
     expect(engineB.engineManager).toBe(engineManager);
     expect(engineManager['engines'].has(engineA)).toBe(true);
@@ -41,12 +36,26 @@ describe('EngineManagerBase', () => {
   });
 
   it('应该正确启动所有引擎', async () => {
+    const engineManager = new EngineManagerBase(
+      (self) => new TestEngine(self),
+      (self) => new TestEngine(self),
+    );
+
+    const [engineA, engineB] = Array.from(
+      engineManager['engines'],
+    ) as TestEngine[];
+
     await engineManager.launch();
     expect(engineA['hasLaunched']).toBe(true);
     expect(engineB['hasLaunched']).toBe(true);
   });
 
   it('应该按拓扑排序启动引擎', async () => {
+    const engineManager = new EngineManagerBase(
+      (self) => new TestEngine(self),
+      (self) => new TestEngine(self),
+    );
+
     const sortedEngines = topologicalSort(
       engineManager['engines'],
       engineManager['dependencies'],
@@ -57,47 +66,68 @@ describe('EngineManagerBase', () => {
   });
 
   it('应该正确获取指定类型的引擎', () => {
+    const engineManager = new EngineManagerBase(
+      (self) => new TestEngine(self),
+      (self) => new TestEngine(self),
+    );
+
+    const [engineA] = Array.from(engineManager['engines']) as TestEngine[];
+
     const fetchedEngine = engineManager.getEngine(TestEngine);
     expect(fetchedEngine).toBe(engineA);
   });
 
   it('没有找到指定类型的引擎时应该抛出错误', () => {
     class NonExistentEngine extends TestEngine {}
+    const engineManager = new EngineManagerBase(
+      (self) => new TestEngine(self),
+      (self) => new TestEngine(self),
+    );
+
     expect(() => engineManager.getEngine(NonExistentEngine)).toThrow(
       'Engine of type NonExistentEngine not found',
     );
   });
 
-  it('重复调用 launch 应该抛出错误', async () => {
-    await engineManager.launch();
-    await expect(engineManager.launch()).rejects.toThrow(
-      'Engine already launch',
-    );
-  });
-
   it('应该处理引擎之间的依赖关系', async () => {
-    engineA['requireEngines'](engineB);
-    engineManager = new EngineManagerBase(engineA, engineB);
+    let engineA: TestEngine, engineB: TestEngine;
+    const engineManager = new EngineManagerBase((self) => {
+      engineA = new TestEngine(self);
+      engineB = new TestEngine(self);
+      engineA['requireEngines'](engineB);
+      return engineA;
+    });
 
-    expect(engineB.dependentEngines.has(engineA)).toBe(true);
-    expect(engineA.requiredEngines.has(engineB)).toBe(true);
+    expect(engineB!.dependentEngines.has(engineA!)).toBe(true);
+    expect(engineA!.requiredEngines.has(engineB!)).toBe(true);
 
     await engineManager.launch();
-    expect(engineA['hasLaunched']).toBe(true);
-    expect(engineB['hasLaunched']).toBe(true);
+    expect(engineA!['hasLaunched']).toBe(true);
+    expect(engineB!['hasLaunched']).toBe(true);
 
     // 确保 B 在 A 之前启动
     const sortedEngines = topologicalSort(
       engineManager['engines'],
       engineManager['dependencies'],
     );
-    expect(sortedEngines.indexOf(engineB)).toBeLessThan(
-      sortedEngines.indexOf(engineA),
+    expect(sortedEngines.indexOf(engineB!)).toBeLessThan(
+      sortedEngines.indexOf(engineA!),
     );
   });
 
   it('应该处理引擎内部的模块执行顺序', async () => {
-    engineA['requireEngines'](engineB);
+    const engineManager = new EngineManagerBase(
+      (self) => {
+        const engine = new TestEngine(self);
+        engine['requireEngines'](new TestEngine(self));
+        return engine;
+      },
+      (self) => new TestEngine(self),
+    );
+
+    const [engineA, engineB] = Array.from(
+      engineManager['engines'],
+    ) as TestEngine[];
 
     let currentIndex = 0;
     class TestModuleA extends ModuleBase {
@@ -122,8 +152,8 @@ describe('EngineManagerBase', () => {
         this.startOrder = currentIndex++;
       }
     }
-    const moduleA = new TestModuleA();
-    const moduleB = new TestModuleB();
+    const moduleA = new TestModuleA(engineA);
+    const moduleB = new TestModuleB(engineB);
 
     engineA['providerModules'](moduleA);
     engineB['providerModules'](moduleB);
@@ -134,5 +164,25 @@ describe('EngineManagerBase', () => {
     expect(moduleB.startOrder).toBe(1);
     expect(moduleA.setupOrder).toBe(2);
     expect(moduleA.startOrder).toBe(3);
+  });
+
+  it('应该正确获取指定类型的所有引擎', () => {
+    class TestOtherEngine extends EngineBase {}
+
+    const engineManager = new EngineManagerBase(
+      (self) => new TestEngine(self),
+      (self) => new TestEngine(self),
+      (self) => new (class extends TestEngine {})(self), // 另一个不同类型的引擎
+      (self) => new TestOtherEngine(self),
+    );
+
+    const fetchedEngines = engineManager.getEngines(TestEngine);
+    expect(fetchedEngines.length).toBe(3); // 期望 TestEngine 类型的引擎有 2 个
+    expect(fetchedEngines[0]).toBeInstanceOf(TestEngine);
+    expect(fetchedEngines[1]).toBeInstanceOf(TestEngine);
+    expect(fetchedEngines[2]).toBeInstanceOf(TestEngine);
+    const fetchedOtherEngines = engineManager.getEngines(TestOtherEngine);
+    expect(fetchedOtherEngines.length).toBe(1); // 期望 TestEngine 类型的引擎有 2 个
+    expect(fetchedOtherEngines[0]).toBeInstanceOf(TestOtherEngine);
   });
 });

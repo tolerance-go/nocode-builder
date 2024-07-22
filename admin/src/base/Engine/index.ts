@@ -6,34 +6,21 @@ export class EngineBase implements Engine {
   public requiredEngines: Set<Engine> = new Set(); // 当前 Engine 依赖的 Engines
   public dependentEngines: Set<Engine> = new Set(); // 依赖当前 Engine 的 Engines
   public launchProcessing: PromiseWithResolvers<void>;
+  public engineManager: EngineManagerBase;
 
   protected hasLaunched: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   private modules: Set<Module>;
   private dependencies: Map<Module, Set<Module>>;
   private dependents: Map<Module, Set<Module>>;
-  private engineManagerInstance: EngineManagerBase | null = null;
 
-  constructor() {
+  constructor(engineManager: EngineManagerBase) {
     this.modules = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
     this.launchProcessing = Promise.withResolvers<void>();
+    this.engineManager = engineManager;
     this.requireEngines();
-  }
-
-  public get engineManager(): EngineManagerBase {
-    if (!this.engineManagerInstance) {
-      throw new Error('EngineManager not set');
-    }
-
-    return this.engineManagerInstance;
-  }
-  public set engineManager(instance: EngineManagerBase) {
-    if (!this.engineManagerInstance) {
-      this.onAddedToEngineManager(instance); // 调用 onAddedToEngineManager hook
-    }
-    this.engineManagerInstance = instance;
   }
 
   public getDependEngine<T extends Engine>(
@@ -46,6 +33,15 @@ export class EngineBase implements Engine {
       }
     }
     throw new Error(`Module of type ${engineClass.name} not found`);
+  }
+
+  public getDependEngines<T extends Engine>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    engineClass: new (...args: any[]) => T,
+  ): T[] {
+    return Array.from(this.requiredEngines).filter(
+      (engine) => engine instanceof engineClass,
+    ) as T[];
   }
 
   public async launch() {
@@ -83,7 +79,6 @@ export class EngineBase implements Engine {
 
   protected async onLaunch(): Promise<void> {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected onAddedToEngineManager(_engineManager: EngineManagerBase): void {} // 新增的 hook
 
   protected requireEngines(...engines: Engine[]) {
     engines.forEach((engine) => {

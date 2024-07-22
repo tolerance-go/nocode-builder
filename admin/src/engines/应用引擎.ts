@@ -8,6 +8,6 @@ export class 应用引擎 extends EngineBase {
   }
 
   providerModules() {
-    super.providerModules(new UITreeManager());
+    super.providerModules(new UITreeManager(this));
   }
 }

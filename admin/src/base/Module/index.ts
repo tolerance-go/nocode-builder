@@ -4,38 +4,19 @@ import { Module } from '../types';
 export class ModuleBase implements Module {
   public setupProcessing: PromiseWithResolvers<void>;
   public startProcessing: PromiseWithResolvers<void>;
+  public engine: EngineBase;
   public requiredModules: Set<Module> = new Set(); // 当前 Module 依赖的 Modules
   public dependentModules: Set<Module> = new Set(); // 依赖当前 Module 的 Modules
 
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
-  private engineInstance: EngineBase | null = null;
-
-  constructor() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  constructor(engine: EngineBase) {
     this.setupProcessing = Promise.withResolvers<void>();
     this.startProcessing = Promise.withResolvers<void>();
+    this.engine = engine;
     this.requireModules();
-  }
-
-  get engine(): EngineBase {
-    if (!this.engineInstance) {
-      throw new Error('Engine not set');
-    }
-
-    return this.engineInstance;
-  }
-
-  set engine(instance: EngineBase) {
-    if (!this.engineInstance) {
-      this.onAddedToEngine(instance); // 调用 onAddedToEngine hook
-    }
-
-    this.engineInstance = instance;
-
-    this.requiredModules.forEach((module) => {
-      module.engine = this.engine;
-    });
   }
 
   // 获取指定类型的 Module 实例
@@ -47,6 +28,15 @@ export class ModuleBase implements Module {
       }
     }
     throw new Error(`Module of type ${moduleClass.name} not found`);
+  }
+
+  getDependModules<T extends Module>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    moduleClass: new (...args: any[]) => T,
+  ): T[] {
+    return Array.from(this.requiredModules).filter(
+      (module) => module instanceof moduleClass,
+    ) as T[];
   }
 
   // 启动
@@ -83,9 +73,6 @@ export class ModuleBase implements Module {
   // 抽象的 start 逻辑函数，需要在继承类中实现
   protected async onSetup(): Promise<void> {}
   protected async onStart(): Promise<void> {}
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected onAddedToEngine(_engine: EngineBase): void {} // 新增的 hook
 
   // 导入其他 Module
   protected requireModules(...modules: Module[]) {
