@@ -5,6 +5,7 @@ export type EngineConstructors = ((self: EngineManagerBase) => Engine)[];
 
 export class EngineManagerBase implements EngineManager {
   private engines: Set<Engine>;
+  private allEngines: Set<Engine>;
   private dependencies: Map<Engine, Set<Engine>>;
   private dependents: Map<Engine, Set<Engine>>;
 
@@ -12,6 +13,7 @@ export class EngineManagerBase implements EngineManager {
     this.engines = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
+    this.allEngines = new Set();
     this.initEngines(engineConstructors);
   }
 
@@ -46,6 +48,7 @@ export class EngineManagerBase implements EngineManager {
     engineConstructors.forEach((engineConstructor) => {
       const engine = engineConstructor(this);
       this.engines.add(engine);
+      this.allEngines.add(engine);
     });
 
     // 收集依赖关系
@@ -53,7 +56,13 @@ export class EngineManagerBase implements EngineManager {
       this.engines,
       this.dependencies,
       this.dependents,
-      (engine) => engine.requiredEngines,
+      (engine) => {
+        engine.requiredEngines.forEach((requiredEngine) => {
+          this.allEngines.add(requiredEngine);
+        });
+
+        return engine.requiredEngines;
+      },
     );
   }
 

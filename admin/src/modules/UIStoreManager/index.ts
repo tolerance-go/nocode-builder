@@ -1,15 +1,13 @@
 import { ProjectTypeEnum } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
 import { paths } from '@/common/constants';
-import { api, 全局事件系统实例, 全局界面导航系统实例 } from '@/globals';
+import { api } from '@/globals';
 import { produce } from 'immer';
 import store from 'store2';
-import { localStateFieldName } from './constants';
-import { RootState } from './types';
 import { StoreModule } from '../StoreModule';
 import { 全局事件系统 } from '../全局事件系统';
 import { 界面导航系统 } from '../界面导航系统';
-import { 基础引擎 } from '@/engines/基础引擎';
+import { RootState } from './types';
 
 export class UIStoreManager extends ModuleBase {
   private initialState: RootState | null = null;
@@ -25,9 +23,9 @@ export class UIStoreManager extends ModuleBase {
 
   requireModules() {
     super.requireModules(
-      全局事件系统实例,
-      全局界面导航系统实例,
-      new StoreModule(this.initialState),
+      this.engine.getModule(全局事件系统),
+      this.engine.getModule(界面导航系统),
+      new StoreModule(this.engine, this.initialState),
     );
   }
 
@@ -166,7 +164,7 @@ export class UIStoreManager extends ModuleBase {
   }
 }
 
+export * from './constants';
 export * from './hooks';
 export * from './types';
 export * from './utils';
-export * from './constants';

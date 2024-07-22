@@ -4,15 +4,28 @@ export function collectDependencies<T>(
   dependents: Map<T, Set<T>>,
   getDependencies: (item: T) => Set<T>,
 ): void {
-  items.forEach((item) => {
+  function addDependencies(item: T) {
     const deps = getDependencies(item);
-    dependencies.set(item, deps);
+
+    if (!dependencies.has(item)) {
+      dependencies.set(item, new Set());
+    }
 
     deps.forEach((dep) => {
+      if (!dependencies.has(dep)) {
+        addDependencies(dep);
+      }
+
+      dependencies.get(item)?.add(dep);
+
       if (!dependents.has(dep)) {
         dependents.set(dep, new Set());
       }
       dependents.get(dep)?.add(item);
     });
+  }
+
+  items.forEach((item) => {
+    addDependencies(item);
   });
 }

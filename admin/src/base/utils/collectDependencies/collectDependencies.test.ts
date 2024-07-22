@@ -40,7 +40,7 @@ describe('collectDependencies', () => {
 
     expect(dependents.get(engineA)).toEqual(new Set([engineB, engineC]));
     expect(dependents.get(engineB)).toEqual(new Set([engineC]));
-    expect(dependents.get(engineC)).toEqual(undefined);
+    expect(dependents.get(engineC)).toBe(undefined);
   });
 
   it('应正确收集模块的依赖关系和被依赖关系', () => {
@@ -65,6 +65,62 @@ describe('collectDependencies', () => {
 
     expect(dependents.get(moduleA)).toEqual(new Set([moduleB, moduleC]));
     expect(dependents.get(moduleB)).toEqual(new Set([moduleC]));
-    expect(dependents.get(moduleC)).toEqual(undefined);
+    expect(dependents.get(moduleC)).toBe(undefined);
+  });
+
+  it('应正确处理模块的递归依赖', () => {
+    const moduleA = new MockModule();
+    const moduleB = new MockModule([moduleA]);
+    const moduleC = new MockModule([moduleB]);
+    const moduleD = new MockModule([moduleC]);
+
+    const modules = new Set([moduleA, moduleB, moduleC, moduleD]);
+    const dependencies = new Map();
+    const dependents = new Map();
+
+    collectDependencies(
+      modules,
+      dependencies,
+      dependents,
+      (module) => module.requiredModules,
+    );
+
+    expect(dependencies.get(moduleA)).toEqual(new Set());
+    expect(dependencies.get(moduleB)).toEqual(new Set([moduleA]));
+    expect(dependencies.get(moduleC)).toEqual(new Set([moduleB]));
+    expect(dependencies.get(moduleD)).toEqual(new Set([moduleC]));
+
+    expect(dependents.get(moduleA)).toEqual(new Set([moduleB]));
+    expect(dependents.get(moduleB)).toEqual(new Set([moduleC]));
+    expect(dependents.get(moduleC)).toEqual(new Set([moduleD]));
+    expect(dependents.get(moduleD)).toBe(undefined);
+  });
+
+  it('应正确处理引擎的递归依赖', () => {
+    const engineA = new MockEngine();
+    const engineB = new MockEngine([engineA]);
+    const engineC = new MockEngine([engineB]);
+    const engineD = new MockEngine([engineC]);
+
+    const engines = new Set([engineA, engineB, engineC, engineD]);
+    const dependencies = new Map();
+    const dependents = new Map();
+
+    collectDependencies(
+      engines,
+      dependencies,
+      dependents,
+      (engine) => engine.requiredEngines,
+    );
+
+    expect(dependencies.get(engineA)).toEqual(new Set());
+    expect(dependencies.get(engineB)).toEqual(new Set([engineA]));
+    expect(dependencies.get(engineC)).toEqual(new Set([engineB]));
+    expect(dependencies.get(engineD)).toEqual(new Set([engineC]));
+
+    expect(dependents.get(engineA)).toEqual(new Set([engineB]));
+    expect(dependents.get(engineB)).toEqual(new Set([engineC]));
+    expect(dependents.get(engineC)).toEqual(new Set([engineD]));
+    expect(dependents.get(engineD)).toBe(undefined);
   });
 });

@@ -7,7 +7,7 @@ import {
   历史记录远程同步状态机,
   历史记录远程同步状态机SnapshotType,
 } from './states';
-import { ModuleBase } from '@/base';
+import { EngineBase, ModuleBase } from '@/base';
 import {
   DiffResult,
   ProjectStructureTreeDataNode,
@@ -16,7 +16,6 @@ import {
 } from '@/modules/UIStoreManager';
 import { 全局事件系统 } from '@/modules/全局事件系统';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
-import { 全局事件系统实例 } from '@/globals';
 import { 基础引擎 } from '@/engines/基础引擎';
 
 export interface SyncHistoryManagerState {
@@ -49,8 +48,8 @@ export class 历史记录远程同步管理者 extends ModuleBase {
   private 历史记录远程同步状态机;
   private stateController;
 
-  constructor(params: SyncHistoryManagerEmployeeParams) {
-    super();
+  constructor(engine: EngineBase, params: SyncHistoryManagerEmployeeParams) {
+    super(engine);
 
     const { retryStartCallback, retryFailCallback, syncFunction } = params;
 
@@ -93,7 +92,7 @@ export class 历史记录远程同步管理者 extends ModuleBase {
   }
 
   public requireModules() {
-    super.requireModules(全局事件系统实例);
+    super.requireModules(this.engine.getModule(全局事件系统));
   }
 
   public async updateHistories(newHistory: 历史记录[]): Promise<void> {

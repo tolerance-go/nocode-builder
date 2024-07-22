@@ -135,10 +135,7 @@ describe('EngineBase', () => {
     const testModule = new TestModule(engine);
     const dependentModule = new TestModule(engine);
 
-    // Mock getDependencies 方法，使其返回 dependentModule
-    vi.spyOn(testModule, 'requiredModules', 'get').mockReturnValue(
-      new Set([dependentModule]),
-    );
+    testModule['requireModules'](dependentModule);
 
     engine['providerModules'](testModule);
 
@@ -146,5 +143,25 @@ describe('EngineBase', () => {
     expect(engine['providedModules'].has(dependentModule)).toBe(false);
     expect(engine['allModules'].has(testModule)).toBe(true);
     expect(engine['allModules'].has(dependentModule)).toBe(true);
+  });
+
+  it('应该正确处理具有多层依赖的模块', () => {
+    const engineManager = new TestEngineManager();
+    const engine = new TestEngine(engineManager);
+    const testModule = new TestModule(engine);
+    const dependentModule = new TestModule(engine);
+    const subDependentModule = new TestModule(engine);
+
+    testModule['requireModules'](dependentModule);
+    dependentModule['requireModules'](subDependentModule);
+
+    engine['providerModules'](testModule);
+
+    expect(engine['providedModules'].has(testModule)).toBe(true);
+    expect(engine['providedModules'].has(dependentModule)).toBe(false);
+    expect(engine['providedModules'].has(subDependentModule)).toBe(false);
+    expect(engine['allModules'].has(testModule)).toBe(true);
+    expect(engine['allModules'].has(dependentModule)).toBe(true);
+    expect(engine['allModules'].has(subDependentModule)).toBe(true);
   });
 });

@@ -97,7 +97,6 @@ export class EngineBase implements Engine {
   }
 
   protected providerModules(...moduleConstructors: Module[]) {
-    // 初始化 Modules
     moduleConstructors.forEach((module) => {
       this.providedModules.add(module);
       this.allModules.add(module);
@@ -107,13 +106,13 @@ export class EngineBase implements Engine {
       this.providedModules,
       this.dependencies,
       this.dependents,
-      (module) => module.requiredModules,
+      (module) => {
+        module.requiredModules.forEach((requiredModule) => {
+          this.allModules.add(requiredModule);
+        });
+        return module.requiredModules;
+      },
     );
-
-    // 将所有依赖模块添加到 allModules
-    this.dependencies.forEach((deps) => {
-      deps.forEach((dep) => this.allModules.add(dep));
-    });
   }
 
   private async setupModules(modules: Module[]) {
