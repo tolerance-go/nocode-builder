@@ -64,9 +64,11 @@ describe('TaskQueue', () => {
     queue.onTaskSuccess = successCallback;
     queue.onTaskFailure = failureCallback;
 
+    let task2ShouldFail = true;
+
     const task1 = vi.fn<[], Promise<void>>(async () => {});
     const task2 = vi.fn<[], Promise<void>>(async () => {
-      throw new Error('任务失败');
+      if (task2ShouldFail) throw new Error('任务失败');
     });
     const task3 = vi.fn<[], Promise<void>>(async () => {});
 
@@ -74,10 +76,20 @@ describe('TaskQueue', () => {
     queue.add(task2);
     queue.add(task3);
 
-    // 等待所有任务执行完毕
+    // 等待任务执行完毕
     await new Promise((resolve) => setTimeout(resolve, 100));
 
-    expect(successCallback).toHaveBeenCalledTimes(2);
+    expect(successCallback).toHaveBeenCalledTimes(1);
     expect(failureCallback).toHaveBeenCalledTimes(1);
+
+    task2ShouldFail = false;
+
+    // 再次添加 task3 确保从失败位置继续执行
+    queue.add(task3);
+
+    // 等待任务执行完毕
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    expect(successCallback).toHaveBeenCalledTimes(4);
   });
 });
