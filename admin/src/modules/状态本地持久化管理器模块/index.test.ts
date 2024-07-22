@@ -2,7 +2,6 @@ import { EngineBase } from '@/base';
 import localforage from 'localforage';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PersistTask, PersistTaskManager } from '../PersistTaskManager';
-import { cloneDeep } from 'lodash-es';
 import {
   clearMockLocalforageData,
   mockLocalData,
