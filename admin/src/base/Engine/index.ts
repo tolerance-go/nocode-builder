@@ -30,6 +30,9 @@ export class EngineBase implements Engine {
     return this.engineManagerInstance;
   }
   public set engineManager(instance: EngineManagerBase) {
+    if (!this.engineManagerInstance) {
+      this.onAddedToEngineManager(instance); // 调用 onAddedToEngineManager hook
+    }
     this.engineManagerInstance = instance;
   }
 
@@ -79,6 +82,8 @@ export class EngineBase implements Engine {
   }
 
   protected async onLaunch(): Promise<void> {}
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected onAddedToEngineManager(_engineManager: EngineManagerBase): void {} // 新增的 hook
 
   protected requireEngines(...engines: Engine[]) {
     engines.forEach((engine) => {
