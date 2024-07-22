@@ -10,12 +10,14 @@ export class EngineBase implements Engine {
 
   protected hasLaunched: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
-  private modules: Set<Module>;
+  private providedModules: Set<Module>;
+  private allModules: Set<Module>;
   private dependencies: Map<Module, Set<Module>>;
   private dependents: Map<Module, Set<Module>>;
 
   constructor(engineManager: EngineManagerBase) {
-    this.modules = new Set();
+    this.providedModules = new Set();
+    this.allModules = new Set();
     this.dependencies = new Map();
     this.dependents = new Map();
     this.launchProcessing = Promise.withResolvers<void>();
@@ -51,12 +53,15 @@ export class EngineBase implements Engine {
 
     await Promise.all(
       Array.from(this.requiredEngines).map(
-        (module) => module.launchProcessing.promise,
+        (engine) => engine.launchProcessing.promise,
       ),
     );
 
     this.providerModules();
-    const sortedActors = topologicalSort(this.modules, this.dependencies);
+    const sortedActors = topologicalSort(
+      this.providedModules,
+      this.dependencies,
+    );
     await this.setupModules(sortedActors);
     await this.startModules(sortedActors);
 
@@ -69,7 +74,7 @@ export class EngineBase implements Engine {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleClass: new (...args: any[]) => T,
   ): T {
-    for (const module of this.modules) {
+    for (const module of this.allModules) {
       if (module instanceof moduleClass) {
         return module;
       }
@@ -92,15 +97,14 @@ export class EngineBase implements Engine {
   }
 
   protected providerModules(...moduleConstructors: Module[]) {
-    // 初始化 Actors
+    // 初始化 Modules
     moduleConstructors.forEach((module) => {
-      module.engine = this;
-
-      this.modules.add(module);
+      this.providedModules.add(module);
+      this.allModules.add(module);
     });
 
     collectDependencies(
-      this.modules,
+      this.providedModules,
       this.dependencies,
       this.dependents,
       (module) => module.requiredModules,
@@ -115,7 +119,7 @@ export class EngineBase implements Engine {
     await Promise.all(modules.map((module) => module.start()));
   }
 
-  private addDependentEngine(module: Engine): void {
-    this.dependentEngines.add(module);
+  private addDependentEngine(engine: Engine): void {
+    this.dependentEngines.add(engine);
   }
 }

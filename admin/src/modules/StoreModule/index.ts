@@ -1,5 +1,4 @@
-import { ModuleBase } from '@/base';
-import { 全局事件系统实例 } from '@/globals';
+import { EngineBase, ModuleBase } from '@/base';
 import { configureStore, Middleware } from '@reduxjs/toolkit';
 import { AppMiddleware, findNode, RootState } from '../UIStoreManager';
 import { LayoutStateController } from '../UIStoreManager/controllers';
@@ -137,8 +136,8 @@ export class StoreModule extends ModuleBase {
 
   private layoutStateController: LayoutStateController;
 
-  constructor(initialState: RootState | null) {
-    super();
+  constructor(engine: EngineBase, initialState: RootState | null) {
+    super(engine);
 
     this.slices = StoreModule.createSlices();
 
