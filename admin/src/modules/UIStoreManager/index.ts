@@ -6,7 +6,7 @@ import { produce } from 'immer';
 import store from 'store2';
 import { localStateFieldName } from './constants';
 import { RootState } from './types';
-import { BaseEngine } from '@/engines/BaseEngine';
+import { 基础引擎 } from '@/engines/BaseEngine';
 import { StoreModule } from '../StoreModule';
 import { 全局事件系统 } from '../全局事件系统';
 import { 界面导航系统 } from '../界面导航系统';
@@ -18,7 +18,7 @@ export class UIStoreManager extends ModuleBase {
     super();
 
     const localState = this.engine.engineManager
-      .getEngine(BaseEngine)
+      .getEngine(基础引擎)
       .getLocalStateItem<RootState>(localStateFieldName);
 
     this.initialState = localState;
@@ -145,7 +145,7 @@ export class UIStoreManager extends ModuleBase {
       const next = this.过滤掉某些不存储到本地的state(state);
 
       this.engine.engineManager
-        .getEngine(BaseEngine)
+        .getEngine(基础引擎)
         .setLocalStateItem(localStateFieldName, next);
     });
   }
