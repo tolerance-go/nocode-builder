@@ -3,7 +3,11 @@ import localforage from 'localforage';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { PersistTask, PersistTaskManager } from '../PersistTaskManager';
 import { cloneDeep } from 'lodash-es';
-import { clearMockLocalforageData, mockLocalforage } from '@/common/tests';
+import {
+  clearMockLocalforageData,
+  mockLocalData,
+  mockLocalforage,
+} from '@/common/tests';
 
 class TestEngine extends EngineBase {
   protected providerModules(): void {
@@ -78,7 +82,7 @@ describe('PersistTaskManager with EngineBase', () => {
       { key: 'testKey1', data: 'testData1' },
       { key: 'testKey2', data: 'testData2' },
     ];
-    localData[key] = tasks;
+    mockLocalData[key] = tasks;
     const newEngine = new TestEngine();
     await newEngine.launch();
     const newTaskManager = newEngine.getModule(PersistTaskManager);
