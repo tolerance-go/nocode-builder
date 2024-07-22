@@ -60,7 +60,7 @@ describe('PersistTaskManager with EngineBase', () => {
     const nextTask = await taskManager.getNextTask();
     expect(nextTask).toBeUndefined();
     const storedTasks = await localforage.getItem('persistTasks');
-    expect(storedTasks).toBeNull();
+    expect(storedTasks).toEqual([]);
   });
 
   it('应该正确判断任务队列是否为空', async () => {
