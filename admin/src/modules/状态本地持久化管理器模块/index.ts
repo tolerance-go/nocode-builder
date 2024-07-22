@@ -76,9 +76,9 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
       this.taskQueue.isIdle() &&
       !this.getDependModule(PersistTaskManager).isQueueEmpty()
     ) {
-      const task = this.getDependModule(PersistTaskManager).getNextTask()!;
+      const task = await this.getDependModule(PersistTaskManager).getNextTask();
       await this.addTask(async () => {
-        await this.saveDataLocally(task.key, task.data);
+        await this.saveDataLocally(task!.key, task!.data);
       });
     }
   }

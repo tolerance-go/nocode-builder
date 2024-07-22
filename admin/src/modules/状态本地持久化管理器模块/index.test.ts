@@ -1,76 +1,90 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import localforage from 'localforage';
 import { EngineBase } from '@/base';
-import { 状态本地持久化管理器模块 } from '.';
+import localforage from 'localforage';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { PersistTask, PersistTaskManager } from '../PersistTaskManager';
+import { cloneDeep } from 'lodash-es';
+import { clearMockLocalforageData, mockLocalforage } from '@/common/tests';
 
 class TestEngine extends EngineBase {
-  constructor() {
-    super();
-    this.providerModules(new 状态本地持久化管理器模块());
+  protected providerModules(): void {
+    super.providerModules(new PersistTaskManager());
   }
 }
 
-describe('状态本地持久化管理器模块', () => {
+interface TestTask {
+  key: string;
+  data: string;
+}
+
+describe('PersistTaskManager with EngineBase', () => {
   let engine: TestEngine;
-  let module: 状态本地持久化管理器模块;
-  const key = '测试键';
-  let localData: Record<string, unknown | null> = {};
+  let taskManager: PersistTaskManager;
+  const key = 'persistTasks';
 
   beforeEach(async () => {
+    mockLocalforage(); // 设置 localforage 的 spy
     engine = new TestEngine();
-    module = engine.getModule(状态本地持久化管理器模块);
     await engine.launch();
-    vi.spyOn(localforage, 'setItem').mockImplementation(async (k, newData) => {
-      localData[k] = newData;
-    });
-    vi.spyOn(localforage, 'getItem').mockImplementation(async (k) => {
-      return localData[k] || null;
-    });
-    vi.spyOn(localforage, 'removeItem').mockImplementation(async (k) => {
-      localData[k] = null;
-    });
+    taskManager = engine.getModule(PersistTaskManager);
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
-    localData = {}; // 重置 localData
+    clearMockLocalforageData(); // 清除 mock 数据
   });
 
-  it('应该持久化数据', async () => {
-    const data = { 测试: '值' };
-    await module.persistData(key, data);
-    const savedData = await localforage.getItem(key);
-    expect(savedData).toEqual(data);
+  it('应该成功添加一个持久化任务并保存到本地存储', async () => {
+    const task: TestTask = { key: 'testKey', data: 'testData' };
+    await taskManager.addPersistTask(task);
+
+    expect(taskManager.isQueueEmpty()).toBe(false);
+
+    const storedTasks = await localforage.getItem(key);
+    expect(storedTasks).toEqual([task]);
   });
 
-  it('应该获取数据', async () => {
-    const data = { 测试: '值' };
-    localData[key] = data;
-    const result = await module.getData<typeof data>(key);
-    expect(result).toEqual(data);
+  it('应该成功获取下一个持久化任务并更新本地存储', async () => {
+    const task1: TestTask = { key: 'testKey1', data: 'testData1' };
+    const task2: TestTask = { key: 'testKey2', data: 'testData2' };
+    await taskManager.addPersistTask(task1);
+    await taskManager.addPersistTask(task2);
+
+    const nextTask = await taskManager.getNextTask();
+    expect(nextTask).toEqual(task1);
+    expect(taskManager.isQueueEmpty()).toBe(false);
+
+    const storedTasks = await localforage.getItem(key);
+    expect(storedTasks).toEqual([task2]);
   });
 
-  it('应该删除数据', async () => {
-    const data = { 测试: '值' };
-    localData[key] = data;
-    await module.removeData(key);
-    const removedData = await localforage.getItem(key);
-    expect(removedData).toBeNull();
+  it('队列为空时应该返回 undefined 并保持本地存储为空', async () => {
+    const nextTask = await taskManager.getNextTask();
+    expect(nextTask).toBeUndefined();
+    const storedTasks = await localforage.getItem(key);
+    expect(storedTasks).toEqual([]);
   });
 
-  it('应该处理任务成功', async () => {
-    const data = { 测试: '值' };
-    await module.persistData(key, data);
-    // 根据需要检查任务队列的状态或结果
+  it('应该正确判断任务队列是否为空', async () => {
+    expect(taskManager.isQueueEmpty()).toBe(true);
+
+    const task: TestTask = { key: 'testKey', data: 'testData' };
+    await taskManager.addPersistTask(task);
+
+    expect(taskManager.isQueueEmpty()).toBe(false);
   });
 
-  it('应该处理任务失败', async () => {
-    const data = { 测试: '值' };
-    vi.spyOn(localforage, 'setItem').mockRejectedValueOnce(new Error('错误'));
-    try {
-      await module.persistData(key, data);
-    } catch (error) {
-      // 确认任务失败后的处理逻辑
-    }
+  it('初始化时应该从本地存储加载任务队列', async () => {
+    const tasks: PersistTask<unknown>[] = [
+      { key: 'testKey1', data: 'testData1' },
+      { key: 'testKey2', data: 'testData2' },
+    ];
+    localData[key] = tasks;
+    const newEngine = new TestEngine();
+    await newEngine.launch();
+    const newTaskManager = newEngine.getModule(PersistTaskManager);
+    expect(newTaskManager.isQueueEmpty()).toBe(false);
+
+    const nextTask = await newTaskManager.getNextTask();
+    expect(nextTask).toEqual(tasks[0]);
   });
 });
