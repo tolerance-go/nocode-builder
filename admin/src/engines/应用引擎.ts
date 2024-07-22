@@ -4,7 +4,7 @@ import { UITreeManager } from '@/modules/UITreeManager';
 
 export class 应用引擎 extends EngineBase {
   requireEngines() {
-    super.requireEngines(new 基础引擎());
+    super.requireEngines(new 基础引擎(this.engineManager));
   }
 
   providerModules() {

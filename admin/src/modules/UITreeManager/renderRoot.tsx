@@ -1,15 +1,23 @@
+import { ModuleBase } from '@/base';
 import { fullPathnames, paths } from '@/common/constants';
 import React from 'react';
 import { Provider } from 'react-redux';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { UIStoreManager } from '../UIStoreManager';
+import { 全局事件系统 } from '../全局事件系统';
+import { 图标管理者 } from '../图标管理者';
+import { 界面导航系统 } from '../界面导航系统';
+import { 界面通知系统 } from '../界面通知系统';
+import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
+import { 验证管理者 } from '../验证管理者';
 import {
-  系统上下文,
-  导航系统Context,
-  全局事件系统Context,
   UIStoreManagerContext,
-  验证管理者Context,
-  跟随鼠标显示内容管理者Context,
+  全局事件系统Context,
   图标管理者Context,
+  导航系统Context,
+  系统上下文,
+  跟随鼠标显示内容管理者Context,
+  验证管理者Context,
 } from './contexts';
 import { Root } from './root';
 import { Admin } from './root/(admin)';
@@ -20,16 +28,8 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
-import { UIStoreManager } from '../UIStoreManager';
-import { 全局事件系统 } from '../全局事件系统';
-import { 图标管理者 } from '../图标管理者';
-import { 界面导航系统 } from '../界面导航系统';
-import { 界面通知系统 } from '../界面通知系统';
-import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
-import { 验证管理者 } from '../验证管理者';
-import { Module } from '@/base/types';
 
-export const renderRoot = (module: Module) => {
+export const renderRoot = (module: ModuleBase) => {
   const 验证管理者实例 = module.getDependModule(验证管理者);
   const 图标管理者实例 = module.getDependModule(图标管理者);
   const 跟随鼠标显示内容管理者实例 =

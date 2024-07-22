@@ -1,5 +1,5 @@
 import { ProjectTypeEnum } from '@/_gen/models';
-import { ModuleBase } from '@/base';
+import { EngineBase, ModuleBase } from '@/base';
 import { paths } from '@/common/constants';
 import { api, 全局事件系统实例, 全局界面导航系统实例 } from '@/globals';
 import { produce } from 'immer';
@@ -12,16 +12,15 @@ import { 界面导航系统 } from '../界面导航系统';
 import { 基础引擎 } from '@/engines/基础引擎';
 
 export class UIStoreManager extends ModuleBase {
-  private initialState: RootState | null;
+  private initialState: RootState | null = null;
 
-  constructor() {
-    super();
+  constructor(engine: EngineBase) {
+    super(engine);
 
-    const localState = this.engine.engineManager
-      .getEngine(基础引擎)
-      .getLocalStateItem<RootState>(localStateFieldName);
+    // const localState = engine.getDependEngine(基础引擎);
+    // .getLocalStateItem<RootState>(localStateFieldName);
 
-    this.initialState = localState;
+    // this.initialState = localState;
   }
 
   requireModules() {
@@ -144,9 +143,9 @@ export class UIStoreManager extends ModuleBase {
 
       const next = this.过滤掉某些不存储到本地的state(state);
 
-      this.engine.engineManager
-        .getEngine(基础引擎)
-        .setLocalStateItem(localStateFieldName, next);
+      // this.engine.engineManager
+      //   .getEngine(基础引擎)
+      //   .setLocalStateItem(localStateFieldName, next);
     });
   }
 

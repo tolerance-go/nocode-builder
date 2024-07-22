@@ -5,7 +5,15 @@ import './index.css';
 import { EngineManagerBase } from './base/EngineManager';
 
 const main = async () => {
-  await new EngineManagerBase(new 应用引擎()).launch();
+  const engineManager = await new EngineManagerBase((self) => {
+    const appEngine = new 应用引擎(self);
+    window.appEngine = appEngine;
+    return appEngine;
+  });
+
+  window.engineManager = engineManager;
+
+  await engineManager.launch();
 };
 
 main();

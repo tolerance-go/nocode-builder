@@ -1,4 +1,3 @@
-// cypress.d.ts
 export {};
 
 declare global {
