@@ -1,12 +1,7 @@
 import { ModuleBase } from '@/base';
 import { TaskQueue } from '@/common/controllers/TaskQueue';
 import localforage from 'localforage';
-
-// 定义一个接口来描述持久化任务
-interface PersistTask<T> {
-  key: string;
-  data: T;
-}
+import { PersistTaskManager } from '../PersistTaskManager';
 
 /**
  * 状态本地持久化管理器模块
@@ -21,7 +16,6 @@ interface PersistTask<T> {
  */
 export class 状态本地持久化管理器模块 extends ModuleBase {
   private taskQueue: TaskQueue;
-  private persistTasks: PersistTask<unknown>[] = []; // 内部任务队列
 
   constructor() {
     super();
@@ -32,10 +26,9 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
 
   // 添加一个持久化任务到队列
   async addPersistTask<T>(key: string, data: T): Promise<void> {
-    this.persistTasks.push({ key, data });
+    this.getDependModule(PersistTaskManager).addPersistTask({ key, data });
     await this.processNextTask(); // 尝试处理下一个任务
   }
-
   // 示例持久化任务
   async persistData<T>(key: string, data: T): Promise<void> {
     await this.addPersistTask(key, data);
@@ -63,6 +56,10 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
       }
     });
   }
+  protected requireModules(): void {
+    super.requireModules(new PersistTaskManager());
+  }
+
   // 在 setup 阶段执行的逻辑
   protected async onSetup(): Promise<void> {
     // 这里可以添加模块 setup 阶段需要执行的逻辑
@@ -75,8 +72,11 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
   }
   // 处理下一个任务
   private async processNextTask(): Promise<void> {
-    if (this.taskQueue.isIdle() && this.persistTasks.length > 0) {
-      const task = this.persistTasks.shift()!;
+    if (
+      this.taskQueue.isIdle() &&
+      !this.getDependModule(PersistTaskManager).isQueueEmpty()
+    ) {
+      const task = this.getDependModule(PersistTaskManager).getNextTask()!;
       await this.addTask(async () => {
         await this.saveDataLocally(task.key, task.data);
       });
