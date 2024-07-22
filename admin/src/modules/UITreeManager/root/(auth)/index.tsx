@@ -39,7 +39,10 @@ export const Auth = () => {
               >
                 <Typography.Title>UNOCODE</Typography.Title>
                 <Typography.Title level={4}>
-                  下一代无代码开发平台
+                  AI时代的无代码软件制作平台，一键上线所需应用
+                </Typography.Title>
+                <Typography.Title level={4}>
+                  无需开发，只待设计
                 </Typography.Title>
               </Flex>
               <Outlet />
