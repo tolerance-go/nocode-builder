@@ -1,3 +1,21 @@
+/**
+ * 任务队列类
+ *
+ * 是什么: 一个用于管理异步任务队列的类
+ *
+ * 为了什么用户: 需要管理异步任务执行顺序并在任务成功或失败时执行相应回调的开发者
+ *
+ * 解决什么问题: 该类确保异步任务按顺序执行，并在每个任务执行成功或失败后触发相应的回调
+ *
+ * 以便于: 开发者能够更轻松地管理异步任务的顺序和状态处理
+ *
+ * 用法示例:
+ * const taskQueue = new TaskQueue();
+ * taskQueue.onTaskSuccess = () => { console.log('任务成功'); };
+ * taskQueue.onTaskFailure = () => { console.log('任务失败'); };
+ * taskQueue.add(async () => { \/* 异步任务逻辑 *\/ });
+ */
+
 export type Task = () => Promise<void>;
 
 export class TaskQueue {
