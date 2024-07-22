@@ -8,6 +8,17 @@ interface PersistTask<T> {
   data: T;
 }
 
+/**
+ * 状态本地持久化管理器模块
+ *
+ * 是什么: 一个用于管理本地状态持久化的模块类
+ *
+ * 为了什么用户: 需要将应用程序状态持久化到本地存储，并能够恢复和管理持久化任务的开发者
+ *
+ * 解决什么问题: 该模块类通过管理持久化任务队列，确保状态数据按顺序持久化，并在成功或失败时进行相应处理
+ *
+ * 以便于: 开发者能够轻松地将应用状态持久化到本地存储，并在应用重启时恢复未完成的持久化任务
+ */
 export class 状态本地持久化管理器模块 extends ModuleBase {
   private taskQueue: TaskQueue;
   private persistTasks: PersistTask<unknown>[] = []; // 内部任务队列
