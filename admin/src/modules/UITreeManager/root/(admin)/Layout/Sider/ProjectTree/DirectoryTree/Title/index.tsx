@@ -1,10 +1,7 @@
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '@/modules/managers/UIStoreManager';
-import { 组件类名 } from '@/modules/managers/UITreeManager/constants';
-import { use界面状态管理者 } from '@/modules/managers/UITreeManager/hooks';
-import { selectProjectStructureTreeNodeDataRecordItem } from '@/modules/managers/UITreeManager/selectors';
+import { useAppDispatch, useAppSelector } from '@/modules/UIStoreManager';
+import { 组件类名 } from '@/modules/UITreeManager/constants';
+import { use界面状态管理者 } from '@/modules/UITreeManager/hooks';
+import { selectProjectStructureTreeNodeDataRecordItem } from '@/modules/UITreeManager/selectors';
 import { 测试标识, 测试类名 } from '@/common/constants';
 import { cx } from '@emotion/css';
 import { Dropdown, Flex, Typography, theme } from 'antd';

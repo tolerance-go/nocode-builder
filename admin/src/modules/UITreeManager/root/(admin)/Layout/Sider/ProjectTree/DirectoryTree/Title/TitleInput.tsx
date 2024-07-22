@@ -1,11 +1,8 @@
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '@/modules/managers/UIStoreManager';
+import { useAppDispatch, useAppSelector } from '@/modules/UIStoreManager';
 import {
   use界面状态管理者,
   use验证管理者,
-} from '@/modules/managers/UITreeManager/hooks';
+} from '@/modules/UITreeManager/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/common/hooks';
 import { 测试标识 } from '@/common/constants';
 import { Flex, Input, InputRef, theme } from 'antd';

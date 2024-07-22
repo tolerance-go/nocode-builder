@@ -5,17 +5,17 @@ import {
   查询项目树中的节点,
   节点是不是文件,
   节点是不是文件夹,
-} from '@/modules/managers/UIStoreManager';
+} from '@/modules/UIStoreManager';
 import {
   ProjectTreeNodeDataRecordItem,
   ProjectStructureTreeDataNode,
-} from '@/modules/managers/UIStoreManager/types';
-import { 组件标识, 组件类名 } from '@/modules/managers/UITreeManager/constants';
+} from '@/modules/UIStoreManager/types';
+import { 组件标识, 组件类名 } from '@/modules/UITreeManager/constants';
 import {
   use界面状态管理者,
   use图标管理者,
-} from '@/modules/managers/UITreeManager/hooks';
-import { ProjectFileType } from '@/modules/managers/UITreeManager/types';
+} from '@/modules/UITreeManager/hooks';
+import { ProjectFileType } from '@/modules/UITreeManager/types';
 
 import { FolderAddOutlined, PlusOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@/common/constants';

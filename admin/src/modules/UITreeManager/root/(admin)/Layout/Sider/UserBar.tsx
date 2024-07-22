@@ -1,5 +1,5 @@
-import { useAppSelector } from '@/modules/managers/UIStoreManager';
-import { layoutPadding } from '@/modules/managers/UITreeManager/configs';
+import { useAppSelector } from '@/modules/UIStoreManager';
+import { layoutPadding } from '@/modules/UITreeManager/configs';
 import { EllipsisOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@/common/constants';
 import { Button, Dropdown, Flex, theme } from 'antd';

@@ -2,12 +2,12 @@ import {
   useAppDispatch,
   useAppSelector,
   过滤掉包含父节点在内的节点,
-} from '@/modules/managers/UIStoreManager';
-import { 组件类名 } from '@/modules/managers/UITreeManager/constants';
+} from '@/modules/UIStoreManager';
+import { 组件类名 } from '@/modules/UITreeManager/constants';
 import {
   use全局事件系统,
   use界面状态管理者,
-} from '@/modules/managers/UITreeManager/hooks';
+} from '@/modules/UITreeManager/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/common/hooks';
 import { 测试标识 } from '@/common/constants';
 import { css, cx } from '@emotion/css';

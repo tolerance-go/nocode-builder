@@ -6,10 +6,10 @@ import { produce } from 'immer';
 import store from 'store2';
 import { localStateFieldName } from './constants';
 import { RootState } from './types';
-import { 基础引擎 } from '@/engines/BaseEngine';
 import { StoreModule } from '../StoreModule';
 import { 全局事件系统 } from '../全局事件系统';
 import { 界面导航系统 } from '../界面导航系统';
+import { 基础引擎 } from '@/engines/基础引擎';
 
 export class UIStoreManager extends ModuleBase {
   private initialState: RootState | null;

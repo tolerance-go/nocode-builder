@@ -1,4 +1,4 @@
-import { AppDispatch, AppSlices } from '@/modules/managers/UIStoreManager';
+import { AppDispatch, AppSlices } from '@/modules/UIStoreManager';
 import store from 'store2';
 
 export const handleLoginSuccess = (

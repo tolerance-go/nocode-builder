@@ -1,5 +1,5 @@
-import { useAppSelector } from '@/modules/managers/UIStoreManager';
-import { use跟随鼠标显示内容管理者 } from '@/modules/managers/UITreeManager/hooks';
+import { useAppSelector } from '@/modules/UIStoreManager';
+import { use跟随鼠标显示内容管理者 } from '@/modules/UITreeManager/hooks';
 import { 测试标识 } from '@/common/constants';
 import { theme } from 'antd';
 import { useLayoutEffect, useState } from 'react';

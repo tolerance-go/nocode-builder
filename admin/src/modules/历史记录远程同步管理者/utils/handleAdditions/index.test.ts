@@ -2,7 +2,7 @@ import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '@/modules/managers/UIStoreManager';
+} from '@/modules/UIStoreManager';
 import { describe, expect, it } from 'vitest';
 import { handleAdditions } from '.';
 import { ProjectTypeEnum } from '@/_gen/models';

@@ -16,8 +16,8 @@ import {
 } from '@/modules/UIStoreManager';
 import { 全局事件系统 } from '@/modules/全局事件系统';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
-import { 基础引擎 } from '@/engines/BaseEngine';
 import { 全局事件系统实例 } from '@/globals';
+import { 基础引擎 } from '@/engines/基础引擎';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];

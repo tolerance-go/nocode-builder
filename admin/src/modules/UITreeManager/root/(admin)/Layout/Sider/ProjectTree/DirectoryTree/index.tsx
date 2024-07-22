@@ -1,7 +1,7 @@
 import {
   use界面状态管理者,
   use图标管理者,
-} from '@/modules/managers/UITreeManager/hooks';
+} from '@/modules/UITreeManager/hooks';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
 import { Title } from './Title';
@@ -10,8 +10,8 @@ import {
   useAppDispatch,
   findNode,
   节点是不是文件,
-} from '@/modules/managers/UIStoreManager';
-import { ProjectStructureTreeDataNode } from '@/modules/managers/UIStoreManager/types';
+} from '@/modules/UIStoreManager';
+import { ProjectStructureTreeDataNode } from '@/modules/UIStoreManager/types';
 import { ViewKey } from '@/common/types';
 import { ProjectTypeEnum } from '@/_gen/models';
 

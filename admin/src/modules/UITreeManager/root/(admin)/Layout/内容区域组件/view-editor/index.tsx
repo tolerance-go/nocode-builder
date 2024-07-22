@@ -1,4 +1,4 @@
-import { layoutPadding } from '@/modules/managers/UITreeManager/configs';
+import { layoutPadding } from '@/modules/UITreeManager/configs';
 import { 测试标识 } from '@/common/constants';
 import { theme } from 'antd';
 
