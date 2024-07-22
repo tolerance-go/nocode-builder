@@ -28,6 +28,9 @@ export class ModuleBase implements Module {
 
   set engine(instance: EngineBase) {
     this.engineInstance = instance;
+    this.requiredModules.forEach((module) => {
+      module.engine = this.engine;
+    });
   }
 
   // 获取指定类型的 Module 实例

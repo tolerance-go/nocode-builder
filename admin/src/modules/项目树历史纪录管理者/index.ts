@@ -53,23 +53,23 @@ export class 项目树历史纪录管理者 extends ModuleBase {
     super.requireModules(
       全局界面通知系统实例,
       全局事件系统实例,
-      new 历史记录远程同步管理者({
-        retryStartCallback: this.retryStartCallback,
-        retryFailCallback: this.retryFailCallback,
-        syncFunction: async (
-          differences: DiffResult<ProjectStructureTreeDataNode>,
-          oldTreeDataRecord?: ProjectTreeNodeDataRecord,
-          newTreeDataRecord?: ProjectTreeNodeDataRecord,
-        ) => {
-          await api.syncs.applyProjectDiff(
-            convertDiffResultToProjectDiffDto(
-              differences,
-              oldTreeDataRecord,
-              newTreeDataRecord,
-            ),
-          );
-        },
-      }),
+      // new 历史记录远程同步管理者({
+      //   retryStartCallback: this.retryStartCallback,
+      //   retryFailCallback: this.retryFailCallback,
+      //   syncFunction: async (
+      //     differences: DiffResult<ProjectStructureTreeDataNode>,
+      //     oldTreeDataRecord?: ProjectTreeNodeDataRecord,
+      //     newTreeDataRecord?: ProjectTreeNodeDataRecord,
+      //   ) => {
+      //     await api.syncs.applyProjectDiff(
+      //       convertDiffResultToProjectDiffDto(
+      //         differences,
+      //         oldTreeDataRecord,
+      //         newTreeDataRecord,
+      //       ),
+      //     );
+      //   },
+      // }),
     );
   }
 

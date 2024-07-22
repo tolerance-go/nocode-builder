@@ -34,6 +34,9 @@ export class EngineManagerBase implements EngineManager {
     // 初始化 Actors
     engineConstructors.forEach((engine) => {
       engine.engineManager = this;
+      engine.requiredEngines.forEach((requiredEngine) => {
+        requiredEngine.engineManager = this;
+      });
 
       this.engines.add(engine);
     });
