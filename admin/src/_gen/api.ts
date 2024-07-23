@@ -1,3 +1,4 @@
+/* eslint-disable sort-class-members/sort-class-members */
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED        ##

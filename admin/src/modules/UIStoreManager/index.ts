@@ -137,10 +137,8 @@ export class UIStoreManager extends ModuleBase {
 
   注册监听保存状态到本地() {
     this.getDependModule(StoreModule).store.subscribe(() => {
-      const state = this.getDependModule(StoreModule).store.getState();
-
-      const next = this.过滤掉某些不存储到本地的state(state);
-
+      // const state = this.getDependModule(StoreModule).store.getState();
+      // const next = this.过滤掉某些不存储到本地的state(state);
       // this.engine.engineManager
       //   .getEngine(基础引擎)
       //   .setLocalStateItem(localStateFieldName, next);

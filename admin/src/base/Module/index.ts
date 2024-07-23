@@ -10,7 +10,6 @@ export class ModuleBase implements Module {
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(engine: EngineBase) {
     this.setupProcessing = Promise.withResolvers<void>();
     this.startProcessing = Promise.withResolvers<void>();
@@ -19,7 +18,6 @@ export class ModuleBase implements Module {
     this.requireModules();
   }
 
-  // 获取指定类型的 Module 实例
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   getDependModule<T extends Module>(moduleClass: new (...args: any[]) => T): T {
     for (const module of this.requiredModules) {

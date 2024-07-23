@@ -11,6 +11,6 @@ export class 基础引擎 extends EngineBase {
   getState() {}
 
   protected async onLaunch(): Promise<void> {
-    const asyncStateManager = this.getModule(AsyncStateManager);
+    // const asyncStateManager = this.getModule(AsyncStateManager);
   }
 }

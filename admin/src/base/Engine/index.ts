@@ -98,7 +98,6 @@ export class EngineBase implements Engine {
   }
 
   protected async onLaunch(): Promise<void> {}
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   protected requireEngines(...engines: Engine[]) {
     engines.forEach((engine) => {
