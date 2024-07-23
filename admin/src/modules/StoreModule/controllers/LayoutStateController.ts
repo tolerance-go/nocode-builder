@@ -3,7 +3,7 @@ import {
   AppStore,
   ProjectTreeNodeDataRecord,
   StateControllerBase,
-} from '../types';
+} from '../../UIStoreManager/types';
 import { ViewKey } from '@/common/types';
 
 export class LayoutStateController extends StateControllerBase {

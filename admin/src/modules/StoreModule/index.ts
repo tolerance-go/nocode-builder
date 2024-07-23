@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { configureStore, Middleware } from '@reduxjs/toolkit';
 import { AppMiddleware, findNode, RootState } from '../UIStoreManager';
-import { LayoutStateController } from '../UIStoreManager/controllers';
+import { LayoutStateController } from './controllers';
 import {
   createProjectTreeSlice,
   createLayoutSlice,
