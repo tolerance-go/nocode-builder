@@ -13,9 +13,8 @@ import { 界面通知系统 } from '../界面通知系统';
 
 export class UITreeManager extends ModuleBase {
   requireModules() {
-    const 全局事件系统实例 = this.engine.getModuleOrCreate(全局事件系统);
     super.requireModules(
-      全局事件系统实例,
+      this.engine.getModuleOrCreate(全局事件系统),
       this.engine.getModuleOrCreate(界面导航系统),
       new 项目树历史纪录管理者(this.engine),
       new 文档环境模块(this.engine, document),
