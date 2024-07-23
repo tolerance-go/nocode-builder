@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { TaskQueue } from '@/common/controllers/TaskQueue';
 import localforage from 'localforage';
-import { 持久化本地状态持久化管理器模块 } from '../持久化本地状态持久化管理器模块';
+import { 状态本地持久化任务管理模块 } from '../状态本地持久化任务管理模块';
 
 /**
  * 状态本地持久化管理器模块
@@ -26,7 +26,7 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
 
   // 添加一个持久化任务到队列
   async addPersistTask<T>(key: string, data: T): Promise<void> {
-    this.getDependModule(持久化本地状态持久化管理器模块).addPersistTask({
+    this.getDependModule(状态本地持久化任务管理模块).addPersistTask({
       key,
       data,
     });
@@ -60,7 +60,7 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
     });
   }
   protected requireModules(): void {
-    super.requireModules(new 持久化本地状态持久化管理器模块(this.engine));
+    super.requireModules(new 状态本地持久化任务管理模块(this.engine));
   }
 
   // 在 setup 阶段执行的逻辑
@@ -77,12 +77,10 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
   private async processNextTask(): Promise<void> {
     if (
       this.taskQueue.isIdle() &&
-      !this.getDependModule(持久化本地状态持久化管理器模块).isQueueEmpty()
+      !this.getDependModule(状态本地持久化任务管理模块).isQueueEmpty()
     ) {
       const task =
-        await this.getDependModule(
-          持久化本地状态持久化管理器模块,
-        ).getNextTask();
+        await this.getDependModule(状态本地持久化任务管理模块).getNextTask();
       await this.addTask(async () => {
         await this.saveDataLocally(task!.key, task!.data);
       });

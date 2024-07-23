@@ -3,8 +3,8 @@ import localforage from 'localforage';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   PersistTask,
-  持久化本地状态持久化管理器模块,
-} from '../持久化本地状态持久化管理器模块';
+  状态本地持久化任务管理模块,
+} from '../状态本地持久化任务管理模块';
 import {
   clearMockLocalforageData,
   mockLocalData,
@@ -15,7 +15,7 @@ class TestEngineManager extends EngineManagerBase {}
 
 class TestEngine extends EngineBase {
   protected providerModules(): void {
-    super.providerModules(new 持久化本地状态持久化管理器模块(this));
+    super.providerModules(new 状态本地持久化任务管理模块(this));
   }
 }
 
@@ -26,7 +26,7 @@ interface TestTask {
 
 describe('PersistTaskManager with EngineBase', () => {
   let engine: TestEngine;
-  let taskManager: 持久化本地状态持久化管理器模块;
+  let taskManager: 状态本地持久化任务管理模块;
   const key = 'persistTasks';
 
   beforeEach(async () => {
@@ -34,7 +34,7 @@ describe('PersistTaskManager with EngineBase', () => {
     const engineManager = new TestEngineManager();
     engine = new TestEngine(engineManager);
     await engine.launch();
-    taskManager = engine.getModule(持久化本地状态持久化管理器模块);
+    taskManager = engine.getModule(状态本地持久化任务管理模块);
   });
 
   afterEach(() => {
@@ -91,7 +91,7 @@ describe('PersistTaskManager with EngineBase', () => {
     const engineManager = new TestEngineManager();
     const newEngine = new TestEngine(engineManager);
     await newEngine.launch();
-    const newTaskManager = newEngine.getModule(持久化本地状态持久化管理器模块);
+    const newTaskManager = newEngine.getModule(状态本地持久化任务管理模块);
     expect(newTaskManager.isQueueEmpty()).toBe(false);
 
     const nextTask = await newTaskManager.getNextTask();
