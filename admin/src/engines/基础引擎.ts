@@ -1,9 +1,9 @@
 import { EngineBase } from '@/base';
-import { 状态本地持久化管理器模块 } from '@/modules/状态本地持久化管理器模块';
+import { 状态本地持久化内存模型管理模块 } from '@/modules/状态本地持久化内存模型管理模块';
 
 export class 基础引擎 extends EngineBase {
   providerModules() {
-    super.providerModules(new 状态本地持久化管理器模块(this));
+    super.providerModules(new 状态本地持久化内存模型管理模块(this));
   }
 
   updateState() {}

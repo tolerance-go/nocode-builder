@@ -1,5 +1,4 @@
 import { authPathnames, localKeys } from '@/common/constants';
-import { StateController } from '@/common/controllers';
 import { delay } from '@/common/utils';
 import { last } from 'lodash-es';
 import { createActor } from 'xstate';
@@ -53,34 +52,34 @@ export class 历史记录远程同步管理者 extends ModuleBase {
 
     const { retryStartCallback, retryFailCallback, syncFunction } = params;
 
-    const restoredStateValue = this.engine
-      .getDependEngine(基础引擎)
-      .getLocalStateItem<
-        历史记录远程同步状态机SnapshotType['value']
-      >(localKeys.历史记录远程同步管理者_state_value);
+    // const restoredStateValue = this.engine
+    //   .getDependEngine(基础引擎)
+    //   .getLocalStateItem<
+    //     历史记录远程同步状态机SnapshotType['value']
+    //   >(localKeys.历史记录远程同步管理者_state_value);
 
-    if (restoredStateValue) {
-      const resolvedState = 历史记录远程同步状态机.resolveState({
-        value: restoredStateValue,
-      });
-      this.历史记录远程同步状态机 = createActor(历史记录远程同步状态机, {
-        snapshot: resolvedState,
-      });
-    } else {
-      this.历史记录远程同步状态机 = createActor(历史记录远程同步状态机);
-    }
+    // if (restoredStateValue) {
+    //   const resolvedState = 历史记录远程同步状态机.resolveState({
+    //     value: restoredStateValue,
+    //   });
+    //   this.历史记录远程同步状态机 = createActor(历史记录远程同步状态机, {
+    //     snapshot: resolvedState,
+    //   });
+    // } else {
+    //   this.历史记录远程同步状态机 = createActor(历史记录远程同步状态机);
+    // }
 
-    const initialState = 引擎api.getLocalStateItem<SyncHistoryManagerState>(
-      localKeys.历史记录远程同步管理者_state,
-    ) || {
-      historyA: [],
-      historyB: [],
-      pendingUpdate: null,
-    };
+    // const initialState = 引擎api.getLocalStateItem<SyncHistoryManagerState>(
+    //   localKeys.历史记录远程同步管理者_state,
+    // ) || {
+    //   historyA: [],
+    //   historyB: [],
+    //   pendingUpdate: null,
+    // };
 
-    this.stateController = new StateController({
-      initialState,
-    });
+    // this.stateController = new StateController({
+    //   initialState,
+    // });
 
     this.retryStartCallback = retryStartCallback;
     this.retryFailCallback = retryFailCallback;

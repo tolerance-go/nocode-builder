@@ -10,7 +10,7 @@ import { 界面导航系统 } from '../界面导航系统';
 import { RootState } from './types';
 import { 基础引擎 } from '@/engines/基础引擎';
 import { localStateFieldName } from './constants';
-import { 状态本地持久化管理器模块 } from '../状态本地持久化管理器模块';
+import { 状态本地持久化内存模型管理模块 } from '../状态本地持久化内存模型管理模块';
 
 export class UIStoreManager extends ModuleBase {
   private initialState: RootState | null = null;
@@ -18,12 +18,12 @@ export class UIStoreManager extends ModuleBase {
   constructor(engine: EngineBase) {
     super(engine);
 
-    const localState = engine
-      .getDependEngine(基础引擎)
-      .getModule(状态本地持久化管理器模块)
-      .getData<RootState>(localStateFieldName);
+    // const localState = engine
+    //   .getDependEngine(基础引擎)
+    //   .getModule(状态本地持久化内存模型管理模块)
+    //   .getData<RootState>(localStateFieldName);
 
-    this.initialState = localState;
+    // this.initialState = localState;
   }
 
   requireModules() {

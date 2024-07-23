@@ -2,7 +2,7 @@ import { EngineBase, ModuleBase } from '@/base';
 import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
 import { 全局事件系统 } from '../全局事件系统';
-import { 历史记录远程同步管理者 } from '../历史记录远程同步管理者';
+// import { 历史记录远程同步管理者 } from '../历史记录远程同步管理者';
 import { 界面通知系统 } from '../界面通知系统';
 import { 历史状态机 } from './states';
 import { 历史记录 } from './types';
@@ -85,9 +85,9 @@ export class 项目树历史纪录管理者 extends ModuleBase {
       this.历史堆栈 = state.context.历史堆栈;
       this.历史指针 = state.context.历史指针;
 
-      this.getDependModule(历史记录远程同步管理者).updateHistories(
-        this.历史堆栈,
-      );
+      // this.getDependModule(历史记录远程同步管理者).updateHistories(
+      //   this.历史堆栈,
+      // );
     });
 
     this.getDependModule(全局事件系统).on(
