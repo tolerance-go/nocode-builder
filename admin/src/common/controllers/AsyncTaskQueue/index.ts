@@ -16,16 +16,16 @@
  * taskQueue.add(async () => { \/* 异步任务逻辑 *\/ });
  */
 
-export type Task = () => Promise<void>;
+export type AsyncTask = () => Promise<void>;
 
-export class TaskQueue {
+export class AsyncTaskQueue {
   public onTaskSuccess: () => void = () => {};
   public onTaskFailure: () => void = () => {};
-  private queue: Task[] = [];
+  private queue: AsyncTask[] = [];
   private running = false;
   private lastFailedIndex: number | null = null;
 
-  async add(task: Task): Promise<void> {
+  async add(task: AsyncTask): Promise<void> {
     this.queue.push(task);
     if (!this.running) {
       this.run();

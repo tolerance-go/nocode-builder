@@ -1,5 +1,5 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { TaskQueue } from '@/common/controllers/TaskQueue';
+import { AsyncTaskQueue } from '@/common/controllers/TaskQueue';
 import localforage from 'localforage';
 import { 状态本地持久化任务管理模块 } from '../状态本地持久化任务管理模块';
 import { 状态本地持久化内存模型管理模块 } from '../状态本地持久化内存模型管理模块';
@@ -16,11 +16,11 @@ import { 状态本地持久化内存模型管理模块 } from '../状态本地�
  * 以便于: 开发者能够轻松地将应用状态持久化到本地存储，并在应用重启时恢复未完成的持久化任务
  */
 export class 状态本地持久化管理器模块 extends ModuleBase {
-  private taskQueue: TaskQueue;
+  private taskQueue: AsyncTaskQueue;
 
   constructor(engine: EngineBase) {
     super(engine);
-    this.taskQueue = new TaskQueue();
+    this.taskQueue = new AsyncTaskQueue();
     this.taskQueue.onTaskSuccess = this.onTaskSuccess.bind(this);
     this.taskQueue.onTaskFailure = this.onTaskFailure.bind(this);
   }

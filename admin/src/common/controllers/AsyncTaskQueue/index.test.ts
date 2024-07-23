@@ -1,9 +1,9 @@
 import { describe, it, expect, vi } from 'vitest';
-import { TaskQueue } from '.';
+import { AsyncTaskQueue } from '.';
 
 describe('TaskQueue', () => {
   it('应该按顺序执行任务', async () => {
-    const queue = new TaskQueue();
+    const queue = new AsyncTaskQueue();
     const taskOrder: number[] = [];
     const task1 = vi.fn<[], Promise<void>>(async () => {
       taskOrder.push(1);
@@ -28,7 +28,7 @@ describe('TaskQueue', () => {
   });
 
   it('任务成功执行时应调用 onTaskSuccess', async () => {
-    const queue = new TaskQueue();
+    const queue = new AsyncTaskQueue();
     const successCallback = vi.fn();
     queue.onTaskSuccess = successCallback;
 
@@ -42,7 +42,7 @@ describe('TaskQueue', () => {
   });
 
   it('任务失败时应调用 onTaskFailure', async () => {
-    const queue = new TaskQueue();
+    const queue = new AsyncTaskQueue();
     const failureCallback = vi.fn();
     queue.onTaskFailure = failureCallback;
 
@@ -58,7 +58,7 @@ describe('TaskQueue', () => {
   });
 
   it('应该处理多个成功和失败的任务', async () => {
-    const queue = new TaskQueue();
+    const queue = new AsyncTaskQueue();
     const successCallback = vi.fn();
     const failureCallback = vi.fn();
     queue.onTaskSuccess = successCallback;
@@ -94,7 +94,7 @@ describe('TaskQueue', () => {
   });
 
   it('应在队列为空时返回 isIdle 为 true', async () => {
-    const queue = new TaskQueue();
+    const queue = new AsyncTaskQueue();
     expect(queue.isIdle()).toBe(true);
 
     const task1 = vi.fn<[], Promise<void>>(async () => {});
