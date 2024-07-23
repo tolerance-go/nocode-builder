@@ -9,7 +9,7 @@ import {
   clearMockLocalforageData,
   mockLocalData,
   mockLocalforage,
-} from '@/common/tests';
+} from '@/tests';
 import { EngineManagerBase } from '@/base/EngineManager';
 class TestEngineManager extends EngineManagerBase {}
 

@@ -2,7 +2,7 @@ import { EngineBase } from '@/base';
 import localforage from 'localforage';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { PersistTask, 状态本地持久化任务管理模块 } from '.';
-import { clearMockLocalforageData, mockLocalforage } from '@/common/tests';
+import { clearMockLocalforageData, mockLocalforage } from '@/tests';
 import { EngineManagerBase } from '@/base/EngineManager';
 
 class TestEngineManager extends EngineManagerBase {}
