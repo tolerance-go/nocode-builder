@@ -10,10 +10,8 @@ export class 文档环境模块 extends ModuleBase {
   }
 
   protected requireModules() {
-    const item = this.engine.getModuleOrCreate(全局事件系统);
-    item.b = 1;
-    debugger;
-    super.requireModules(item);
+    const 全局事件系统实例 = this.engine.getModuleOrCreate(全局事件系统);
+    super.requireModules(全局事件系统实例);
   }
 
   protected async onStart(): Promise<void> {
@@ -21,16 +19,14 @@ export class 文档环境模块 extends ModuleBase {
   }
 
   private addPageLoadCompleteEventListener() {
-    const item = this.getDependModule(全局事件系统);
-    item.c = 1;
-    debugger;
+    const 全局事件系统实例 = this.getDependModule(全局事件系统);
     if (document.readyState === 'loading') {
       // 添加事件监听器，当页面完全加载时触发
       this.document.addEventListener('DOMContentLoaded', () => {
-        item.emit('文档环境/pageLoadComplete', undefined);
+        全局事件系统实例.emit('文档环境/pageLoadComplete', undefined);
       });
     } else {
-      item.emit('文档环境/pageLoadComplete', undefined);
+      全局事件系统实例.emit('文档环境/pageLoadComplete', undefined);
     }
   }
 }

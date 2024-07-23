@@ -3,7 +3,7 @@ import { AsyncStateManager } from '@/modules/AsyncStateManager';
 
 export class 基础引擎 extends EngineBase {
   providerModules() {
-    super.providerModules(new AsyncStateManager());
+    super.providerModules(new AsyncStateManager(this));
   }
 
   updateState() {}
