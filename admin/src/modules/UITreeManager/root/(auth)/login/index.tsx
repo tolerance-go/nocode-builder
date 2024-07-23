@@ -6,7 +6,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LoginFormValues } from '../../../types';
 import { handleLoginSuccess } from './hooks';
-import { useAppDispatch } from '@/modules/UIStoreManager';
+import { useAppDispatch } from '@/modules/界面状态管理器模块';
 import { use界面状态管理者 } from '../../../hooks';
 
 export const Login: React.FC = () => {

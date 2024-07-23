@@ -3,7 +3,7 @@ import { fullPathnames, paths } from '@/common/constants';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { UIStoreManager } from '../UIStoreManager';
+import { UIStoreManager } from '../界面状态管理器模块';
 import { 全局事件系统 } from '../全局事件系统';
 import { 图标管理者 } from '../图标管理者';
 import { 界面导航系统 } from '../界面导航系统';
@@ -28,7 +28,7 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
-import { StoreModule } from '../StoreModule';
+import { 界面状态仓库模块 } from '../界面状态仓库模块';
 
 export const renderRoot = (module: ModuleBase) => {
   const 验证管理者实例 = module.getDependModule(验证管理者);
@@ -59,7 +59,8 @@ export const renderRoot = (module: ModuleBase) => {
                   <图标管理者Context.Provider value={图标管理者实例}>
                     <Provider
                       store={
-                        界面状态管理者实例.getDependModule(StoreModule).store
+                        界面状态管理者实例.getDependModule(界面状态仓库模块)
+                          .store
                       }
                     >
                       <BrowserRouter

@@ -1,7 +1,7 @@
 import { ConfigProvider, message, Modal, notification } from 'antd';
 import { useLayoutEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../../UIStoreManager';
+import { useAppDispatch } from '../../界面状态管理器模块';
 import { themeConfig } from '../configs';
 import { use导航系统, use界面状态管理者, 获取系统上下文 } from '../hooks';
 // import '@antv/s2-react/dist/style.min.css';

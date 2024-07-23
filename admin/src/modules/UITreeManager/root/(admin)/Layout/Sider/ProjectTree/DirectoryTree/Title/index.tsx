@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@/modules/UIStoreManager';
+import { useAppDispatch, useAppSelector } from '@/modules/界面状态管理器模块';
 import { 组件类名 } from '@/modules/UITreeManager/constants';
 import { use界面状态管理者 } from '@/modules/UITreeManager/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/modules/UITreeManager/selectors';

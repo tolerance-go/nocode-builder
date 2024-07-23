@@ -5,7 +5,7 @@ import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '@/modules/UIStoreManager';
+} from '@/modules/界面状态管理器模块';
 
 // import { handleUpdates } from './handleUpdates';
 

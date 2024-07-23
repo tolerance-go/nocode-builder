@@ -1,6 +1,6 @@
 import { ModuleBase } from '@/base';
 import ReactDOM from 'react-dom/client';
-import { UIStoreManager } from '../UIStoreManager';
+import { UIStoreManager } from '../界面状态管理器模块';
 import { 图标管理者 } from '../图标管理者';
 import { 文档环境模块 } from '../文档环境模块';
 import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';

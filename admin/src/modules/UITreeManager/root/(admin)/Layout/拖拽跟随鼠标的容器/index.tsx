@@ -1,4 +1,4 @@
-import { useAppSelector } from '@/modules/UIStoreManager';
+import { useAppSelector } from '@/modules/界面状态管理器模块';
 import { use跟随鼠标显示内容管理者 } from '@/modules/UITreeManager/hooks';
 import { 测试标识 } from '@/common/constants';
 import { theme } from 'antd';

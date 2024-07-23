@@ -10,8 +10,8 @@ import {
   useAppDispatch,
   findNode,
   节点是不是文件,
-} from '@/modules/UIStoreManager';
-import { ProjectStructureTreeDataNode } from '@/modules/UIStoreManager/types';
+} from '@/modules/界面状态管理器模块';
+import { ProjectStructureTreeDataNode } from '@/modules/界面状态管理器模块/types';
 import { ViewKey } from '@/common/types';
 import { ProjectTypeEnum } from '@/_gen/models';
 

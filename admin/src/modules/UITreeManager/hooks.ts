@@ -8,7 +8,7 @@ import {
   跟随鼠标显示内容管理者Context,
   验证管理者Context,
 } from './contexts';
-import { StoreModule } from '../StoreModule';
+import { 界面状态仓库模块 } from '../界面状态仓库模块';
 
 export const use图标管理者 = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -36,7 +36,7 @@ export const use界面状态管理者 = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const UIStoreManager = useContext(UIStoreManagerContext);
   if (!UIStoreManager) throw new Error('UIStoreManager未初始化');
-  return UIStoreManager.getDependModule(StoreModule);
+  return UIStoreManager.getDependModule(界面状态仓库模块);
 };
 export const use全局事件系统 = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks

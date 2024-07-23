@@ -1,5 +1,5 @@
 import { LoginResponseDto } from '@/_gen/api';
-import { useAppDispatch } from '@/modules/UIStoreManager';
+import { useAppDispatch } from '@/modules/界面状态管理器模块';
 import { api } from '@/globals';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';

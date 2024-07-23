@@ -4,7 +4,7 @@ import {
   ProjectTreeNodeDataRecordItem,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '../UIStoreManager';
+} from '../界面状态管理器模块';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
 import { ModuleBase } from '@/base';
 
