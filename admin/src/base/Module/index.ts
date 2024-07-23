@@ -6,7 +6,6 @@ export class ModuleBase implements Module {
   public startProcessing: PromiseWithResolvers<void>;
   public engine: EngineBase;
   public requiredModules: Set<Module> = new Set(); // 当前 Module 依赖的 Modules
-  public dependentModules: Set<Module> = new Set(); // 依赖当前 Module 的 Modules
 
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
@@ -16,6 +15,7 @@ export class ModuleBase implements Module {
     this.setupProcessing = Promise.withResolvers<void>();
     this.startProcessing = Promise.withResolvers<void>();
     this.engine = engine;
+    this.engine.onModuleAdded(this);
     this.requireModules();
   }
 
@@ -79,15 +79,7 @@ export class ModuleBase implements Module {
     modules.forEach((module) => {
       if (!this.requiredModules.has(module)) {
         this.requiredModules.add(module);
-        if (module instanceof ModuleBase) {
-          module.addDependentModule(this);
-        }
       }
     });
-  }
-
-  // 添加依赖当前 Module 的 Module
-  private addDependentModule(module: Module): void {
-    this.dependentModules.add(module);
   }
 }

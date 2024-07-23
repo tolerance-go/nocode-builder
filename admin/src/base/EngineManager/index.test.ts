@@ -1,8 +1,8 @@
-import { describe, it, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { EngineManagerBase } from '.';
 import { EngineBase } from '../Engine';
-import { collectDependencies, topologicalSort } from '../utils';
 import { ModuleBase } from '../Module';
+import { topologicalSort } from '../utils';
 
 class TestEngine extends EngineBase {}
 
@@ -14,25 +14,13 @@ describe('EngineManagerBase', () => {
     );
 
     const [engineA, engineB] = Array.from(
-      engineManager['engines'],
+      engineManager['providedEngines'],
     ) as TestEngine[];
 
     expect(engineA.engineManager).toBe(engineManager);
     expect(engineB.engineManager).toBe(engineManager);
-    expect(engineManager['engines'].has(engineA)).toBe(true);
-    expect(engineManager['engines'].has(engineB)).toBe(true);
-
-    const dependencies = new Map();
-    const dependents = new Map();
-    collectDependencies(
-      engineManager['engines'],
-      dependencies,
-      dependents,
-      (engine) => engine.requiredEngines,
-    );
-
-    expect(dependencies).toEqual(engineManager['dependencies']);
-    expect(dependents).toEqual(engineManager['dependents']);
+    expect(engineManager['providedEngines'].has(engineA)).toBe(true);
+    expect(engineManager['providedEngines'].has(engineB)).toBe(true);
   });
 
   it('应该正确启动所有引擎', async () => {
@@ -42,7 +30,7 @@ describe('EngineManagerBase', () => {
     );
 
     const [engineA, engineB] = Array.from(
-      engineManager['engines'],
+      engineManager['providedEngines'],
     ) as TestEngine[];
 
     await engineManager.launch();
@@ -57,12 +45,12 @@ describe('EngineManagerBase', () => {
     );
 
     const sortedEngines = topologicalSort(
-      engineManager['engines'],
-      engineManager['dependencies'],
+      engineManager['providedEngines'],
+      (engine) => engine.requiredEngines,
     );
 
     await engineManager.launch();
-    expect(sortedEngines).toEqual(Array.from(engineManager['engines']));
+    expect(sortedEngines).toEqual(Array.from(engineManager['allEngines']));
   });
 
   it('应该正确获取指定类型的引擎', () => {
@@ -71,7 +59,9 @@ describe('EngineManagerBase', () => {
       (self) => new TestEngine(self),
     );
 
-    const [engineA] = Array.from(engineManager['engines']) as TestEngine[];
+    const [engineA] = Array.from(
+      engineManager['providedEngines'],
+    ) as TestEngine[];
 
     const fetchedEngine = engineManager.getEngine(TestEngine);
     expect(fetchedEngine).toBe(engineA);
@@ -107,8 +97,8 @@ describe('EngineManagerBase', () => {
 
     // 确保 B 在 A 之前启动
     const sortedEngines = topologicalSort(
-      engineManager['engines'],
-      engineManager['dependencies'],
+      engineManager['providedEngines'],
+      (engine) => engine.requiredEngines,
     );
     expect(sortedEngines.indexOf(engineB!)).toBeLessThan(
       sortedEngines.indexOf(engineA!),
@@ -126,7 +116,7 @@ describe('EngineManagerBase', () => {
     );
 
     const [engineA, engineB] = Array.from(
-      engineManager['engines'],
+      engineManager['providedEngines'],
     ) as TestEngine[];
 
     let currentIndex = 0;

@@ -39,7 +39,6 @@ describe('ModuleBase', () => {
 
     module['requireModules'](dependentModule);
     expect(module.requiredModules.has(dependentModule)).toBe(true);
-    expect(dependentModule.dependentModules.has(module)).toBe(true);
   });
 
   it('应该正确获取指定类型的依赖模块', () => {

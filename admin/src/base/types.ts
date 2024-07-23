@@ -5,7 +5,6 @@ export interface EngineManager {
 
 export interface Engine {
   requiredEngines: Set<Engine>; // 当前 Actor 依赖的 Actors
-  dependentEngines: Set<Engine>; // 依赖当前 Actor 的 Actors
   launchProcessing: PromiseWithResolvers<void>;
   engineManager: EngineManager;
   launch(...args: unknown[]): Promise<void>;
@@ -16,7 +15,6 @@ export interface Engine {
 
 export interface Module {
   requiredModules: Set<Module>; // 当前 Actor 依赖的 Actors
-  dependentModules: Set<Module>; // 依赖当前 Actor 的 Actors
   setupProcessing: PromiseWithResolvers<void>;
   startProcessing: PromiseWithResolvers<void>;
   engine: Engine;

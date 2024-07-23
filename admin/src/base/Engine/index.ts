@@ -1,6 +1,6 @@
 import { EngineManagerBase } from '../EngineManager';
 import { Engine, Module } from '../types';
-import { collectDependencies, topologicalSort } from '../utils';
+import { topologicalSort } from '../utils';
 
 export class EngineBase implements Engine {
   public requiredEngines: Set<Engine> = new Set(); // 当前 Engine 依赖的 Engines
@@ -12,16 +12,13 @@ export class EngineBase implements Engine {
 
   private providedModules: Set<Module>;
   private allModules: Set<Module>;
-  private dependencies: Map<Module, Set<Module>>;
-  private dependents: Map<Module, Set<Module>>;
 
   constructor(engineManager: EngineManagerBase) {
     this.providedModules = new Set();
     this.allModules = new Set();
-    this.dependencies = new Map();
-    this.dependents = new Map();
     this.launchProcessing = Promise.withResolvers<void>();
     this.engineManager = engineManager;
+    this.engineManager.onEngineAdded(this);
     this.requireEngines();
   }
 
@@ -60,7 +57,7 @@ export class EngineBase implements Engine {
     this.providerModules();
     const sortedActors = topologicalSort(
       this.providedModules,
-      this.dependencies,
+      (module) => module.requiredModules,
     );
     await this.setupModules(sortedActors);
     await this.startModules(sortedActors);
@@ -96,6 +93,10 @@ export class EngineBase implements Engine {
     return newModule;
   }
 
+  public onModuleAdded(module: Module) {
+    this.allModules.add(module);
+  }
+
   protected async onLaunch(): Promise<void> {}
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -110,23 +111,10 @@ export class EngineBase implements Engine {
     });
   }
 
-  protected providerModules(...moduleConstructors: Module[]) {
-    moduleConstructors.forEach((module) => {
+  protected providerModules(...modules: Module[]) {
+    modules.forEach((module) => {
       this.providedModules.add(module);
-      this.allModules.add(module);
     });
-
-    collectDependencies(
-      this.providedModules,
-      this.dependencies,
-      this.dependents,
-      (module) => {
-        module.requiredModules.forEach((requiredModule) => {
-          this.allModules.add(requiredModule);
-        });
-        return module.requiredModules;
-      },
-    );
   }
 
   private async setupModules(modules: Module[]) {

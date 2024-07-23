@@ -13,8 +13,11 @@ import { 界面通知系统 } from '../界面通知系统';
 
 export class UITreeManager extends ModuleBase {
   requireModules() {
+    const item = this.engine.getModuleOrCreate(全局事件系统);
+    item.a = 1;
+    debugger;
     super.requireModules(
-      this.engine.getModuleOrCreate(全局事件系统),
+      item,
       this.engine.getModuleOrCreate(界面导航系统),
       new 项目树历史纪录管理者(this.engine),
       new 文档环境模块(this.engine, document),
@@ -30,8 +33,10 @@ export class UITreeManager extends ModuleBase {
     window.全局界面通知系统实例 = this.getDependModule(界面通知系统);
     window.全局事件系统实例 = this.getDependModule(全局事件系统);
     window.全局界面导航系统实例 = this.getDependModule(界面导航系统);
+    debugger;
 
     this.getDependModule(全局事件系统).on('文档环境/pageLoadComplete', () => {
+      debugger;
       ReactDOM.createRoot(document.getElementById('root')!).render(
         renderRoot(this),
       );

@@ -1,24 +1,23 @@
 import { EngineManager, Engine } from '../types';
-import { collectDependencies, topologicalSort } from '../utils';
+import { topologicalSort } from '../utils';
 
 export type EngineConstructors = ((self: EngineManagerBase) => Engine)[];
 
 export class EngineManagerBase implements EngineManager {
-  private engines: Set<Engine>;
+  private providedEngines: Set<Engine>;
   private allEngines: Set<Engine>;
-  private dependencies: Map<Engine, Set<Engine>>;
-  private dependents: Map<Engine, Set<Engine>>;
 
   constructor(...engineConstructors: EngineConstructors) {
-    this.engines = new Set();
-    this.dependencies = new Map();
-    this.dependents = new Map();
+    this.providedEngines = new Set();
     this.allEngines = new Set();
-    this.initEngines(engineConstructors);
+    this.providerEngines(engineConstructors);
   }
 
   public async launch() {
-    const sortedActors = topologicalSort(this.engines, this.dependencies);
+    const sortedActors = topologicalSort(
+      this.providedEngines,
+      (engine) => engine.requiredEngines,
+    );
     await this.launchEngines(sortedActors);
   }
 
@@ -26,7 +25,7 @@ export class EngineManagerBase implements EngineManager {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     engineClass: new (...args: any[]) => T,
   ): T {
-    for (const engine of this.engines) {
+    for (const engine of this.providedEngines) {
       if (engine instanceof engineClass) {
         return engine;
       }
@@ -34,36 +33,25 @@ export class EngineManagerBase implements EngineManager {
     throw new Error(`Engine of type ${engineClass.name} not found`);
   }
 
+  public onEngineAdded(engine: Engine) {
+    this.allEngines.add(engine);
+  }
+
   public getEngines<T extends Engine>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     engineClass: new (...args: any[]) => T,
   ): T[] {
-    return Array.from(this.engines).filter(
+    return Array.from(this.providedEngines).filter(
       (engine) => engine instanceof engineClass,
     ) as T[];
   }
 
-  private initEngines(engineConstructors: EngineConstructors) {
+  private providerEngines(engineConstructors: EngineConstructors) {
     // 初始化 Actors
     engineConstructors.forEach((engineConstructor) => {
       const engine = engineConstructor(this);
-      this.engines.add(engine);
-      this.allEngines.add(engine);
+      this.providedEngines.add(engine);
     });
-
-    // 收集依赖关系
-    collectDependencies(
-      this.engines,
-      this.dependencies,
-      this.dependents,
-      (engine) => {
-        engine.requiredEngines.forEach((requiredEngine) => {
-          this.allEngines.add(requiredEngine);
-        });
-
-        return engine.requiredEngines;
-      },
-    );
   }
 
   private async launchEngines(engines: Engine[]) {

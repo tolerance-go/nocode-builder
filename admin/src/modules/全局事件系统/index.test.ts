@@ -1,5 +1,14 @@
 import { describe, it, expect, vi } from 'vitest';
 import { 全局事件系统 } from '.';
+import { EngineBase } from '@/base';
+import { EngineManagerBase } from '@/base/EngineManager';
+
+class TestEngineManager extends EngineManagerBase {}
+class TestEngine extends EngineBase {
+  constructor(engineManager: EngineManagerBase) {
+    super(engineManager);
+  }
+}
 
 type 测试事件映射 = {
   用户登录: { 用户ID: string };
@@ -8,7 +17,9 @@ type 测试事件映射 = {
 
 describe('全局事件系统', () => {
   it('应该注册和触发事件', async () => {
-    const 系统 = new 全局事件系统<测试事件映射>();
+    const engineManager = new TestEngineManager();
+    const engine = new TestEngine(engineManager);
+    const 系统 = new 全局事件系统<测试事件映射>(engine);
     await 系统.setup();
     await 系统.start();
 
@@ -26,7 +37,9 @@ describe('全局事件系统', () => {
   });
 
   it('应该取消注册事件', async () => {
-    const 系统 = new 全局事件系统<测试事件映射>();
+    const engineManager = new TestEngineManager();
+    const engine = new TestEngine(engineManager);
+    const 系统 = new 全局事件系统<测试事件映射>(engine);
     await 系统.setup();
     await 系统.start();
 
@@ -41,7 +54,9 @@ describe('全局事件系统', () => {
   });
 
   it('应该允许重新注册事件', async () => {
-    const 系统 = new 全局事件系统<测试事件映射>();
+    const engineManager = new TestEngineManager();
+    const engine = new TestEngine(engineManager);
+    const 系统 = new 全局事件系统<测试事件映射>(engine);
     await 系统.setup();
     await 系统.start();
 
@@ -57,7 +72,9 @@ describe('全局事件系统', () => {
   });
 
   it('应该在启动前缓存事件并在启动后按顺序发送', async () => {
-    const 系统 = new 全局事件系统<测试事件映射>();
+    const engineManager = new TestEngineManager();
+    const engine = new TestEngine(engineManager);
+    const 系统 = new 全局事件系统<测试事件映射>(engine);
     await 系统.setup();
 
     const 用户登录处理器 = vi.fn();

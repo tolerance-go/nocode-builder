@@ -6,7 +6,10 @@ describe('topologicalSort', () => {
     const modules = new Set(['a', 'b', 'c']);
     const dependencies = new Map<string, Set<string>>();
 
-    const result = topologicalSort(modules, dependencies);
+    const result = topologicalSort(
+      modules,
+      (module) => dependencies.get(module) || new Set([]),
+    );
 
     expect(result).toEqual(['a', 'b', 'c']);
   });
@@ -18,7 +21,10 @@ describe('topologicalSort', () => {
       ['c', new Set(['b'])],
     ]);
 
-    const result = topologicalSort(modules, dependencies);
+    const result = topologicalSort(
+      modules,
+      (module) => dependencies.get(module) || new Set([]),
+    );
 
     expect(result).toEqual(['a', 'b', 'c']);
   });
@@ -31,7 +37,10 @@ describe('topologicalSort', () => {
       ['d', new Set(['b', 'c'])],
     ]);
 
-    const result = topologicalSort(modules, dependencies);
+    const result = topologicalSort(
+      modules,
+      (module) => dependencies.get(module) || new Set([]),
+    );
 
     expect(result).toEqual(['a', 'b', 'c', 'd']);
   });
@@ -43,8 +52,11 @@ describe('topologicalSort', () => {
       ['b', new Set(['a'])],
     ]);
 
-    expect(() => topologicalSort(modules, dependencies)).toThrow(
-      'Circular dependency detected',
-    );
+    expect(() =>
+      topologicalSort(
+        modules,
+        (module) => dependencies.get(module) || new Set([]),
+      ),
+    ).toThrow('Circular dependency detected');
   });
 });
