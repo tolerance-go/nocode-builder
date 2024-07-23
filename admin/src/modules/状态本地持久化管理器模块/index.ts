@@ -2,6 +2,7 @@ import { EngineBase, ModuleBase } from '@/base';
 import { TaskQueue } from '@/common/controllers/TaskQueue';
 import localforage from 'localforage';
 import { 状态本地持久化任务管理模块 } from '../状态本地持久化任务管理模块';
+import { 状态本地持久化内存模型管理模块 } from '../状态本地持久化内存模型管理模块';
 
 /**
  * 状态本地持久化管理器模块
@@ -30,12 +31,15 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
       key,
       data,
     });
+    this.getDependModule(状态本地持久化内存模型管理模块).set(key, data);
     await this.processNextTask(); // 尝试处理下一个任务
   }
+
   // 示例持久化任务
   async persistData<T>(key: string, data: T): Promise<void> {
     await this.addPersistTask(key, data);
   }
+
   // 从本地存储中获取数据
   async getData<T>(key: string): Promise<T | null> {
     try {
@@ -47,11 +51,13 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
       throw error;
     }
   }
+
   // 从本地存储中删除数据
   async removeData(key: string): Promise<void> {
     await this.addTask(async () => {
       try {
         await localforage.removeItem(key);
+        this.getDependModule(状态本地持久化内存模型管理模块).remove(key);
         console.log(`数据已从本地删除: ${key}`);
       } catch (error) {
         console.error(`删除数据失败: ${key}`, error);
@@ -59,8 +65,12 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
       }
     });
   }
+
   protected requireModules(): void {
-    super.requireModules(new 状态本地持久化任务管理模块(this.engine));
+    super.requireModules(
+      new 状态本地持久化任务管理模块(this.engine),
+      new 状态本地持久化内存模型管理模块(this.engine),
+    );
   }
 
   // 在 setup 阶段执行的逻辑
@@ -68,11 +78,13 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
     // 这里可以添加模块 setup 阶段需要执行的逻辑
     console.log('本地状态持久化管理器模块 setup 完成');
   }
+
   // 在 start 阶段执行的逻辑
   protected async onStart(): Promise<void> {
     // 这里可以添加模块 start 阶段需要执行的逻辑
     console.log('本地状态持久化管理器模块 start 完成');
   }
+
   // 处理下一个任务
   private async processNextTask(): Promise<void> {
     if (
