@@ -1,9 +1,9 @@
 import { EngineBase } from '@/base';
-import { AsyncStateManager } from '@/modules/AsyncStateManager';
+import { 状态本地持久化管理器模块 } from '@/modules/状态本地持久化管理器模块';
 
 export class 基础引擎 extends EngineBase {
   providerModules() {
-    super.providerModules(new AsyncStateManager(this));
+    super.providerModules(new 状态本地持久化管理器模块(this));
   }
 
   updateState() {}

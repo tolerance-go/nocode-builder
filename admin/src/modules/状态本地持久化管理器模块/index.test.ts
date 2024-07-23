@@ -10,10 +10,12 @@ import {
   mockLocalData,
   mockLocalforage,
 } from '@/common/tests';
+import { EngineManagerBase } from '@/base/EngineManager';
+class TestEngineManager extends EngineManagerBase {}
 
 class TestEngine extends EngineBase {
   protected providerModules(): void {
-    super.providerModules(new 持久化本地状态持久化管理器模块());
+    super.providerModules(new 持久化本地状态持久化管理器模块(this));
   }
 }
 
@@ -29,7 +31,8 @@ describe('PersistTaskManager with EngineBase', () => {
 
   beforeEach(async () => {
     mockLocalforage(); // 设置 localforage 的 spy
-    engine = new TestEngine();
+    const engineManager = new TestEngineManager();
+    engine = new TestEngine(engineManager);
     await engine.launch();
     taskManager = engine.getModule(持久化本地状态持久化管理器模块);
   });
@@ -85,7 +88,8 @@ describe('PersistTaskManager with EngineBase', () => {
       { key: 'testKey2', data: 'testData2' },
     ];
     mockLocalData[key] = tasks;
-    const newEngine = new TestEngine();
+    const engineManager = new TestEngineManager();
+    const newEngine = new TestEngine(engineManager);
     await newEngine.launch();
     const newTaskManager = newEngine.getModule(持久化本地状态持久化管理器模块);
     expect(newTaskManager.isQueueEmpty()).toBe(false);

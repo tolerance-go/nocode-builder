@@ -1,4 +1,4 @@
-import { ModuleBase } from '@/base';
+import { EngineBase, ModuleBase } from '@/base';
 import { TaskQueue } from '@/common/controllers/TaskQueue';
 import localforage from 'localforage';
 import { 持久化本地状态持久化管理器模块 } from '../持久化本地状态持久化管理器模块';
@@ -17,8 +17,8 @@ import { 持久化本地状态持久化管理器模块 } from '../持久化本�
 export class 状态本地持久化管理器模块 extends ModuleBase {
   private taskQueue: TaskQueue;
 
-  constructor() {
-    super();
+  constructor(engine: EngineBase) {
+    super(engine);
     this.taskQueue = new TaskQueue();
     this.taskQueue.onTaskSuccess = this.onTaskSuccess.bind(this);
     this.taskQueue.onTaskFailure = this.onTaskFailure.bind(this);
@@ -60,7 +60,7 @@ export class 状态本地持久化管理器模块 extends ModuleBase {
     });
   }
   protected requireModules(): void {
-    super.requireModules(new 持久化本地状态持久化管理器模块());
+    super.requireModules(new 持久化本地状态持久化管理器模块(this.engine));
   }
 
   // 在 setup 阶段执行的逻辑
