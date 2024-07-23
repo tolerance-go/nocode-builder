@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/modules/界面状态管理器�
 import {
   use界面状态管理者,
   use验证管理者,
-} from '@/modules/UITreeManager/hooks';
+} from '@/modules/界面组件树管理模块/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/common/hooks';
 import { 测试标识 } from '@/common/constants';
 import { Flex, Input, InputRef, theme } from 'antd';

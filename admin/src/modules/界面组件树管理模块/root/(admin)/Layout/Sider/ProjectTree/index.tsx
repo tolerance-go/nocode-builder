@@ -3,11 +3,11 @@ import {
   useAppSelector,
   过滤掉包含父节点在内的节点,
 } from '@/modules/界面状态管理器模块';
-import { 组件类名 } from '@/modules/UITreeManager/constants';
+import { 组件类名 } from '@/modules/界面组件树管理模块/constants';
 import {
   use全局事件系统,
   use界面状态管理者,
-} from '@/modules/UITreeManager/hooks';
+} from '@/modules/界面组件树管理模块/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/common/hooks';
 import { 测试标识 } from '@/common/constants';
 import { css, cx } from '@emotion/css';

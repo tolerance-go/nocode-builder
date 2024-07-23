@@ -23,6 +23,6 @@ i18n.use(initReactI18next).init({
   },
 });
 
-export class I18nSystem extends ModuleBase {
+export class 语言国际化系统 extends ModuleBase {
   i18n = i18n;
 }

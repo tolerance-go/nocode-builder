@@ -10,12 +10,12 @@ import {
   ProjectTreeNodeDataRecordItem,
   ProjectStructureTreeDataNode,
 } from '@/modules/界面状态管理器模块/types';
-import { 组件标识, 组件类名 } from '@/modules/UITreeManager/constants';
+import { 组件标识, 组件类名 } from '@/modules/界面组件树管理模块/constants';
 import {
   use界面状态管理者,
   use图标管理者,
-} from '@/modules/UITreeManager/hooks';
-import { ProjectFileType } from '@/modules/UITreeManager/types';
+} from '@/modules/界面组件树管理模块/hooks';
+import { ProjectFileType } from '@/modules/界面组件树管理模块/types';
 
 import { FolderAddOutlined, PlusOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@/common/constants';

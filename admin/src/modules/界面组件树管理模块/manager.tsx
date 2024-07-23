@@ -11,7 +11,7 @@ import { 全局事件系统 } from '../全局事件系统';
 import { 界面导航系统 } from '../界面导航系统';
 import { 界面通知系统 } from '../界面通知系统';
 
-export class UITreeManager extends ModuleBase {
+export class 界面组件树管理模块 extends ModuleBase {
   requireModules() {
     super.requireModules(
       this.engine.getModuleOrCreate(全局事件系统),

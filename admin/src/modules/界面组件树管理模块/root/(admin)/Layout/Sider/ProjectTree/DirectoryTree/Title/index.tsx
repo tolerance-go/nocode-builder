@@ -1,7 +1,7 @@
 import { useAppDispatch, useAppSelector } from '@/modules/界面状态管理器模块';
-import { 组件类名 } from '@/modules/UITreeManager/constants';
-import { use界面状态管理者 } from '@/modules/UITreeManager/hooks';
-import { selectProjectStructureTreeNodeDataRecordItem } from '@/modules/UITreeManager/selectors';
+import { 组件类名 } from '@/modules/界面组件树管理模块/constants';
+import { use界面状态管理者 } from '@/modules/界面组件树管理模块/hooks';
+import { selectProjectStructureTreeNodeDataRecordItem } from '@/modules/界面组件树管理模块/selectors';
 import { 测试标识, 测试类名 } from '@/common/constants';
 import { cx } from '@emotion/css';
 import { Dropdown, Flex, Typography, theme } from 'antd';

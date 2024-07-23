@@ -1,7 +1,7 @@
 import {
   use界面状态管理者,
   use图标管理者,
-} from '@/modules/UITreeManager/hooks';
+} from '@/modules/界面组件树管理模块/hooks';
 import { css } from '@emotion/css';
 import { theme, Tree } from 'antd';
 import { Title } from './Title';
