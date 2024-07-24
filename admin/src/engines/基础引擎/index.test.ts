@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { 状态本地持久化内存模型管理模块 } from '@/modules/状态本地持久化内存模型管理模块';
 import { EngineManagerBase } from '@/base/EngineManager';
 import { LocalForageService } from '@/modules/services/LocalForageService';
-import { 基础引擎 } from './基础引擎';
+import { 基础引擎 } from '.';
 
 describe('基础引擎', () => {
   let engine: 基础引擎;
@@ -96,7 +96,7 @@ describe('基础引擎', () => {
     expect(mockLocalForageService.removeItem).toHaveBeenCalledWith('testKey1');
   });
 
-  it('onSetup 方法应该正确加载所有数据', async () => {
+  it('launch 后应该正确加载所有数据', async () => {
     expect(engine.getLocalItem<string>('testKey1')).toBe('testValue1');
     expect(engine.getLocalItem<string>('testKey2')).toBe('testValue2');
   });
