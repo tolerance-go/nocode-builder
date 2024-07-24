@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { ModuleBase } from '.';
 import { EngineBase } from '../Engine';
 import { EngineManagerBase } from '../EngineManager';
+import { Module } from '../types';
 
 class TestEngineManager extends EngineManagerBase {}
 class TestEngine extends EngineBase {}
@@ -133,5 +134,32 @@ describe('ModuleBase', () => {
     expect(JSON.stringify(module)).toMatchInlineSnapshot(
       `"{"name":"TestModule"}"`,
     );
+  });
+
+  it('应该正确处理 invokeRequiredModules 选项', async () => {
+    class TestEngineManager extends EngineManagerBase {}
+    class TestEngine extends EngineBase {
+      protected providerModules(): void {
+        super.providerModules(new TestModule1(this));
+      }
+    }
+
+    class TestModule1 extends ModuleBase {
+      constructor(engine: EngineBase) {
+        super(engine, { invokeRequiredModules: false });
+      }
+      protected requireModules(): void {
+        super.requireModules(new TestModule2(this.engine));
+      }
+    }
+    class TestModule2 extends ModuleBase {}
+
+    const engineManager = new TestEngineManager((self) => new TestEngine(self));
+
+    await engineManager.launch();
+
+    expect(() =>
+      engineManager.getEngine(TestEngine).getModule(TestModule2),
+    ).toThrowErrorMatchingInlineSnapshot(`[Error: Module of type TestModule2 not found]`);
   });
 });
