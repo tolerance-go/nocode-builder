@@ -115,4 +115,23 @@ describe('ModuleBase', () => {
     const fetchedModules = module.getDependModules(TestModule);
     expect(fetchedModules).toEqual([dependentModule1, dependentModule2]);
   });
+
+  it('toJSON', async () => {
+    class TestEngineManager extends EngineManagerBase {}
+    class TestEngine extends EngineBase {
+      protected providerModules(): void {
+        super.providerModules(new TestModule(this));
+      }
+    }
+    const engineManager = new TestEngineManager((self) => new TestEngine(self));
+    const engine = engineManager.getEngine(TestEngine);
+
+    await engineManager.launch();
+
+    const module = engine.getModule(TestModule);
+
+    expect(JSON.stringify(module)).toMatchInlineSnapshot(
+      `"{"name":"TestModule"}"`,
+    );
+  });
 });

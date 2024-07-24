@@ -72,7 +72,7 @@ export class EngineBase implements Engine {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleClass: new (...args: any[]) => T,
   ): T {
-    const module = this.findModule(moduleClass);
+    const module = this.findModuleWithCache(moduleClass);
     if (module) {
       return module as T;
     }
@@ -84,12 +84,18 @@ export class EngineBase implements Engine {
     moduleClass: new (...args: any[]) => T,
     createInstance: () => T = () => new moduleClass(this),
   ): T {
-    const module = this.findModule(moduleClass);
+    const module = this.findModuleWithCache(moduleClass);
     if (module) {
       return module as T;
     }
     const newModule = createInstance();
     return newModule;
+  }
+
+  public toJSON(): object {
+    return {
+      name: this.constructor.name,
+    };
   }
 
   public onModuleAdded(module: Module) {
@@ -127,7 +133,7 @@ export class EngineBase implements Engine {
     this.dependentEngines.add(engine);
   }
 
-  private findModule<T extends Module>(
+  private findModuleWithCache<T extends Module>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleClass: new (...args: any[]) => T,
   ): T | undefined {

@@ -68,6 +68,12 @@ export class ModuleBase implements Module {
     this.hasStarted = true; // 标记为已启动
   }
 
+  public toJSON(): object {
+    return {
+      name: this.constructor.name,
+    };
+  }
+
   // 抽象的 start 逻辑函数，需要在继承类中实现
   protected async onSetup(): Promise<void> {}
   protected async onStart(): Promise<void> {}

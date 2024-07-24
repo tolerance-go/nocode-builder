@@ -166,13 +166,24 @@ describe('EngineManagerBase', () => {
       (self) => new TestOtherEngine(self),
     );
 
-    const fetchedEngines = engineManager.getEngines(TestEngine);
+    const fetchedEngines = engineManager.getProvidedEngines(TestEngine);
     expect(fetchedEngines.length).toBe(3); // 期望 TestEngine 类型的引擎有 2 个
     expect(fetchedEngines[0]).toBeInstanceOf(TestEngine);
     expect(fetchedEngines[1]).toBeInstanceOf(TestEngine);
     expect(fetchedEngines[2]).toBeInstanceOf(TestEngine);
-    const fetchedOtherEngines = engineManager.getEngines(TestOtherEngine);
+    const fetchedOtherEngines =
+      engineManager.getProvidedEngines(TestOtherEngine);
     expect(fetchedOtherEngines.length).toBe(1); // 期望 TestEngine 类型的引擎有 2 个
     expect(fetchedOtherEngines[0]).toBeInstanceOf(TestOtherEngine);
+  });
+
+  it('toJSON', async () => {
+    class TestEngineManager extends EngineManagerBase {}
+    class TestEngine extends EngineBase {}
+    const engineManager = new TestEngineManager((self) => new TestEngine(self));
+
+    expect(JSON.stringify(engineManager)).toMatchInlineSnapshot(
+      `"{"name":"TestEngineManager"}"`,
+    );
   });
 });

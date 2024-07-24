@@ -1,21 +1,28 @@
-type CacheKeyArgs = string;
+type CacheKeyArgs = string | string[];
 
-class CacheSet<T> {
+class CacheSet<T> implements Iterable<T> {
   private items: Set<T>;
   private cache: Map<string, { arg: unknown; result: T | undefined }>;
-  private itemsSnapshot: string;
 
   constructor() {
     this.items = new Set<T>();
     this.cache = new Map();
-    this.itemsSnapshot = this.getSnapshot();
+  }
+
+  // 获取集合大小
+  get length(): number {
+    return this.items.size;
+  }
+
+  // 获取集合大小
+  size(): number {
+    return this.items.size;
   }
 
   // 添加元素
   add(element: T): this {
     this.items.add(element);
-    this.itemsSnapshot = this.getSnapshot();
-    this.cache.clear(); // 集合变化，清除缓存
+    this.clearCache(); // 集合变化，清除缓存
     return this;
   }
 
@@ -23,8 +30,7 @@ class CacheSet<T> {
   delete(element: T): boolean {
     const result = this.items.delete(element);
     if (result) {
-      this.itemsSnapshot = this.getSnapshot();
-      this.cache.clear(); // 集合变化，清除缓存
+      this.clearCache(); // 集合变化，清除缓存
     }
     return result;
   }
@@ -39,16 +45,10 @@ class CacheSet<T> {
     return Array.from(this.items);
   }
 
-  // 获取集合大小
-  size(): number {
-    return this.items.size;
-  }
-
   // 清空集合
   clear(): void {
     this.items.clear();
-    this.itemsSnapshot = this.getSnapshot();
-    this.cache.clear(); // 集合变化，清除缓存
+    this.clearCache(); // 集合变化，清除缓存
   }
 
   // 查找符合条件的第一个元素
@@ -59,7 +59,7 @@ class CacheSet<T> {
     const cacheKey = this.generateCacheKey(cacheKeyArgs);
     const cached = this.cache.get(cacheKey);
 
-    if (cached && this.itemsSnapshot === this.getSnapshot()) {
+    if (cached) {
       return cached.result;
     }
 
@@ -73,13 +73,33 @@ class CacheSet<T> {
     }
 
     this.cache.set(cacheKey, { arg: cacheKeyArgs, result });
-    this.itemsSnapshot = this.getSnapshot();
 
     return result;
   }
-  // 获取集合的快照（用于检测变化）
-  private getSnapshot(): string {
-    return JSON.stringify(Array.from(this.items));
+
+  // 迭代器
+  [Symbol.iterator](): IterableIterator<T> {
+    return this.items[Symbol.iterator]();
+  }
+
+  // forEach 方法
+  forEach(
+    callback: (value: T, value2: T, set: CacheSet<T>) => void,
+    thisArg?: unknown,
+  ): void {
+    this.items.forEach((value, value2) =>
+      callback.call(thisArg, value, value2, this),
+    );
+  }
+
+  // 自定义序列化方法
+  toJSON() {
+    return Array.from(this.items);
+  }
+
+  // 清除缓存
+  private clearCache(): void {
+    this.cache.clear();
   }
 
   // 生成缓存键

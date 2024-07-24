@@ -1,5 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { CacheSet } from '.';
+import { EngineBase, ModuleBase } from '@/base';
+import { EngineManagerBase } from '@/base/EngineManager';
 
 describe('CacheSet', () => {
   it('应该正确添加和删除元素', () => {
@@ -71,5 +73,37 @@ describe('CacheSet', () => {
     const result3 = set.findWithCache(predicate, '1'); // 使用缓存结果
     expect(result3).toBe(2);
     expect(predicate).toHaveBeenCalledTimes(4); // 没有新的调用
+  });
+
+  it('应该正确遍历集合元素', () => {
+    const set = new CacheSet<number>();
+    set.add(1).add(2).add(3);
+
+    const elements: number[] = [];
+    for (const value of set) {
+      elements.push(value);
+    }
+
+    expect(elements).toEqual([1, 2, 3]);
+  });
+
+  it('应该正确使用 forEach 遍历集合元素', () => {
+    const set = new CacheSet<number>();
+    set.add(1).add(2).add(3);
+
+    const elements: number[] = [];
+    set.forEach((value) => {
+      elements.push(value);
+    });
+
+    expect(elements).toEqual([1, 2, 3]);
+  });
+
+  it('应该正确序列化集合', () => {
+    const set = new CacheSet<number>();
+    set.add(1).add(2).add(3);
+
+    const json = JSON.stringify(set);
+    expect(json).toBe('[1,2,3]');
   });
 });

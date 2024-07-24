@@ -164,4 +164,15 @@ describe('EngineBase', () => {
     expect(engine['allModules'].has(dependentModule)).toBe(true);
     expect(engine['allModules'].has(subDependentModule)).toBe(true);
   });
+
+  it('toJSON', async () => {
+    class TestEngineManager extends EngineManagerBase {}
+    class TestEngine extends EngineBase {}
+    const engineManager = new TestEngineManager((self) => new TestEngine(self));
+    const engine = engineManager.getEngine(TestEngine);
+
+    expect(JSON.stringify(engine)).toMatchInlineSnapshot(
+      `"{"name":"TestEngine2"}"`,
+    );
+  });
 });
