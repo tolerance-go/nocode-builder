@@ -12,11 +12,11 @@ export class EngineBase implements Engine {
   protected hasLaunched: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   private providedModules: Set<Module>;
-  private allModules: CacheSet<Module>;
+  private allModules: Set<Module>;
 
   constructor(engineManager: EngineManagerBase) {
     this.providedModules = new Set();
-    this.allModules = new CacheSet();
+    this.allModules = new Set();
     this.launchProcessing = Promise.withResolvers<void>();
     this.engineManager = engineManager;
     this.engineManager.onEngineAdded(this);
@@ -72,7 +72,7 @@ export class EngineBase implements Engine {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleClass: new (...args: any[]) => T,
   ): T {
-    const module = this.findModuleWithCache(moduleClass);
+    const module = this.findModule(moduleClass);
     if (module) {
       return module as T;
     }
@@ -84,7 +84,7 @@ export class EngineBase implements Engine {
     moduleClass: new (...args: any[]) => T,
     createInstance: () => T = () => new moduleClass(this),
   ): T {
-    const module = this.findModuleWithCache(moduleClass);
+    const module = this.findModule(moduleClass);
     if (module) {
       return module as T;
     }
@@ -133,15 +133,14 @@ export class EngineBase implements Engine {
     this.dependentEngines.add(engine);
   }
 
-  private findModuleWithCache<T extends Module>(
+  private findModule<T extends Module>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleClass: new (...args: any[]) => T,
   ): T | undefined {
-    const module = this.allModules.findWithCache((item) => {
-      return item instanceof moduleClass;
-    }, 'EngineBase_cacheKey');
-    if (module) {
-      return module as T;
+    for (const module of this.allModules) {
+      if (module instanceof moduleClass) {
+        return module;
+      }
     }
   }
 }

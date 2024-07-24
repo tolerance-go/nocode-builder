@@ -1,4 +1,3 @@
-import { CacheSet } from '@/common/utils/CacheSet';
 import { EngineManager, Engine } from '../types';
 import { topologicalSort } from '../utils';
 
@@ -6,11 +5,11 @@ export type EngineConstructors = ((self: EngineManagerBase) => Engine)[];
 
 export class EngineManagerBase implements EngineManager {
   private providedEngines: Set<Engine>;
-  private allEngines: CacheSet<Engine>;
+  private allEngines: Set<Engine>;
 
   constructor(...engineConstructors: EngineConstructors) {
     this.providedEngines = new Set();
-    this.allEngines = new CacheSet();
+    this.allEngines = new Set();
     this.providerEngines(engineConstructors);
   }
 
@@ -26,7 +25,7 @@ export class EngineManagerBase implements EngineManager {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     engineClass: new (...args: any[]) => T,
   ): T {
-    const engine = this.findEngineWithCache(engineClass);
+    const engine = this.findEngine(engineClass);
     if (engine) {
       return engine as T;
     }
@@ -64,15 +63,14 @@ export class EngineManagerBase implements EngineManager {
     await Promise.all(engines.map((engine) => engine.launch()));
   }
 
-  private findEngineWithCache<T extends Engine>(
+  private findEngine<T extends Engine>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     engineClass: new (...args: any[]) => T,
   ): T | undefined {
-    const engine = this.allEngines.findWithCache((item) => {
-      return item instanceof engineClass;
-    }, 'EngineManagerBase_cacheKey');
-    if (engine) {
-      return engine as T;
+    for (const engine of this.allEngines) {
+      if (engine instanceof engineClass) {
+        return engine;
+      }
     }
   }
 }
