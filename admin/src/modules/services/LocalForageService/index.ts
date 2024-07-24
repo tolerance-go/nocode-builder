@@ -52,4 +52,17 @@ export class LocalForageService extends ModuleBase {
       console.error('清除 localforage 中的所有数据出错', error);
     }
   }
+
+  async loadAllItems(): Promise<Record<string, unknown>> {
+    const items: Record<string, unknown> = {};
+    try {
+      await this.store.iterate((value, key) => {
+        items[key] = value;
+      });
+      console.log('从 localforage 加载的所有数据', items);
+    } catch (error) {
+      console.error('从 localforage 加载所有数据出错', error);
+    }
+    return items;
+  }
 }

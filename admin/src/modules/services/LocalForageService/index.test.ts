@@ -11,6 +11,7 @@ describe('LocalForageService', () => {
     getItem: Mock;
     removeItem: Mock;
     clear: Mock;
+    iterate: Mock;
   };
 
   beforeEach(async () => {
@@ -20,6 +21,7 @@ describe('LocalForageService', () => {
       getItem: vi.fn(),
       removeItem: vi.fn(),
       clear: vi.fn(),
+      iterate: vi.fn(),
     };
 
     vi.spyOn(localforage, 'createInstance').mockReturnValue(
@@ -88,5 +90,20 @@ describe('LocalForageService', () => {
     await localForageService.clear();
 
     expect(mockLocalForageInstance.clear).toHaveBeenCalled();
+  });
+
+  it('应该正确加载所有项目', async () => {
+    const mockData = {
+      testKey1: 'testValue1',
+      testKey2: 'testValue2',
+    };
+    mockLocalForageInstance.iterate.mockImplementation((callback) => {
+      Object.entries(mockData).forEach(([key, value]) => callback(value, key));
+    });
+
+    const result = await localForageService.loadAllItems();
+
+    expect(result).toEqual(mockData);
+    expect(mockLocalForageInstance.iterate).toHaveBeenCalled();
   });
 });

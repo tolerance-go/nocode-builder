@@ -36,6 +36,11 @@ export class 状态本地持久化内存模型管理模块 extends ModuleBase {
     super.requireModules(new LocalForageService(this.engine));
   }
 
+  protected async onSetup(): Promise<void> {
+    this.localData =
+      await this.getDependModule(LocalForageService).loadAllItems();
+  }
+
   // 添加任务到异步队列
   private addTaskToQueue(task: () => Promise<void>): void {
     this.taskQueue = this.taskQueue.then(task).catch((error) => {
