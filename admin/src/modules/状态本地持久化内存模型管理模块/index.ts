@@ -14,21 +14,18 @@ export class 状态本地持久化内存模型管理模块 extends ModuleBase {
   // 同步设置数据到本地状态
   set<T>(key: string, value: T): void {
     this.localData[key] = value;
-    console.log(`数据已设置: ${key}`, value);
     this.addTaskToQueue(() => this.syncToLocalForage(key, value));
   }
 
   // 同步获取本地状态中的数据
   get<T>(key: string): T | undefined {
     const data = this.localData[key];
-    console.log(`获取数据: ${key}`, data);
     return data as T | undefined;
   }
 
   // 从本地状态中删除数据
   remove(key: string): void {
     delete this.localData[key];
-    console.log(`数据已删除: ${key}`);
     this.addTaskToQueue(() => this.removeFromLocalForage(key));
   }
 
@@ -52,7 +49,6 @@ export class 状态本地持久化内存模型管理模块 extends ModuleBase {
   private async syncToLocalForage<T>(key: string, value: T): Promise<void> {
     try {
       await this.getDependModule(LocalForageService).setItem(key, value);
-      console.log(`数据已同步到 localforage: ${key}`, value);
     } catch (error) {
       console.error(`同步数据到 localforage 出错: ${key}`, error);
     }
@@ -62,7 +58,6 @@ export class 状态本地持久化内存模型管理模块 extends ModuleBase {
   private async removeFromLocalForage(key: string): Promise<void> {
     try {
       await this.getDependModule(LocalForageService).removeItem(key);
-      console.log(`数据已从 localforage 删除: ${key}`);
     } catch (error) {
       console.error(`从 localforage 删除数据出错: ${key}`, error);
     }

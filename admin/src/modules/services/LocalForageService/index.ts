@@ -7,7 +7,6 @@ export class LocalForageService extends ModuleBase {
   constructor(engine: EngineBase) {
     super(engine);
     this.store = localforage.createInstance({
-      driver: [localforage.INDEXEDDB, localforage.LOCALSTORAGE],
       name: 'nocode-builder-app',
       version: 1.0,
       storeName: 'keyvaluepairs',
@@ -18,7 +17,6 @@ export class LocalForageService extends ModuleBase {
   async setItem<T>(key: string, value: T): Promise<void> {
     try {
       await this.store.setItem(key, value);
-      console.log(`数据已同步到 localforage: ${key}`, value);
     } catch (error) {
       console.error(`同步数据到 localforage 出错: ${key}`, error);
     }
@@ -27,7 +25,6 @@ export class LocalForageService extends ModuleBase {
   async getItem<T>(key: string): Promise<T | null> {
     try {
       const value = await this.store.getItem<T>(key);
-      console.log(`从 localforage 获取数据: ${key}`, value);
       return value;
     } catch (error) {
       console.error(`从 localforage 获取数据出错: ${key}`, error);
@@ -59,7 +56,6 @@ export class LocalForageService extends ModuleBase {
       await this.store.iterate((value, key) => {
         items[key] = value;
       });
-      console.log('从 localforage 加载的所有数据', items);
     } catch (error) {
       console.error('从 localforage 加载所有数据出错', error);
     }

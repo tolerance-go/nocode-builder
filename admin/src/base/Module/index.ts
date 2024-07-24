@@ -10,12 +10,19 @@ export class ModuleBase implements Module {
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
-  constructor(engine: EngineBase) {
+  constructor(
+    engine: EngineBase,
+    options: {
+      invokeRequiredModules?: boolean;
+    } = {
+      invokeRequiredModules: true,
+    },
+  ) {
     this.setupProcessing = Promise.withResolvers<void>();
     this.startProcessing = Promise.withResolvers<void>();
     this.engine = engine;
     this.engine.onModuleAdded(this);
-    this.requireModules();
+    options.invokeRequiredModules && this.requireModules();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

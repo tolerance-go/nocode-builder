@@ -1,1 +1,1 @@
-export const localStateFieldName = 'state';
+export const localStateFieldName = 'store';
