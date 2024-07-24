@@ -1,3 +1,4 @@
+import { CacheSet } from '@/common/utils/CacheSet';
 import { EngineManagerBase } from '../EngineManager';
 import { Engine, Module } from '../types';
 import { topologicalSort } from '../utils';
@@ -11,11 +12,11 @@ export class EngineBase implements Engine {
   protected hasLaunched: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   private providedModules: Set<Module>;
-  private allModules: Set<Module>;
+  private allModules: CacheSet<Module>;
 
   constructor(engineManager: EngineManagerBase) {
     this.providedModules = new Set();
-    this.allModules = new Set();
+    this.allModules = new CacheSet();
     this.launchProcessing = Promise.withResolvers<void>();
     this.engineManager = engineManager;
     this.engineManager.onEngineAdded(this);
@@ -71,10 +72,9 @@ export class EngineBase implements Engine {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleClass: new (...args: any[]) => T,
   ): T {
-    for (const module of this.allModules) {
-      if (module instanceof moduleClass) {
-        return module;
-      }
+    const module = this.findModule(moduleClass);
+    if (module) {
+      return module as T;
     }
     throw new Error(`Module of type ${moduleClass.name} not found`);
   }
@@ -84,10 +84,9 @@ export class EngineBase implements Engine {
     moduleClass: new (...args: any[]) => T,
     createInstance: () => T = () => new moduleClass(this),
   ): T {
-    for (const module of this.allModules) {
-      if (module instanceof moduleClass) {
-        return module;
-      }
+    const module = this.findModule(moduleClass);
+    if (module) {
+      return module as T;
     }
     const newModule = createInstance();
     return newModule;
@@ -126,5 +125,17 @@ export class EngineBase implements Engine {
 
   private addDependentEngine(engine: Engine): void {
     this.dependentEngines.add(engine);
+  }
+
+  private findModule<T extends Module>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    moduleClass: new (...args: any[]) => T,
+  ): T | undefined {
+    const module = this.allModules.findWithCache((item) => {
+      return item instanceof moduleClass;
+    }, 'EngineBase_cacheKey');
+    if (module) {
+      return module as T;
+    }
   }
 }
