@@ -4,23 +4,8 @@ import { EngineBase } from '../Engine';
 import { EngineManagerBase } from '../EngineManager';
 
 class TestEngineManager extends EngineManagerBase {}
-class TestEngine extends EngineBase {
-  constructor(engineManager: EngineManagerBase) {
-    super(engineManager);
-  }
-}
-class TestModule extends ModuleBase {
-  async onSetup() {
-    // 自定义的 setup 逻辑
-  }
-
-  async onStart() {
-    // 自定义的 start 逻辑
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onAddedToEngine(_engine: EngineBase) {}
-}
+class TestEngine extends EngineBase {}
+class TestModule extends ModuleBase {}
 
 describe('ModuleBase', () => {
   it('应该正确设置和获取 engine 实例', () => {

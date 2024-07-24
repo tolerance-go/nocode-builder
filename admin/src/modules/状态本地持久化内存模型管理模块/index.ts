@@ -26,16 +26,4 @@ export class 状态本地持久化内存模型管理模块 extends ModuleBase {
     delete this.localData[key];
     console.log(`数据已删除: ${key}`);
   }
-
-  // 在 setup 阶段执行的逻辑
-  protected async onSetup(): Promise<void> {
-    // 这里可以添加模块 setup 阶段需要执行的逻辑
-    console.log('状态本地持久化内存模型管理模块 setup 完成');
-  }
-
-  // 在 start 阶段执行的逻辑
-  protected async onStart(): Promise<void> {
-    // 这里可以添加模块 start 阶段需要执行的逻辑
-    console.log('状态本地持久化内存模型管理模块 start 完成');
-  }
 }
