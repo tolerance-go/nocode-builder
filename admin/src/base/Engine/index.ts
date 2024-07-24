@@ -1,4 +1,3 @@
-import { CacheSet } from '@/common/utils/CacheSet';
 import { EngineManagerBase } from '../EngineManager';
 import { Engine, Module } from '../types';
 import { topologicalSort } from '../utils';
@@ -74,7 +73,7 @@ export class EngineBase implements Engine {
   ): T {
     const module = this.findModule(moduleClass);
     if (module) {
-      return module as T;
+      return module;
     }
     throw new Error(`Module of type ${moduleClass.name} not found`);
   }
@@ -86,7 +85,7 @@ export class EngineBase implements Engine {
   ): T {
     const module = this.findModule(moduleClass);
     if (module) {
-      return module as T;
+      return module;
     }
     const newModule = createInstance();
     return newModule;
@@ -100,6 +99,15 @@ export class EngineBase implements Engine {
 
   public onModuleAdded(module: Module) {
     this.allModules.add(module);
+  }
+
+  public getProvidedModules<T extends Module>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    moduleClass: new (...args: any[]) => T,
+  ): T[] {
+    return Array.from(this.providedModules).filter(
+      (module) => module instanceof moduleClass,
+    ) as T[];
   }
 
   protected async onLaunch(): Promise<void> {}

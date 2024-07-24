@@ -9,6 +9,7 @@ import {
   createUserInfoSlice,
 } from '../界面状态管理器模块/states';
 import { 全局事件系统 } from '../全局事件系统';
+import { 基础引擎 } from '@/engines/基础引擎';
 
 export class 界面状态仓库模块 extends ModuleBase {
   static createSlices = () => {
@@ -132,22 +133,24 @@ export class 界面状态仓库模块 extends ModuleBase {
     return result;
   };
 
-  private initialState: RootState | null;
-
   private layoutStateController: LayoutStateController;
 
-  constructor(engine: EngineBase, initialState: RootState | null) {
+  private localStoreKey = 'store';
+
+  constructor(engine: EngineBase) {
     super(engine);
 
     this.slices = 界面状态仓库模块.createSlices();
 
     this.reducers = 界面状态仓库模块.createReducers(this.slices);
-    this.initialState = initialState;
+    const initialState = this.engine
+      .getDependEngine(基础引擎)
+      .getLocalItem<RootState>(this.localStoreKey);
 
     this.store = 界面状态仓库模块.createStore(
       this.reducers,
       [this.handleMiddleware],
-      this.initialState,
+      initialState,
     );
 
     this.layoutStateController = new LayoutStateController();

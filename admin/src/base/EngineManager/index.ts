@@ -27,7 +27,7 @@ export class EngineManagerBase implements EngineManager {
   ): T {
     const engine = this.findEngine(engineClass);
     if (engine) {
-      return engine as T;
+      return engine;
     }
     throw new Error(`Engine of type ${engineClass.name} not found`);
   }
