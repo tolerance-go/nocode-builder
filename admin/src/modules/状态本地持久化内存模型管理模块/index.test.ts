@@ -12,16 +12,24 @@ describe('状态本地持久化内存模型管理模块', () => {
     class TestEngineManager extends EngineManagerBase {}
     class TestEngine extends EngineBase {
       protected providerModules(): void {
-        super.providerModules(new 状态本地持久化内存模型管理模块(this));
+        const module = new 状态本地持久化内存模型管理模块(this);
+        mockLocalForageService = module.getDependModule(LocalForageService);
+
+        vi.spyOn(mockLocalForageService, 'loadAllItems').mockResolvedValue({
+          testKey1: 'testValue1',
+          testKey2: 'testValue2',
+        });
+
+        super.providerModules(module);
       }
     }
     const engineManager = new TestEngineManager((self) => new TestEngine(self));
+
     await engineManager.launch();
 
     module = engineManager
       .getEngine(TestEngine)
       .getModule(状态本地持久化内存模型管理模块);
-    mockLocalForageService = module.getDependModule(LocalForageService);
 
     // Mock localforage methods
     vi.spyOn(mockLocalForageService, 'setItem').mockResolvedValue(undefined);
@@ -86,5 +94,10 @@ describe('状态本地持久化内存模型管理模块', () => {
       'testValue2',
     );
     expect(mockLocalForageService.removeItem).toHaveBeenCalledWith('testKey1');
+  });
+
+  it('onSetup 方法应该正确加载所有数据', async () => {
+    expect(module.get<string>('testKey1')).toBe('testValue1');
+    expect(module.get<string>('testKey2')).toBe('testValue2');
   });
 });
