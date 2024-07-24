@@ -1,16 +1,5 @@
 import { EngineBase, ModuleBase } from '@/base';
 
-/**
- * 状态本地持久化内存模型管理模块
- *
- * 是什么: 一个用于管理本地状态内存模型的模块类
- *
- * 为了什么用户: 需要在应用程序中同步管理本地状态数据的开发者
- *
- * 解决什么问题: 该模块类通过维护一个内存中的状态数据对象，提供同步的 set 和 get 方法，以便于快速访问和修改状态数据
- *
- * 以便于: 开发者能够方便地管理应用状态数据，并在需要时快速访问或更新这些数据
- */
 export class 状态本地持久化内存模型管理模块 extends ModuleBase {
   private localData: Record<string, unknown>;
 
@@ -36,11 +25,6 @@ export class 状态本地持久化内存模型管理模块 extends ModuleBase {
   remove(key: string): void {
     delete this.localData[key];
     console.log(`数据已删除: ${key}`);
-  }
-
-  // 打印当前的本地状态数据
-  printLocalData(): void {
-    console.log('当前本地状态数据:', this.localData);
   }
 
   // 在 setup 阶段执行的逻辑
