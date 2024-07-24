@@ -2,7 +2,6 @@ import { describe, expect, it } from 'vitest';
 import { ModuleBase } from '.';
 import { EngineBase } from '../Engine';
 import { EngineManagerBase } from '../EngineManager';
-import { Module } from '../types';
 
 class TestEngineManager extends EngineManagerBase {}
 class TestEngine extends EngineBase {}
@@ -160,6 +159,8 @@ describe('ModuleBase', () => {
 
     expect(() =>
       engineManager.getEngine(TestEngine).getModule(TestModule2),
-    ).toThrowErrorMatchingInlineSnapshot(`[Error: Module of type TestModule2 not found]`);
+    ).toThrowErrorMatchingInlineSnapshot(
+      `[Error: Module of type TestModule2 not found]`,
+    );
   });
 });

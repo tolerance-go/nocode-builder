@@ -1,19 +1,17 @@
 import { EngineManager, Engine } from '../types';
 import { topologicalSort } from '../utils';
 
-export type EngineConstructors = ((self: EngineManagerBase) => Engine)[];
-
 export class EngineManagerBase implements EngineManager {
   private providedEngines: Set<Engine>;
   private allEngines: Set<Engine>;
 
-  constructor(...engineConstructors: EngineConstructors) {
+  constructor() {
     this.providedEngines = new Set();
     this.allEngines = new Set();
-    this.providerEngines(engineConstructors);
   }
 
   public async launch() {
+    this.providerEngines();
     const sortedActors = topologicalSort(
       this.providedEngines,
       (engine) => engine.requiredEngines,
@@ -51,10 +49,9 @@ export class EngineManagerBase implements EngineManager {
     };
   }
 
-  private providerEngines(engineConstructors: EngineConstructors) {
+  protected providerEngines(...engines: Engine[]) {
     // 初始化 Actors
-    engineConstructors.forEach((engineConstructor) => {
-      const engine = engineConstructor(this);
+    engines.forEach((engine) => {
       this.providedEngines.add(engine);
     });
   }
