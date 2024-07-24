@@ -6,19 +6,18 @@ import { EngineManagerBase } from './base/EngineManager';
 
 class AppEngineManager extends EngineManagerBase {
   protected providerEngines(): void {
-    const appEngine = new 应用引擎(this);
-    window.appEngine = appEngine;
-
-    super.providerEngines(appEngine);
+    super.providerEngines(new 应用引擎(this));
   }
 }
 
 const main = async () => {
-  const engineManager = new AppEngineManager();
+  const appEngineManager = new AppEngineManager();
+  window.appEngineManager = appEngineManager;
 
-  window.appEngineManager = engineManager;
+  await appEngineManager.launch();
 
-  await engineManager.launch();
+  const appEngine = appEngineManager.getEngine(应用引擎);
+  window.appEngine = appEngine;
 };
 
 main();
