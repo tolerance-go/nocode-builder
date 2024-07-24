@@ -9,7 +9,11 @@ describe('状态本地持久化内存模型管理模块', () => {
   let mockLocalForageService: LocalForageService;
 
   beforeEach(async () => {
-    class TestEngineManager extends EngineManagerBase {}
+    class TestEngineManager extends EngineManagerBase {
+      protected providerEngines(): void {
+        super.providerEngines(new TestEngine(this));
+      }
+    }
     class TestEngine extends EngineBase {
       protected providerModules(): void {
         const module = new 状态本地持久化内存模型管理模块(this);
@@ -23,7 +27,7 @@ describe('状态本地持久化内存模型管理模块', () => {
         super.providerModules(module);
       }
     }
-    const engineManager = new TestEngineManager((self) => new TestEngine(self));
+    const engineManager = new TestEngineManager();
 
     await engineManager.launch();
 

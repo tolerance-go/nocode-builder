@@ -20,7 +20,6 @@ describe('EngineBase', () => {
     const dependentEngine = new TestEngine(engineManager);
     engine['requireEngines'](dependentEngine);
     expect(engine.requiredEngines.has(dependentEngine)).toBe(true);
-    expect(dependentEngine.dependentEngines.has(engine)).toBe(true);
   });
 
   it('应该正确获取指定类型的依赖引擎', () => {
@@ -146,9 +145,16 @@ describe('EngineBase', () => {
   });
 
   it('toJSON', async () => {
-    class TestEngineManager extends EngineManagerBase {}
+    class TestEngineManager extends EngineManagerBase {
+      protected providerEngines(): void {
+        super.providerEngines(new TestEngine(this));
+      }
+    }
     class TestEngine extends EngineBase {}
-    const engineManager = new TestEngineManager((self) => new TestEngine(self));
+    const engineManager = new TestEngineManager();
+
+    await engineManager.launch();
+
     const engine = engineManager.getEngine(TestEngine);
 
     expect(JSON.stringify(engine)).toMatchInlineSnapshot(

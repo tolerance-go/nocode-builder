@@ -6,14 +6,18 @@ import { describe, expect, it } from 'vitest';
 import { 图标管理者 } from '.';
 
 describe('图标管理者', async () => {
-  class TestEngineManager extends EngineManagerBase {}
+  class TestEngineManager extends EngineManagerBase {
+    protected providerEngines(): void {
+      super.providerEngines(new TestEngine(this));
+    }
+  }
   class TestEngine extends EngineBase {
     protected providerModules(): void {
       const manager = new 图标管理者(this);
       super.providerModules(manager);
     }
   }
-  const engineManager = new TestEngineManager((self) => new TestEngine(self));
+  const engineManager = new TestEngineManager();
   await engineManager.launch();
   const manager = engineManager.getEngine(TestEngine).getModule(图标管理者);
 

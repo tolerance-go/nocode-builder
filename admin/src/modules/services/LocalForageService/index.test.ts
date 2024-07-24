@@ -28,14 +28,18 @@ describe('LocalForageService', () => {
       mockLocalForageInstance as unknown as LocalForage,
     );
 
-    class TestEngineManager extends EngineManagerBase {}
+    class TestEngineManager extends EngineManagerBase {
+      protected providerEngines(): void {
+        super.providerEngines(new TestEngine(this));
+      }
+    }
     class TestEngine extends EngineBase {
       protected providerModules(): void {
         super.providerModules(new LocalForageService(this));
       }
     }
 
-    const engineManager = new TestEngineManager((self) => new TestEngine(self));
+    const engineManager = new TestEngineManager();
 
     await engineManager.launch();
 

@@ -3,7 +3,6 @@ import { EngineManagerBase } from '.';
 import { EngineBase } from '../Engine';
 import { ModuleBase } from '../Module';
 import { topologicalSort } from '../utils';
-import { Engine, Module } from '../types';
 
 class TestEngine extends EngineBase {}
 

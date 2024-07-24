@@ -10,7 +10,11 @@ describe('基础引擎', () => {
   let mockPersistenceModule: 状态本地持久化内存模型管理模块;
 
   beforeEach(async () => {
-    class TestEngineManager extends EngineManagerBase {}
+    class TestEngineManager extends EngineManagerBase {
+      protected providerEngines(): void {
+        super.providerEngines(new TestEngine(this));
+      }
+    }
     class TestEngine extends 基础引擎 {
       protected providerModules(): void {
         super.providerModules();
@@ -26,7 +30,7 @@ describe('基础引擎', () => {
       }
     }
 
-    const engineManager = new TestEngineManager((self) => new TestEngine(self));
+    const engineManager = new TestEngineManager();
     await engineManager.launch();
 
     engine = engineManager.getEngine(TestEngine);
