@@ -1,10 +1,8 @@
 import { EngineManagerBase } from '../EngineManager';
 import { Engine, Module } from '../types';
-import { topologicalSort } from '../utils';
 
 export class EngineBase implements Engine {
   public requiredEngines: Set<Engine> = new Set(); // 当前 Engine 依赖的 Engines
-  public dependentEngines: Set<Engine> = new Set(); // 依赖当前 Engine 的 Engines
   public launchProcessing: PromiseWithResolvers<void>;
   public engineManager: EngineManagerBase;
 
@@ -55,10 +53,7 @@ export class EngineBase implements Engine {
     );
 
     this.providerModules();
-    const sortedActors = topologicalSort(
-      this.providedModules,
-      (module) => module.requiredModules,
-    );
+    const sortedActors = Array.from(this.allModules);
     await this.setupModules(sortedActors);
     await this.startModules(sortedActors);
 
@@ -116,9 +111,6 @@ export class EngineBase implements Engine {
     engines.forEach((engine) => {
       if (!this.requiredEngines.has(engine)) {
         this.requiredEngines.add(engine);
-        if (engine instanceof EngineBase) {
-          engine.addDependentEngine(this);
-        }
       }
     });
   }
@@ -135,10 +127,6 @@ export class EngineBase implements Engine {
 
   private async startModules(modules: Module[]) {
     await Promise.all(modules.map((module) => module.start()));
-  }
-
-  private addDependentEngine(engine: Engine): void {
-    this.dependentEngines.add(engine);
   }
 
   private findModule<T extends Module>(

@@ -1,5 +1,4 @@
-import { EngineManager, Engine } from '../types';
-import { topologicalSort } from '../utils';
+import { Engine, EngineManager } from '../types';
 
 export class EngineManagerBase implements EngineManager {
   private providedEngines: Set<Engine>;
@@ -12,11 +11,7 @@ export class EngineManagerBase implements EngineManager {
 
   public async launch() {
     this.providerEngines();
-    const sortedActors = topologicalSort(
-      this.providedEngines,
-      (engine) => engine.requiredEngines,
-    );
-    await this.launchEngines(sortedActors);
+    await this.launchEngines(Array.from(this.allEngines));
   }
 
   public getEngine<T extends Engine>(

@@ -117,17 +117,22 @@ describe('ModuleBase', () => {
   });
 
   it('toJSON', async () => {
-    class TestEngineManager extends EngineManagerBase {}
     class TestEngine extends EngineBase {
       protected providerModules(): void {
         super.providerModules(new TestModule(this));
       }
     }
-    const engineManager = new TestEngineManager((self) => new TestEngine(self));
-    const engine = engineManager.getEngine(TestEngine);
+    class TestEngineManager extends EngineManagerBase {
+      protected providerEngines(): void {
+        super.providerEngines(new TestEngine(this));
+      }
+    }
+
+    const engineManager = new TestEngineManager();
 
     await engineManager.launch();
 
+    const engine = engineManager.getEngine(TestEngine);
     const module = engine.getModule(TestModule);
 
     expect(JSON.stringify(module)).toMatchInlineSnapshot(
@@ -136,13 +141,6 @@ describe('ModuleBase', () => {
   });
 
   it('应该正确处理 invokeRequiredModules 选项', async () => {
-    class TestEngineManager extends EngineManagerBase {}
-    class TestEngine extends EngineBase {
-      protected providerModules(): void {
-        super.providerModules(new TestModule1(this));
-      }
-    }
-
     class TestModule1 extends ModuleBase {
       constructor(engine: EngineBase) {
         super(engine, { invokeRequiredModules: false });
@@ -152,8 +150,19 @@ describe('ModuleBase', () => {
       }
     }
     class TestModule2 extends ModuleBase {}
+    class TestEngine extends EngineBase {
+      protected providerModules(): void {
+        super.providerModules(new TestModule1(this));
+      }
+    }
 
-    const engineManager = new TestEngineManager((self) => new TestEngine(self));
+    class TestEngineManager extends EngineManagerBase {
+      protected providerEngines(): void {
+        super.providerEngines(new TestEngine(this));
+      }
+    }
+
+    const engineManager = new TestEngineManager();
 
     await engineManager.launch();
 
