@@ -1,3 +1,5 @@
+import { localforageInstanceName } from '@/modules/services/LocalForageService';
+
 // 定义步骤函数类型
 type StepFunction<T = void> = (
   description: string,
@@ -50,7 +52,7 @@ export const 使用场景: ScenarioFunction = (description, steps) => {
       cy.clearLocalStorage();
 
       cy.window().then((win) => {
-        const databases = ['localforage']; // 列出你要清除的数据库名称
+        const databases = [localforageInstanceName]; // 列出你要清除的数据库名称
         databases.forEach((dbName) => {
           win.indexedDB.deleteDatabase(dbName);
         });

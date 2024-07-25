@@ -1,13 +1,15 @@
 import { EngineBase, ModuleBase } from '@/base';
 import localforage from 'localforage';
 
+export const localforageInstanceName = 'nocode-builder-app';
+
 export class LocalForageService extends ModuleBase {
   private store: LocalForage;
 
   constructor(engine: EngineBase) {
     super(engine);
     this.store = localforage.createInstance({
-      name: 'nocode-builder-app',
+      name: localforageInstanceName,
       version: 1.0,
       storeName: 'keyvaluepairs',
       description: 'Local storage for application',
