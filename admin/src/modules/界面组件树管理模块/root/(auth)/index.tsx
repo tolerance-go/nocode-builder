@@ -38,16 +38,8 @@ export const Auth = () => {
                 }}
               >
                 <Typography.Title>UNOCODE</Typography.Title>
-                <Typography.Title level={5}>
-                  只待设计，一键上线
-                </Typography.Title>
-                <Typography.Paragraph
-                  style={{
-                    fontStyle: 'italic',
-                  }}
-                >
-                  AI 时代下的无代码软件研发平台
-                </Typography.Paragraph>
+                <Typography.Title level={5}>AI & 零代码平台</Typography.Title>
+                <Typography.Paragraph>一键上线，仅待设计</Typography.Paragraph>
               </Flex>
               <Outlet />
             </Flex>
