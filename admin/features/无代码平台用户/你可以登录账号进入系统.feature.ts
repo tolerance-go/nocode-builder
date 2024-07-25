@@ -2,7 +2,7 @@ import { fullPathnames, 测试标识 } from '@/common/constants';
 import { RootState } from '@/modules/界面状态管理器模块/types';
 import { localStateFieldName } from '@/modules/界面状态管理器模块/constants';
 import { 使用场景 } from '@cypress/support/utils';
-import localforage from 'localforage';
+import { createLocalforageInstance } from '@/modules/services/LocalForageService';
 
 使用场景('用户登录流程', ({ 假如 }) => {
   假如('用户登录后，应该过滤掉某些属性后保存到本地 state', ({ 当, 那么 }) => {
@@ -15,12 +15,12 @@ import localforage from 'localforage';
 
     那么('本地 state 中不包括 userInfo.token 和 location.pathname', () => {
       cy.当前访问应该为主页().then(() => {
-        return localforage
-          .getItem<RootState>(localStateFieldName)
-          .then((state) => {
-            expect(state!.userInfo.token).to.eq(null);
-            expect(state!.location.pathname).to.eq(null);
-          });
+        const store = createLocalforageInstance();
+
+        return store.getItem<RootState>(localStateFieldName).then((state) => {
+          expect(state!.userInfo.token).to.eq(null);
+          expect(state!.location.pathname).to.eq(null);
+        });
       });
     });
   });

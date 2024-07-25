@@ -3,17 +3,21 @@ import localforage from 'localforage';
 
 export const localforageInstanceName = 'nocode-builder-app';
 
+export const createLocalforageInstance = () => {
+  return localforage.createInstance({
+    name: localforageInstanceName,
+    version: 1.0,
+    storeName: 'keyvaluepairs',
+    description: 'Local storage for application',
+  });
+};
+
 export class LocalForageService extends ModuleBase {
   private store: LocalForage;
 
   constructor(engine: EngineBase) {
     super(engine);
-    this.store = localforage.createInstance({
-      name: localforageInstanceName,
-      version: 1.0,
-      storeName: 'keyvaluepairs',
-      description: 'Local storage for application',
-    });
+    this.store = createLocalforageInstance();
   }
 
   async setItem<T>(key: string, value: T): Promise<void> {

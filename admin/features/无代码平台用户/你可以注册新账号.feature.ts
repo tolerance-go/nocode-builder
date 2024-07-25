@@ -77,16 +77,14 @@ import { random } from 'lodash-es';
       cy.get('input#confirm').type('123456a.');
     });
 
-    cy.拦截请求(apiUrls.AuthController_register, {
-      statusCode: 201,
-    }).as('registerRequest');
+    cy.拦截请求(apiUrls.AuthController_register).as('registerRequest');
 
     并且('点击注册按钮', () => {
       cy.get('button[type="submit"]').click();
     });
 
     那么('接口应该返回成功信息', () => {
-      cy.wait('@registerRequest');
+      cy.wait('@registerRequest').its('response.statusCode').should('eq', 201);
     });
 
     那么('用户将被重定向到登录页面', () => {
@@ -118,16 +116,14 @@ import { random } from 'lodash-es';
       cy.get('input#confirm').type('123456a.');
     });
 
-    cy.拦截请求(apiUrls.AuthController_register, {
-      statusCode: 201,
-    }).as('registerRequest');
+    cy.拦截请求(apiUrls.AuthController_register).as('registerRequest');
 
     并且('点击注册按钮', () => {
       cy.get('button[type="submit"]').click();
     });
 
     那么('接口应该返回成功信息', () => {
-      cy.wait('@registerRequest');
+      cy.wait('@registerRequest').its('response.statusCode').should('eq', 201);
     });
 
     并且('用户将被重定向到主页', () => {

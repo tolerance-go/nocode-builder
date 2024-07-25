@@ -7,6 +7,16 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
+interface HttpExceptionResponse {
+  message: string | string[];
+  error?: string;
+  statusCode?: number;
+}
+
+function isHttpExceptionResponse(obj: unknown): obj is HttpExceptionResponse {
+  return typeof obj === 'object' && obj !== null && 'message' in obj;
+}
+
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
@@ -22,7 +32,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       status = exception.getStatus();
-      message = exception.getResponse();
+      const responseMessage = exception.getResponse();
+      if (isHttpExceptionResponse(responseMessage)) {
+        message = responseMessage.message || message;
+      } else {
+        message = responseMessage;
+      }
     } else if (exception instanceof Error) {
       stack = exception.stack;
       message = exception.message;

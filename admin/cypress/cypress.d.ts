@@ -22,7 +22,7 @@ declare global {
           method: 'post' | 'get' | 'delete' | 'put';
           path: string;
         },
-        body: Parameters<typeof cy.intercept>[2],
+        body?: Parameters<typeof cy.intercept>[2],
       ): Chainable<void>;
       /**
        * 业务操作
