@@ -1,5 +1,5 @@
 import { EngineManagerBase } from '../EngineManager';
-import { ModuleBase, ModuleBaseOptions } from '../Module';
+import { ModuleBase } from '../Module';
 
 export class EngineBase {
   public requiredEngines: Set<EngineBase> = new Set(); // 当前 Engine 依赖的 Engines
