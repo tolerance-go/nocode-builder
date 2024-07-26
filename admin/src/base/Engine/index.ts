@@ -72,20 +72,6 @@ export class EngineBase {
     throw new Error(`Module of type ${moduleClass.name} not found`);
   }
 
-  public getModuleOrCreate<T extends ModuleBase>(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    moduleClass: new (...args: any[]) => T,
-    createInstance: (options: ModuleBaseOptions) => T = (options) =>
-      new moduleClass(this, options),
-  ): T {
-    const module = this.findModule(moduleClass);
-    if (module) {
-      return module;
-    }
-    const newModule = createInstance({});
-    return newModule;
-  }
-
   public toJSON(): object {
     return {
       name: this.constructor.name,

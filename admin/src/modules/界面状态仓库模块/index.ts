@@ -161,11 +161,7 @@ export class 界面状态仓库模块 extends ModuleBase {
   }
 
   protected requireModules(): void {
-    super.requireModules(
-      this.engine.engineManager
-        .getEngine(基础引擎)
-        .getModuleOrCreate(事件中心系统),
-    );
+    super.requireModules(事件中心系统.getInstance(this.engine));
   }
 
   protected async onSetup(): Promise<void> {

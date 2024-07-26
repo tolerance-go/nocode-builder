@@ -37,7 +37,7 @@ export class UIStoreManager extends ModuleBase {
   requireModules() {
     super.requireModules(
       事件中心系统.getInstance(this.engine),
-      this.engine.getModuleOrCreate(界面导航系统),
+      界面导航系统.getInstance(this.engine),
       new 界面状态仓库模块(this.engine, this.initialState),
     );
   }

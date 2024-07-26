@@ -25,8 +25,8 @@ export class 基础引擎 extends EngineBase {
   protected providerModules() {
     super.providerModules(
       事件中心系统.getInstance(this),
-      this.getModuleOrCreate(本地数据管理模块),
-      this.getModuleOrCreate(后台数据管理模块),
+      本地数据管理模块.getInstance(this),
+      后台数据管理模块.getInstance(this),
     );
   }
 }

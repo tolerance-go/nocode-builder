@@ -61,8 +61,8 @@ class UserModelTable extends ModuleBase {
 
   protected requireModules(): void {
     super.requireModules(
-      this.engine.getModuleOrCreate(事件中心系统),
-      this.engine.getModuleOrCreate(浏览器代理模块),
+      事件中心系统.getInstance(this.engine),
+      浏览器代理模块.getInstance(this.engine),
     );
   }
 

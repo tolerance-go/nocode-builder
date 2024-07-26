@@ -52,10 +52,8 @@ export class 项目树历史纪录管理者 extends ModuleBase {
 
   requireModules() {
     super.requireModules(
-      this.engine.getModuleOrCreate(界面通知系统),
-      this.engine.engineManager
-        .getEngine(基础引擎)
-        .getModuleOrCreate(事件中心系统),
+      界面通知系统.getInstance(this.engine),
+      事件中心系统.getInstance(this.engine),
       // new 历史记录远程同步管理者({
       //   retryStartCallback: this.retryStartCallback,
       //   retryFailCallback: this.retryFailCallback,

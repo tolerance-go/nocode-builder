@@ -22,13 +22,12 @@ export class 界面组件树管理模块 extends ModuleBase {
   }
 
   requireModules() {
-    const 全局事件系统实例 = 事件中心系统.getInstance(this.engine);
     super.requireModules(
-      全局事件系统实例,
-      this.engine.getModuleOrCreate(界面导航系统),
+      事件中心系统.getInstance(this.engine),
+      界面导航系统.getInstance(this.engine),
       new 项目树历史纪录管理者(this.engine),
       new 文档环境模块(this.engine, document),
-      this.engine.getModuleOrCreate(界面通知系统),
+      界面通知系统.getInstance(this.engine),
       new 验证管理者(this.engine),
       new 图标管理者(this.engine),
       new 跟随鼠标显示内容管理者(this.engine),
