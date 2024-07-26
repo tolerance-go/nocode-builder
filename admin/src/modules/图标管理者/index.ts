@@ -1,4 +1,4 @@
-import { ModuleBase } from '@/base';
+import { EngineBase, ModuleBase } from '@/base';
 import {
   BuildOutlined,
   FolderOpenOutlined,
@@ -18,6 +18,15 @@ export class 图标管理者 extends ModuleBase {
     项目组文件夹: FolderOutlined,
     项目组文件夹展开中: FolderOpenOutlined,
   };
+
+  private static instance: 图标管理者;
+
+  public static getInstance(engine: EngineBase): 图标管理者 {
+    if (!图标管理者.instance) {
+      图标管理者.instance = new 图标管理者(engine);
+    }
+    return 图标管理者.instance;
+  }
 
   根据id获取组件<ID extends 图标组件id联合>(id: ID, props?: AntdIconProps) {
     const Component = 图标管理者.跟随组件id到组件映射[id];

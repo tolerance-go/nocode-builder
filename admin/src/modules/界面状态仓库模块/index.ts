@@ -55,6 +55,15 @@ export class 界面状态仓库模块 extends ModuleBase {
         getDefaultMiddleware().concat(middlewares as Middleware[]),
     });
 
+  private static instance: 界面状态仓库模块;
+
+  public static getInstance(engine: EngineBase): 界面状态仓库模块 {
+    if (!界面状态仓库模块.instance) {
+      界面状态仓库模块.instance = new 界面状态仓库模块(engine);
+    }
+    return 界面状态仓库模块.instance;
+  }
+
   slices;
   reducers;
   store;

@@ -33,6 +33,15 @@ export class ClientUserModel extends UserModel {
 }
 
 class UserModelTable extends ModuleBase {
+  private static instance: UserModelTable;
+
+  public static getInstance(engine: EngineBase): UserModelTable {
+    if (!UserModelTable.instance) {
+      UserModelTable.instance = new UserModelTable(engine);
+    }
+    return UserModelTable.instance;
+  }
+
   table: string;
   list: ClientUserModel[];
   token: string | null;

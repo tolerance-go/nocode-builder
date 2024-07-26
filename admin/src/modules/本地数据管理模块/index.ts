@@ -2,6 +2,15 @@ import { EngineBase, ModuleBase } from '@/base';
 import { LocalForageService } from '../services/LocalForageService';
 
 export class 本地数据管理模块 extends ModuleBase {
+  private static instance: 本地数据管理模块;
+
+  public static getInstance(engine: EngineBase): 本地数据管理模块 {
+    if (!本地数据管理模块.instance) {
+      本地数据管理模块.instance = new 本地数据管理模块(engine);
+    }
+    return 本地数据管理模块.instance;
+  }
+
   private localData: Record<string, unknown>;
   private taskQueue: Promise<void>;
 

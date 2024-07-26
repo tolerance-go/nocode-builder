@@ -4,7 +4,7 @@ import { HookAPI } from 'antd/es/modal/useModal';
 import { NotificationInstance } from 'antd/es/notification/interface';
 import { createElement } from 'react';
 import { ModalFuncProps } from 'antd';
-import { ModuleBase } from '@/base';
+import { EngineBase, ModuleBase } from '@/base';
 
 interface MessageOptions {
   type: 'success' | 'error' | 'info' | 'warning' | 'loading';
@@ -24,6 +24,15 @@ type ModalOptions = ModalFuncProps & {
 };
 
 export class 界面通知系统 extends ModuleBase {
+  private static instance: 界面通知系统;
+
+  public static getInstance(engine: EngineBase): 界面通知系统 {
+    if (!界面通知系统.instance) {
+      界面通知系统.instance = new 界面通知系统(engine);
+    }
+    return 界面通知系统.instance;
+  }
+
   setMessageApi = (messageApi: MessageInstance): void => {
     this.messageApi = messageApi;
     this.processQueue(this.messageQueue);

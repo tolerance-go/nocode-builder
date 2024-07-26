@@ -1,7 +1,16 @@
-import { ModuleBase } from '@/base';
+import { EngineBase, ModuleBase } from '@/base';
 import { authPathnames } from '@/common/constants';
 
 export class 浏览器代理模块 extends ModuleBase {
+  private static instance: 浏览器代理模块;
+
+  public static getInstance(engine: EngineBase): 浏览器代理模块 {
+    if (!浏览器代理模块.instance) {
+      浏览器代理模块.instance = new 浏览器代理模块(engine);
+    }
+    return 浏览器代理模块.instance;
+  }
+
   public getFilteredPathname(): string {
     const base = import.meta.env.BASE_URL; // 获取 Vite 配置中的 base URL
     const pathname = window.location.pathname;

@@ -13,6 +13,15 @@ export const createLocalforageInstance = () => {
 };
 
 export class LocalForageService extends ModuleBase {
+  private static instance: LocalForageService;
+
+  public static getInstance(engine: EngineBase): LocalForageService {
+    if (!LocalForageService.instance) {
+      LocalForageService.instance = new LocalForageService(engine);
+    }
+    return LocalForageService.instance;
+  }
+
   private store: LocalForage;
 
   constructor(engine: EngineBase) {

@@ -1,18 +1,26 @@
-import { ModuleBase } from '@/base';
+import { EngineBase, ModuleBase } from '@/base';
 import ReactDOM from 'react-dom/client';
-import { UIStoreManager } from '../界面状态管理器模块';
+import { 事件中心系统 } from '../事件中心系统';
 import { 图标管理者 } from '../图标管理者';
 import { 文档环境模块 } from '../文档环境模块';
+import { 界面导航系统 } from '../界面导航系统';
+import { UIStoreManager } from '../界面状态管理器模块';
+import { 界面通知系统 } from '../界面通知系统';
 import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
 import { 项目树历史纪录管理者 } from '../项目树历史纪录管理者';
 import { 验证管理者 } from '../验证管理者';
 import { renderRoot } from './renderRoot';
-import { 事件中心系统 } from '../事件中心系统';
-import { 界面导航系统 } from '../界面导航系统';
-import { 界面通知系统 } from '../界面通知系统';
-import { 基础引擎 } from '@/engines/基础引擎';
 
 export class 界面组件树管理模块 extends ModuleBase {
+  private static instance: 界面组件树管理模块;
+
+  public static getInstance(engine: EngineBase): 界面组件树管理模块 {
+    if (!界面组件树管理模块.instance) {
+      界面组件树管理模块.instance = new 界面组件树管理模块(engine);
+    }
+    return 界面组件树管理模块.instance;
+  }
+
   requireModules() {
     const 全局事件系统实例 = 事件中心系统.getInstance(this.engine);
     super.requireModules(

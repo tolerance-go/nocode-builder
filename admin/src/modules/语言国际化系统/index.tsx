@@ -3,7 +3,7 @@ import { initReactI18next } from 'react-i18next';
 
 import en from './lng/en.json';
 import zh from './lng/zh.json';
-import { ModuleBase } from '@/base';
+import { EngineBase, ModuleBase } from '@/base';
 
 export const resources = {
   en: {
@@ -24,5 +24,14 @@ i18n.use(initReactI18next).init({
 });
 
 export class 语言国际化系统 extends ModuleBase {
+  private static instance: 语言国际化系统;
+
+  public static getInstance(engine: EngineBase): 语言国际化系统 {
+    if (!语言国际化系统.instance) {
+      语言国际化系统.instance = new 语言国际化系统(engine);
+    }
+    return 语言国际化系统.instance;
+  }
+
   i18n = i18n;
 }

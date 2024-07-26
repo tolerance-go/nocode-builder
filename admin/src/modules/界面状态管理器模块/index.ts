@@ -10,6 +10,15 @@ import { localStateFieldName } from './constants';
 import { RootState } from './types';
 
 export class UIStoreManager extends ModuleBase {
+  private static instance: UIStoreManager;
+
+  public static getInstance(engine: EngineBase): UIStoreManager {
+    if (!UIStoreManager.instance) {
+      UIStoreManager.instance = new UIStoreManager(engine);
+    }
+    return UIStoreManager.instance;
+  }
+
   private initialState?: RootState;
 
   constructor(engine: EngineBase) {

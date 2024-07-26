@@ -32,6 +32,21 @@ type SyncFunction = (
 ) => Promise<void>;
 
 export class 历史记录远程同步管理者 extends ModuleBase {
+  private static instance: 历史记录远程同步管理者;
+
+  public static getInstance(
+    engine: EngineBase,
+    params: SyncHistoryManagerEmployeeParams,
+  ): 历史记录远程同步管理者 {
+    if (!历史记录远程同步管理者.instance) {
+      历史记录远程同步管理者.instance = new 历史记录远程同步管理者(
+        engine,
+        params,
+      );
+    }
+    return 历史记录远程同步管理者.instance;
+  }
+
   private currentPathname: string | null = null;
   private readonly retryStartCallback: RetryStartCallback; // 初始重试回调函数
   private readonly retryFailCallback: RetryFailCallback; // 重试失败回调函数

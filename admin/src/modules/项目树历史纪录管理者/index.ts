@@ -9,6 +9,15 @@ import { 历史记录 } from './types';
 import { 基础引擎 } from '@/engines/基础引擎';
 
 export class 项目树历史纪录管理者 extends ModuleBase {
+  private static instance: 项目树历史纪录管理者;
+
+  public static getInstance(engine: EngineBase): 项目树历史纪录管理者 {
+    if (!项目树历史纪录管理者.instance) {
+      项目树历史纪录管理者.instance = new 项目树历史纪录管理者(engine);
+    }
+    return 项目树历史纪录管理者.instance;
+  }
+
   retryFailCallback = () => {};
 
   retryStartCallback = () => {
