@@ -30,7 +30,7 @@ export class 语言国际化系统 extends ModuleBase {
     if (!语言国际化系统.instance) {
       语言国际化系统.instance = new 语言国际化系统(engine);
     }
-    ModuleBase.断言实例是否合法(语言国际化系统.instance, engine);
+
     return 语言国际化系统.instance;
   }
 

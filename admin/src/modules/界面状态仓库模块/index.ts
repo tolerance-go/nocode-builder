@@ -9,7 +9,6 @@ import {
   createUserInfoSlice,
 } from '../界面状态管理器模块/states';
 import { 事件中心系统 } from '../事件中心系统';
-import { 基础引擎 } from '@/engines/基础引擎';
 
 export class 界面状态仓库模块 extends ModuleBase {
   static createSlices = () => {
@@ -61,7 +60,7 @@ export class 界面状态仓库模块 extends ModuleBase {
     if (!界面状态仓库模块.instance) {
       界面状态仓库模块.instance = new 界面状态仓库模块(engine);
     }
-    ModuleBase.断言实例是否合法(界面状态仓库模块.instance, engine);
+
     return 界面状态仓库模块.instance;
   }
 

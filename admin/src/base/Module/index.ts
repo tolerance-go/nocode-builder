@@ -5,15 +5,6 @@ export type ModuleBaseOptions = {
 };
 
 export class ModuleBase {
-  static 断言实例是否合法<T extends ModuleBase>(
-    instance: T,
-    engine: EngineBase,
-  ) {
-    if (instance.engine !== engine) {
-      throw new Error('instance is not belong to the engine');
-    }
-  }
-
   public setupProcessing: PromiseWithResolvers<void>;
   public startProcessing: PromiseWithResolvers<void>;
   public engine: EngineBase;
@@ -59,7 +50,8 @@ export class ModuleBase {
   // 启动
   async setup(): Promise<void> {
     if (this.hasSetup) {
-      throw new Error('Module already setup');
+      console.warn('Module already setup');
+      return;
     }
 
     await Promise.all(
@@ -74,7 +66,8 @@ export class ModuleBase {
 
   async start(): Promise<void> {
     if (this.hasStarted) {
-      throw new Error('Module already started');
+      console.warn('Module already start');
+      return;
     }
 
     await Promise.all(

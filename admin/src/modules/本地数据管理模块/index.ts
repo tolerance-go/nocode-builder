@@ -8,7 +8,7 @@ export class 本地数据管理模块 extends ModuleBase {
     if (!本地数据管理模块.instance) {
       本地数据管理模块.instance = new 本地数据管理模块(engine);
     }
-    ModuleBase.断言实例是否合法(本地数据管理模块.instance, engine);
+
     return 本地数据管理模块.instance;
   }
 

@@ -44,7 +44,7 @@ export class 历史记录远程同步管理者 extends ModuleBase {
         params,
       );
     }
-    ModuleBase.断言实例是否合法(历史记录远程同步管理者.instance, engine);
+
     return 历史记录远程同步管理者.instance;
   }
 

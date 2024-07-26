@@ -14,7 +14,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
     if (!项目树历史纪录管理者.instance) {
       项目树历史纪录管理者.instance = new 项目树历史纪录管理者(engine);
     }
-    ModuleBase.断言实例是否合法(项目树历史纪录管理者.instance, engine);
+
     return 项目树历史纪录管理者.instance;
   }
 

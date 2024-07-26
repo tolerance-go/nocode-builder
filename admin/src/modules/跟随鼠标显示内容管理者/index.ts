@@ -18,7 +18,7 @@ export class 跟随鼠标显示内容管理者 extends ModuleBase {
     if (!跟随鼠标显示内容管理者.instance) {
       跟随鼠标显示内容管理者.instance = new 跟随鼠标显示内容管理者(engine);
     }
-    ModuleBase.断言实例是否合法(跟随鼠标显示内容管理者.instance, engine);
+
     return 跟随鼠标显示内容管理者.instance;
   }
 

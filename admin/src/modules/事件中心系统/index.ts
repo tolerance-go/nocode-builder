@@ -103,8 +103,6 @@ export class 事件中心系统<
       事件中心系统.instance = new 事件中心系统(engine, options);
     }
 
-    ModuleBase.断言实例是否合法(事件中心系统.instance, engine);
-
     return 事件中心系统.instance as unknown as 事件中心系统<U>;
   }
 

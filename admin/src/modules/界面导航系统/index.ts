@@ -7,7 +7,7 @@ export class 界面导航系统 extends ModuleBase {
     if (!界面导航系统.instance) {
       界面导航系统.instance = new 界面导航系统(engine);
     }
-    ModuleBase.断言实例是否合法(界面导航系统.instance, engine);
+
     return 界面导航系统.instance;
   }
 

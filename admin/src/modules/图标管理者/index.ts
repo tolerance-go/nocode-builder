@@ -25,7 +25,7 @@ export class 图标管理者 extends ModuleBase {
     if (!图标管理者.instance) {
       图标管理者.instance = new 图标管理者(engine);
     }
-    ModuleBase.断言实例是否合法(图标管理者.instance, engine);
+
     return 图标管理者.instance;
   }
 
