@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { EngineBase } from '@/base';
 import { EngineManagerBase } from '@/base/EngineManager';
-import { 状态本地持久化内存模型管理模块 } from '@/modules/状态本地持久化内存模型管理模块';
+import { 本地数据管理模块 } from '@/modules/本地数据管理模块';
 import { LocalForageService } from '../services/LocalForageService';
 
 describe('状态本地持久化内存模型管理模块', () => {
-  let module: 状态本地持久化内存模型管理模块;
+  let module: 本地数据管理模块;
   let mockLocalForageService: LocalForageService;
 
   beforeEach(async () => {
@@ -16,7 +16,7 @@ describe('状态本地持久化内存模型管理模块', () => {
     }
     class TestEngine extends EngineBase {
       protected providerModules(): void {
-        const module = new 状态本地持久化内存模型管理模块(this);
+        const module = new 本地数据管理模块(this);
         mockLocalForageService = module.getDependModule(LocalForageService);
 
         vi.spyOn(mockLocalForageService, 'loadAllItems').mockResolvedValue({
@@ -31,9 +31,7 @@ describe('状态本地持久化内存模型管理模块', () => {
 
     await engineManager.launch();
 
-    module = engineManager
-      .getEngine(TestEngine)
-      .getModule(状态本地持久化内存模型管理模块);
+    module = engineManager.getEngine(TestEngine).getModule(本地数据管理模块);
 
     // Mock localforage methods
     vi.spyOn(mockLocalForageService, 'setItem').mockResolvedValue(undefined);

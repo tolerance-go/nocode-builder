@@ -7,6 +7,14 @@ import {
 } from '../界面状态管理器模块';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
 import { ModuleBase } from '@/base';
+import { ClientUserModel } from '../model-tables/UserModelTable';
+
+type UserModelTable事件类型 = {
+  获取登录用户信息成功: {
+    userInfo: ClientUserModel;
+  };
+  登录用户信息清理成功: undefined;
+};
 
 type 界面状态管理者事件类型 = {
   路由更新: {
@@ -47,6 +55,7 @@ type 界面视图管理者事件类型 = {
   用户登录成功: {
     token: string;
   };
+  用户登出成功: undefined;
 };
 
 type 项目树历史记录管理者事件类型 = {
@@ -68,6 +77,8 @@ export type 全局事件映射 = {
   [K in keyof 项目树历史记录管理者事件类型 as `项目树历史记录管理者/${K}`]: 项目树历史记录管理者事件类型[K];
 } & {
   [K in keyof 文档环境事件类型 as `文档环境/${K}`]: 文档环境事件类型[K];
+} & {
+  [K in keyof UserModelTable事件类型 as `用户模型表/${K}`]: UserModelTable事件类型[K];
 };
 
 export type UnsubscribeFn = () => void;
@@ -77,7 +88,7 @@ type EventCacheItem<T> = {
   [K in keyof T]: { eventName: K; eventData: T[K] };
 }[keyof T];
 
-export class 全局事件系统<
+export class 事件中心系统<
   T extends Record<string, unknown> = 全局事件映射,
 > extends ModuleBase {
   private emitter = new Emittery<T>();

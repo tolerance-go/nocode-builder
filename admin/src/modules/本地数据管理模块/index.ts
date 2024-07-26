@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { LocalForageService } from '../services/LocalForageService';
 
-export class 状态本地持久化内存模型管理模块 extends ModuleBase {
+export class 本地数据管理模块 extends ModuleBase {
   private localData: Record<string, unknown>;
   private taskQueue: Promise<void>;
 

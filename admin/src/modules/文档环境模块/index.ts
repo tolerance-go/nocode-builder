@@ -1,5 +1,5 @@
 import { 基础引擎 } from '@/engines/基础引擎';
-import { 全局事件系统 } from '../全局事件系统';
+import { 事件中心系统 } from '../事件中心系统';
 import { EngineBase, ModuleBase } from '@/base';
 
 export class 文档环境模块 extends ModuleBase {
@@ -13,7 +13,7 @@ export class 文档环境模块 extends ModuleBase {
   protected requireModules() {
     const 全局事件系统实例 = this.engine.engineManager
       .getEngine(基础引擎)
-      .getModuleOrCreate(全局事件系统);
+      .getModuleOrCreate(事件中心系统);
     super.requireModules(全局事件系统实例);
   }
 
@@ -22,7 +22,7 @@ export class 文档环境模块 extends ModuleBase {
   }
 
   private addPageLoadCompleteEventListener() {
-    const 全局事件系统实例 = this.getDependModule(全局事件系统);
+    const 全局事件系统实例 = this.getDependModule(事件中心系统);
     if (document.readyState === 'loading') {
       // 添加事件监听器，当页面完全加载时触发
       this.document.addEventListener('DOMContentLoaded', () => {

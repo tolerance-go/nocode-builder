@@ -1,10 +1,10 @@
 import { ModuleBase } from '@/base';
-import { fullPathnames, paths } from '@/common/constants';
+import { fullPathnames, pathItems } from '@/common/constants';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { UIStoreManager } from '../界面状态管理器模块';
-import { 全局事件系统 } from '../全局事件系统';
+import { 事件中心系统 } from '../事件中心系统';
 import { 图标管理者 } from '../图标管理者';
 import { 界面导航系统 } from '../界面导航系统';
 import { 界面通知系统 } from '../界面通知系统';
@@ -36,7 +36,7 @@ export const renderRoot = (module: ModuleBase) => {
   const 跟随鼠标显示内容管理者实例 =
     module.getDependModule(跟随鼠标显示内容管理者);
   const 界面状态管理者实例 = module.getDependModule(UIStoreManager);
-  const 全局事件系统实例 = module.getDependModule(全局事件系统);
+  const 全局事件系统实例 = module.getDependModule(事件中心系统);
   const 导航系统实例 = module.getDependModule(界面导航系统);
   const 界面通知系统实例 = module.getDependModule(界面通知系统);
 
@@ -72,26 +72,26 @@ export const renderRoot = (module: ModuleBase) => {
                             <Route index element={<Admin />}></Route>
                             <Route element={<Admin />}>
                               <Route
-                                path={paths['view-editor']}
+                                path={pathItems['view-editor']}
                                 element={<ViewEditor />}
                               ></Route>
                               <Route
-                                path={paths['bluemap-editor']}
+                                path={pathItems['bluemap-editor']}
                                 element={<BluemapEditor />}
                               ></Route>
                               <Route
-                                path={paths['data-table-editor']}
+                                path={pathItems['data-table-editor']}
                                 element={<DataTableEditor />}
                               ></Route>
                             </Route>
                             <Route element={<Auth />}>
                               <Route index element={<Login />}></Route>
                               <Route
-                                path={paths.login}
+                                path={pathItems.login}
                                 element={<Login />}
                               ></Route>
                               <Route
-                                path={paths.register}
+                                path={pathItems.register}
                                 element={<Register />}
                               ></Route>
                             </Route>

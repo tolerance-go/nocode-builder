@@ -1,7 +1,8 @@
 import { UserModel } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
 import { api } from '@/globals';
-import { 全局事件系统 } from '@/modules/全局事件系统';
+import { 浏览器代理模块 } from '@/modules/simulations/浏览器代理模块';
+import { 事件中心系统 } from '@/modules/事件中心系统';
 import store from 'store2';
 
 export class ClientUserModel extends UserModel {
@@ -35,34 +36,39 @@ class UserModelTable extends ModuleBase {
   table: string;
   list: ClientUserModel[];
   token: string | null;
+  tokenFieldName: string;
 
   constructor(engine: EngineBase) {
     super(engine);
     this.table = 'user_model';
     this.list = [];
     this.token = null;
+    this.tokenFieldName = 'token';
   }
 
-  public get currentUser(): ClientUserModel {
-    if (this.list.length === 0) {
-      throw new Error('用户未登录');
-    }
-
+  public get loginUser(): ClientUserModel | undefined {
     return this.list[0];
   }
 
   protected requireModules(): void {
-    super.requireModules(this.engine.getModuleOrCreate(全局事件系统));
+    super.requireModules(
+      this.engine.getModuleOrCreate(事件中心系统),
+      this.engine.getModuleOrCreate(浏览器代理模块),
+    );
   }
 
   protected async onSetup(): Promise<void> {
-    const token = store.get('token');
-    if (token) {
-      this.token = token;
-      await this.getUserByToken();
+    this.监听视图用户登出();
+
+    if (!this.getDependModule(浏览器代理模块).pathnameIsAuth()) {
+      const token = store.get('token');
+      if (token) {
+        this.token = token;
+        await this.getUserByToken();
+      }
     }
 
-    this.getDependModule(全局事件系统).on(
+    this.getDependModule(事件中心系统).on(
       '界面视图管理者/用户登录成功',
       async ({ token }) => {
         store.set('token', token);
@@ -73,14 +79,32 @@ class UserModelTable extends ModuleBase {
 
   private async getUserByToken() {
     const user = await api.users.getUserByToken();
-    this.list.push(
-      new ClientUserModel({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        createdAt: user.createdAt,
-        updatedAt: user.updatedAt,
-      }),
+    const userInfo = new ClientUserModel({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    });
+    this.list.push(userInfo);
+    this.getDependModule(事件中心系统).emit('用户模型表/获取登录用户信息成功', {
+      userInfo,
+    });
+  }
+
+  private 监听视图用户登出() {
+    this.getDependModule(事件中心系统).on(
+      '界面视图管理者/用户登出成功',
+      async () => {
+        this.token = null;
+        this.list = [];
+        store.remove(this.tokenFieldName);
+
+        this.getDependModule(事件中心系统).emit(
+          '用户模型表/登录用户信息清理成功',
+          undefined,
+        );
+      },
     );
   }
 }

@@ -4,10 +4,12 @@ import { EllipsisOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@/common/constants';
 import { Button, Dropdown, Flex, theme } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { use全局事件系统 } from '@/modules/界面组件树管理模块/hooks';
 
 export const UserBar = () => {
   const { token } = theme.useToken();
   const navigate = useNavigate();
+  const 事件中心系统 = use全局事件系统();
 
   const username = useAppSelector((state) => state.userInfo.username);
 
@@ -28,6 +30,7 @@ export const UserBar = () => {
               key: '1',
               label: <span data-test-id={测试标识.登出按钮文本}>登出</span>,
               onClick: () => {
+                事件中心系统.emit('界面视图管理者/用户登出成功', undefined);
                 navigate('/login');
               },
             },

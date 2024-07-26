@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { authPathnames, localKeys } from '@/common/constants';
 import { delay } from '@/common/utils';
-import { 全局事件系统 } from '@/modules/全局事件系统';
+import { 事件中心系统 } from '@/modules/事件中心系统';
 import {
   DiffResult,
   ProjectStructureTreeDataNode,
@@ -85,7 +85,7 @@ export class 历史记录远程同步管理者 extends ModuleBase {
   }
 
   public requireModules() {
-    super.requireModules(this.engine.getModuleOrCreate(全局事件系统));
+    super.requireModules(this.engine.getModuleOrCreate(事件中心系统));
   }
 
   public async updateHistories(newHistory: 历史记录[]): Promise<void> {
@@ -119,7 +119,7 @@ export class 历史记录远程同步管理者 extends ModuleBase {
       );
     });
 
-    this.getDependModule(全局事件系统).on(
+    this.getDependModule(事件中心系统).on(
       '界面状态管理者/路由更新',
       async ({ pathname }) => {
         const prevPathname = this.currentPathname;

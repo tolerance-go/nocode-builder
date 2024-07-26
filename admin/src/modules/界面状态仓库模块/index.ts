@@ -8,7 +8,7 @@ import {
   createLocationSlice,
   createUserInfoSlice,
 } from '../界面状态管理器模块/states';
-import { 全局事件系统 } from '../全局事件系统';
+import { 事件中心系统 } from '../事件中心系统';
 import { 基础引擎 } from '@/engines/基础引擎';
 
 export class 界面状态仓库模块 extends ModuleBase {
@@ -95,7 +95,7 @@ export class 界面状态仓库模块 extends ModuleBase {
         throw new Error('位置非法');
       }
 
-      this.getDependModule(全局事件系统).emit('界面状态管理者/新增节点', {
+      this.getDependModule(事件中心系统).emit('界面状态管理者/新增节点', {
         nodeKey: action.payload.nodeKey,
         nodeData,
         parentKey,
@@ -107,7 +107,7 @@ export class 界面状态仓库模块 extends ModuleBase {
       const { nodeKey } = action.payload;
       const newNodeData = nextState.projectTree.项目树节点数据[nodeKey];
       const oldNodeData = prevState.projectTree.项目树节点数据[nodeKey];
-      this.getDependModule(全局事件系统).emit('界面状态管理者/修改节点', {
+      this.getDependModule(事件中心系统).emit('界面状态管理者/修改节点', {
         nodeKey: action.payload.nodeKey,
         newTreeNodeData: newNodeData,
         oldTreeNodeData: oldNodeData,
@@ -115,13 +115,13 @@ export class 界面状态仓库模块 extends ModuleBase {
         treeDataRecord: nextState.projectTree.项目树节点数据,
       });
     } else if (action.type === 'projectTree/删除节点') {
-      this.getDependModule(全局事件系统).emit('界面状态管理者/删除节点', {
+      this.getDependModule(事件中心系统).emit('界面状态管理者/删除节点', {
         nodeKeys: action.payload,
         treeNodes: nextState.projectTree.项目结构树,
         treeDataRecord: nextState.projectTree.项目树节点数据,
       });
     } else if (action.type === 'projectTree/移动节点') {
-      this.getDependModule(全局事件系统).emit('界面状态管理者/移动节点', {
+      this.getDependModule(事件中心系统).emit('界面状态管理者/移动节点', {
         节点keys: action.payload.nodeKeys,
         目标父节点key: action.payload.newParentKey,
         index: action.payload.newIndex,
@@ -155,7 +155,7 @@ export class 界面状态仓库模块 extends ModuleBase {
     super.requireModules(
       this.engine.engineManager
         .getEngine(基础引擎)
-        .getModuleOrCreate(全局事件系统),
+        .getModuleOrCreate(事件中心系统),
     );
   }
 

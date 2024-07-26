@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
-import { 全局事件系统 } from '../全局事件系统';
+import { 事件中心系统 } from '../事件中心系统';
 // import { 历史记录远程同步管理者 } from '../历史记录远程同步管理者';
 import { 界面通知系统 } from '../界面通知系统';
 import { 历史状态机 } from './states';
@@ -46,7 +46,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
       this.engine.getModuleOrCreate(界面通知系统),
       this.engine.engineManager
         .getEngine(基础引擎)
-        .getModuleOrCreate(全局事件系统),
+        .getModuleOrCreate(事件中心系统),
       // new 历史记录远程同步管理者({
       //   retryStartCallback: this.retryStartCallback,
       //   retryFailCallback: this.retryFailCallback,
@@ -76,7 +76,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
   protected async onSetup(): Promise<void> {
     this.历史状态机Actor.start().subscribe((state) => {
       if (this.历史指针 !== state.context.历史指针) {
-        this.getDependModule(全局事件系统).emit(
+        this.getDependModule(事件中心系统).emit(
           '项目树历史记录管理者/指针移动',
           {
             历史指针: state.context.历史指针,
@@ -93,7 +93,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
       // );
     });
 
-    this.getDependModule(全局事件系统).on(
+    this.getDependModule(事件中心系统).on(
       '界面状态管理者/新增节点',
       ({ nodeKey, parentKey, nodeData, treeNodes, treeDataRecord, index }) => {
         this.addRecordToHistory({
@@ -115,7 +115,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
       },
     );
 
-    this.getDependModule(全局事件系统).on(
+    this.getDependModule(事件中心系统).on(
       '界面状态管理者/修改节点',
       ({
         nodeKey,
@@ -142,7 +142,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
       },
     );
 
-    this.getDependModule(全局事件系统).on(
+    this.getDependModule(事件中心系统).on(
       '界面状态管理者/删除节点',
       ({ nodeKeys, treeNodes, treeDataRecord }) => {
         this.addRecordToHistory({
@@ -161,7 +161,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
       },
     );
 
-    this.getDependModule(全局事件系统).on(
+    this.getDependModule(事件中心系统).on(
       '界面状态管理者/移动节点',
       ({ 节点keys, 目标父节点key, index, treeNodes, treeDataRecord }) => {
         this.addRecordToHistory({
@@ -182,7 +182,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
       },
     );
 
-    this.getDependModule(全局事件系统).on(
+    this.getDependModule(事件中心系统).on(
       '界面视图管理者/用户撤销项目树',
       () => {
         this.历史状态机Actor.send({
@@ -191,7 +191,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
       },
     );
 
-    this.getDependModule(全局事件系统).on(
+    this.getDependModule(事件中心系统).on(
       '界面视图管理者/用户重做项目树',
       () => {
         this.历史状态机Actor.send({

@@ -1,4 +1,4 @@
-export const paths = {
+export const pathItems = {
   login: 'login',
   register: 'register',
   'view-editor': 'view-editor',
@@ -7,14 +7,14 @@ export const paths = {
 };
 
 export const editorPathnames = {
-  'root.view-editor': '/view-editor',
-  'root.data-table-editor': '/data-table-editor',
-  'root.bluemap-editor': '/bluemap-editor',
+  'root.view-editor': `/${pathItems['view-editor']}`,
+  'root.data-table-editor': `/${pathItems['data-table-editor']}`,
+  'root.bluemap-editor': `/${pathItems['bluemap-editor']}`,
 };
 
 export const authPathnames = {
-  'root.login': '/login',
-  'root.register': '/register',
+  'root.login': `/${pathItems['login']}`,
+  'root.register': `/${pathItems['register']}`,
 };
 
 export const fullPathnames = {

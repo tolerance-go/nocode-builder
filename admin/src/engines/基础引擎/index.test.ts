@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { 状态本地持久化内存模型管理模块 } from '@/modules/状态本地持久化内存模型管理模块';
+import { 本地数据管理模块 } from '@/modules/本地数据管理模块';
 import { EngineManagerBase } from '@/base/EngineManager';
 import { LocalForageService } from '@/modules/services/LocalForageService';
 import { 基础引擎 } from '.';
@@ -7,7 +7,7 @@ import { 基础引擎 } from '.';
 describe('基础引擎', () => {
   let engine: 基础引擎;
   let mockLocalForageService: LocalForageService;
-  let mockPersistenceModule: 状态本地持久化内存模型管理模块;
+  let mockPersistenceModule: 本地数据管理模块;
 
   beforeEach(async () => {
     class TestEngineManager extends EngineManagerBase {
@@ -19,7 +19,7 @@ describe('基础引擎', () => {
       protected providerModules(): void {
         super.providerModules();
 
-        mockPersistenceModule = this.getModule(状态本地持久化内存模型管理模块);
+        mockPersistenceModule = this.getModule(本地数据管理模块);
         mockLocalForageService =
           mockPersistenceModule.getDependModule(LocalForageService);
 

@@ -1,9 +1,9 @@
 import { ProjectTypeEnum } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
-import { paths } from '@/common/constants';
+import { pathItems } from '@/common/constants';
 import { 基础引擎 } from '@/engines/基础引擎';
 import { produce } from 'immer';
-import { 全局事件系统 } from '../全局事件系统';
+import { 事件中心系统 } from '../事件中心系统';
 import { 界面导航系统 } from '../界面导航系统';
 import { 界面状态仓库模块 } from '../界面状态仓库模块';
 import { localStateFieldName } from './constants';
@@ -29,14 +29,14 @@ export class UIStoreManager extends ModuleBase {
     super.requireModules(
       this.engine.engineManager
         .getEngine(基础引擎)
-        .getModuleOrCreate(全局事件系统),
+        .getModuleOrCreate(事件中心系统),
       this.engine.getModuleOrCreate(界面导航系统),
       new 界面状态仓库模块(this.engine, this.initialState),
     );
   }
 
   注册指针移动监听() {
-    this.getDependModule(全局事件系统).on(
+    this.getDependModule(事件中心系统).on(
       '项目树历史记录管理者/指针移动',
       (event) => {
         this.getDependModule(界面状态仓库模块).store.dispatch(
@@ -66,7 +66,7 @@ export class UIStoreManager extends ModuleBase {
         nextState.location.pathname !== prevState.location.pathname &&
         nextState.location.pathname
       ) {
-        this.getDependModule(全局事件系统).emit('界面状态管理者/路由更新', {
+        this.getDependModule(事件中心系统).emit('界面状态管理者/路由更新', {
           pathname: nextState.location.pathname,
         });
       }
@@ -74,12 +74,37 @@ export class UIStoreManager extends ModuleBase {
     });
   }
 
-  同步用户信息() {
-    const userInfo = this.engine.getDependEngine(基础引擎).currentUser;
-    this.getDependModule(界面状态仓库模块).store.dispatch(
-      this.getDependModule(界面状态仓库模块).slices.userInfo.actions.更新用户名(
-        userInfo.name,
-      ),
+  注册用户信息监听() {
+    const userInfo = this.engine.getDependEngine(基础引擎).loginUser;
+
+    if (userInfo) {
+      this.getDependModule(界面状态仓库模块).store.dispatch(
+        this.getDependModule(
+          界面状态仓库模块,
+        ).slices.userInfo.actions.更新用户名(userInfo.name),
+      );
+    }
+
+    this.getDependModule(事件中心系统).on(
+      '用户模型表/获取登录用户信息成功',
+      ({ userInfo }) => {
+        this.getDependModule(界面状态仓库模块).store.dispatch(
+          this.getDependModule(
+            界面状态仓库模块,
+          ).slices.userInfo.actions.更新用户名(userInfo.name),
+        );
+      },
+    );
+
+    this.getDependModule(事件中心系统).on(
+      '用户模型表/登录用户信息清理成功',
+      () => {
+        this.getDependModule(界面状态仓库模块).store.dispatch(
+          this.getDependModule(
+            界面状态仓库模块,
+          ).slices.userInfo.actions.更新用户名(''),
+        );
+      },
     );
   }
 
@@ -101,15 +126,15 @@ export class UIStoreManager extends ModuleBase {
           if (nodeData.type === 'file') {
             if (nodeData.projectFileType === ProjectTypeEnum.View) {
               this.getDependModule(界面导航系统).navigateTo(
-                paths['view-editor'],
+                pathItems['view-editor'],
               );
             } else if (nodeData.projectFileType === ProjectTypeEnum.Bluemap) {
               this.getDependModule(界面导航系统).navigateTo(
-                paths['bluemap-editor'],
+                pathItems['bluemap-editor'],
               );
             } else if (nodeData.projectFileType === ProjectTypeEnum.DataTable) {
               this.getDependModule(界面导航系统).navigateTo(
-                paths['data-table-editor'],
+                pathItems['data-table-editor'],
               );
             }
           }
@@ -132,7 +157,7 @@ export class UIStoreManager extends ModuleBase {
   }
 
   protected async onSetup(): Promise<void> {
-    this.同步用户信息();
+    this.注册用户信息监听();
     this.监听项目节点激活状态变化并修改url();
     this.注册监听保存状态到本地();
     this.注册路由更新监听();
