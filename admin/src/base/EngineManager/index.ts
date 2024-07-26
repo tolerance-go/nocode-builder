@@ -1,8 +1,8 @@
-import { Engine, EngineManager } from '../types';
+import { EngineBase } from '../Engine';
 
-export class EngineManagerBase implements EngineManager {
-  private providedEngines: Set<Engine>;
-  private allEngines: Set<Engine>;
+export class EngineManagerBase {
+  private providedEngines: Set<EngineBase>;
+  private allEngines: Set<EngineBase>;
 
   constructor() {
     this.providedEngines = new Set();
@@ -14,7 +14,7 @@ export class EngineManagerBase implements EngineManager {
     await this.launchEngines(Array.from(this.allEngines));
   }
 
-  public getEngine<T extends Engine>(
+  public getEngine<T extends EngineBase>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     engineClass: new (...args: any[]) => T,
   ): T {
@@ -25,7 +25,7 @@ export class EngineManagerBase implements EngineManager {
     throw new Error(`Engine of type ${engineClass.name} not found`);
   }
 
-  public getProvidedEngines<T extends Engine>(
+  public getProvidedEngines<T extends EngineBase>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     engineClass: new (...args: any[]) => T,
   ): T[] {
@@ -34,7 +34,7 @@ export class EngineManagerBase implements EngineManager {
     ) as T[];
   }
 
-  public onEngineAdded(engine: Engine) {
+  public onEngineAdded(engine: EngineBase) {
     this.allEngines.add(engine);
   }
 
@@ -44,18 +44,18 @@ export class EngineManagerBase implements EngineManager {
     };
   }
 
-  protected providerEngines(...engines: Engine[]) {
+  protected providerEngines(...engines: EngineBase[]) {
     // 初始化 Actors
     engines.forEach((engine) => {
       this.providedEngines.add(engine);
     });
   }
 
-  private async launchEngines(engines: Engine[]) {
+  private async launchEngines(engines: EngineBase[]) {
     await Promise.all(engines.map((engine) => engine.launch()));
   }
 
-  private findEngine<T extends Engine>(
+  private findEngine<T extends EngineBase>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     engineClass: new (...args: any[]) => T,
   ): T | undefined {

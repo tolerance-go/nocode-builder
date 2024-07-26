@@ -1,13 +1,13 @@
+import { EngineBase, ModuleBase, ModuleBaseOptions } from '@/base';
 import { ViewKey } from '@/common/types';
 import Emittery from 'emittery';
+import { ClientUserModel } from '../model-tables/UserModelTable';
 import {
-  ProjectTreeNodeDataRecordItem,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
+  ProjectTreeNodeDataRecordItem,
 } from '../界面状态管理器模块';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
-import { ModuleBase } from '@/base';
-import { ClientUserModel } from '../model-tables/UserModelTable';
 
 type UserModelTable事件类型 = {
   获取登录用户信息成功: {
@@ -91,8 +91,31 @@ type EventCacheItem<T> = {
 export class 事件中心系统<
   T extends Record<string, unknown> = 全局事件映射,
 > extends ModuleBase {
+  private static instance: 事件中心系统;
+
+  public static getInstance<U extends Record<string, unknown> = 全局事件映射>(
+    engine: EngineBase,
+    options: ModuleBaseOptions = {
+      invokeRequiredModules: true,
+    },
+  ): 事件中心系统<U> {
+    if (!事件中心系统.instance) {
+      事件中心系统.instance = new 事件中心系统(engine, options);
+    }
+    return 事件中心系统.instance as unknown as 事件中心系统<U>;
+  }
+
   private emitter = new Emittery<T>();
   private eventCache: EventCacheItem<T>[] = [];
+
+  constructor(
+    engine: EngineBase,
+    options: ModuleBaseOptions = {
+      invokeRequiredModules: true,
+    },
+  ) {
+    super(engine, options);
+  }
 
   public on<EventName extends keyof T>(
     eventName: EventName,

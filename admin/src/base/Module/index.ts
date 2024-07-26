@@ -1,20 +1,21 @@
 import { EngineBase } from '../Engine';
-import { Module } from '../types';
 
-export class ModuleBase implements Module {
+export type ModuleBaseOptions = {
+  invokeRequiredModules?: boolean;
+};
+
+export class ModuleBase {
   public setupProcessing: PromiseWithResolvers<void>;
   public startProcessing: PromiseWithResolvers<void>;
   public engine: EngineBase;
-  public requiredModules: Set<Module> = new Set(); // 当前 Module 依赖的 Modules
+  public requiredModules: Set<ModuleBase> = new Set(); // 当前 Module 依赖的 Modules
 
   protected hasStarted: boolean = false; // 用于跟踪 start 方法是否已经执行过
   protected hasSetup: boolean = false; // 用于跟踪 start 方法是否已经执行过
 
   constructor(
     engine: EngineBase,
-    options: {
-      invokeRequiredModules?: boolean;
-    } = {
+    options: ModuleBaseOptions = {
       invokeRequiredModules: true,
     },
   ) {
@@ -25,8 +26,10 @@ export class ModuleBase implements Module {
     options.invokeRequiredModules && this.requireModules();
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  getDependModule<T extends Module>(moduleClass: new (...args: any[]) => T): T {
+  getDependModule<T extends ModuleBase>(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    moduleClass: new (...args: any[]) => T,
+  ): T {
     for (const module of this.requiredModules) {
       if (module instanceof moduleClass) {
         return module;
@@ -35,7 +38,7 @@ export class ModuleBase implements Module {
     throw new Error(`Module of type ${moduleClass.name} not found`);
   }
 
-  getDependModules<T extends Module>(
+  getDependModules<T extends ModuleBase>(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     moduleClass: new (...args: any[]) => T,
   ): T[] {
@@ -86,7 +89,7 @@ export class ModuleBase implements Module {
   protected async onStart(): Promise<void> {}
 
   // 导入其他 Module
-  protected requireModules(...modules: Module[]) {
+  protected requireModules(...modules: ModuleBase[]) {
     modules.forEach((module) => {
       if (!this.requiredModules.has(module)) {
         this.requiredModules.add(module);

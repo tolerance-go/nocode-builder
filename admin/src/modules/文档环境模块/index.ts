@@ -1,4 +1,3 @@
-import { 基础引擎 } from '@/engines/基础引擎';
 import { 事件中心系统 } from '../事件中心系统';
 import { EngineBase, ModuleBase } from '@/base';
 
@@ -11,9 +10,7 @@ export class 文档环境模块 extends ModuleBase {
   }
 
   protected requireModules() {
-    const 全局事件系统实例 = this.engine.engineManager
-      .getEngine(基础引擎)
-      .getModuleOrCreate(事件中心系统);
+    const 全局事件系统实例 = 事件中心系统.getInstance(this.engine);
     super.requireModules(全局事件系统实例);
   }
 

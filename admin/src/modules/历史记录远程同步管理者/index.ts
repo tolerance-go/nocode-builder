@@ -85,7 +85,7 @@ export class 历史记录远程同步管理者 extends ModuleBase {
   }
 
   public requireModules() {
-    super.requireModules(this.engine.getModuleOrCreate(事件中心系统));
+    super.requireModules(事件中心系统.getInstance(this.engine));
   }
 
   public async updateHistories(newHistory: 历史记录[]): Promise<void> {

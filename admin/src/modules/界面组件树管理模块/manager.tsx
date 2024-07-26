@@ -14,9 +14,7 @@ import { 基础引擎 } from '@/engines/基础引擎';
 
 export class 界面组件树管理模块 extends ModuleBase {
   requireModules() {
-    const 全局事件系统实例 = this.engine.engineManager
-      .getEngine(基础引擎)
-      .getModuleOrCreate(事件中心系统);
+    const 全局事件系统实例 = 事件中心系统.getInstance(this.engine);
     super.requireModules(
       全局事件系统实例,
       this.engine.getModuleOrCreate(界面导航系统),
