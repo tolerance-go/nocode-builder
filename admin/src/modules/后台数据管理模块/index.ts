@@ -8,6 +8,7 @@ export class 后台数据管理模块 extends ModuleBase {
     if (!后台数据管理模块.instance) {
       后台数据管理模块.instance = new 后台数据管理模块(engine);
     }
+    ModuleBase.断言实例是否合法(后台数据管理模块.instance, engine);
     return 后台数据管理模块.instance;
   }
 

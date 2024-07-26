@@ -30,6 +30,7 @@ export class 界面通知系统 extends ModuleBase {
     if (!界面通知系统.instance) {
       界面通知系统.instance = new 界面通知系统(engine);
     }
+    ModuleBase.断言实例是否合法(界面通知系统.instance, engine);
     return 界面通知系统.instance;
   }
 

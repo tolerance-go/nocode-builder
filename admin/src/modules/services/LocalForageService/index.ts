@@ -19,6 +19,7 @@ export class LocalForageService extends ModuleBase {
     if (!LocalForageService.instance) {
       LocalForageService.instance = new LocalForageService(engine);
     }
+    ModuleBase.断言实例是否合法(LocalForageService.instance, engine);
     return LocalForageService.instance;
   }
 

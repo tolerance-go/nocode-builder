@@ -11,6 +11,7 @@ export class 文档环境模块 extends ModuleBase {
     if (!文档环境模块.instance) {
       文档环境模块.instance = new 文档环境模块(engine, document);
     }
+    ModuleBase.断言实例是否合法(文档环境模块.instance, engine);
     return 文档环境模块.instance;
   }
 

@@ -27,6 +27,7 @@ export class 验证管理者 extends ModuleBase {
     if (!验证管理者.instance) {
       验证管理者.instance = new 验证管理者(engine);
     }
+    ModuleBase.断言实例是否合法(验证管理者.instance, engine);
     return 验证管理者.instance;
   }
 

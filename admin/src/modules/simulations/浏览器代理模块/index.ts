@@ -8,6 +8,7 @@ export class 浏览器代理模块 extends ModuleBase {
     if (!浏览器代理模块.instance) {
       浏览器代理模块.instance = new 浏览器代理模块(engine);
     }
+    ModuleBase.断言实例是否合法(浏览器代理模块.instance, engine);
     return 浏览器代理模块.instance;
   }
 

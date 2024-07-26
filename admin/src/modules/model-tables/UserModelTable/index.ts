@@ -39,6 +39,7 @@ class UserModelTable extends ModuleBase {
     if (!UserModelTable.instance) {
       UserModelTable.instance = new UserModelTable(engine);
     }
+    ModuleBase.断言实例是否合法(UserModelTable.instance, engine);
     return UserModelTable.instance;
   }
 

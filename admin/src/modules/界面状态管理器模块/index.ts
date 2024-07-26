@@ -16,6 +16,7 @@ export class UIStoreManager extends ModuleBase {
     if (!UIStoreManager.instance) {
       UIStoreManager.instance = new UIStoreManager(engine);
     }
+    ModuleBase.断言实例是否合法(UIStoreManager.instance, engine);
     return UIStoreManager.instance;
   }
 

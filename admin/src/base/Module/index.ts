@@ -5,6 +5,15 @@ export type ModuleBaseOptions = {
 };
 
 export class ModuleBase {
+  static 断言实例是否合法<T extends ModuleBase>(
+    instance: T,
+    engine: EngineBase,
+  ) {
+    if (instance.engine !== engine) {
+      throw new Error('instance is not belong to the engine');
+    }
+  }
+
   public setupProcessing: PromiseWithResolvers<void>;
   public startProcessing: PromiseWithResolvers<void>;
   public engine: EngineBase;
