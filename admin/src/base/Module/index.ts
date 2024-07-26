@@ -50,8 +50,7 @@ export class ModuleBase {
   // 启动
   async setup(): Promise<void> {
     if (this.hasSetup) {
-      console.warn('Module already setup');
-      return;
+      throw new Error('Module already setup');
     }
 
     await Promise.all(
@@ -66,8 +65,7 @@ export class ModuleBase {
 
   async start(): Promise<void> {
     if (this.hasStarted) {
-      console.warn('Module already start');
-      return;
+      throw new Error('Module already started');
     }
 
     await Promise.all(
