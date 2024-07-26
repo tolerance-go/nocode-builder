@@ -51,8 +51,6 @@ export class EngineBase {
       ),
     );
 
-    debugger;
-
     this.providerModules();
     const sortedActors = Array.from(this.allModules);
     await this.setupModules(sortedActors);

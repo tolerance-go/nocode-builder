@@ -13,6 +13,6 @@ export class 后台数据管理模块 extends ModuleBase {
   }
 
   protected requireModules(): void {
-    super.requireModules(new UserModelTable(this.engine));
+    super.requireModules(UserModelTable.getInstance(this.engine));
   }
 }

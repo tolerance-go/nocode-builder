@@ -8,6 +8,8 @@ import { 界面导航系统 } from '../界面导航系统';
 import { 界面状态仓库模块 } from '../界面状态仓库模块';
 import { localStateFieldName } from './constants';
 import { RootState } from './types';
+import { UserModelTable } from '../model-tables/UserModelTable';
+import { 本地数据管理模块 } from '../本地数据管理模块';
 
 export class UIStoreManager extends ModuleBase {
   private static instance: UIStoreManager;
@@ -25,7 +27,8 @@ export class UIStoreManager extends ModuleBase {
   constructor(engine: EngineBase) {
     const initialState = engine
       .getDependEngine(基础引擎)
-      .getLocalItem<RootState>(localStateFieldName);
+      .getModule(本地数据管理模块)
+      .get<RootState>(localStateFieldName);
 
     super(engine, {
       invokeRequiredModules: false,
@@ -37,6 +40,8 @@ export class UIStoreManager extends ModuleBase {
 
   requireModules() {
     super.requireModules(
+      本地数据管理模块.getInstance(this.engine),
+      UserModelTable.getInstance(this.engine),
       事件中心系统.getInstance(this.engine),
       界面导航系统.getInstance(this.engine),
       new 界面状态仓库模块(this.engine, this.initialState),
@@ -83,7 +88,7 @@ export class UIStoreManager extends ModuleBase {
   }
 
   注册用户信息监听() {
-    const userInfo = this.engine.getDependEngine(基础引擎).loginUser;
+    const userInfo = this.getDependModule(UserModelTable).loginUser;
 
     if (userInfo) {
       this.getDependModule(界面状态仓库模块).store.dispatch(
@@ -158,9 +163,7 @@ export class UIStoreManager extends ModuleBase {
     store.subscribe(() => {
       const state = store.getState();
       const next = this.过滤掉某些不存储到本地的state(state);
-      this.engine.engineManager
-        .getEngine(基础引擎)
-        .setLocalItem(localStateFieldName, next);
+      this.getDependModule(本地数据管理模块).set(localStateFieldName, next);
     });
   }
 
