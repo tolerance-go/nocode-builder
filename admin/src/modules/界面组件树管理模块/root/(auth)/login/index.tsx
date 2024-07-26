@@ -1,18 +1,16 @@
+import { 测试标识 } from '@/common/constants';
 import { api } from '@/globals';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { 测试标识 } from '@/common/constants';
 import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { use全局事件系统 } from '../../../hooks';
 import { LoginFormValues } from '../../../types';
 import { handleLoginSuccess } from './hooks';
-import { useAppDispatch } from '@/modules/界面状态管理器模块';
-import { use界面状态管理者 } from '../../../hooks';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { slices } = use界面状态管理者();
+  const 全局事件系统实例 = use全局事件系统();
 
   const [loading, setLoading] = useState(false);
   const onFinish = async (values: LoginFormValues) => {
@@ -22,7 +20,7 @@ export const Login: React.FC = () => {
         username: values.username,
         password: values.password,
       });
-      handleLoginSuccess(accessToken, navigate, dispatch, slices);
+      handleLoginSuccess(accessToken, navigate, 全局事件系统实例);
     } catch (error) {
       /* empty */
     } finally {

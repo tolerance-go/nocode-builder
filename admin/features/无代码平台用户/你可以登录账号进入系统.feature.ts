@@ -13,12 +13,11 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
       cy.获取测试标识(测试标识.登录提交按钮).click();
     });
 
-    那么('本地 state 中不包括 userInfo.token 和 location.pathname', () => {
+    那么('本地 state 中不包括 location.pathname', () => {
       cy.当前访问应该为主页().then(() => {
         const store = createLocalforageInstance();
 
         return store.getItem<RootState>(localStateFieldName).then((state) => {
-          expect(state!.userInfo.token).to.eq(null);
           expect(state!.location.pathname).to.eq(null);
         });
       });

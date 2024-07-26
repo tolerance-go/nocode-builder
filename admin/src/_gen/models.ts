@@ -15,10 +15,10 @@ export class UserModel {
   name: string;
   email?: string;
   password: string;
-  projects: ProjectModel;
+  projects: ProjectModel[];
   createdAt: Date;
   updatedAt: Date;
-  projectGroups: ProjectGroupModel;
+  projectGroups: ProjectGroupModel[];
 
   constructor({
     id,
@@ -34,10 +34,10 @@ export class UserModel {
     name: string;
     email?: string;
     password: string;
-    projects: ProjectModel;
+    projects: ProjectModel[];
     createdAt: Date;
     updatedAt: Date;
-    projectGroups: ProjectGroupModel;
+    projectGroups: ProjectGroupModel[];
   }) {
     this.id = id;
     this.name = name;
@@ -99,10 +99,10 @@ export class ProjectGroupModel {
   name: string;
   parentGroupId?: number;
   parentGroup?: ProjectGroupModel;
-  childGroups: ProjectGroupModel;
+  childGroups: ProjectGroupModel[];
   ownerId: number;
   owner: UserModel;
-  projects: ProjectModel;
+  projects: ProjectModel[];
   createdAt: Date;
   updatedAt: Date;
 
@@ -122,10 +122,10 @@ export class ProjectGroupModel {
     name: string;
     parentGroupId?: number;
     parentGroup?: ProjectGroupModel;
-    childGroups: ProjectGroupModel;
+    childGroups: ProjectGroupModel[];
     ownerId: number;
     owner: UserModel;
-    projects: ProjectModel;
+    projects: ProjectModel[];
     createdAt: Date;
     updatedAt: Date;
   }) {

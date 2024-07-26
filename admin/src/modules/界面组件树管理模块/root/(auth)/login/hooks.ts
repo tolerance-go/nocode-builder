@@ -1,13 +1,12 @@
-import { AppDispatch, AppSlices } from '@/modules/界面状态管理器模块';
-import store from 'store2';
+import { 全局事件系统 } from '@/modules/全局事件系统';
 
 export const handleLoginSuccess = (
   accessToken: string,
   navigate: (path: string) => void,
-  dispatch: AppDispatch,
-  slices: AppSlices,
+  全局事件系统实例: 全局事件系统,
 ) => {
-  store.set('token', accessToken);
+  全局事件系统实例.emit('界面视图管理者/用户登录成功', {
+    token: accessToken,
+  });
   navigate('/');
-  dispatch(slices.userInfo.actions.更新token(accessToken));
 };

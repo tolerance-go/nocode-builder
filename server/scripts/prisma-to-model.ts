@@ -3,15 +3,6 @@ import * as path from 'path';
 import { getDMMF } from '@prisma/sdk';
 import { format, resolveConfig } from 'prettier';
 
-// const toCamelCase = (str: string): string => {
-//   return str.replace(/(?:^\w|[A-Z]|\b\w|[-_]\w)/g, (match, index) => {
-//     if (index === 0) {
-//       return match.toLowerCase();
-//     }
-//     return match.replace(/[-_]/, '').toUpperCase();
-//   });
-// };
-
 const classMap: { [name: string]: Class } = {};
 
 // 定义 Decorator 类
@@ -35,6 +26,7 @@ class Field {
   name: string;
   type: string | Class | Enum;
   isRequired: boolean;
+  isArray: boolean;
   isId: boolean;
   isUpdatedAt: boolean; // 是否为更新时间字段
   hasDefaultValue: boolean; // 是否有默认值
@@ -44,6 +36,7 @@ class Field {
     name: string,
     type: string | Class | Enum,
     isRequired: boolean,
+    isArray: boolean,
     isId: boolean,
     isUpdateAt: boolean = false,
     hasDefault: boolean = false,
@@ -52,6 +45,7 @@ class Field {
     this.name = name;
     this.type = type;
     this.isRequired = isRequired;
+    this.isArray = isArray;
     this.isId = isId;
     this.isUpdatedAt = isUpdateAt;
     this.hasDefaultValue = hasDefault;
@@ -63,9 +57,10 @@ class Field {
       typeof this.type === 'string'
         ? this.type
         : (this.type as Class | Enum).printName;
+    const arrayStr = this.isArray ? '[]' : '';
     const decoratorsStr = this.decorators.map((dec) => dec.print()).join(' ');
     const nullableStr = this.isRequired ? '' : '?';
-    return `${decoratorsStr} ${this.name}${nullableStr}: ${type};`;
+    return `${decoratorsStr} ${this.name}${nullableStr}: ${type}${arrayStr};`;
   }
 }
 
@@ -105,8 +100,9 @@ class Class {
           typeof field.type === 'string'
             ? field.type
             : (field.type as Class | Enum).printName;
+        const arrayStr = field.isArray ? '[]' : '';
         const nullableStr = field.isRequired ? '' : '?';
-        return `${field.name}${nullableStr}: ${type}`;
+        return `${field.name}${nullableStr}: ${type}${arrayStr}`;
       })
       .join('; ');
 
@@ -261,6 +257,7 @@ async function parseSchema(
         field.name,
         fieldType,
         field.isRequired,
+        field.isList,
         field.isId,
         field.isUpdatedAt,
         field.hasDefaultValue,

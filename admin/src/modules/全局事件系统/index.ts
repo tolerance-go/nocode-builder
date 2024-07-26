@@ -8,11 +8,11 @@ import {
 import { 历史记录 } from '../项目树历史纪录管理者/types';
 import { ModuleBase } from '@/base';
 
-export type 全局事件映射 = {
-  '界面状态管理者/路由更新': {
+type 界面状态管理者事件类型 = {
+  路由更新: {
     pathname: string;
   };
-  '界面状态管理者/新增节点': {
+  新增节点: {
     nodeKey: ViewKey;
     nodeData: ProjectTreeNodeDataRecordItem;
     parentKey: ViewKey | null;
@@ -20,32 +20,54 @@ export type 全局事件映射 = {
     treeDataRecord: ProjectTreeNodeDataRecord;
     index: number;
   };
-  '界面状态管理者/修改节点': {
+  修改节点: {
     nodeKey: ViewKey;
     oldTreeNodeData: ProjectTreeNodeDataRecordItem;
     newTreeNodeData: ProjectTreeNodeDataRecordItem;
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   };
-  '界面状态管理者/删除节点': {
+  删除节点: {
     nodeKeys: ViewKey[];
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   };
-  '界面状态管理者/移动节点': {
+  移动节点: {
     treeNodes: ProjectStructureTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
     节点keys: ViewKey[];
     目标父节点key: ViewKey | null;
     index: number;
   };
-  '界面视图管理者/用户撤销项目树': undefined;
-  '界面视图管理者/用户重做项目树': undefined;
-  '项目树历史记录管理者/指针移动': {
+};
+
+type 界面视图管理者事件类型 = {
+  用户撤销项目树: undefined;
+  用户重做项目树: undefined;
+  用户登录成功: {
+    token: string;
+  };
+};
+
+type 项目树历史记录管理者事件类型 = {
+  指针移动: {
     历史堆栈: 历史记录[];
     历史指针: number;
   };
-  '文档环境/pageLoadComplete': undefined;
+};
+
+type 文档环境事件类型 = {
+  pageLoadComplete: undefined;
+};
+
+export type 全局事件映射 = {
+  [K in keyof 界面状态管理者事件类型 as `界面状态管理者/${K}`]: 界面状态管理者事件类型[K];
+} & {
+  [K in keyof 界面视图管理者事件类型 as `界面视图管理者/${K}`]: 界面视图管理者事件类型[K];
+} & {
+  [K in keyof 项目树历史记录管理者事件类型 as `项目树历史记录管理者/${K}`]: 项目树历史记录管理者事件类型[K];
+} & {
+  [K in keyof 文档环境事件类型 as `文档环境/${K}`]: 文档环境事件类型[K];
 };
 
 export type UnsubscribeFn = () => void;

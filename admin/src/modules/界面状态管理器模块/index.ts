@@ -1,15 +1,13 @@
 import { ProjectTypeEnum } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
 import { paths } from '@/common/constants';
-import { api } from '@/globals';
+import { 基础引擎 } from '@/engines/基础引擎';
 import { produce } from 'immer';
-import store from 'store2';
 import { 全局事件系统 } from '../全局事件系统';
 import { 界面导航系统 } from '../界面导航系统';
 import { 界面状态仓库模块 } from '../界面状态仓库模块';
-import { RootState } from './types';
-import { 基础引擎 } from '@/engines/基础引擎';
 import { localStateFieldName } from './constants';
+import { RootState } from './types';
 
 export class UIStoreManager extends ModuleBase {
   private initialState?: RootState;
@@ -76,35 +74,13 @@ export class UIStoreManager extends ModuleBase {
     });
   }
 
-  注册同步用户信息监听() {
-    let prevState = this.getDependModule(界面状态仓库模块).store.getState();
-    this.getDependModule(界面状态仓库模块).store.subscribe(() => {
-      const nextState = this.getDependModule(界面状态仓库模块).store.getState();
-      if (nextState.userInfo.token !== prevState.userInfo.token) {
-        this.请求同步用户信息();
-      }
-      prevState = nextState;
-    });
-  }
-
-  async 请求同步用户信息() {
-    const userInfo = await api.users.getUserByToken();
+  同步用户信息() {
+    const userInfo = this.engine.getDependEngine(基础引擎).currentUser;
     this.getDependModule(界面状态仓库模块).store.dispatch(
       this.getDependModule(界面状态仓库模块).slices.userInfo.actions.更新用户名(
         userInfo.name,
       ),
     );
-  }
-
-  检查本地用户token同步到内存中() {
-    const token = store.get('token');
-    if (token) {
-      this.getDependModule(界面状态仓库模块).store.dispatch(
-        this.getDependModule(
-          界面状态仓库模块,
-        ).slices.userInfo.actions.更新token(token),
-      );
-    }
   }
 
   监听项目节点激活状态变化并修改url() {
@@ -156,10 +132,9 @@ export class UIStoreManager extends ModuleBase {
   }
 
   protected async onSetup(): Promise<void> {
+    this.同步用户信息();
     this.监听项目节点激活状态变化并修改url();
     this.注册监听保存状态到本地();
-    this.注册同步用户信息监听();
-    this.检查本地用户token同步到内存中();
     this.注册路由更新监听();
     this.注册指针移动监听();
   }
@@ -167,7 +142,6 @@ export class UIStoreManager extends ModuleBase {
   private 过滤掉某些不存储到本地的state(state: RootState): RootState {
     return produce(state, (draft) => {
       draft.location.pathname = null;
-      draft.userInfo.token = null;
     });
   }
 }
