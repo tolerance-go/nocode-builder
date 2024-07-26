@@ -9,6 +9,7 @@ import {
   createUserInfoSlice,
 } from '../界面状态管理器模块/states';
 import { 全局事件系统 } from '../全局事件系统';
+import { 基础引擎 } from '@/engines/基础引擎';
 
 export class 界面状态仓库模块 extends ModuleBase {
   static createSlices = () => {
@@ -151,7 +152,11 @@ export class 界面状态仓库模块 extends ModuleBase {
   }
 
   protected requireModules(): void {
-    super.requireModules(this.engine.getModuleOrCreate(全局事件系统));
+    super.requireModules(
+      this.engine.engineManager
+        .getEngine(基础引擎)
+        .getModuleOrCreate(全局事件系统),
+    );
   }
 
   protected async onSetup(): Promise<void> {

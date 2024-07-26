@@ -1,21 +1,15 @@
+import { EngineBase, ModuleBase } from '@/base';
 import { authPathnames, localKeys } from '@/common/constants';
 import { delay } from '@/common/utils';
-import { last } from 'lodash-es';
-import { createActor } from 'xstate';
-import {
-  历史记录远程同步状态机,
-  历史记录远程同步状态机SnapshotType,
-} from './states';
-import { EngineBase, ModuleBase } from '@/base';
+import { 全局事件系统 } from '@/modules/全局事件系统';
 import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
   compareTrees,
 } from '@/modules/界面状态管理器模块';
-import { 全局事件系统 } from '@/modules/全局事件系统';
+import { last } from 'lodash-es';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
-import { 基础引擎 } from '@/engines/基础引擎';
 
 export interface SyncHistoryManagerState {
   historyA: 历史记录[];

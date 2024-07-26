@@ -6,6 +6,7 @@ import { 全局事件系统 } from '../全局事件系统';
 import { 界面通知系统 } from '../界面通知系统';
 import { 历史状态机 } from './states';
 import { 历史记录 } from './types';
+import { 基础引擎 } from '@/engines/基础引擎';
 
 export class 项目树历史纪录管理者 extends ModuleBase {
   retryFailCallback = () => {};
@@ -43,7 +44,9 @@ export class 项目树历史纪录管理者 extends ModuleBase {
   requireModules() {
     super.requireModules(
       this.engine.getModuleOrCreate(界面通知系统),
-      this.engine.getModuleOrCreate(全局事件系统),
+      this.engine.engineManager
+        .getEngine(基础引擎)
+        .getModuleOrCreate(全局事件系统),
       // new 历史记录远程同步管理者({
       //   retryStartCallback: this.retryStartCallback,
       //   retryFailCallback: this.retryFailCallback,

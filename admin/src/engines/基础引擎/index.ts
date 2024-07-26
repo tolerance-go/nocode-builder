@@ -1,4 +1,5 @@
 import { EngineBase } from '@/base';
+import { 全局事件系统 } from '@/modules/全局事件系统';
 import { 状态本地持久化内存模型管理模块 } from '@/modules/状态本地持久化内存模型管理模块';
 
 export class 基础引擎 extends EngineBase {
@@ -15,6 +16,9 @@ export class 基础引擎 extends EngineBase {
   }
 
   protected providerModules() {
-    super.providerModules(new 状态本地持久化内存模型管理模块(this));
+    super.providerModules(
+      new 状态本地持久化内存模型管理模块(this),
+      new 全局事件系统(this),
+    );
   }
 }
