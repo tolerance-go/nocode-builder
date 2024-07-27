@@ -2,13 +2,13 @@ import { EngineBase, ModuleBase } from '@/base';
 import { configureStore, Middleware } from '@reduxjs/toolkit';
 import { AppMiddleware, findNode, RootState } from '../界面状态管理器模块';
 import { LayoutStateController } from './controllers';
+import { 事件中心系统 } from '../事件中心系统';
 import {
   createProjectTreeSlice,
   createLayoutSlice,
   createLocationSlice,
   createUserInfoSlice,
-} from '../界面状态管理器模块/states';
-import { 事件中心系统 } from '../事件中心系统';
+} from './states';
 
 export class 界面状态仓库模块 extends ModuleBase {
   static createSlices = () => {
