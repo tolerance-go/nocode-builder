@@ -81,6 +81,70 @@ import {
           horizontal: 'right',
         },
       );
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              projectGroup: {
+                id: 1,
+                name: '文件夹节点',
+                childGroups: [],
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+              },
+              projectGroupId: 1,
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '文件夹节点',
+              childGroups: [],
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+            },
+          ]),
+        );
+      });
     });
 
     那么('项目节点应该位于文件夹节点下', () => {
@@ -113,6 +177,52 @@ import {
         expect($children.length).equal(0);
       });
       cy.获取antd树列表内部容器().children().should('have.length', 2);
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '文件夹节点',
+              childGroups: [],
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+            },
+          ]),
+        );
+      });
     });
 
     当('用户按下 ctrl + shift + z 重做操作', () => {
@@ -136,6 +246,71 @@ import {
             .find(`[data-test-class*="${测试类名.项目树节点标题}"]`)
             .text(),
         ).equal('文件夹节点');
+      });
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              projectGroup: {
+                id: 1,
+                name: '文件夹节点',
+                childGroups: [],
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+              },
+              projectGroupId: 1,
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '文件夹节点',
+              childGroups: [],
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+            },
+          ]),
+        );
       });
     });
   });
