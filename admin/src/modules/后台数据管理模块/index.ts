@@ -1,5 +1,5 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { UserModelTable } from '../model-tables/UserModelTable';
+import { UserModelTable } from '../model-tables/用户表模块';
 
 export class 后台数据管理模块 extends ModuleBase {
   private static instance: 后台数据管理模块;

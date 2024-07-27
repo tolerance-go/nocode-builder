@@ -8,7 +8,7 @@ import { 界面导航系统 } from '../界面导航系统';
 import { 界面状态仓库模块 } from '../界面状态仓库模块';
 import { localStateFieldName } from './constants';
 import { RootState } from './types';
-import { UserModelTable } from '../model-tables/UserModelTable';
+import { UserModelTable } from '../model-tables/用户表模块';
 import { 本地数据管理模块 } from '../本地数据管理模块';
 
 export class UIStoreManager extends ModuleBase {

@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase, ModuleBaseOptions } from '@/base';
 import { ViewKey } from '@/common/types';
 import Emittery from 'emittery';
-import { ClientUserModel } from '../model-tables/UserModelTable';
+import { ClientUserModel } from '../model-tables/用户表模块';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,

@@ -32,15 +32,15 @@ export class ClientUserModel extends UserModel {
   }
 }
 
-class UserModelTable extends ModuleBase {
-  private static instance: UserModelTable;
+class 用户表模块 extends ModuleBase {
+  private static instance: 用户表模块;
 
-  public static getInstance(engine: EngineBase): UserModelTable {
-    if (!UserModelTable.instance) {
-      UserModelTable.instance = new UserModelTable(engine);
+  public static getInstance(engine: EngineBase): 用户表模块 {
+    if (!用户表模块.instance) {
+      用户表模块.instance = new 用户表模块(engine);
     }
 
-    return UserModelTable.instance;
+    return 用户表模块.instance;
   }
 
   table: string;
@@ -119,4 +119,4 @@ class UserModelTable extends ModuleBase {
   }
 }
 
-export { UserModelTable };
+export { 用户表模块 as UserModelTable };

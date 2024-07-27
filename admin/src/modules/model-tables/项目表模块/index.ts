@@ -6,7 +6,6 @@ import {
 } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
-import { 浏览器代理模块 } from '@/modules/simulations/浏览器代理模块';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 
 export class ClientProjectModel extends ProjectModel {
@@ -45,17 +44,15 @@ export class ClientProjectModel extends ProjectModel {
   }
 }
 
-export class ProjectModelTableTableModule extends ModuleBase {
-  private static instance: ProjectModelTableTableModule;
+export class 项目表模块 extends ModuleBase {
+  private static instance: 项目表模块;
 
-  public static getInstance(engine: EngineBase): ProjectModelTableTableModule {
-    if (!ProjectModelTableTableModule.instance) {
-      ProjectModelTableTableModule.instance = new ProjectModelTableTableModule(
-        engine,
-      );
+  public static getInstance(engine: EngineBase): 项目表模块 {
+    if (!项目表模块.instance) {
+      项目表模块.instance = new 项目表模块(engine);
     }
 
-    return ProjectModelTableTableModule.instance;
+    return 项目表模块.instance;
   }
 
   tableName: string;
@@ -68,10 +65,7 @@ export class ProjectModelTableTableModule extends ModuleBase {
   }
 
   protected requireModules(): void {
-    super.requireModules(
-      事件中心系统.getInstance(this.engine),
-      浏览器代理模块.getInstance(this.engine),
-    );
+    super.requireModules(事件中心系统.getInstance(this.engine));
   }
 
   protected async onSetup(): Promise<void> {}
