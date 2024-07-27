@@ -74,21 +74,12 @@ export class 项目树后台同步模块 extends ModuleBase {
           );
         });
         diffs.删除.recordItems.forEach((item) => {
-          if (!prevState) {
-            throw new Error('删除项目时发生错误，无法获取项目数据');
-          }
-
-          const itemData = prevState.projectTree.项目树节点数据[item.key];
-
-          if (!itemData.recordId) {
-            throw new Error('无法删除未保存的项目');
-          }
-
-          if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
-            项目表模块实例.removeProject(itemData.recordId);
-          } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
-            项目组表模块实例.removeProjectGroup(itemData.recordId);
-          }
+          this.handleDeleteInfo(
+            item,
+            prevState,
+            项目表模块实例,
+            项目组表模块实例,
+          );
         });
         diffs.移动.forEach((moveInfo) => {
           moveInfo.recordItems.forEach((item) => {
@@ -182,5 +173,40 @@ export class 项目树后台同步模块 extends ModuleBase {
         }
       }
     });
+  }
+
+  private handleDeleteInfo(
+    item: ProjectStructureTreeDataNode,
+    prevState: RootState | null,
+    项目表模块实例: 项目表模块,
+    项目组表模块实例: 项目组表模块,
+  ) {
+    const itemData = prevState?.projectTree.项目树节点数据[item.key];
+
+    if (!itemData) {
+      throw new Error('删除项目时发生错误，无法获取项目数据');
+    }
+
+    if (!itemData.recordId) {
+      throw new Error('无法删除未保存的项目');
+    }
+
+    if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
+      项目表模块实例.removeProject(itemData.recordId);
+    } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
+      项目组表模块实例.removeProjectGroup(itemData.recordId);
+    }
+
+    // 递归处理子节点删除
+    if (item.children) {
+      item.children.forEach((child) => {
+        this.handleDeleteInfo(
+          child,
+          prevState,
+          项目表模块实例,
+          项目组表模块实例,
+        );
+      });
+    }
   }
 }
