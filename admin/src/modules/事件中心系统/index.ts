@@ -13,9 +13,11 @@ import { 历史记录 } from '../项目树历史纪录管理者/types';
 
 type 项目树后台同步模块事件类型 = {
   新增项目记录成功: {
+    key: ViewKey;
     record: ClientProjectModel;
   };
   新增项目组记录成功: {
+    key: ViewKey;
     record: ClientProjectGroupModel;
   };
 };

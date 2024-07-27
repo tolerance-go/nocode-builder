@@ -178,9 +178,7 @@ export class 界面状态仓库模块 extends ModuleBase {
       '项目树历史记录管理者/指针移动',
       (event) => {
         this.store.dispatch(
-          this.getDependModule(
-            界面状态仓库模块,
-          ).slices.projectTree.actions.更新项目节点树(
+          this.slices.projectTree.actions.更新项目节点树(
             event.历史指针 === -1
               ? {
                   结构树: this.initialState?.projectTree.项目结构树 ?? [],

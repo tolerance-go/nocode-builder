@@ -19,7 +19,31 @@ export class ProjectTreeModel extends ModuleBase {
     this.注册拖拽监听();
     this.getDependModule(事件中心系统).on(
       '项目树后台同步模块/新增项目记录成功',
-      (event) => {},
+      (event) => {
+        const storeModule = this.getDependModule(界面状态仓库模块);
+        storeModule.store.dispatch(
+          storeModule.slices.projectTree.actions.更新节点的数据({
+            key: event.key,
+            data: {
+              recordId: event.record.id,
+            },
+          }),
+        );
+      },
+    );
+    this.getDependModule(事件中心系统).on(
+      '项目树后台同步模块/新增项目组记录成功',
+      (event) => {
+        const storeModule = this.getDependModule(界面状态仓库模块);
+        storeModule.store.dispatch(
+          storeModule.slices.projectTree.actions.更新节点的数据({
+            key: event.key,
+            data: {
+              recordId: event.record.id,
+            },
+          }),
+        );
+      },
     );
   }
 

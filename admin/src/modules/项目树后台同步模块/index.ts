@@ -71,6 +71,7 @@ export class 项目树后台同步模块 extends ModuleBase {
                   this.getDependModule(事件中心系统).emit(
                     '项目树后台同步模块/新增项目记录成功',
                     {
+                      key: item.key,
                       record,
                     },
                   );
@@ -82,6 +83,7 @@ export class 项目树后台同步模块 extends ModuleBase {
                   this.getDependModule(事件中心系统).emit(
                     '项目树后台同步模块/新增项目组记录成功',
                     {
+                      key: item.key,
                       record,
                     },
                   );
