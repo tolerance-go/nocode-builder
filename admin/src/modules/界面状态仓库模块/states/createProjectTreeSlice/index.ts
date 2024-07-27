@@ -3,9 +3,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ProjectTreeNodeDataRecord,
   ProjectStructureTreeDataNode,
-  ProjectTreeNodeDataRecordItem,
   TreeNode,
-} from '../types';
+  ProjectTreeNodeDataRecordItemBase,
+} from '../../types';
 import {
   compareTrees,
   removeNode,
@@ -13,7 +13,7 @@ import {
   insertNodeAtIndex,
   插入节点,
   批量插入节点,
-} from '../utils';
+} from '../../utils';
 
 export type ProjectTreeStates = {
   // 派生数据
@@ -36,24 +36,29 @@ export type ProjectTreeStates = {
   当前聚焦的节点key: ViewKey | null;
 };
 
-const initialState: ProjectTreeStates = {
-  derived_节点到父节点的映射: {},
-  编辑节点标题之前暂存的聚焦的节点key: null,
-  当前聚焦的节点key: null,
-  是否正在聚焦项目树区域: false,
-  当前正在拖拽的节点key: null,
-  激活的节点的key: null,
-  当前输入的标题: '',
-  项目结构树: [],
-  项目树节点数据: {},
-  所有已经选中的节点: [],
-  所有展开的节点的key: [],
-  当前正在编辑的项目树节点的key: null,
-  临时创建的节点的key: null,
-  节点树容器的高度: 0,
-  编辑节点标题之前暂存的选中的节点keys: null,
-  是否选中了项目树容器: false,
+export const createInitialState = () => {
+  const initialState: ProjectTreeStates = {
+    derived_节点到父节点的映射: {},
+    编辑节点标题之前暂存的聚焦的节点key: null,
+    当前聚焦的节点key: null,
+    是否正在聚焦项目树区域: false,
+    当前正在拖拽的节点key: null,
+    激活的节点的key: null,
+    当前输入的标题: '',
+    项目结构树: [],
+    项目树节点数据: {},
+    所有已经选中的节点: [],
+    所有展开的节点的key: [],
+    当前正在编辑的项目树节点的key: null,
+    临时创建的节点的key: null,
+    节点树容器的高度: 0,
+    编辑节点标题之前暂存的选中的节点keys: null,
+    是否选中了项目树容器: false,
+  };
+  return initialState;
 };
+
+const initialState: ProjectTreeStates = createInitialState();
 
 export const createProjectTreeSlice = () => {
   const projectTreeSlice = createSlice({
@@ -142,15 +147,13 @@ export const createProjectTreeSlice = () => {
         state,
         action: PayloadAction<{
           key: ViewKey;
-          data: Partial<Pick<ProjectTreeNodeDataRecordItem, 'title'>>;
+          data: Partial<ProjectTreeNodeDataRecordItemBase>;
         }>,
       ) => {
         const { key, data } = action.payload;
-        if (data.title) {
-          const item = state.项目树节点数据[key];
-          if (item) {
-            item.title = data.title;
-          }
+        const item = state.项目树节点数据[key];
+        if (item) {
+          Object.assign(item, data);
         }
       },
       更新当前输入的标题: (state, action: PayloadAction<ViewKey>) => {

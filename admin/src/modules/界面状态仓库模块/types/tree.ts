@@ -7,7 +7,7 @@ export interface ProjectStructureTreeDataNode extends TreeDataNode {
   children?: ProjectStructureTreeDataNode[];
 }
 
-type ProjectTreeNodeDataRecordItemBase = {
+export type ProjectTreeNodeDataRecordItemBase = {
   title: string;
   recordId?: number;
 };
