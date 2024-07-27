@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@/modules/界面状态管理器模块';
+import { useAppDispatch, useAppSelector } from '@/modules/界面状态仓库模块';
 import {
   use界面状态管理者,
   use验证管理者,

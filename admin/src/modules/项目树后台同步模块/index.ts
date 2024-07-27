@@ -6,7 +6,7 @@ import {
   DirectoryTreeNodeTypeEnum,
   ProjectStructureTreeDataNode,
   RootState,
-} from '../界面状态管理器模块';
+} from '../界面状态仓库模块';
 import { 事件中心系统 } from '../事件中心系统';
 
 export class 项目树后台同步模块 extends ModuleBase {

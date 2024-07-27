@@ -34,9 +34,9 @@ export const use验证管理者 = () => {
 
 export const use界面状态管理者 = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const UIStoreManager = useContext(界面状态仓库模块Context);
-  if (!UIStoreManager) throw new Error('UIStoreManager未初始化');
-  return UIStoreManager.getDependModule(界面状态仓库模块);
+  const 界面状态仓库模块 = useContext(界面状态仓库模块Context);
+  if (!界面状态仓库模块) throw new Error('界面状态仓库模块未初始化');
+  return 界面状态仓库模块;
 };
 export const use全局事件系统 = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks

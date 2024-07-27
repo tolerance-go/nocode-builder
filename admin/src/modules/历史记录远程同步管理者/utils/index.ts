@@ -5,7 +5,7 @@ import {
   DiffResult,
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '@/modules/界面状态管理器模块';
+} from '@/modules/界面状态仓库模块';
 
 // import { handleUpdates } from './handleUpdates';
 

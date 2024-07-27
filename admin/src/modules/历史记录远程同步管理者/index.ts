@@ -7,7 +7,7 @@
 //   ProjectStructureTreeDataNode,
 //   ProjectTreeNodeDataRecord,
 //   compareTrees,
-// } from '@/modules/界面状态管理器模块';
+// } from '@/modules/界面状态仓库模块';
 // import { last } from 'lodash-es';
 // import { 历史记录 } from '../项目树历史纪录管理者/types';
 

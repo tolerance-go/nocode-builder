@@ -56,12 +56,7 @@ export const renderRoot = (module: ModuleBase) => {
                   value={跟随鼠标显示内容管理者实例}
                 >
                   <图标管理者Context.Provider value={图标管理者实例}>
-                    <Provider
-                      store={
-                        界面状态管理者实例.getDependModule(界面状态仓库模块)
-                          .store
-                      }
-                    >
+                    <Provider store={界面状态管理者实例.store}>
                       <BrowserRouter
                         basename={import.meta.env.DEV ? '' : '/admin'}
                       >

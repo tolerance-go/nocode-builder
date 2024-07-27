@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '@/modules/界面状态管理器模块';
+import { useAppDispatch, useAppSelector } from '@/modules/界面状态仓库模块';
 import { 组件类名 } from '@/modules/界面组件树管理模块/constants';
 import { use界面状态管理者 } from '@/modules/界面组件树管理模块/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/modules/界面组件树管理模块/selectors';

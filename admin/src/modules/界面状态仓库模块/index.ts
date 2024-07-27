@@ -185,7 +185,7 @@ export class 界面状态仓库模块 extends ModuleBase {
     this.getDependModule(事件中心系统).on(
       '项目树历史记录管理者/指针移动',
       (event) => {
-        this.getDependModule(界面状态仓库模块).store.dispatch(
+        this.store.dispatch(
           this.getDependModule(
             界面状态仓库模块,
           ).slices.projectTree.actions.更新项目节点树(
@@ -205,9 +205,9 @@ export class 界面状态仓库模块 extends ModuleBase {
   }
 
   注册路由更新监听() {
-    let prevState = this.getDependModule(界面状态仓库模块).store.getState();
-    this.getDependModule(界面状态仓库模块).store.subscribe(() => {
-      const nextState = this.getDependModule(界面状态仓库模块).store.getState();
+    let prevState = this.store.getState();
+    this.store.subscribe(() => {
+      const nextState = this.store.getState();
       if (
         nextState.location.pathname !== prevState.location.pathname &&
         nextState.location.pathname
@@ -224,20 +224,16 @@ export class 界面状态仓库模块 extends ModuleBase {
     const userInfo = this.getDependModule(用户表模块).currentLoginUser;
 
     if (userInfo) {
-      this.getDependModule(界面状态仓库模块).store.dispatch(
-        this.getDependModule(
-          界面状态仓库模块,
-        ).slices.userInfo.actions.更新用户名(userInfo.name),
+      this.store.dispatch(
+        this.slices.userInfo.actions.更新用户名(userInfo.name),
       );
     }
 
     this.getDependModule(事件中心系统).on(
       '用户模型表/获取登录用户信息成功',
       ({ userInfo }) => {
-        this.getDependModule(界面状态仓库模块).store.dispatch(
-          this.getDependModule(
-            界面状态仓库模块,
-          ).slices.userInfo.actions.更新用户名(userInfo.name),
+        this.store.dispatch(
+          this.slices.userInfo.actions.更新用户名(userInfo.name),
         );
       },
     );
@@ -245,20 +241,15 @@ export class 界面状态仓库模块 extends ModuleBase {
     this.getDependModule(事件中心系统).on(
       '用户模型表/登录用户信息清理成功',
       () => {
-        this.getDependModule(界面状态仓库模块).store.dispatch(
-          this.getDependModule(
-            界面状态仓库模块,
-          ).slices.userInfo.actions.更新用户名(''),
-        );
+        this.store.dispatch(this.slices.userInfo.actions.更新用户名(''));
       },
     );
   }
 
   监听项目节点激活状态变化并修改url() {
-    let previousState = this.getDependModule(界面状态仓库模块).store.getState(); // 初始化之前的 state
-    this.getDependModule(界面状态仓库模块).store.subscribe(() => {
-      const currentState =
-        this.getDependModule(界面状态仓库模块).store.getState(); // 获取当前的 state
+    let previousState = this.store.getState(); // 初始化之前的 state
+    this.store.subscribe(() => {
+      const currentState = this.store.getState(); // 获取当前的 state
 
       if (
         currentState.projectTree.激活的节点的key !==
@@ -292,7 +283,7 @@ export class 界面状态仓库模块 extends ModuleBase {
   }
 
   注册监听保存状态到本地() {
-    const { store } = this.getDependModule(界面状态仓库模块);
+    const { store } = this;
     store.subscribe(() => {
       const state = store.getState();
       const next = this.过滤掉某些不存储到本地的state(state);

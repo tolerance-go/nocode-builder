@@ -2,7 +2,7 @@ import {
   useAppDispatch,
   useAppSelector,
   过滤掉包含父节点在内的节点,
-} from '@/modules/界面状态管理器模块';
+} from '@/modules/界面状态仓库模块';
 import { 组件类名 } from '@/modules/界面组件树管理模块/constants';
 import {
   use全局事件系统,
