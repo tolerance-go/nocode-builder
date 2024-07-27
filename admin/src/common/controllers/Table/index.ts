@@ -1,3 +1,5 @@
+import { JSONValue } from '@/common/types';
+
 export type RecordWithId = {
   id: number;
 };
@@ -60,6 +62,32 @@ export class Table<T extends RecordWithId> {
   searchRecords(predicate: (record: T) => boolean): T[] {
     return this.records.filter(predicate);
   }
+
+  // 将 records 转换为 JSON 对象
+  toTestSnapshot(): { [key: string]: JSONValue }[] {
+    // 递归修改对象中的日期属性值为空字符串
+    const replaceDatesWithEmptyString = (obj: JSONValue): JSONValue => {
+      if (Array.isArray(obj)) {
+        return obj.map((item) => replaceDatesWithEmptyString(item));
+      } else if (obj !== null && typeof obj === 'object') {
+        const newObj: { [key: string]: JSONValue } = {};
+        for (const key in obj) {
+          if (key === 'createdAt' || key === 'updatedAt') {
+            newObj[key] = '';
+          } else {
+            newObj[key] = replaceDatesWithEmptyString(obj[key]);
+          }
+        }
+        return newObj;
+      }
+      return obj;
+    };
+
+    return replaceDatesWithEmptyString(this.records) as {
+      [key: string]: JSONValue;
+    }[];
+  }
+
   // 事务接口
   async $transaction(fn: (table: this) => Promise<void> | void): Promise<void> {
     this.startTransaction();

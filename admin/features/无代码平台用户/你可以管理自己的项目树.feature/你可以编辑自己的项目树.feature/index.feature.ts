@@ -25,6 +25,52 @@ import {
 
       cy.获取添加项目组的按钮().click();
       cy.获取项目树标题输入框().type('文件夹节点{enter}');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '文件夹节点',
+              childGroups: [],
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+            },
+          ]),
+        );
+      });
     });
 
     当('用户将项目节点移动到文件夹节点下', () => {
