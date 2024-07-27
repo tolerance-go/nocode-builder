@@ -42,60 +42,113 @@ export class 项目树后台同步模块 extends ModuleBase {
         this.prevState?.projectTree.项目树节点数据 !==
           currentState.projectTree.项目树节点数据
       ) {
-        const diffs = compareTrees<ProjectStructureTreeDataNode>(
-          this.prevState?.projectTree.项目结构树 ?? [],
-          currentState.projectTree.项目结构树,
-          (oldNode, newNode) => {
-            return (
-              this.prevState?.projectTree.项目树节点数据[oldNode.key].title !==
-              currentState.projectTree.项目树节点数据[newNode.key].title
-            );
-          },
-        );
-
-        this.getDependModule(后台数据管理模块).$transaction(
-          ({ 项目表模块实例, 项目组表模块实例 }) => {
-            diffs.新增.forEach((addInfo) => {
-              addInfo.recordItems.forEach((item) => {
-                const parentData = addInfo.父节点key
-                  ? currentState.projectTree.项目树节点数据[addInfo.父节点key]
-                  : undefined;
-                const itemData =
-                  currentState.projectTree.项目树节点数据[item.key];
-                if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
-                  const record = 项目表模块实例.addProject({
-                    name: itemData.title,
-                    type: itemData.projectType,
-                    projectGroupId: parentData?.recordId,
-                  });
-                  this.getDependModule(事件中心系统).emit(
-                    '项目树后台同步模块/新增项目记录成功',
-                    {
-                      key: item.key,
-                      record,
-                    },
-                  );
-                } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
-                  const record = 项目组表模块实例.addProjectGroup({
-                    name: itemData.title,
-                    parentGroupId: parentData?.recordId,
-                  });
-                  this.getDependModule(事件中心系统).emit(
-                    '项目树后台同步模块/新增项目组记录成功',
-                    {
-                      key: item.key,
-                      record,
-                    },
-                  );
-                }
-              });
-            });
-          },
-        );
-
-        console.log('项目树发生变化，正在同步到后台...', diffs);
+        this.syncBackend(this.prevState, currentState);
       }
+
       this.prevState = currentState;
     });
+  }
+
+  private syncBackend(prevState: RootState | null, currentState: RootState) {
+    const diffs = compareTrees<ProjectStructureTreeDataNode>(
+      prevState?.projectTree.项目结构树 ?? [],
+      currentState.projectTree.项目结构树,
+      (oldNode, newNode) => {
+        return (
+          prevState?.projectTree.项目树节点数据[oldNode.key].title !==
+          currentState.projectTree.项目树节点数据[newNode.key].title
+        );
+      },
+    );
+
+    this.getDependModule(后台数据管理模块).$transaction(
+      ({ 项目表模块实例, 项目组表模块实例 }) => {
+        diffs.新增.forEach((addInfo) => {
+          addInfo.recordItems.forEach((item) => {
+            const parentData = addInfo.父节点key
+              ? currentState.projectTree.项目树节点数据[addInfo.父节点key]
+              : undefined;
+            const itemData = currentState.projectTree.项目树节点数据[item.key];
+            if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
+              const record = 项目表模块实例.addProject({
+                name: itemData.title,
+                type: itemData.projectType,
+                projectGroupId: parentData?.recordId,
+              });
+              this.getDependModule(事件中心系统).emit(
+                '项目树后台同步模块/新增项目记录成功',
+                {
+                  key: item.key,
+                  record,
+                },
+              );
+            } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
+              const record = 项目组表模块实例.addProjectGroup({
+                name: itemData.title,
+                parentGroupId: parentData?.recordId,
+              });
+              this.getDependModule(事件中心系统).emit(
+                '项目树后台同步模块/新增项目组记录成功',
+                {
+                  key: item.key,
+                  record,
+                },
+              );
+            }
+          });
+        });
+        diffs.删除.recordItems.forEach((item) => {
+          if (!prevState) {
+            throw new Error('删除项目时发生错误，无法获取项目数据');
+          }
+
+          const itemData = prevState.projectTree.项目树节点数据[item.key];
+
+          if (!itemData.recordId) {
+            throw new Error('无法删除未保存的项目');
+          }
+
+          if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
+            项目表模块实例.removeProject(itemData.recordId);
+          } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
+            项目组表模块实例.removeProjectGroup(itemData.recordId);
+          }
+        });
+        diffs.移动.forEach((moveInfo) => {
+          moveInfo.recordItems.forEach((item) => {
+            const itemData = currentState.projectTree.项目树节点数据[item.key];
+
+            if (!itemData.recordId) {
+              throw new Error('无法移动未保存的项目');
+            }
+
+            if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
+              项目表模块实例.moveProject(itemData.recordId);
+            } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
+              项目组表模块实例.moveProjectGroup(itemData.recordId);
+            }
+          });
+        });
+
+        diffs.更新?.forEach((updateInfo) => {
+          const itemData =
+            currentState.projectTree.项目树节点数据[updateInfo.节点key];
+
+          if (!itemData.recordId) {
+            throw new Error('无法移动未保存的项目');
+          }
+
+          if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
+            项目表模块实例.updateProjectTitle(itemData.recordId, {
+              name: itemData.title,
+            });
+          } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
+            项目组表模块实例.updateProjectGroup(itemData.recordId, {
+              name: itemData.title,
+            });
+          }
+        });
+      },
+    );
   }
 }

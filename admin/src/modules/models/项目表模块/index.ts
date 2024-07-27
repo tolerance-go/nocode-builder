@@ -66,6 +66,45 @@ export class 项目表模块 extends ModuleBase {
     }
   }
 
+  public removeProject(id: number): void {
+    this.table.deleteRecord(id);
+  }
+
+  public moveProject(
+    id: number,
+    newProjectGroupId?: number,
+  ): ClientProjectModel {
+    const record = this.table.findRecordOrThrow(id);
+    const newProjectGroup = newProjectGroupId
+      ? this.getDependModule(项目组表模块).table.findRecordOrThrow(
+          newProjectGroupId,
+        )
+      : undefined;
+
+    record.projectGroupId = newProjectGroupId;
+    record.projectGroup = newProjectGroup;
+    this.table.updateRecord(record);
+
+    return record;
+  }
+
+  public updateProjectTitle(
+    id: number,
+    data: {
+      name?: string;
+    },
+  ): ClientProjectModel {
+    const record = this.table.findRecordOrThrow(id);
+
+    if (data.name !== undefined) {
+      record.name = data.name;
+    }
+
+    this.table.updateRecord(record);
+
+    return record;
+  }
+
   public addProject(data: {
     name: string;
     projectGroupId?: number;

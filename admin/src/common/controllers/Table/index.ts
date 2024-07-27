@@ -17,6 +17,16 @@ export class Table<T extends RecordWithId> {
   addRecord(record: T): void {
     this.records.push(record);
   }
+  // 更新记录
+  updateRecord(updatedRecord: T): void {
+    const index = this.records.findIndex(
+      (record) => record.id === updatedRecord.id,
+    );
+    if (index === -1) {
+      throw new Error(`Record with id ${updatedRecord.id} not found`);
+    }
+    this.records[index] = updatedRecord;
+  }
   // 删除记录
   deleteRecord(id: number): void {
     this.records = this.records.filter((record) => record.id !== id);

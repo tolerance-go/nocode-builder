@@ -55,6 +55,43 @@ export class 项目组表模块 extends ModuleBase {
     this.table = new Table<ClientProjectGroupModel>();
   }
 
+  public removeProjectGroup(id: number): void {
+    this.table.deleteRecord(id);
+  }
+
+  public moveProjectGroup(
+    id: number,
+    newParentGroupId?: number,
+  ): ClientProjectGroupModel {
+    const record = this.table.findRecordOrThrow(id);
+    const newParentGroup = newParentGroupId
+      ? this.table.findRecordOrThrow(newParentGroupId)
+      : undefined;
+
+    record.parentGroupId = newParentGroupId;
+    record.parentGroup = newParentGroup;
+    this.table.updateRecord(record);
+
+    return record;
+  }
+
+  public updateProjectGroup(
+    id: number,
+    data: {
+      name?: string;
+    },
+  ): ClientProjectGroupModel {
+    const record = this.table.findRecordOrThrow(id);
+
+    if (data.name !== undefined) {
+      record.name = data.name;
+    }
+
+    this.table.updateRecord(record);
+
+    return record;
+  }
+
   public addProjectGroup(data: {
     name: string;
     parentGroupId?: number;
