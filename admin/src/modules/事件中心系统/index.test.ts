@@ -19,7 +19,7 @@ describe('全局事件系统', () => {
   it('应该注册和触发事件', async () => {
     const engineManager = new TestEngineManager();
     const engine = new TestEngine(engineManager);
-    const 系统 = 事件中心系统.getInstance<测试事件映射>(engine);
+    const 系统 = new 事件中心系统<测试事件映射>(engine);
     await 系统.setup();
     await 系统.start();
 
@@ -39,7 +39,7 @@ describe('全局事件系统', () => {
   it('应该取消注册事件', async () => {
     const engineManager = new TestEngineManager();
     const engine = new TestEngine(engineManager);
-    const 系统 = 事件中心系统.getInstance<测试事件映射>(engine);
+    const 系统 = new 事件中心系统<测试事件映射>(engine);
     await 系统.setup();
     await 系统.start();
 
@@ -56,7 +56,7 @@ describe('全局事件系统', () => {
   it('应该允许重新注册事件', async () => {
     const engineManager = new TestEngineManager();
     const engine = new TestEngine(engineManager);
-    const 系统 = 事件中心系统.getInstance<测试事件映射>(engine);
+    const 系统 = new 事件中心系统<测试事件映射>(engine);
     await 系统.setup();
     await 系统.start();
 
@@ -74,7 +74,7 @@ describe('全局事件系统', () => {
   it('应该在启动前缓存事件并在启动后按顺序发送', async () => {
     const engineManager = new TestEngineManager();
     const engine = new TestEngine(engineManager);
-    const 系统 = 事件中心系统.getInstance<测试事件映射>(engine);
+    const 系统 = new 事件中心系统<测试事件映射>(engine);
     await 系统.setup();
 
     const 用户登录处理器 = vi.fn();
