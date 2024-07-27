@@ -6,8 +6,8 @@ import { produce } from 'immer';
 import { 事件中心系统 } from '../事件中心系统';
 import { 界面导航系统 } from '../界面导航系统';
 import { 界面状态仓库模块 } from '../界面状态仓库模块';
-import { localStateFieldName } from './constants';
-import { RootState } from './types';
+import { localStateFieldName } from '../界面状态仓库模块/constants';
+import { RootState } from '../界面状态仓库模块/types';
 import { 用户表模块 } from '../models/用户表模块';
 import { 本地数据管理模块 } from '../本地数据管理模块';
 
@@ -181,8 +181,3 @@ export class UIStoreManager extends ModuleBase {
     });
   }
 }
-
-export * from './constants';
-export * from './hooks';
-export * from './types';
-export * from './utils';

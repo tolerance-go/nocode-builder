@@ -1,8 +1,4 @@
-import {
-  AppSlices,
-  AppStore,
-  ProjectTreeNodeDataRecord,
-} from '../../界面状态管理器模块/types';
+import { AppSlices, AppStore, ProjectTreeNodeDataRecord } from '../types';
 import { ViewKey } from '@/common/types';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 

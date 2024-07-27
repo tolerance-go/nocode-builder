@@ -5,12 +5,12 @@ import {
   查询项目树中的节点,
   节点是不是文件,
   节点是不是文件夹,
-} from '@/modules/界面状态管理器模块';
+} from '@/modules/界面状态仓库模块';
 import {
   ProjectTreeNodeDataRecordItem,
   ProjectStructureTreeDataNode,
   DirectoryTreeNodeTypeEnum,
-} from '@/modules/界面状态管理器模块/types';
+} from '@/modules/界面状态仓库模块/types';
 import { 组件标识, 组件类名 } from '@/modules/界面组件树管理模块/constants';
 import {
   use界面状态管理者,
