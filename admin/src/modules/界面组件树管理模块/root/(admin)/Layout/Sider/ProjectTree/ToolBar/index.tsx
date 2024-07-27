@@ -74,7 +74,6 @@ export const ToolBar = () => {
         index: 0,
         recordItem: {
           title: '',
-          id: -1,
           type: DirectoryTreeNodeTypeEnum.Folder,
         },
       }),
@@ -106,7 +105,6 @@ export const ToolBar = () => {
         index: folderIndex + 1,
         recordItem: {
           title: '',
-          id: -1,
           type: DirectoryTreeNodeTypeEnum.File,
           projectType: projectType,
         },
@@ -138,7 +136,6 @@ export const ToolBar = () => {
         recordItem: {
           title: '',
           type: DirectoryTreeNodeTypeEnum.File,
-          id: -1,
           projectType: projectFileType,
         },
       }),
@@ -155,7 +152,6 @@ export const ToolBar = () => {
         },
         index: 0,
         recordItem: {
-          id: -1,
           type: DirectoryTreeNodeTypeEnum.Folder,
           title: '',
         },

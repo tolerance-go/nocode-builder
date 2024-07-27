@@ -74,4 +74,12 @@ describe('Table 类测试', () => {
     expect(table.findRecord(1)).toBeUndefined();
     expect(table.findRecord(2)).toBeUndefined();
   });
+
+  it('应该获取下一个可用的 ID', () => {
+    expect(table.getNextId()).toBe(1);
+    table.addRecord({ id: 1, name: 'Alice', age: 30 });
+    expect(table.getNextId()).toBe(2);
+    table.addRecord({ id: 2, name: 'Bob', age: 25 });
+    expect(table.getNextId()).toBe(3);
+  });
 });

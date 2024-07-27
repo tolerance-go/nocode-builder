@@ -1,13 +1,24 @@
 import { EngineBase, ModuleBase, ModuleBaseOptions } from '@/base';
 import { ViewKey } from '@/common/types';
 import Emittery from 'emittery';
-import { ClientUserModel } from '../model-tables/用户表模块';
+import { ClientUserModel } from '../models/用户表模块';
+import { ClientProjectGroupModel } from '../models/项目组表模块';
+import { ClientProjectModel } from '../models/项目表模块';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
 } from '../界面状态管理器模块';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
+
+type 项目树后台同步模块事件类型 = {
+  新增项目记录成功: {
+    record: ClientProjectModel;
+  };
+  新增项目组记录成功: {
+    record: ClientProjectGroupModel;
+  };
+};
 
 type UserModelTable事件类型 = {
   获取登录用户信息成功: {
@@ -79,6 +90,8 @@ export type 全局事件映射 = {
   [K in keyof 文档环境事件类型 as `文档环境/${K}`]: 文档环境事件类型[K];
 } & {
   [K in keyof UserModelTable事件类型 as `用户模型表/${K}`]: UserModelTable事件类型[K];
+} & {
+  [K in keyof 项目树后台同步模块事件类型 as `项目树后台同步模块/${K}`]: 项目树后台同步模块事件类型[K];
 };
 
 export type UnsubscribeFn = () => void;

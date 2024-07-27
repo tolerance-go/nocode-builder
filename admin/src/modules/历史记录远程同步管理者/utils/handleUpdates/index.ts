@@ -26,18 +26,18 @@ export function handleUpdates(
     const newNodeData = newNodeDataRecord[newNode.key];
     if (newNodeData.type === 'file') {
       projectsToUpdate.push({
-        id: newNodeData.id,
+        id: newNodeData.recordId,
         name: newNodeData.title,
         projectGroupId: 更新操作.节点key
-          ? newNodeDataRecord[更新操作.节点key].id
+          ? newNodeDataRecord[更新操作.节点key].recordId
           : undefined,
       });
     } else if (newNodeData.type === 'folder') {
       projectGroupsToUpdate.push({
-        id: newNodeData.id,
+        id: newNodeData.recordId,
         name: newNodeData.title,
         parentGroupId: 更新操作.节点key
-          ? newNodeDataRecord[更新操作.节点key].id
+          ? newNodeDataRecord[更新操作.节点key].recordId
           : undefined,
       });
     }

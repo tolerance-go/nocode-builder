@@ -7,6 +7,7 @@ import {
   ProjectStructureTreeDataNode,
   RootState,
 } from '../界面状态管理器模块';
+import { 事件中心系统 } from '../事件中心系统';
 
 export class 项目树后台同步模块 extends ModuleBase {
   private static instance: 项目树后台同步模块;
@@ -23,6 +24,7 @@ export class 项目树后台同步模块 extends ModuleBase {
 
   protected requireModules() {
     super.requireModules(
+      事件中心系统.getInstance(this.engine),
       后台数据管理模块.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),
     );
@@ -61,18 +63,28 @@ export class 项目树后台同步模块 extends ModuleBase {
                 const itemData =
                   currentState.projectTree.项目树节点数据[item.key];
                 if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
-                  项目表模块实例.addProject({
-                    id: itemData.id,
+                  const record = 项目表模块实例.addProject({
                     name: itemData.title,
                     type: itemData.projectType,
-                    projectGroupId: parentData?.id,
+                    projectGroupId: parentData?.recordId,
                   });
+                  this.getDependModule(事件中心系统).emit(
+                    '项目树后台同步模块/新增项目记录成功',
+                    {
+                      record,
+                    },
+                  );
                 } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
-                  项目组表模块实例.addProjectGroup({
-                    id: itemData.id,
+                  const record = 项目组表模块实例.addProjectGroup({
                     name: itemData.title,
-                    parentGroupId: parentData?.id,
+                    parentGroupId: parentData?.recordId,
                   });
+                  this.getDependModule(事件中心系统).emit(
+                    '项目树后台同步模块/新增项目组记录成功',
+                    {
+                      record,
+                    },
+                  );
                 }
               });
             });

@@ -160,7 +160,10 @@ export class 界面状态仓库模块 extends ModuleBase {
       initialState,
     );
 
-    this.layoutStateController = new LayoutStateController();
+    this.layoutStateController = new LayoutStateController(
+      this.store,
+      this.slices,
+    );
   }
 
   protected requireModules(): void {
@@ -168,6 +171,8 @@ export class 界面状态仓库模块 extends ModuleBase {
   }
 
   protected async onSetup(): Promise<void> {
-    await this.layoutStateController.onCreateStore(this.store, this.slices);
+    await Promise.all([
+      this.layoutStateController.onSetup(this.getDependModule(事件中心系统)),
+    ]);
   }
 }

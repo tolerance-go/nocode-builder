@@ -56,26 +56,27 @@ export class 项目组表模块 extends ModuleBase {
   }
 
   public addProjectGroup(data: {
-    id: number;
     name: string;
     parentGroupId?: number;
-  }): void {
+  }): ClientProjectGroupModel {
     const 用户表模块实例 = this.getDependModule(用户表模块);
     const ownerId = 用户表模块实例.loginUser.id;
 
-    this.table.addRecord(
-      new ClientProjectGroupModel({
-        ...data,
-        parentGroup: data.parentGroupId
-          ? this.getDependModule(项目组表模块).table.findRecordOrThrow(
-              data.parentGroupId,
-            )
-          : undefined,
-        ownerId,
-        owner:
-          this.getDependModule(用户表模块).table.findRecordOrThrow(ownerId),
-      }),
-    );
+    const record = new ClientProjectGroupModel({
+      ...data,
+      id: this.table.getNextId(),
+      parentGroup: data.parentGroupId
+        ? this.getDependModule(项目组表模块).table.findRecordOrThrow(
+            data.parentGroupId,
+          )
+        : undefined,
+      ownerId,
+      owner: this.getDependModule(用户表模块).table.findRecordOrThrow(ownerId),
+    });
+
+    this.table.addRecord(record);
+
+    return record;
   }
 
   protected requireModules(): void {

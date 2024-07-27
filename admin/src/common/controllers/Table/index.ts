@@ -34,6 +34,18 @@ export class Table<T extends RecordWithId> {
     return record;
   }
 
+  // 获取下一个可用的 ID
+  getNextId(): number {
+    if (this.records.length === 0) {
+      return 1;
+    }
+    const maxId = this.records.reduce(
+      (max, record) => (record.id > max ? record.id : max),
+      this.records[0].id,
+    );
+    return maxId + 1;
+  }
+
   // 搜索记录
   searchRecords(predicate: (record: T) => boolean): T[] {
     return this.records.filter(predicate);

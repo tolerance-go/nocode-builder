@@ -38,26 +38,26 @@ describe('handleAdditions', () => {
     };
 
     const newNodeDataRecord: ProjectTreeNodeDataRecord = {
-      '1': { type: 'folder', title: '文件夹 1', id: -1 },
+      '1': { type: 'folder', title: '文件夹 1', recordId: -1 },
       '1-1': {
-        id: -1,
+        recordId: -1,
         type: 'file',
         title: '文件 1-1',
         projectType: ProjectTypeEnum.View,
       },
       '1-2': {
-        id: -1,
+        recordId: -1,
         type: 'file',
         title: '文件 1-2',
         projectType: ProjectTypeEnum.View,
       },
       '2': {
-        id: -1,
+        recordId: -1,
         type: 'folder',
         title: '文件夹 2',
       },
       '2-1': {
-        id: -1,
+        recordId: -1,
         type: 'file',
         title: '文件 2-1',
         projectType: ProjectTypeEnum.View,
@@ -106,7 +106,7 @@ describe('handleAdditions', () => {
     };
 
     const newNodeDataRecord: ProjectTreeNodeDataRecord = {
-      '1': { type: 'folder', title: '空文件夹', id: -1 },
+      '1': { type: 'folder', title: '空文件夹', recordId: -1 },
     };
 
     const result = handleAdditions(diffResult, newNodeDataRecord);
@@ -147,7 +147,7 @@ describe('handleAdditions', () => {
       '1': {
         type: 'file',
         title: '单个文件',
-        id: -1,
+        recordId: -1,
         projectType: ProjectTypeEnum.View,
       },
     };
@@ -190,18 +190,18 @@ describe('handleAdditions', () => {
     };
 
     const newNodeDataRecord: ProjectTreeNodeDataRecord = {
-      '1': { type: 'folder', title: '根文件夹', id: -1 },
-      '1-1': { type: 'folder', title: '子文件夹', id: -1 },
+      '1': { type: 'folder', title: '根文件夹', recordId: -1 },
+      '1-1': { type: 'folder', title: '子文件夹', recordId: -1 },
       '1-1-1': {
         type: 'file',
         title: '文件 1-1-1',
-        id: -1,
+        recordId: -1,
         projectType: ProjectTypeEnum.View,
       },
       '1-1-2': {
         type: 'file',
         title: '文件 1-1-2',
-        id: -1,
+        recordId: -1,
         projectType: ProjectTypeEnum.View,
       },
     };

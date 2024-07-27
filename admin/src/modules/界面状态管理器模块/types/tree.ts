@@ -9,7 +9,7 @@ export interface ProjectStructureTreeDataNode extends TreeDataNode {
 
 type ProjectTreeNodeDataRecordItemBase = {
   title: string;
-  id: number;
+  recordId?: number;
 };
 
 export type DirectoryTreeNodeType = DirectoryTreeNodeTypeEnum;
