@@ -1,6 +1,10 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { 后台数据管理模块 } from '../后台数据管理模块';
-import { 新增操作详情, 界面状态仓库模块 } from '../界面状态仓库模块';
+import {
+  新增操作详情,
+  界面状态仓库模块,
+  移动操作详情,
+} from '../界面状态仓库模块';
 import {
   compareTrees,
   DirectoryTreeNodeTypeEnum,
@@ -82,19 +86,12 @@ export class 项目树后台同步模块 extends ModuleBase {
           );
         });
         diffs.移动.forEach((moveInfo) => {
-          moveInfo.recordItems.forEach((item) => {
-            const itemData = currentState.projectTree.项目树节点数据[item.key];
-
-            if (!itemData.recordId) {
-              throw new Error('无法移动未保存的项目');
-            }
-
-            if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
-              项目表模块实例.moveProject(itemData.recordId);
-            } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
-              项目组表模块实例.moveProjectGroup(itemData.recordId);
-            }
-          });
+          this.handleMoveInfo(
+            moveInfo,
+            currentState,
+            项目表模块实例,
+            项目组表模块实例,
+          );
         });
 
         diffs.更新?.forEach((updateInfo) => {
@@ -208,5 +205,49 @@ export class 项目树后台同步模块 extends ModuleBase {
         );
       });
     }
+  }
+
+  private handleMoveInfo(
+    moveInfo: 移动操作详情<ProjectStructureTreeDataNode>,
+    currentState: RootState,
+    项目表模块实例: 项目表模块,
+    项目组表模块实例: 项目组表模块,
+  ) {
+    moveInfo.recordItems.forEach((item) => {
+      const itemData = currentState.projectTree.项目树节点数据[item.key];
+
+      if (!itemData.recordId) {
+        throw new Error('无法移动未保存的项目');
+      }
+
+      const parentData = moveInfo.目标父节点key
+        ? currentState.projectTree.项目树节点数据[moveInfo.目标父节点key]
+        : undefined;
+
+      if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
+        项目表模块实例.moveProject(itemData.recordId, parentData?.recordId);
+      } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
+        项目组表模块实例.moveProjectGroup(
+          itemData.recordId,
+          parentData?.recordId,
+        );
+      }
+
+      // 递归处理子节点移动
+      if (item.children) {
+        const nestedMoveInfo: 移动操作详情<ProjectStructureTreeDataNode> = {
+          节点keys: item.children.map((child) => child.key),
+          目标父节点key: item.key,
+          index: 0,
+          recordItems: item.children,
+        };
+        this.handleMoveInfo(
+          nestedMoveInfo,
+          currentState,
+          项目表模块实例,
+          项目组表模块实例,
+        );
+      }
+    });
   }
 }
