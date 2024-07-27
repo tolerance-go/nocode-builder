@@ -1,5 +1,6 @@
 import { UserModel } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
+import { Table } from '@/common/controllers';
 import { api } from '@/globals';
 import { 浏览器代理模块 } from '@/modules/simulations/浏览器代理模块';
 import { 事件中心系统 } from '@/modules/事件中心系统';
@@ -43,21 +44,21 @@ export class 用户表模块 extends ModuleBase {
     return 用户表模块.instance;
   }
 
-  table: string;
-  list: ClientUserModel[];
+  tableName: string;
+  table: Table<ClientUserModel>;
   token: string | null;
   tokenFieldName: string;
 
   constructor(engine: EngineBase) {
     super(engine);
-    this.table = 'user_model';
-    this.list = [];
+    this.tableName = 'user_model';
+    this.table = new Table<ClientUserModel>();
     this.token = null;
     this.tokenFieldName = 'token';
   }
 
   public get loginUser(): ClientUserModel | undefined {
-    return this.list[0];
+    return this.table.findRecordByIndex(0);
   }
 
   protected requireModules(): void {
@@ -96,7 +97,7 @@ export class 用户表模块 extends ModuleBase {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     });
-    this.list.push(userInfo);
+    this.table.addRecord(userInfo);
     this.getDependModule(事件中心系统).emit('用户模型表/获取登录用户信息成功', {
       userInfo,
     });
@@ -107,7 +108,7 @@ export class 用户表模块 extends ModuleBase {
       '界面视图管理者/用户登出成功',
       async () => {
         this.token = null;
-        this.list = [];
+        this.table.clearRecords();
         store.remove(this.tokenFieldName);
 
         this.getDependModule(事件中心系统).emit(

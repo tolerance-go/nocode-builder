@@ -59,4 +59,19 @@ describe('Table 类测试', () => {
     expect(table.findRecord(1)).toBeUndefined();
     expect(table.findRecord(2)).toBeUndefined();
   });
+
+  it('应该通过下标查找记录', () => {
+    table.addRecord({ id: 1, name: 'Alice', age: 30 });
+    table.addRecord({ id: 2, name: 'Bob', age: 25 });
+    const record = table.findRecordByIndex(1);
+    expect(record).toEqual({ id: 2, name: 'Bob', age: 25 });
+  });
+
+  it('应该清空所有记录', () => {
+    table.addRecord({ id: 1, name: 'Alice', age: 30 });
+    table.addRecord({ id: 2, name: 'Bob', age: 25 });
+    table.clearRecords();
+    expect(table.findRecord(1)).toBeUndefined();
+    expect(table.findRecord(2)).toBeUndefined();
+  });
 });

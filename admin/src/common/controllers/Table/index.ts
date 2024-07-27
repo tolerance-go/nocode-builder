@@ -5,7 +5,14 @@ export type RecordWithId = {
 export class Table<T extends RecordWithId> {
   private records: T[] = [];
   private transactionRecords: T[] | null = null;
-
+  // 清空所有记录
+  clearRecords(): void {
+    this.records = [];
+  }
+  // 通过下标查找记录
+  findRecordByIndex(index: number): T | undefined {
+    return this.records[index];
+  }
   // 增加记录
   addRecord(record: T): void {
     this.records.push(record);
