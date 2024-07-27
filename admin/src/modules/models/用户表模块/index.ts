@@ -11,14 +11,10 @@ export class ClientUserModel extends UserModel {
     id,
     name,
     email,
-    createdAt,
-    updatedAt,
   }: {
     id: number;
     name: string;
     email?: string;
-    createdAt: string;
-    updatedAt: string;
   }) {
     super({
       id,
@@ -26,8 +22,8 @@ export class ClientUserModel extends UserModel {
       email,
       password: '',
       projects: [],
-      createdAt: new Date(createdAt),
-      updatedAt: new Date(updatedAt),
+      createdAt: new Date(),
+      updatedAt: new Date(),
       projectGroups: [],
     });
   }
@@ -57,8 +53,15 @@ export class 用户表模块 extends ModuleBase {
     this.tokenFieldName = 'token';
   }
 
-  public get loginUser(): ClientUserModel | undefined {
+  public get currentLoginUser(): ClientUserModel | undefined {
     return this.table.findRecordByIndex(0);
+  }
+
+  public get loginUser(): ClientUserModel {
+    if (!this.currentLoginUser) {
+      throw new Error('未登录');
+    }
+    return this.currentLoginUser;
   }
 
   protected requireModules(): void {
@@ -94,8 +97,6 @@ export class 用户表模块 extends ModuleBase {
       id: user.id,
       name: user.name,
       email: user.email,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
     });
     this.table.addRecord(userInfo);
     this.getDependModule(事件中心系统).emit('用户模型表/获取登录用户信息成功', {

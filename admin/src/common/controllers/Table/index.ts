@@ -25,6 +25,15 @@ export class Table<T extends RecordWithId> {
   findRecord(id: number): T | undefined {
     return this.records.find((record) => record.id === id);
   }
+
+  findRecordOrThrow(id: number): T {
+    const record = this.findRecord(id);
+    if (record === undefined) {
+      throw new Error(`Record with id ${id} not found`);
+    }
+    return record;
+  }
+
   // 搜索记录
   searchRecords(predicate: (record: T) => boolean): T[] {
     return this.records.filter(predicate);

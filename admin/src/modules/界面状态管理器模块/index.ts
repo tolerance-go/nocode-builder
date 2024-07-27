@@ -88,7 +88,7 @@ export class UIStoreManager extends ModuleBase {
   }
 
   注册用户信息监听() {
-    const userInfo = this.getDependModule(用户表模块).loginUser;
+    const userInfo = this.getDependModule(用户表模块).currentLoginUser;
 
     if (userInfo) {
       this.getDependModule(界面状态仓库模块).store.dispatch(
@@ -137,15 +137,15 @@ export class UIStoreManager extends ModuleBase {
               currentState.projectTree.激活的节点的key
             ];
           if (nodeData.type === 'file') {
-            if (nodeData.projectFileType === ProjectTypeEnum.View) {
+            if (nodeData.projectType === ProjectTypeEnum.View) {
               this.getDependModule(界面导航系统).navigateTo(
                 pathItems['view-editor'],
               );
-            } else if (nodeData.projectFileType === ProjectTypeEnum.Bluemap) {
+            } else if (nodeData.projectType === ProjectTypeEnum.Bluemap) {
               this.getDependModule(界面导航系统).navigateTo(
                 pathItems['bluemap-editor'],
               );
-            } else if (nodeData.projectFileType === ProjectTypeEnum.DataTable) {
+            } else if (nodeData.projectType === ProjectTypeEnum.DataTable) {
               this.getDependModule(界面导航系统).navigateTo(
                 pathItems['data-table-editor'],
               );

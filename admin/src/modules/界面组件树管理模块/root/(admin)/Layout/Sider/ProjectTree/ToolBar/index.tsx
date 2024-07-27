@@ -9,13 +9,14 @@ import {
 import {
   ProjectTreeNodeDataRecordItem,
   ProjectStructureTreeDataNode,
+  DirectoryTreeNodeTypeEnum,
 } from '@/modules/界面状态管理器模块/types';
 import { 组件标识, 组件类名 } from '@/modules/界面组件树管理模块/constants';
 import {
   use界面状态管理者,
   use图标管理者,
 } from '@/modules/界面组件树管理模块/hooks';
-import { ProjectFileType } from '@/modules/界面组件树管理模块/types';
+import { ProjectType } from '@/modules/界面组件树管理模块/types';
 
 import { FolderAddOutlined, PlusOutlined } from '@ant-design/icons';
 import { 测试标识 } from '@/common/constants';
@@ -74,7 +75,7 @@ export const ToolBar = () => {
         recordItem: {
           title: '',
           id: -1,
-          type: 'folder',
+          type: DirectoryTreeNodeTypeEnum.Folder,
         },
       }),
     );
@@ -82,7 +83,7 @@ export const ToolBar = () => {
 
   const 在指定节点下插入新文件 = (
     target: ProjectStructureTreeDataNode,
-    projectFileType: ProjectFileType,
+    projectType: ProjectType,
   ) => {
     const folderIndex = 找到同层最后一个文件夹的位置(
       (target.children ?? []).map((node) => {
@@ -106,14 +107,14 @@ export const ToolBar = () => {
         recordItem: {
           title: '',
           id: -1,
-          type: 'file',
-          projectFileType,
+          type: DirectoryTreeNodeTypeEnum.File,
+          projectType: projectType,
         },
       }),
     );
   };
 
-  const 在根节点下插入新文件 = (projectFileType: ProjectFileType) => {
+  const 在根节点下插入新文件 = (projectFileType: ProjectType) => {
     const folderIndex = 找到同层最后一个文件夹的位置(
       projectStructureTreeData.map((node) => {
         const recordItem = projectTreeDataRecord[node.key];
@@ -136,9 +137,9 @@ export const ToolBar = () => {
         index: folderIndex + 1,
         recordItem: {
           title: '',
-          type: 'file',
+          type: DirectoryTreeNodeTypeEnum.File,
           id: -1,
-          projectFileType: projectFileType,
+          projectType: projectFileType,
         },
       }),
     );
@@ -155,7 +156,7 @@ export const ToolBar = () => {
         index: 0,
         recordItem: {
           id: -1,
-          type: 'folder',
+          type: DirectoryTreeNodeTypeEnum.Folder,
           title: '',
         },
       }),
@@ -203,7 +204,7 @@ export const ToolBar = () => {
   };
 
   const handleProjectFileCreateBtnClick = async (
-    projectFileType: ProjectFileType,
+    projectFileType: ProjectType,
   ) => {
     if (!selectedKey) {
       在根节点下插入新文件(projectFileType);

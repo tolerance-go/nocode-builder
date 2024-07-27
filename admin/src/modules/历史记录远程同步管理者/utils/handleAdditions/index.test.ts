@@ -43,13 +43,13 @@ describe('handleAdditions', () => {
         id: -1,
         type: 'file',
         title: '文件 1-1',
-        projectFileType: ProjectTypeEnum.View,
+        projectType: ProjectTypeEnum.View,
       },
       '1-2': {
         id: -1,
         type: 'file',
         title: '文件 1-2',
-        projectFileType: ProjectTypeEnum.View,
+        projectType: ProjectTypeEnum.View,
       },
       '2': {
         id: -1,
@@ -60,7 +60,7 @@ describe('handleAdditions', () => {
         id: -1,
         type: 'file',
         title: '文件 2-1',
-        projectFileType: ProjectTypeEnum.View,
+        projectType: ProjectTypeEnum.View,
       },
     };
 
@@ -148,7 +148,7 @@ describe('handleAdditions', () => {
         type: 'file',
         title: '单个文件',
         id: -1,
-        projectFileType: ProjectTypeEnum.View,
+        projectType: ProjectTypeEnum.View,
       },
     };
 
@@ -196,13 +196,13 @@ describe('handleAdditions', () => {
         type: 'file',
         title: '文件 1-1-1',
         id: -1,
-        projectFileType: ProjectTypeEnum.View,
+        projectType: ProjectTypeEnum.View,
       },
       '1-1-2': {
         type: 'file',
         title: '文件 1-1-2',
         id: -1,
-        projectFileType: ProjectTypeEnum.View,
+        projectType: ProjectTypeEnum.View,
       },
     };
 

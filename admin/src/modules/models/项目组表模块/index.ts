@@ -1,7 +1,8 @@
-import { ProjectGroupModel, ProjectModel, UserModel } from '@/_gen/models';
+import { ProjectGroupModel, UserModel } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
 import { 事件中心系统 } from '@/modules/事件中心系统';
+import { 用户表模块 } from '../用户表模块';
 
 export class ClientProjectGroupModel extends ProjectGroupModel {
   constructor({
@@ -9,35 +10,27 @@ export class ClientProjectGroupModel extends ProjectGroupModel {
     name,
     parentGroupId,
     parentGroup,
-    childGroups,
     ownerId,
     owner,
-    projects,
-    createdAt,
-    updatedAt,
   }: {
     id: number;
     name: string;
     parentGroupId?: number;
     parentGroup?: ProjectGroupModel;
-    childGroups: ProjectGroupModel[];
     ownerId: number;
     owner: UserModel;
-    projects: ProjectModel[];
-    createdAt: Date;
-    updatedAt: Date;
   }) {
     super({
       id,
       name,
       parentGroupId,
       parentGroup,
-      childGroups,
+      childGroups: [],
       ownerId,
       owner,
-      projects,
-      createdAt,
-      updatedAt,
+      projects: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
     });
   }
 }
@@ -62,8 +55,34 @@ export class 项目组表模块 extends ModuleBase {
     this.table = new Table<ClientProjectGroupModel>();
   }
 
+  public addProjectGroup(data: {
+    id: number;
+    name: string;
+    parentGroupId?: number;
+  }): void {
+    const 用户表模块实例 = this.getDependModule(用户表模块);
+    const ownerId = 用户表模块实例.loginUser.id;
+
+    this.table.addRecord(
+      new ClientProjectGroupModel({
+        ...data,
+        parentGroup: data.parentGroupId
+          ? this.getDependModule(项目组表模块).table.findRecordOrThrow(
+              data.parentGroupId,
+            )
+          : undefined,
+        ownerId,
+        owner:
+          this.getDependModule(用户表模块).table.findRecordOrThrow(ownerId),
+      }),
+    );
+  }
+
   protected requireModules(): void {
-    super.requireModules(事件中心系统.getInstance(this.engine));
+    super.requireModules(
+      事件中心系统.getInstance(this.engine),
+      用户表模块.getInstance(this.engine),
+    );
   }
 
   protected async onSetup(): Promise<void> {}

@@ -1,9 +1,9 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { 事件中心系统 } from '../事件中心系统';
 import { 后台数据管理模块 } from '../后台数据管理模块';
 import { 界面状态仓库模块 } from '../界面状态仓库模块';
 import {
   compareTrees,
+  DirectoryTreeNodeTypeEnum,
   ProjectStructureTreeDataNode,
   RootState,
 } from '../界面状态管理器模块';
@@ -23,7 +23,6 @@ export class 项目树后台同步模块 extends ModuleBase {
 
   protected requireModules() {
     super.requireModules(
-      事件中心系统.getInstance(this.engine),
       后台数据管理模块.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),
     );
@@ -52,7 +51,33 @@ export class 项目树后台同步模块 extends ModuleBase {
           },
         );
 
-        this.getDependModule(后台数据管理模块);
+        this.getDependModule(后台数据管理模块).$transaction(
+          ({ 项目表模块实例, 项目组表模块实例 }) => {
+            diffs.新增.forEach((addInfo) => {
+              addInfo.recordItems.forEach((item) => {
+                const parentData = addInfo.父节点key
+                  ? currentState.projectTree.项目树节点数据[addInfo.父节点key]
+                  : undefined;
+                const itemData =
+                  currentState.projectTree.项目树节点数据[item.key];
+                if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
+                  项目表模块实例.addProject({
+                    id: itemData.id,
+                    name: itemData.title,
+                    type: itemData.projectType,
+                    projectGroupId: parentData?.id,
+                  });
+                } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
+                  项目组表模块实例.addProjectGroup({
+                    id: itemData.id,
+                    name: itemData.title,
+                    parentGroupId: parentData?.id,
+                  });
+                }
+              });
+            });
+          },
+        );
 
         console.log('项目树发生变化，正在同步到后台...', diffs);
       }

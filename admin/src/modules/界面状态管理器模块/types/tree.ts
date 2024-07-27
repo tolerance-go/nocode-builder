@@ -1,9 +1,9 @@
-import { ProjectFileType } from '@/modules/界面组件树管理模块';
+import { ViewKey } from '@/common/types';
+import { ProjectType } from '@/modules/界面组件树管理模块';
 import { TreeDataNode } from 'antd';
 
 export interface ProjectStructureTreeDataNode extends TreeDataNode {
-  isLeaf?: boolean;
-  key: string;
+  key: ViewKey;
   children?: ProjectStructureTreeDataNode[];
 }
 
@@ -12,13 +12,19 @@ type ProjectTreeNodeDataRecordItemBase = {
   id: number;
 };
 
+export type DirectoryTreeNodeType = DirectoryTreeNodeTypeEnum;
+
+export enum DirectoryTreeNodeTypeEnum {
+  Folder = 'folder',
+  File = 'file',
+}
 export type ProjectTreeNodeFolderDataRecordItem = {
-  type: 'folder';
+  type: DirectoryTreeNodeTypeEnum.Folder;
 } & ProjectTreeNodeDataRecordItemBase;
 
 export type ProjectTreeNodeFileDataRecordItem = {
-  type: 'file';
-  projectFileType: ProjectFileType;
+  type: DirectoryTreeNodeTypeEnum.File;
+  projectType: ProjectType;
 } & ProjectTreeNodeDataRecordItemBase;
 
 export type ProjectTreeNodeDataRecordItem =

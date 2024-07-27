@@ -26,7 +26,7 @@ export function handleAdditions(
     if (recordItem.type === 'file') {
       const projectNode: ProjectCreateDto = {
         name: recordItem.title,
-        type: recordItem.projectFileType,
+        type: recordItem.projectType,
       };
       currentGroup.push(projectNode);
     } else if (recordItem.type === 'folder') {

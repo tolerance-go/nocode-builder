@@ -292,13 +292,13 @@ export const DirectoryTree = () => {
 
         const nodeData = connected_树节点key到节点数据的映射[nodeKey];
         if (nodeData.type === 'file') {
-          if (nodeData.projectFileType === ProjectTypeEnum.View) {
+          if (nodeData.projectType === ProjectTypeEnum.View) {
             return 图标管理者实例.根据id获取组件('视图项目节点');
           }
-          if (nodeData.projectFileType === ProjectTypeEnum.DataTable) {
+          if (nodeData.projectType === ProjectTypeEnum.DataTable) {
             return 图标管理者实例.根据id获取组件('数据表项目节点');
           }
-          if (nodeData.projectFileType === ProjectTypeEnum.Bluemap) {
+          if (nodeData.projectType === ProjectTypeEnum.Bluemap) {
             return 图标管理者实例.根据id获取组件('蓝图项目节点');
           }
         } else {

@@ -1,8 +1,13 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { ClientUserModel, 用户表模块 } from '../models/用户表模块';
-import { ClientProjectModel, 项目表模块 } from '../models/项目表模块';
-import { ClientProjectGroupModel, 项目组表模块 } from '../models/项目组表模块';
-import { Table } from '@/common/controllers';
+import { 用户表模块 } from '../models/用户表模块';
+import { 项目组表模块 } from '../models/项目组表模块';
+import { 项目表模块 } from '../models/项目表模块';
+
+type TransactionFunction = (tables: {
+  用户表模块实例: 用户表模块;
+  项目表模块实例: 项目表模块;
+  项目组表模块实例: 项目组表模块;
+}) => Promise<void> | void;
 
 export class 后台数据管理模块 extends ModuleBase {
   private static instance: 后台数据管理模块;
@@ -15,23 +20,41 @@ export class 后台数据管理模块 extends ModuleBase {
     return 后台数据管理模块.instance;
   }
 
-  public async $transaction(
-    fn: (tables: {
-      用户表: Table<ClientUserModel>;
-      项目表: Table<ClientProjectModel>;
-      项目组表: Table<ClientProjectGroupModel>;
-    }) => Promise<void> | void,
-  ): Promise<void> {
-    const 用户表 = 用户表模块.getInstance(this.engine).table;
-    const 项目表 = 项目表模块.getInstance(this.engine).table;
-    const 项目组表 = 项目组表模块.getInstance(this.engine).table;
+  private transactionQueue: Promise<void>;
 
-    await 用户表.$transaction(async () => {
-      await 项目表.$transaction(async () => {
-        await 项目组表.$transaction(async () => {
-          await fn({ 用户表, 项目表, 项目组表 });
+  constructor(engine: EngineBase) {
+    super(engine);
+    this.transactionQueue = Promise.resolve();
+  }
+
+  public async $transaction(fn: TransactionFunction): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      this.transactionQueue = this.transactionQueue
+        .then(async () => {
+          const 用户表模块实例 = this.getDependModule(用户表模块);
+          const 项目表模块实例 = this.getDependModule(项目表模块);
+          const 项目组表模块实例 = this.getDependModule(项目组表模块);
+
+          try {
+            await 用户表模块实例.table.$transaction(async () => {
+              await 项目表模块实例.table.$transaction(async () => {
+                await 项目组表模块实例.table.$transaction(async () => {
+                  await fn({
+                    用户表模块实例,
+                    项目表模块实例,
+                    项目组表模块实例,
+                  });
+                });
+              });
+            });
+            resolve();
+          } catch (error) {
+            reject(error);
+          }
+        })
+        .catch((error) => {
+          console.error('队列任务执行出错', error);
         });
-      });
     });
   }
 
