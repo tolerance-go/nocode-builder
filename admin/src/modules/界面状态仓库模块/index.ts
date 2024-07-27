@@ -6,7 +6,6 @@ import { 事件中心系统 } from '../事件中心系统';
 import { 本地数据管理模块 } from '../本地数据管理模块';
 import { 界面导航系统 } from '../界面导航系统';
 import { localStateFieldName } from './constants';
-import { LayoutStateController } from './controllers';
 import {
   createLayoutSlice,
   createLocationSlice,
@@ -153,8 +152,6 @@ export class 界面状态仓库模块 extends ModuleBase {
 
   private initialState?: RootState;
 
-  private layoutStateController: LayoutStateController;
-
   constructor(engine: EngineBase) {
     super(engine);
 
@@ -173,11 +170,6 @@ export class 界面状态仓库模块 extends ModuleBase {
       this.reducers,
       [this.handleMiddleware],
       initialState,
-    );
-
-    this.layoutStateController = new LayoutStateController(
-      this.store,
-      this.slices,
     );
   }
 
@@ -306,10 +298,6 @@ export class 界面状态仓库模块 extends ModuleBase {
     this.注册监听保存状态到本地();
     this.注册路由更新监听();
     this.注册指针移动监听();
-
-    await Promise.all([
-      this.layoutStateController.onSetup(this.getDependModule(事件中心系统)),
-    ]);
   }
 
   private 过滤掉某些不存储到本地的state(state: RootState): RootState {

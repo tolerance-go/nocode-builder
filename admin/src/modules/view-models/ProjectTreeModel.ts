@@ -1,22 +1,41 @@
-import { AppSlices, AppStore, ProjectTreeNodeDataRecord } from '../types';
+import { EngineBase, ModuleBase } from '@/base';
 import { ViewKey } from '@/common/types';
+import { ProjectTreeNodeDataRecord } from '../界面状态仓库模块/types';
+import { 界面状态仓库模块 } from '../界面状态仓库模块';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 
-export class LayoutStateController {
-  store: AppStore;
-  slices: AppSlices;
+export class ProjectTreeModel extends ModuleBase {
+  private static instance: ProjectTreeModel;
 
-  constructor(store: AppStore, slices: AppSlices) {
-    this.store = store;
-    this.slices = slices;
-    this.注册拖拽监听();
+  public static getInstance(engine: EngineBase): ProjectTreeModel {
+    if (!ProjectTreeModel.instance) {
+      ProjectTreeModel.instance = new ProjectTreeModel(engine);
+    }
+
+    return ProjectTreeModel.instance;
   }
 
-  注册拖拽监听() {
-    let previousState = this.store.getState(); // 初始化之前的 state
+  protected async onSetup(): Promise<void> {
+    this.注册拖拽监听();
+    this.getDependModule(事件中心系统).on(
+      '项目树后台同步模块/新增项目记录成功',
+      (event) => {},
+    );
+  }
 
-    this.store.subscribe(() => {
-      const currentState = this.store.getState(); // 获取当前的 state
+  protected requireModules(): void {
+    super.requireModules(
+      事件中心系统.getInstance(this.engine),
+      界面状态仓库模块.getInstance(this.engine),
+    );
+  }
+
+  private 注册拖拽监听() {
+    const { store, slices } = this.getDependModule(界面状态仓库模块);
+    let previousState = store.getState(); // 初始化之前的 state
+
+    store.subscribe(() => {
+      const currentState = store.getState(); // 获取当前的 state
 
       if (
         currentState.projectTree.当前正在拖拽的节点key &&
@@ -31,8 +50,8 @@ export class LayoutStateController {
               currentState.projectTree.当前正在拖拽的节点key,
             )
           ) {
-            this.store.dispatch(
-              this.slices.layout.actions.显示拖拽时鼠标跟随组件([
+            store.dispatch(
+              slices.layout.actions.显示拖拽时鼠标跟随组件([
                 '拖拽中显示的组件id',
                 {
                   count: currentState.projectTree.所有已经选中的节点.length,
@@ -53,8 +72,8 @@ export class LayoutStateController {
 
             // 如果拖拽的节点不是选中的
             // 那么显示名称
-            this.store.dispatch(
-              this.slices.layout.actions.显示拖拽时鼠标跟随组件([
+            store.dispatch(
+              slices.layout.actions.显示拖拽时鼠标跟随组件([
                 '拖拽中显示的组件id',
                 {
                   title: 获取节点数据通过key如果找不到抛出异常(
@@ -73,17 +92,11 @@ export class LayoutStateController {
         previousState.projectTree.当前正在拖拽的节点key
       ) {
         if (currentState.layout.拖拽时鼠标附近的跟随组件是否显示) {
-          this.store.dispatch(
-            this.slices.layout.actions.隐藏并取消拖拽时鼠标跟随组件(),
-          );
+          store.dispatch(slices.layout.actions.隐藏并取消拖拽时鼠标跟随组件());
         }
       }
 
       previousState = currentState; // 更新之前的 state
     });
-  }
-
-  async onSetup(事件中心系统实例: 事件中心系统): Promise<void> {
-    事件中心系统实例.on('项目树后台同步模块/新增项目记录成功', (event) => {});
   }
 }

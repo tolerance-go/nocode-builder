@@ -4,12 +4,13 @@ import { 事件中心系统 } from '../事件中心系统';
 import { 图标管理者 } from '../图标管理者';
 import { 文档环境模块 } from '../文档环境模块';
 import { 界面导航系统 } from '../界面导航系统';
-import { 界面状态仓库模块 } from '../界面状态仓库模块';
+import { 界面状态管理模块 } from '../界面状态管理模块';
 import { 界面通知系统 } from '../界面通知系统';
 import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
 import { 项目树历史纪录管理者 } from '../项目树历史纪录管理者';
 import { 验证管理者 } from '../验证管理者';
 import { renderRoot } from './renderRoot';
+import { 界面状态仓库模块 } from '../界面状态仓库模块';
 
 export class 界面组件树管理模块 extends ModuleBase {
   private static instance: 界面组件树管理模块;
@@ -26,13 +27,14 @@ export class 界面组件树管理模块 extends ModuleBase {
     super.requireModules(
       事件中心系统.getInstance(this.engine),
       界面导航系统.getInstance(this.engine),
-      new 项目树历史纪录管理者(this.engine),
-      new 文档环境模块(this.engine, document),
+      项目树历史纪录管理者.getInstance(this.engine),
+      文档环境模块.getInstance(this.engine, document),
       界面通知系统.getInstance(this.engine),
-      new 验证管理者(this.engine),
-      new 图标管理者(this.engine),
-      new 跟随鼠标显示内容管理者(this.engine),
-      new 界面状态仓库模块(this.engine),
+      验证管理者.getInstance(this.engine),
+      图标管理者.getInstance(this.engine),
+      跟随鼠标显示内容管理者.getInstance(this.engine),
+      界面状态仓库模块.getInstance(this.engine),
+      界面状态管理模块.getInstance(this.engine),
     );
   }
 
