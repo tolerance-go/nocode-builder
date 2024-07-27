@@ -4,7 +4,7 @@ import { 事件中心系统 } from '../事件中心系统';
 import { 图标管理者 } from '../图标管理者';
 import { 文档环境模块 } from '../文档环境模块';
 import { 界面导航系统 } from '../界面导航系统';
-import { UIStoreManager } from '../界面状态管理器模块';
+import { 界面状态仓库模块 } from '../界面状态仓库模块';
 import { 界面通知系统 } from '../界面通知系统';
 import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
 import { 项目树历史纪录管理者 } from '../项目树历史纪录管理者';
@@ -32,7 +32,7 @@ export class 界面组件树管理模块 extends ModuleBase {
       new 验证管理者(this.engine),
       new 图标管理者(this.engine),
       new 跟随鼠标显示内容管理者(this.engine),
-      new UIStoreManager(this.engine),
+      new 界面状态仓库模块(this.engine),
     );
   }
 

@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import {
-  UIStoreManagerContext,
+  界面状态仓库模块Context,
   全局事件系统Context,
   图标管理者Context,
   导航系统Context,
@@ -34,7 +34,7 @@ export const use验证管理者 = () => {
 
 export const use界面状态管理者 = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const UIStoreManager = useContext(UIStoreManagerContext);
+  const UIStoreManager = useContext(界面状态仓库模块Context);
   if (!UIStoreManager) throw new Error('UIStoreManager未初始化');
   return UIStoreManager.getDependModule(界面状态仓库模块);
 };

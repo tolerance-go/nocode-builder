@@ -3,18 +3,18 @@ import { fullPathnames, pathItems } from '@/common/constants';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { UIStoreManager } from '../界面状态管理器模块';
 import { 事件中心系统 } from '../事件中心系统';
 import { 图标管理者 } from '../图标管理者';
 import { 界面导航系统 } from '../界面导航系统';
+import { 界面状态仓库模块 } from '../界面状态仓库模块';
 import { 界面通知系统 } from '../界面通知系统';
 import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
 import { 验证管理者 } from '../验证管理者';
 import {
-  UIStoreManagerContext,
   全局事件系统Context,
   图标管理者Context,
   导航系统Context,
+  界面状态仓库模块Context,
   系统上下文,
   跟随鼠标显示内容管理者Context,
   验证管理者Context,
@@ -28,14 +28,13 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
-import { 界面状态仓库模块 } from '../界面状态仓库模块';
 
 export const renderRoot = (module: ModuleBase) => {
   const 验证管理者实例 = module.getDependModule(验证管理者);
   const 图标管理者实例 = module.getDependModule(图标管理者);
   const 跟随鼠标显示内容管理者实例 =
     module.getDependModule(跟随鼠标显示内容管理者);
-  const 界面状态管理者实例 = module.getDependModule(UIStoreManager);
+  const 界面状态管理者实例 = module.getDependModule(界面状态仓库模块);
   const 全局事件系统实例 = module.getDependModule(事件中心系统);
   const 导航系统实例 = module.getDependModule(界面导航系统);
   const 界面通知系统实例 = module.getDependModule(界面通知系统);
@@ -51,7 +50,7 @@ export const renderRoot = (module: ModuleBase) => {
       >
         <导航系统Context.Provider value={导航系统实例}>
           <全局事件系统Context.Provider value={全局事件系统实例}>
-            <UIStoreManagerContext.Provider value={界面状态管理者实例}>
+            <界面状态仓库模块Context.Provider value={界面状态管理者实例}>
               <验证管理者Context.Provider value={验证管理者实例}>
                 <跟随鼠标显示内容管理者Context.Provider
                   value={跟随鼠标显示内容管理者实例}
@@ -103,7 +102,7 @@ export const renderRoot = (module: ModuleBase) => {
                   </图标管理者Context.Provider>
                 </跟随鼠标显示内容管理者Context.Provider>
               </验证管理者Context.Provider>
-            </UIStoreManagerContext.Provider>
+            </界面状态仓库模块Context.Provider>
           </全局事件系统Context.Provider>
         </导航系统Context.Provider>
       </系统上下文.Provider>
