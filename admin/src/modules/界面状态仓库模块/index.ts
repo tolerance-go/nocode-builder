@@ -56,9 +56,12 @@ export class 界面状态仓库模块 extends ModuleBase {
 
   private static instance: 界面状态仓库模块;
 
-  public static getInstance(engine: EngineBase): 界面状态仓库模块 {
+  public static getInstance(
+    engine: EngineBase,
+    initialState?: RootState,
+  ): 界面状态仓库模块 {
     if (!界面状态仓库模块.instance) {
-      界面状态仓库模块.instance = new 界面状态仓库模块(engine);
+      界面状态仓库模块.instance = new 界面状态仓库模块(engine, initialState);
     }
 
     return 界面状态仓库模块.instance;

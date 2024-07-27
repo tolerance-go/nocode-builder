@@ -57,6 +57,19 @@ export class 历史记录远程同步管理者 extends ModuleBase {
   private 历史记录远程同步状态机;
   private stateController;
 
+  retryFailCallback = () => {};
+
+  retryStartCallback = () => {
+    this.getDependModule(界面通知系统).showModal({
+      type: 'info',
+      title: '正在保存服务器数据...',
+      onOk: () => {},
+      // okButtonProps: {
+      //   loading: true,
+      // },
+    });
+  };
+
   constructor(engine: EngineBase, params: SyncHistoryManagerEmployeeParams) {
     super(engine);
 

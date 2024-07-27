@@ -32,7 +32,7 @@ export class ClientUserModel extends UserModel {
   }
 }
 
-class 用户表模块 extends ModuleBase {
+export class 用户表模块 extends ModuleBase {
   private static instance: 用户表模块;
 
   public static getInstance(engine: EngineBase): 用户表模块 {
@@ -118,5 +118,3 @@ class 用户表模块 extends ModuleBase {
     );
   }
 }
-
-export { 用户表模块 as UserModelTable };

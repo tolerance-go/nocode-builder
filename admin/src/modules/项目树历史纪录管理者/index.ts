@@ -18,24 +18,11 @@ export class 项目树历史纪录管理者 extends ModuleBase {
     return 项目树历史纪录管理者.instance;
   }
 
-  retryFailCallback = () => {};
-
-  retryStartCallback = () => {
-    this.getDependModule(界面通知系统).showModal({
-      type: 'info',
-      title: '正在保存服务器数据...',
-      onOk: () => {},
-      // okButtonProps: {
-      //   loading: true,
-      // },
-    });
-  };
-
   private 历史指针: number = -1;
   private 历史堆栈: 历史记录[] = [];
   private 历史状态机Actor;
 
-  public constructor(engine: EngineBase) {
+  constructor(engine: EngineBase) {
     super(engine);
 
     this.历史状态机Actor = createActor(历史状态机, {
@@ -50,36 +37,20 @@ export class 项目树历史纪录管理者 extends ModuleBase {
     });
   }
 
-  requireModules() {
-    super.requireModules(
-      界面通知系统.getInstance(this.engine),
-      事件中心系统.getInstance(this.engine),
-      // new 历史记录远程同步管理者({
-      //   retryStartCallback: this.retryStartCallback,
-      //   retryFailCallback: this.retryFailCallback,
-      //   syncFunction: async (
-      //     differences: DiffResult<ProjectStructureTreeDataNode>,
-      //     oldTreeDataRecord?: ProjectTreeNodeDataRecord,
-      //     newTreeDataRecord?: ProjectTreeNodeDataRecord,
-      //   ) => {
-      //     await api.syncs.applyProjectDiff(
-      //       convertDiffResultToProjectDiffDto(
-      //         differences,
-      //         oldTreeDataRecord,
-      //         newTreeDataRecord,
-      //       ),
-      //     );
-      //   },
-      // }),
-    );
-  }
-
   addRecordToHistory(record: 历史记录) {
     this.历史状态机Actor.send({
       type: '推入历史记录',
       data: record,
     });
   }
+
+  protected requireModules() {
+    super.requireModules(
+      界面通知系统.getInstance(this.engine),
+      事件中心系统.getInstance(this.engine),
+    );
+  }
+
   protected async onSetup(): Promise<void> {
     this.历史状态机Actor.start().subscribe((state) => {
       if (this.历史指针 !== state.context.历史指针) {

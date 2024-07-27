@@ -8,7 +8,7 @@ import { 界面导航系统 } from '../界面导航系统';
 import { 界面状态仓库模块 } from '../界面状态仓库模块';
 import { localStateFieldName } from './constants';
 import { RootState } from './types';
-import { UserModelTable } from '../model-tables/用户表模块';
+import { 用户表模块 } from '../models/用户表模块';
 import { 本地数据管理模块 } from '../本地数据管理模块';
 
 export class UIStoreManager extends ModuleBase {
@@ -41,10 +41,10 @@ export class UIStoreManager extends ModuleBase {
   requireModules() {
     super.requireModules(
       本地数据管理模块.getInstance(this.engine),
-      UserModelTable.getInstance(this.engine),
+      用户表模块.getInstance(this.engine),
       事件中心系统.getInstance(this.engine),
       界面导航系统.getInstance(this.engine),
-      new 界面状态仓库模块(this.engine, this.initialState),
+      界面状态仓库模块.getInstance(this.engine, this.initialState),
     );
   }
 
@@ -88,7 +88,7 @@ export class UIStoreManager extends ModuleBase {
   }
 
   注册用户信息监听() {
-    const userInfo = this.getDependModule(UserModelTable).loginUser;
+    const userInfo = this.getDependModule(用户表模块).loginUser;
 
     if (userInfo) {
       this.getDependModule(界面状态仓库模块).store.dispatch(

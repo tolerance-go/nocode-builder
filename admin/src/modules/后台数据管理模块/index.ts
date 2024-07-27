@@ -1,5 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { UserModelTable } from '../model-tables/用户表模块';
+import { 用户表模块 } from '../models/用户表模块';
+import { 项目表模块 } from '../models/项目表模块';
+import { 项目组表模块 } from '../models/项目组表模块';
 
 export class 后台数据管理模块 extends ModuleBase {
   private static instance: 后台数据管理模块;
@@ -13,6 +15,10 @@ export class 后台数据管理模块 extends ModuleBase {
   }
 
   protected requireModules(): void {
-    super.requireModules(UserModelTable.getInstance(this.engine));
+    super.requireModules(
+      用户表模块.getInstance(this.engine),
+      项目表模块.getInstance(this.engine),
+      项目组表模块.getInstance(this.engine),
+    );
   }
 }
