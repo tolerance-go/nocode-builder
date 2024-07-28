@@ -1,4 +1,4 @@
-import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 import {
   ProjectGroupOperationRecordDto,
   ProjectOperationRecordDto,
@@ -18,11 +18,7 @@ export class OperationDto {
   operation: OperationType;
 
   @ApiProperty({
-    oneOf: [
-      { $ref: getSchemaPath(UserOperationRecordDto) },
-      { $ref: getSchemaPath(ProjectOperationRecordDto) },
-      { $ref: getSchemaPath(ProjectGroupOperationRecordDto) },
-    ],
+    type: Object,
   })
   record:
     | UserOperationRecordDto

@@ -12,8 +12,8 @@ export const apiUrls = {
   },
   SyncController_applyProjectDiff: {
     method: 'post',
-    route: '/syncs/apply-project-diff',
-    path: '/syncs/apply-project-diff',
+    route: '/syncs/apply-operations',
+    path: '/syncs/apply-operations',
   },
   AuthController_login: {
     method: 'post',

@@ -5,24 +5,14 @@
  * ---------------------------------------------------------------
  */
 
-export interface ProjectUpdateWithIdDto {
-  name?: string;
-  projectGroupId?: number;
-  id: number;
+export interface OperationDto {
+  tableName: string;
+  operation: 'clearRecords' | 'addRecord' | 'updateRecord' | 'deleteRecord';
+  record: object;
 }
 
-export interface ProjectGroupUpdateWithIdDto {
-  name?: string;
-  parentGroupId?: number;
-  id: number;
-}
-
-export interface ProjectDiffDto {
-  additions: (ProjectCreateDto | ProjectGroupCreateWithChildrenDto)[][];
-  projectsToUpdate: ProjectUpdateWithIdDto[];
-  projectGroupsToUpdate: ProjectGroupUpdateWithIdDto[];
-  projectIdsToDelete: number[];
-  projectGroupIdsToDelete: number[];
+export interface OperationsDto {
+  operations: OperationDto[];
 }
 
 export interface LoginDto {
@@ -63,9 +53,10 @@ export interface UserUpdateDto {
   updatedAt?: string;
 }
 
-export interface ProjectDto {
+export interface ProjectResponseDto {
   id: number;
   name: string;
+  type: 'View' | 'DataTable' | 'Bluemap';
   projectGroupId?: number;
   ownerId: number;
   createdAt: string;
@@ -85,7 +76,7 @@ export interface ProjectUpdateDto {
   projectGroupId?: number;
 }
 
-export interface ProjectGroupDto {
+export interface ProjectGroupResponseDto {
   id: number;
   name: string;
   parentGroupId?: number | null;
@@ -104,14 +95,6 @@ export interface ProjectGroupCreateDto {
 export interface ProjectGroupUpdateDto {
   name?: string;
   parentGroupId?: number;
-}
-
-export interface ProjectGroupCreateWithChildrenDto {
-  name: string;
-  parentGroupId?: number;
-  createdAt?: string;
-  updatedAt?: string;
-  children?: (ProjectCreateDto | ProjectGroupCreateWithChildrenDto)[];
 }
 
 import type {
@@ -318,11 +301,11 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * No description
      *
      * @name SyncControllerApplyProjectDiff
-     * @request POST:/syncs/apply-project-diff
+     * @request POST:/syncs/apply-operations
      */
-    applyProjectDiff: (data: ProjectDiffDto, params: RequestParams = {}) =>
+    applyProjectDiff: (data: OperationsDto, params: RequestParams = {}) =>
       this.request<void, void>({
-        path: `/syncs/apply-project-diff`,
+        path: `/syncs/apply-operations`,
         method: 'POST',
         body: data,
         type: ContentType.Json,
@@ -468,7 +451,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request GET:/projects/{id}
      */
     getProject: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectDto, unknown>({
+      this.request<ProjectResponseDto, unknown>({
         path: `/projects/${id}`,
         method: 'GET',
         format: 'json',
@@ -486,7 +469,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
       data: ProjectUpdateDto,
       params: RequestParams = {},
     ) =>
-      this.request<ProjectDto, unknown>({
+      this.request<ProjectResponseDto, unknown>({
         path: `/projects/${id}`,
         method: 'PATCH',
         body: data,
@@ -502,7 +485,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request DELETE:/projects/{id}
      */
     deleteProject: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectDto, unknown>({
+      this.request<ProjectResponseDto, unknown>({
         path: `/projects/${id}`,
         method: 'DELETE',
         format: 'json',
@@ -524,7 +507,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
       },
       params: RequestParams = {},
     ) =>
-      this.request<ProjectDto[], unknown>({
+      this.request<ProjectResponseDto[], unknown>({
         path: `/projects`,
         method: 'GET',
         query: query,
@@ -539,7 +522,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request POST:/projects
      */
     createProject: (data: ProjectCreateDto, params: RequestParams = {}) =>
-      this.request<ProjectDto, void>({
+      this.request<ProjectResponseDto, void>({
         path: `/projects`,
         method: 'POST',
         body: data,
@@ -556,7 +539,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request GET:/project-groups/{id}
      */
     getProjectGroup: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectGroupDto, unknown>({
+      this.request<ProjectGroupResponseDto, unknown>({
         path: `/project-groups/${id}`,
         method: 'GET',
         format: 'json',
@@ -574,7 +557,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
       data: ProjectGroupUpdateDto,
       params: RequestParams = {},
     ) =>
-      this.request<ProjectGroupDto, unknown>({
+      this.request<ProjectGroupResponseDto, unknown>({
         path: `/project-groups/${id}`,
         method: 'PATCH',
         body: data,
@@ -590,7 +573,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request DELETE:/project-groups/{id}
      */
     deleteProjectGroup: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectGroupDto, unknown>({
+      this.request<ProjectGroupResponseDto, unknown>({
         path: `/project-groups/${id}`,
         method: 'DELETE',
         format: 'json',
@@ -612,7 +595,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
       },
       params: RequestParams = {},
     ) =>
-      this.request<ProjectGroupDto[], unknown>({
+      this.request<ProjectGroupResponseDto[], unknown>({
         path: `/project-groups`,
         method: 'GET',
         query: query,
@@ -630,7 +613,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
       data: ProjectGroupCreateDto,
       params: RequestParams = {},
     ) =>
-      this.request<ProjectGroupDto, void>({
+      this.request<ProjectGroupResponseDto, void>({
         path: `/project-groups`,
         method: 'POST',
         body: data,
