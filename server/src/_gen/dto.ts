@@ -20,47 +20,57 @@ export enum ProjectTypeEnum {
   Bluemap = 'Bluemap',
 }
 
-export class UserDto {
-  @ApiProperty() @IsInt() id: number;
-  @ApiProperty() @IsString() name: string;
-  @ApiProperty({ required: false }) @IsString() @IsOptional() email?: string;
-  @ApiProperty() @IsString() password: string;
-  @ApiProperty() projects: ProjectDto[];
-  @ApiProperty() @IsDateString() createdAt: Date;
-  @ApiProperty() @IsDateString() updatedAt: Date;
-  @ApiProperty() projectGroups: ProjectGroupDto[];
-}
-
 export class ProjectDto {
   @ApiProperty() @IsInt() id: number;
   @ApiProperty() @IsString() name: string;
   @ApiProperty() @IsInt() ownerId: number;
-  @ApiProperty() owner: UserDto;
+  @ApiProperty() @ApiProperty({ type: UserDto }) owner: UserDto;
   @ApiProperty() @IsDateString() createdAt: Date;
   @ApiProperty() @IsDateString() updatedAt: Date;
-  @ApiProperty({ required: false }) projectGroup?: ProjectGroupDto;
   @ApiProperty({ required: false })
-  @IsInt()
+  @ApiProperty({ type: ProjectGroupDto })
   @IsOptional()
+  projectGroup?: ProjectGroupDto;
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
   projectGroupId?: number;
-  @ApiProperty() type: ProjectTypeEnum;
+  @ApiProperty()
+  @ApiProperty({ enum: ProjectTypeEnum })
+  @IsEnum(ProjectTypeEnum)
+  type: ProjectTypeEnum;
 }
 
 export class ProjectGroupDto {
   @ApiProperty() @IsInt() id: number;
   @ApiProperty() @IsString() name: string;
   @ApiProperty({ required: false })
-  @IsInt()
   @IsOptional()
+  @IsInt()
   parentGroupId?: number;
-  @ApiProperty({ required: false }) parentGroup?: ProjectGroupDto;
-  @ApiProperty() childGroups: ProjectGroupDto[];
+  @ApiProperty({ required: false })
+  @ApiProperty({ type: ProjectGroupDto })
+  @IsOptional()
+  parentGroup?: ProjectGroupDto;
+  @ApiProperty()
+  @ApiProperty({ type: ProjectGroupDto })
+  childGroups: ProjectGroupDto[];
   @ApiProperty() @IsInt() ownerId: number;
-  @ApiProperty({
-    type: UserDto,
-  })
-  owner: UserDto;
-  @ApiProperty() projects: ProjectDto[];
+  @ApiProperty() @ApiProperty({ type: UserDto }) owner: UserDto;
+  @ApiProperty() @ApiProperty({ type: ProjectDto }) projects: ProjectDto[];
   @ApiProperty() @IsDateString() createdAt: Date;
   @ApiProperty() @IsDateString() updatedAt: Date;
+}
+
+export class UserDto {
+  @ApiProperty() @IsInt() id: number;
+  @ApiProperty() @IsString() name: string;
+  @ApiProperty({ required: false }) @IsOptional() @IsString() email?: string;
+  @ApiProperty() @IsString() password: string;
+  @ApiProperty() @ApiProperty({ type: ProjectDto }) projects: ProjectDto[];
+  @ApiProperty() @IsDateString() createdAt: Date;
+  @ApiProperty() @IsDateString() updatedAt: Date;
+  @ApiProperty()
+  @ApiProperty({ type: ProjectGroupDto })
+  projectGroups: ProjectGroupDto[];
 }

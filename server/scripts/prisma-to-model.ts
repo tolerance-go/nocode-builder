@@ -290,9 +290,13 @@ class DTOFile extends File {
       ),
     ];
 
+    // 先改名字，此时 fields 中 type 引用的是自身
     this.classes.forEach((cls) => {
       cls.printName = `${cls.name}Dto`;
       cls.printConstructorFlag = false;
+    });
+
+    this.classes.forEach((cls) => {
       cls.fields.forEach((field) => {
         const decorators = [
           new Decorator(
@@ -300,6 +304,16 @@ class DTOFile extends File {
             field.isRequired ? [] : ['{ required: false }'],
           ),
         ];
+        if (field.type instanceof Class) {
+          decorators.push(
+            new Decorator('ApiProperty', [`{ type: ${field.type.printName} }`]),
+          );
+        } else if (field.type instanceof Enum) {
+          decorators.push(
+            new Decorator('ApiProperty', [`{ enum: ${field.type.printName} }`]),
+          );
+          decorators.push(new Decorator('IsEnum', [field.type.printName]));
+        }
         if (!field.isRequired) {
           decorators.push(new Decorator('IsOptional', []));
         }
