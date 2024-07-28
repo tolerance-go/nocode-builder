@@ -10,6 +10,7 @@ import {
   Min,
   IsEnum,
 } from 'class-validator';
+import { UserResponseDto } from 'src/common/dtos';
 
 export class ProjectCreateDto {
   @ApiProperty()
@@ -95,7 +96,7 @@ export class ProjectUpdateWithIdDto extends ProjectUpdateDto {
   id: number;
 }
 
-export class ProjectDto {
+export class ProjectResponseDto {
   @ApiProperty({})
   @IsInt()
   id: number;
@@ -103,6 +104,11 @@ export class ProjectDto {
   @ApiProperty({})
   @IsString()
   name: string;
+
+  @ApiProperty({
+    enum: ProjectType,
+  })
+  type: ProjectType;
 
   @ApiProperty({
     required: false,

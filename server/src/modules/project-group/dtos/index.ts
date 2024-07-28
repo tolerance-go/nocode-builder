@@ -86,7 +86,7 @@ export class ProjectGroupUpdateWithIdDto extends ProjectGroupUpdateDto {
   id: number;
 }
 
-export class ProjectGroupDto {
+export class ProjectGroupResponseDto {
   @ApiProperty({})
   @IsInt()
   id: number;

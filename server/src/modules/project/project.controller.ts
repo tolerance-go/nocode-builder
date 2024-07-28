@@ -15,7 +15,7 @@ import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ProjectService } from './project.service';
 import {
-  ProjectDto,
+  ProjectResponseDto,
   ProjectQueryDto,
   ProjectCreateDto,
   ProjectUpdateDto,
@@ -31,9 +31,11 @@ export class ProjectController {
   @ApiResponse({
     status: 200,
     description: 'The project has been successfully fetched.',
-    type: ProjectDto,
+    type: ProjectResponseDto,
   })
-  async getProject(@Param('id') id: string): Promise<ProjectDto | null> {
+  async getProject(
+    @Param('id') id: string,
+  ): Promise<ProjectResponseDto | null> {
     const project = await this.projectService.project({
       id: Number(id),
     });
@@ -45,9 +47,11 @@ export class ProjectController {
   @ApiResponse({
     status: 200,
     description: 'The projects have been successfully fetched.',
-    type: [ProjectDto],
+    type: [ProjectResponseDto],
   })
-  async getProjects(@Query() query: ProjectQueryDto): Promise<ProjectDto[]> {
+  async getProjects(
+    @Query() query: ProjectQueryDto,
+  ): Promise<ProjectResponseDto[]> {
     const projects = await this.projectService.projects({
       skip: query.skip,
       take: query.take,
@@ -62,13 +66,13 @@ export class ProjectController {
   @ApiResponse({
     status: 201,
     description: 'The project has been successfully created.',
-    type: ProjectDto,
+    type: ProjectResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async createProject(
     @Body() { projectGroupId, ...rest }: ProjectCreateDto,
     @Req() req: Request & { user: JwtUserDto },
-  ): Promise<ProjectDto> {
+  ): Promise<ProjectResponseDto> {
     const userId = req.user.id;
     const project = await this.projectService.createProject({
       ...rest,
@@ -93,12 +97,12 @@ export class ProjectController {
   @ApiResponse({
     status: 200,
     description: 'The project has been successfully updated.',
-    type: ProjectDto,
+    type: ProjectResponseDto,
   })
   async updateProject(
     @Param('id') id: string,
     @Body() data: ProjectUpdateDto,
-  ): Promise<ProjectDto> {
+  ): Promise<ProjectResponseDto> {
     const project = await this.projectService.updateProject({
       where: { id: Number(id) },
       data,
@@ -111,9 +115,9 @@ export class ProjectController {
   @ApiResponse({
     status: 200,
     description: 'The project has been successfully deleted.',
-    type: ProjectDto,
+    type: ProjectResponseDto,
   })
-  async deleteProject(@Param('id') id: string): Promise<ProjectDto> {
+  async deleteProject(@Param('id') id: string): Promise<ProjectResponseDto> {
     const project = await this.projectService.deleteProject({
       id: Number(id),
     });

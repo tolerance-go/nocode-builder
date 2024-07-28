@@ -16,7 +16,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { ProjectGroupService } from './project-group.service';
 import { toProjectGroupDto } from './utils';
 import {
-  ProjectGroupDto,
+  ProjectGroupResponseDto,
   ProjectGroupQueryDto,
   ProjectGroupCreateDto,
   ProjectGroupUpdateDto,
@@ -31,11 +31,11 @@ export class ProjectGroupController {
   @ApiResponse({
     status: 200,
     description: 'The project group has been successfully fetched.',
-    type: ProjectGroupDto,
+    type: ProjectGroupResponseDto,
   })
   async getProjectGroup(
     @Param('id') id: string,
-  ): Promise<ProjectGroupDto | null> {
+  ): Promise<ProjectGroupResponseDto | null> {
     const projectGroup = await this.projectGroupService.projectGroup({
       id: Number(id),
     });
@@ -47,11 +47,11 @@ export class ProjectGroupController {
   @ApiResponse({
     status: 200,
     description: 'The project groups have been successfully fetched.',
-    type: [ProjectGroupDto],
+    type: [ProjectGroupResponseDto],
   })
   async getProjectGroups(
     @Query() query: ProjectGroupQueryDto,
-  ): Promise<ProjectGroupDto[]> {
+  ): Promise<ProjectGroupResponseDto[]> {
     const projectGroups = await this.projectGroupService.projectGroups({
       skip: query.skip,
       take: query.take,
@@ -66,13 +66,13 @@ export class ProjectGroupController {
   @ApiResponse({
     status: 201,
     description: 'The project group has been successfully created.',
-    type: ProjectGroupDto,
+    type: ProjectGroupResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async createProjectGroup(
     @Body() data: ProjectGroupCreateDto,
     @Req() req: Request & { user: JwtUserDto },
-  ): Promise<ProjectGroupDto> {
+  ): Promise<ProjectGroupResponseDto> {
     const { parentGroupId, ...rest } = data;
     const userId = req.user.id;
     const projectGroup = await this.projectGroupService.createProjectGroup({
@@ -98,12 +98,12 @@ export class ProjectGroupController {
   @ApiResponse({
     status: 200,
     description: 'The project group has been successfully updated.',
-    type: ProjectGroupDto,
+    type: ProjectGroupResponseDto,
   })
   async updateProjectGroup(
     @Param('id') id: string,
     @Body() data: ProjectGroupUpdateDto,
-  ): Promise<ProjectGroupDto> {
+  ): Promise<ProjectGroupResponseDto> {
     const projectGroup = await this.projectGroupService.updateProjectGroup({
       where: { id: Number(id) },
       data,
@@ -116,9 +116,11 @@ export class ProjectGroupController {
   @ApiResponse({
     status: 200,
     description: 'The project group has been successfully deleted.',
-    type: ProjectGroupDto,
+    type: ProjectGroupResponseDto,
   })
-  async deleteProjectGroup(@Param('id') id: string): Promise<ProjectGroupDto> {
+  async deleteProjectGroup(
+    @Param('id') id: string,
+  ): Promise<ProjectGroupResponseDto> {
     const projectGroup = await this.projectGroupService.deleteProjectGroup({
       id: Number(id),
     });

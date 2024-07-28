@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { RecordWithId, Table } from '.';
+import { OperationType, RecordWithId, Table } from '.';
 
 interface Person extends RecordWithId {
   name: string;
@@ -88,7 +88,7 @@ describe('Table 类测试', () => {
     const unregister = table.registerListener(listener);
 
     table.addRecord({ id: 1, name: 'Alice', age: 30 });
-    expect(listener).toHaveBeenCalledWith('addRecord', {
+    expect(listener).toHaveBeenCalledWith(OperationType.ADD_RECORD, {
       id: 1,
       name: 'Alice',
       age: 30,
@@ -103,7 +103,7 @@ describe('Table 类测试', () => {
     const unregister = table.registerListener(listener);
 
     table.deleteRecord(1);
-    expect(listener).toHaveBeenCalledWith('deleteRecord', {
+    expect(listener).toHaveBeenCalledWith(OperationType.DELETE_RECORD, {
       id: 1,
       name: 'Alice',
       age: 30,
@@ -118,7 +118,7 @@ describe('Table 类测试', () => {
     const unregister = table.registerListener(listener);
 
     table.updateRecord({ id: 1, name: 'Alice', age: 31 });
-    expect(listener).toHaveBeenCalledWith('updateRecord', {
+    expect(listener).toHaveBeenCalledWith(OperationType.UPDATE_RECORD, {
       id: 1,
       name: 'Alice',
       age: 31,
@@ -133,7 +133,10 @@ describe('Table 类测试', () => {
     const unregister = table.registerListener(listener);
 
     table.clearRecords();
-    expect(listener).toHaveBeenCalledWith('clearRecords');
+    expect(listener).toHaveBeenCalledWith(
+      OperationType.CLEAR_RECORDS,
+      undefined,
+    );
 
     unregister();
   });

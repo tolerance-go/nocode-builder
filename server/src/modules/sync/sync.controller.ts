@@ -1,22 +1,15 @@
-import {
-  Body,
-  Controller,
-  HttpException,
-  Post,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { ProjectDiffDto } from './dtos';
+import { OperationsDto } from './dtos';
 import { SyncService } from './sync.service';
 
 @Controller('syncs')
 export class SyncController {
   constructor(private readonly syncService: SyncService) {}
 
-  @Post('apply-project-diff')
+  @Post('apply-operations')
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 201,
@@ -24,9 +17,9 @@ export class SyncController {
   @ApiResponse({ status: 400 })
   @ApiResponse({ status: 500 })
   async applyProjectDiff(
-    @Body() diffs: ProjectDiffDto,
+    @Body() operations: OperationsDto[],
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<void> {
-    await this.syncService.applyProjectDiff(diffs, req.user.id);
+    await this.syncService.applyOperations(operations, req.user.id);
   }
 }

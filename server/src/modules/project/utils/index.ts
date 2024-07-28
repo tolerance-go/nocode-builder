@@ -1,7 +1,7 @@
 import { Project } from '@prisma/client';
-import { ProjectDto } from '../dtos';
+import { ProjectResponseDto } from '../dtos';
 
-export function toProjectDto(project: Project): ProjectDto {
+export function toProjectDto(project: Project): ProjectResponseDto {
   return {
     id: project.id,
     name: project.name,

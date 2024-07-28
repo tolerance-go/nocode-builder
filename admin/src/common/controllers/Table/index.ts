@@ -4,7 +4,14 @@ export type RecordWithId = {
   id: number;
 };
 
-type SideEffectListener<T> = (operation: string, record?: T) => void;
+export enum OperationType {
+  CLEAR_RECORDS = 'clearRecords',
+  ADD_RECORD = 'addRecord',
+  UPDATE_RECORD = 'updateRecord',
+  DELETE_RECORD = 'deleteRecord',
+}
+
+type SideEffectListener<T> = (operation: OperationType, record?: T) => void;
 
 export class Table<T extends RecordWithId> {
   private records: T[] = [];
@@ -14,13 +21,13 @@ export class Table<T extends RecordWithId> {
   // 清空所有记录
   clearRecords(): void {
     this.records = [];
-    this.notifyListeners('clearRecords');
+    this.notifyListeners(OperationType.CLEAR_RECORDS);
   }
 
   // 增加记录
   addRecord(record: T): void {
     this.records.push(record);
-    this.notifyListeners('addRecord', record);
+    this.notifyListeners(OperationType.ADD_RECORD, record);
   }
 
   // 更新记录
@@ -32,7 +39,7 @@ export class Table<T extends RecordWithId> {
       throw new Error(`Record with id ${updatedRecord.id} not found`);
     }
     this.records[index] = updatedRecord;
-    this.notifyListeners('updateRecord', updatedRecord);
+    this.notifyListeners(OperationType.UPDATE_RECORD, updatedRecord);
   }
 
   // 删除记录
@@ -40,7 +47,7 @@ export class Table<T extends RecordWithId> {
     const record = this.findRecord(id);
     if (record) {
       this.records = this.records.filter((record) => record.id !== id);
-      this.notifyListeners('deleteRecord', record);
+      this.notifyListeners(OperationType.DELETE_RECORD, record);
     }
   }
 
@@ -126,7 +133,7 @@ export class Table<T extends RecordWithId> {
   }
 
   // 通知监听器
-  private notifyListeners(operation: string, record?: T): void {
+  private notifyListeners(operation: OperationType, record?: T): void {
     this.listeners.forEach((listener) => listener(operation, record));
   }
 

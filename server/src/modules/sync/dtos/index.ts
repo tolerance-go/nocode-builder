@@ -1,66 +1,24 @@
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { IsOptional } from 'class-validator';
-import {
-  ProjectGroupCreateDto,
-  ProjectGroupUpdateWithIdDto,
-} from 'src/modules/project-group/dtos';
-import {
-  ProjectCreateDto,
-  ProjectUpdateWithIdDto,
-} from 'src/modules/project/dtos';
+import { Project } from '@prisma/client';
+import { OperationType } from 'src/common/enums/operation-type';
+import { ProjectGroupResponseDto } from 'src/modules/project-group/dtos';
 
-export class ProjectGroupCreateWithChildrenDto extends ProjectGroupCreateDto {
+export class OperationsDto {
   @ApiProperty({
-    type: 'array',
-    items: {
-      oneOf: [
-        { $ref: getSchemaPath(ProjectCreateDto) },
-        { $ref: getSchemaPath(ProjectGroupCreateWithChildrenDto) },
-      ],
-    },
-    required: false,
+    type: String,
   })
-  @IsOptional()
-  children?: (ProjectCreateDto | ProjectGroupCreateWithChildrenDto)[];
-}
-
-export class ProjectDiffDto {
-  @ApiProperty({
-    type: 'array',
-    items: {
-      type: 'array',
-      items: {
-        oneOf: [
-          { $ref: getSchemaPath(ProjectCreateDto) },
-          { $ref: getSchemaPath(ProjectGroupCreateWithChildrenDto) },
-        ],
-      },
-    },
-  })
-  @IsOptional()
-  additions?: (ProjectGroupCreateWithChildrenDto | ProjectCreateDto)[][];
+  tableName: string;
 
   @ApiProperty({
-    type: [ProjectUpdateWithIdDto],
+    enum: OperationType,
   })
-  @IsOptional()
-  projectsToUpdate?: ProjectUpdateWithIdDto[];
+  operation: OperationType;
 
   @ApiProperty({
-    type: [ProjectGroupUpdateWithIdDto],
+    oneOf: [
+      { $ref: getSchemaPath(Project) },
+      { $ref: getSchemaPath(ProjectGroupResponseDto) },
+    ],
   })
-  @IsOptional()
-  projectGroupsToUpdate?: ProjectGroupUpdateWithIdDto[];
-
-  @ApiProperty({
-    type: [Number],
-  })
-  @IsOptional()
-  projectIdsToDelete?: number[];
-
-  @ApiProperty({
-    type: [Number],
-  })
-  @IsOptional()
-  projectGroupIdsToDelete?: number[];
+  record: Project | ProjectGroupResponseDto;
 }
