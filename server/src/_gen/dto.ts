@@ -14,12 +14,6 @@ import {
 } from 'class-validator';
 import { forwardRef } from '@nestjs/common';
 
-export enum ProjectTypeEnum {
-  View = 'View',
-  DataTable = 'DataTable',
-  Bluemap = 'Bluemap',
-}
-
 export class UserDto {
   @ApiProperty({})
   @IsInt()
