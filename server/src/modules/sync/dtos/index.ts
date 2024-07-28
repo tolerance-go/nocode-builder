@@ -6,7 +6,7 @@ import {
 } from 'src/_gen/dtos';
 import { OperationType } from 'src/common/enums/operation-type';
 
-export class OperationsDto {
+export class OperationDto {
   @ApiProperty({
     type: String,
   })
@@ -28,4 +28,11 @@ export class OperationsDto {
     | UserOperationRecordDto
     | ProjectOperationRecordDto
     | ProjectGroupOperationRecordDto;
+}
+
+export class OperationsDto {
+  @ApiProperty({
+    type: [OperationDto],
+  })
+  operations: OperationDto[];
 }

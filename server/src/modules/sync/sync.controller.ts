@@ -16,7 +16,7 @@ export class SyncController {
   @ApiResponse({ status: 400 })
   @ApiResponse({ status: 500 })
   async applyProjectDiff(
-    @Body() operations: OperationsDto[],
+    @Body() operations: OperationsDto,
     // @Req() req: Request & { user: JwtUserDto },
   ): Promise<void> {
     await this.syncService.applyOperations(operations);

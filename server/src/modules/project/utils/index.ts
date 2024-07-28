@@ -9,5 +9,6 @@ export function toProjectDto(project: Project): ProjectResponseDto {
     ownerId: project.ownerId,
     createdAt: project.createdAt.toISOString(),
     updatedAt: project.updatedAt.toISOString(),
+    type: project.type,
   };
 }

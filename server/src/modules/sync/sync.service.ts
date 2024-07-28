@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { ProjectGroupService } from 'src/modules/project-group/project-group.service';
-import { ProjectService } from 'src/modules/project/project.service';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { OperationsDto } from './dtos';
-import { OperationType } from 'src/common/enums/operation-type';
-import { Project } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import {
   ProjectGroupOperationRecordDto,
   ProjectOperationRecordDto,
 } from 'src/_gen/dtos';
+import { OperationType } from 'src/common/enums/operation-type';
+import { ProjectGroupService } from 'src/modules/project-group/project-group.service';
+import { ProjectService } from 'src/modules/project/project.service';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { OperationsDto } from './dtos';
 
 @Injectable()
 export class SyncService {
@@ -18,9 +18,9 @@ export class SyncService {
     private projectGroupService: ProjectGroupService,
   ) {}
 
-  async applyOperations(operations: OperationsDto[]): Promise<void> {
+  async applyOperations(operations: OperationsDto): Promise<void> {
     await this.prisma.$transaction(async (tx) => {
-      for (const operation of operations) {
+      for (const operation of operations.operations) {
         const { record, operation: operationType, tableName } = operation;
 
         switch (operationType) {
@@ -28,103 +28,14 @@ export class SyncService {
             if (tableName === 'project') {
               const projectRecord = record as ProjectOperationRecordDto;
               await this.projectService.createProject(
-                {
-                  name: projectRecord.name,
-                  createdAt: projectRecord.createdAt,
-                  updatedAt: projectRecord.updatedAt,
-                  type: projectRecord.type,
-                  owner: {
-                    connect: {
-                      id: projectRecord.ownerId,
-                    },
-                  },
-                  projectGroup: {
-                    connectOrCreate: {
-                      where: { id: projectRecord.projectGroupId },
-                      create: {
-                        name: projectRecord.projectGroup!.name,
-                        createdAt: projectRecord.projectGroup!.createdAt,
-                        updatedAt: projectRecord.projectGroup!.updatedAt,
-                        parentGroup: {
-                          connectOrCreate: {
-                            where: {
-                              id: projectRecord.projectGroup?.parentGroupId,
-                            },
-                            create: {
-                              name: projectRecord.projectGroup!.parentGroup!
-                                .name,
-                              createdAt:
-                                projectRecord.projectGroup?.parentGroup!
-                                  .createdAt,
-                              updatedAt:
-                                projectRecord.projectGroup?.parentGroup!
-                                  .updatedAt,
-                              owner: {
-                                connect: {
-                                  id: projectRecord.parentGroupOwnerId,
-                                },
-                              },
-                            },
-                          },
-                        },
-                        owner: {
-                          connect: {
-                            id: projectRecord.ownerId,
-                          },
-                        },
-                        childGroups: {
-                          connectOrCreate:
-                            projectRecord.projectGroup?.childGroups.map(
-                              (childGroup) => ({
-                                where: { id: childGroup.id },
-                                create: {
-                                  name: childGroup.name,
-                                  createdAt: childGroup.createdAt,
-                                  updatedAt: childGroup.updatedAt,
-                                  owner: {
-                                    connect: {
-                                      id: childGroup.ownerId,
-                                    },
-                                  },
-                                },
-                              }),
-                            ),
-                        },
-                      },
-                    },
-                  },
-                },
+                this.createProjectCreateInput(projectRecord),
                 tx,
               );
             } else if (tableName === 'projectGroup') {
               const projectGroupRecord =
                 record as ProjectGroupOperationRecordDto;
               await this.projectGroupService.createProjectGroup(
-                {
-                  name: projectGroupRecord.name,
-                  createdAt: projectGroupRecord.createdAt,
-                  updatedAt: projectGroupRecord.updatedAt,
-                  parentGroup: {
-                    connectOrCreate: {
-                      where: { id: projectGroupRecord.parentGroupId },
-                      create: {
-                        name: projectGroupRecord.parentGroup!.name,
-                        createdAt: projectGroupRecord.parentGroup!.createdAt,
-                        updatedAt: projectGroupRecord.parentGroup!.updatedAt,
-                        owner: {
-                          connect: {
-                            id: projectGroupRecord.parentGroupOwnerId,
-                          },
-                        },
-                      },
-                    },
-                  },
-                  owner: {
-                    connect: {
-                      id: projectGroupRecord.ownerId,
-                    },
-                  },
-                },
+                this.createProjectGroupCreateInput(projectGroupRecord),
                 tx,
               );
             }
@@ -136,32 +47,7 @@ export class SyncService {
               await this.projectService.updateProject(
                 {
                   where: { id: record.id },
-                  data: {
-                    name: projectRecord.name,
-                    createdAt: projectRecord.createdAt,
-                    updatedAt: projectRecord.updatedAt,
-                    type: projectRecord.type,
-                    owner: {
-                      connect: {
-                        id: projectRecord.ownerId,
-                      },
-                    },
-                    projectGroup: {
-                      connectOrCreate: {
-                        where: { id: projectRecord.projectGroupId },
-                        create: {
-                          name: projectRecord.projectGroup!.name,
-                          createdAt: projectRecord.projectGroup!.createdAt,
-                          updatedAt: projectRecord.projectGroup!.updatedAt,
-                          owner: {
-                            connect: {
-                              id: projectRecord.projectGroupOwnerId,
-                            },
-                          },
-                        },
-                      },
-                    },
-                  },
+                  data: this.createProjectUpdateInput(projectRecord),
                 },
                 tx,
               );
@@ -172,31 +58,7 @@ export class SyncService {
               await this.projectGroupService.updateProjectGroup(
                 {
                   where: { id: record.id },
-                  data: {
-                    name: projectGroupRecord.name,
-                    createdAt: projectGroupRecord.createdAt,
-                    updatedAt: projectGroupRecord.updatedAt,
-                    parentGroup: {
-                      connectOrCreate: {
-                        where: { id: projectGroupRecord.parentGroupId },
-                        create: {
-                          name: projectGroupRecord.parentGroup!.name,
-                          createdAt: projectGroupRecord.parentGroup!.createdAt,
-                          updatedAt: projectGroupRecord.parentGroup!.updatedAt,
-                          owner: {
-                            connect: {
-                              id: projectGroupRecord.parentGroupOwnerId,
-                            },
-                          },
-                        },
-                      },
-                    },
-                    owner: {
-                      connect: {
-                        id: projectGroupRecord.ownerId,
-                      },
-                    },
-                  },
+                  data: this.createProjectGroupUpdateInput(projectGroupRecord),
                 },
                 tx,
               );
@@ -227,5 +89,127 @@ export class SyncService {
         }
       }
     });
+  }
+
+  private createProjectCreateInput(
+    record: ProjectOperationRecordDto,
+  ): Prisma.ProjectCreateInput {
+    return {
+      name: record.name,
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+      type: record.type,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      projectGroup:
+        record.projectGroup && record.projectGroupId
+          ? {
+              connectOrCreate: {
+                where: { id: record.projectGroupId },
+                create: this.createProjectGroupCreateInput(record.projectGroup),
+              },
+            }
+          : undefined,
+    };
+  }
+
+  private createProjectGroupCreateInput(
+    record: ProjectGroupOperationRecordDto,
+  ): Prisma.ProjectGroupCreateInput {
+    return {
+      name: record.name,
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      projects: {
+        connectOrCreate: record.projects.map((project) => ({
+          where: { id: project.id },
+          create: this.createProjectCreateInput(project),
+        })),
+      },
+      parentGroup:
+        record.parentGroupId && record.parentGroup
+          ? {
+              connectOrCreate: {
+                where: { id: record.parentGroupId },
+                create: this.createProjectGroupCreateInput(record.parentGroup),
+              },
+            }
+          : undefined,
+      childGroups: {
+        connectOrCreate: record.childGroups.map((childGroup) => ({
+          where: { id: childGroup.id },
+          create: this.createProjectGroupCreateInput(childGroup),
+        })),
+      },
+    };
+  }
+
+  private createProjectUpdateInput(
+    record: ProjectOperationRecordDto,
+  ): Prisma.ProjectUpdateInput {
+    return {
+      name: record.name,
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+      type: record.type,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      projectGroup:
+        record.projectGroup && record.projectGroupId
+          ? {
+              connectOrCreate: {
+                where: { id: record.projectGroupId },
+                create: this.createProjectGroupCreateInput(record.projectGroup),
+              },
+            }
+          : undefined,
+    };
+  }
+
+  private createProjectGroupUpdateInput(
+    record: ProjectGroupOperationRecordDto,
+  ): Prisma.ProjectGroupUpdateInput {
+    return {
+      name: record.name,
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      projects: {
+        connectOrCreate: record.projects.map((project) => ({
+          where: { id: project.id },
+          create: this.createProjectCreateInput(project),
+        })),
+      },
+      parentGroup:
+        record.parentGroupId && record.parentGroup
+          ? {
+              connectOrCreate: {
+                where: { id: record.parentGroupId },
+                create: this.createProjectGroupCreateInput(record.parentGroup),
+              },
+            }
+          : undefined,
+      childGroups: {
+        connectOrCreate: record.childGroups.map((childGroup) => ({
+          where: { id: childGroup.id },
+          create: this.createProjectGroupCreateInput(childGroup),
+        })),
+      },
+    };
   }
 }
