@@ -69,6 +69,7 @@ class Class {
   name: string;
   fields: Field[];
   dependsOnOtherClasses: boolean;
+  printConstructorFlag: boolean;
 
   private _printName: string;
 
@@ -80,14 +81,21 @@ class Class {
     this._printName = name;
   }
 
-  constructor(name: string, fields: Field[]) {
+  constructor(
+    name: string,
+    fields: Field[],
+    printConstructorFlag: boolean = true,
+  ) {
     this.name = name;
     this.fields = fields;
     this.dependsOnOtherClasses = false;
     this._printName = name;
+    this.printConstructorFlag = printConstructorFlag;
   }
 
   printConstructor(): string {
+    if (!this.printConstructorFlag) return '';
+
     const paramsStr = this.fields
       .map((field) => {
         return field.name;
@@ -116,7 +124,7 @@ class Class {
   print(): string {
     const fieldsStr = this.fields.map((field) => field.print()).join('\n  ');
     const constructorStr = this.printConstructor();
-    return `export class ${this.printName} {\n  ${fieldsStr}\n\n  ${constructorStr}\n}`;
+    return `export class ${this.printName} {\n  ${fieldsStr}\n${constructorStr ? `\n  ${constructorStr}\n` : ''}}`;
   }
 }
 
@@ -219,12 +227,81 @@ class ModelsFile extends File {
     // 设置 class 和 enum 的 printName
     this.classes.forEach((classItem) => {
       classItem.printName = `${classItem.name}Model`;
+      classItem.printConstructorFlag = true;
     });
     this.enums.forEach((enumItem) => {
       enumItem.printName = `${enumItem.name}Enum`;
     });
 
     return super.print();
+  }
+}
+
+// 新增 DTOFile 类，继承自 File 类
+class DTOFile extends File {
+  constructor(classes: Class[], enums: Enum[] = []) {
+    super(classes, enums);
+  }
+
+  print(): string {
+    const dtoImports = [
+      new Import(['ApiProperty'], '@nestjs/swagger'),
+      new Import(
+        [
+          'IsInt',
+          'IsNotEmpty',
+          'IsOptional',
+          'IsString',
+          'IsDateString',
+          'IsEnum',
+        ],
+        'class-validator',
+      ),
+    ];
+
+    const dtoClasses = this.classes.map((cls) => {
+      const dtoFields = cls.fields.map((field) => {
+        const decorators = [];
+        if (field.name === 'id') {
+          decorators.push(new Decorator('ApiProperty', []));
+          decorators.push(new Decorator('IsInt', []));
+        } else if (field.name === 'createdAt' || field.name === 'updatedAt') {
+          decorators.push(
+            new Decorator('ApiProperty', ['{ required: false }']),
+          );
+          decorators.push(new Decorator('IsDateString', []));
+          decorators.push(new Decorator('IsOptional', []));
+        } else if (field.type instanceof Enum) {
+          decorators.push(
+            new Decorator('ApiProperty', [`{ enum: ${field.type.printName} }`]),
+          );
+          decorators.push(new Decorator('IsEnum', [field.type.printName]));
+          decorators.push(new Decorator('IsNotEmpty', []));
+        } else {
+          decorators.push(new Decorator('ApiProperty', []));
+          decorators.push(new Decorator('IsString', []));
+          decorators.push(new Decorator('IsNotEmpty', []));
+        }
+
+        return new Field(
+          field.name,
+          field.type,
+          field.isRequired,
+          field.isArray,
+          field.isId,
+          field.isUpdatedAt,
+          field.hasDefaultValue,
+          decorators,
+        );
+      });
+
+      return new Class(`${cls.name}Dto`, dtoFields, false);
+    });
+
+    const classesStr = dtoClasses.map((cls) => cls.print()).join('\n\n');
+    const importsStr = dtoImports.map((imp) => imp.print()).join('\n');
+
+    return `${importsStr}\n\n${classesStr}`;
   }
 }
 
@@ -235,7 +312,7 @@ const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
 // 使用 Prisma SDK 解析 schema
 async function parseSchema(
   schema: string,
-): Promise<{ modelsFile: ModelsFile }> {
+): Promise<{ modelsFile: ModelsFile; dtoFile: DTOFile }> {
   const dmmf = await getDMMF({ datamodel: schema });
 
   const typeMapping: { [key: string]: string } = {
@@ -283,14 +360,15 @@ async function parseSchema(
   });
 
   const modelsFile = new ModelsFile(classes, enums);
+  const dtoFile = new DTOFile(classes, enums);
 
-  return { modelsFile };
+  return { modelsFile, dtoFile };
 }
 
 // 主函数
 async function main() {
   try {
-    const { modelsFile } = await parseSchema(schemaContent);
+    const { modelsFile, dtoFile } = await parseSchema(schemaContent);
 
     const prettierConfig = await resolveConfig(path.resolve());
     // 输出 ModelsFile 结果
@@ -310,8 +388,25 @@ async function main() {
 ${formattedModelsOutput}`,
     );
 
+    // 输出 DTOFile 结果
+    const formattedDtoOutput = await format(dtoFile.print(), {
+      ...prettierConfig,
+      parser: 'typescript',
+    });
+    const dtoOutputPath = path.resolve('./src/_gen/dto.ts');
+    fs.writeFileSync(
+      dtoOutputPath,
+      `/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED        ##
+ * ---------------------------------------------------------------
+ */
+
+${formattedDtoOutput}`,
+    );
+
     console.log(
-      'Prisma schema has been successfully parsed and saved to models.ts',
+      'Prisma schema has been successfully parsed and saved to models.ts and dto.ts',
     );
   } catch (error) {
     console.error('Error parsing schema:', error);

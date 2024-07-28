@@ -10,7 +10,6 @@ import {
   Min,
   IsEnum,
 } from 'class-validator';
-import { UserResponseDto } from 'src/common/dtos';
 
 export class ProjectCreateDto {
   @ApiProperty()
