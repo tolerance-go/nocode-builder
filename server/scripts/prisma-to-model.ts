@@ -329,20 +329,19 @@ class DTOFile extends File {
 
     this.classes.forEach((cls) => {
       cls.fields.forEach((field) => {
-        const decorators = [
-          new Decorator(
-            'ApiProperty',
-            field.isRequired ? [] : ['{ required: false }'],
-          ),
-        ];
+        const apiPropertyParams: string[] = [];
+        if (!field.isRequired) {
+          apiPropertyParams.push('{ required: false }');
+        }
         if (field.type instanceof Class) {
-          decorators.push(
-            new Decorator('ApiProperty', [`{ type: ${field.type.printName} }`]),
-          );
+          apiPropertyParams.push(`{ type: ${field.type.printName} }`);
         } else if (field.type instanceof Enum) {
-          decorators.push(
-            new Decorator('ApiProperty', [`{ enum: ${field.type.printName} }`]),
-          );
+          apiPropertyParams.push(`{ enum: ${field.type.printName} }`);
+        }
+
+        const decorators = [new Decorator('ApiProperty', apiPropertyParams)];
+
+        if (field.type instanceof Enum) {
           decorators.push(new Decorator('IsEnum', [field.type.printName]));
         }
         if (!field.isRequired) {
