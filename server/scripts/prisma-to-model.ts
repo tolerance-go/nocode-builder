@@ -296,9 +296,10 @@ class DTOFile extends File {
     });
 
     const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');
+    const enumsStr = this.enums.map((enm) => enm.print()).join('\n\n');
     const importsStr = dtoImports.map((imp) => imp.print()).join('\n');
 
-    return `${importsStr}\n\n${classesStr}`;
+    return `${importsStr}\n\n${enumsStr}\n\n${classesStr}`;
   }
 }
 

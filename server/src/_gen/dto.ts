@@ -14,6 +14,12 @@ import {
   IsEnum,
 } from 'class-validator';
 
+export enum ProjectTypeEnum {
+  View = 'View',
+  DataTable = 'DataTable',
+  Bluemap = 'Bluemap',
+}
+
 export class UserDto {
   id: number;
   name: string;
