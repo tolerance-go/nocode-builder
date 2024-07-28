@@ -318,6 +318,21 @@ class DTOFile extends File {
       cls.printConstructorFlag = false;
     });
 
+    const detectCircularDependency = (
+      cls: Class,
+      visited: Set<Class> = new Set(),
+    ): boolean => {
+      if (visited.has(cls)) return true;
+      visited.add(cls);
+
+      return cls.fields.some((field) => {
+        if (field.type instanceof Class) {
+          return detectCircularDependency(field.type as Class, visited);
+        }
+        return false;
+      });
+    };
+
     this.classes.forEach((cls) => {
       cls.fields.forEach((field) => {
         const apiPropertyParams: string[] = [];
@@ -325,7 +340,13 @@ class DTOFile extends File {
           apiPropertyParams.push('required: false');
         }
         if (field.type instanceof Class) {
-          apiPropertyParams.push(`type: ${field.type.printName}`);
+          if (detectCircularDependency(cls)) {
+            apiPropertyParams.push(
+              `type: () => forwardRef(() => ${field.type.printName})`,
+            );
+          } else {
+            apiPropertyParams.push(`type: ${field.type.printName}`);
+          }
         } else if (field.type instanceof Enum) {
           apiPropertyParams.push(`enum: ${field.type.printName}`);
         }
