@@ -28,19 +28,16 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
           cy.添加项目树视图项目();
           cy.获取项目树标题输入框().type('file3{enter}');
           cy.获取添加项目组的按钮().click();
-          cy.获取项目树标题输入框().type('file4{enter}');
-          cy.获取添加项目组的按钮().click();
           cy.获取项目树标题输入框().type('folder{enter}');
         },
       );
       那么(
-        '项目树中应该包含一个文件夹 folder 和三个文件 file1, file2, file3, file4',
+        '项目树中应该包含一个文件夹 folder 和三个文件 file1, file2, file3',
         () => {
           cy.获取antd树列表内部容器().should('contain.text', 'folder');
           cy.获取antd树列表内部容器().should('contain.text', 'file1');
           cy.获取antd树列表内部容器().should('contain.text', 'file2');
           cy.获取antd树列表内部容器().should('contain.text', 'file3');
-          cy.获取antd树列表内部容器().should('contain.text', 'file4');
 
           cy.window().then((win) => {
             expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
@@ -104,24 +101,6 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
               JSON.stringify([
                 {
                   id: 1,
-                  name: 'file4',
-                  childGroups: [],
-                  ownerId: 2,
-                  owner: {
-                    id: 2,
-                    name: 'yb',
-                    password: '',
-                    projects: [],
-                    createdAt: '',
-                    updatedAt: '',
-                    projectGroups: [],
-                  },
-                  projects: [],
-                  createdAt: '',
-                  updatedAt: '',
-                },
-                {
-                  id: 2,
                   name: 'folder',
                   childGroups: [],
                   ownerId: 2,
@@ -562,6 +541,145 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
             horizontal: 'right',
           },
         );
+
+        cy.window().then((win) => {
+          expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+            JSON.stringify([
+              {
+                id: 1,
+                name: 'file1',
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                createdAt: '',
+                updatedAt: '',
+                projectGroup: {
+                  id: 1,
+                  name: 'folder',
+                  childGroups: [],
+                  ownerId: 2,
+                  owner: {
+                    id: 2,
+                    name: 'yb',
+                    password: '',
+                    projects: [],
+                    createdAt: '',
+                    updatedAt: '',
+                    projectGroups: [],
+                  },
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                },
+                projectGroupId: 1,
+                type: 'View',
+              },
+              {
+                id: 2,
+                name: 'file2',
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                createdAt: '',
+                updatedAt: '',
+                projectGroup: {
+                  id: 1,
+                  name: 'folder',
+                  childGroups: [],
+                  ownerId: 2,
+                  owner: {
+                    id: 2,
+                    name: 'yb',
+                    password: '',
+                    projects: [],
+                    createdAt: '',
+                    updatedAt: '',
+                    projectGroups: [],
+                  },
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                },
+                projectGroupId: 1,
+                type: 'View',
+              },
+              {
+                id: 3,
+                name: 'file3',
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                createdAt: '',
+                updatedAt: '',
+                projectGroup: {
+                  id: 1,
+                  name: 'folder',
+                  childGroups: [],
+                  ownerId: 2,
+                  owner: {
+                    id: 2,
+                    name: 'yb',
+                    password: '',
+                    projects: [],
+                    createdAt: '',
+                    updatedAt: '',
+                    projectGroups: [],
+                  },
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                },
+                projectGroupId: 1,
+                type: 'View',
+              },
+            ]),
+          );
+          expect(
+            JSON.stringify(win.projectGroupTable.toTestSnapshot()),
+          ).to.equal(
+            JSON.stringify([
+              {
+                id: 1,
+                name: 'folder',
+                childGroups: [],
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+              },
+            ]),
+          );
+        });
       });
       那么('文件夹 folder 自动打开并包含文件 file1, file2, file3', () => {
         cy.获取项目树节点通过标题('folder').should(
@@ -615,6 +733,47 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
     那么('第一个标题为 a，第二个标题为 b', () => {
       cy.获取antd树列表内部容器().children().eq(0).should('contain.text', 'a');
       cy.获取antd树列表内部容器().children().eq(1).should('contain.text', 'b');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: 'b',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+            {
+              id: 2,
+              name: 'a',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+      });
     });
     当('用户拖拽 b 到 a 的前面', () => {
       cy.获取项目树节点通过标题('b').拖拽到(cy.获取项目树节点通过标题('a'), {
@@ -683,6 +842,71 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
         ).equal('folder');
       });
     });
+
+    cy.window().then((win) => {
+      expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+        JSON.stringify([
+          {
+            id: 1,
+            name: 'file',
+            ownerId: 2,
+            owner: {
+              id: 2,
+              name: 'yb',
+              password: '',
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+              projectGroups: [],
+            },
+            createdAt: '',
+            updatedAt: '',
+            projectGroup: {
+              id: 1,
+              name: 'folder',
+              childGroups: [],
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+            },
+            projectGroupId: 1,
+            type: 'View',
+          },
+        ]),
+      );
+      expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+        JSON.stringify([
+          {
+            id: 1,
+            name: 'folder',
+            childGroups: [],
+            ownerId: 2,
+            owner: {
+              id: 2,
+              name: 'yb',
+              password: '',
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+              projectGroups: [],
+            },
+            projects: [],
+            createdAt: '',
+            updatedAt: '',
+          },
+        ]),
+      );
+    });
   });
 
   假如(
@@ -734,6 +958,52 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
           .eq(1)
           .should('contain.text', 'file');
       });
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: 'file',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: 'folder',
+              childGroups: [],
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+            },
+          ]),
+        );
+      });
     },
   );
 
@@ -780,6 +1050,71 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
           'ant-tree-treenode-switcher-open',
         );
       });
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: 'file',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              projectGroup: {
+                id: 1,
+                name: 'folder',
+                childGroups: [],
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+              },
+              projectGroupId: 1,
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: 'folder',
+              childGroups: [],
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+            },
+          ]),
+        );
+      });
     },
   );
 
@@ -810,6 +1145,49 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
         .children()
         .eq(1)
         .should('contain.text', 'folder2');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: 'folder2',
+              childGroups: [],
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+            },
+            {
+              id: 2,
+              name: 'folder1',
+              childGroups: [],
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              projects: [],
+              createdAt: '',
+              updatedAt: '',
+            },
+          ]),
+        );
+      });
     });
     当('用户拖拽 folder2 到 folder1 的前面', () => {
       cy.获取项目树节点通过标题('folder2').拖拽到(
