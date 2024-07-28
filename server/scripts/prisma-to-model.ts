@@ -3,6 +3,7 @@ import * as path from 'path';
 import { getDMMF } from '@prisma/sdk';
 import { format, resolveConfig } from 'prettier';
 
+// 定义 Decorator 类
 class Decorator {
   name: string;
   params: string[];
@@ -22,14 +23,15 @@ class Decorator {
   }
 }
 
+// 定义 Field 类
 class Field {
   name: string;
   type: string | Class | Enum;
   isRequired: boolean;
   isArray: boolean;
   isId: boolean;
-  isUpdatedAt: boolean;
-  hasDefaultValue: boolean;
+  isUpdatedAt: boolean; // 是否为更新时间字段
+  hasDefaultValue: boolean; // 是否有默认值
   decorators: Decorator[];
 
   constructor(
@@ -77,6 +79,7 @@ class Field {
   }
 }
 
+// 定义 Class 类
 class Class {
   name: string;
   fields: Field[];
@@ -152,6 +155,7 @@ class Class {
   }
 }
 
+// 新增 Enum 类
 class Enum {
   name: string;
   values: string[];
@@ -184,6 +188,7 @@ class Enum {
   }
 }
 
+// 修改 Import 类
 class Import {
   params: string[];
   from: string;
@@ -198,6 +203,7 @@ class Import {
   }
 }
 
+// 定义 File 类
 class File {
   classes: Class[];
   enums: Enum[];
@@ -228,7 +234,7 @@ class File {
     };
 
     this.classes.forEach((cls) => visit(cls));
-    this.classes = sorted.reverse();
+    this.classes = sorted.reverse(); // 逆序排列，使被依赖的类先输出
   }
 
   print(): string {
@@ -242,12 +248,14 @@ class File {
   }
 }
 
+// 新增 ModelsFile 类，继承自 File 类
 class ModelsFile extends File {
   constructor(classes: Class[], enums: Enum[] = []) {
     super(classes, enums);
   }
 
   print(): string {
+    // 设置 class 和 enum 的 printName
     this.classes.forEach((classItem) => {
       classItem.printName = `${classItem.name}Model`;
       classItem.printConstructorFlag = true;
@@ -260,6 +268,7 @@ class ModelsFile extends File {
   }
 }
 
+// 新增 DTOFile 类，继承自 File 类
 class DTOFile extends File {
   constructor(classes: Class[], enums: Enum[] = []) {
     super(classes, enums);
@@ -281,6 +290,7 @@ class DTOFile extends File {
       ),
     ];
 
+    // 先改名字，此时 fields 中 type
     this.classes.forEach((cls) => {
       cls.printName = `${cls.name}Dto`;
       cls.printConstructorFlag = false;
@@ -332,9 +342,11 @@ class DTOFile extends File {
   }
 }
 
+// 读取文件内容
 const schemaFilePath = path.resolve('./prisma/schema.prisma');
 const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
 
+// 使用 Prisma SDK 解析 schema
 async function parseSchema(
   schema: string,
 ): Promise<{ modelsFile: ModelsFile; dtoFile: DTOFile }> {
@@ -388,13 +400,16 @@ async function parseSchema(
 
   const modelsFile = new ModelsFile(classes, enums);
 
+  // 深拷贝 classes 以确保不影响 modelsFile
   const dtoClasses = classes.map((cls) => cls.clone());
 
+  // 填充 dtoClassMap
   const dtoClassMap: { [name: string]: Class } = {};
   dtoClasses.forEach((cls) => {
     dtoClassMap[cls.name] = cls;
   });
 
+  // 替换所有字段的类型为 DTO 版本
   dtoClasses.forEach((classObj) => {
     classObj.fields.forEach((field) => {
       if (field.type instanceof Class && dtoClassMap[field.type.name]) {
@@ -408,11 +423,13 @@ async function parseSchema(
   return { modelsFile, dtoFile };
 }
 
+// 主函数
 async function main() {
   try {
     const { modelsFile, dtoFile } = await parseSchema(schemaContent);
 
     const prettierConfig = await resolveConfig(path.resolve());
+    // 输出 ModelsFile 结果
     const formattedModelsOutput = await format(modelsFile.print(), {
       ...prettierConfig,
       parser: 'typescript',
@@ -429,6 +446,7 @@ async function main() {
 ${formattedModelsOutput}`,
     );
 
+    // 输出 DTOFile 结果
     const formattedDtoOutput = await format(dtoFile.print(), {
       ...prettierConfig,
       parser: 'typescript',
