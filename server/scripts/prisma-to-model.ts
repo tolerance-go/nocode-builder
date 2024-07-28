@@ -293,6 +293,31 @@ class DTOFile extends File {
     this.classes.forEach((cls) => {
       cls.printName = `${cls.name}Dto`;
       cls.printConstructorFlag = false;
+      cls.fields.forEach((field) => {
+        const decorators = [
+          new Decorator(
+            'ApiProperty',
+            field.isRequired ? [] : ['{ required: false }'],
+          ),
+        ];
+        if (!field.isRequired) {
+          decorators.push(new Decorator('IsOptional', []));
+        }
+        switch (field.type) {
+          case 'number':
+            decorators.push(new Decorator('IsInt', []));
+            break;
+          case 'string':
+            decorators.push(new Decorator('IsString', []));
+            break;
+          case 'Date':
+            decorators.push(new Decorator('IsDateString', []));
+            break;
+          default:
+            break;
+        }
+        field.decorators = decorators;
+      });
     });
 
     const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');

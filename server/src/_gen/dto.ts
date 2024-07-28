@@ -21,37 +21,46 @@ export enum ProjectTypeEnum {
 }
 
 export class UserDto {
-  id: number;
-  name: string;
-  email?: string;
-  password: string;
-  projects: ProjectDto[];
-  createdAt: Date;
-  updatedAt: Date;
-  projectGroups: ProjectGroupDto[];
+  @ApiProperty() @IsInt() id: number;
+  @ApiProperty() @IsString() name: string;
+  @ApiProperty({ required: false }) @IsString() @IsOptional() email?: string;
+  @ApiProperty() @IsString() password: string;
+  @ApiProperty() projects: ProjectDto[];
+  @ApiProperty() @IsDateString() createdAt: Date;
+  @ApiProperty() @IsDateString() updatedAt: Date;
+  @ApiProperty() projectGroups: ProjectGroupDto[];
 }
 
 export class ProjectDto {
-  id: number;
-  name: string;
-  ownerId: number;
-  owner: UserDto;
-  createdAt: Date;
-  updatedAt: Date;
-  projectGroup?: ProjectGroupDto;
+  @ApiProperty() @IsInt() id: number;
+  @ApiProperty() @IsString() name: string;
+  @ApiProperty() @IsInt() ownerId: number;
+  @ApiProperty() owner: UserDto;
+  @ApiProperty() @IsDateString() createdAt: Date;
+  @ApiProperty() @IsDateString() updatedAt: Date;
+  @ApiProperty({ required: false }) projectGroup?: ProjectGroupDto;
+  @ApiProperty({ required: false })
+  @IsInt()
+  @IsOptional()
   projectGroupId?: number;
-  type: ProjectTypeEnum;
+  @ApiProperty() type: ProjectTypeEnum;
 }
 
 export class ProjectGroupDto {
-  id: number;
-  name: string;
+  @ApiProperty() @IsInt() id: number;
+  @ApiProperty() @IsString() name: string;
+  @ApiProperty({ required: false })
+  @IsInt()
+  @IsOptional()
   parentGroupId?: number;
-  parentGroup?: ProjectGroupDto;
-  childGroups: ProjectGroupDto[];
-  ownerId: number;
+  @ApiProperty({ required: false }) parentGroup?: ProjectGroupDto;
+  @ApiProperty() childGroups: ProjectGroupDto[];
+  @ApiProperty() @IsInt() ownerId: number;
+  @ApiProperty({
+    type: UserDto,
+  })
   owner: UserDto;
-  projects: ProjectDto[];
-  createdAt: Date;
-  updatedAt: Date;
+  @ApiProperty() projects: ProjectDto[];
+  @ApiProperty() @IsDateString() createdAt: Date;
+  @ApiProperty() @IsDateString() updatedAt: Date;
 }
