@@ -324,16 +324,79 @@ import {
     当('用户成功创建一个项目节点', () => {
       cy.添加项目树视图项目();
       cy.获取项目树标题输入框().type('项目节点{enter}');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     当('用户删除节点', () => {
       cy.获取项目树节点通过标题('项目节点').click();
       cy.get('body').type('{del}');
       cy.获取antd树列表内部容器().children().should('have.length', 0);
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     当('用户按下 ctrl + z', () => {
       cy.get('body').type('{ctrl}z');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     那么('节点标题应该回到之前的状态', () => {
@@ -342,6 +405,15 @@ import {
 
     当('用户按下 ctrl + shift + z', () => {
       cy.get('body').type('{ctrl}{shift}z');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     那么('节点标题应该还原', () => {
@@ -357,6 +429,33 @@ import {
     当('用户成功创建一个项目节点', () => {
       cy.添加项目树视图项目();
       cy.获取项目树标题输入框().type('项目节点{enter}');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     当('用户编辑节点标题', () => {
@@ -367,10 +466,63 @@ import {
         key: 'F2',
       });
       cy.获取项目树标题输入框().type('{selectall}{backspace}新项目节点{enter}');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '新项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     当('用户按下 ctrl + z', () => {
       cy.get('body').type('{ctrl}z');
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     那么('节点标题应该回到之前的状态', () => {
@@ -379,6 +531,32 @@ import {
 
     当('用户按下 ctrl + shift + z', () => {
       cy.get('body').type('{ctrl}{shift}z');
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '新项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     那么('节点标题应该还原', () => {
@@ -400,6 +578,32 @@ import {
       当('用户成功创建一个项目节点', () => {
         cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点1{enter}');
+        cy.window().then((win) => {
+          expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+            JSON.stringify([
+              {
+                id: 1,
+                name: '项目节点1',
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                createdAt: '',
+                updatedAt: '',
+                type: 'View',
+              },
+            ]),
+          );
+          expect(
+            JSON.stringify(win.projectGroupTable.toTestSnapshot()),
+          ).to.equal(JSON.stringify([]));
+        });
       });
 
       那么('这个节点应该处于激活状态', () => {
@@ -409,6 +613,50 @@ import {
       当('用户再次新建项目节点', () => {
         cy.添加项目树视图项目();
         cy.获取项目树标题输入框().type('项目节点2');
+
+        cy.window().then((win) => {
+          expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+            JSON.stringify([
+              {
+                id: 1,
+                name: '项目节点1',
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                createdAt: '',
+                updatedAt: '',
+                type: 'View',
+              },
+              {
+                id: 2,
+                name: '',
+                ownerId: 2,
+                owner: {
+                  id: 2,
+                  name: 'yb',
+                  password: '',
+                  projects: [],
+                  createdAt: '',
+                  updatedAt: '',
+                  projectGroups: [],
+                },
+                createdAt: '',
+                updatedAt: '',
+                type: 'View',
+              },
+            ]),
+          );
+          expect(
+            JSON.stringify(win.projectGroupTable.toTestSnapshot()),
+          ).to.equal(JSON.stringify([]));
+        });
       });
 
       那么('编辑中的时候，原节点保持激活状态', () => {
@@ -441,6 +689,33 @@ import {
     当('用户创建一个项目节点', () => {
       cy.添加项目树视图项目();
       cy.获取项目树标题输入框().type('项目节点{enter}');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     那么('此时项目树区域应该聚焦', () => {
@@ -449,6 +724,15 @@ import {
 
     当('用户按下 ctrl + z 键', () => {
       cy.get('body').type('{ctrl}z');
+
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     那么('项目节点应该被删除', () => {
@@ -457,6 +741,32 @@ import {
 
     当('用户按下 ctrl + shift + z 键', () => {
       cy.get('body').type('{ctrl}{shift}z');
+      cy.window().then((win) => {
+        expect(JSON.stringify(win.projectTable.toTestSnapshot())).to.equal(
+          JSON.stringify([
+            {
+              id: 1,
+              name: '项目节点',
+              ownerId: 2,
+              owner: {
+                id: 2,
+                name: 'yb',
+                password: '',
+                projects: [],
+                createdAt: '',
+                updatedAt: '',
+                projectGroups: [],
+              },
+              createdAt: '',
+              updatedAt: '',
+              type: 'View',
+            },
+          ]),
+        );
+        expect(JSON.stringify(win.projectGroupTable.toTestSnapshot())).to.equal(
+          JSON.stringify([]),
+        );
+      });
     });
 
     那么('项目节点应该被恢复', () => {
