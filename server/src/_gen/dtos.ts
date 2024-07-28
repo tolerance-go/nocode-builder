@@ -38,11 +38,11 @@ export class UserOperationRecordDto {
 
   @ApiProperty({})
   @IsDateString()
-  createdAt: Date;
+  createdAt: string;
 
   @ApiProperty({})
   @IsDateString()
-  updatedAt: Date;
+  updatedAt: string;
 
   @ApiProperty({ type: () => forwardRef(() => ProjectGroupOperationRecordDto) })
   projectGroups: ProjectGroupOperationRecordDto[];
@@ -66,11 +66,11 @@ export class ProjectOperationRecordDto {
 
   @ApiProperty({})
   @IsDateString()
-  createdAt: Date;
+  createdAt: string;
 
   @ApiProperty({})
   @IsDateString()
-  updatedAt: Date;
+  updatedAt: string;
 
   @ApiProperty({
     required: false,
@@ -125,9 +125,9 @@ export class ProjectGroupOperationRecordDto {
 
   @ApiProperty({})
   @IsDateString()
-  createdAt: Date;
+  createdAt: string;
 
   @ApiProperty({})
   @IsDateString()
-  updatedAt: Date;
+  updatedAt: string;
 }

@@ -375,21 +375,23 @@ class DTOFile extends File {
           usedValidators.add('IsOptional');
         }
 
-        switch (field.type) {
-          case 'number':
-            decorators.push(new Decorator('IsInt', []));
-            usedValidators.add('IsInt');
-            break;
-          case 'string':
-            decorators.push(new Decorator('IsString', []));
-            usedValidators.add('IsString');
-            break;
-          case 'Date':
-            decorators.push(new Decorator('IsDateString', []));
-            usedValidators.add('IsDateString');
-            break;
-          default:
-            break;
+        if (field.type === 'Date') {
+          field.type = 'string';
+          decorators.push(new Decorator('IsDateString', []));
+          usedValidators.add('IsDateString');
+        } else {
+          switch (field.type) {
+            case 'number':
+              decorators.push(new Decorator('IsInt', []));
+              usedValidators.add('IsInt');
+              break;
+            case 'string':
+              decorators.push(new Decorator('IsString', []));
+              usedValidators.add('IsString');
+              break;
+            default:
+              break;
+          }
         }
         field.decorators = decorators;
       });

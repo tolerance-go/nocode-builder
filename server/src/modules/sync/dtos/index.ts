@@ -1,12 +1,10 @@
 import { ApiProperty, getSchemaPath } from '@nestjs/swagger';
-import { Project } from '@prisma/client';
 import {
   ProjectGroupOperationRecordDto,
   ProjectOperationRecordDto,
   UserOperationRecordDto,
 } from 'src/_gen/dtos';
 import { OperationType } from 'src/common/enums/operation-type';
-import { ProjectGroupResponseDto } from 'src/modules/project-group/dtos';
 
 export class OperationsDto {
   @ApiProperty({
@@ -26,5 +24,8 @@ export class OperationsDto {
       { $ref: getSchemaPath(ProjectGroupOperationRecordDto) },
     ],
   })
-  record: Project | ProjectGroupResponseDto;
+  record:
+    | UserOperationRecordDto
+    | ProjectOperationRecordDto
+    | ProjectGroupOperationRecordDto;
 }

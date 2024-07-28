@@ -1,6 +1,5 @@
-import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { OperationsDto } from './dtos';
 import { SyncService } from './sync.service';
@@ -18,8 +17,8 @@ export class SyncController {
   @ApiResponse({ status: 500 })
   async applyProjectDiff(
     @Body() operations: OperationsDto[],
-    @Req() req: Request & { user: JwtUserDto },
+    // @Req() req: Request & { user: JwtUserDto },
   ): Promise<void> {
-    await this.syncService.applyOperations(operations, req.user.id);
+    await this.syncService.applyOperations(operations);
   }
 }

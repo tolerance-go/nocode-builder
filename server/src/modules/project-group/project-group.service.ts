@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { Prisma, ProjectGroup } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 
@@ -70,5 +70,17 @@ export class ProjectGroupService {
     return client.projectGroup.delete({
       where,
     });
+  }
+
+  async clearProjectGroups(
+    tx?: Prisma.TransactionClient,
+  ): Promise<{ count: number }> {
+    const client = tx || this.prisma;
+    try {
+      const result = await client.projectGroup.deleteMany({});
+      return { count: result.count };
+    } catch (error) {
+      throw new HttpException(`清空项目组失败：${error.message}`, 500);
+    }
   }
 }

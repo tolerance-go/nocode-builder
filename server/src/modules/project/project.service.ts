@@ -76,4 +76,16 @@ export class ProjectService {
       where,
     });
   }
+
+  async clearProjects(
+    tx?: Prisma.TransactionClient,
+  ): Promise<{ count: number }> {
+    const client = tx || this.prisma;
+    try {
+      const result = await client.project.deleteMany({});
+      return { count: result.count };
+    } catch (error) {
+      throw new HttpException(`清空项目失败：${error.message}`, 500);
+    }
+  }
 }
