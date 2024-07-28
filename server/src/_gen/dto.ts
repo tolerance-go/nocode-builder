@@ -13,6 +13,7 @@ import {
   IsEnum,
 } from 'class-validator';
 import { forwardRef } from '@nestjs/common';
+import { ProjectType } from '@prisma/client';
 
 export class UserDto {
   @ApiProperty({})
@@ -83,9 +84,9 @@ export class ProjectDto {
   @IsInt()
   projectGroupId?: number;
 
-  @ApiProperty({ enum: ProjectTypeEnum })
-  @IsEnum(ProjectTypeEnum)
-  type: ProjectTypeEnum;
+  @ApiProperty({ enum: ProjectType })
+  @IsEnum(ProjectType)
+  type: ProjectType;
 }
 
 export class ProjectGroupDto {

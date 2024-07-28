@@ -313,6 +313,13 @@ class DTOFile extends File {
     const usedValidators = new Set<string>();
     let useForwardRef = false;
 
+    // 动态获取所有的枚举类型，用于生成导入语句
+    const enumImports = new Set<string>();
+
+    this.enums.forEach((enumItem) => {
+      enumItem.printName = `${enumItem.name}Dto`;
+    });
+
     // 先改名字，此时 fields 中 type
     this.classes.forEach((cls) => {
       cls.printName = `${cls.name}Dto`;
@@ -350,7 +357,9 @@ class DTOFile extends File {
             apiPropertyParams.push(`type: ${field.type.printName}`);
           }
         } else if (field.type instanceof Enum) {
-          apiPropertyParams.push(`enum: ${field.type.printName}`);
+          const enumName = field.type.name;
+          apiPropertyParams.push(`enum: ${enumName}`);
+          enumImports.add(enumName);
         }
 
         const decorators: Decorator[] = [
@@ -358,7 +367,7 @@ class DTOFile extends File {
         ];
 
         if (field.type instanceof Enum) {
-          decorators.push(new Decorator('IsEnum', [field.type.printName]));
+          decorators.push(new Decorator('IsEnum', [field.type.name]));
           usedValidators.add('IsEnum');
         }
         if (!field.isRequired) {
@@ -394,6 +403,10 @@ class DTOFile extends File {
 
     if (useForwardRef) {
       dtoImports.push(new Import(['forwardRef'], '@nestjs/common'));
+    }
+
+    if (enumImports.size > 0) {
+      dtoImports.push(new Import(Array.from(enumImports), '@prisma/client'));
     }
 
     const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');
@@ -467,6 +480,7 @@ async function parseSchema(
 
   // 深拷贝 classes 以确保不影响 modelsFile
   const dtoClasses = classes.map((cls) => cls.clone());
+  const dtoEnums = enums.map((enumItem) => enumItem.clone());
 
   // 填充 dtoClassMap
   const dtoClassMap: { [name: string]: Class } = {};
@@ -474,11 +488,19 @@ async function parseSchema(
     dtoClassMap[cls.name] = cls;
   });
 
+  const dtoEnumsMap: { [name: string]: Enum } = {};
+  dtoEnums.forEach((cls) => {
+    dtoEnumsMap[cls.name] = cls;
+  });
+
   // 替换所有字段的类型为 DTO 版本
   dtoClasses.forEach((classObj) => {
     classObj.fields.forEach((field) => {
       if (field.type instanceof Class && dtoClassMap[field.type.name]) {
         field.type = dtoClassMap[field.type.name];
+      }
+      if (field.type instanceof Enum && dtoEnumsMap[field.type.name]) {
+        field.type = dtoEnumsMap[field.type.name];
       }
     });
   });
