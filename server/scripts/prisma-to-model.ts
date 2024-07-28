@@ -85,9 +85,11 @@ class Field {
         ? this.type
         : (this.type as Class | Enum).printName;
     const arrayStr = this.isArray ? '[]' : '';
-    const decoratorsStr = this.decorators.map((dec) => dec.print()).join(' ');
+    const decoratorsStr = this.decorators
+      .map((dec) => dec.print())
+      .join('\n  ');
     const nullableStr = this.isRequired ? '' : '?';
-    return `${decoratorsStr} ${this.name}${nullableStr}: ${type}${arrayStr};`;
+    return `${decoratorsStr}\n  ${this.name}${nullableStr}: ${type}${arrayStr};`;
   }
 
   clone(): Field {
@@ -339,7 +341,9 @@ class DTOFile extends File {
           apiPropertyParams.push(`{ enum: ${field.type.printName} }`);
         }
 
-        const decorators = [new Decorator('ApiProperty', apiPropertyParams)];
+        const decorators: Decorator[] = [
+          new Decorator('ApiProperty', apiPropertyParams),
+        ];
 
         if (field.type instanceof Enum) {
           decorators.push(new Decorator('IsEnum', [field.type.printName]));

@@ -12,12 +12,19 @@ export enum ProjectTypeEnum {
 
 export class UserModel {
   id: number;
+
   name: string;
+
   email?: string;
+
   password: string;
+
   projects: ProjectModel[];
+
   createdAt: Date;
+
   updatedAt: Date;
+
   projectGroups: ProjectGroupModel[];
 
   constructor({
@@ -52,13 +59,21 @@ export class UserModel {
 
 export class ProjectModel {
   id: number;
+
   name: string;
+
   ownerId: number;
+
   owner: UserModel;
+
   createdAt: Date;
+
   updatedAt: Date;
+
   projectGroup?: ProjectGroupModel;
+
   projectGroupId?: number;
+
   type: ProjectTypeEnum;
 
   constructor({
@@ -96,14 +111,23 @@ export class ProjectModel {
 
 export class ProjectGroupModel {
   id: number;
+
   name: string;
+
   parentGroupId?: number;
+
   parentGroup?: ProjectGroupModel;
+
   childGroups: ProjectGroupModel[];
+
   ownerId: number;
+
   owner: UserModel;
+
   projects: ProjectModel[];
+
   createdAt: Date;
+
   updatedAt: Date;
 
   constructor({
