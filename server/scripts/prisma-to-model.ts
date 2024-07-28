@@ -322,16 +322,16 @@ class DTOFile extends File {
       cls.fields.forEach((field) => {
         const apiPropertyParams: string[] = [];
         if (!field.isRequired) {
-          apiPropertyParams.push('{ required: false }');
+          apiPropertyParams.push('required: false');
         }
         if (field.type instanceof Class) {
-          apiPropertyParams.push(`{ type: ${field.type.printName} }`);
+          apiPropertyParams.push(`type: ${field.type.printName}`);
         } else if (field.type instanceof Enum) {
-          apiPropertyParams.push(`{ enum: ${field.type.printName} }`);
+          apiPropertyParams.push(`enum: ${field.type.printName}`);
         }
 
         const decorators: Decorator[] = [
-          new Decorator('ApiProperty', apiPropertyParams),
+          new Decorator('ApiProperty', [`{ ${apiPropertyParams.join(', ')} }`]),
         ];
 
         if (field.type instanceof Enum) {
