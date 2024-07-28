@@ -20,6 +20,19 @@ export enum ProjectTypeEnum {
   Bluemap = 'Bluemap',
 }
 
+export class UserDto {
+  @ApiProperty() @IsInt() id: number;
+  @ApiProperty() @IsString() name: string;
+  @ApiProperty({ required: false }) @IsOptional() @IsString() email?: string;
+  @ApiProperty() @IsString() password: string;
+  @ApiProperty() @ApiProperty({ type: ProjectDto }) projects: ProjectDto[];
+  @ApiProperty() @IsDateString() createdAt: Date;
+  @ApiProperty() @IsDateString() updatedAt: Date;
+  @ApiProperty()
+  @ApiProperty({ type: ProjectGroupDto })
+  projectGroups: ProjectGroupDto[];
+}
+
 export class ProjectDto {
   @ApiProperty() @IsInt() id: number;
   @ApiProperty() @IsString() name: string;
@@ -60,17 +73,4 @@ export class ProjectGroupDto {
   @ApiProperty() @ApiProperty({ type: ProjectDto }) projects: ProjectDto[];
   @ApiProperty() @IsDateString() createdAt: Date;
   @ApiProperty() @IsDateString() updatedAt: Date;
-}
-
-export class UserDto {
-  @ApiProperty() @IsInt() id: number;
-  @ApiProperty() @IsString() name: string;
-  @ApiProperty({ required: false }) @IsOptional() @IsString() email?: string;
-  @ApiProperty() @IsString() password: string;
-  @ApiProperty() @ApiProperty({ type: ProjectDto }) projects: ProjectDto[];
-  @ApiProperty() @IsDateString() createdAt: Date;
-  @ApiProperty() @IsDateString() updatedAt: Date;
-  @ApiProperty()
-  @ApiProperty({ type: ProjectGroupDto })
-  projectGroups: ProjectGroupDto[];
 }
