@@ -311,6 +311,7 @@ class DTOFile extends File {
     const dtoImports = [new Import(['ApiProperty'], '@nestjs/swagger')];
 
     const usedValidators = new Set<string>();
+    let useForwardRef = false;
 
     // 先改名字，此时 fields 中 type
     this.classes.forEach((cls) => {
@@ -344,6 +345,7 @@ class DTOFile extends File {
             apiPropertyParams.push(
               `type: () => forwardRef(() => ${field.type.printName})`,
             );
+            useForwardRef = true;
           } else {
             apiPropertyParams.push(`type: ${field.type.printName}`);
           }
@@ -388,6 +390,10 @@ class DTOFile extends File {
       dtoImports.push(
         new Import(Array.from(usedValidators), 'class-validator'),
       );
+    }
+
+    if (useForwardRef) {
+      dtoImports.push(new Import(['forwardRef'], '@nestjs/common'));
     }
 
     const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');

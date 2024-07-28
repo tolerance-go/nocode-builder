@@ -1,3 +1,9 @@
+/*
+ * ---------------------------------------------------------------
+ * ## THIS FILE WAS GENERATED        ##
+ * ---------------------------------------------------------------
+ */
+
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsInt,
@@ -6,7 +12,6 @@ import {
   IsDateString,
   IsEnum,
 } from 'class-validator';
-import { Type } from 'class-transformer';
 import { forwardRef } from '@nestjs/common';
 
 export enum ProjectTypeEnum {
@@ -34,7 +39,6 @@ export class UserDto {
   password: string;
 
   @ApiProperty({ type: () => forwardRef(() => ProjectDto) })
-  @Type(() => ProjectDto)
   projects: ProjectDto[];
 
   @ApiProperty({})
@@ -46,7 +50,6 @@ export class UserDto {
   updatedAt: Date;
 
   @ApiProperty({ type: () => forwardRef(() => ProjectGroupDto) })
-  @Type(() => ProjectGroupDto)
   projectGroups: ProjectGroupDto[];
 }
 
@@ -64,7 +67,6 @@ export class ProjectDto {
   ownerId: number;
 
   @ApiProperty({ type: () => forwardRef(() => UserDto) })
-  @Type(() => UserDto)
   owner: UserDto;
 
   @ApiProperty({})
@@ -80,7 +82,6 @@ export class ProjectDto {
     type: () => forwardRef(() => ProjectGroupDto),
   })
   @IsOptional()
-  @Type(() => ProjectGroupDto)
   projectGroup?: ProjectGroupDto;
 
   @ApiProperty({ required: false })
@@ -112,11 +113,9 @@ export class ProjectGroupDto {
     type: () => forwardRef(() => ProjectGroupDto),
   })
   @IsOptional()
-  @Type(() => ProjectGroupDto)
   parentGroup?: ProjectGroupDto;
 
   @ApiProperty({ type: () => forwardRef(() => ProjectGroupDto) })
-  @Type(() => ProjectGroupDto)
   childGroups: ProjectGroupDto[];
 
   @ApiProperty({})
@@ -124,11 +123,9 @@ export class ProjectGroupDto {
   ownerId: number;
 
   @ApiProperty({ type: () => forwardRef(() => UserDto) })
-  @Type(() => UserDto)
   owner: UserDto;
 
   @ApiProperty({ type: () => forwardRef(() => ProjectDto) })
-  @Type(() => ProjectDto)
   projects: ProjectDto[];
 
   @ApiProperty({})
