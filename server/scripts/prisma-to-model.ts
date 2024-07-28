@@ -168,7 +168,7 @@ class Class {
   }
 
   print(): string {
-    const fieldsStr = this.fields.map((field) => field.print()).join('\n  ');
+    const fieldsStr = this.fields.map((field) => field.print()).join('\n\n  ');
     const constructorStr = this.printConstructor();
     return `export class ${this.printName} {\n  ${fieldsStr}\n${
       constructorStr ? `\n  ${constructorStr}\n` : ''
@@ -331,7 +331,7 @@ class DTOFile extends File {
 
     this.classes.forEach((cls) => {
       cls.fields.forEach((field) => {
-        const apiPropertyParams: string[] = [];
+        let apiPropertyParams: string[] = [];
         if (!field.isRequired) {
           apiPropertyParams.push('{ required: false }');
         }
