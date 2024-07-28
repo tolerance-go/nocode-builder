@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { RecordWithId, Table } from '.';
 
 interface Person extends RecordWithId {
@@ -81,5 +81,60 @@ describe('Table 类测试', () => {
     expect(table.getNextId()).toBe(2);
     table.addRecord({ id: 2, name: 'Bob', age: 25 });
     expect(table.getNextId()).toBe(3);
+  });
+
+  it('应该在增加记录时调用监听器', () => {
+    const listener = vi.fn();
+    const unregister = table.registerListener(listener);
+
+    table.addRecord({ id: 1, name: 'Alice', age: 30 });
+    expect(listener).toHaveBeenCalledWith('addRecord', {
+      id: 1,
+      name: 'Alice',
+      age: 30,
+    });
+
+    unregister();
+  });
+
+  it('应该在删除记录时调用监听器', () => {
+    const listener = vi.fn();
+    table.addRecord({ id: 1, name: 'Alice', age: 30 });
+    const unregister = table.registerListener(listener);
+
+    table.deleteRecord(1);
+    expect(listener).toHaveBeenCalledWith('deleteRecord', {
+      id: 1,
+      name: 'Alice',
+      age: 30,
+    });
+
+    unregister();
+  });
+
+  it('应该在更新记录时调用监听器', () => {
+    const listener = vi.fn();
+    table.addRecord({ id: 1, name: 'Alice', age: 30 });
+    const unregister = table.registerListener(listener);
+
+    table.updateRecord({ id: 1, name: 'Alice', age: 31 });
+    expect(listener).toHaveBeenCalledWith('updateRecord', {
+      id: 1,
+      name: 'Alice',
+      age: 31,
+    });
+
+    unregister();
+  });
+
+  it('应该在清空记录时调用监听器', () => {
+    const listener = vi.fn();
+    table.addRecord({ id: 1, name: 'Alice', age: 30 });
+    const unregister = table.registerListener(listener);
+
+    table.clearRecords();
+    expect(listener).toHaveBeenCalledWith('clearRecords');
+
+    unregister();
   });
 });

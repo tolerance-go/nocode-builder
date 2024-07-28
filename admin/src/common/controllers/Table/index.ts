@@ -4,21 +4,25 @@ export type RecordWithId = {
   id: number;
 };
 
+type SideEffectListener<T> = (operation: string, record?: T) => void;
+
 export class Table<T extends RecordWithId> {
   private records: T[] = [];
   private transactionRecords: T[] | null = null;
+  private listeners: SideEffectListener<T>[] = [];
+
   // 清空所有记录
   clearRecords(): void {
     this.records = [];
+    this.notifyListeners('clearRecords');
   }
-  // 通过下标查找记录
-  findRecordByIndex(index: number): T | undefined {
-    return this.records[index];
-  }
+
   // 增加记录
   addRecord(record: T): void {
     this.records.push(record);
+    this.notifyListeners('addRecord', record);
   }
+
   // 更新记录
   updateRecord(updatedRecord: T): void {
     const index = this.records.findIndex(
@@ -28,11 +32,23 @@ export class Table<T extends RecordWithId> {
       throw new Error(`Record with id ${updatedRecord.id} not found`);
     }
     this.records[index] = updatedRecord;
+    this.notifyListeners('updateRecord', updatedRecord);
   }
+
   // 删除记录
   deleteRecord(id: number): void {
-    this.records = this.records.filter((record) => record.id !== id);
+    const record = this.findRecord(id);
+    if (record) {
+      this.records = this.records.filter((record) => record.id !== id);
+      this.notifyListeners('deleteRecord', record);
+    }
   }
+
+  // 通过下标查找记录
+  findRecordByIndex(index: number): T | undefined {
+    return this.records[index];
+  }
+
   // 查找记录
   findRecord(id: number): T | undefined {
     return this.records.find((record) => record.id === id);
@@ -88,6 +104,15 @@ export class Table<T extends RecordWithId> {
     }[];
   }
 
+  // 注册监听器
+  registerListener(listener: SideEffectListener<T>): () => void {
+    this.listeners.push(listener);
+    // 返回解除监听的方法
+    return () => {
+      this.listeners = this.listeners.filter((l) => l !== listener);
+    };
+  }
+
   // 事务接口
   async $transaction(fn: (table: this) => Promise<void> | void): Promise<void> {
     this.startTransaction();
@@ -99,6 +124,12 @@ export class Table<T extends RecordWithId> {
       throw error;
     }
   }
+
+  // 通知监听器
+  private notifyListeners(operation: string, record?: T): void {
+    this.listeners.forEach((listener) => listener(operation, record));
+  }
+
   // 开始事务
   private startTransaction(): void {
     if (this.transactionRecords !== null) {

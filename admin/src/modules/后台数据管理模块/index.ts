@@ -35,6 +35,8 @@ export class 后台数据管理模块 extends ModuleBase {
           const 项目表模块实例 = this.getDependModule(项目表模块);
           const 项目组表模块实例 = this.getDependModule(项目组表模块);
 
+          项目表模块实例.table.registerListener;
+
           try {
             await 用户表模块实例.table.$transaction(async () => {
               await 项目表模块实例.table.$transaction(async () => {
