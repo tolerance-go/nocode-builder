@@ -15,58 +15,37 @@ import {
 } from 'class-validator';
 
 export class UserDto {
-  @ApiProperty() @IsInt() id: number;
-  @ApiProperty() @IsString() @IsNotEmpty() name: string;
-  @ApiProperty() @IsString() @IsNotEmpty() email?: string;
-  @ApiProperty() @IsString() @IsNotEmpty() password: string;
-  @ApiProperty() @IsString() @IsNotEmpty() projects: ProjectModel[];
-  @ApiProperty({ required: false })
-  @IsDateString()
-  @IsOptional()
+  id: number;
+  name: string;
+  email?: string;
+  password: string;
+  projects: ProjectModel[];
   createdAt: Date;
-  @ApiProperty({ required: false })
-  @IsDateString()
-  @IsOptional()
   updatedAt: Date;
-  @ApiProperty() @IsString() @IsNotEmpty() projectGroups: ProjectGroupModel[];
+  projectGroups: ProjectGroupModel[];
 }
 
 export class ProjectDto {
-  @ApiProperty() @IsInt() id: number;
-  @ApiProperty() @IsString() @IsNotEmpty() name: string;
-  @ApiProperty() @IsString() @IsNotEmpty() ownerId: number;
-  @ApiProperty() @IsString() @IsNotEmpty() owner: UserModel;
-  @ApiProperty({ required: false })
-  @IsDateString()
-  @IsOptional()
+  id: number;
+  name: string;
+  ownerId: number;
+  owner: UserModel;
   createdAt: Date;
-  @ApiProperty({ required: false })
-  @IsDateString()
-  @IsOptional()
   updatedAt: Date;
-  @ApiProperty() @IsString() @IsNotEmpty() projectGroup?: ProjectGroupModel;
-  @ApiProperty() @IsString() @IsNotEmpty() projectGroupId?: number;
-  @ApiProperty({ enum: ProjectTypeEnum })
-  @IsEnum(ProjectTypeEnum)
-  @IsNotEmpty()
+  projectGroup?: ProjectGroupModel;
+  projectGroupId?: number;
   type: ProjectTypeEnum;
 }
 
 export class ProjectGroupDto {
-  @ApiProperty() @IsInt() id: number;
-  @ApiProperty() @IsString() @IsNotEmpty() name: string;
-  @ApiProperty() @IsString() @IsNotEmpty() parentGroupId?: number;
-  @ApiProperty() @IsString() @IsNotEmpty() parentGroup?: ProjectGroupModel;
-  @ApiProperty() @IsString() @IsNotEmpty() childGroups: ProjectGroupModel[];
-  @ApiProperty() @IsString() @IsNotEmpty() ownerId: number;
-  @ApiProperty() @IsString() @IsNotEmpty() owner: UserModel;
-  @ApiProperty() @IsString() @IsNotEmpty() projects: ProjectModel[];
-  @ApiProperty({ required: false })
-  @IsDateString()
-  @IsOptional()
+  id: number;
+  name: string;
+  parentGroupId?: number;
+  parentGroup?: ProjectGroupModel;
+  childGroups: ProjectGroupModel[];
+  ownerId: number;
+  owner: UserModel;
+  projects: ProjectModel[];
   createdAt: Date;
-  @ApiProperty({ required: false })
-  @IsDateString()
-  @IsOptional()
   updatedAt: Date;
 }

@@ -3,8 +3,6 @@ import * as path from 'path';
 import { getDMMF } from '@prisma/sdk';
 import { format, resolveConfig } from 'prettier';
 
-const classMap: { [name: string]: Class } = {};
-
 // 定义 Decorator 类
 class Decorator {
   name: string;
@@ -18,6 +16,10 @@ class Decorator {
   print(): string {
     const paramsStr = this.params.length ? `(${this.params.join(', ')})` : '()';
     return `@${this.name}${paramsStr}`;
+  }
+
+  clone(): Decorator {
+    return new Decorator(this.name, [...this.params]);
   }
 }
 
@@ -61,6 +63,19 @@ class Field {
     const decoratorsStr = this.decorators.map((dec) => dec.print()).join(' ');
     const nullableStr = this.isRequired ? '' : '?';
     return `${decoratorsStr} ${this.name}${nullableStr}: ${type}${arrayStr};`;
+  }
+
+  clone(): Field {
+    return new Field(
+      this.name,
+      this.type,
+      this.isRequired,
+      this.isArray,
+      this.isId,
+      this.isUpdatedAt,
+      this.hasDefaultValue,
+      this.decorators.map((dec) => dec.clone()),
+    );
   }
 }
 
@@ -126,6 +141,18 @@ class Class {
     const constructorStr = this.printConstructor();
     return `export class ${this.printName} {\n  ${fieldsStr}\n${constructorStr ? `\n  ${constructorStr}\n` : ''}}`;
   }
+
+  clone(): Class {
+    const clonedFields = this.fields.map((field) => field.clone());
+    const clonedClass = new Class(
+      this.name,
+      clonedFields,
+      this.printConstructorFlag,
+    );
+    clonedClass.printName = this.printName;
+    clonedClass.dependsOnOtherClasses = this.dependsOnOtherClasses;
+    return clonedClass;
+  }
 }
 
 // 新增 Enum 类
@@ -154,6 +181,10 @@ class Enum {
       .map((value) => `${value} = "${value}"`)
       .join(',\n  ');
     return `export enum ${this.printName} {\n  ${valuesStr}\n}`;
+  }
+
+  clone(): Enum {
+    return new Enum(this.name, [...this.values]);
   }
 }
 
@@ -259,46 +290,12 @@ class DTOFile extends File {
       ),
     ];
 
-    const dtoClasses = this.classes.map((cls) => {
-      const dtoFields = cls.fields.map((field) => {
-        const decorators = [];
-        if (field.name === 'id') {
-          decorators.push(new Decorator('ApiProperty', []));
-          decorators.push(new Decorator('IsInt', []));
-        } else if (field.name === 'createdAt' || field.name === 'updatedAt') {
-          decorators.push(
-            new Decorator('ApiProperty', ['{ required: false }']),
-          );
-          decorators.push(new Decorator('IsDateString', []));
-          decorators.push(new Decorator('IsOptional', []));
-        } else if (field.type instanceof Enum) {
-          decorators.push(
-            new Decorator('ApiProperty', [`{ enum: ${field.type.printName} }`]),
-          );
-          decorators.push(new Decorator('IsEnum', [field.type.printName]));
-          decorators.push(new Decorator('IsNotEmpty', []));
-        } else {
-          decorators.push(new Decorator('ApiProperty', []));
-          decorators.push(new Decorator('IsString', []));
-          decorators.push(new Decorator('IsNotEmpty', []));
-        }
-
-        return new Field(
-          field.name,
-          field.type,
-          field.isRequired,
-          field.isArray,
-          field.isId,
-          field.isUpdatedAt,
-          field.hasDefaultValue,
-          decorators,
-        );
-      });
-
-      return new Class(`${cls.name}Dto`, dtoFields, false);
+    this.classes.forEach((cls) => {
+      cls.printName = `${cls.name}Dto`;
+      cls.printConstructorFlag = false;
     });
 
-    const classesStr = dtoClasses.map((cls) => cls.print()).join('\n\n');
+    const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');
     const importsStr = dtoImports.map((imp) => imp.print()).join('\n');
 
     return `${importsStr}\n\n${classesStr}`;
@@ -322,6 +319,8 @@ async function parseSchema(
     DateTime: 'Date',
   };
 
+  const modelClassMap: { [name: string]: Class } = {};
+
   const enums: Enum[] = dmmf.datamodel.enums.map((enm) => {
     const values = enm.values.map((val) => val.name);
     return new Enum(enm.name, values);
@@ -341,14 +340,14 @@ async function parseSchema(
       );
     });
     const classObj = new Class(model.name, fields);
-    classMap[model.name] = classObj;
+    modelClassMap[model.name] = classObj;
     return classObj;
   });
 
   classes.forEach((classObj) => {
     classObj.fields.forEach((field) => {
-      if (typeof field.type === 'string' && classMap[field.type]) {
-        field.type = classMap[field.type];
+      if (typeof field.type === 'string' && modelClassMap[field.type]) {
+        field.type = modelClassMap[field.type];
         classObj.dependsOnOtherClasses = true;
       } else if (
         typeof field.type === 'string' &&
@@ -360,7 +359,12 @@ async function parseSchema(
   });
 
   const modelsFile = new ModelsFile(classes, enums);
-  const dtoFile = new DTOFile(classes, enums);
+
+  const dtoClassMap: { [name: string]: Class } = {};
+
+  // 深拷贝 classes 以确保不影响 modelsFile
+  const dtoClasses = classes.map((cls) => cls.clone());
+  const dtoFile = new DTOFile(dtoClasses, enums);
 
   return { modelsFile, dtoFile };
 }
