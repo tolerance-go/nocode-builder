@@ -26,14 +26,13 @@ export class SyncService {
         switch (operationType) {
           case OperationType.ADD_RECORD:
             if (tableName === 'project') {
-              const projectRecord = record as ProjectOperationRecordDto;
+              const projectRecord = record.projectOperationRecord!;
               await this.projectService.createProject(
                 this.createProjectCreateInput(projectRecord),
                 tx,
               );
             } else if (tableName === 'projectGroup') {
-              const projectGroupRecord =
-                record as ProjectGroupOperationRecordDto;
+              const projectGroupRecord = record.projectGroupOperationRecord!;
               await this.projectGroupService.createProjectGroup(
                 this.createProjectGroupCreateInput(projectGroupRecord),
                 tx,
@@ -43,21 +42,20 @@ export class SyncService {
 
           case OperationType.UPDATE_RECORD:
             if (tableName === 'project') {
-              const projectRecord = record as ProjectOperationRecordDto;
+              const projectRecord = record.projectOperationRecord!;
               await this.projectService.updateProject(
                 {
-                  where: { id: record.id },
+                  where: { id: projectRecord.id },
                   data: this.createProjectUpdateInput(projectRecord),
                 },
                 tx,
               );
             } else if (tableName === 'projectGroup' && 'id' in record) {
-              const projectGroupRecord =
-                record as ProjectGroupOperationRecordDto;
+              const projectGroupRecord = record.projectGroupOperationRecord!;
 
               await this.projectGroupService.updateProjectGroup(
                 {
-                  where: { id: record.id },
+                  where: { id: projectGroupRecord.id },
                   data: this.createProjectGroupUpdateInput(projectGroupRecord),
                 },
                 tx,
@@ -67,10 +65,15 @@ export class SyncService {
 
           case OperationType.DELETE_RECORD:
             if (tableName === 'project') {
-              await this.projectService.deleteProject({ id: record.id }, tx);
-            } else if (tableName === 'projectGroup' && 'id' in record) {
+              const projectRecord = record.projectOperationRecord!;
+              await this.projectService.deleteProject(
+                { id: projectRecord.id },
+                tx,
+              );
+            } else if (tableName === 'projectGroup') {
+              const projectGroupRecord = record.projectGroupOperationRecord!;
               await this.projectGroupService.deleteProjectGroup(
-                { id: record.id },
+                { id: projectGroupRecord.id },
                 tx,
               );
             }

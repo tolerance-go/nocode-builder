@@ -13,7 +13,6 @@ import {
   IsEnum,
   ValidateNested,
 } from 'class-validator';
-import { forwardRef } from '@nestjs/common';
 import { ProjectType } from '@prisma/client';
 import { Type } from 'class-transformer';
 
@@ -35,7 +34,7 @@ export class UserOperationRecordDto {
   @IsString()
   password: string;
 
-  @ApiProperty({ type: () => forwardRef(() => ProjectOperationRecordDto) })
+  @ApiProperty({ type: () => ProjectOperationRecordDto })
   @ValidateNested({ each: true })
   @Type(() => ProjectOperationRecordDto)
   projects: ProjectOperationRecordDto[];
@@ -48,7 +47,7 @@ export class UserOperationRecordDto {
   @IsDateString()
   updatedAt: string;
 
-  @ApiProperty({ type: () => forwardRef(() => ProjectGroupOperationRecordDto) })
+  @ApiProperty({ type: () => ProjectGroupOperationRecordDto })
   projectGroups: ProjectGroupOperationRecordDto[];
 }
 
@@ -65,7 +64,7 @@ export class ProjectOperationRecordDto {
   @IsInt()
   ownerId: number;
 
-  @ApiProperty({ type: () => forwardRef(() => UserOperationRecordDto) })
+  @ApiProperty({ type: () => UserOperationRecordDto })
   owner: UserOperationRecordDto;
 
   @ApiProperty({})
@@ -78,7 +77,7 @@ export class ProjectOperationRecordDto {
 
   @ApiProperty({
     required: false,
-    type: () => forwardRef(() => ProjectGroupOperationRecordDto),
+    type: () => ProjectGroupOperationRecordDto,
   })
   @IsOptional()
   projectGroup?: ProjectGroupOperationRecordDto;
@@ -109,22 +108,22 @@ export class ProjectGroupOperationRecordDto {
 
   @ApiProperty({
     required: false,
-    type: () => forwardRef(() => ProjectGroupOperationRecordDto),
+    type: () => ProjectGroupOperationRecordDto,
   })
   @IsOptional()
   parentGroup?: ProjectGroupOperationRecordDto;
 
-  @ApiProperty({ type: () => forwardRef(() => ProjectGroupOperationRecordDto) })
+  @ApiProperty({ type: () => ProjectGroupOperationRecordDto })
   childGroups: ProjectGroupOperationRecordDto[];
 
   @ApiProperty({})
   @IsInt()
   ownerId: number;
 
-  @ApiProperty({ type: () => forwardRef(() => UserOperationRecordDto) })
+  @ApiProperty({ type: () => UserOperationRecordDto })
   owner: UserOperationRecordDto;
 
-  @ApiProperty({ type: () => forwardRef(() => ProjectOperationRecordDto) })
+  @ApiProperty({ type: () => ProjectOperationRecordDto })
   projects: ProjectOperationRecordDto[];
 
   @ApiProperty({})
