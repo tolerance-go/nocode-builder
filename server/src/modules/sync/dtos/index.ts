@@ -43,7 +43,7 @@ export class OperationDto {
     // 这里不用 oneOf 是以为无法解决循环依赖报错（forwardRef不起作用）
     type: Object,
   })
-  @ValidateNested({ each: true })
+  @ValidateNested()
   @Type(() => OperationRecordUnion)
   record: OperationRecordUnion;
 }
