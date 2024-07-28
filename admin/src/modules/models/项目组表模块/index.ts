@@ -107,9 +107,7 @@ export class 项目组表模块 extends ModuleBase {
       ...data,
       id: this.table.getNextId(),
       parentGroup: data.parentGroupId
-        ? this.getDependModule(项目组表模块).table.findRecordOrThrow(
-            data.parentGroupId,
-          )
+        ? this.table.findRecordOrThrow(data.parentGroupId)
         : undefined,
       ownerId,
       owner: this.getDependModule(用户表模块).table.findRecordOrThrow(ownerId),
