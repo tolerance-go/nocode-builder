@@ -16,6 +16,7 @@ generateApi({
   codeGenConstructs: () => ({
     Keyword: {
       Any: 'unknown',
+      Object: 'Record<string, unknown>',
     },
   }),
   hooks: {

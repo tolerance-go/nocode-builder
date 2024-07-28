@@ -8,7 +8,7 @@
 export interface OperationDto {
   tableName: string;
   operation: 'clearRecords' | 'addRecord' | 'updateRecord' | 'deleteRecord';
-  record: object;
+  record: Record<string, unknown>;
 }
 
 export interface OperationsDto {
