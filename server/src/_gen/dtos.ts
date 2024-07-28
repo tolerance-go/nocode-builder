@@ -15,7 +15,7 @@ import {
 import { forwardRef } from '@nestjs/common';
 import { ProjectType } from '@prisma/client';
 
-export class UserDto {
+export class UserOperationRecordDto {
   @ApiProperty({})
   @IsInt()
   id: number;
@@ -33,8 +33,8 @@ export class UserDto {
   @IsString()
   password: string;
 
-  @ApiProperty({ type: () => forwardRef(() => ProjectDto) })
-  projects: ProjectDto[];
+  @ApiProperty({ type: () => forwardRef(() => ProjectOperationRecordDto) })
+  projects: ProjectOperationRecordDto[];
 
   @ApiProperty({})
   @IsDateString()
@@ -44,11 +44,11 @@ export class UserDto {
   @IsDateString()
   updatedAt: Date;
 
-  @ApiProperty({ type: () => forwardRef(() => ProjectGroupDto) })
-  projectGroups: ProjectGroupDto[];
+  @ApiProperty({ type: () => forwardRef(() => ProjectGroupOperationRecordDto) })
+  projectGroups: ProjectGroupOperationRecordDto[];
 }
 
-export class ProjectDto {
+export class ProjectOperationRecordDto {
   @ApiProperty({})
   @IsInt()
   id: number;
@@ -61,8 +61,8 @@ export class ProjectDto {
   @IsInt()
   ownerId: number;
 
-  @ApiProperty({ type: () => forwardRef(() => UserDto) })
-  owner: UserDto;
+  @ApiProperty({ type: () => forwardRef(() => UserOperationRecordDto) })
+  owner: UserOperationRecordDto;
 
   @ApiProperty({})
   @IsDateString()
@@ -74,10 +74,10 @@ export class ProjectDto {
 
   @ApiProperty({
     required: false,
-    type: () => forwardRef(() => ProjectGroupDto),
+    type: () => forwardRef(() => ProjectGroupOperationRecordDto),
   })
   @IsOptional()
-  projectGroup?: ProjectGroupDto;
+  projectGroup?: ProjectGroupOperationRecordDto;
 
   @ApiProperty({ required: false })
   @IsOptional()
@@ -89,7 +89,7 @@ export class ProjectDto {
   type: ProjectType;
 }
 
-export class ProjectGroupDto {
+export class ProjectGroupOperationRecordDto {
   @ApiProperty({})
   @IsInt()
   id: number;
@@ -105,23 +105,23 @@ export class ProjectGroupDto {
 
   @ApiProperty({
     required: false,
-    type: () => forwardRef(() => ProjectGroupDto),
+    type: () => forwardRef(() => ProjectGroupOperationRecordDto),
   })
   @IsOptional()
-  parentGroup?: ProjectGroupDto;
+  parentGroup?: ProjectGroupOperationRecordDto;
 
-  @ApiProperty({ type: () => forwardRef(() => ProjectGroupDto) })
-  childGroups: ProjectGroupDto[];
+  @ApiProperty({ type: () => forwardRef(() => ProjectGroupOperationRecordDto) })
+  childGroups: ProjectGroupOperationRecordDto[];
 
   @ApiProperty({})
   @IsInt()
   ownerId: number;
 
-  @ApiProperty({ type: () => forwardRef(() => UserDto) })
-  owner: UserDto;
+  @ApiProperty({ type: () => forwardRef(() => UserOperationRecordDto) })
+  owner: UserOperationRecordDto;
 
-  @ApiProperty({ type: () => forwardRef(() => ProjectDto) })
-  projects: ProjectDto[];
+  @ApiProperty({ type: () => forwardRef(() => ProjectOperationRecordDto) })
+  projects: ProjectOperationRecordDto[];
 
   @ApiProperty({})
   @IsDateString()

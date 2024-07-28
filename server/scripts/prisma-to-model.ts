@@ -317,12 +317,12 @@ class DTOFile extends File {
     const enumImports = new Set<string>();
 
     this.enums.forEach((enumItem) => {
-      enumItem.printName = `${enumItem.name}Dto`;
+      enumItem.printName = `${enumItem.name}OperationRecordDto`;
     });
 
     // 先改名字，此时 fields 中 type
     this.classes.forEach((cls) => {
-      cls.printName = `${cls.name}Dto`;
+      cls.printName = `${cls.name}OperationRecordDto`;
       cls.printConstructorFlag = false;
     });
 
@@ -538,7 +538,7 @@ ${formattedModelsOutput}`,
       ...prettierConfig,
       parser: 'typescript',
     });
-    const dtoOutputPath = path.resolve('./src/_gen/dto.ts');
+    const dtoOutputPath = path.resolve('./src/_gen/dtos.ts');
     fs.writeFileSync(
       dtoOutputPath,
       `/*
