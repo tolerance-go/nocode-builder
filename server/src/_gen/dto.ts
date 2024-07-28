@@ -19,20 +19,20 @@ export class UserDto {
   name: string;
   email?: string;
   password: string;
-  projects: ProjectModel[];
+  projects: ProjectDto[];
   createdAt: Date;
   updatedAt: Date;
-  projectGroups: ProjectGroupModel[];
+  projectGroups: ProjectGroupDto[];
 }
 
 export class ProjectDto {
   id: number;
   name: string;
   ownerId: number;
-  owner: UserModel;
+  owner: UserDto;
   createdAt: Date;
   updatedAt: Date;
-  projectGroup?: ProjectGroupModel;
+  projectGroup?: ProjectGroupDto;
   projectGroupId?: number;
   type: ProjectTypeEnum;
 }
@@ -41,11 +41,11 @@ export class ProjectGroupDto {
   id: number;
   name: string;
   parentGroupId?: number;
-  parentGroup?: ProjectGroupModel;
-  childGroups: ProjectGroupModel[];
+  parentGroup?: ProjectGroupDto;
+  childGroups: ProjectGroupDto[];
   ownerId: number;
-  owner: UserModel;
-  projects: ProjectModel[];
+  owner: UserDto;
+  projects: ProjectDto[];
   createdAt: Date;
   updatedAt: Date;
 }

@@ -360,10 +360,24 @@ async function parseSchema(
 
   const modelsFile = new ModelsFile(classes, enums);
 
-  const dtoClassMap: { [name: string]: Class } = {};
-
   // 深拷贝 classes 以确保不影响 modelsFile
   const dtoClasses = classes.map((cls) => cls.clone());
+
+  // 填充 dtoClassMap
+  const dtoClassMap: { [name: string]: Class } = {};
+  dtoClasses.forEach((cls) => {
+    dtoClassMap[cls.name] = cls;
+  });
+
+  // 替换所有字段的类型为 DTO 版本
+  dtoClasses.forEach((classObj) => {
+    classObj.fields.forEach((field) => {
+      if (field.type instanceof Class && dtoClassMap[field.type.name]) {
+        field.type = dtoClassMap[field.type.name];
+      }
+    });
+  });
+
   const dtoFile = new DTOFile(dtoClasses, enums);
 
   return { modelsFile, dtoFile };
