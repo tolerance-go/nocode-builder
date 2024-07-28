@@ -32,25 +32,50 @@ class Field {
   isId: boolean;
   isUpdatedAt: boolean; // 是否为更新时间字段
   hasDefaultValue: boolean; // 是否有默认值
+  relationFromFields?: string[];
+  relationToFields?: any[];
+  relationOnDelete?: string;
+  relationName?: string;
   decorators: Decorator[];
 
-  constructor(
-    name: string,
-    type: string | Class | Enum,
-    isRequired: boolean,
-    isArray: boolean,
-    isId: boolean,
-    isUpdateAt: boolean = false,
-    hasDefault: boolean = false,
-    decorators: Decorator[] = [],
-  ) {
+  constructor({
+    name,
+    type,
+    isRequired,
+    isArray,
+    isId,
+    isUpdatedAt = false,
+    hasDefaultValue = false,
+    relationFromFields,
+    relationToFields,
+    relationOnDelete,
+    relationName,
+    decorators = [],
+  }: {
+    name: string;
+    type: string | Class | Enum;
+    isRequired: boolean;
+    isArray: boolean;
+    isId: boolean;
+    isUpdatedAt?: boolean;
+    hasDefaultValue?: boolean;
+    relationFromFields?: string[];
+    relationToFields?: any[];
+    relationOnDelete?: string;
+    relationName?: string;
+    decorators?: Decorator[];
+  }) {
     this.name = name;
     this.type = type;
     this.isRequired = isRequired;
     this.isArray = isArray;
     this.isId = isId;
-    this.isUpdatedAt = isUpdateAt;
-    this.hasDefaultValue = hasDefault;
+    this.isUpdatedAt = isUpdatedAt;
+    this.hasDefaultValue = hasDefaultValue;
+    this.relationFromFields = relationFromFields;
+    this.relationToFields = relationToFields;
+    this.relationOnDelete = relationOnDelete;
+    this.relationName = relationName;
     this.decorators = decorators;
   }
 
@@ -66,16 +91,20 @@ class Field {
   }
 
   clone(): Field {
-    return new Field(
-      this.name,
-      this.type,
-      this.isRequired,
-      this.isArray,
-      this.isId,
-      this.isUpdatedAt,
-      this.hasDefaultValue,
-      this.decorators.map((dec) => dec.clone()),
-    );
+    return new Field({
+      name: this.name,
+      type: this.type,
+      isRequired: this.isRequired,
+      isArray: this.isArray,
+      isId: this.isId,
+      isUpdatedAt: this.isUpdatedAt,
+      hasDefaultValue: this.hasDefaultValue,
+      relationFromFields: this.relationFromFields,
+      relationToFields: this.relationToFields,
+      relationOnDelete: this.relationOnDelete,
+      relationName: this.relationName,
+      decorators: this.decorators.map((dec) => dec.clone()),
+    });
   }
 }
 
@@ -139,7 +168,9 @@ class Class {
   print(): string {
     const fieldsStr = this.fields.map((field) => field.print()).join('\n  ');
     const constructorStr = this.printConstructor();
-    return `export class ${this.printName} {\n  ${fieldsStr}\n${constructorStr ? `\n  ${constructorStr}\n` : ''}}`;
+    return `export class ${this.printName} {\n  ${fieldsStr}\n${
+      constructorStr ? `\n  ${constructorStr}\n` : ''
+    }}`;
   }
 
   clone(): Class {
@@ -369,15 +400,19 @@ async function parseSchema(
   const classes: Class[] = dmmf.datamodel.models.map((model) => {
     const fields: Field[] = model.fields.map((field) => {
       const fieldType = typeMapping[field.type] || field.type;
-      return new Field(
-        field.name,
-        fieldType,
-        field.isRequired,
-        field.isList,
-        field.isId,
-        field.isUpdatedAt,
-        field.hasDefaultValue,
-      );
+      return new Field({
+        name: field.name,
+        type: fieldType,
+        isRequired: field.isRequired,
+        isArray: field.isList,
+        isId: field.isId,
+        isUpdatedAt: field.isUpdatedAt,
+        hasDefaultValue: field.hasDefaultValue,
+        relationFromFields: field.relationFromFields,
+        relationToFields: field.relationToFields,
+        relationOnDelete: field.relationOnDelete,
+        relationName: field.relationName,
+      });
     });
     const classObj = new Class(model.name, fields);
     modelClassMap[model.name] = classObj;
