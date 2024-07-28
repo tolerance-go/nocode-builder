@@ -16,7 +16,7 @@ class Decorator {
   }
 
   print(): string {
-    const paramsStr = this.params.length ? `(${this.params.join(', ')})` : '';
+    const paramsStr = this.params.length ? `(${this.params.join(', ')})` : '()';
     return `@${this.name}${paramsStr}`;
   }
 }
