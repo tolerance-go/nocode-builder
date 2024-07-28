@@ -18,6 +18,7 @@ export class OperationDto {
   operation: OperationType;
 
   @ApiProperty({
+    // 这里不用 oneOf 是以为无法解决循环依赖报错（forwardRef不起作用）
     type: Object,
   })
   record:

@@ -11,9 +11,11 @@ import {
   IsOptional,
   IsDateString,
   IsEnum,
+  ValidateNested,
 } from 'class-validator';
 import { forwardRef } from '@nestjs/common';
 import { ProjectType } from '@prisma/client';
+import { Type } from 'class-transformer';
 
 export class UserOperationRecordDto {
   @ApiProperty({})
@@ -34,6 +36,8 @@ export class UserOperationRecordDto {
   password: string;
 
   @ApiProperty({ type: () => forwardRef(() => ProjectOperationRecordDto) })
+  @ValidateNested({ each: true })
+  @Type(() => ProjectOperationRecordDto)
   projects: ProjectOperationRecordDto[];
 
   @ApiProperty({})
