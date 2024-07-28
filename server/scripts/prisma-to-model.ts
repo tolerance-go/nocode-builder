@@ -308,20 +308,9 @@ class DTOFile extends File {
   }
 
   print(): string {
-    const dtoImports = [
-      new Import(['ApiProperty'], '@nestjs/swagger'),
-      new Import(
-        [
-          'IsInt',
-          'IsNotEmpty',
-          'IsOptional',
-          'IsString',
-          'IsDateString',
-          'IsEnum',
-        ],
-        'class-validator',
-      ),
-    ];
+    const dtoImports = [new Import(['ApiProperty'], '@nestjs/swagger')];
+
+    const usedValidators = new Set<string>();
 
     // 先改名字，此时 fields 中 type
     this.classes.forEach((cls) => {
@@ -331,7 +320,7 @@ class DTOFile extends File {
 
     this.classes.forEach((cls) => {
       cls.fields.forEach((field) => {
-        let apiPropertyParams: string[] = [];
+        const apiPropertyParams: string[] = [];
         if (!field.isRequired) {
           apiPropertyParams.push('{ required: false }');
         }
@@ -347,19 +336,24 @@ class DTOFile extends File {
 
         if (field.type instanceof Enum) {
           decorators.push(new Decorator('IsEnum', [field.type.printName]));
+          usedValidators.add('IsEnum');
         }
         if (!field.isRequired) {
           decorators.push(new Decorator('IsOptional', []));
+          usedValidators.add('IsOptional');
         }
         switch (field.type) {
           case 'number':
             decorators.push(new Decorator('IsInt', []));
+            usedValidators.add('IsInt');
             break;
           case 'string':
             decorators.push(new Decorator('IsString', []));
+            usedValidators.add('IsString');
             break;
           case 'Date':
             decorators.push(new Decorator('IsDateString', []));
+            usedValidators.add('IsDateString');
             break;
           default:
             break;
@@ -367,6 +361,12 @@ class DTOFile extends File {
         field.decorators = decorators;
       });
     });
+
+    if (usedValidators.size > 0) {
+      dtoImports.push(
+        new Import(Array.from(usedValidators), 'class-validator'),
+      );
+    }
 
     const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');
     const enumsStr = this.enums.map((enm) => enm.print()).join('\n\n');
