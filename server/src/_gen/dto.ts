@@ -1,9 +1,3 @@
-/*
- * ---------------------------------------------------------------
- * ## THIS FILE WAS GENERATED        ##
- * ---------------------------------------------------------------
- */
-
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsInt,
@@ -12,6 +6,8 @@ import {
   IsDateString,
   IsEnum,
 } from 'class-validator';
+import { Type } from 'class-transformer';
+import { forwardRef } from '@nestjs/common';
 
 export enum ProjectTypeEnum {
   View = 'View',
@@ -37,7 +33,8 @@ export class UserDto {
   @IsString()
   password: string;
 
-  @ApiProperty({ type: ProjectDto })
+  @ApiProperty({ type: () => forwardRef(() => ProjectDto) })
+  @Type(() => ProjectDto)
   projects: ProjectDto[];
 
   @ApiProperty({})
@@ -48,7 +45,8 @@ export class UserDto {
   @IsDateString()
   updatedAt: Date;
 
-  @ApiProperty({ type: ProjectGroupDto })
+  @ApiProperty({ type: () => forwardRef(() => ProjectGroupDto) })
+  @Type(() => ProjectGroupDto)
   projectGroups: ProjectGroupDto[];
 }
 
@@ -65,7 +63,8 @@ export class ProjectDto {
   @IsInt()
   ownerId: number;
 
-  @ApiProperty({ type: UserDto })
+  @ApiProperty({ type: () => forwardRef(() => UserDto) })
+  @Type(() => UserDto)
   owner: UserDto;
 
   @ApiProperty({})
@@ -76,8 +75,12 @@ export class ProjectDto {
   @IsDateString()
   updatedAt: Date;
 
-  @ApiProperty({ required: false, type: ProjectGroupDto })
+  @ApiProperty({
+    required: false,
+    type: () => forwardRef(() => ProjectGroupDto),
+  })
   @IsOptional()
+  @Type(() => ProjectGroupDto)
   projectGroup?: ProjectGroupDto;
 
   @ApiProperty({ required: false })
@@ -104,21 +107,28 @@ export class ProjectGroupDto {
   @IsInt()
   parentGroupId?: number;
 
-  @ApiProperty({ required: false, type: ProjectGroupDto })
+  @ApiProperty({
+    required: false,
+    type: () => forwardRef(() => ProjectGroupDto),
+  })
   @IsOptional()
+  @Type(() => ProjectGroupDto)
   parentGroup?: ProjectGroupDto;
 
-  @ApiProperty({ type: ProjectGroupDto })
+  @ApiProperty({ type: () => forwardRef(() => ProjectGroupDto) })
+  @Type(() => ProjectGroupDto)
   childGroups: ProjectGroupDto[];
 
   @ApiProperty({})
   @IsInt()
   ownerId: number;
 
-  @ApiProperty({ type: UserDto })
+  @ApiProperty({ type: () => forwardRef(() => UserDto) })
+  @Type(() => UserDto)
   owner: UserDto;
 
-  @ApiProperty({ type: ProjectDto })
+  @ApiProperty({ type: () => forwardRef(() => ProjectDto) })
+  @Type(() => ProjectDto)
   projects: ProjectDto[];
 
   @ApiProperty({})

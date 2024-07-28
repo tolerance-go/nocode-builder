@@ -342,6 +342,7 @@ class DTOFile extends File {
           decorators.push(new Decorator('IsOptional', []));
           usedValidators.add('IsOptional');
         }
+
         switch (field.type) {
           case 'number':
             decorators.push(new Decorator('IsInt', []));
