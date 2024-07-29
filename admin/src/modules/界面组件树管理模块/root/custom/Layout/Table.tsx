@@ -3,6 +3,7 @@ import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import { useEffect, useRef, useState } from 'react';
 import Mock from 'mockjs';
 import './ag-grid-theme-builder.css';
+import { ColDef, ColGroupDef } from 'ag-grid-community';
 
 // 生成模拟数据
 const generateMockData = () => {
@@ -51,25 +52,109 @@ export const Table = () => {
   // 行数据：展示的数据
   const [rowData] = useState(generateMockData());
 
+  const getCellStyle = (): ColDef['cellStyle'] => {
+    return (params) => {
+      const value = params.value;
+      const color =
+        value > 0.5
+          ? `rgba(64, 150, 255, ${value})` // 蓝色 #4096ff
+          : `rgba(255, 77, 79, ${1 - value})`; // 红色 #ff4d4f
+      return { backgroundColor: color };
+    };
+  };
+
   // 列定义：定义要展示的列
-  const [colDefs] = useState<AgGridReact['props']['columnDefs']>([
-    { field: 'OI', headerName: 'OI', width: 100 },
+  const [colDefs] = useState<(ColDef | ColGroupDef)[]>([
+    {
+      field: 'OI',
+      headerName: 'OI',
+      width: 100,
+    },
     { field: 'Pos', headerName: 'Pos', width: 100 },
     { field: 'OBSz', headerName: 'OBSz', width: 100 },
-    { field: 'MBSz', headerName: 'MBSz', width: 100 },
-    { field: 'MBIV', headerName: 'MBIV', width: 100 },
-    { field: 'OBIV', headerName: 'OBIV', width: 100 },
-    { field: 'OAIV', headerName: 'OAIV', width: 100 },
-    { field: 'MAIV', headerName: 'MAIV', width: 100 },
-    { field: 'OBidRaw', headerName: 'OBidRaw', width: 100 },
-    { field: 'MBid', headerName: 'MBid', width: 100 },
-    { field: 'OBid', headerName: 'OBid', width: 100 },
-    { field: 'OFair', headerName: 'OFair', width: 100 },
-    { field: 'OptMid', headerName: 'OptMid', width: 100 },
-    { field: 'OAsk', headerName: 'OAsk', width: 100 },
-    { field: 'MAsk', headerName: 'MAsk', width: 100 },
-    { field: 'OAskRaw', headerName: 'OAskRaw', width: 100 },
-    { field: 'MASz', headerName: 'MASz', width: 100 },
+    {
+      field: 'MBSz',
+      headerName: 'MBSz',
+      width: 100,
+    },
+    {
+      field: 'MBIV',
+      headerName: 'MBIV',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'OBIV',
+      headerName: 'OBIV',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'OAIV',
+      headerName: 'OAIV',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'MAIV',
+      headerName: 'MAIV',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'OBidRaw',
+      headerName: 'OBidRaw',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'MBid',
+      headerName: 'MBid',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'OBid',
+      headerName: 'OBid',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'OFair',
+      headerName: 'OFair',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'OptMid',
+      headerName: 'OptMid',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'OAsk',
+      headerName: 'OAsk',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'MAsk',
+      headerName: 'MAsk',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'OAskRaw',
+      headerName: 'OAskRaw',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    {
+      field: 'MASz',
+      headerName: 'MASz',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
     { field: 'OASz', headerName: 'OASz', width: 100 },
     { field: 'MAS', headerName: 'MAS', width: 100 },
     { field: 'OSp', headerName: 'OSp', width: 100 },
@@ -108,15 +193,22 @@ export const Table = () => {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      if (gridRef.current) {
+      if (gridRef.current && colDefs) {
         const updatedItems = [];
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 250; i++) {
           const rowIndex = Math.floor(Math.random() * rowData.length);
           const colIndex = Math.floor(Math.random() * colDefs.length);
-          const colField = colDefs[colIndex].field;
-          const newValue = Mock.mock('@float(0.1, 1.0, 1, 1)');
-          const updatedItem = { ...rowData[rowIndex], [colField]: newValue };
-          updatedItems.push(updatedItem);
+          const colDef = colDefs[colIndex];
+
+          // 只更新具有 field 属性的列
+          if ('field' in colDef && colDef.field) {
+            const newValue = Mock.mock('@float(0.1, 1.0, 1, 1)');
+            const updatedItem = {
+              ...rowData[rowIndex],
+              [colDef.field]: newValue,
+            };
+            updatedItems.push(updatedItem);
+          }
         }
         gridRef.current.api.applyTransaction({ update: updatedItems });
       }
