@@ -1,10 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { OperationType } from '@unocode/common';
 import { Type } from 'class-transformer';
 import { IsOptional, ValidateNested } from 'class-validator';
 import { ProjectGroupOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectGroupOperationRecordDto';
 import { ProjectOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectOperationRecordDto';
 import { UserOperationRecordDto } from 'src/_gen/dtos/operation-records/UserOperationRecordDto';
-import { OperationType } from 'src/common/enums/operation-type.client-sync';
 
 class OperationRecordUnion {
   @ApiProperty({ type: () => UserOperationRecordDto })

@@ -9,7 +9,6 @@
     "seed": "ts-node ./prisma/seed.ts"
   },
   "scripts": {
-    "client-sync": "ts-node scripts/client-sync.ts",
     "prisma-to-model": "ts-node scripts/prisma-to-model.ts",
     "daily:run": "pnpm lint && pnpm test && pnpm generate-all && pnpm build",
     "build": "nest build",
@@ -23,7 +22,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "generate-all": "prisma generate && pnpm prisma-to-model && client-sync",
+    "generate-all": "prisma generate && pnpm prisma-to-model",
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
@@ -35,6 +34,7 @@
     "prisma:studio": "prisma studio"
   },
   "dependencies": {
+    "@unocode/common": "workspace:*",
     "@nestjs/common": "^10.0.0",
     "@nestjs/config": "^3.2.2",
     "@nestjs/core": "^10.0.0",

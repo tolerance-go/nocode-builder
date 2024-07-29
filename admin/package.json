@@ -16,6 +16,7 @@
     "cypress:run": "cross-env CYPRESS_BASE_URL=http://127.0.0.1/admin pnpm cypress run --env baseApi=http://127.0.0.1/api"
   },
   "dependencies": {
+    "@unocode/common": "workspace:*",
     "@ant-design/icons": "^5.3.7",
     "@antv/s2": "2.0.0-next.23",
     "@antv/s2-react": "2.0.0-next.22",

@@ -1,15 +1,11 @@
 import { JSONValue } from '@/common/types';
+import { OperationType } from '@unocode/common';
 
 export type RecordWithId = {
   id: number;
 };
 
-export enum OperationType {
-  CLEAR_RECORDS = 'clearRecords',
-  ADD_RECORD = 'addRecord',
-  UPDATE_RECORD = 'updateRecord',
-  DELETE_RECORD = 'deleteRecord',
-}
+export { OperationType };
 
 type SideEffectListener<T> = (operation: OperationType, record?: T) => void;
 

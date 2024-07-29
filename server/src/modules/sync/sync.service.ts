@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { OperationsDto } from './dtos';
 import { ProjectGroupOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectGroupOperationRecordDto';
 import { ProjectOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectOperationRecordDto';
-import { OperationType } from 'src/common/enums/operation-type.client-sync';
+import { OperationType } from '@unocode/common';
 
 @Injectable()
 export class SyncService {
