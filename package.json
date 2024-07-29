@@ -23,7 +23,7 @@
     "dev:e2e": "pnpm --filter admin cypress:open",
     "dev:admin": "pnpm --filter admin dev",
     "dev:server": "pnpm --filter server start:dev",
-    "daily:run": "pnpm format && pnpm generate:source && pnpm build-depends && pnpm -r run daily:run && pnpm docker:dev && pnpm cypress:run",
+    "daily:run": "pnpm format && pnpm generate:source && pnpm build-depends && pnpm -r run daily:run && pnpm docker:dev-build && pnpm cypress:run",
     "cypress:run": "pnpm --filter admin cypress:run"
   },
   "keywords": [],

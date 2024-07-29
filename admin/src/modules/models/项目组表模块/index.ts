@@ -54,9 +54,7 @@ export class 项目组表模块 extends ModuleBase {
     this.tableName = 'project_group_model';
     this.table = new Table<ClientProjectGroupModel>();
 
-    if (import.meta.env.DEV) {
-      window.projectGroupTable = this.table;
-    }
+    window.projectGroupTable = this.table;
   }
 
   public removeProjectGroup(id: number): void {

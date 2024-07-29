@@ -61,9 +61,7 @@ export class 项目表模块 extends ModuleBase {
     this.tableName = 'project_model';
     this.table = new Table<ClientProjectModel>();
 
-    if (import.meta.env.DEV) {
-      window.projectTable = this.table;
-    }
+    window.projectTable = this.table;
   }
 
   public removeProject(id: number): void {
