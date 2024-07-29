@@ -9,8 +9,9 @@ import { Flex, Input, InputRef, theme } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import MagneticComponent from './MagneticComponent';
 import MarkdownParser from './MarkdownParser';
+import { ViewKey } from '@/common/types';
 
-export const TitleInput = ({ nodeKey }: { nodeKey: string }) => {
+export const TitleInput = ({ nodeKey }: { nodeKey: ViewKey }) => {
   const {
     slices: {
       projectTree: { actions: projectTreeActions },

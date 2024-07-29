@@ -6,8 +6,9 @@ import { 测试标识, 测试类名 } from '@/common/constants';
 import { cx } from '@emotion/css';
 import { Dropdown, Flex, Typography, theme } from 'antd';
 import { TitleInput } from './TitleInput';
+import { ViewKey } from '@/common/types';
 
-export const Title = ({ nodeKey }: { nodeKey: string }) => {
+export const Title = ({ nodeKey }: { nodeKey: ViewKey }) => {
   const {
     store: reduxStore,
     slices: {

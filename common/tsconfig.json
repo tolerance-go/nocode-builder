@@ -1,16 +1,12 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
     "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
+    "declarationDir": "dist/types", // 确保声明文件在 Rollup 输出目录内
+    "rootDir": "src", // 根目录设置为src，以便生成正确的声明文件路径
+    "module": "esnext", // 使用 ESNext 模块
     "target": "ES2021",
-    "sourceMap": false,
-    "outDir": "./dist",
     "baseUrl": "./",
-    "incremental": true,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
     "noImplicitAny": true,

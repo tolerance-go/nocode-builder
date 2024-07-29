@@ -1,12 +1,12 @@
 import { describe, it, expect } from 'vitest';
 import { createActor } from 'xstate';
+import { 历史状态机 } from '.';
+import { 历史记录 } from '../types';
 import {
   ProjectStructureTreeDataNode,
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeDataRecordItem,
-} from '../../界面状态管理器模块';
-import { 历史状态机 } from '.';
-import { 历史记录 } from '../types';
+} from '@/modules/界面状态仓库模块';
 
 describe('历史状态机', () => {
   const 创建Mock记录 = (

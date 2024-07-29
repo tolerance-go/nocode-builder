@@ -5,6 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "build-depends": "pnpm --filter common run build",
+    "source:generate": "pnpm recursive run source:generate",
     "ci": "pnpm image:build-and-tag && pnpm image:tag-and-push-cloud",
     "ci:remote": "pnpm image:pull-cloud && pnpm image:up-cloud",
     "image:up-cloud": "node ./scripts/up-cloud-images.js",
@@ -18,7 +20,7 @@
     "dev:e2e": "pnpm --filter admin cypress:open",
     "dev:admin": "pnpm --filter admin dev",
     "dev:server": "pnpm --filter server start:dev",
-    "daily:run": "pnpm format && pnpm --filter server recursive run daily:run && pnpm --filter=!server recursive run daily:run && pnpm docker:dev && pnpm cypress:run",
+    "daily:run": "pnpm format && pnpm source:generate && pnpm build-depends && pnpm recursive run daily:run && pnpm docker:dev && pnpm cypress:run",
     "cypress:run": "pnpm --filter admin cypress:run"
   },
   "keywords": [],
