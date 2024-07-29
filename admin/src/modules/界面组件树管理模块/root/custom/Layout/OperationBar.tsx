@@ -1,5 +1,9 @@
-import { SettingFilled, SettingOutlined } from '@ant-design/icons';
-import { Button, Divider, Dropdown, Space, Switch, theme } from 'antd';
+import {
+  PauseOutlined,
+  PlaySquareFilled,
+  SettingOutlined,
+} from '@ant-design/icons';
+import { Button, Divider, Space, Switch, theme } from 'antd';
 import React from 'react';
 
 export const OperationBar: React.FC = () => {
@@ -23,7 +27,12 @@ export const OperationBar: React.FC = () => {
           <Button size="small" icon={<SettingOutlined />}></Button>
         </Space.Compact>
       </Space>
-
+      <Space>
+        <Button.Group>
+          <Button size="small" icon={<PlaySquareFilled />}></Button>
+          <Button size="small" icon={<PauseOutlined />}></Button>
+        </Button.Group>
+      </Space>
       <Space>
         <Button size="small" type="text">
           Resume
@@ -39,7 +48,12 @@ export const OperationBar: React.FC = () => {
         </Button>
       </Space>
 
-      <Space>
+      <Space
+        style={{
+          position: 'relative',
+          top: -1.5,
+        }}
+      >
         <Switch
           size="small"
           checkedChildren="DERIBIT"
