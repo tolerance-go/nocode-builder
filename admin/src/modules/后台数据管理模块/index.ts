@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { 用户表模块 } from '../models/用户表模块';
-import { 项目组表模块 } from '../models/项目组表模块';
-import { 项目表模块 } from '../models/项目表模块';
+import { ClientUserModel, 用户表模块 } from '../models/用户表模块';
+import { ClientProjectGroupModel, 项目组表模块 } from '../models/项目组表模块';
+import { ClientProjectModel, 项目表模块 } from '../models/项目表模块';
 import { OperationType } from '@/common/controllers';
 
 type TransactionFunction = (tables: {
@@ -13,7 +13,7 @@ type TransactionFunction = (tables: {
 interface Operation {
   tableName: string;
   operation: OperationType;
-  record?: unknown;
+  record?: ClientUserModel | ClientProjectModel | ClientProjectGroupModel;
 }
 
 export class 后台数据管理模块 extends ModuleBase {
@@ -48,19 +48,19 @@ export class 后台数据管理模块 extends ModuleBase {
 
           const 用户表模块监听器 = (
             operation: OperationType,
-            record?: unknown,
+            record?: ClientUserModel,
           ) => {
             操作收集器.push({ tableName: '用户表模块', operation, record });
           };
           const 项目表模块监听器 = (
             operation: OperationType,
-            record?: unknown,
+            record?: ClientProjectModel,
           ) => {
             操作收集器.push({ tableName: '项目表模块', operation, record });
           };
           const 项目组表模块监听器 = (
             operation: OperationType,
-            record?: unknown,
+            record?: ClientProjectGroupModel,
           ) => {
             操作收集器.push({ tableName: '项目组表模块', operation, record });
           };
