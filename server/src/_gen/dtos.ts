@@ -5,16 +5,16 @@
  */
 
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsInt,
   IsString,
   IsOptional,
+  ValidateNested,
   IsDateString,
   IsEnum,
-  ValidateNested,
 } from 'class-validator';
 import { ProjectType } from '@prisma/client';
-import { Type } from 'class-transformer';
 
 export class UserOperationRecordDto {
   @ApiProperty({})
@@ -48,6 +48,8 @@ export class UserOperationRecordDto {
   updatedAt: string;
 
   @ApiProperty({ type: () => ProjectGroupOperationRecordDto })
+  @ValidateNested({ each: true })
+  @Type(() => ProjectGroupOperationRecordDto)
   projectGroups: ProjectGroupOperationRecordDto[];
 }
 
@@ -65,6 +67,8 @@ export class ProjectOperationRecordDto {
   ownerId: number;
 
   @ApiProperty({ type: () => UserOperationRecordDto })
+  @ValidateNested()
+  @Type(() => UserOperationRecordDto)
   owner: UserOperationRecordDto;
 
   @ApiProperty({})
@@ -75,10 +79,9 @@ export class ProjectOperationRecordDto {
   @IsDateString()
   updatedAt: string;
 
-  @ApiProperty({
-    required: false,
-    type: () => ProjectGroupOperationRecordDto,
-  })
+  @ApiProperty({ required: false, type: () => ProjectGroupOperationRecordDto })
+  @ValidateNested()
+  @Type(() => ProjectGroupOperationRecordDto)
   @IsOptional()
   projectGroup?: ProjectGroupOperationRecordDto;
 
@@ -106,14 +109,15 @@ export class ProjectGroupOperationRecordDto {
   @IsInt()
   parentGroupId?: number;
 
-  @ApiProperty({
-    required: false,
-    type: () => ProjectGroupOperationRecordDto,
-  })
+  @ApiProperty({ required: false, type: () => ProjectGroupOperationRecordDto })
+  @ValidateNested()
+  @Type(() => ProjectGroupOperationRecordDto)
   @IsOptional()
   parentGroup?: ProjectGroupOperationRecordDto;
 
   @ApiProperty({ type: () => ProjectGroupOperationRecordDto })
+  @ValidateNested({ each: true })
+  @Type(() => ProjectGroupOperationRecordDto)
   childGroups: ProjectGroupOperationRecordDto[];
 
   @ApiProperty({})
@@ -121,9 +125,13 @@ export class ProjectGroupOperationRecordDto {
   ownerId: number;
 
   @ApiProperty({ type: () => UserOperationRecordDto })
+  @ValidateNested()
+  @Type(() => UserOperationRecordDto)
   owner: UserOperationRecordDto;
 
   @ApiProperty({ type: () => ProjectOperationRecordDto })
+  @ValidateNested({ each: true })
+  @Type(() => ProjectOperationRecordDto)
   projects: ProjectOperationRecordDto[];
 
   @ApiProperty({})

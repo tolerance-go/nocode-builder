@@ -311,7 +311,6 @@ class DTOFile extends File {
     const dtoImports = [new Import(['ApiProperty'], '@nestjs/swagger')];
 
     const usedValidators = new Set<string>();
-    let useForwardRef = false;
 
     // 动态获取所有的枚举类型，用于生成导入语句
     const enumImports = new Set<string>();
@@ -341,21 +340,25 @@ class DTOFile extends File {
       });
     };
 
+    let usedType = false;
+
     this.classes.forEach((cls) => {
       cls.fields.forEach((field) => {
         const apiPropertyParams: string[] = [];
+
         if (!field.isRequired) {
           apiPropertyParams.push('required: false');
         }
         if (field.type instanceof Class) {
           if (detectCircularDependency(cls)) {
-            apiPropertyParams.push(
-              `type: () => forwardRef(() => ${field.type.printName})`,
-            );
-            useForwardRef = true;
+            apiPropertyParams.push(`type: () => ${field.type.printName}`);
           } else {
             apiPropertyParams.push(`type: ${field.type.printName}`);
           }
+
+          usedValidators.add('ValidateNested');
+
+          usedType = true;
         } else if (field.type instanceof Enum) {
           const enumName = field.type.name;
           apiPropertyParams.push(`enum: ${enumName}`);
@@ -365,6 +368,22 @@ class DTOFile extends File {
         const decorators: Decorator[] = [
           new Decorator('ApiProperty', [`{ ${apiPropertyParams.join(', ')} }`]),
         ];
+
+        if (field.type instanceof Class) {
+          if (field.isArray) {
+            decorators.push(
+              new Decorator('ValidateNested', [`{ each: true }`]),
+              new Decorator('Type', [`() => ${field.type.printName}`]),
+            );
+          } else {
+            decorators.push(
+              new Decorator('ValidateNested', []),
+              new Decorator('Type', [`() => ${field.type.printName}`]),
+            );
+          }
+
+          usedValidators.add('ValidateNested');
+        }
 
         if (field.type instanceof Enum) {
           decorators.push(new Decorator('IsEnum', [field.type.name]));
@@ -397,14 +416,14 @@ class DTOFile extends File {
       });
     });
 
+    if (usedType) {
+      dtoImports.push(new Import(['Type'], 'class-transformer'));
+    }
+
     if (usedValidators.size > 0) {
       dtoImports.push(
         new Import(Array.from(usedValidators), 'class-validator'),
       );
-    }
-
-    if (useForwardRef) {
-      dtoImports.push(new Import(['forwardRef'], '@nestjs/common'));
     }
 
     if (enumImports.size > 0) {
