@@ -38,8 +38,8 @@ export const Auth = () => {
                 }}
               >
                 <Typography.Title>UNOCODE</Typography.Title>
-                <Typography.Title level={5}>AI & 零代码平台</Typography.Title>
-                <Typography.Paragraph>一键上线，仅待设计</Typography.Paragraph>
+                {/* <Typography.Title level={5}>AI & 零代码平台</Typography.Title>
+                <Typography.Paragraph>一键上线，仅待设计</Typography.Paragraph> */}
               </Flex>
               <Outlet />
             </Flex>
@@ -60,22 +60,23 @@ export const Auth = () => {
               translate: 0 -20%;
             `}
           >
-            <Flex vertical gap={token.sizeXXL} align="end">
+            <Flex vertical gap={token.sizeXXL * 2} align="end">
               <Typography.Text>
                 “
                 <Typography.Text italic>
-                  使用 UNOCODE
-                  零代码平台，我无需编程基础，只要懂业务，就能快速上线所需应用，真的很方便，强烈推荐！
+                  {/* 使用 UNOCODE
+                  零代码平台，我无需编程基础，只要懂业务，就能快速上线所需应用，真的很方便，强烈推荐！ */}
+                  每一个不曾起舞的日子，都是对生命的辜负。
                 </Typography.Text>
                 ”
               </Typography.Text>
 
               <Space size="middle">
-                <Avatar size={'large'} />
-                <Space direction="vertical" size={token.sizeXXS / 4}>
-                  <Typography.Text strong>周天宇</Typography.Text>
+                <Avatar src={'/nicai.webp'} size={'large'} />
+                <Space direction="vertical" size={token.sizeXXS}>
+                  <Typography.Text strong>弗里德里希·尼采</Typography.Text>
                   <Typography.Text type="secondary">
-                    光大证券高级产品经理
+                    19世纪德国著名的哲学家，诗人
                   </Typography.Text>
                 </Space>
               </Space>
