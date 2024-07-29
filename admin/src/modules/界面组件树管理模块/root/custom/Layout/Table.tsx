@@ -19,13 +19,15 @@ import {
   SettingFilled,
   ToolFilled,
 } from '@ant-design/icons';
-
+import { RowGroupingModule } from '@ag-grid-enterprise/row-grouping';
 import ReactDOMServer from 'react-dom/server';
+import { theme } from 'antd';
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
   RangeSelectionModule,
   MenuModule,
+  RowGroupingModule,
 ]);
 
 // 生成模拟数据
@@ -74,14 +76,18 @@ const generateMockData = () => {
 export const Table = () => {
   // 行数据：展示的数据
   const [rowData] = useState(generateMockData());
+  const { token } = theme.useToken();
+
+  const colors = [token.blue3, token.red3, token.green3];
 
   const getCellStyle = (): ColDef['cellStyle'] => {
     return (params) => {
       const value = params.value;
-      const color =
-        value > 0.5
-          ? `rgba(0, 44, 140, ${value})` // 蓝色 #002c8c
-          : `rgba(130, 0, 20, ${1 - value})`; // 红色 #820014
+      let colorIndex = Math.floor(value / 333);
+      if (colorIndex >= colors.length) {
+        colorIndex = colors.length - 1; // 确保索引不超过颜色数组长度
+      }
+      const color = colors[colorIndex];
       return { backgroundColor: color };
     };
   };
@@ -146,210 +152,235 @@ export const Table = () => {
   const [colDefs] = useState<(ColDef | ColGroupDef)[]>([
     {
       field: 'OI',
+      sort: 'desc',
+      enableRowGroup: true,
       headerName: 'OI',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'Pos',
+      enableRowGroup: true,
       headerName: 'Pos',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'OBSz',
+      enableRowGroup: true,
       headerName: 'OBSz',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'MBSz',
+      enableRowGroup: true,
       headerName: 'MBSz',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'MBIV',
+      enableRowGroup: true,
       headerName: 'MBIV',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
-      cellStyle: getCellStyle(),
     },
     {
       field: 'OBIV',
+      enableRowGroup: true,
       headerName: 'OBIV',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
-      cellStyle: getCellStyle(),
     },
     {
       field: 'OAIV',
+      enableRowGroup: true,
       headerName: 'OAIV',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
       cellStyle: getCellStyle(),
     },
     {
       field: 'MAIV',
+      enableRowGroup: true,
       headerName: 'MAIV',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
       cellStyle: getCellStyle(),
     },
     {
       field: 'OBidRaw',
+      enableRowGroup: true,
       headerName: 'OBidRaw',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
       cellStyle: getCellStyle(),
     },
     {
       field: 'MBid',
+      enableRowGroup: true,
       headerName: 'MBid',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
       cellStyle: getCellStyle(),
     },
     {
       field: 'OBid',
+      enableRowGroup: true,
       headerName: 'OBid',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
       cellStyle: getCellStyle(),
     },
     {
       field: 'OFair',
+      enableRowGroup: true,
       headerName: 'OFair',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
       cellStyle: getCellStyle(),
     },
     {
       field: 'OptMid',
+      enableRowGroup: true,
       headerName: 'OptMid',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
       cellStyle: getCellStyle(),
     },
     {
       field: 'OAsk',
+      enableRowGroup: true,
       headerName: 'OAsk',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
       cellStyle: getCellStyle(),
     },
     {
       field: 'MAsk',
+      enableRowGroup: true,
       headerName: 'MAsk',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
-      cellStyle: getCellStyle(),
     },
     {
       field: 'OAskRaw',
+      enableRowGroup: true,
       headerName: 'OAskRaw',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
-      cellStyle: getCellStyle(),
     },
     {
       field: 'MASz',
+      enableRowGroup: true,
       headerName: 'MASz',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
-      cellStyle: getCellStyle(),
     },
     {
       field: 'OASz',
+      enableRowGroup: true,
       headerName: 'OASz',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
-      cellStyle: getCellStyle(),
     },
     {
       field: 'MAS',
+      enableRowGroup: true,
       headerName: 'MAS',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
-      cellStyle: getCellStyle(),
     },
     {
       field: 'OSp',
+      enableRowGroup: true,
       headerName: 'OSp',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
-      cellStyle: getCellStyle(),
     },
     {
       field: 'State',
+      enableRowGroup: true,
       headerName: 'State',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'BsDelta',
+      enableRowGroup: true,
       headerName: 'BsDelta',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'Strike',
+      enableRowGroup: true,
       headerName: 'Strike',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'Exch',
+      enableRowGroup: true,
       headerName: 'Exch',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'Expiry',
+      enableRowGroup: true,
       headerName: 'Expiry',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'UMP',
+      enableRowGroup: true,
       headerName: 'UMP',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'OFairVol',
+      enableRowGroup: true,
       headerName: 'OFairVol',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'volMv',
+      enableRowGroup: true,
       headerName: 'volMv',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'iMv',
+      enableRowGroup: true,
       headerName: 'iMv',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'VspSft',
+      enableRowGroup: true,
       headerName: 'VspSft',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'PosGamma',
+      enableRowGroup: true,
       headerName: 'PosGamma',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
     {
       field: 'PosVega',
+      enableRowGroup: true,
       headerName: 'PosVega',
-      width: 100,
+      width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
     },
   ]);
@@ -376,28 +407,34 @@ export const Table = () => {
   useEffect(() => {
     const intervalId = setInterval(() => {
       if (gridRef.current && colDefs) {
+        const totalCells = colDefs.length * 500;
+        const updateCount = 1000;
         const updatedItems = [];
-        for (let i = 0; i < 5000; i++) {
-          const rowIndex = Math.floor(Math.random() * rowData.length);
-          const colIndex = Math.floor(Math.random() * colDefs.length);
+
+        for (let i = 0; i < updateCount; i++) {
+          const randomCellIndex = Math.floor(Math.random() * totalCells);
+          const rowIndex = randomCellIndex % 500; // 假设 rowData 长度为 500
+          const colIndex = Math.floor(randomCellIndex / 500) % colDefs.length;
           const colDef = colDefs[colIndex];
 
           // 只更新具有 field 属性的列
           if ('field' in colDef && colDef.field) {
-            const newValue = Mock.mock('@float(0.1, 1.0, 1, 1)');
-            const updatedItem = {
-              ...rowData[rowIndex],
-              [colDef.field]: newValue,
-            };
-            updatedItems.push(updatedItem);
+            const newValue = Mock.mock('@float(0, 1000, 0, 0)');
+            const rowNode =
+              gridRef.current.api.getDisplayedRowAtIndex(rowIndex);
+            if (rowNode) {
+              rowNode.setDataValue(colDef.field, newValue);
+              updatedItems.push(rowNode.data);
+            }
           }
         }
+
         gridRef.current.api.applyTransaction({ update: updatedItems });
       }
     }, 1000); // 每隔1秒更新一次
 
     return () => clearInterval(intervalId); // 组件卸载时清除定时器
-  }, [rowData, colDefs]);
+  }, [colDefs]);
 
   return (
     // 包裹容器，带有主题和尺寸
@@ -413,6 +450,10 @@ export const Table = () => {
           }}
         >
           <AgGridReact
+            autoGroupColumnDef={{
+              minWidth: 200,
+            }}
+            rowGroupPanelShow="always"
             enableRangeSelection
             enableRangeHandle
             allowContextMenuWithControlKey

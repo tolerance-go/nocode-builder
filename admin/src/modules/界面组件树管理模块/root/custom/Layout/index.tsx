@@ -17,7 +17,15 @@ export const Layout = () => {
         overflow: 'hidden',
       }}
     >
-      <AccountSelector />
+      <Flex
+        justify="space-between"
+        style={{
+          padding: token.controlPaddingHorizontalSM,
+        }}
+      >
+        <AccountSelector />
+      </Flex>
+
       <Flex
         justify="space-between"
         style={{

@@ -53,6 +53,9 @@ importers:
       '@ag-grid-enterprise/range-selection':
         specifier: ^32.0.2
         version: 32.0.2
+      '@ag-grid-enterprise/row-grouping':
+        specifier: ^32.0.2
+        version: 32.0.2
       '@ant-design/icons':
         specifier: ^5.3.7
         version: 5.3.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
