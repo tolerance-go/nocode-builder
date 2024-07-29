@@ -8,7 +8,6 @@ import {
   跟随鼠标显示内容管理者Context,
   验证管理者Context,
 } from './contexts';
-import { 界面状态仓库模块 } from '../界面状态仓库模块';
 
 export const use图标管理者 = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
