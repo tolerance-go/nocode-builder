@@ -195,7 +195,7 @@ export const Table = () => {
     const intervalId = setInterval(() => {
       if (gridRef.current && colDefs) {
         const updatedItems = [];
-        for (let i = 0; i < 250; i++) {
+        for (let i = 0; i < 5000; i++) {
           const rowIndex = Math.floor(Math.random() * rowData.length);
           const colIndex = Math.floor(Math.random() * colDefs.length);
           const colDef = colDefs[colIndex];
