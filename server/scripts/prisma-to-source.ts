@@ -569,21 +569,21 @@ async function main() {
     // 如果 admin 目录不存在，就不执行输出
     if (fs.existsSync(adminPath)) {
       // 输出 ModelsFile 结果
-      const formattedModelsOutput = await format(modelsFile.print(), {
-        ...prettierConfig,
-        parser: 'typescript',
-      });
-      const modelsOutputPath = path.resolve(adminPath, 'src/_gen/models.ts');
-      fs.writeFileSync(
-        modelsOutputPath,
+      const formattedModelsOutput = await format(
         `/*
-   * ---------------------------------------------------------------
-   * ## THIS FILE WAS GENERATED        ##
-   * ---------------------------------------------------------------
-   */
-  
-  ${formattedModelsOutput}`,
+* ---------------------------------------------------------------
+* ## THIS FILE WAS GENERATED        ##
+* ---------------------------------------------------------------
+*/
+
+${modelsFile.print()}`,
+        {
+          ...prettierConfig,
+          parser: 'typescript',
+        },
       );
+      const modelsOutputPath = path.resolve(adminPath, 'src/_gen/models.ts');
+      fs.writeFileSync(modelsOutputPath, formattedModelsOutput);
     }
 
     const dtoOutput = path.resolve('./src/_gen/dtos/operation-records');
@@ -595,24 +595,24 @@ async function main() {
     await Promise.all(
       dtoFiles.map(async (dtoFile) => {
         // 输出 DTOFile 结果
-        const formattedDtoOutput = await format(dtoFile.print(), {
-          ...prettierConfig,
-          parser: 'typescript',
-        });
+        const formattedDtoOutput = await format(
+          `/*
+* ---------------------------------------------------------------
+* ## THIS FILE WAS GENERATED        ##
+* ---------------------------------------------------------------
+*/
+
+${dtoFile.print()}`,
+          {
+            ...prettierConfig,
+            parser: 'typescript',
+          },
+        );
         const dtoOutputPath = path.resolve(
           dtoOutput,
           `${dtoFile.classes[0].printName}.ts`,
         );
-        fs.writeFileSync(
-          dtoOutputPath,
-          `/*
- * ---------------------------------------------------------------
- * ## THIS FILE WAS GENERATED        ##
- * ---------------------------------------------------------------
- */
-
-${formattedDtoOutput}`,
-        );
+        fs.writeFileSync(dtoOutputPath, formattedDtoOutput);
       }),
     );
 
