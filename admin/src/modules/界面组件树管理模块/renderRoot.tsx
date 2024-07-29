@@ -28,6 +28,7 @@ import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
+import { Custom } from './root/custom';
 
 export const renderRoot = (module: ModuleBase) => {
   const 验证管理者实例 = module.getDependModule(验证管理者);
@@ -78,6 +79,10 @@ export const renderRoot = (module: ModuleBase) => {
                                 element={<DataTableEditor />}
                               ></Route>
                             </Route>
+                            <Route
+                              path={pathItems['custom']}
+                              element={<Custom />}
+                            ></Route>
                             <Route element={<Auth />}>
                               <Route index element={<Login />}></Route>
                               <Route

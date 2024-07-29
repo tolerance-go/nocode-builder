@@ -1,6 +1,7 @@
 export const pathItems = {
   login: 'login',
   register: 'register',
+  custom: 'custom',
   'view-editor': 'view-editor',
   'data-table-editor': 'data-table-editor',
   'bluemap-editor': 'bluemap-editor',

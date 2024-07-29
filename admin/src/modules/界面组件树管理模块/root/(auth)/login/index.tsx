@@ -20,7 +20,12 @@ export const Login: React.FC = () => {
         username: values.username,
         password: values.password,
       });
-      handleLoginSuccess(accessToken, navigate, 全局事件系统实例);
+      handleLoginSuccess(
+        values.username,
+        accessToken,
+        navigate,
+        全局事件系统实例,
+      );
     } catch (error) {
       /* empty */
     } finally {

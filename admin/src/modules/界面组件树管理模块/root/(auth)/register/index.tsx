@@ -26,7 +26,12 @@ export const Register: React.FC = () => {
       if (values.autoLogin) {
         const { accessToken } = result as LoginResponseDto;
 
-        handleLoginSuccess(accessToken, navigate, 全局事件系统实例);
+        handleLoginSuccess(
+          values.username,
+          accessToken,
+          navigate,
+          全局事件系统实例,
+        );
       } else {
         navigate('/login');
       }
