@@ -5,6 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "install:no-cypress": "cross-env CYPRESS_INSTALL_BINARY=0 pnpm install",
     "build:admin": "pnpm --filter admin... build",
     "build:server": "pnpm --filter server... build",
     "build-depends": "pnpm --filter common build",
