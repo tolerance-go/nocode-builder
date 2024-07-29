@@ -19,7 +19,7 @@ RUN pnpm install --frozen-lockfile
 COPY server/ server/
 COPY common/ common/
 
-RUN pnpm prisma:generate
+RUN pnpm generate:source
 
 # 安装依赖
 RUN pnpm build:server

@@ -562,24 +562,29 @@ async function parseSchema(
 async function main() {
   try {
     const { modelsFile, dtoFiles } = await parseSchema(schemaContent);
-
     const prettierConfig = await resolveConfig(path.resolve());
-    // 输出 ModelsFile 结果
-    const formattedModelsOutput = await format(modelsFile.print(), {
-      ...prettierConfig,
-      parser: 'typescript',
-    });
-    const modelsOutputPath = path.resolve('../admin/src/_gen/models.ts');
-    fs.writeFileSync(
-      modelsOutputPath,
-      `/*
- * ---------------------------------------------------------------
- * ## THIS FILE WAS GENERATED        ##
- * ---------------------------------------------------------------
- */
 
-${formattedModelsOutput}`,
-    );
+    const adminPath = path.resolve('../admin');
+
+    // 如果 admin 目录不存在，就不执行输出
+    if (fs.existsSync(adminPath)) {
+      // 输出 ModelsFile 结果
+      const formattedModelsOutput = await format(modelsFile.print(), {
+        ...prettierConfig,
+        parser: 'typescript',
+      });
+      const modelsOutputPath = path.resolve(adminPath, 'src/_gen/models.ts');
+      fs.writeFileSync(
+        modelsOutputPath,
+        `/*
+   * ---------------------------------------------------------------
+   * ## THIS FILE WAS GENERATED        ##
+   * ---------------------------------------------------------------
+   */
+  
+  ${formattedModelsOutput}`,
+      );
+    }
 
     const dtoOutput = path.resolve('./src/_gen/dtos/operation-records');
 

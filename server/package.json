@@ -9,7 +9,7 @@
     "seed": "ts-node ./prisma/seed.ts"
   },
   "scripts": {
-    "prisma-to-model": "ts-node scripts/prisma-to-model.ts",
+    "prisma-to-source": "ts-node scripts/prisma-to-source.ts",
     "daily:run": "pnpm lint && pnpm test && pnpm build",
     "build": "nest build",
     "start": "nest start",
@@ -22,7 +22,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "source:generate": "prisma generate && pnpm prisma-to-model",
+    "generate:source": "prisma generate && pnpm prisma-to-source",
     "prisma:generate": "prisma generate",
     "prisma:migrate:dev": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
