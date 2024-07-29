@@ -2,6 +2,7 @@ import { Flex } from 'antd';
 import { Menu } from './Menu';
 import { Table } from './Table';
 import { AccountSelector } from './AccountSelector';
+import { OperationBar } from './OperationBar';
 
 export const Layout = () => {
   return (
@@ -14,7 +15,10 @@ export const Layout = () => {
       }}
     >
       <AccountSelector />
-      <Menu />
+      <Flex justify="space-between">
+        <Menu />
+        <OperationBar />
+      </Flex>
       <div
         style={{
           flexGrow: 1,

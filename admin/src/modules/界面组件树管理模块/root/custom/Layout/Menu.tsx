@@ -26,11 +26,6 @@ const items: MenuItem[] = [
     key: 'holding',
     icon: <ContainerOutlined />,
   },
-  {
-    label: '状态以及参数设置',
-    key: 'settings',
-    icon: <SettingOutlined />,
-  },
 ];
 
 export const Menu: React.FC = () => {
