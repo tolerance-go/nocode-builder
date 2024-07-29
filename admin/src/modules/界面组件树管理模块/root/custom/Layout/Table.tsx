@@ -9,6 +9,7 @@ const generateMockData = () => {
   return Mock.mock({
     'data|500': [
       {
+        id: '@guid', // 为每行数据生成唯一标识符
         'OI|1-1000': 1,
         'Pos|1-100': 1,
         'OBSz|100-500': 1,
@@ -48,10 +49,10 @@ const generateMockData = () => {
 
 export const Table = () => {
   // 行数据：展示的数据
-  const [rowData, setRowData] = useState(generateMockData());
+  const [rowData] = useState(generateMockData());
 
   // 列定义：定义要展示的列
-  const [colDefs, setColDefs] = useState<AgGridReact['props']['columnDefs']>([
+  const [colDefs] = useState<AgGridReact['props']['columnDefs']>([
     { field: 'OI', headerName: 'OI', width: 100 },
     { field: 'Pos', headerName: 'Pos', width: 100 },
     { field: 'OBSz', headerName: 'OBSz', width: 100 },
@@ -87,6 +88,7 @@ export const Table = () => {
   ]);
 
   const containerRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<AgGridReact>(null);
   const [gridHeight, setGridHeight] = useState(0);
 
   useEffect(() => {
@@ -104,6 +106,25 @@ export const Table = () => {
     return () => window.removeEventListener('resize', updateGridHeight);
   }, []);
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (gridRef.current) {
+        const updatedItems = [];
+        for (let i = 0; i < 100; i++) {
+          const rowIndex = Math.floor(Math.random() * rowData.length);
+          const colIndex = Math.floor(Math.random() * colDefs.length);
+          const colField = colDefs[colIndex].field;
+          const newValue = Mock.mock('@float(0.1, 1.0, 1, 1)');
+          const updatedItem = { ...rowData[rowIndex], [colField]: newValue };
+          updatedItems.push(updatedItem);
+        }
+        gridRef.current.api.applyTransaction({ update: updatedItems });
+      }
+    }, 1000); // 每隔1秒更新一次
+
+    return () => clearInterval(intervalId); // 组件卸载时清除定时器
+  }, [rowData, colDefs]);
+
   return (
     // 包裹容器，带有主题和尺寸
     <div
@@ -117,7 +138,12 @@ export const Table = () => {
             height: gridHeight,
           }}
         >
-          <AgGridReact rowData={rowData} columnDefs={colDefs} />
+          <AgGridReact
+            ref={gridRef}
+            rowData={rowData}
+            columnDefs={colDefs}
+            getRowId={(params) => params.data.id} // 设置唯一标识符
+          />
         </div>
       )}
     </div>
