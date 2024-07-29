@@ -1,15 +1,32 @@
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
-import { ColDef, ColGroupDef, ModuleRegistry } from '@ag-grid-community/core';
+import {
+  ColDef,
+  ColGroupDef,
+  GetContextMenuItemsParams,
+  MenuItemDef,
+  ModuleRegistry,
+} from '@ag-grid-community/core';
 import { RangeSelectionModule } from '@ag-grid-enterprise/range-selection';
 import { cx } from '@emotion/css';
 import { AgGridReact } from '@ag-grid-community/react'; // React Data Grid Component
 import Mock from 'mockjs';
-import { useEffect, useRef, useState } from 'react';
+import { cloneElement, useEffect, useRef, useState } from 'react';
+import { MenuModule } from '@ag-grid-enterprise/menu';
 import './ag-grid-theme-builder.css';
+import {
+  PauseCircleFilled,
+  PlusCircleFilled,
+  SettingFilled,
+  ToolFilled,
+} from '@ant-design/icons';
+
+import reactDOMServer from 'react-dom/server';
+import ReactDOMServer from 'react-dom/server';
 
 ModuleRegistry.registerModules([
   ClientSideRowModelModule,
   RangeSelectionModule,
+  MenuModule,
 ]);
 
 // 生成模拟数据
@@ -68,6 +85,62 @@ export const Table = () => {
           : `rgba(130, 0, 20, ${1 - value})`; // 红色 #820014
       return { backgroundColor: color };
     };
+  };
+
+  const createIconHtml = (icon: React.ReactNode): string => {
+    const container = document.createElement('div');
+    const iconWithStyle = cloneElement(icon as React.ReactElement, {
+      style: { opacity: 0.4 }, // 设置颜色和透明度
+    });
+    const iconHtml = ReactDOMServer.renderToString(iconWithStyle);
+    container.innerHTML = iconHtml;
+    return container.innerHTML;
+  };
+
+  const getContextMenuItems = (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    _params: GetContextMenuItemsParams,
+  ): (string | MenuItemDef)[] => {
+    const result: (string | MenuItemDef)[] = [
+      {
+        // built in separator
+        name: '启动报价',
+        shortcut: 'Alt + W',
+        action: () => {
+          console.log('启动报价 Selected');
+        },
+        icon: createIconHtml(<SettingFilled />),
+      },
+      {
+        // custom item
+        name: '暂停报价',
+        shortcut: 'Alt + P',
+        action: () => {
+          console.log('暂停报价 Selected');
+        },
+        icon: createIconHtml(<PauseCircleFilled />),
+      },
+      {
+        // custom item
+        name: '设置参数',
+        // shortcut: 'Alt + S',
+        action: () => {
+          console.log('设置参数 Selected');
+        },
+        icon: createIconHtml(<ToolFilled />),
+      },
+      {
+        // custom item
+        name: '增加 spread',
+        // shortcut: 'Alt + A',
+        action: () => {
+          console.log('增加 spread Selected');
+        },
+        icon: createIconHtml(<PlusCircleFilled />),
+      },
+    ];
+
+    return result;
   };
 
   // 列定义：定义要展示的列
@@ -245,10 +318,12 @@ export const Table = () => {
           <AgGridReact
             enableRangeSelection
             enableRangeHandle
+            allowContextMenuWithControlKey
             ref={gridRef}
             rowData={rowData}
             columnDefs={colDefs}
             getRowId={(params) => params.data.id} // 设置唯一标识符
+            getContextMenuItems={getContextMenuItems} // 自定义右键菜单
           />
         </div>
       )}

@@ -47,6 +47,9 @@ importers:
       '@ag-grid-enterprise/core':
         specifier: ^32.0.2
         version: 32.0.2
+      '@ag-grid-enterprise/menu':
+        specifier: ^32.0.2
+        version: 32.0.2
       '@ag-grid-enterprise/range-selection':
         specifier: ^32.0.2
         version: 32.0.2
@@ -519,11 +522,23 @@ packages:
       react: ^16.3.0 || ^17.0.0 || ^18.0.0
       react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
 
+  '@ag-grid-enterprise/column-tool-panel@32.0.2':
+    resolution: {integrity: sha512-d0s2T55ILUxDt7lw+aginaJhnAfo7RXyodzl/7dBhig2zqUHmQCctMhphrjj/c1QFni6beCVNhabshI57/R31A==}
+
   '@ag-grid-enterprise/core@32.0.2':
     resolution: {integrity: sha512-ksHpdHqgg7OR5XMQWZ51vvvN8APhYkbtwuHG7B6QNP6JmdVfa88kMCpvb08So/JR4lIlvhunKHhosI41EjSBkw==}
 
+  '@ag-grid-enterprise/menu@32.0.2':
+    resolution: {integrity: sha512-uJKR3ZGjZbhENyUSAdt/2N4Ap/qnOGx7oddmZ9nJZUisjRBU6J2+qIEcEv5cl0OpQdD34sqeGUiDD9cOnJXtHg==}
+
   '@ag-grid-enterprise/range-selection@32.0.2':
     resolution: {integrity: sha512-S+Z1d0e9Z1SGB0M/sLgv9wiiXcw/yfTKbiLKP67638lZzgrQIQuPIgLBv+FVFNktAkCgI6XuBwFMHviIsEhhWA==}
+
+  '@ag-grid-enterprise/row-grouping@32.0.2':
+    resolution: {integrity: sha512-JcWvSDDsFfgjiW7LEPDpUCiEIhRmKTWS529hHERE0TGPUrBNXtLBem+S8HAfqT2fMMYOC8EjL+x+x0oB9lhTuQ==}
+
+  '@ag-grid-enterprise/side-bar@32.0.2':
+    resolution: {integrity: sha512-B8RBT7YAWLfw7Sa8XCadyz8KnrIlx52ncjzsUg1snwCKbFOTg5QJJtu/b0kNlPxLI0lFjFQziUntMhSScXUkjQ==}
 
   '@algolia/autocomplete-core@1.9.3':
     resolution: {integrity: sha512-009HdfugtGCdC4JdXUbVJClA0q0zh24yyePn+KUGk3rP7j8FEe/m5Yo/z65gn6nP/cM39PxpzqKrL7A6fP6PPw==}
@@ -7149,11 +7164,34 @@ snapshots:
       react: 18.3.1
       react-dom: 18.3.1(react@18.3.1)
 
+  '@ag-grid-enterprise/column-tool-panel@32.0.2':
+    dependencies:
+      '@ag-grid-community/core': 32.0.2
+      '@ag-grid-enterprise/core': 32.0.2
+      '@ag-grid-enterprise/row-grouping': 32.0.2
+      '@ag-grid-enterprise/side-bar': 32.0.2
+
   '@ag-grid-enterprise/core@32.0.2':
     dependencies:
       '@ag-grid-community/core': 32.0.2
 
+  '@ag-grid-enterprise/menu@32.0.2':
+    dependencies:
+      '@ag-grid-community/core': 32.0.2
+      '@ag-grid-enterprise/column-tool-panel': 32.0.2
+      '@ag-grid-enterprise/core': 32.0.2
+
   '@ag-grid-enterprise/range-selection@32.0.2':
+    dependencies:
+      '@ag-grid-community/core': 32.0.2
+      '@ag-grid-enterprise/core': 32.0.2
+
+  '@ag-grid-enterprise/row-grouping@32.0.2':
+    dependencies:
+      '@ag-grid-community/core': 32.0.2
+      '@ag-grid-enterprise/core': 32.0.2
+
+  '@ag-grid-enterprise/side-bar@32.0.2':
     dependencies:
       '@ag-grid-community/core': 32.0.2
       '@ag-grid-enterprise/core': 32.0.2

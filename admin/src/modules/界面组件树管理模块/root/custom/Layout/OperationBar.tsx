@@ -12,7 +12,7 @@ export const OperationBar: React.FC = () => {
   return (
     <Space
       style={{
-        paddingRight: token.paddingContentHorizontalSM / 2,
+        paddingRight: token.controlPaddingHorizontalSM,
       }}
       split={<Divider type="vertical" />}
     >
