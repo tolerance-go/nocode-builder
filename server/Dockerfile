@@ -7,23 +7,24 @@ RUN npm install -g pnpm@9
 WORKDIR /workspace
 
 # 复制 package.json 和 pnpm-lock.yaml 以及上级目录的 pnpm-workspace.yaml
-COPY ../pnpm-lock.yaml ../pnpm-workspace.yaml ../.npmrc ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml .npmrc ./
 
-# 设置工作目录
-WORKDIR /workspace/server
-
-COPY ./server/package.json ./
+COPY server/package.json server/
+COPY common/package.json common/
 
 # 安装依赖
 RUN pnpm install --frozen-lockfile
 
 # 复制所有文件到工作目录
-COPY ./server .
+COPY server/ server/
+COPY common/ common/
 
 RUN pnpm prisma:generate
 
 # 安装依赖
-RUN pnpm build
+RUN pnpm build:server
+
+WORKDIR /workspace/server
 
 # 暴露应用运行的端口（假设你的应用运行在3000端口）
 EXPOSE 3000
