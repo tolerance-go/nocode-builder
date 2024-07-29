@@ -1,5 +1,4 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { createBrowserInspector } from '@statelyai/inspect';
 import { createActor } from 'xstate';
 import { 事件中心系统 } from '../事件中心系统';
 // import { 历史记录远程同步管理者 } from '../历史记录远程同步管理者';

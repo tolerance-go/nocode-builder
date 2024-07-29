@@ -1,8 +1,8 @@
-import { Flex, Tag, theme } from 'antd';
-import { Menu } from './Menu';
-import { Table } from './Table';
+import { Flex, theme } from 'antd';
 import { AccountSelector } from './AccountSelector';
+import { Menu } from './Menu';
 import { OperationBar } from './OperationBar';
+import { Table } from './Table';
 import { UpdateTimer } from './UpdateTimer';
 
 export const Layout = () => {

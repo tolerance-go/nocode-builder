@@ -3,7 +3,6 @@ import {
   TransactionOutlined,
   SwapOutlined,
   ContainerOutlined,
-  SettingOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu as AntdMenu } from 'antd';
