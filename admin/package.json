@@ -41,6 +41,7 @@
     "keyboardjs": "^2.7.0",
     "localforage": "^1.10.0",
     "lodash-es": "^4.17.21",
+    "mockjs": "^1.1.0",
     "monaco-editor": "^0.49.0",
     "normalize.css": "^8.0.1",
     "react": "^18.2.0",

@@ -23,7 +23,7 @@ export const Custom = () => {
       }}
       locale={zhCN}
     >
-      <Layout />;
+      <Layout />
     </ConfigProvider>
   );
 };

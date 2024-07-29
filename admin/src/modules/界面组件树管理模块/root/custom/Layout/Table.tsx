@@ -1,47 +1,54 @@
 import { cx } from '@emotion/css';
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import { useEffect, useRef, useState } from 'react';
+import Mock from 'mockjs';
 import './ag-grid-theme-builder.css';
+
+// 生成模拟数据
+const generateMockData = () => {
+  return Mock.mock({
+    'data|500': [
+      {
+        'OI|1-1000': 1,
+        'Pos|1-100': 1,
+        'OBSz|100-500': 1,
+        'MBSz|100-500': 1,
+        MBIV: '@float(0.1, 1.0, 1, 1)',
+        OBIV: '@float(0.1, 1.0, 1, 1)',
+        OAIV: '@float(0.1, 1.0, 1, 1)',
+        MAIV: '@float(0.1, 1.0, 1, 1)',
+        'OBidRaw|1-2': 1,
+        'MBid|1-2': 1,
+        'OBid|1-2': 1,
+        'OFair|1-2': 1,
+        'OptMid|1-2': 1,
+        'OAsk|1-2': 1,
+        'MAsk|1-2': 1,
+        'OAskRaw|1-2': 1,
+        'MASz|1-2': 1,
+        'OASz|1-2': 1,
+        'MAS|1-2': 1,
+        'OSp|1-2': 1,
+        State: '@pick(["Active", "Inactive"])',
+        'BsDelta|0.1-1.0': 1,
+        'Strike|1-5': 1,
+        Exch: '@word',
+        Expiry: '@date("yyyy-MM-dd")',
+        UMP: '@float(0.1, 1.0, 1, 1)',
+        OFairVol: '@float(0.1, 1.0, 1, 1)',
+        volMv: '@float(0.1, 1.0, 1, 1)',
+        iMv: '@float(0.1, 1.0, 1, 1)',
+        VspSft: '@float(0.1, 1.0, 1, 1)',
+        PosGamma: '@float(0.1, 1.0, 1, 1)',
+        PosVega: '@float(0.1, 1.0, 1, 1)',
+      },
+    ],
+  }).data;
+};
 
 export const Table = () => {
   // 行数据：展示的数据
-  const [rowData, setRowData] = useState([
-    {
-      OI: 100,
-      Pos: 50,
-      OBSz: 200,
-      MBSz: 300,
-      MBIV: 0.5,
-      OBIV: 0.7,
-      OAIV: 0.6,
-      MAIV: 0.4,
-      OBidRaw: 1.5,
-      MBid: 1.4,
-      OBid: 1.6,
-      OFair: 1.7,
-      OptMid: 1.3,
-      OAsk: 1.2,
-      MAsk: 1.1,
-      OAskRaw: 1.0,
-      MASz: 1.9,
-      OASz: 1.8,
-      MAS: 1.7,
-      OSp: 1.6,
-      State: 'Active',
-      BsDelta: 0.8,
-      Strike: 2,
-      Exch: 'Exchange1',
-      Expiry: '2023-06-30',
-      UMP: 0.5,
-      OFairVol: 0.6,
-      volMv: 0.7,
-      iMv: 0.8,
-      VspSft: 0.9,
-      PosGamma: 1.0,
-      PosVega: 1.1,
-    },
-    // 添加更多行数据
-  ]);
+  const [rowData, setRowData] = useState(generateMockData());
 
   // 列定义：定义要展示的列
   const [colDefs, setColDefs] = useState<AgGridReact['props']['columnDefs']>([
