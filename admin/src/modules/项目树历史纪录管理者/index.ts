@@ -26,10 +26,10 @@ export class 项目树历史纪录管理者 extends ModuleBase {
     super(engine);
 
     this.历史状态机Actor = createActor(历史状态机, {
-      inspect:
-        window.Cypress || import.meta.env.PROD
-          ? undefined
-          : createBrowserInspector().inspect,
+      // inspect:
+      //   window.Cypress || import.meta.env.PROD
+      //     ? undefined
+      //     : createBrowserInspector().inspect,
       input: {
         历史堆栈: this.历史堆栈,
         历史指针: this.历史指针,

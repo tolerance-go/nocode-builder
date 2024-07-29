@@ -16,7 +16,6 @@
     "cypress:run": "cross-env CYPRESS_BASE_URL=http://127.0.0.1/admin pnpm cypress run --env baseApi=http://127.0.0.1/api"
   },
   "dependencies": {
-    "@unocode/common": "workspace:*",
     "@ant-design/icons": "^5.3.7",
     "@antv/s2": "2.0.0-next.23",
     "@antv/s2-react": "2.0.0-next.22",
@@ -29,6 +28,9 @@
     "@antv/x6-react-shape": "^2.2.3",
     "@emotion/css": "^11.11.2",
     "@reduxjs/toolkit": "^2.2.6",
+    "@unocode/common": "workspace:*",
+    "ag-grid-community": "^32.0.2",
+    "ag-grid-react": "^32.0.2",
     "antd": "^5.18.1",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",
