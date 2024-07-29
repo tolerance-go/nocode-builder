@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
-import {
-  ProjectGroupOperationRecordDto,
-  ProjectOperationRecordDto,
-} from 'src/_gen/dtos';
-import { OperationType } from 'src/common/enums/operation-type';
 import { ProjectGroupService } from 'src/modules/project-group/project-group.service';
 import { ProjectService } from 'src/modules/project/project.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OperationsDto } from './dtos';
+import { ProjectGroupOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectGroupOperationRecordDto';
+import { ProjectOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectOperationRecordDto';
+import { OperationType } from 'src/common/enums/operation-type.client-sync';
 
 @Injectable()
 export class SyncService {
@@ -171,9 +169,9 @@ export class SyncService {
       projectGroup:
         record.projectGroup && record.projectGroupId
           ? {
-              connectOrCreate: {
+              update: {
                 where: { id: record.projectGroupId },
-                create: this.createProjectGroupCreateInput(record.projectGroup),
+                data: this.createProjectGroupUpdateInput(record.projectGroup),
               },
             }
           : undefined,
@@ -193,24 +191,24 @@ export class SyncService {
         },
       },
       projects: {
-        connectOrCreate: record.projects.map((project) => ({
+        update: record.projects.map((project) => ({
           where: { id: project.id },
-          create: this.createProjectCreateInput(project),
+          data: this.createProjectUpdateInput(project),
         })),
       },
       parentGroup:
         record.parentGroupId && record.parentGroup
           ? {
-              connectOrCreate: {
+              update: {
                 where: { id: record.parentGroupId },
-                create: this.createProjectGroupCreateInput(record.parentGroup),
+                data: this.createProjectGroupUpdateInput(record.parentGroup),
               },
             }
           : undefined,
       childGroups: {
-        connectOrCreate: record.childGroups.map((childGroup) => ({
+        update: record.childGroups.map((childGroup) => ({
           where: { id: childGroup.id },
-          create: this.createProjectGroupCreateInput(childGroup),
+          data: this.createProjectGroupUpdateInput(childGroup),
         })),
       },
     };

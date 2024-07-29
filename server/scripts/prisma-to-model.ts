@@ -303,8 +303,19 @@ class ModelsFile extends File {
 
 // 新增 DTOFile 类，继承自 File 类
 class DTOFile extends File {
-  constructor(classes: Class[], enums: Enum[] = []) {
+  static prevHandleClasses(classes: Class[]) {
+    // 先改名字，此时 fields 中 type
+    classes.forEach((cls) => {
+      cls.printName = `${cls.name}OperationRecordDto`;
+      cls.printConstructorFlag = false;
+    });
+  }
+
+  splitMode: boolean;
+
+  constructor(classes: Class[], enums: Enum[] = [], splitMode: boolean = true) {
     super(classes, enums);
+    this.splitMode = splitMode;
   }
 
   print(): string {
@@ -315,32 +326,9 @@ class DTOFile extends File {
     // 动态获取所有的枚举类型，用于生成导入语句
     const enumImports = new Set<string>();
 
-    this.enums.forEach((enumItem) => {
-      enumItem.printName = `${enumItem.name}OperationRecordDto`;
-    });
-
-    // 先改名字，此时 fields 中 type
-    this.classes.forEach((cls) => {
-      cls.printName = `${cls.name}OperationRecordDto`;
-      cls.printConstructorFlag = false;
-    });
-
-    const detectCircularDependency = (
-      cls: Class,
-      visited: Set<Class> = new Set(),
-    ): boolean => {
-      if (visited.has(cls)) return true;
-      visited.add(cls);
-
-      return cls.fields.some((field) => {
-        if (field.type instanceof Class) {
-          return detectCircularDependency(field.type as Class, visited);
-        }
-        return false;
-      });
-    };
-
     let usedType = false;
+
+    const refsImports = new Map<string, Import>();
 
     this.classes.forEach((cls) => {
       cls.fields.forEach((field) => {
@@ -350,7 +338,7 @@ class DTOFile extends File {
           apiPropertyParams.push('required: false');
         }
         if (field.type instanceof Class) {
-          if (detectCircularDependency(cls)) {
+          if (this.detectCircularDependency(cls)) {
             apiPropertyParams.push(`type: () => ${field.type.printName}`);
           } else {
             apiPropertyParams.push(`type: ${field.type.printName}`);
@@ -359,6 +347,17 @@ class DTOFile extends File {
           usedValidators.add('ValidateNested');
 
           usedType = true;
+
+          if (this.splitMode) {
+            if (field.type.printName !== cls.printName) {
+              const refPath = `./${field.type.printName}`;
+              if (!refsImports.has(refPath)) {
+                const importObj = new Import([field.type.printName], refPath);
+                dtoImports.push(importObj);
+                refsImports.set(refPath, importObj);
+              }
+            }
+          }
         } else if (field.type instanceof Enum) {
           const enumName = field.type.name;
           apiPropertyParams.push(`enum: ${enumName}`);
@@ -435,16 +434,65 @@ class DTOFile extends File {
 
     return `${importsStr}\n\n${classesStr}`;
   }
+
+  private detectCircularDependency = (
+    cls: Class,
+    visited: Set<Class> = new Set(),
+  ): boolean => {
+    if (visited.has(cls)) return true;
+    visited.add(cls);
+
+    return cls.fields.some((field) => {
+      if (field.type instanceof Class) {
+        return this.detectCircularDependency(field.type, visited);
+      }
+      return false;
+    });
+  };
 }
 
 // 读取文件内容
 const schemaFilePath = path.resolve('./prisma/schema.prisma');
 const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
 
+const deepCloneDtoClasses = (classes: Class[], enums: Enum[]) => {
+  // 深拷贝 classes 以确保不影响 modelsFile
+  const dtoClasses = classes.map((cls) => cls.clone());
+  const dtoEnums = enums.map((enumItem) => enumItem.clone());
+
+  // 填充 dtoClassMap
+  const dtoClassMap: { [name: string]: Class } = {};
+  dtoClasses.forEach((cls) => {
+    dtoClassMap[cls.name] = cls;
+  });
+
+  const dtoEnumsMap: { [name: string]: Enum } = {};
+  dtoEnums.forEach((cls) => {
+    dtoEnumsMap[cls.name] = cls;
+  });
+
+  // 替换所有字段的类型为 DTO 版本
+  dtoClasses.forEach((classObj) => {
+    classObj.fields.forEach((field) => {
+      if (field.type instanceof Class && dtoClassMap[field.type.name]) {
+        field.type = dtoClassMap[field.type.name];
+      }
+      if (field.type instanceof Enum && dtoEnumsMap[field.type.name]) {
+        field.type = dtoEnumsMap[field.type.name];
+      }
+    });
+  });
+
+  return {
+    dtoClasses,
+    dtoEnums,
+  };
+};
+
 // 使用 Prisma SDK 解析 schema
 async function parseSchema(
   schema: string,
-): Promise<{ modelsFile: ModelsFile; dtoFile: DTOFile }> {
+): Promise<{ modelsFile: ModelsFile; dtoFiles: DTOFile[] }> {
   const dmmf = await getDMMF({ datamodel: schema });
 
   const typeMapping: { [key: string]: string } = {
@@ -499,42 +547,21 @@ async function parseSchema(
 
   const modelsFile = new ModelsFile(classes, enums);
 
-  // 深拷贝 classes 以确保不影响 modelsFile
-  const dtoClasses = classes.map((cls) => cls.clone());
-  const dtoEnums = enums.map((enumItem) => enumItem.clone());
+  const { dtoClasses, dtoEnums } = deepCloneDtoClasses(classes, enums);
 
-  // 填充 dtoClassMap
-  const dtoClassMap: { [name: string]: Class } = {};
-  dtoClasses.forEach((cls) => {
-    dtoClassMap[cls.name] = cls;
-  });
+  DTOFile.prevHandleClasses(dtoClasses);
 
-  const dtoEnumsMap: { [name: string]: Enum } = {};
-  dtoEnums.forEach((cls) => {
-    dtoEnumsMap[cls.name] = cls;
-  });
+  const dtoFiles: DTOFile[] = dtoClasses.map(
+    (cls) => new DTOFile([cls], dtoEnums),
+  );
 
-  // 替换所有字段的类型为 DTO 版本
-  dtoClasses.forEach((classObj) => {
-    classObj.fields.forEach((field) => {
-      if (field.type instanceof Class && dtoClassMap[field.type.name]) {
-        field.type = dtoClassMap[field.type.name];
-      }
-      if (field.type instanceof Enum && dtoEnumsMap[field.type.name]) {
-        field.type = dtoEnumsMap[field.type.name];
-      }
-    });
-  });
-
-  const dtoFile = new DTOFile(dtoClasses, enums);
-
-  return { modelsFile, dtoFile };
+  return { modelsFile, dtoFiles };
 }
 
 // 主函数
 async function main() {
   try {
-    const { modelsFile, dtoFile } = await parseSchema(schemaContent);
+    const { modelsFile, dtoFiles } = await parseSchema(schemaContent);
 
     const prettierConfig = await resolveConfig(path.resolve());
     // 输出 ModelsFile 结果
@@ -554,21 +581,34 @@ async function main() {
 ${formattedModelsOutput}`,
     );
 
-    // 输出 DTOFile 结果
-    const formattedDtoOutput = await format(dtoFile.print(), {
-      ...prettierConfig,
-      parser: 'typescript',
+    const dtoOutput = path.resolve('./src/_gen/dtos/operation-records');
+
+    fs.mkdirSync(dtoOutput, {
+      recursive: true,
     });
-    const dtoOutputPath = path.resolve('./src/_gen/dtos.ts');
-    fs.writeFileSync(
-      dtoOutputPath,
-      `/*
+
+    await Promise.all(
+      dtoFiles.map(async (dtoFile) => {
+        // 输出 DTOFile 结果
+        const formattedDtoOutput = await format(dtoFile.print(), {
+          ...prettierConfig,
+          parser: 'typescript',
+        });
+        const dtoOutputPath = path.resolve(
+          dtoOutput,
+          `${dtoFile.classes[0].printName}.ts`,
+        );
+        fs.writeFileSync(
+          dtoOutputPath,
+          `/*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED        ##
  * ---------------------------------------------------------------
  */
 
 ${formattedDtoOutput}`,
+        );
+      }),
     );
 
     console.log(
