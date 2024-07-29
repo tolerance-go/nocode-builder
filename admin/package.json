@@ -16,6 +16,11 @@
     "cypress:run": "cross-env CYPRESS_BASE_URL=http://127.0.0.1/admin pnpm cypress run --env baseApi=http://127.0.0.1/api"
   },
   "dependencies": {
+    "@ag-grid-community/client-side-row-model": "^32.0.2",
+    "@ag-grid-community/core": "^32.0.2",
+    "@ag-grid-community/react": "^32.0.2",
+    "@ag-grid-enterprise/core": "^32.0.2",
+    "@ag-grid-enterprise/range-selection": "^32.0.2",
     "@ant-design/icons": "^5.3.7",
     "@antv/s2": "2.0.0-next.23",
     "@antv/s2-react": "2.0.0-next.22",
@@ -29,8 +34,6 @@
     "@emotion/css": "^11.11.2",
     "@reduxjs/toolkit": "^2.2.6",
     "@unocode/common": "workspace:*",
-    "ag-grid-community": "^32.0.2",
-    "ag-grid-react": "^32.0.2",
     "antd": "^5.18.1",
     "axios": "^1.7.2",
     "dayjs": "^1.11.11",

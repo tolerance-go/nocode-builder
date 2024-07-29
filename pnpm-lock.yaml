@@ -35,6 +35,21 @@ importers:
 
   admin:
     dependencies:
+      '@ag-grid-community/client-side-row-model':
+        specifier: ^32.0.2
+        version: 32.0.2
+      '@ag-grid-community/core':
+        specifier: ^32.0.2
+        version: 32.0.2
+      '@ag-grid-community/react':
+        specifier: ^32.0.2
+        version: 32.0.2(@ag-grid-community/core@32.0.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      '@ag-grid-enterprise/core':
+        specifier: ^32.0.2
+        version: 32.0.2
+      '@ag-grid-enterprise/range-selection':
+        specifier: ^32.0.2
+        version: 32.0.2
       '@ant-design/icons':
         specifier: ^5.3.7
         version: 5.3.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -74,12 +89,6 @@ importers:
       '@unocode/common':
         specifier: workspace:*
         version: link:../common
-      ag-grid-community:
-        specifier: ^32.0.2
-        version: 32.0.2
-      ag-grid-react:
-        specifier: ^32.0.2
-        version: 32.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       antd:
         specifier: ^5.18.1
         version: 5.19.3(date-fns@2.30.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -496,6 +505,25 @@ packages:
 
   '@adobe/css-tools@4.4.0':
     resolution: {integrity: sha512-Ff9+ksdQQB3rMncgqDK78uLznstjyfIf2Arnh22pW8kBpLs6rpKDwgnZT46hin5Hl1WzazzK64DOrhSwYpS7bQ==}
+
+  '@ag-grid-community/client-side-row-model@32.0.2':
+    resolution: {integrity: sha512-NuwnXsogowbtceLRF8YpAgqj/KU/nPb+FFgwajPwAoxAVzc0qQITMSV/PQN5T5YR9HSaaQQFyyjsHiPAcEoTlw==}
+
+  '@ag-grid-community/core@32.0.2':
+    resolution: {integrity: sha512-Pm4KpWuoHtn/eXgzunX0R10TZt6ze3KIz89Q/pzl2ZE+GdEjn6vPmgG+lMb/z90FgFwnMuIOQiz1qk0x5/xaHA==}
+
+  '@ag-grid-community/react@32.0.2':
+    resolution: {integrity: sha512-flvY58sLaOKFR+nOeqqtZrRHyp0p7a5fGdPUSJPdQnF0iK9VhXvGtKQHCkZ/px6qZ8W//OrGeo3bgiHRxa1Rcg==}
+    peerDependencies:
+      '@ag-grid-community/core': 32.0.2
+      react: ^16.3.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
+
+  '@ag-grid-enterprise/core@32.0.2':
+    resolution: {integrity: sha512-ksHpdHqgg7OR5XMQWZ51vvvN8APhYkbtwuHG7B6QNP6JmdVfa88kMCpvb08So/JR4lIlvhunKHhosI41EjSBkw==}
+
+  '@ag-grid-enterprise/range-selection@32.0.2':
+    resolution: {integrity: sha512-S+Z1d0e9Z1SGB0M/sLgv9wiiXcw/yfTKbiLKP67638lZzgrQIQuPIgLBv+FVFNktAkCgI6XuBwFMHviIsEhhWA==}
 
   '@algolia/autocomplete-core@1.9.3':
     resolution: {integrity: sha512-009HdfugtGCdC4JdXUbVJClA0q0zh24yyePn+KUGk3rP7j8FEe/m5Yo/z65gn6nP/cM39PxpzqKrL7A6fP6PPw==}
@@ -2526,15 +2554,6 @@ packages:
 
   ag-charts-types@10.0.2:
     resolution: {integrity: sha512-Nxo5slHOXlaeg0gRIsVnovAosQzzlYfWJtdDy0Aq/VvpJru/PJ+5i2c9aCyEhgRxhBjImsoegwkgRj7gNOWV6Q==}
-
-  ag-grid-community@32.0.2:
-    resolution: {integrity: sha512-vLJJUjnsG9hNK41GNuW2EHu1W264kxA/poOpcX4kmyrjU5Uzvelsbj3HdKAO9POV28iqyRdKGYfAWdn8QzA7KA==}
-
-  ag-grid-react@32.0.2:
-    resolution: {integrity: sha512-IWYsoyJ/Z763rWbE5/9SaT1n5xwIKrm/QzOG14l7i8z5J6JdJwfV0aQFATmEE8Xws2H48vlLcLdW1cv4hwV3eg==}
-    peerDependencies:
-      react: ^16.3.0 || ^17.0.0 || ^18.0.0
-      react-dom: ^16.3.0 || ^17.0.0 || ^18.0.0
 
   agent-base@6.0.2:
     resolution: {integrity: sha512-RZNwNclF7+MS/8bDg70amg32dyeZGZxiDuQmZxKLAlQjr3jGyLx+4Kkk58UO7D2QdgFIQCovuSuZESne6RG6XQ==}
@@ -7113,6 +7132,32 @@ snapshots:
 
   '@adobe/css-tools@4.4.0': {}
 
+  '@ag-grid-community/client-side-row-model@32.0.2':
+    dependencies:
+      '@ag-grid-community/core': 32.0.2
+      tslib: 2.6.3
+
+  '@ag-grid-community/core@32.0.2':
+    dependencies:
+      ag-charts-types: 10.0.2
+      tslib: 2.6.3
+
+  '@ag-grid-community/react@32.0.2(@ag-grid-community/core@32.0.2)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
+    dependencies:
+      '@ag-grid-community/core': 32.0.2
+      prop-types: 15.8.1
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
+
+  '@ag-grid-enterprise/core@32.0.2':
+    dependencies:
+      '@ag-grid-community/core': 32.0.2
+
+  '@ag-grid-enterprise/range-selection@32.0.2':
+    dependencies:
+      '@ag-grid-community/core': 32.0.2
+      '@ag-grid-enterprise/core': 32.0.2
+
   '@algolia/autocomplete-core@1.9.3(@algolia/client-search@4.23.3)(algoliasearch@4.23.3)(search-insights@2.14.0)':
     dependencies:
       '@algolia/autocomplete-plugin-algolia-insights': 1.9.3(@algolia/client-search@4.23.3)(algoliasearch@4.23.3)(search-insights@2.14.0)
@@ -9724,17 +9769,6 @@ snapshots:
   acorn@8.12.0: {}
 
   ag-charts-types@10.0.2: {}
-
-  ag-grid-community@32.0.2:
-    dependencies:
-      ag-charts-types: 10.0.2
-
-  ag-grid-react@32.0.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-    dependencies:
-      ag-grid-community: 32.0.2
-      prop-types: 15.8.1
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
 
   agent-base@6.0.2:
     dependencies:

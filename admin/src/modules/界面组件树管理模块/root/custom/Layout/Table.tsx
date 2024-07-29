@@ -1,9 +1,16 @@
+import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model';
+import { ColDef, ColGroupDef, ModuleRegistry } from '@ag-grid-community/core';
+import { RangeSelectionModule } from '@ag-grid-enterprise/range-selection';
 import { cx } from '@emotion/css';
-import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
-import { useEffect, useRef, useState } from 'react';
+import { AgGridReact } from '@ag-grid-community/react'; // React Data Grid Component
 import Mock from 'mockjs';
+import { useEffect, useRef, useState } from 'react';
 import './ag-grid-theme-builder.css';
-import { ColDef, ColGroupDef } from 'ag-grid-community';
+
+ModuleRegistry.registerModules([
+  ClientSideRowModelModule,
+  RangeSelectionModule,
+]);
 
 // 生成模拟数据
 const generateMockData = () => {
@@ -57,8 +64,8 @@ export const Table = () => {
       const value = params.value;
       const color =
         value > 0.5
-          ? `rgba(64, 150, 255, ${value})` // 蓝色 #4096ff
-          : `rgba(255, 77, 79, ${1 - value})`; // 红色 #ff4d4f
+          ? `rgba(0, 44, 140, ${value})` // 蓝色 #002c8c
+          : `rgba(130, 0, 20, ${1 - value})`; // 红色 #820014
       return { backgroundColor: color };
     };
   };
@@ -155,9 +162,14 @@ export const Table = () => {
       width: 100,
       cellStyle: getCellStyle(),
     },
-    { field: 'OASz', headerName: 'OASz', width: 100 },
-    { field: 'MAS', headerName: 'MAS', width: 100 },
-    { field: 'OSp', headerName: 'OSp', width: 100 },
+    {
+      field: 'OASz',
+      headerName: 'OASz',
+      width: 100,
+      cellStyle: getCellStyle(),
+    },
+    { field: 'MAS', headerName: 'MAS', width: 100, cellStyle: getCellStyle() },
+    { field: 'OSp', headerName: 'OSp', width: 100, cellStyle: getCellStyle() },
     { field: 'State', headerName: 'State', width: 100 },
     { field: 'BsDelta', headerName: 'BsDelta', width: 100 },
     { field: 'Strike', headerName: 'Strike', width: 100 },
@@ -231,6 +243,8 @@ export const Table = () => {
           }}
         >
           <AgGridReact
+            enableRangeSelection
+            enableRangeHandle
             ref={gridRef}
             rowData={rowData}
             columnDefs={colDefs}
