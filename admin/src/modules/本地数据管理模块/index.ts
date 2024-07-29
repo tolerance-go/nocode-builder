@@ -1,5 +1,6 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { LocalForageService } from '../services/LocalForageService';
+import { 后台数据管理模块 } from '../后台数据管理模块';
 
 export class 本地数据管理模块 extends ModuleBase {
   private static instance: 本地数据管理模块;
@@ -40,7 +41,10 @@ export class 本地数据管理模块 extends ModuleBase {
   }
 
   protected requireModules(): void {
-    super.requireModules(new LocalForageService(this.engine));
+    super.requireModules(
+      后台数据管理模块.getInstance(this.engine),
+      LocalForageService.getInstance(this.engine),
+    );
   }
 
   protected async onSetup(): Promise<void> {
