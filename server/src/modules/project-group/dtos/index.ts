@@ -97,7 +97,6 @@ export class ProjectGroupResponseDto {
 
   @ApiProperty({
     required: false,
-    nullable: true,
   })
   @IsInt()
   @IsOptional()

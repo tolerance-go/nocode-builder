@@ -113,7 +113,7 @@ export interface ProjectUpdateDto {
 export interface ProjectGroupResponseDto {
   id: number;
   name: string;
-  parentGroupId?: number | null;
+  parentGroupId?: number;
   ownerId: number;
   createdAt: string;
   updatedAt: string;

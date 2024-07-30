@@ -48,7 +48,12 @@ export class 用户表模块 extends ModuleBase {
   constructor(engine: EngineBase) {
     super(engine);
     this.table = new Table<UserModelRecord>();
-    this.token = null;
+
+    const token = store.get(TOKEN_KEY);
+
+    this.token = token;
+
+    this.监听视图用户登出();
   }
 
   public get currentLoginUser(): UserModelRecord | undefined {
@@ -70,13 +75,11 @@ export class 用户表模块 extends ModuleBase {
   }
 
   protected async onSetup(): Promise<void> {
-    this.监听视图用户登出();
-
     if (!this.getDependModule(浏览器代理模块).pathnameIsAuth()) {
-      const token = store.get('token');
-      if (token) {
-        this.token = token;
+      if (this.token) {
         await this.getUserByToken();
+      } else {
+        redirectToLogin();
       }
     }
   }

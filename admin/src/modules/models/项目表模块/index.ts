@@ -4,10 +4,26 @@ import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import { 用户表模块 } from '../用户表模块';
-import { 项目组表模块 } from '../项目组表模块';
 import { TableName } from '@unocode/common';
+import { api } from '@/globals';
 
 export class ClientProjectModel extends ProjectModelRecord {
+  // 静态方法: 从 ProjectModelRecord 实例创建 ClientProjectModel 实例
+  static createFromRecord(record: ProjectModelRecord): ClientProjectModel {
+    const instance = new ClientProjectModel({
+      id: record.id,
+      name: record.name,
+      ownerId: record.ownerId,
+      projectGroupId: record.projectGroupId,
+      type: record.type,
+    });
+
+    instance.createdAt = record.createdAt;
+    instance.updatedAt = record.updatedAt;
+
+    return instance;
+  }
+
   constructor({
     id,
     name,
@@ -52,8 +68,6 @@ export class 项目表模块 extends ModuleBase {
     this.table = new Table<ClientProjectModel>();
 
     window.projectTable = this.table;
-
-    this.getDependModule(用户表模块);
   }
 
   public removeProject(id: number): void {
@@ -115,5 +129,28 @@ export class 项目表模块 extends ModuleBase {
     );
   }
 
-  protected async onSetup(): Promise<void> {}
+  protected async onSetup(): Promise<void> {
+    const projects = await api.projects.getProjects();
+    this.table.initializeRecords(
+      projects.map((project) =>
+        ClientProjectModel.createFromRecord({
+          id: project.id,
+          name: project.name,
+          ownerId: project.ownerId,
+          projectGroupId: project.projectGroupId,
+          type: this.toProjectTypeEnum(project.type),
+          createdAt: new Date(project.createdAt),
+          updatedAt: new Date(project.updatedAt),
+        }),
+      ),
+    );
+  }
+
+  private toProjectTypeEnum(type: string): ProjectTypeEnum {
+    if (type in ProjectTypeEnum) {
+      return ProjectTypeEnum[type as keyof typeof ProjectTypeEnum];
+    }
+
+    throw new Error(`Unknown ProjectType: ${type}`);
+  }
 }

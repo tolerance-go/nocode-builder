@@ -1,11 +1,28 @@
 import { ProjectGroupModelRecord } from '@/_gen/model-records';
 import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
+import { api } from '@/globals';
 import { 事件中心系统 } from '@/modules/事件中心系统';
-import { 用户表模块 } from '../用户表模块';
 import { TableName } from '@unocode/common';
+import { 用户表模块 } from '../用户表模块';
 
 export class ClientProjectGroupModel extends ProjectGroupModelRecord {
+  static createFromRecord(
+    record: ProjectGroupModelRecord,
+  ): ClientProjectGroupModel {
+    const instance = new ClientProjectGroupModel({
+      id: record.id,
+      name: record.name,
+      ownerId: record.ownerId,
+      parentGroupId: record.parentGroupId,
+    });
+
+    instance.createdAt = record.createdAt;
+    instance.updatedAt = record.updatedAt;
+
+    return instance;
+  }
+
   constructor({
     id,
     name,
@@ -107,5 +124,19 @@ export class 项目组表模块 extends ModuleBase {
     );
   }
 
-  protected async onSetup(): Promise<void> {}
+  protected async onSetup(): Promise<void> {
+    const projectGroups = await api.projectGroups.getProjectGroups();
+    this.table.initializeRecords(
+      projectGroups.map((projectGroup) =>
+        ClientProjectGroupModel.createFromRecord({
+          id: projectGroup.id,
+          name: projectGroup.name,
+          ownerId: projectGroup.ownerId,
+          parentGroupId: projectGroup.parentGroupId,
+          createdAt: new Date(projectGroup.createdAt),
+          updatedAt: new Date(projectGroup.updatedAt),
+        }),
+      ),
+    );
+  }
 }
