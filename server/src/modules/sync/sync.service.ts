@@ -4,9 +4,11 @@ import { ProjectGroupService } from 'src/modules/project-group/project-group.ser
 import { ProjectService } from 'src/modules/project/project.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OperationsDto } from './dtos';
-import { ProjectGroupOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectGroupOperationRecordDto';
-import { ProjectOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectOperationRecordDto';
 import { OperationType } from '@unocode/common';
+import {
+  ProjectModelRecordDto,
+  ProjectGroupModelRecordDto,
+} from 'src/_gen/dtos/model-records';
 
 @Injectable()
 export class SyncService {
@@ -93,7 +95,7 @@ export class SyncService {
   }
 
   private createProjectCreateInput(
-    record: ProjectOperationRecordDto,
+    record: ProjectModelRecordDto,
   ): Prisma.ProjectCreateInput {
     return {
       name: record.name,
@@ -105,20 +107,11 @@ export class SyncService {
           id: record.ownerId,
         },
       },
-      projectGroup:
-        record.projectGroup && record.projectGroupId
-          ? {
-              connectOrCreate: {
-                where: { id: record.projectGroupId },
-                create: this.createProjectGroupCreateInput(record.projectGroup),
-              },
-            }
-          : undefined,
     };
   }
 
   private createProjectGroupCreateInput(
-    record: ProjectGroupOperationRecordDto,
+    record: ProjectGroupModelRecordDto,
   ): Prisma.ProjectGroupCreateInput {
     return {
       name: record.name,
@@ -129,32 +122,11 @@ export class SyncService {
           id: record.ownerId,
         },
       },
-      projects: {
-        connectOrCreate: record.projects.map((project) => ({
-          where: { id: project.id },
-          create: this.createProjectCreateInput(project),
-        })),
-      },
-      parentGroup:
-        record.parentGroupId && record.parentGroup
-          ? {
-              connectOrCreate: {
-                where: { id: record.parentGroupId },
-                create: this.createProjectGroupCreateInput(record.parentGroup),
-              },
-            }
-          : undefined,
-      childGroups: {
-        connectOrCreate: record.childGroups.map((childGroup) => ({
-          where: { id: childGroup.id },
-          create: this.createProjectGroupCreateInput(childGroup),
-        })),
-      },
     };
   }
 
   private createProjectUpdateInput(
-    record: ProjectOperationRecordDto,
+    record: ProjectModelRecordDto,
   ): Prisma.ProjectUpdateInput {
     return {
       name: record.name,
@@ -166,20 +138,11 @@ export class SyncService {
           id: record.ownerId,
         },
       },
-      projectGroup:
-        record.projectGroup && record.projectGroupId
-          ? {
-              update: {
-                where: { id: record.projectGroupId },
-                data: this.createProjectGroupUpdateInput(record.projectGroup),
-              },
-            }
-          : undefined,
     };
   }
 
   private createProjectGroupUpdateInput(
-    record: ProjectGroupOperationRecordDto,
+    record: ProjectGroupModelRecordDto,
   ): Prisma.ProjectGroupUpdateInput {
     return {
       name: record.name,
@@ -189,27 +152,6 @@ export class SyncService {
         connect: {
           id: record.ownerId,
         },
-      },
-      projects: {
-        update: record.projects.map((project) => ({
-          where: { id: project.id },
-          data: this.createProjectUpdateInput(project),
-        })),
-      },
-      parentGroup:
-        record.parentGroupId && record.parentGroup
-          ? {
-              update: {
-                where: { id: record.parentGroupId },
-                data: this.createProjectGroupUpdateInput(record.parentGroup),
-              },
-            }
-          : undefined,
-      childGroups: {
-        update: record.childGroups.map((childGroup) => ({
-          where: { id: childGroup.id },
-          data: this.createProjectGroupUpdateInput(childGroup),
-        })),
       },
     };
   }

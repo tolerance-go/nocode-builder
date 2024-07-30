@@ -2,28 +2,30 @@ import { ApiProperty } from '@nestjs/swagger';
 import { OperationType } from '@unocode/common';
 import { Type } from 'class-transformer';
 import { IsOptional, ValidateNested } from 'class-validator';
-import { ProjectGroupOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectGroupOperationRecordDto';
-import { ProjectOperationRecordDto } from 'src/_gen/dtos/operation-records/ProjectOperationRecordDto';
-import { UserOperationRecordDto } from 'src/_gen/dtos/operation-records/UserOperationRecordDto';
+import {
+  UserModelRecordDto,
+  ProjectModelRecordDto,
+  ProjectGroupModelRecordDto,
+} from 'src/_gen/dtos/model-records';
 
-class OperationRecordUnion {
-  @ApiProperty({ type: () => UserOperationRecordDto })
+class OperationRecordUnionDto {
+  @ApiProperty({ type: () => UserModelRecordDto })
   @IsOptional()
   @ValidateNested()
-  @Type(() => UserOperationRecordDto)
-  userOperationRecord?: UserOperationRecordDto;
+  @Type(() => UserModelRecordDto)
+  userOperationRecord?: UserModelRecordDto;
 
-  @ApiProperty({ type: () => ProjectOperationRecordDto })
+  @ApiProperty({ type: () => ProjectModelRecordDto })
   @IsOptional()
   @ValidateNested()
-  @Type(() => ProjectOperationRecordDto)
-  projectOperationRecord?: ProjectOperationRecordDto;
+  @Type(() => ProjectModelRecordDto)
+  projectOperationRecord?: ProjectModelRecordDto;
 
-  @ApiProperty({ type: () => ProjectGroupOperationRecordDto })
+  @ApiProperty({ type: () => ProjectGroupModelRecordDto })
   @IsOptional()
   @ValidateNested()
-  @Type(() => ProjectGroupOperationRecordDto)
-  projectGroupOperationRecord?: ProjectGroupOperationRecordDto;
+  @Type(() => ProjectGroupModelRecordDto)
+  projectGroupOperationRecord?: ProjectGroupModelRecordDto;
 }
 
 export class OperationDto {
@@ -38,12 +40,11 @@ export class OperationDto {
   operation: OperationType;
 
   @ApiProperty({
-    // 这里不用 oneOf 是以为无法解决循环依赖报错（forwardRef不起作用）
-    type: Object,
+    type: OperationRecordUnionDto,
   })
   @ValidateNested()
-  @Type(() => OperationRecordUnion)
-  record: OperationRecordUnion;
+  @Type(() => OperationRecordUnionDto)
+  record: OperationRecordUnionDto;
 }
 
 export class OperationsDto {

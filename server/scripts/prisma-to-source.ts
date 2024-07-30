@@ -306,16 +306,24 @@ class DTOFile extends File {
   static prevHandleClasses(classes: Class[]) {
     // 先改名字，此时 fields 中 type
     classes.forEach((cls) => {
-      cls.printName = `${cls.name}OperationRecordDto`;
+      cls.printName = `${cls.name}ModelRecordDto`;
       cls.printConstructorFlag = false;
     });
   }
 
   splitMode: boolean;
 
-  constructor(classes: Class[], enums: Enum[] = [], splitMode: boolean = true) {
+  hideRefFields: boolean;
+
+  constructor(
+    classes: Class[],
+    enums: Enum[] = [],
+    splitMode: boolean = false,
+    hideRefFields: boolean = true,
+  ) {
     super(classes, enums);
     this.splitMode = splitMode;
+    this.hideRefFields = hideRefFields;
   }
 
   print(): string {
@@ -331,6 +339,12 @@ class DTOFile extends File {
     const refsImports = new Map<string, Import>();
 
     this.classes.forEach((cls) => {
+      if (this.hideRefFields) {
+        cls.fields = cls.fields.filter((field) => {
+          return !field.relationFromFields;
+        });
+      }
+
       cls.fields.forEach((field) => {
         const apiPropertyParams: string[] = [];
 
@@ -492,7 +506,7 @@ const deepCloneDtoClasses = (classes: Class[], enums: Enum[]) => {
 // 使用 Prisma SDK 解析 schema
 async function parseSchema(
   schema: string,
-): Promise<{ modelsFile: ModelsFile; dtoFiles: DTOFile[] }> {
+): Promise<{ modelsFile: ModelsFile; dtoFile: DTOFile }> {
   const dmmf = await getDMMF({ datamodel: schema });
 
   const typeMapping: { [key: string]: string } = {
@@ -551,17 +565,15 @@ async function parseSchema(
 
   DTOFile.prevHandleClasses(dtoClasses);
 
-  const dtoFiles: DTOFile[] = dtoClasses.map(
-    (cls) => new DTOFile([cls], dtoEnums),
-  );
+  const dtoFile: DTOFile = new DTOFile(dtoClasses, dtoEnums);
 
-  return { modelsFile, dtoFiles };
+  return { modelsFile, dtoFile };
 }
 
 // 主函数
 async function main() {
   try {
-    const { modelsFile, dtoFiles } = await parseSchema(schemaContent);
+    const { modelsFile, dtoFile } = await parseSchema(schemaContent);
     const prettierConfig = await resolveConfig(path.resolve());
 
     const adminPath = path.resolve('../admin');
@@ -586,35 +598,28 @@ ${modelsFile.print()}`,
       fs.writeFileSync(modelsOutputPath, formattedModelsOutput);
     }
 
-    const dtoOutput = path.resolve('./src/_gen/dtos/operation-records');
+    const dtoOutput = path.resolve('./src/_gen/dtos');
 
     fs.mkdirSync(dtoOutput, {
       recursive: true,
     });
 
-    await Promise.all(
-      dtoFiles.map(async (dtoFile) => {
-        // 输出 DTOFile 结果
-        const formattedDtoOutput = await format(
-          `/*
-* ---------------------------------------------------------------
-* ## THIS FILE WAS GENERATED        ##
-* ---------------------------------------------------------------
-*/
-
-${dtoFile.print()}`,
-          {
-            ...prettierConfig,
-            parser: 'typescript',
-          },
-        );
-        const dtoOutputPath = path.resolve(
-          dtoOutput,
-          `${dtoFile.classes[0].printName}.ts`,
-        );
-        fs.writeFileSync(dtoOutputPath, formattedDtoOutput);
-      }),
+    // 输出 DTOFile 结果
+    const formattedDtoOutput = await format(
+      `/*
+  * ---------------------------------------------------------------
+  * ## THIS FILE WAS GENERATED        ##
+  * ---------------------------------------------------------------
+  */
+  
+  ${dtoFile.print()}`,
+      {
+        ...prettierConfig,
+        parser: 'typescript',
+      },
     );
+    const dtoOutputPath = path.resolve(dtoOutput, 'model-records.ts');
+    fs.writeFileSync(dtoOutputPath, formattedDtoOutput);
 
     console.log(
       'Prisma schema has been successfully parsed and saved to models.ts and dto.ts',
