@@ -50,7 +50,7 @@ export class SyncService {
                 },
                 tx,
               );
-            } else if (tableName === 'projectGroup' && 'id' in record) {
+            } else if (tableName === 'projectGroup') {
               const projectGroupRecord = record.projectGroupOperationRecord!;
 
               await this.projectGroupService.updateProjectGroup(
@@ -82,7 +82,7 @@ export class SyncService {
           case OperationType.CLEAR_RECORDS:
             if (tableName === 'project') {
               await this.projectService.clearProjects(tx);
-            } else if (tableName === 'projectGroup' && 'id' in record) {
+            } else if (tableName === 'projectGroup') {
               await this.projectGroupService.clearProjectGroups(tx);
             }
             break;
@@ -97,7 +97,7 @@ export class SyncService {
   private createProjectCreateInput(
     record: ProjectModelRecordDto,
   ): Prisma.ProjectCreateInput {
-    return {
+    const input: Prisma.ProjectCreateInput = {
       name: record.name,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
@@ -108,12 +108,23 @@ export class SyncService {
         },
       },
     };
+
+    // 检查 projectGroupId 是否存在，若存在则添加连接信息
+    if (record.projectGroupId) {
+      input.projectGroup = {
+        connect: {
+          id: record.projectGroupId,
+        },
+      };
+    }
+
+    return input;
   }
 
   private createProjectGroupCreateInput(
     record: ProjectGroupModelRecordDto,
   ): Prisma.ProjectGroupCreateInput {
-    return {
+    const input: Prisma.ProjectGroupCreateInput = {
       name: record.name,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
@@ -123,12 +134,23 @@ export class SyncService {
         },
       },
     };
+
+    // 检查 projectGroupId 是否存在，若存在则添加连接信息
+    if (record.parentGroupId) {
+      input.parentGroup = {
+        connect: {
+          id: record.parentGroupId,
+        },
+      };
+    }
+
+    return input;
   }
 
   private createProjectUpdateInput(
     record: ProjectModelRecordDto,
   ): Prisma.ProjectUpdateInput {
-    return {
+    const input: Prisma.ProjectUpdateInput = {
       name: record.name,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
@@ -139,12 +161,22 @@ export class SyncService {
         },
       },
     };
+
+    if (record.projectGroupId) {
+      input.projectGroup = {
+        connect: {
+          id: record.projectGroupId,
+        },
+      };
+    }
+
+    return input;
   }
 
   private createProjectGroupUpdateInput(
     record: ProjectGroupModelRecordDto,
   ): Prisma.ProjectGroupUpdateInput {
-    return {
+    const input: Prisma.ProjectGroupUpdateInput = {
       name: record.name,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
@@ -154,5 +186,15 @@ export class SyncService {
         },
       },
     };
+
+    if (record.parentGroupId) {
+      input.parentGroup = {
+        connect: {
+          id: record.parentGroupId,
+        },
+      };
+    }
+
+    return input;
   }
 }
