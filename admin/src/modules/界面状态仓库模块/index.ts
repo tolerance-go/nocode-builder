@@ -1,6 +1,8 @@
+import { ProjectTypeEnum } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
-import { 基础引擎 } from '@/engines/基础引擎';
+import { pathItems } from '@/common/constants';
 import { configureStore, Middleware } from '@reduxjs/toolkit';
+import { produce } from 'immer';
 import { 用户表模块 } from '../models/用户表模块';
 import { 事件中心系统 } from '../事件中心系统';
 import { 本地数据管理模块 } from '../本地数据管理模块';
@@ -14,9 +16,6 @@ import {
 } from './states';
 import { AppMiddleware, RootState } from './types';
 import { findNode } from './utils';
-import { ProjectTypeEnum } from '@/_gen/models';
-import { pathItems } from '@/common/constants';
-import { produce } from 'immer';
 
 export class 界面状态仓库模块 extends ModuleBase {
   static createSlices = () => {
@@ -154,6 +153,11 @@ export class 界面状态仓库模块 extends ModuleBase {
 
   constructor(engine: EngineBase) {
     super(engine);
+
+    // 从数据库同步状态
+    if (this.getDependModule(用户表模块).currentLoginUser) {
+      //
+    }
 
     const initialState =
       this.getDependModule(本地数据管理模块).get<RootState>(
