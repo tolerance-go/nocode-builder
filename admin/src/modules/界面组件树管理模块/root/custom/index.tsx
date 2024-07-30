@@ -13,13 +13,7 @@ export const Custom = () => {
     <ConfigProvider
       theme={{
         algorithm: [theme.darkAlgorithm],
-        components: {
-          Radio: {
-            borderRadius: 0,
-            borderRadiusSM: 0,
-            borderRadiusLG: 0,
-          },
-        },
+        components: {},
       }}
       locale={zhCN}
     >
