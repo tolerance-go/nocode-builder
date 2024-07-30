@@ -155,10 +155,10 @@ export class 界面状态仓库模块 extends ModuleBase {
   constructor(engine: EngineBase) {
     super(engine);
 
-    const initialState = engine
-      .getDependEngine(基础引擎)
-      .getModule(本地数据管理模块)
-      .get<RootState>(localStateFieldName);
+    const initialState =
+      this.getDependModule(本地数据管理模块).get<RootState>(
+        localStateFieldName,
+      );
 
     this.initialState = initialState;
 
