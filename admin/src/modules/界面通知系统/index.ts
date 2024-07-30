@@ -1,4 +1,4 @@
-import { 测试标识 } from '@/common/constants';
+import { 组件测试标识 } from '@/common/constants';
 import { MessageInstance } from 'antd/es/message/interface';
 import { HookAPI } from 'antd/es/modal/useModal';
 import { NotificationInstance } from 'antd/es/notification/interface';
@@ -56,7 +56,7 @@ export class 界面通知系统 extends ModuleBase {
           this.messageApi.open({
             type: options.type,
             content: createElement('span', {
-              'data-test-id': 测试标识.全局消息框标题,
+              'data-test-id': 组件测试标识.全局消息框标题,
               children: options.content,
             }),
             duration: options.duration,
@@ -79,7 +79,7 @@ export class 界面通知系统 extends ModuleBase {
         if (this.notificationApi) {
           this.notificationApi[type]({
             message: createElement('span', {
-              'data-test-id': 测试标识.全局通知框标题,
+              'data-test-id': 组件测试标识.全局通知框标题,
               children: rest.message,
             }),
             description: rest.description,
@@ -101,7 +101,7 @@ export class 界面通知系统 extends ModuleBase {
           this.modalApi[type]({
             ...rest,
             title: createElement('span', {
-              'data-test-id': 测试标识.全局模态框标题,
+              'data-test-id': 组件测试标识.全局模态框标题,
               children: rest.title,
             }),
             content: rest.content,

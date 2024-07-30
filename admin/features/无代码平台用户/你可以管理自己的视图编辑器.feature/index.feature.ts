@@ -1,5 +1,5 @@
 import { editorPathnames } from '@/common/constants';
-import { 测试标识 } from '@/common/constants';
+import { 组件测试标识 } from '@/common/constants';
 import { 验证元素可见性 } from '@cypress/support/helpers';
 import { 使用场景 } from '@cypress/support/utils';
 
@@ -11,7 +11,7 @@ import { 使用场景 } from '@cypress/support/utils';
     });
 
     那么('用户可以看到相关视图', () => {
-      验证元素可见性(测试标识.视图编辑页面);
+      验证元素可见性(组件测试标识.视图编辑页面);
     });
   });
 });

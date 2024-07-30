@@ -19,7 +19,7 @@ import {
 import { ProjectType } from '@/modules/界面组件树管理模块/types';
 
 import { FolderAddOutlined, PlusOutlined } from '@ant-design/icons';
-import { 测试标识 } from '@/common/constants';
+import { 组件测试标识 } from '@/common/constants';
 import { Button, Dropdown, Flex, Space, theme } from 'antd';
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
@@ -253,7 +253,9 @@ export const ToolBar = () => {
               {
                 key: 'view',
                 label: (
-                  <span data-test-id={测试标识.创建视图项目节点的菜单项标题}>
+                  <span
+                    data-test-id={组件测试标识.创建视图项目节点的菜单项标题}
+                  >
                     视图
                   </span>
                 ),
@@ -265,7 +267,9 @@ export const ToolBar = () => {
               {
                 key: 'data-table',
                 label: (
-                  <span data-test-id={测试标识.创建数据表项目节点的菜单项标题}>
+                  <span
+                    data-test-id={组件测试标识.创建数据表项目节点的菜单项标题}
+                  >
                     数据表
                   </span>
                 ),
@@ -276,7 +280,9 @@ export const ToolBar = () => {
               {
                 key: 'bluemap',
                 label: (
-                  <span data-test-id={测试标识.创建蓝图项目节点的菜单项标题}>
+                  <span
+                    data-test-id={组件测试标识.创建蓝图项目节点的菜单项标题}
+                  >
                     蓝图
                   </span>
                 ),
@@ -290,7 +296,7 @@ export const ToolBar = () => {
         >
           <Button
             id={组件标识.创建项目节点的按钮}
-            data-test-id={测试标识.创建项目节点的按钮}
+            data-test-id={组件测试标识.创建项目节点的按钮}
             type="text"
             disabled={projectTreeTimeLineVisible}
             // loading={addFileLoading}
@@ -300,7 +306,7 @@ export const ToolBar = () => {
         <Button
           type="text"
           id={组件标识.创建项目组节点的按钮}
-          data-test-id={测试标识.创建项目组节点的按钮}
+          data-test-id={组件测试标识.创建项目组节点的按钮}
           disabled={projectTreeTimeLineVisible}
           // loading={addFolderLoading}
           icon={<FolderAddOutlined />}

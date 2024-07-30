@@ -4,7 +4,7 @@ import {
   use验证管理者,
 } from '@/modules/界面组件树管理模块/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/common/hooks';
-import { 测试标识 } from '@/common/constants';
+import { 组件测试标识 } from '@/common/constants';
 import { Flex, Input, InputRef, theme } from 'antd';
 import { useEffect, useRef, useState } from 'react';
 import MagneticComponent from './MagneticComponent';
@@ -120,7 +120,7 @@ export const TitleInput = ({ nodeKey }: { nodeKey: ViewKey }) => {
         onPressEnter={() => {
           保存标题输入();
         }}
-        id={测试标识.项目树标题输入框}
+        id={组件测试标识.项目树标题输入框}
         size="small"
         autoComplete="off"
         autoFocus

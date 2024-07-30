@@ -227,13 +227,6 @@ export class 界面状态仓库模块 extends ModuleBase {
         );
       },
     );
-
-    this.getDependModule(事件中心系统).on(
-      '用户模型表/登录用户信息清理成功',
-      () => {
-        this.store.dispatch(this.slices.userInfo.actions.更新用户名(''));
-      },
-    );
   }
 
   监听项目节点激活状态变化并修改url() {

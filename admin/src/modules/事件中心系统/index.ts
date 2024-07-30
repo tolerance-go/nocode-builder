@@ -26,7 +26,6 @@ type UserModelTable事件类型 = {
   获取登录用户信息成功: {
     userInfo: ClientUserModel;
   };
-  登录用户信息清理成功: undefined;
 };
 
 type 界面状态管理者事件类型 = {
@@ -65,9 +64,6 @@ type 界面状态管理者事件类型 = {
 type 界面视图管理者事件类型 = {
   用户撤销项目树: undefined;
   用户重做项目树: undefined;
-  用户登录成功: {
-    token: string;
-  };
   用户登出成功: undefined;
 };
 

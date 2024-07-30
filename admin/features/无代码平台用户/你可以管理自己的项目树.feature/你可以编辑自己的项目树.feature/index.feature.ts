@@ -1,4 +1,4 @@
-import { 测试标识, 测试类名 } from '@/common/constants';
+import { 组件测试标识, 组件测试类名 } from '@/common/constants';
 import { apiUrls } from '@cypress/support/_gen/apiUrls';
 import {
   getTreeNodeChildren,
@@ -161,7 +161,7 @@ import {
         const $parent = getTreeNodeParent($file);
         expect(
           $parent
-            .find(`[data-test-class*="${测试类名.项目树节点标题}"]`)
+            .find(`[data-test-class*="${组件测试类名.项目树节点标题}"]`)
             .text(),
         ).equal('文件夹节点');
       });
@@ -243,7 +243,7 @@ import {
         const $parent = getTreeNodeParent($file);
         expect(
           $parent
-            .find(`[data-test-class*="${测试类名.项目树节点标题}"]`)
+            .find(`[data-test-class*="${组件测试类名.项目树节点标题}"]`)
             .text(),
         ).equal('文件夹节点');
       });
@@ -720,7 +720,10 @@ import {
     });
 
     那么('此时项目树区域应该聚焦', () => {
-      cy.获取测试标识(测试标识.项目树区域容器).should('have.class', 'focused');
+      cy.获取测试标识(组件测试标识.项目树区域容器).should(
+        'have.class',
+        'focused',
+      );
     });
 
     当('用户按下 ctrl + z 键', () => {
@@ -1111,7 +1114,7 @@ import {
     });
 
     当('用户点击编辑菜单项', () => {
-      cy.获取测试标识(测试标识.重命名项目树节点标题菜单按钮).click();
+      cy.获取测试标识(组件测试标识.重命名项目树节点标题菜单按钮).click();
     });
 
     那么('被右击的节点进入编辑状态', () => {
@@ -1268,7 +1271,7 @@ import {
     });
 
     当('用户点击编辑菜单', () => {
-      cy.获取测试标识(测试标识.重命名项目树节点标题菜单按钮).click();
+      cy.获取测试标识(组件测试标识.重命名项目树节点标题菜单按钮).click();
     });
 
     那么('项目节点应该进入编辑状态', () => {
@@ -1628,7 +1631,7 @@ import {
 
       那么('选中的文件夹应该被删除', () => {
         cy.获取项目树节点通过标题('文件夹0').should('exist');
-        cy.获取测试类(测试类名.项目树节点标题).should('have.length', 1);
+        cy.获取测试类(组件测试类名.项目树节点标题).should('have.length', 1);
       });
     },
   );
@@ -2123,7 +2126,7 @@ import {
         cy.获取项目树节点通过标题('项目节点')
           .should('not.have.class', 'ant-tree-treenode-selected')
           .find(
-            `[data-test-class*="${测试类名.编辑临时创建节点之前选中的节点}"]`,
+            `[data-test-class*="${组件测试类名.编辑临时创建节点之前选中的节点}"]`,
           )
           .should('exist');
       });
@@ -2136,7 +2139,7 @@ import {
         cy.获取项目树节点通过标题('项目节点')
           .should('have.class', 'ant-tree-treenode-selected')
           .find(
-            `[data-test-class*="${测试类名.编辑临时创建节点之前选中的节点}"]`,
+            `[data-test-class*="${组件测试类名.编辑临时创建节点之前选中的节点}"]`,
           )
           .should('not.exist');
       });

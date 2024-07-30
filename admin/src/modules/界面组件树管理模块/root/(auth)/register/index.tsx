@@ -4,13 +4,11 @@ import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Checkbox, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { use全局事件系统 } from '../../../hooks';
 import { RegisterFormValues } from '../../../types';
 import { handleLoginSuccess } from '../login/hooks';
 
 export const Register: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const 全局事件系统实例 = use全局事件系统();
 
   const navigate = useNavigate();
 
@@ -26,12 +24,7 @@ export const Register: React.FC = () => {
       if (values.autoLogin) {
         const { accessToken } = result as LoginResponseDto;
 
-        handleLoginSuccess(
-          values.username,
-          accessToken,
-          navigate,
-          全局事件系统实例,
-        );
+        handleLoginSuccess(values.username, accessToken);
       } else {
         navigate('/login');
       }

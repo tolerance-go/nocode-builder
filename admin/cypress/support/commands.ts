@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-import { 测试标识, 测试类名 } from '@/common/constants';
+import { 组件测试标识, 组件测试类名 } from '@/common/constants';
 import { BASE_API } from './constants';
 import { fullPathnames } from '@/common/constants';
 import { constructPathname } from './utils';
@@ -47,22 +47,22 @@ Cypress.Commands.add('拦截请求', (options, body) => {
 });
 
 Cypress.Commands.add('获取项目树容器', () => {
-  return cy.获取测试标识(测试标识.项目树容器);
+  return cy.获取测试标识(组件测试标识.项目树容器);
 });
 
 Cypress.Commands.add('添加项目树视图项目', () => {
   cy.获取添加项目的按钮().click();
-  cy.获取测试标识(测试标识.创建视图项目节点的菜单项标题).click();
+  cy.获取测试标识(组件测试标识.创建视图项目节点的菜单项标题).click();
 });
 
 Cypress.Commands.add('添加项目树蓝图项目', () => {
   cy.获取添加项目的按钮().click();
-  cy.获取测试标识(测试标识.创建蓝图项目节点的菜单项标题).click();
+  cy.获取测试标识(组件测试标识.创建蓝图项目节点的菜单项标题).click();
 });
 
 Cypress.Commands.add('添加项目树数据表项目', () => {
   cy.获取添加项目的按钮().click();
-  cy.获取测试标识(测试标识.创建数据表项目节点的菜单项标题).click();
+  cy.获取测试标识(组件测试标识.创建数据表项目节点的菜单项标题).click();
 });
 
 Cypress.Commands.add('组合批量选中节点', (titles) => {
@@ -208,7 +208,7 @@ Cypress.Commands.add('登录', (username: string, password: string) => {
 
 Cypress.Commands.add('获取项目树节点标题元素', (name: string) => {
   return cy
-    .get(`[data-test-class*="${测试类名.项目树节点标题}"]`)
+    .get(`[data-test-class*="${组件测试类名.项目树节点标题}"]`)
     .filter((_index, element) => {
       return element.textContent === name;
     });
@@ -219,15 +219,15 @@ Cypress.Commands.add('获取项目树节点通过标题', (name: string) => {
 });
 
 Cypress.Commands.add('获取项目树标题输入框', () => {
-  return cy.get(`input#${测试标识.项目树标题输入框}`);
+  return cy.get(`input#${组件测试标识.项目树标题输入框}`);
 });
 
 Cypress.Commands.add('获取添加项目组的按钮', () => {
-  return cy.get(`[data-test-id="${测试标识.创建项目组节点的按钮}"]`);
+  return cy.get(`[data-test-id="${组件测试标识.创建项目组节点的按钮}"]`);
 });
 
 Cypress.Commands.add('获取添加项目的按钮', () => {
-  return cy.get(`[data-test-id="${测试标识.创建项目节点的按钮}"]`);
+  return cy.get(`[data-test-id="${组件测试标识.创建项目节点的按钮}"]`);
 });
 
 Cypress.Commands.add('获取测试标识', (id: string) => {

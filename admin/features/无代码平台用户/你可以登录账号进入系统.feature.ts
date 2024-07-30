@@ -1,4 +1,4 @@
-import { fullPathnames, 测试标识 } from '@/common/constants';
+import { fullPathnames, 组件测试标识 } from '@/common/constants';
 import { RootState } from '@/modules/界面状态仓库模块/types';
 import { localStateFieldName } from '@/modules/界面状态仓库模块/constants';
 import { 使用场景 } from '@cypress/support/utils';
@@ -8,9 +8,9 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
   假如('用户登录后，应该过滤掉某些属性后保存到本地 state', ({ 当, 那么 }) => {
     当('用户登录成功后', () => {
       cy.visit('/login');
-      cy.获取测试标识(测试标识.登录用户名输入框).type('yb');
-      cy.获取测试标识(测试标识.登录密码输入框).type('123456');
-      cy.获取测试标识(测试标识.登录提交按钮).click();
+      cy.获取测试标识(组件测试标识.登录用户名输入框).type('yb');
+      cy.获取测试标识(组件测试标识.登录密码输入框).type('123456');
+      cy.获取测试标识(组件测试标识.登录提交按钮).click();
     });
 
     那么('本地 state 中不包括 location.pathname', () => {
@@ -31,17 +31,20 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
         cy.visit('/login');
       });
       当('用户在登录页面输入用户名 "yb" 和密码 "123456"', () => {
-        cy.获取测试标识(测试标识.登录用户名输入框).type('yb');
-        cy.获取测试标识(测试标识.登录密码输入框).type('123456');
+        cy.获取测试标识(组件测试标识.登录用户名输入框).type('yb');
+        cy.获取测试标识(组件测试标识.登录密码输入框).type('123456');
       });
       并且('点击登录按钮', () => {
-        cy.获取测试标识(测试标识.登录提交按钮).click();
+        cy.获取测试标识(组件测试标识.登录提交按钮).click();
       });
       那么('用户会跳转到主页', () => {
         cy.当前访问应该为主页();
       });
       并且('用户会看到自己的姓名', () => {
-        cy.获取测试标识(测试标识.用户信息显示按钮).should('have.text', 'yb');
+        cy.获取测试标识(组件测试标识.用户信息显示按钮).should(
+          'have.text',
+          'yb',
+        );
       });
     },
   );
@@ -56,7 +59,10 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
         cy.visit('/');
       });
       那么('用户会看到自己的姓名', () => {
-        cy.获取测试标识(测试标识.用户信息显示按钮).should('have.text', 'yb');
+        cy.获取测试标识(组件测试标识.用户信息显示按钮).should(
+          'have.text',
+          'yb',
+        );
       });
     },
   );
@@ -66,7 +72,7 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
       cy.visit('/login');
     });
     那么('用户应该能看到登录表单', () => {
-      cy.获取测试标识(测试标识.登录表单).should('be.visible');
+      cy.获取测试标识(组件测试标识.登录表单).should('be.visible');
     });
   });
 
@@ -75,7 +81,7 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
       cy.visit('/login');
     });
     那么('用户可以看到用户名输入框聚焦', () => {
-      cy.获取测试标识(测试标识.登录用户名输入框).should('be.focused');
+      cy.获取测试标识(组件测试标识.登录用户名输入框).should('be.focused');
     });
   });
 
@@ -86,11 +92,11 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
         cy.visit('/login');
       });
       当('用户在登录页面输入用户名 "yb" 和密码 "123456"', () => {
-        cy.获取测试标识(测试标识.登录用户名输入框).type('yb');
-        cy.获取测试标识(测试标识.登录密码输入框).type('123456');
+        cy.获取测试标识(组件测试标识.登录用户名输入框).type('yb');
+        cy.获取测试标识(组件测试标识.登录密码输入框).type('123456');
       });
       并且('点击登录按钮', () => {
-        cy.获取测试标识(测试标识.登录提交按钮).click();
+        cy.获取测试标识(组件测试标识.登录提交按钮).click();
       });
       那么('用户应该被重定向到主页并看到欢迎信息', () => {
         cy.页面路径应该为(fullPathnames.root);
@@ -107,12 +113,12 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
       当(
         '用户在登录页面输入无效的用户名 "invalidUser" 和密码 "invalidPass"',
         () => {
-          cy.获取测试标识(测试标识.登录用户名输入框).type('invalidUser');
-          cy.获取测试标识(测试标识.登录密码输入框).type('invalidPass');
+          cy.获取测试标识(组件测试标识.登录用户名输入框).type('invalidUser');
+          cy.获取测试标识(组件测试标识.登录密码输入框).type('invalidPass');
         },
       );
       并且('点击登录按钮', () => {
-        cy.获取测试标识(测试标识.登录提交按钮).click();
+        cy.获取测试标识(组件测试标识.登录提交按钮).click();
       });
       那么('用户应该看到错误提示信息并停留在登录页面', () => {
         cy.获取antd通知框描述().should('contain.text', '用户不存在');
@@ -129,18 +135,18 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
       });
 
       当('用户在用户名和密码输入框中留空', () => {
-        cy.获取测试标识(测试标识.登录用户名输入框).clear();
-        cy.获取测试标识(测试标识.登录密码输入框).clear();
+        cy.获取测试标识(组件测试标识.登录用户名输入框).clear();
+        cy.获取测试标识(组件测试标识.登录密码输入框).clear();
       });
       并且('点击登录按钮', () => {
-        cy.获取测试标识(测试标识.登录提交按钮).click();
+        cy.获取测试标识(组件测试标识.登录提交按钮).click();
       });
       那么('用户应该看到输入框的错误提示信息并停留在登录页面', () => {
-        cy.获取测试标识(测试标识.登录用户名输入框)
+        cy.获取测试标识(组件测试标识.登录用户名输入框)
           .parents('.ant-form-item')
           .find('.ant-form-item-explain-error')
           .should('be.visible');
-        cy.获取测试标识(测试标识.登录密码输入框)
+        cy.获取测试标识(组件测试标识.登录密码输入框)
           .parents('.ant-form-item')
           .find('.ant-form-item-explain-error')
           .should('be.visible');
@@ -154,8 +160,8 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
     当('用户已经成功登录并点击登出按钮', () => {
       cy.登录('yb', '123456'); // 假设这是一个自定义命令，用于简化登录过程
       cy.visit('/');
-      cy.获取测试标识(测试标识.用户名称文本).trigger('mouseover');
-      cy.获取测试标识(测试标识.登出按钮文本).should('be.visible').click();
+      cy.获取测试标识(组件测试标识.用户名称文本).trigger('mouseover');
+      cy.获取测试标识(组件测试标识.登出按钮文本).should('be.visible').click();
     });
     那么('用户应该被登出并返回到登录页面', () => {
       cy.url().should('include', '/login');
@@ -171,27 +177,27 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
       当(
         '用户在登录页面输入错误的用户名 "errorUser" 和正确的密码 "123456"',
         () => {
-          cy.获取测试标识(测试标识.登录用户名输入框).type('errorUser');
-          cy.获取测试标识(测试标识.登录密码输入框).type('123456');
+          cy.获取测试标识(组件测试标识.登录用户名输入框).type('errorUser');
+          cy.获取测试标识(组件测试标识.登录密码输入框).type('123456');
         },
       );
       并且('点击登录按钮', () => {
-        cy.获取测试标识(测试标识.登录提交按钮).click();
+        cy.获取测试标识(组件测试标识.登录提交按钮).click();
       });
       那么('页面应该显示登录失败的错误提示', () => {
         cy.获取antd通知框描述().should('contain.text', '用户不存在');
       });
 
       当('用户在登录页面输入正确的用户名 "yb" 和错误的密码 "wrongPass"', () => {
-        cy.获取测试标识(测试标识.登录用户名输入框).type(
+        cy.获取测试标识(组件测试标识.登录用户名输入框).type(
           '{selectall}{backspace}yb',
         );
-        cy.获取测试标识(测试标识.登录密码输入框).type(
+        cy.获取测试标识(组件测试标识.登录密码输入框).type(
           '{selectall}{backspace}wrongPass',
         );
       });
       并且('点击登录按钮', () => {
-        cy.获取测试标识(测试标识.登录提交按钮).click();
+        cy.获取测试标识(组件测试标识.登录提交按钮).click();
       });
       那么('页面应该显示登录失败的错误提示', () => {
         cy.获取antd通知框描述().should('contain.text', '密码错误');
@@ -205,27 +211,27 @@ import { createLocalforageInstance } from '@/modules/services/LocalForageService
     });
 
     并且('用户在登录页面不输入用户名，输入密码 "123456"', () => {
-      cy.获取测试标识(测试标识.登录密码输入框).type('123456');
+      cy.获取测试标识(组件测试标识.登录密码输入框).type('123456');
     });
     当('用户点击登录按钮', () => {
-      cy.获取测试标识(测试标识.登录提交按钮).click();
+      cy.获取测试标识(组件测试标识.登录提交按钮).click();
     });
     那么('页面应该显示用户名必填的提示', () => {
-      cy.获取测试标识(测试标识.登录用户名输入框)
+      cy.获取测试标识(组件测试标识.登录用户名输入框)
         .parents('.ant-form-item')
         .find('.ant-form-item-explain-error')
         .should('be.visible');
     });
 
     当('用户在登录页面输入用户名 "yb" 并且不输入密码', () => {
-      cy.获取测试标识(测试标识.登录用户名输入框).type('yb');
-      cy.获取测试标识(测试标识.登录密码输入框).clear();
+      cy.获取测试标识(组件测试标识.登录用户名输入框).type('yb');
+      cy.获取测试标识(组件测试标识.登录密码输入框).clear();
     });
     当('用户点击登录按钮', () => {
-      cy.获取测试标识(测试标识.登录提交按钮).click();
+      cy.获取测试标识(组件测试标识.登录提交按钮).click();
     });
     那么('页面应该显示密码必填的提示', () => {
-      cy.获取测试标识(测试标识.登录密码输入框)
+      cy.获取测试标识(组件测试标识.登录密码输入框)
         .parents('.ant-form-item')
         .find('.ant-form-item-explain-error')
         .should('be.visible');

@@ -1,13 +1,8 @@
-import { 事件中心系统 } from '@/modules/事件中心系统';
+import { TOKEN_KEY } from '@/common/constants';
+import { redirectTo } from '@/common/utils';
+import store from 'store2';
 
-export const handleLoginSuccess = (
-  username: string,
-  accessToken: string,
-  navigate: (path: string) => void,
-  全局事件系统实例: 事件中心系统,
-) => {
-  全局事件系统实例.emit('界面视图管理者/用户登录成功', {
-    token: accessToken,
-  });
-  navigate(username.startsWith('@') ? '/custom' : '/');
+export const handleLoginSuccess = (username: string, accessToken: string) => {
+  store.set(TOKEN_KEY, accessToken);
+  redirectTo(username.startsWith('@') ? 'custom' : '');
 };

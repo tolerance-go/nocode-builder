@@ -1,16 +1,14 @@
-import { 测试标识 } from '@/common/constants';
+import { 组件测试标识 } from '@/common/constants';
 import { api } from '@/globals';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 import { Button, Form, Input } from 'antd';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { use全局事件系统 } from '../../../hooks';
 import { LoginFormValues } from '../../../types';
 import { handleLoginSuccess } from './hooks';
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
-  const 全局事件系统实例 = use全局事件系统();
 
   const [loading, setLoading] = useState(false);
   const onFinish = async (values: LoginFormValues) => {
@@ -20,12 +18,7 @@ export const Login: React.FC = () => {
         username: values.username,
         password: values.password,
       });
-      handleLoginSuccess(
-        values.username,
-        accessToken,
-        navigate,
-        全局事件系统实例,
-      );
+      handleLoginSuccess(values.username, accessToken);
     } catch (error) {
       /* empty */
     } finally {
@@ -34,14 +27,17 @@ export const Login: React.FC = () => {
   };
 
   return (
-    <Form<LoginFormValues> onFinish={onFinish} data-test-id={测试标识.登录表单}>
+    <Form<LoginFormValues>
+      onFinish={onFinish}
+      data-test-id={组件测试标识.登录表单}
+    >
       <Form.Item
         name="username"
         rules={[{ required: true, message: '请输入你的用户名!' }]}
       >
         <Input
           autoComplete="off"
-          data-test-id={测试标识.登录用户名输入框}
+          data-test-id={组件测试标识.登录用户名输入框}
           autoFocus
           prefix={<UserOutlined className="site-form-item-icon" />}
           placeholder="用户名"
@@ -53,7 +49,7 @@ export const Login: React.FC = () => {
       >
         <Input
           autoComplete="off"
-          data-test-id={测试标识.登录密码输入框}
+          data-test-id={组件测试标识.登录密码输入框}
           prefix={<LockOutlined />}
           type="password"
           placeholder="密码"
@@ -61,7 +57,7 @@ export const Login: React.FC = () => {
       </Form.Item>
       <Form.Item>
         <Button
-          data-test-id={测试标识.登录提交按钮}
+          data-test-id={组件测试标识.登录提交按钮}
           loading={loading}
           block
           type="primary"

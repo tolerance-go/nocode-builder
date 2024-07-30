@@ -2,7 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/modules/界面状态仓库模�
 import { 组件类名 } from '@/modules/界面组件树管理模块/constants';
 import { use界面状态管理者 } from '@/modules/界面组件树管理模块/hooks';
 import { selectProjectStructureTreeNodeDataRecordItem } from '@/modules/界面组件树管理模块/selectors';
-import { 测试标识, 测试类名 } from '@/common/constants';
+import { 组件测试标识, 组件测试类名 } from '@/common/constants';
 import { cx } from '@emotion/css';
 import { Dropdown, Flex, Typography, theme } from 'antd';
 import { TitleInput } from './TitleInput';
@@ -54,7 +54,7 @@ export const Title = ({ nodeKey }: { nodeKey: ViewKey }) => {
             key: 'edit',
             label: (
               <Flex
-                data-test-id={测试标识.重命名项目树节点标题菜单按钮}
+                data-test-id={组件测试标识.重命名项目树节点标题菜单按钮}
                 justify="space-between"
                 align="center"
               >
@@ -95,9 +95,9 @@ export const Title = ({ nodeKey }: { nodeKey: ViewKey }) => {
     >
       <span
         data-test-class={cx(
-          测试类名.项目树节点标题,
+          组件测试类名.项目树节点标题,
           编辑临时创建节点之前选中的节点是否为自身 &&
-            测试类名.编辑临时创建节点之前选中的节点,
+            组件测试类名.编辑临时创建节点之前选中的节点,
         )}
         style={{
           display: 'inline-block',

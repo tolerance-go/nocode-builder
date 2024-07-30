@@ -1,6 +1,6 @@
 import { useAppSelector } from '@/modules/界面状态仓库模块';
 import { use跟随鼠标显示内容管理者 } from '@/modules/界面组件树管理模块/hooks';
-import { 测试标识 } from '@/common/constants';
+import { 组件测试标识 } from '@/common/constants';
 import { theme } from 'antd';
 import { useLayoutEffect, useState } from 'react';
 
@@ -55,7 +55,7 @@ export const 拖拽跟随鼠标的容器 = () => {
         left: mousePos.x + 20,
         zIndex: token.zIndexPopupBase + 1,
       }}
-      data-test-id={测试标识.拖拽跟随鼠标的容器}
+      data-test-id={组件测试标识.拖拽跟随鼠标的容器}
     >
       {跟随鼠标的组件元素}
     </div>

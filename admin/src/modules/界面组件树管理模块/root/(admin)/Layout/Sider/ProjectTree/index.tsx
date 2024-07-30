@@ -9,7 +9,7 @@ import {
   use界面状态管理者,
 } from '@/modules/界面组件树管理模块/hooks';
 import { useKeyPressEventByKeyboardJs } from '@/common/hooks';
-import { 测试标识 } from '@/common/constants';
+import { 组件测试标识 } from '@/common/constants';
 import { css, cx } from '@emotion/css';
 import { theme } from 'antd';
 import { debounce } from 'lodash-es';
@@ -160,12 +160,12 @@ export const ProjectTree = () => {
         // 处理所有内部的点击冒泡
         dispatch(projectTreeActions.更新是否正在聚焦项目树区域(true));
       }}
-      data-test-id={测试标识.项目树区域容器}
+      data-test-id={组件测试标识.项目树区域容器}
       className={cx(是否正在聚焦项目树区域 && 'focused')}
     >
       <ToolBar />
       <div
-        data-test-id={测试标识.项目树容器}
+        data-test-id={组件测试标识.项目树容器}
         className={cx(
           css`
             border-top: 1px solid transparent;

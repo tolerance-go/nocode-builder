@@ -1,4 +1,4 @@
-import { 测试标识, 测试类名 } from '@/common/constants';
+import { 组件测试标识, 组件测试类名 } from '@/common/constants';
 import { apiUrls } from '@cypress/support/_gen/apiUrls';
 import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
 
@@ -136,7 +136,7 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
         );
       });
       那么('鼠标附近应该出现提示数量为 3', () => {
-        cy.获取测试标识(测试标识.拖拽跟随鼠标的容器).should(
+        cy.获取测试标识(组件测试标识.拖拽跟随鼠标的容器).should(
           'contain.text',
           '3',
         );
@@ -223,7 +223,7 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
       );
     });
     那么('鼠标附近应该出现标题提示为 file1', () => {
-      cy.获取测试标识(测试标识.拖拽跟随鼠标的容器).should(
+      cy.获取测试标识(组件测试标识.拖拽跟随鼠标的容器).should(
         'contain.text',
         'file1',
       );
@@ -492,7 +492,7 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
             const $parent = getTreeNodeParent($file);
             expect(
               $parent
-                .find(`[data-test-class*="${测试类名.项目树节点标题}"]`)
+                .find(`[data-test-class*="${组件测试类名.项目树节点标题}"]`)
                 .text(),
             ).equal('folder');
           });
@@ -705,7 +705,7 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
             const $parent = getTreeNodeParent($file);
             expect(
               $parent
-                .find(`[data-test-class*="${测试类名.项目树节点标题}"]`)
+                .find(`[data-test-class*="${组件测试类名.项目树节点标题}"]`)
                 .text(),
             ).equal('folder');
           });
@@ -838,7 +838,9 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
       cy.获取项目树节点通过标题('file').then(($file) => {
         const $parent = getTreeNodeParent($file);
         expect(
-          $parent.find(`[data-test-class="${测试类名.项目树节点标题}"]`).text(),
+          $parent
+            .find(`[data-test-class="${组件测试类名.项目树节点标题}"]`)
+            .text(),
         ).equal('folder');
       });
     });
@@ -1130,10 +1132,10 @@ import { 使用场景, getTreeNodeParent } from '@cypress/support/utils';
       () => {
         cy.获取添加项目组的按钮().click();
         cy.获取项目树标题输入框().type('folder2');
-        cy.获取测试标识(测试标识.项目树容器).click();
+        cy.获取测试标识(组件测试标识.项目树容器).click();
         cy.获取添加项目组的按钮().click();
         cy.获取项目树标题输入框().type('folder1');
-        cy.获取测试标识(测试标识.项目树容器).click();
+        cy.获取测试标识(组件测试标识.项目树容器).click();
       },
     );
     那么('第一个标题为 folder1，第二个标题为 folder2', () => {

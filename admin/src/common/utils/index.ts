@@ -5,3 +5,4 @@ export * from './validPaths';
 export * from './shallowEqual';
 export * from './delay';
 export * from './hexToRgb';
+export * from './redirectToX';

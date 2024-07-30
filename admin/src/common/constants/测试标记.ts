@@ -1,4 +1,4 @@
-export const 测试标识 = {
+export const 组件测试标识 = {
   创建项目组节点的按钮: 'create-project-group-node-btn',
   创建项目节点的按钮: 'create-project-node-btn',
   项目树标题输入框: 'project-tree-title-input',
@@ -51,7 +51,7 @@ export const 测试标识 = {
   },
 };
 
-export const 测试类名 = {
+export const 组件测试类名 = {
   项目树节点标题: 'project-tree-title',
   编辑临时创建节点之前选中的节点: 'previous-selected-node',
 };

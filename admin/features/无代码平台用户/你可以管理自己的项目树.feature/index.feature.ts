@@ -1,4 +1,4 @@
-import { 测试类名, 测试标识 } from '@/common/constants';
+import { 组件测试类名, 组件测试标识 } from '@/common/constants';
 import { apiUrls } from '@cypress/support/_gen/apiUrls';
 import {
   使用场景,
@@ -110,7 +110,7 @@ import {
 
       那么('项目节点应该被激活', () => {
         cy.获取项目树节点通过标题('项目节点')
-          .find(`[data-test-class="${测试类名.项目树节点标题}"]`)
+          .find(`[data-test-class="${组件测试类名.项目树节点标题}"]`)
           .should('have.class', 'active');
       });
 
@@ -139,17 +139,17 @@ import {
 
     那么('项目节点应该被激活', () => {
       cy.获取项目树节点通过标题('项目节点')
-        .find(`[data-test-class="${测试类名.项目树节点标题}"]`)
+        .find(`[data-test-class="${组件测试类名.项目树节点标题}"]`)
         .should('have.class', 'active');
     });
 
     当('用户选中项目树容器', () => {
-      cy.获取测试标识(测试标识.项目树容器).click('bottom');
+      cy.获取测试标识(组件测试标识.项目树容器).click('bottom');
     });
 
     那么('项目节点应该失去激活状态', () => {
       cy.获取项目树节点通过标题('项目节点')
-        .find(`[data-test-class="${测试类名.项目树节点标题}"]`)
+        .find(`[data-test-class="${组件测试类名.项目树节点标题}"]`)
         .should('not.have.class', 'active');
     });
 
@@ -159,7 +159,7 @@ import {
 
     那么('项目节点应该再次进入激活状态', () => {
       cy.获取项目树节点通过标题('项目节点')
-        .find(`[data-test-class="${测试类名.项目树节点标题}"]`)
+        .find(`[data-test-class="${组件测试类名.项目树节点标题}"]`)
         .should('have.class', 'active');
     });
   });
@@ -188,7 +188,7 @@ import {
       cy.获取项目树标题输入框().type('{enter}');
     });
     那么('用户应该能看到分组名称在项目树中', () => {
-      cy.获取测试类(测试类名.项目树节点标题)
+      cy.获取测试类(组件测试类名.项目树节点标题)
         .should('have.length', 1)
         .and('contain.text', 'Test Group');
     });
@@ -204,7 +204,7 @@ import {
         cy.visit('/');
       });
       当('用户创建项目组节点', () => {
-        cy.获取测试标识(测试标识.创建项目组节点的按钮).click();
+        cy.获取测试标识(组件测试标识.创建项目组节点的按钮).click();
       });
       当('用户输入内容后，又全部撤销', () => {
         cy.获取项目树标题输入框().type('s{backspace}');
@@ -259,7 +259,7 @@ import {
         cy['获取antd树列表内部容器']().should('have.length', 1);
       });
       并且('点击创建项目分组按钮', () => {
-        cy.获取测试标识(测试标识.创建项目组节点的按钮).click();
+        cy.获取测试标识(组件测试标识.创建项目组节点的按钮).click();
       });
       那么('输入框应该在根节点下一级的第一个位置显示', () => {
         cy.获取项目树标题输入框()
@@ -335,7 +335,7 @@ import {
           .children()
           .should('have.length', 1)
           .first()
-          .find(`#${测试标识.项目树标题输入框}`)
+          .find(`#${组件测试标识.项目树标题输入框}`)
           .should('be.visible');
       });
     },
