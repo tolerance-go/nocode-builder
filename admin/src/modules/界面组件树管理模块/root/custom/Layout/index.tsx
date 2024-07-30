@@ -30,6 +30,8 @@ export const Layout = () => {
         justify="space-between"
         style={{
           backgroundColor: token.colorBgContainer,
+          paddingRight: token.controlPaddingHorizontalSM,
+          borderBottom: `1px solid ${token.colorBorderSecondary}`,
         }}
       >
         <Menu />

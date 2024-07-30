@@ -6,6 +6,7 @@ import {
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Menu as AntdMenu } from 'antd';
+import { css } from '@emotion/css';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -41,6 +42,9 @@ export const Menu: React.FC = () => {
       selectedKeys={[current]}
       mode="horizontal"
       items={items}
+      className={css`
+        border-bottom: 0;
+      `}
     />
   );
 };

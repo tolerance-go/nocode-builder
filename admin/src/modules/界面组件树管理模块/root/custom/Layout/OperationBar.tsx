@@ -3,19 +3,12 @@ import {
   PlaySquareFilled,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Button, Divider, Space, Switch, theme } from 'antd';
+import { Button, Divider, Space, Switch } from 'antd';
 import React from 'react';
 
 export const OperationBar: React.FC = () => {
-  const { token } = theme.useToken();
-
   return (
-    <Space
-      style={{
-        paddingRight: token.controlPaddingHorizontalSM,
-      }}
-      split={<Divider type="vertical" />}
-    >
+    <Space split={<Divider type="vertical" />}>
       <Space>
         <Button type="primary" size="small">
           Quoter-ETH-JUPITER

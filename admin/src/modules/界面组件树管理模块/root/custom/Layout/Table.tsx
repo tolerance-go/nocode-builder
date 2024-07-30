@@ -157,6 +157,7 @@ export const Table = () => {
       headerName: 'OI',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'Pos',
@@ -164,6 +165,7 @@ export const Table = () => {
       headerName: 'Pos',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'OBSz',
@@ -171,6 +173,7 @@ export const Table = () => {
       headerName: 'OBSz',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'MBSz',
@@ -178,6 +181,7 @@ export const Table = () => {
       headerName: 'MBSz',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'MBIV',
@@ -185,6 +189,7 @@ export const Table = () => {
       headerName: 'MBIV',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'OBIV',
@@ -192,6 +197,7 @@ export const Table = () => {
       headerName: 'OBIV',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'OAIV',
@@ -199,6 +205,7 @@ export const Table = () => {
       headerName: 'OAIV',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
       cellStyle: getCellStyle(),
     },
     {
@@ -207,6 +214,7 @@ export const Table = () => {
       headerName: 'MAIV',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
       cellStyle: getCellStyle(),
     },
     {
@@ -215,6 +223,7 @@ export const Table = () => {
       headerName: 'OBidRaw',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
       cellStyle: getCellStyle(),
     },
     {
@@ -223,6 +232,7 @@ export const Table = () => {
       headerName: 'MBid',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
       cellStyle: getCellStyle(),
     },
     {
@@ -231,6 +241,7 @@ export const Table = () => {
       headerName: 'OBid',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
       cellStyle: getCellStyle(),
     },
     {
@@ -239,6 +250,7 @@ export const Table = () => {
       headerName: 'OFair',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
       cellStyle: getCellStyle(),
     },
     {
@@ -247,6 +259,7 @@ export const Table = () => {
       headerName: 'OptMid',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
       cellStyle: getCellStyle(),
     },
     {
@@ -255,6 +268,7 @@ export const Table = () => {
       headerName: 'OAsk',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
       cellStyle: getCellStyle(),
     },
     {
@@ -263,6 +277,7 @@ export const Table = () => {
       headerName: 'MAsk',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'OAskRaw',
@@ -270,6 +285,7 @@ export const Table = () => {
       headerName: 'OAskRaw',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'MASz',
@@ -277,6 +293,7 @@ export const Table = () => {
       headerName: 'MASz',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'OASz',
@@ -284,6 +301,7 @@ export const Table = () => {
       headerName: 'OASz',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'MAS',
@@ -291,6 +309,7 @@ export const Table = () => {
       headerName: 'MAS',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'OSp',
@@ -298,6 +317,7 @@ export const Table = () => {
       headerName: 'OSp',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'State',
@@ -305,6 +325,7 @@ export const Table = () => {
       headerName: 'State',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agTextColumnFilter',
     },
     {
       field: 'BsDelta',
@@ -312,6 +333,7 @@ export const Table = () => {
       headerName: 'BsDelta',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'Strike',
@@ -319,6 +341,7 @@ export const Table = () => {
       headerName: 'Strike',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'Exch',
@@ -326,6 +349,7 @@ export const Table = () => {
       headerName: 'Exch',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'Expiry',
@@ -333,6 +357,7 @@ export const Table = () => {
       headerName: 'Expiry',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agDateColumnFilter',
     },
     {
       field: 'UMP',
@@ -340,6 +365,7 @@ export const Table = () => {
       headerName: 'UMP',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'OFairVol',
@@ -347,6 +373,7 @@ export const Table = () => {
       headerName: 'OFairVol',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'volMv',
@@ -354,6 +381,7 @@ export const Table = () => {
       headerName: 'volMv',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'iMv',
@@ -361,6 +389,7 @@ export const Table = () => {
       headerName: 'iMv',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'VspSft',
@@ -368,6 +397,7 @@ export const Table = () => {
       headerName: 'VspSft',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'PosGamma',
@@ -375,6 +405,7 @@ export const Table = () => {
       headerName: 'PosGamma',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
     {
       field: 'PosVega',
@@ -382,6 +413,7 @@ export const Table = () => {
       headerName: 'PosVega',
       width: 120,
       cellRenderer: 'agAnimateShowChangeCellRenderer',
+      filter: 'agNumberColumnFilter',
     },
   ]);
 
