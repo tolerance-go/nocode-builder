@@ -171,6 +171,12 @@ export class 界面状态仓库模块 extends ModuleBase {
       [this.handleMiddleware],
       initialState,
     );
+
+    this.注册用户信息监听();
+    this.监听项目节点激活状态变化并修改url();
+    this.注册监听保存状态到本地();
+    this.注册路由更新监听();
+    this.注册指针移动监听();
   }
 
   注册指针移动监听() {
@@ -283,13 +289,7 @@ export class 界面状态仓库模块 extends ModuleBase {
     );
   }
 
-  protected async onSetup(): Promise<void> {
-    this.注册用户信息监听();
-    this.监听项目节点激活状态变化并修改url();
-    this.注册监听保存状态到本地();
-    this.注册路由更新监听();
-    this.注册指针移动监听();
-  }
+  protected async onSetup(): Promise<void> {}
 
   private 过滤掉某些不存储到本地的state(state: RootState): RootState {
     return produce(state, (draft) => {
