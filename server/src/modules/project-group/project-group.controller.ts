@@ -75,7 +75,9 @@ export class ProjectGroupController {
   ): Promise<ProjectGroupResponseDto> {
     const { parentGroupId, ...rest } = data;
     const userId = req.user.id;
+    const id = await this.projectGroupService.getNextProjectGroupId();
     const projectGroup = await this.projectGroupService.createProjectGroup({
+      id,
       ...rest,
       owner: {
         connect: {

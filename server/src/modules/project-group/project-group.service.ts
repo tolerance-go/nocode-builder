@@ -83,4 +83,16 @@ export class ProjectGroupService {
       throw new HttpException(`清空项目组失败：${error.message}`, 500);
     }
   }
+
+  // 获取下一个 ProjectGroup 的 ID
+  async getNextProjectGroupId(tx?: Prisma.TransactionClient): Promise<number> {
+    const client = tx || this.prisma;
+    const lastProjectGroup = await client.projectGroup.findFirst({
+      orderBy: {
+        id: 'desc',
+      },
+    });
+
+    return lastProjectGroup ? lastProjectGroup.id + 1 : 1;
+  }
 }

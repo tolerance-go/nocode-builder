@@ -10,12 +10,6 @@ export enum ProjectTypeEnum {
   Bluemap = 'Bluemap',
 }
 
-export enum TableNameEnum {
-  User = 'User',
-  Project = 'Project',
-  ProjectGroup = 'ProjectGroup',
-}
-
 export class UserModel {
   id: number;
 

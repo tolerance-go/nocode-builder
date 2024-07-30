@@ -98,6 +98,7 @@ export class SyncService {
     record: ProjectModelRecordDto,
   ): Prisma.ProjectCreateInput {
     const input: Prisma.ProjectCreateInput = {
+      id: record.id,
       name: record.name,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,
@@ -125,6 +126,7 @@ export class SyncService {
     record: ProjectGroupModelRecordDto,
   ): Prisma.ProjectGroupCreateInput {
     const input: Prisma.ProjectGroupCreateInput = {
+      id: record.id,
       name: record.name,
       createdAt: record.createdAt,
       updatedAt: record.updatedAt,

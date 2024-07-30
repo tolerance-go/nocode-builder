@@ -40,7 +40,7 @@ export interface OperationRecordUnionDto {
 }
 
 export interface OperationDto {
-  tableName: string;
+  tableName: 'User' | 'Project' | 'ProjectGroup';
   operation: 'clearRecords' | 'addRecord' | 'updateRecord' | 'deleteRecord';
   record?: OperationRecordUnionDto;
 }

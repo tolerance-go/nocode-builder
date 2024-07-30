@@ -18,7 +18,8 @@ export class SyncController {
   async applyProjectDiff(
     @Body() operations: OperationsDto,
     // @Req() req: Request & { user: JwtUserDto },
-  ): Promise<void> {
+  ): Promise<boolean> {
     await this.syncService.applyOperations(operations);
+    return true;
   }
 }

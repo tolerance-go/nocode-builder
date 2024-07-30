@@ -74,7 +74,9 @@ export class ProjectController {
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<ProjectResponseDto> {
     const userId = req.user.id;
+    const id = await this.projectService.getNextProjectId();
     const project = await this.projectService.createProject({
+      id,
       ...rest,
       owner: {
         connect: {

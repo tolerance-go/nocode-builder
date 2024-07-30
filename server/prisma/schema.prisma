@@ -25,7 +25,7 @@ model User {
 }
 
 model Project {
-  id             Int           @id @default(autoincrement())
+  id             Int           @id
   name           String
   ownerId        Int
   owner          User          @relation(fields: [ownerId], references: [id])
@@ -37,7 +37,7 @@ model Project {
 }
 
 model ProjectGroup {
-  id            Int            @id @default(autoincrement())
+  id            Int            @id
   name          String
   parentGroupId Int?
   parentGroup   ProjectGroup?  @relation("ChildGroups", fields: [parentGroupId], references: [id])

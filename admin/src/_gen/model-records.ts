@@ -5,7 +5,6 @@
  */
 
 import { ProjectTypeEnum } from './models';
-import { TableNameEnum } from './models';
 
 export class UserModelRecord {
   id: number;
