@@ -1,8 +1,20 @@
+import {
+  ProjectGroupModelRecord,
+  ProjectModelRecord,
+  UserModelRecord,
+} from '@/_gen/model-records';
 import { EngineBase, ModuleBase } from '@/base';
-import { ClientUserModel, 用户表模块 } from '../models/用户表模块';
-import { ClientProjectGroupModel, 项目组表模块 } from '../models/项目组表模块';
-import { ClientProjectModel, 项目表模块 } from '../models/项目表模块';
 import { OperationType } from '@/common/controllers';
+import { api } from '@/globals';
+import { TableName } from '@unocode/common';
+import { 用户表模块 } from '../models/用户表模块';
+import { 项目组表模块 } from '../models/项目组表模块';
+import { 项目表模块 } from '../models/项目表模块';
+import {
+  convertProjectDatesToISO,
+  convertProjectGroupDatesToISO,
+  convertUserDatesToISO,
+} from './utils';
 
 type TransactionFunction = (tables: {
   用户表模块实例: 用户表模块;
@@ -11,9 +23,9 @@ type TransactionFunction = (tables: {
 }) => Promise<void> | void;
 
 interface Operation {
-  tableName: string;
+  tableName: TableName;
   operation: OperationType;
-  record?: ClientUserModel | ClientProjectModel | ClientProjectGroupModel;
+  record?: UserModelRecord | ProjectModelRecord | ProjectGroupModelRecord;
 }
 
 export class 后台数据管理模块 extends ModuleBase {
@@ -48,21 +60,29 @@ export class 后台数据管理模块 extends ModuleBase {
 
           const 用户表模块监听器 = (
             operation: OperationType,
-            record?: ClientUserModel,
+            record?: UserModelRecord,
           ) => {
-            操作收集器.push({ tableName: '用户表模块', operation, record });
+            操作收集器.push({ tableName: TableName.User, operation, record });
           };
           const 项目表模块监听器 = (
             operation: OperationType,
-            record?: ClientProjectModel,
+            record?: ProjectModelRecord,
           ) => {
-            操作收集器.push({ tableName: '项目表模块', operation, record });
+            操作收集器.push({
+              tableName: TableName.Project,
+              operation,
+              record,
+            });
           };
           const 项目组表模块监听器 = (
             operation: OperationType,
-            record?: ClientProjectGroupModel,
+            record?: ProjectGroupModelRecord,
           ) => {
-            操作收集器.push({ tableName: '项目组表模块', operation, record });
+            操作收集器.push({
+              tableName: TableName.ProjectGroup,
+              operation,
+              record,
+            });
           };
 
           const 用户表模块实例TableUnregister =
@@ -88,12 +108,28 @@ export class 后台数据管理模块 extends ModuleBase {
             // 将操作插入到 remoteTransactionQueue 队列中
             this.remoteTransactionQueue = this.remoteTransactionQueue.then(
               async () => {
-                console.log('操作收集器', 操作收集器);
-                for (const 操作 of 操作收集器) {
-                  // 处理每个操作，具体实现根据业务需求
-                  console.log('处理操作:', 操作);
-                  // 在这里添加你要对每个操作执行的代码
-                }
+                await api.syncs.applyProjectDiff({
+                  operations: 操作收集器.map((operation) => {
+                    return {
+                      tableName: operation.tableName,
+                      operation: operation.operation,
+                      record: {
+                        userOperationRecord:
+                          operation.record instanceof UserModelRecord
+                            ? convertUserDatesToISO(operation.record)
+                            : undefined,
+                        projectOperationRecord:
+                          operation.record instanceof ProjectModelRecord
+                            ? convertProjectDatesToISO(operation.record)
+                            : undefined,
+                        projectGroupOperationRecord:
+                          operation.record instanceof ProjectGroupModelRecord
+                            ? convertProjectGroupDatesToISO(operation.record)
+                            : undefined,
+                      },
+                    };
+                  }),
+                });
               },
             );
 

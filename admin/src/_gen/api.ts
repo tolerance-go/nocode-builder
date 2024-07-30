@@ -5,10 +5,44 @@
  * ---------------------------------------------------------------
  */
 
+export interface UserModelRecordDto {
+  id: number;
+  name: string;
+  email?: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectModelRecordDto {
+  id: number;
+  name: string;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+  projectGroupId?: number;
+  type: 'View' | 'DataTable' | 'Bluemap';
+}
+
+export interface ProjectGroupModelRecordDto {
+  id: number;
+  name: string;
+  parentGroupId?: number;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface OperationRecordUnionDto {
+  userOperationRecord?: UserModelRecordDto;
+  projectOperationRecord?: ProjectModelRecordDto;
+  projectGroupOperationRecord?: ProjectGroupModelRecordDto;
+}
+
 export interface OperationDto {
   tableName: string;
   operation: 'clearRecords' | 'addRecord' | 'updateRecord' | 'deleteRecord';
-  record: Record<string, unknown>;
+  record?: OperationRecordUnionDto;
 }
 
 export interface OperationsDto {

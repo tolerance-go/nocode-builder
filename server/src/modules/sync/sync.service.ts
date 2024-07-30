@@ -4,7 +4,7 @@ import { ProjectGroupService } from 'src/modules/project-group/project-group.ser
 import { ProjectService } from 'src/modules/project/project.service';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { OperationsDto } from './dtos';
-import { OperationType } from '@unocode/common';
+import { OperationType, TableName } from '@unocode/common';
 import {
   ProjectModelRecordDto,
   ProjectGroupModelRecordDto,
@@ -25,13 +25,13 @@ export class SyncService {
 
         switch (operationType) {
           case OperationType.ADD_RECORD:
-            if (tableName === 'project') {
+            if (tableName === TableName.Project) {
               const projectRecord = record.projectOperationRecord!;
               await this.projectService.createProject(
                 this.createProjectCreateInput(projectRecord),
                 tx,
               );
-            } else if (tableName === 'projectGroup') {
+            } else if (tableName === TableName.ProjectGroup) {
               const projectGroupRecord = record.projectGroupOperationRecord!;
               await this.projectGroupService.createProjectGroup(
                 this.createProjectGroupCreateInput(projectGroupRecord),
@@ -41,7 +41,7 @@ export class SyncService {
             break;
 
           case OperationType.UPDATE_RECORD:
-            if (tableName === 'project') {
+            if (tableName === TableName.Project) {
               const projectRecord = record.projectOperationRecord!;
               await this.projectService.updateProject(
                 {
@@ -50,7 +50,7 @@ export class SyncService {
                 },
                 tx,
               );
-            } else if (tableName === 'projectGroup') {
+            } else if (tableName === TableName.ProjectGroup) {
               const projectGroupRecord = record.projectGroupOperationRecord!;
 
               await this.projectGroupService.updateProjectGroup(
@@ -64,13 +64,13 @@ export class SyncService {
             break;
 
           case OperationType.DELETE_RECORD:
-            if (tableName === 'project') {
+            if (tableName === TableName.Project) {
               const projectRecord = record.projectOperationRecord!;
               await this.projectService.deleteProject(
                 { id: projectRecord.id },
                 tx,
               );
-            } else if (tableName === 'projectGroup') {
+            } else if (tableName === TableName.ProjectGroup) {
               const projectGroupRecord = record.projectGroupOperationRecord!;
               await this.projectGroupService.deleteProjectGroup(
                 { id: projectGroupRecord.id },
@@ -80,9 +80,9 @@ export class SyncService {
             break;
 
           case OperationType.CLEAR_RECORDS:
-            if (tableName === 'project') {
+            if (tableName === TableName.Project) {
               await this.projectService.clearProjects(tx);
-            } else if (tableName === 'projectGroup') {
+            } else if (tableName === TableName.ProjectGroup) {
               await this.projectGroupService.clearProjectGroups(tx);
             }
             break;

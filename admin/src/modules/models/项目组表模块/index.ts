@@ -1,34 +1,26 @@
-import { ProjectGroupModel, UserModel } from '@/_gen/models';
+import { ProjectGroupModelRecord } from '@/_gen/model-records';
 import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import { 用户表模块 } from '../用户表模块';
 
-export class ClientProjectGroupModel extends ProjectGroupModel {
+export class ClientProjectGroupModel extends ProjectGroupModelRecord {
   constructor({
     id,
     name,
     parentGroupId,
-    parentGroup,
     ownerId,
-    owner,
   }: {
     id: number;
     name: string;
     parentGroupId?: number;
-    parentGroup?: ProjectGroupModel;
     ownerId: number;
-    owner: UserModel;
   }) {
     super({
       id,
       name,
       parentGroupId,
-      parentGroup,
-      childGroups: [],
       ownerId,
-      owner,
-      projects: [],
       createdAt: new Date(),
       updatedAt: new Date(),
     });
@@ -66,12 +58,8 @@ export class 项目组表模块 extends ModuleBase {
     newParentGroupId?: number,
   ): ClientProjectGroupModel {
     const record = this.table.findRecordOrThrow(id);
-    const newParentGroup = newParentGroupId
-      ? this.table.findRecordOrThrow(newParentGroupId)
-      : undefined;
 
     record.parentGroupId = newParentGroupId;
-    record.parentGroup = newParentGroup;
     this.table.updateRecord(record);
 
     return record;
@@ -104,11 +92,7 @@ export class 项目组表模块 extends ModuleBase {
     const record = new ClientProjectGroupModel({
       ...data,
       id: this.table.getNextId(),
-      parentGroup: data.parentGroupId
-        ? this.table.findRecordOrThrow(data.parentGroupId)
-        : undefined,
       ownerId,
-      owner: this.getDependModule(用户表模块).table.findRecordOrThrow(ownerId),
     });
 
     this.table.addRecord(record);

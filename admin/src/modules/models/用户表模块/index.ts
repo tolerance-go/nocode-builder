@@ -1,4 +1,4 @@
-import { UserModel } from '@/_gen/models';
+import { UserModelRecord } from '@/_gen/model-records';
 import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
 import { api } from '@/globals';
@@ -6,7 +6,7 @@ import { 浏览器代理模块 } from '@/modules/simulations/浏览器代理模�
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import store from 'store2';
 
-export class ClientUserModel extends UserModel {
+export class ClientUserModel extends UserModelRecord {
   constructor({
     id,
     name,
@@ -21,10 +21,8 @@ export class ClientUserModel extends UserModel {
       name,
       email,
       password: '',
-      projects: [],
       createdAt: new Date(),
       updatedAt: new Date(),
-      projectGroups: [],
     });
   }
 }
@@ -41,23 +39,23 @@ export class 用户表模块 extends ModuleBase {
   }
 
   tableName: string;
-  table: Table<ClientUserModel>;
+  table: Table<UserModelRecord>;
   token: string | null;
   tokenFieldName: string;
 
   constructor(engine: EngineBase) {
     super(engine);
     this.tableName = 'user_model';
-    this.table = new Table<ClientUserModel>();
+    this.table = new Table<UserModelRecord>();
     this.token = null;
     this.tokenFieldName = 'token';
   }
 
-  public get currentLoginUser(): ClientUserModel | undefined {
+  public get currentLoginUser(): UserModelRecord | undefined {
     return this.table.findRecordByIndex(0);
   }
 
-  public get loginUser(): ClientUserModel {
+  public get loginUser(): UserModelRecord {
     if (!this.currentLoginUser) {
       throw new Error('未登录');
     }

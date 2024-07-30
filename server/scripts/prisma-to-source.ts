@@ -285,10 +285,6 @@ class File {
 class ModelsFile extends File {
   constructor(classes: Class[], enums: Enum[] = []) {
     super(classes, enums);
-  }
-
-  print(): string {
-    // 设置 class 和 enum 的 printName
     this.classes.forEach((classItem) => {
       classItem.printName = `${classItem.name}Model`;
       classItem.printConstructorFlag = true;
@@ -296,21 +292,46 @@ class ModelsFile extends File {
     this.enums.forEach((enumItem) => {
       enumItem.printName = `${enumItem.name}Enum`;
     });
+  }
 
+  print(): string {
     return super.print();
+  }
+}
+
+class ModelRecordsFile extends File {
+  constructor(classes: Class[], enums: Enum[] = []) {
+    super(classes, enums);
+    this.classes = this.classes.map((classItem) => {
+      classItem.fields = classItem.fields.filter((field) => {
+        return !field.relationFromFields;
+      });
+      return classItem;
+    });
+    // 设置 class 和 enum 的 printName
+    this.classes.forEach((classItem) => {
+      classItem.printName = `${classItem.name}ModelRecord`;
+      classItem.printConstructorFlag = true;
+    });
+    this.enums.forEach((enumItem) => {
+      enumItem.printName = `${enumItem.name}Enum`;
+    });
+  }
+
+  print(): string {
+    const dtoImports = this.enums.map((enumItem) => {
+      return new Import([enumItem.printName], './models');
+    });
+
+    const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');
+    const importsStr = dtoImports.map((imp) => imp.print()).join('\n');
+
+    return `${importsStr}\n\n${classesStr}`;
   }
 }
 
 // 新增 DTOFile 类，继承自 File 类
 class DTOFile extends File {
-  static prevHandleClasses(classes: Class[]) {
-    // 先改名字，此时 fields 中 type
-    classes.forEach((cls) => {
-      cls.printName = `${cls.name}ModelRecordDto`;
-      cls.printConstructorFlag = false;
-    });
-  }
-
   splitMode: boolean;
 
   hideRefFields: boolean;
@@ -324,6 +345,21 @@ class DTOFile extends File {
     super(classes, enums);
     this.splitMode = splitMode;
     this.hideRefFields = hideRefFields;
+
+    // 先改名字，此时 fields 中 type
+    this.classes.forEach((cls) => {
+      cls.printName = `${cls.name}ModelRecordDto`;
+      cls.printConstructorFlag = false;
+    });
+
+    if (this.hideRefFields) {
+      this.classes = this.classes.map((classItem) => {
+        classItem.fields = classItem.fields.filter((field) => {
+          return !field.relationFromFields;
+        });
+        return classItem;
+      });
+    }
   }
 
   print(): string {
@@ -339,12 +375,6 @@ class DTOFile extends File {
     const refsImports = new Map<string, Import>();
 
     this.classes.forEach((cls) => {
-      if (this.hideRefFields) {
-        cls.fields = cls.fields.filter((field) => {
-          return !field.relationFromFields;
-        });
-      }
-
       cls.fields.forEach((field) => {
         const apiPropertyParams: string[] = [];
 
@@ -469,44 +499,42 @@ class DTOFile extends File {
 const schemaFilePath = path.resolve('./prisma/schema.prisma');
 const schemaContent = fs.readFileSync(schemaFilePath, 'utf-8');
 
-const deepCloneDtoClasses = (classes: Class[], enums: Enum[]) => {
+const deepCloneClasses = (classes: Class[], enums: Enum[]) => {
   // 深拷贝 classes 以确保不影响 modelsFile
-  const dtoClasses = classes.map((cls) => cls.clone());
-  const dtoEnums = enums.map((enumItem) => enumItem.clone());
+  const clonedClasses = classes.map((cls) => cls.clone());
+  const clonedEnums = enums.map((enumItem) => enumItem.clone());
 
   // 填充 dtoClassMap
-  const dtoClassMap: { [name: string]: Class } = {};
-  dtoClasses.forEach((cls) => {
-    dtoClassMap[cls.name] = cls;
+  const clonedClassMap: { [name: string]: Class } = {};
+  clonedClasses.forEach((cls) => {
+    clonedClassMap[cls.name] = cls;
   });
 
-  const dtoEnumsMap: { [name: string]: Enum } = {};
-  dtoEnums.forEach((cls) => {
-    dtoEnumsMap[cls.name] = cls;
+  const clonedEnumsMap: { [name: string]: Enum } = {};
+  clonedEnums.forEach((cls) => {
+    clonedEnumsMap[cls.name] = cls;
   });
 
   // 替换所有字段的类型为 DTO 版本
-  dtoClasses.forEach((classObj) => {
+  clonedClasses.forEach((classObj) => {
     classObj.fields.forEach((field) => {
-      if (field.type instanceof Class && dtoClassMap[field.type.name]) {
-        field.type = dtoClassMap[field.type.name];
+      if (field.type instanceof Class && clonedClassMap[field.type.name]) {
+        field.type = clonedClassMap[field.type.name];
       }
-      if (field.type instanceof Enum && dtoEnumsMap[field.type.name]) {
-        field.type = dtoEnumsMap[field.type.name];
+      if (field.type instanceof Enum && clonedEnumsMap[field.type.name]) {
+        field.type = clonedEnumsMap[field.type.name];
       }
     });
   });
 
   return {
-    dtoClasses,
-    dtoEnums,
+    clonedClasses,
+    clonedEnums,
   };
 };
 
 // 使用 Prisma SDK 解析 schema
-async function parseSchema(
-  schema: string,
-): Promise<{ modelsFile: ModelsFile; dtoFile: DTOFile }> {
+async function parseSchema(schema: string) {
   const dmmf = await getDMMF({ datamodel: schema });
 
   const typeMapping: { [key: string]: string } = {
@@ -561,19 +589,28 @@ async function parseSchema(
 
   const modelsFile = new ModelsFile(classes, enums);
 
-  const { dtoClasses, dtoEnums } = deepCloneDtoClasses(classes, enums);
-
-  DTOFile.prevHandleClasses(dtoClasses);
-
+  const { clonedClasses: dtoClasses, clonedEnums: dtoEnums } = deepCloneClasses(
+    classes,
+    enums,
+  );
   const dtoFile: DTOFile = new DTOFile(dtoClasses, dtoEnums);
 
-  return { modelsFile, dtoFile };
+  const { clonedClasses: modelRecordClasses, clonedEnums: modelRecordEnums } =
+    deepCloneClasses(classes, enums);
+
+  const modelRecordsFile = new ModelRecordsFile(
+    modelRecordClasses,
+    modelRecordEnums,
+  );
+
+  return { modelsFile, modelRecordsFile, dtoFile };
 }
 
 // 主函数
 async function main() {
   try {
-    const { modelsFile, dtoFile } = await parseSchema(schemaContent);
+    const { modelsFile, dtoFile, modelRecordsFile } =
+      await parseSchema(schemaContent);
     const prettierConfig = await resolveConfig(path.resolve());
 
     const adminPath = path.resolve('../admin');
@@ -596,6 +633,26 @@ ${modelsFile.print()}`,
       );
       const modelsOutputPath = path.resolve(adminPath, 'src/_gen/models.ts');
       fs.writeFileSync(modelsOutputPath, formattedModelsOutput);
+
+      // 输出 ModelsFile 结果
+      const formattedModelRecordsOutput = await format(
+        `/*
+* ---------------------------------------------------------------
+* ## THIS FILE WAS GENERATED        ##
+* ---------------------------------------------------------------
+*/
+
+${modelRecordsFile.print()}`,
+        {
+          ...prettierConfig,
+          parser: 'typescript',
+        },
+      );
+      const modelRecordsOutputPath = path.resolve(
+        adminPath,
+        'src/_gen/model-records.ts',
+      );
+      fs.writeFileSync(modelRecordsOutputPath, formattedModelRecordsOutput);
     }
 
     const dtoOutput = path.resolve('./src/_gen/dtos');

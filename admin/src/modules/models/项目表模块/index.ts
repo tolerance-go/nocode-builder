@@ -1,30 +1,22 @@
-import {
-  ProjectGroupModel,
-  ProjectModel,
-  ProjectTypeEnum,
-  UserModel,
-} from '@/_gen/models';
+import { ProjectModelRecord } from '@/_gen/model-records';
+import { ProjectTypeEnum } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import { 用户表模块 } from '../用户表模块';
 import { 项目组表模块 } from '../项目组表模块';
 
-export class ClientProjectModel extends ProjectModel {
+export class ClientProjectModel extends ProjectModelRecord {
   constructor({
     id,
     name,
     ownerId,
-    owner,
-    projectGroup,
     projectGroupId,
     type,
   }: {
     id: number;
     name: string;
     ownerId: number;
-    owner: UserModel;
-    projectGroup?: ProjectGroupModel;
     projectGroupId?: number;
     type: ProjectTypeEnum;
   }) {
@@ -32,10 +24,8 @@ export class ClientProjectModel extends ProjectModel {
       id,
       name,
       ownerId,
-      owner,
       createdAt: new Date(),
       updatedAt: new Date(),
-      projectGroup,
       projectGroupId,
       type,
     });
@@ -73,14 +63,8 @@ export class 项目表模块 extends ModuleBase {
     newProjectGroupId?: number,
   ): ClientProjectModel {
     const record = this.table.findRecordOrThrow(id);
-    const newProjectGroup = newProjectGroupId
-      ? this.getDependModule(项目组表模块).table.findRecordOrThrow(
-          newProjectGroupId,
-        )
-      : undefined;
 
     record.projectGroupId = newProjectGroupId;
-    record.projectGroup = newProjectGroup;
     this.table.updateRecord(record);
 
     return record;
@@ -114,13 +98,7 @@ export class 项目表模块 extends ModuleBase {
     const record = new ClientProjectModel({
       ...data,
       id: this.table.getNextId(),
-      projectGroup: data.projectGroupId
-        ? this.getDependModule(项目组表模块).table.findRecordOrThrow(
-            data.projectGroupId,
-          )
-        : undefined,
       ownerId,
-      owner: this.getDependModule(用户表模块).table.findRecordOrThrow(ownerId),
     });
 
     this.table.addRecord(record);
