@@ -125,6 +125,10 @@ export class 项目组表模块 extends ModuleBase {
   }
 
   protected async onSetup(): Promise<void> {
+    if (!this.getDependModule(用户表模块).currentLoginUser) {
+      return;
+    }
+
     const projectGroups = await api.projectGroups.getProjectGroups();
     this.table.initializeRecords(
       projectGroups.map((projectGroup) =>

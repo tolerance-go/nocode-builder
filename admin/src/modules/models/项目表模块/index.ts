@@ -130,6 +130,10 @@ export class 项目表模块 extends ModuleBase {
   }
 
   protected async onSetup(): Promise<void> {
+    if (!this.getDependModule(用户表模块).currentLoginUser) {
+      return;
+    }
+
     const projects = await api.projects.getProjects();
     this.table.initializeRecords(
       projects.map((project) =>

@@ -1,6 +1,6 @@
 import { UserModelRecord } from '@/_gen/model-records';
 import { EngineBase, ModuleBase } from '@/base';
-import { localKeys, TOKEN_KEY } from '@/common/constants';
+import { TOKEN_KEY } from '@/common/constants';
 import { Table } from '@/common/controllers';
 import { redirectToLogin } from '@/common/utils';
 import { api } from '@/globals';
@@ -75,12 +75,14 @@ export class 用户表模块 extends ModuleBase {
   }
 
   protected async onSetup(): Promise<void> {
-    if (!this.getDependModule(浏览器代理模块).pathnameIsAuth()) {
-      if (this.token) {
-        await this.getUserByToken();
-      } else {
-        redirectToLogin();
-      }
+    if (this.getDependModule(浏览器代理模块).pathnameIsAuth()) {
+      return;
+    }
+
+    if (this.token) {
+      await this.getUserByToken();
+    } else {
+      redirectToLogin();
     }
   }
 
