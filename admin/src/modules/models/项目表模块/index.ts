@@ -5,6 +5,7 @@ import { Table } from '@/common/controllers';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import { 用户表模块 } from '../用户表模块';
 import { 项目组表模块 } from '../项目组表模块';
+import { TableName } from '@unocode/common';
 
 export class ClientProjectModel extends ProjectModelRecord {
   constructor({
@@ -33,6 +34,7 @@ export class ClientProjectModel extends ProjectModelRecord {
 }
 
 export class 项目表模块 extends ModuleBase {
+  static tableName = TableName.Project;
   private static instance: 项目表模块;
 
   public static getInstance(engine: EngineBase): 项目表模块 {
@@ -43,15 +45,15 @@ export class 项目表模块 extends ModuleBase {
     return 项目表模块.instance;
   }
 
-  tableName: string;
   table: Table<ClientProjectModel>;
 
   constructor(engine: EngineBase) {
     super(engine);
-    this.tableName = 'project_model';
     this.table = new Table<ClientProjectModel>();
 
     window.projectTable = this.table;
+
+    this.getDependModule(用户表模块);
   }
 
   public removeProject(id: number): void {
@@ -110,7 +112,6 @@ export class 项目表模块 extends ModuleBase {
     super.requireModules(
       事件中心系统.getInstance(this.engine),
       用户表模块.getInstance(this.engine),
-      项目组表模块.getInstance(this.engine),
     );
   }
 

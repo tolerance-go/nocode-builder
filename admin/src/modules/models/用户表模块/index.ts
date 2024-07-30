@@ -4,6 +4,7 @@ import { Table } from '@/common/controllers';
 import { api } from '@/globals';
 import { 浏览器代理模块 } from '@/modules/simulations/浏览器代理模块';
 import { 事件中心系统 } from '@/modules/事件中心系统';
+import { TableName } from '@unocode/common';
 import store from 'store2';
 
 export class ClientUserModel extends UserModelRecord {
@@ -28,6 +29,7 @@ export class ClientUserModel extends UserModelRecord {
 }
 
 export class 用户表模块 extends ModuleBase {
+  static tableName = TableName.User;
   private static instance: 用户表模块;
 
   public static getInstance(engine: EngineBase): 用户表模块 {
@@ -38,17 +40,23 @@ export class 用户表模块 extends ModuleBase {
     return 用户表模块.instance;
   }
 
-  tableName: string;
   table: Table<UserModelRecord>;
   token: string | null;
   tokenFieldName: string;
 
   constructor(engine: EngineBase) {
     super(engine);
-    this.tableName = 'user_model';
     this.table = new Table<UserModelRecord>();
     this.token = null;
     this.tokenFieldName = 'token';
+
+    this.getDependModule(事件中心系统).on(
+      '界面视图管理者/用户登录成功',
+      async ({ token }) => {
+        store.set('token', token);
+        await this.getUserByToken();
+      },
+    );
   }
 
   public get currentLoginUser(): UserModelRecord | undefined {
@@ -79,14 +87,6 @@ export class 用户表模块 extends ModuleBase {
         await this.getUserByToken();
       }
     }
-
-    this.getDependModule(事件中心系统).on(
-      '界面视图管理者/用户登录成功',
-      async ({ token }) => {
-        store.set('token', token);
-        await this.getUserByToken();
-      },
-    );
   }
 
   private async getUserByToken() {

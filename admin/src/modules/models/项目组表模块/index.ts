@@ -3,6 +3,7 @@ import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import { 用户表模块 } from '../用户表模块';
+import { TableName } from '@unocode/common';
 
 export class ClientProjectGroupModel extends ProjectGroupModelRecord {
   constructor({
@@ -28,6 +29,7 @@ export class ClientProjectGroupModel extends ProjectGroupModelRecord {
 }
 
 export class 项目组表模块 extends ModuleBase {
+  static tableName = TableName.ProjectGroup;
   private static instance: 项目组表模块;
 
   public static getInstance(engine: EngineBase): 项目组表模块 {
@@ -38,12 +40,10 @@ export class 项目组表模块 extends ModuleBase {
     return 项目组表模块.instance;
   }
 
-  tableName: string;
   table: Table<ClientProjectGroupModel>;
 
   constructor(engine: EngineBase) {
     super(engine);
-    this.tableName = 'project_group_model';
     this.table = new Table<ClientProjectGroupModel>();
 
     window.projectGroupTable = this.table;
