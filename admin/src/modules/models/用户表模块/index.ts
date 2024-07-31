@@ -103,6 +103,8 @@ export class 用户表模块 extends ModuleBase {
     this.getDependModule(事件中心系统).on(
       '界面视图管理者/用户登出成功',
       async () => {
+        this.table.reset();
+        this.token = null;
         store.remove(TOKEN_KEY);
         redirectToLogin();
       },

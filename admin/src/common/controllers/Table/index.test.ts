@@ -150,4 +150,11 @@ describe('Table 类测试', () => {
       { id: 2, name: 'Bob', age: 25 },
     ]);
   });
+
+  it('应该重置记录', () => {
+    table.addRecord({ id: 1, name: 'Alice', age: 30 });
+    table.reset([{ id: 2, name: 'Bob', age: 25 }]);
+    expect(table.findRecord(1)).toBeUndefined();
+    expect(table.findRecord(2)).toEqual({ id: 2, name: 'Bob', age: 25 });
+  });
 });

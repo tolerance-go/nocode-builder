@@ -14,6 +14,11 @@ export class Table<T extends RecordWithId> {
   private transactionRecords: T[] | null = null;
   private listeners: SideEffectListener<T>[] = [];
 
+  // 重置记录
+  reset(initialRecords: T[] = []): void {
+    this.records = initialRecords;
+  }
+
   // 初始化记录
   initializeRecords(initialRecords: T[] = []): void {
     this.records = initialRecords;
