@@ -4,6 +4,7 @@
  * ---------------------------------------------------------------
  */
 
+import { WidgetElementTypeEnum } from './models';
 import { ProjectTypeEnum } from './models';
 
 export class UserModelRecord {
@@ -19,6 +20,8 @@ export class UserModelRecord {
 
   updatedAt: Date;
 
+  isAdmin: boolean;
+
   constructor({
     id,
     name,
@@ -26,6 +29,7 @@ export class UserModelRecord {
     password,
     createdAt,
     updatedAt,
+    isAdmin,
   }: {
     id: number;
     name: string;
@@ -33,6 +37,7 @@ export class UserModelRecord {
     password: string;
     createdAt: Date;
     updatedAt: Date;
+    isAdmin: boolean;
   }) {
     this.id = id;
     this.name = name;
@@ -40,6 +45,7 @@ export class UserModelRecord {
     this.password = password;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.isAdmin = isAdmin;
   }
 }
 
@@ -119,5 +125,55 @@ export class ProjectGroupModelRecord {
     this.ownerId = ownerId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+  }
+}
+
+export class WidgetModelRecord {
+  id: number;
+
+  elementType: WidgetElementTypeEnum;
+
+  constructor({
+    id,
+    elementType,
+  }: {
+    id: number;
+    elementType: WidgetElementTypeEnum;
+  }) {
+    this.id = id;
+    this.elementType = elementType;
+  }
+}
+
+export class WidgetSlotModelRecord {
+  id: number;
+
+  name: string;
+
+  constructor({ id, name }: { id: number; name: string }) {
+    this.id = id;
+    this.name = name;
+  }
+}
+
+export class WidgetSlotAssignmentModelRecord {
+  widgetId: number;
+
+  slotId: number;
+
+  assignedAt: Date;
+
+  constructor({
+    widgetId,
+    slotId,
+    assignedAt,
+  }: {
+    widgetId: number;
+    slotId: number;
+    assignedAt: Date;
+  }) {
+    this.widgetId = widgetId;
+    this.slotId = slotId;
+    this.assignedAt = assignedAt;
   }
 }

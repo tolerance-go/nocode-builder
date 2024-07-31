@@ -31,7 +31,7 @@ export class ClientProjectGroupModel extends ProjectGroupModelRecord {
   }: {
     id: number;
     name: string;
-    parentGroupId?: number;
+    parentGroupId: number | undefined;
     ownerId: number;
   }) {
     super({
@@ -110,6 +110,7 @@ export class 项目组表模块 extends ModuleBase {
       ...data,
       id: this.table.getNextId(),
       ownerId,
+      parentGroupId: data.parentGroupId,
     });
 
     this.table.addRecord(record);

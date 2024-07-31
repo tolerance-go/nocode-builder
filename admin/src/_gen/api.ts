@@ -12,6 +12,7 @@ export interface UserModelRecordDto {
   password: string;
   createdAt: string;
   updatedAt: string;
+  isAdmin: boolean;
 }
 
 export interface ProjectModelRecordDto {
@@ -68,6 +69,7 @@ export interface UserResponseDto {
   id: number;
   name: string;
   email?: string;
+  isAdmin: boolean;
   createdAt: string;
   updatedAt: string;
 }

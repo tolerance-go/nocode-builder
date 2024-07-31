@@ -14,10 +14,12 @@ export class ClientUserModel extends UserModelRecord {
     id,
     name,
     email,
+    isAdmin,
   }: {
     id: number;
     name: string;
-    email?: string;
+    email: string | undefined;
+    isAdmin: boolean;
   }) {
     super({
       id,
@@ -26,6 +28,7 @@ export class ClientUserModel extends UserModelRecord {
       password: '',
       createdAt: new Date(),
       updatedAt: new Date(),
+      isAdmin,
     });
   }
 }
@@ -92,6 +95,7 @@ export class 用户表模块 extends ModuleBase {
       id: user.id,
       name: user.name,
       email: user.email,
+      isAdmin: user.isAdmin,
     });
     this.table.addRecord(userInfo);
     this.getDependModule(事件中心系统).emit('用户模型表/获取登录用户信息成功', {

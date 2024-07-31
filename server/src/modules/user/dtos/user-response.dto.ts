@@ -13,6 +13,9 @@ export class UserResponseDto {
   email?: string;
 
   @ApiProperty({})
+  isAdmin: boolean;
+
+  @ApiProperty({})
   createdAt: string;
 
   @ApiProperty({})

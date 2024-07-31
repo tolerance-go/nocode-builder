@@ -12,7 +12,7 @@ import {
   IsDateString,
   IsEnum,
 } from 'class-validator';
-import { ProjectType } from '@prisma/client';
+import { ProjectType, WidgetElementType } from '@prisma/client';
 
 export class UserModelRecordDto {
   @ApiProperty({})
@@ -39,6 +39,9 @@ export class UserModelRecordDto {
   @ApiProperty({})
   @IsDateString()
   updatedAt: string;
+
+  @ApiProperty({})
+  isAdmin: boolean;
 }
 
 export class ProjectModelRecordDto {
@@ -97,4 +100,38 @@ export class ProjectGroupModelRecordDto {
   @ApiProperty({})
   @IsDateString()
   updatedAt: string;
+}
+
+export class WidgetModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({ enum: WidgetElementType })
+  @IsEnum(WidgetElementType)
+  elementType: WidgetElementType;
+}
+
+export class WidgetSlotModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({})
+  @IsString()
+  name: string;
+}
+
+export class WidgetSlotAssignmentModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  widgetId: number;
+
+  @ApiProperty({})
+  @IsInt()
+  slotId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  assignedAt: string;
 }

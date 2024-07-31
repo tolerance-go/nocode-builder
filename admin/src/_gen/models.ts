@@ -4,10 +4,93 @@
  * ---------------------------------------------------------------
  */
 
+export enum WidgetElementTypeEnum {
+  Root = 'Root',
+  Button = 'Button',
+  Table = 'Table',
+  Input = 'Input',
+}
+
 export enum ProjectTypeEnum {
   View = 'View',
   DataTable = 'DataTable',
   Bluemap = 'Bluemap',
+}
+
+export class WidgetModel {
+  id: number;
+
+  elementType: WidgetElementTypeEnum;
+
+  slots: WidgetSlotAssignmentModel[];
+
+  constructor({
+    id,
+    elementType,
+    slots,
+  }: {
+    id: number;
+    elementType: WidgetElementTypeEnum;
+    slots: WidgetSlotAssignmentModel[];
+  }) {
+    this.id = id;
+    this.elementType = elementType;
+    this.slots = slots;
+  }
+}
+
+export class WidgetSlotAssignmentModel {
+  widgetId: number;
+
+  slotId: number;
+
+  widget: WidgetModel;
+
+  slot: WidgetSlotModel;
+
+  assignedAt: Date;
+
+  constructor({
+    widgetId,
+    slotId,
+    widget,
+    slot,
+    assignedAt,
+  }: {
+    widgetId: number;
+    slotId: number;
+    widget: WidgetModel;
+    slot: WidgetSlotModel;
+    assignedAt: Date;
+  }) {
+    this.widgetId = widgetId;
+    this.slotId = slotId;
+    this.widget = widget;
+    this.slot = slot;
+    this.assignedAt = assignedAt;
+  }
+}
+
+export class WidgetSlotModel {
+  id: number;
+
+  name: string;
+
+  widgets: WidgetSlotAssignmentModel[];
+
+  constructor({
+    id,
+    name,
+    widgets,
+  }: {
+    id: number;
+    name: string;
+    widgets: WidgetSlotAssignmentModel[];
+  }) {
+    this.id = id;
+    this.name = name;
+    this.widgets = widgets;
+  }
 }
 
 export class UserModel {
@@ -27,6 +110,8 @@ export class UserModel {
 
   projectGroups: ProjectGroupModel[];
 
+  isAdmin: boolean;
+
   constructor({
     id,
     name,
@@ -36,6 +121,7 @@ export class UserModel {
     createdAt,
     updatedAt,
     projectGroups,
+    isAdmin,
   }: {
     id: number;
     name: string;
@@ -45,6 +131,7 @@ export class UserModel {
     createdAt: Date;
     updatedAt: Date;
     projectGroups: ProjectGroupModel[];
+    isAdmin: boolean;
   }) {
     this.id = id;
     this.name = name;
@@ -54,6 +141,7 @@ export class UserModel {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.projectGroups = projectGroups;
+    this.isAdmin = isAdmin;
   }
 }
 

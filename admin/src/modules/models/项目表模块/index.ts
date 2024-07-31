@@ -34,7 +34,7 @@ export class ClientProjectModel extends ProjectModelRecord {
     id: number;
     name: string;
     ownerId: number;
-    projectGroupId?: number;
+    projectGroupId: number | undefined;
     type: ProjectTypeEnum;
   }) {
     super({
@@ -115,6 +115,7 @@ export class 项目表模块 extends ModuleBase {
       ...data,
       id: this.table.getNextId(),
       ownerId,
+      projectGroupId: data.projectGroupId,
     });
 
     this.table.addRecord(record);
