@@ -6,7 +6,7 @@ import { WidgetElementTypeEnum } from '@/_gen/models';
 import { api } from '@/globals';
 import { 获取系统上下文 } from '@/modules/界面组件树管理模块/hooks';
 import { PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Modal, Select, Table, Tag, theme } from 'antd';
+import { Button, Form, Modal, Select, Table, Tabs, Tag, theme } from 'antd';
 import dayjs from 'dayjs';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { AddSlotModal } from './AddSlotModal';
@@ -119,60 +119,97 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
             </Button>,
           ]}
         >
-          <Table
-            columns={[
-              {
-                title: '部件类型',
-                dataIndex: 'elementType',
-                key: 'type',
-              },
-              {
-                title: '插槽名称',
-                dataIndex: 'slots',
-                key: 'slots',
-                render: (
-                  slots: WidgetSlotAssignmentWithSlotsResponseDto[],
-                  record,
-                ) => {
-                  return (
-                    <div>
-                      {slots?.map(({ slot }) => (
-                        <Tag
-                          key={slot.id}
-                          closable
-                          onClose={() => handleRemoveSlot(record.id, slot.id)}
-                        >
-                          {slot.name}
-                        </Tag>
-                      ))}
-                      <Tag
-                        style={tagPlusStyle}
-                        icon={<PlusOutlined />}
-                        onClick={() => openSlotModal(record.id)}
-                      >
-                        添加
-                      </Tag>
-                    </div>
-                  );
+          <div>
+            <Tabs
+              defaultActiveKey="1"
+              items={[
+                {
+                  label: 'PC Web',
+                  key: 'PC Web',
+                  children: (
+                    <Table
+                      columns={[
+                        {
+                          title: '部件类型',
+                          dataIndex: 'elementType',
+                          key: 'type',
+                        },
+                        {
+                          title: '插槽名称',
+                          dataIndex: 'slots',
+                          key: 'slots',
+                          render: (
+                            slots: WidgetSlotAssignmentWithSlotsResponseDto[],
+                            record,
+                          ) => {
+                            return (
+                              <div>
+                                {slots?.map(({ slot }) => (
+                                  <Tag
+                                    key={slot.id}
+                                    closable
+                                    onClose={() =>
+                                      handleRemoveSlot(record.id, slot.id)
+                                    }
+                                  >
+                                    {slot.name}
+                                  </Tag>
+                                ))}
+                                <Tag
+                                  style={tagPlusStyle}
+                                  icon={<PlusOutlined />}
+                                  onClick={() => openSlotModal(record.id)}
+                                >
+                                  添加
+                                </Tag>
+                              </div>
+                            );
+                          },
+                        },
+                        {
+                          title: '创建时间',
+                          dataIndex: 'createdAt',
+                          key: 'createdAt',
+                          render: (text) =>
+                            dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
+                        },
+                        {
+                          title: '更新时间',
+                          dataIndex: 'updatedAt',
+                          key: 'updatedAt',
+                          render: (text) =>
+                            dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
+                        },
+                      ]}
+                      rowKey={'id'}
+                      dataSource={data}
+                      loading={loading} // 传递加载状态
+                    />
+                  ),
                 },
-              },
-              {
-                title: '创建时间',
-                dataIndex: 'createdAt',
-                key: 'createdAt',
-                render: (text) => dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
-              },
-              {
-                title: '更新时间',
-                dataIndex: 'updatedAt',
-                key: 'updatedAt',
-                render: (text) => dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
-              },
-            ]}
-            rowKey={'id'}
-            dataSource={data}
-            loading={loading} // 传递加载状态
-          />
+                {
+                  label: '移动端 Web',
+                  key: '移动端 Web',
+                  children: 'Tab 2',
+                },
+                {
+                  label: '小程序',
+                  key: '小程序',
+                  children: 'Tab 3',
+                },
+                {
+                  label: '原生移动端',
+                  key: '原生移动端',
+                  children: 'Tab 3',
+                },
+                {
+                  label: '桌面客户端',
+                  key: '桌面客户端',
+                  children: 'Tab 3',
+                },
+              ]}
+            />
+          </div>
         </Modal>
 
         <Modal
