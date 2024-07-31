@@ -52,6 +52,21 @@ export class WidgetService {
     }
   }
 
+  async createWidgets(
+    data: Prisma.WidgetCreateManyInput[],
+    tx?: Prisma.TransactionClient,
+  ): Promise<{ count: number }> {
+    try {
+      const client = tx || this.prisma;
+      const result = await client.widget.createMany({
+        data,
+      });
+      return { count: result.count };
+    } catch (error) {
+      throw new HttpException(`批量创建项目失败：${error.message}`, 500);
+    }
+  }
+
   async updateWidget(
     params: {
       where: Prisma.WidgetWhereUniqueInput;
@@ -87,17 +102,5 @@ export class WidgetService {
     } catch (error) {
       throw new HttpException(`清空项目失败：${error.message}`, 500);
     }
-  }
-
-  // 获取下一个 WidgetGroup 的 ID
-  async getNextWidgetId(tx?: Prisma.TransactionClient): Promise<number> {
-    const client = tx || this.prisma;
-    const lastWidget = await client.widget.findFirst({
-      orderBy: {
-        id: 'desc',
-      },
-    });
-
-    return lastWidget ? lastWidget.id + 1 : 1;
   }
 }

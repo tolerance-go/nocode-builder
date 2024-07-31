@@ -145,6 +145,14 @@ export interface WidgetCreateDto {
   elementType: 'Root' | 'Button' | 'Table' | 'Input';
 }
 
+export interface WidgetCreateManyDto {
+  createDtos: WidgetCreateDto[];
+}
+
+export interface CountDto {
+  count: number;
+}
+
 export type WidgetUpdateDto = Record<string, unknown>;
 
 import type {
@@ -753,6 +761,22 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     createWidget: (data: WidgetCreateDto, params: RequestParams = {}) =>
       this.request<WidgetResponseDto, void>({
         path: `/widgets`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerCreateWidgets
+     * @request POST:/widgets/bulk-create
+     */
+    createWidgets: (data: WidgetCreateManyDto, params: RequestParams = {}) =>
+      this.request<CountDto, void>({
+        path: `/widgets/bulk-create`,
         method: 'POST',
         body: data,
         type: ContentType.Json,

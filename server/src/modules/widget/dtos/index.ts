@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { WidgetElementType } from '@prisma/client';
+import { Type } from 'class-transformer';
 import {
+  IsArray,
   IsDateString,
   IsEnum,
   IsIn,
@@ -8,6 +10,7 @@ import {
   IsOptional,
   IsString,
   Min,
+  ValidateNested,
 } from 'class-validator';
 
 export class WidgetCreateDto {
@@ -16,6 +19,16 @@ export class WidgetCreateDto {
   })
   @IsEnum(WidgetElementType)
   elementType: WidgetElementType;
+}
+
+export class WidgetCreateManyDto {
+  @ApiProperty({
+    type: [WidgetCreateDto],
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => WidgetCreateDto)
+  createDtos: WidgetCreateDto[];
 }
 
 export class WidgetQueryDto {

@@ -1,6 +1,8 @@
 import { WidgetResponseDto } from '@/_gen/api';
+import { WidgetElementTypeEnum } from '@/_gen/models';
 import { api } from '@/globals';
-import { Button, Form, Input, Modal, Table } from 'antd';
+import { Button, Form, Modal, Select, Table } from 'antd';
+import dayjs from 'dayjs';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 
 export interface DataManagerModalRef {
@@ -34,12 +36,25 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     const handleAdd = async () => {
       try {
         const values = await form.validateFields();
-        await api.widgets.createWidget(values);
+        const currentDateTime = dayjs().toISOString();
+        await api.widgets.createWidgets({
+          createDtos: values.widgetType.map((type) => {
+            return {
+              widgetType: type,
+              createdAt: currentDateTime,
+              updatedAt: currentDateTime,
+            };
+          }),
+        });
         setIsAddModalVisible(false);
         fetchData(); // 刷新表格数据
       } catch (error) {
         console.error('Failed to add widget:', error);
       }
+    };
+
+    const handleSelectAll = () => {
+      form.setFieldsValue({ type: Object.values(WidgetElementTypeEnum) });
     };
 
     return (
@@ -88,34 +103,34 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
           title="新增 Widget"
           onCancel={() => setIsAddModalVisible(false)}
           onOk={handleAdd}
+          footer={[
+            <Button key="multiSelect" onClick={handleSelectAll}>
+              一键全选
+            </Button>,
+            <Button key="submit" type="primary" onClick={handleAdd}>
+              确定
+            </Button>,
+          ]}
         >
           <Form form={form} layout="vertical">
             <Form.Item
-              name="type"
+              name="widgetType"
               label="WidgetType"
               rules={[
-                { required: true, message: 'Please input the widget type!' },
+                { required: true, message: 'Please select the widget type!' },
               ]}
             >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="createdAt"
-              label="创建时间"
-              rules={[
-                { required: true, message: 'Please input the creation date!' },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="updatedAt"
-              label="更新时间"
-              rules={[
-                { required: true, message: 'Please input the update date!' },
-              ]}
-            >
-              <Input />
+              <Select
+                mode="multiple"
+                allowClear
+                placeholder="请选择 Widget 类型"
+              >
+                {Object.values(WidgetElementTypeEnum).map((type) => (
+                  <Select.Option key={type} value={type}>
+                    {type}
+                  </Select.Option>
+                ))}
+              </Select>
             </Form.Item>
           </Form>
         </Modal>
@@ -123,3 +138,5 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     );
   },
 );
+
+export default DataManagerModal;

@@ -130,4 +130,9 @@ export const apiUrls = {
     route: '/widgets',
     path: '/widgets',
   },
+  WidgetController_createWidgets: {
+    method: 'post',
+    route: '/widgets/bulk-create',
+    path: '/widgets/bulk-create',
+  },
 } as const;

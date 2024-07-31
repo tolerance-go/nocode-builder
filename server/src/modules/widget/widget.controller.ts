@@ -19,8 +19,11 @@ import {
   WidgetQueryDto,
   WidgetCreateDto,
   WidgetUpdateDto,
+  WidgetCreateManyDto,
 } from './dtos';
 import { toWidgetDto } from './utils';
+import { Prisma } from '@prisma/client';
+import { CountDto } from 'src/common/dtos';
 
 @Controller('widgets')
 export class WidgetController {
@@ -78,6 +81,26 @@ export class WidgetController {
       },
     });
     return toWidgetDto(widget);
+  }
+
+  @Post('bulk-create')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 201,
+    type: CountDto,
+  })
+  @ApiResponse({ status: 400 })
+  async createWidgets(
+    @Body() createWidgetsDto: WidgetCreateManyDto,
+    @Req() req: Request & { user: JwtUserDto },
+  ): Promise<{ count: number }> {
+    const userId = req.user.id;
+    const widgetsData: Prisma.WidgetCreateManyInput[] =
+      createWidgetsDto.createDtos.map((dto) => ({
+        ...dto,
+        ownerId: userId,
+      }));
+    return this.widgetService.createWidgets(widgetsData);
   }
 
   @Patch(':id')

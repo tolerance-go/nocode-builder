@@ -1,7 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProjectResponseDto } from 'src/modules/project/dtos';
-import { ProjectGroupResponseDto } from 'src/modules/project-group/dtos';
 import { IsDateString } from 'class-validator';
+import { ProjectGroupResponseDto } from 'src/modules/project-group/dtos';
+import { ProjectResponseDto } from 'src/modules/project/dtos';
+
+export class CountDto {
+  @ApiProperty()
+  count: number;
+}
 
 export class UserResponseDto {
   @ApiProperty()
