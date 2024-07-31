@@ -91,6 +91,12 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
       }
     };
 
+    const tagPlusStyle: React.CSSProperties = {
+      background: token.colorBgContainer,
+      borderStyle: 'dashed',
+      cursor: 'pointer',
+    };
+
     return (
       <>
         <Modal
@@ -138,11 +144,11 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
                         </Tag>
                       ))}
                       <Tag
-                        color={token.blue4}
-                        style={{ cursor: 'pointer' }}
+                        style={tagPlusStyle}
+                        icon={<PlusOutlined />}
                         onClick={() => openSlotModal(record.id)}
                       >
-                        <PlusOutlined /> 添加
+                        添加
                       </Tag>
                     </div>
                   );
