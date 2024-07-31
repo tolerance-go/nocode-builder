@@ -108,6 +108,10 @@ export class 后台数据管理模块 extends ModuleBase {
             // 将操作插入到 remoteTransactionQueue 队列中
             this.remoteTransactionQueue = this.remoteTransactionQueue.then(
               async () => {
+                if (操作收集器.length === 0) {
+                  return;
+                }
+
                 await api.syncs.applyProjectDiff({
                   operations: 操作收集器.map((operation) => {
                     return {

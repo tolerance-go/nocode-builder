@@ -28,6 +28,7 @@ function generateProjectTreeMeta(
     };
     groupNodes[groupKey] = groupNode;
     项目树节点数据[groupKey] = {
+      recordId: group.id,
       title: group.name,
       type: DirectoryTreeNodeTypeEnum.Folder,
     };
@@ -45,6 +46,7 @@ function generateProjectTreeMeta(
       children: [], // 保证符合 ProjectStructureTreeDataNode 类型
     };
     项目树节点数据[projectKey] = {
+      recordId: project.id,
       title: project.name,
       type: DirectoryTreeNodeTypeEnum.File,
       projectType: project.type,
@@ -72,25 +74,36 @@ function generateProjectTreeMeta(
     }
   });
 
-  // 对项目结构树进行排序，使项目组在项目之前
-  项目结构树.sort((a, b) => {
-    const aData = 项目树节点数据[a.key];
-    const bData = 项目树节点数据[b.key];
+  // 递归排序函数，使项目组在项目之前
+  function sortTreeNodes(nodes: ProjectStructureTreeDataNode[]) {
+    nodes.sort((a, b) => {
+      const aData = 项目树节点数据[a.key];
+      const bData = 项目树节点数据[b.key];
 
-    if (
-      aData.type === DirectoryTreeNodeTypeEnum.Folder &&
-      bData.type === DirectoryTreeNodeTypeEnum.File
-    ) {
-      return -1;
-    }
-    if (
-      aData.type === DirectoryTreeNodeTypeEnum.File &&
-      bData.type === DirectoryTreeNodeTypeEnum.Folder
-    ) {
-      return 1;
-    }
-    return 0;
-  });
+      if (
+        aData.type === DirectoryTreeNodeTypeEnum.Folder &&
+        bData.type === DirectoryTreeNodeTypeEnum.File
+      ) {
+        return -1;
+      }
+      if (
+        aData.type === DirectoryTreeNodeTypeEnum.File &&
+        bData.type === DirectoryTreeNodeTypeEnum.Folder
+      ) {
+        return 1;
+      }
+      return 0;
+    });
+
+    nodes.forEach((node) => {
+      if (node.children && node.children.length > 0) {
+        sortTreeNodes(node.children);
+      }
+    });
+  }
+
+  // 对项目结构树进行递归排序
+  sortTreeNodes(项目结构树);
 
   return {
     项目树节点数据,
