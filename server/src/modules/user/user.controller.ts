@@ -11,14 +11,16 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiBody, ApiResponse } from '@nestjs/swagger';
-import { UserCreateDto } from './dtos/user-create.dto';
-import { UserQueryDto } from './dtos/user-query.dto';
-import { UserUpdateDto } from './dtos/user-update.dto';
-import { UserResponseDto } from './dtos/user-response.dto';
 import { UserService } from './user.service';
 import { toUserResponseDto } from './utils/toUserResponseDto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
+import {
+  UserResponseDto,
+  UserQueryDto,
+  UserCreateDto,
+  UserUpdateDto,
+} from './dtos';
 
 @Controller('users')
 export class UserController {
