@@ -872,8 +872,8 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * @request DELETE:/widgets/{widgetId}/slot/{slotId}
      */
     deleteSlotAssignment: (
-      widgetId: string,
-      slotId: string,
+      widgetId: number,
+      slotId: number,
       params: RequestParams = {},
     ) =>
       this.request<void, unknown>({

@@ -84,7 +84,7 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
 
     const handleRemoveSlot = async (widgetId: number, slotId: number) => {
       try {
-        await api.widgets.deleteSlotAssignment(`${widgetId}`, `${slotId}`);
+        await api.widgets.deleteSlotAssignment(widgetId, slotId);
         界面通知系统.showMessage({ type: 'success', content: 'Slot 删除成功' });
         fetchData(); // 刷新表格数据
       } catch (error) {

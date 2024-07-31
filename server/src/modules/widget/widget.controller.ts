@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
@@ -190,15 +191,11 @@ export class WidgetController {
     description: 'The slot assignment has been successfully deleted.',
   })
   async deleteSlotAssignment(
-    @Param('widgetId') widgetId: string,
-    @Param('slotId') slotId: string,
+    @Param('widgetId', ParseIntPipe) widgetId: number,
+    @Param('slotId', ParseIntPipe) slotId: number,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<void> {
     const userId = req.user.id;
-    await this.widgetService.deleteSlotAssignment(
-      Number(widgetId),
-      Number(slotId),
-      userId,
-    );
+    await this.widgetService.deleteSlotAssignment(widgetId, slotId, userId);
   }
 }
