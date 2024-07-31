@@ -1,6 +1,7 @@
 import { layoutPadding } from '@/modules/界面组件树管理模块/configs';
 import { 组件测试标识 } from '@/common/constants';
 import { theme } from 'antd';
+import { WidgetTree } from './WidgetTree';
 
 export const ViewEditor = () => {
   const { token } = theme.useToken();
@@ -27,7 +28,7 @@ export const ViewEditor = () => {
             width: 300,
           }}
         >
-          side-tree
+          <WidgetTree />
         </div>
         <div
           style={{
