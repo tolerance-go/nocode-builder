@@ -4,10 +4,11 @@ import {
 } from '@/_gen/api';
 import { WidgetElementTypeEnum } from '@/_gen/models';
 import { api } from '@/globals';
-import { Button, Form, Modal, Select, Table, Tag, message } from 'antd';
+import { Button, Form, Modal, Select, Table, Tag, message, theme } from 'antd';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { AddSlotModal } from './AddSlotModal';
 import { 获取系统上下文 } from '@/modules/界面组件树管理模块/hooks';
+import { PlusOutlined } from '@ant-design/icons';
 
 export interface DataManagerModalRef {
   open: () => void;
@@ -30,6 +31,7 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     const [currentWidgetId, setCurrentWidgetId] = useState<number | null>(null);
     const [form] = Form.useForm<FormValues>();
 
+    const { token } = theme.useToken();
     const { 界面通知系统 } = 获取系统上下文();
 
     useImperativeHandle(ref, () => ({
@@ -135,6 +137,13 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
                           {slot.name}
                         </Tag>
                       ))}
+                      <Tag
+                        color={token.blue4}
+                        style={{ cursor: 'pointer' }}
+                        onClick={() => openSlotModal(record.id)}
+                      >
+                        <PlusOutlined /> 添加
+                      </Tag>
                     </div>
                   );
                 },
@@ -148,15 +157,6 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
                 title: '更新时间',
                 dataIndex: 'updatedAt',
                 key: 'updatedAt',
-              },
-              {
-                title: '操作',
-                key: 'action',
-                render: (_, record) => (
-                  <Button onClick={() => openSlotModal(record.id)}>
-                    添加 Slot
-                  </Button>
-                ),
               },
             ]}
             rowKey={'id'}
