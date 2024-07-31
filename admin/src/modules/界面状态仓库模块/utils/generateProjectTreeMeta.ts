@@ -72,6 +72,26 @@ function generateProjectTreeMeta(
     }
   });
 
+  // 对项目结构树进行排序，使项目组在项目之前
+  项目结构树.sort((a, b) => {
+    const aData = 项目树节点数据[a.key];
+    const bData = 项目树节点数据[b.key];
+
+    if (
+      aData.type === DirectoryTreeNodeTypeEnum.Folder &&
+      bData.type === DirectoryTreeNodeTypeEnum.File
+    ) {
+      return -1;
+    }
+    if (
+      aData.type === DirectoryTreeNodeTypeEnum.File &&
+      bData.type === DirectoryTreeNodeTypeEnum.Folder
+    ) {
+      return 1;
+    }
+    return 0;
+  });
+
   return {
     项目树节点数据,
     项目结构树,
