@@ -14,18 +14,20 @@ datasource db {
 }
 
 model User {
-  id                   Int                    @id @default(autoincrement())
-  name                 String                 @unique
-  email                String?                @unique
-  password             String
-  projects             Project[]
-  createdAt            DateTime               @default(now())
-  updatedAt            DateTime               @updatedAt
-  projectGroups        ProjectGroup[]
-  isAdmin              Boolean                @default(false)
-  widgets              Widget[]
-  widgetSlots          WidgetSlot[]
-  WidgetSlotAssignment WidgetSlotAssignment[]
+  id                    Int                    @id @default(autoincrement())
+  name                  String                 @unique
+  email                 String?                @unique
+  password              String
+  projects              Project[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  projectGroups         ProjectGroup[]
+  isAdmin               Boolean                @default(false)
+  widgets               Widget[]
+  widgetSlots           WidgetSlot[]
+  WidgetSlotAssignments WidgetSlotAssignment[]
+  widgetLibs            WidgetLib[]
+  components            Component[]
 }
 
 model Project {
@@ -53,12 +55,36 @@ model ProjectGroup {
   updatedAt     DateTime       @updatedAt
 }
 
+model Component {
+  id        Int                  @id @default(autoincrement())
+  name      String
+  widgets   Widget[]
+  platforms WidgetPlatformType[]
+  ownerId   Int
+  owner     User                 @relation(fields: [ownerId], references: [id])
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+}
+
+model WidgetLib {
+  id        Int      @id @default(autoincrement())
+  widgets   Widget[]
+  ownerId   Int
+  owner     User     @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Widget {
   id          Int                    @id @default(autoincrement())
-  elementType WidgetElementType      @unique
+  component   Component              @relation(fields: [componentId], references: [id])
+  name        String
   slots       WidgetSlotAssignment[]
   ownerId     Int
   owner       User                   @relation(fields: [ownerId], references: [id])
+  componentId Int
+  widgetLib   WidgetLib?             @relation(fields: [widgetLibId], references: [id])
+  widgetLibId Int?
   createdAt   DateTime               @default(now())
   updatedAt   DateTime               @updatedAt
 }
@@ -85,11 +111,12 @@ model WidgetSlotAssignment {
   @@id([widgetId, slotId])
 }
 
-enum WidgetElementType {
-  Root
-  Button
-  Table
-  Input
+enum WidgetPlatformType {
+  PcWeb
+  MobileWeb
+  MiniProgram
+  NativeMobile
+  DesktopClient
 }
 
 enum ProjectType {
