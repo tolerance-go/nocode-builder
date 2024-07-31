@@ -12,7 +12,7 @@ export const Sider = () => {
         // 防止加载闪烁
         height: '100vh',
         backgroundColor: token.colorBgContainer,
-        width: 400,
+        width: 300,
       }}
     >
       <UserBar />

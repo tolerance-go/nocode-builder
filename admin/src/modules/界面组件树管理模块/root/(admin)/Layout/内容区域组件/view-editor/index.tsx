@@ -22,50 +22,66 @@ export const ViewEditor = () => {
       >
         <div
           style={{
-            flexGrow: 1,
-            display: 'flex',
-            flexDirection: 'column',
+            backgroundColor: token.colorBgContainer,
+            borderRight: `1px solid ${token.colorBorderSecondary}`,
+            width: 300,
           }}
-          data-test-id={组件测试标识.视图编辑页面.舞台.区域}
         >
-          <div
-            style={{
-              borderBottom: `1px solid ${token.colorBorderSecondary}`,
-              backgroundColor: token.colorBgContainer,
-              padding: layoutPadding(token),
-            }}
-            data-test-id={组件测试标识.视图编辑页面.舞台.头部}
-          >
-            header
-          </div>
-          <div data-test-id={组件测试标识.视图编辑页面.舞台.内容}>stage</div>
+          side-tree
         </div>
         <div
           style={{
-            width: 400,
-            borderLeft: `1px solid ${token.colorBorderSecondary}`,
-            backgroundColor: token.colorBgContainer,
             display: 'flex',
-            flexDirection: 'column',
+            flexGrow: 1,
           }}
-          data-test-id={组件测试标识.视图编辑页面.配置栏目.区域}
         >
           <div
             style={{
               flexGrow: 1,
+              display: 'flex',
+              flexDirection: 'column',
             }}
-            data-test-id={组件测试标识.视图编辑页面.配置栏目.上部}
+            data-test-id={组件测试标识.视图编辑页面.舞台.区域}
           >
-            toolPanel-top
+            <div
+              style={{
+                borderBottom: `1px solid ${token.colorBorderSecondary}`,
+                backgroundColor: token.colorBgContainer,
+                padding: layoutPadding(token),
+              }}
+              data-test-id={组件测试标识.视图编辑页面.舞台.头部}
+            >
+              header
+            </div>
+            <div data-test-id={组件测试标识.视图编辑页面.舞台.内容}>stage</div>
           </div>
           <div
             style={{
-              flexGrow: 1,
-              borderTop: `1px solid ${token.colorBorderSecondary}`,
+              width: 300,
+              borderLeft: `1px solid ${token.colorBorderSecondary}`,
+              backgroundColor: token.colorBgContainer,
+              display: 'flex',
+              flexDirection: 'column',
             }}
-            data-test-id={组件测试标识.视图编辑页面.配置栏目.下部}
+            data-test-id={组件测试标识.视图编辑页面.配置栏目.区域}
           >
-            toolPanel-bottom
+            <div
+              style={{
+                flexGrow: 1,
+              }}
+              data-test-id={组件测试标识.视图编辑页面.配置栏目.上部}
+            >
+              toolPanel-top
+            </div>
+            <div
+              style={{
+                flexGrow: 1,
+                borderTop: `1px solid ${token.colorBorderSecondary}`,
+              }}
+              data-test-id={组件测试标识.视图编辑页面.配置栏目.下部}
+            >
+              toolPanel-bottom
+            </div>
           </div>
         </div>
       </div>
