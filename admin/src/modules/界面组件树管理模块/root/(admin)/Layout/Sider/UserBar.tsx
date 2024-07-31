@@ -41,7 +41,7 @@ export const UserBar = () => {
             },
           ],
         }}
-        placement="bottomLeft"
+        placement="bottom"
       >
         <Button data-test-id={组件测试标识.用户信息显示按钮} type="text">
           <span data-test-id={组件测试标识.用户名称文本}>{username}</span>
@@ -60,7 +60,7 @@ export const UserBar = () => {
             },
           ].filter(Boolean) as ItemType[],
         }}
-        placement="bottomRight"
+        placement="bottom"
       >
         <Button type="text" icon={<EllipsisOutlined />}></Button>
       </Dropdown>
