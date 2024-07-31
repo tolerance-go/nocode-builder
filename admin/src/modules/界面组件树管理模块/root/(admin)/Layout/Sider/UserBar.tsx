@@ -4,17 +4,12 @@ import { layoutPadding } from '@/modules/界面组件树管理模块/configs';
 import { use全局事件系统 } from '@/modules/界面组件树管理模块/hooks';
 import { EllipsisOutlined } from '@ant-design/icons';
 import { Button, Dropdown, Flex, theme } from 'antd';
-import { ItemType } from 'antd/es/menu/interface';
 import { useNavigate } from 'react-router-dom';
-import { DataManagerModal, DataManagerModalRef } from './DataManagerModal';
-import { useRef } from 'react';
 
 export const UserBar = () => {
   const { token } = theme.useToken();
   const navigate = useNavigate();
   const 事件中心系统 = use全局事件系统();
-  const modalRef = useRef<DataManagerModalRef>(null);
-  const userIsAdmin = useAppSelector((state) => state.userInfo.isAdmin);
 
   const username = useAppSelector((state) => state.userInfo.username);
 
@@ -48,23 +43,7 @@ export const UserBar = () => {
         </Button>
       </Dropdown>
 
-      <Dropdown
-        menu={{
-          items: [
-            userIsAdmin && {
-              key: '1',
-              label: <span>管理数据</span>,
-              onClick: () => {
-                modalRef.current?.open();
-              },
-            },
-          ].filter(Boolean) as ItemType[],
-        }}
-        placement="bottom"
-      >
-        <Button type="text" icon={<EllipsisOutlined />}></Button>
-      </Dropdown>
-      <DataManagerModal ref={modalRef} />
+      <Button type="text" icon={<EllipsisOutlined />}></Button>
     </Flex>
   );
 };
