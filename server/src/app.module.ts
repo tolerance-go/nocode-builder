@@ -8,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProjectGroupModule } from './modules/project-group/project-group.module';
 import { SyncModule } from './modules/sync/sync.module';
 import { WidgetModule } from './modules/widget/widget.module';
+import { WidgetSlotModule } from './modules/widget-slot/widget-slot.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,6 +21,7 @@ import { WidgetModule } from './modules/widget/widget.module';
     UserModule,
     AuthModule,
     WidgetModule,
+    WidgetSlotModule,
   ],
   controllers: [AppController],
   providers: [AppService],

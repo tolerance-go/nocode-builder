@@ -3,6 +3,7 @@ import { WidgetElementType } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsArray,
+  IsBoolean,
   IsDateString,
   IsEnum,
   IsIn,
@@ -12,6 +13,27 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import {
+  WidgetSlotAssignmentResponseDto,
+  WidgetSlotAssignmentWithSlotsResponseDto,
+} from 'src/modules/widget-slot-assignment/dtos';
+import {
+  WidgetSlotCreateDto,
+  WidgetSlotResponseDto,
+} from 'src/modules/widget-slot/dtos';
+
+export class WidgetAddSlotDto {
+  @ApiProperty({})
+  @IsInt()
+  widgetId: number;
+
+  @ApiProperty({
+    type: WidgetSlotCreateDto,
+  })
+  @ValidateNested()
+  @Type(() => WidgetSlotCreateDto)
+  slot: WidgetSlotCreateDto;
+}
 
 export class WidgetCreateDto {
   @ApiProperty({
@@ -29,6 +51,15 @@ export class WidgetCreateManyDto {
   @ValidateNested({ each: true })
   @Type(() => WidgetCreateDto)
   createDtos: WidgetCreateDto[];
+}
+
+export class WidgetIncludeDto {
+  @ApiProperty({
+    required: false,
+  })
+  @IsOptional()
+  @IsBoolean()
+  slots?: boolean;
 }
 
 export class WidgetQueryDto {
@@ -94,4 +125,14 @@ export class WidgetResponseDto {
   @ApiProperty({})
   @IsDateString()
   updatedAt: string;
+}
+
+export class WidgetWithSlotsResponseDto extends WidgetResponseDto {
+  @ApiProperty({
+    type: () => [WidgetSlotAssignmentWithSlotsResponseDto],
+  })
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => WidgetSlotAssignmentWithSlotsResponseDto)
+  slots: WidgetSlotAssignmentWithSlotsResponseDto[];
 }

@@ -197,19 +197,24 @@ export class WidgetSlotAssignmentModelRecord {
 
   slotId: number;
 
+  ownerId: number;
+
   assignedAt: Date;
 
   constructor({
     widgetId,
     slotId,
+    ownerId,
     assignedAt,
   }: {
     widgetId: number;
     slotId: number;
+    ownerId: number;
     assignedAt: Date;
   }) {
     this.widgetId = widgetId;
     this.slotId = slotId;
+    this.ownerId = ownerId;
     this.assignedAt = assignedAt;
   }
 }

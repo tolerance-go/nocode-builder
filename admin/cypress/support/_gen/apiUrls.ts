@@ -120,7 +120,7 @@ export const apiUrls = {
     route: '/widgets/{id}',
     path: '/widgets/${id}',
   },
-  WidgetController_getWidgets: {
+  WidgetController_getWidgetsWithSlots: {
     method: 'get',
     route: '/widgets',
     path: '/widgets',
@@ -130,9 +130,44 @@ export const apiUrls = {
     route: '/widgets',
     path: '/widgets',
   },
+  WidgetController_addSlot: {
+    method: 'post',
+    route: '/widgets/add-slot',
+    path: '/widgets/add-slot',
+  },
   WidgetController_createWidgets: {
     method: 'post',
     route: '/widgets/bulk-create',
     path: '/widgets/bulk-create',
+  },
+  WidgetSlotController_getWidgetSlot: {
+    method: 'get',
+    route: '/widgetSlots/{id}',
+    path: '/widgetSlots/${id}',
+  },
+  WidgetSlotController_updateWidgetSlot: {
+    method: 'patch',
+    route: '/widgetSlots/{id}',
+    path: '/widgetSlots/${id}',
+  },
+  WidgetSlotController_deleteWidgetSlot: {
+    method: 'delete',
+    route: '/widgetSlots/{id}',
+    path: '/widgetSlots/${id}',
+  },
+  WidgetSlotController_getWidgetSlots: {
+    method: 'get',
+    route: '/widgetSlots',
+    path: '/widgetSlots',
+  },
+  WidgetSlotController_createWidgetSlot: {
+    method: 'post',
+    route: '/widgetSlots',
+    path: '/widgetSlots',
+  },
+  WidgetSlotController_createWidgetSlots: {
+    method: 'post',
+    route: '/widgetSlots/bulk-create',
+    path: '/widgetSlots/bulk-create',
   },
 } as const;

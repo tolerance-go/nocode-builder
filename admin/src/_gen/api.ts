@@ -141,8 +141,42 @@ export interface WidgetResponseDto {
   updatedAt: string;
 }
 
+export interface WidgetSlotResponseDto {
+  id: number;
+  name: string;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WidgetSlotAssignmentWithSlotsResponseDto {
+  widgetId: number;
+  slotId: number;
+  ownerId: number;
+  assignedAt: string;
+  slot: WidgetSlotResponseDto;
+}
+
+export interface WidgetWithSlotsResponseDto {
+  id: number;
+  elementType: 'Root' | 'Button' | 'Table' | 'Input';
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+  slots: WidgetSlotAssignmentWithSlotsResponseDto[];
+}
+
 export interface WidgetCreateDto {
   elementType: 'Root' | 'Button' | 'Table' | 'Input';
+}
+
+export interface WidgetSlotCreateDto {
+  name: string;
+}
+
+export interface WidgetAddSlotDto {
+  widgetId: number;
+  slot: WidgetSlotCreateDto;
 }
 
 export interface WidgetCreateManyDto {
@@ -154,6 +188,14 @@ export interface CountDto {
 }
 
 export type WidgetUpdateDto = Record<string, unknown>;
+
+export interface WidgetSlotCreateManyDto {
+  createDtos: WidgetSlotCreateDto[];
+}
+
+export interface WidgetSlotUpdateDto {
+  name: string;
+}
 
 import type {
   AxiosInstance,
@@ -732,10 +774,10 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     /**
      * No description
      *
-     * @name WidgetControllerGetWidgets
+     * @name WidgetControllerGetWidgetsWithSlots
      * @request GET:/widgets
      */
-    getWidgets: (
+    getWidgetsWithSlots: (
       query?: {
         skip?: number;
         take?: number;
@@ -744,7 +786,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
       },
       params: RequestParams = {},
     ) =>
-      this.request<WidgetResponseDto[], unknown>({
+      this.request<WidgetWithSlotsResponseDto[], unknown>({
         path: `/widgets`,
         method: 'GET',
         query: query,
@@ -771,12 +813,135 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     /**
      * No description
      *
+     * @name WidgetControllerAddSlot
+     * @request POST:/widgets/add-slot
+     */
+    addSlot: (data: WidgetAddSlotDto, params: RequestParams = {}) =>
+      this.request<WidgetResponseDto, void>({
+        path: `/widgets/add-slot`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @name WidgetControllerCreateWidgets
      * @request POST:/widgets/bulk-create
      */
     createWidgets: (data: WidgetCreateManyDto, params: RequestParams = {}) =>
       this.request<CountDto, void>({
         path: `/widgets/bulk-create`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+  };
+  widgetSlots = {
+    /**
+     * No description
+     *
+     * @name WidgetSlotControllerGetWidgetSlot
+     * @request GET:/widgetSlots/{id}
+     */
+    getWidgetSlot: (id: string, params: RequestParams = {}) =>
+      this.request<WidgetSlotResponseDto, unknown>({
+        path: `/widgetSlots/${id}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotControllerUpdateWidgetSlot
+     * @request PATCH:/widgetSlots/{id}
+     */
+    updateWidgetSlot: (
+      id: string,
+      data: WidgetSlotUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetSlotResponseDto, unknown>({
+        path: `/widgetSlots/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotControllerDeleteWidgetSlot
+     * @request DELETE:/widgetSlots/{id}
+     */
+    deleteWidgetSlot: (id: string, params: RequestParams = {}) =>
+      this.request<WidgetSlotResponseDto, unknown>({
+        path: `/widgetSlots/${id}`,
+        method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotControllerGetWidgetSlots
+     * @request GET:/widgetSlots
+     */
+    getWidgetSlots: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetSlotResponseDto[], unknown>({
+        path: `/widgetSlots`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotControllerCreateWidgetSlot
+     * @request POST:/widgetSlots
+     */
+    createWidgetSlot: (data: WidgetSlotCreateDto, params: RequestParams = {}) =>
+      this.request<WidgetSlotResponseDto, void>({
+        path: `/widgetSlots`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotControllerCreateWidgetSlots
+     * @request POST:/widgetSlots/bulk-create
+     */
+    createWidgetSlots: (
+      data: WidgetSlotCreateManyDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<CountDto, void>({
+        path: `/widgetSlots/bulk-create`,
         method: 'POST',
         body: data,
         type: ContentType.Json,

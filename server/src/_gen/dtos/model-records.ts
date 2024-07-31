@@ -156,6 +156,10 @@ export class WidgetSlotAssignmentModelRecordDto {
   slotId: number;
 
   @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
   @IsDateString()
   assignedAt: string;
 }

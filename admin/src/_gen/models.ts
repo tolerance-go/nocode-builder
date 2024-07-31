@@ -40,6 +40,8 @@ export class UserModel {
 
   widgetSlots: WidgetSlotModel[];
 
+  WidgetSlotAssignment: WidgetSlotAssignmentModel[];
+
   constructor({
     id,
     name,
@@ -52,6 +54,7 @@ export class UserModel {
     isAdmin,
     widgets,
     widgetSlots,
+    WidgetSlotAssignment,
   }: {
     id: number;
     name: string;
@@ -64,6 +67,7 @@ export class UserModel {
     isAdmin: boolean;
     widgets: WidgetModel[];
     widgetSlots: WidgetSlotModel[];
+    WidgetSlotAssignment: WidgetSlotAssignmentModel[];
   }) {
     this.id = id;
     this.name = name;
@@ -76,6 +80,7 @@ export class UserModel {
     this.isAdmin = isAdmin;
     this.widgets = widgets;
     this.widgetSlots = widgetSlots;
+    this.WidgetSlotAssignment = WidgetSlotAssignment;
   }
 }
 
@@ -130,6 +135,10 @@ export class WidgetSlotAssignmentModel {
 
   slot: WidgetSlotModel;
 
+  ownerId: number;
+
+  owner: UserModel;
+
   assignedAt: Date;
 
   constructor({
@@ -137,18 +146,24 @@ export class WidgetSlotAssignmentModel {
     slotId,
     widget,
     slot,
+    ownerId,
+    owner,
     assignedAt,
   }: {
     widgetId: number;
     slotId: number;
     widget: WidgetModel;
     slot: WidgetSlotModel;
+    ownerId: number;
+    owner: UserModel;
     assignedAt: Date;
   }) {
     this.widgetId = widgetId;
     this.slotId = slotId;
     this.widget = widget;
     this.slot = slot;
+    this.ownerId = ownerId;
+    this.owner = owner;
     this.assignedAt = assignedAt;
   }
 }

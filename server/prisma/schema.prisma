@@ -14,17 +14,18 @@ datasource db {
 }
 
 model User {
-  id            Int            @id @default(autoincrement())
-  name          String         @unique
-  email         String?        @unique
-  password      String
-  projects      Project[]
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
-  projectGroups ProjectGroup[]
-  isAdmin       Boolean        @default(false)
-  widgets       Widget[]
-  widgetSlots   WidgetSlot[]
+  id                   Int                    @id @default(autoincrement())
+  name                 String                 @unique
+  email                String?                @unique
+  password             String
+  projects             Project[]
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+  projectGroups        ProjectGroup[]
+  isAdmin              Boolean                @default(false)
+  widgets              Widget[]
+  widgetSlots          WidgetSlot[]
+  WidgetSlotAssignment WidgetSlotAssignment[]
 }
 
 model Project {
@@ -77,6 +78,8 @@ model WidgetSlotAssignment {
   slotId     Int
   widget     Widget     @relation(fields: [widgetId], references: [id])
   slot       WidgetSlot @relation(fields: [slotId], references: [id])
+  ownerId    Int
+  owner      User       @relation(fields: [ownerId], references: [id])
   assignedAt DateTime   @default(now())
 
   @@id([widgetId, slotId])

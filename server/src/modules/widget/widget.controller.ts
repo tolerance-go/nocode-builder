@@ -7,23 +7,27 @@ import {
   Patch,
   Post,
   Query,
-  UseGuards,
   Req,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
-import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { WidgetService } from './widget.service';
-import {
-  WidgetResponseDto,
-  WidgetQueryDto,
-  WidgetCreateDto,
-  WidgetUpdateDto,
-  WidgetCreateManyDto,
-} from './dtos';
-import { toWidgetDto } from './utils';
 import { Prisma } from '@prisma/client';
 import { CountDto } from 'src/common/dtos';
+import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { toWidgetSlotAssignmentDto } from '../widget-slot-assignment/utils';
+import { toWidgetSlotDto } from '../widget-slot/utils';
+import {
+  WidgetAddSlotDto,
+  WidgetCreateDto,
+  WidgetCreateManyDto,
+  WidgetQueryDto,
+  WidgetResponseDto,
+  WidgetUpdateDto,
+  WidgetWithSlotsResponseDto,
+} from './dtos';
+import { toWidgetDto } from './utils';
+import { WidgetService } from './widget.service';
 
 @Controller('widgets')
 export class WidgetController {
@@ -60,6 +64,34 @@ export class WidgetController {
     return widgets.map(toWidgetDto);
   }
 
+  @Get()
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    type: [WidgetWithSlotsResponseDto],
+  })
+  async getWidgetsWithSlots(
+    @Query() query: WidgetQueryDto,
+  ): Promise<WidgetWithSlotsResponseDto[]> {
+    const widgets = await this.widgetService.widgetsWithSlots({
+      skip: query.skip,
+      take: query.take,
+      cursor: query.filter ? { id: Number(query.filter) } : undefined,
+      orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
+    });
+    return widgets.map((item) => {
+      return {
+        ...toWidgetDto(item),
+        slots: item.slots.map((slot) => {
+          return {
+            ...toWidgetSlotAssignmentDto(slot),
+            slot: toWidgetSlotDto(slot.slot),
+          };
+        }),
+      };
+    });
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
@@ -81,6 +113,22 @@ export class WidgetController {
       },
     });
     return toWidgetDto(widget);
+  }
+
+  @Post('add-slot')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 201,
+    type: WidgetResponseDto,
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request.' })
+  async addSlot(
+    @Body() data: WidgetAddSlotDto,
+    @Req() req: Request & { user: JwtUserDto },
+  ): Promise<void> {
+    const userId = req.user.id;
+
+    await this.widgetService.addSlot(data, userId);
   }
 
   @Post('bulk-create')
