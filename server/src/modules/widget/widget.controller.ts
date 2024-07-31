@@ -33,7 +33,7 @@ import { WidgetService } from './widget.service';
 export class WidgetController {
   constructor(private readonly widgetService: WidgetService) {}
 
-  @Get(':id')
+  @Get('detail/:id')
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
@@ -64,7 +64,7 @@ export class WidgetController {
     return widgets.map(toWidgetDto);
   }
 
-  @Get()
+  @Get('with-slots')
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,

@@ -26,7 +26,7 @@ import { toProjectDto } from './utils';
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
-  @Get(':id')
+  @Get('detail/:id')
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,

@@ -32,18 +32,8 @@ export const apiUrls = {
   },
   UserController_getUser: {
     method: 'get',
-    route: '/users/{id}',
-    path: '/users/${id}',
-  },
-  UserController_updateUser: {
-    method: 'patch',
-    route: '/users/{id}',
-    path: '/users/${id}',
-  },
-  UserController_deleteUser: {
-    method: 'delete',
-    route: '/users/{id}',
-    path: '/users/${id}',
+    route: '/users/detail/{id}',
+    path: '/users/detail/${id}',
   },
   UserController_getUsers: {
     method: 'get',
@@ -55,20 +45,20 @@ export const apiUrls = {
     route: '/users',
     path: '/users',
   },
+  UserController_updateUser: {
+    method: 'patch',
+    route: '/users/{id}',
+    path: '/users/${id}',
+  },
+  UserController_deleteUser: {
+    method: 'delete',
+    route: '/users/{id}',
+    path: '/users/${id}',
+  },
   ProjectController_getProject: {
     method: 'get',
-    route: '/projects/{id}',
-    path: '/projects/${id}',
-  },
-  ProjectController_updateProject: {
-    method: 'patch',
-    route: '/projects/{id}',
-    path: '/projects/${id}',
-  },
-  ProjectController_deleteProject: {
-    method: 'delete',
-    route: '/projects/{id}',
-    path: '/projects/${id}',
+    route: '/projects/detail/{id}',
+    path: '/projects/detail/${id}',
   },
   ProjectController_getProjects: {
     method: 'get',
@@ -80,20 +70,20 @@ export const apiUrls = {
     route: '/projects',
     path: '/projects',
   },
+  ProjectController_updateProject: {
+    method: 'patch',
+    route: '/projects/{id}',
+    path: '/projects/${id}',
+  },
+  ProjectController_deleteProject: {
+    method: 'delete',
+    route: '/projects/{id}',
+    path: '/projects/${id}',
+  },
   ProjectGroupController_getProjectGroup: {
     method: 'get',
-    route: '/project-groups/{id}',
-    path: '/project-groups/${id}',
-  },
-  ProjectGroupController_updateProjectGroup: {
-    method: 'patch',
-    route: '/project-groups/{id}',
-    path: '/project-groups/${id}',
-  },
-  ProjectGroupController_deleteProjectGroup: {
-    method: 'delete',
-    route: '/project-groups/{id}',
-    path: '/project-groups/${id}',
+    route: '/project-groups/detail/{id}',
+    path: '/project-groups/detail/${id}',
   },
   ProjectGroupController_getProjectGroups: {
     method: 'get',
@@ -105,22 +95,22 @@ export const apiUrls = {
     route: '/project-groups',
     path: '/project-groups',
   },
+  ProjectGroupController_updateProjectGroup: {
+    method: 'patch',
+    route: '/project-groups/{id}',
+    path: '/project-groups/${id}',
+  },
+  ProjectGroupController_deleteProjectGroup: {
+    method: 'delete',
+    route: '/project-groups/{id}',
+    path: '/project-groups/${id}',
+  },
   WidgetController_getWidget: {
     method: 'get',
-    route: '/widgets/{id}',
-    path: '/widgets/${id}',
+    route: '/widgets/detail/{id}',
+    path: '/widgets/detail/${id}',
   },
-  WidgetController_updateWidget: {
-    method: 'patch',
-    route: '/widgets/{id}',
-    path: '/widgets/${id}',
-  },
-  WidgetController_deleteWidget: {
-    method: 'delete',
-    route: '/widgets/{id}',
-    path: '/widgets/${id}',
-  },
-  WidgetController_getWidgetsWithSlots: {
+  WidgetController_getWidgets: {
     method: 'get',
     route: '/widgets',
     path: '/widgets',
@@ -129,6 +119,11 @@ export const apiUrls = {
     method: 'post',
     route: '/widgets',
     path: '/widgets',
+  },
+  WidgetController_getWidgetsWithSlots: {
+    method: 'get',
+    route: '/widgets/with-slots',
+    path: '/widgets/with-slots',
   },
   WidgetController_addSlot: {
     method: 'post',
@@ -140,20 +135,20 @@ export const apiUrls = {
     route: '/widgets/bulk-create',
     path: '/widgets/bulk-create',
   },
+  WidgetController_updateWidget: {
+    method: 'patch',
+    route: '/widgets/{id}',
+    path: '/widgets/${id}',
+  },
+  WidgetController_deleteWidget: {
+    method: 'delete',
+    route: '/widgets/{id}',
+    path: '/widgets/${id}',
+  },
   WidgetSlotController_getWidgetSlot: {
     method: 'get',
-    route: '/widgetSlots/{id}',
-    path: '/widgetSlots/${id}',
-  },
-  WidgetSlotController_updateWidgetSlot: {
-    method: 'patch',
-    route: '/widgetSlots/{id}',
-    path: '/widgetSlots/${id}',
-  },
-  WidgetSlotController_deleteWidgetSlot: {
-    method: 'delete',
-    route: '/widgetSlots/{id}',
-    path: '/widgetSlots/${id}',
+    route: '/widgetSlots/detail/{id}',
+    path: '/widgetSlots/detail/${id}',
   },
   WidgetSlotController_getWidgetSlots: {
     method: 'get',
@@ -169,5 +164,15 @@ export const apiUrls = {
     method: 'post',
     route: '/widgetSlots/bulk-create',
     path: '/widgetSlots/bulk-create',
+  },
+  WidgetSlotController_updateWidgetSlot: {
+    method: 'patch',
+    route: '/widgetSlots/{id}',
+    path: '/widgetSlots/${id}',
+  },
+  WidgetSlotController_deleteWidgetSlot: {
+    method: 'delete',
+    route: '/widgetSlots/{id}',
+    path: '/widgetSlots/${id}',
   },
 } as const;

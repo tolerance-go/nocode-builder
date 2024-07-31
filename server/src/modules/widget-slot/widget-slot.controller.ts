@@ -29,7 +29,7 @@ import { CountDto } from 'src/common/dtos';
 export class WidgetSlotController {
   constructor(private readonly widgetSlotService: WidgetSlotService) {}
 
-  @Get(':id')
+  @Get('detail/:id')
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,

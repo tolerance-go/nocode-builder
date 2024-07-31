@@ -41,7 +41,7 @@ export class UserController {
     return user ? toUserResponseDto(user) : null;
   }
 
-  @Get(':id')
+  @Get('detail/:id')
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,

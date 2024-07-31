@@ -26,7 +26,7 @@ import {
 export class ProjectGroupController {
   constructor(private readonly projectGroupService: ProjectGroupService) {}
 
-  @Get(':id')
+  @Get('detail/:id')
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,

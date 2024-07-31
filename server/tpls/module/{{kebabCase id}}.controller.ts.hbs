@@ -24,7 +24,7 @@ import { to{{pascalCase id}}Dto } from './utils/to{{pascalCase id}}Dto';
 export class {{pascalCase id}}Controller {
   constructor(private readonly {{camelCase id}}Service: {{pascalCase id}}Service) {}
 
-  @Get(':id')
+  @Get('detail/:id')
   @ApiResponse({
     status: 200,
     description: 'The project group has been successfully fetched.',

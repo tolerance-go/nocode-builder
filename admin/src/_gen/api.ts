@@ -464,42 +464,12 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
      * No description
      *
      * @name UserControllerGetUser
-     * @request GET:/users/{id}
+     * @request GET:/users/detail/{id}
      */
     getUser: (id: string, params: RequestParams = {}) =>
       this.request<UserResponseDto, unknown>({
-        path: `/users/${id}`,
+        path: `/users/detail/${id}`,
         method: 'GET',
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name UserControllerUpdateUser
-     * @request PATCH:/users/{id}
-     */
-    updateUser: (id: string, data: UserUpdateDto, params: RequestParams = {}) =>
-      this.request<UserResponseDto, unknown>({
-        path: `/users/${id}`,
-        method: 'PATCH',
-        body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name UserControllerDeleteUser
-     * @request DELETE:/users/{id}
-     */
-    deleteUser: (id: string, params: RequestParams = {}) =>
-      this.request<UserResponseDto, unknown>({
-        path: `/users/${id}`,
-        method: 'DELETE',
         format: 'json',
         ...params,
       }),
@@ -542,35 +512,16 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         format: 'json',
         ...params,
       }),
-  };
-  projects = {
-    /**
-     * No description
-     *
-     * @name ProjectControllerGetProject
-     * @request GET:/projects/{id}
-     */
-    getProject: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectResponseDto, unknown>({
-        path: `/projects/${id}`,
-        method: 'GET',
-        format: 'json',
-        ...params,
-      }),
 
     /**
      * No description
      *
-     * @name ProjectControllerUpdateProject
-     * @request PATCH:/projects/{id}
+     * @name UserControllerUpdateUser
+     * @request PATCH:/users/{id}
      */
-    updateProject: (
-      id: string,
-      data: ProjectUpdateDto,
-      params: RequestParams = {},
-    ) =>
-      this.request<ProjectResponseDto, unknown>({
-        path: `/projects/${id}`,
+    updateUser: (id: string, data: UserUpdateDto, params: RequestParams = {}) =>
+      this.request<UserResponseDto, unknown>({
+        path: `/users/${id}`,
         method: 'PATCH',
         body: data,
         type: ContentType.Json,
@@ -581,13 +532,28 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     /**
      * No description
      *
-     * @name ProjectControllerDeleteProject
-     * @request DELETE:/projects/{id}
+     * @name UserControllerDeleteUser
+     * @request DELETE:/users/{id}
      */
-    deleteProject: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectResponseDto, unknown>({
-        path: `/projects/${id}`,
+    deleteUser: (id: string, params: RequestParams = {}) =>
+      this.request<UserResponseDto, unknown>({
+        path: `/users/${id}`,
         method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+  };
+  projects = {
+    /**
+     * No description
+     *
+     * @name ProjectControllerGetProject
+     * @request GET:/projects/detail/{id}
+     */
+    getProject: (id: string, params: RequestParams = {}) =>
+      this.request<ProjectResponseDto, unknown>({
+        path: `/projects/detail/${id}`,
+        method: 'GET',
         format: 'json',
         ...params,
       }),
@@ -630,35 +596,20 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         format: 'json',
         ...params,
       }),
-  };
-  projectGroups = {
-    /**
-     * No description
-     *
-     * @name ProjectGroupControllerGetProjectGroup
-     * @request GET:/project-groups/{id}
-     */
-    getProjectGroup: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectGroupResponseDto, unknown>({
-        path: `/project-groups/${id}`,
-        method: 'GET',
-        format: 'json',
-        ...params,
-      }),
 
     /**
      * No description
      *
-     * @name ProjectGroupControllerUpdateProjectGroup
-     * @request PATCH:/project-groups/{id}
+     * @name ProjectControllerUpdateProject
+     * @request PATCH:/projects/{id}
      */
-    updateProjectGroup: (
+    updateProject: (
       id: string,
-      data: ProjectGroupUpdateDto,
+      data: ProjectUpdateDto,
       params: RequestParams = {},
     ) =>
-      this.request<ProjectGroupResponseDto, unknown>({
-        path: `/project-groups/${id}`,
+      this.request<ProjectResponseDto, unknown>({
+        path: `/projects/${id}`,
         method: 'PATCH',
         body: data,
         type: ContentType.Json,
@@ -669,13 +620,28 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     /**
      * No description
      *
-     * @name ProjectGroupControllerDeleteProjectGroup
-     * @request DELETE:/project-groups/{id}
+     * @name ProjectControllerDeleteProject
+     * @request DELETE:/projects/{id}
      */
-    deleteProjectGroup: (id: string, params: RequestParams = {}) =>
-      this.request<ProjectGroupResponseDto, unknown>({
-        path: `/project-groups/${id}`,
+    deleteProject: (id: string, params: RequestParams = {}) =>
+      this.request<ProjectResponseDto, unknown>({
+        path: `/projects/${id}`,
         method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+  };
+  projectGroups = {
+    /**
+     * No description
+     *
+     * @name ProjectGroupControllerGetProjectGroup
+     * @request GET:/project-groups/detail/{id}
+     */
+    getProjectGroup: (id: string, params: RequestParams = {}) =>
+      this.request<ProjectGroupResponseDto, unknown>({
+        path: `/project-groups/detail/${id}`,
+        method: 'GET',
         format: 'json',
         ...params,
       }),
@@ -721,18 +687,146 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         format: 'json',
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @name ProjectGroupControllerUpdateProjectGroup
+     * @request PATCH:/project-groups/{id}
+     */
+    updateProjectGroup: (
+      id: string,
+      data: ProjectGroupUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ProjectGroupResponseDto, unknown>({
+        path: `/project-groups/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name ProjectGroupControllerDeleteProjectGroup
+     * @request DELETE:/project-groups/{id}
+     */
+    deleteProjectGroup: (id: string, params: RequestParams = {}) =>
+      this.request<ProjectGroupResponseDto, unknown>({
+        path: `/project-groups/${id}`,
+        method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
   };
   widgets = {
     /**
      * No description
      *
      * @name WidgetControllerGetWidget
-     * @request GET:/widgets/{id}
+     * @request GET:/widgets/detail/{id}
      */
     getWidget: (id: string, params: RequestParams = {}) =>
       this.request<WidgetResponseDto, unknown>({
-        path: `/widgets/${id}`,
+        path: `/widgets/detail/${id}`,
         method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerGetWidgets
+     * @request GET:/widgets
+     */
+    getWidgets: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetResponseDto[], unknown>({
+        path: `/widgets`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerCreateWidget
+     * @request POST:/widgets
+     */
+    createWidget: (data: WidgetCreateDto, params: RequestParams = {}) =>
+      this.request<WidgetResponseDto, void>({
+        path: `/widgets`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerGetWidgetsWithSlots
+     * @request GET:/widgets/with-slots
+     */
+    getWidgetsWithSlots: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetWithSlotsResponseDto[], unknown>({
+        path: `/widgets/with-slots`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerAddSlot
+     * @request POST:/widgets/add-slot
+     */
+    addSlot: (data: WidgetAddSlotDto, params: RequestParams = {}) =>
+      this.request<WidgetResponseDto, void>({
+        path: `/widgets/add-slot`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerCreateWidgets
+     * @request POST:/widgets/bulk-create
+     */
+    createWidgets: (data: WidgetCreateManyDto, params: RequestParams = {}) =>
+      this.request<CountDto, void>({
+        path: `/widgets/bulk-create`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
         format: 'json',
         ...params,
       }),
@@ -770,123 +864,18 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         format: 'json',
         ...params,
       }),
-
-    /**
-     * No description
-     *
-     * @name WidgetControllerGetWidgetsWithSlots
-     * @request GET:/widgets
-     */
-    getWidgetsWithSlots: (
-      query?: {
-        skip?: number;
-        take?: number;
-        orderBy?: string;
-        filter?: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<WidgetWithSlotsResponseDto[], unknown>({
-        path: `/widgets`,
-        method: 'GET',
-        query: query,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name WidgetControllerCreateWidget
-     * @request POST:/widgets
-     */
-    createWidget: (data: WidgetCreateDto, params: RequestParams = {}) =>
-      this.request<WidgetResponseDto, void>({
-        path: `/widgets`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name WidgetControllerAddSlot
-     * @request POST:/widgets/add-slot
-     */
-    addSlot: (data: WidgetAddSlotDto, params: RequestParams = {}) =>
-      this.request<WidgetResponseDto, void>({
-        path: `/widgets/add-slot`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name WidgetControllerCreateWidgets
-     * @request POST:/widgets/bulk-create
-     */
-    createWidgets: (data: WidgetCreateManyDto, params: RequestParams = {}) =>
-      this.request<CountDto, void>({
-        path: `/widgets/bulk-create`,
-        method: 'POST',
-        body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
   };
   widgetSlots = {
     /**
      * No description
      *
      * @name WidgetSlotControllerGetWidgetSlot
-     * @request GET:/widgetSlots/{id}
+     * @request GET:/widgetSlots/detail/{id}
      */
     getWidgetSlot: (id: string, params: RequestParams = {}) =>
       this.request<WidgetSlotResponseDto, unknown>({
-        path: `/widgetSlots/${id}`,
+        path: `/widgetSlots/detail/${id}`,
         method: 'GET',
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name WidgetSlotControllerUpdateWidgetSlot
-     * @request PATCH:/widgetSlots/{id}
-     */
-    updateWidgetSlot: (
-      id: string,
-      data: WidgetSlotUpdateDto,
-      params: RequestParams = {},
-    ) =>
-      this.request<WidgetSlotResponseDto, unknown>({
-        path: `/widgetSlots/${id}`,
-        method: 'PATCH',
-        body: data,
-        type: ContentType.Json,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name WidgetSlotControllerDeleteWidgetSlot
-     * @request DELETE:/widgetSlots/{id}
-     */
-    deleteWidgetSlot: (id: string, params: RequestParams = {}) =>
-      this.request<WidgetSlotResponseDto, unknown>({
-        path: `/widgetSlots/${id}`,
-        method: 'DELETE',
         format: 'json',
         ...params,
       }),
@@ -945,6 +934,40 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         method: 'POST',
         body: data,
         type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotControllerUpdateWidgetSlot
+     * @request PATCH:/widgetSlots/{id}
+     */
+    updateWidgetSlot: (
+      id: string,
+      data: WidgetSlotUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetSlotResponseDto, unknown>({
+        path: `/widgetSlots/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotControllerDeleteWidgetSlot
+     * @request DELETE:/widgetSlots/{id}
+     */
+    deleteWidgetSlot: (id: string, params: RequestParams = {}) =>
+      this.request<WidgetSlotResponseDto, unknown>({
+        path: `/widgetSlots/${id}`,
+        method: 'DELETE',
         format: 'json',
         ...params,
       }),

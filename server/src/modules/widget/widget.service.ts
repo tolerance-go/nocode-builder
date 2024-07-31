@@ -156,6 +156,7 @@ export class WidgetService {
     const existSlot = await client.widgetSlot.findUnique({
       where: {
         name: slot.name,
+        ownerId: userId,
       },
     });
 
