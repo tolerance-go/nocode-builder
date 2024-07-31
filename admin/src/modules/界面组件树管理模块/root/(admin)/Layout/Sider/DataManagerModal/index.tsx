@@ -4,11 +4,12 @@ import {
 } from '@/_gen/api';
 import { WidgetElementTypeEnum } from '@/_gen/models';
 import { api } from '@/globals';
-import { Button, Form, Modal, Select, Table, Tag, message, theme } from 'antd';
-import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
-import { AddSlotModal } from './AddSlotModal';
 import { 获取系统上下文 } from '@/modules/界面组件树管理模块/hooks';
 import { PlusOutlined } from '@ant-design/icons';
+import { Button, Form, Modal, Select, Table, Tag, theme } from 'antd';
+import dayjs from 'dayjs';
+import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { AddSlotModal } from './AddSlotModal';
 
 export interface DataManagerModalRef {
   open: () => void;
@@ -100,11 +101,15 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     return (
       <>
         <Modal
+          title="部件管理"
           width={'40%'}
           open={visible}
           onCancel={() => setVisible(false)}
           onOk={() => setVisible(false)}
           footer={[
+            <Button key="close" onClick={() => setVisible(false)}>
+              关闭
+            </Button>,
             <Button
               key="add"
               type="primary"
@@ -112,20 +117,17 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
             >
               新增
             </Button>,
-            <Button key="close" onClick={() => setVisible(false)}>
-              关闭
-            </Button>,
           ]}
         >
           <Table
             columns={[
               {
-                title: 'WidgetType',
+                title: '部件类型',
                 dataIndex: 'elementType',
                 key: 'type',
               },
               {
-                title: 'slots',
+                title: '插槽名称',
                 dataIndex: 'slots',
                 key: 'slots',
                 render: (
@@ -158,11 +160,13 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
                 title: '创建时间',
                 dataIndex: 'createdAt',
                 key: 'createdAt',
+                render: (text) => dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
               },
               {
                 title: '更新时间',
                 dataIndex: 'updatedAt',
                 key: 'updatedAt',
+                render: (text) => dayjs(text).format('YYYY-MM-DD HH:mm:ss'),
               },
             ]}
             rowKey={'id'}
@@ -173,7 +177,7 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
 
         <Modal
           open={isAddModalVisible}
-          title="新增 Widget"
+          title="新增部件"
           onCancel={() => setIsAddModalVisible(false)}
           onOk={handleAdd}
           footer={[
@@ -188,7 +192,7 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
           <Form form={form} layout="vertical">
             <Form.Item
               name="widgetType"
-              label="WidgetType"
+              label="部件类型"
               rules={[
                 { required: true, message: 'Please select the widget type!' },
               ]}

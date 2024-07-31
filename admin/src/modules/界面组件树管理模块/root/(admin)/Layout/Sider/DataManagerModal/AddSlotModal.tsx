@@ -53,6 +53,10 @@ export const AddSlotModal: FC<AddSlotModalProps> = ({
       title="添加 Slot"
       onCancel={onCancel}
       onOk={handleAddSlot}
+      afterClose={() => {
+        slotForm.resetFields();
+        setOptions([]);
+      }}
     >
       <Form form={slotForm} layout="vertical">
         <Form.Item
