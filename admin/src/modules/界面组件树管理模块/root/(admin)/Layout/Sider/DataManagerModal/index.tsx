@@ -4,9 +4,10 @@ import {
 } from '@/_gen/api';
 import { WidgetElementTypeEnum } from '@/_gen/models';
 import { api } from '@/globals';
-import { Button, Form, Modal, Select, Table } from 'antd';
+import { Button, Form, Modal, Select, Table, Tag, message } from 'antd';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 import { AddSlotModal } from './AddSlotModal';
+import { 获取系统上下文 } from '@/modules/界面组件树管理模块/hooks';
 
 export interface DataManagerModalRef {
   open: () => void;
@@ -28,6 +29,8 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     const [isSlotModalVisible, setIsSlotModalVisible] = useState(false);
     const [currentWidgetId, setCurrentWidgetId] = useState<number | null>(null);
     const [form] = Form.useForm<FormValues>();
+
+    const { 界面通知系统 } = 获取系统上下文();
 
     useImperativeHandle(ref, () => ({
       open: () => setVisible(true),
@@ -76,6 +79,16 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
       setIsSlotModalVisible(true);
     };
 
+    const handleRemoveSlot = async (widgetId: number, slotId: number) => {
+      try {
+        await api.widgets.deleteSlotAssignment(`${widgetId}`, `${slotId}`);
+        界面通知系统.showMessage({ type: 'success', content: 'Slot 删除成功' });
+        fetchData(); // 刷新表格数据
+      } catch (error) {
+        界面通知系统.showMessage({ type: 'error', content: 'Slot 删除失败' });
+      }
+    };
+
     return (
       <>
         <Modal
@@ -107,11 +120,20 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
                 title: 'slots',
                 dataIndex: 'slots',
                 key: 'slots',
-                render: (slots: WidgetSlotAssignmentWithSlotsResponseDto[]) => {
+                render: (
+                  slots: WidgetSlotAssignmentWithSlotsResponseDto[],
+                  record,
+                ) => {
                   return (
                     <div>
                       {slots?.map(({ slot }) => (
-                        <div key={slot.id}>{slot.name}</div>
+                        <Tag
+                          key={slot.id}
+                          closable
+                          onClose={() => handleRemoveSlot(record.id, slot.id)}
+                        >
+                          {slot.name}
+                        </Tag>
                       ))}
                     </div>
                   );
