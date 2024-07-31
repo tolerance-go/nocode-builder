@@ -49,6 +49,35 @@ model ProjectGroup {
   updatedAt     DateTime       @updatedAt
 }
 
+model Widget {
+  id          Int                    @id @default(autoincrement())
+  elementType WidgetElementType
+  slots       WidgetSlotAssignment[]
+}
+
+model WidgetSlot {
+  id      Int                    @id @default(autoincrement())
+  name    String                 @unique
+  widgets WidgetSlotAssignment[]
+}
+
+model WidgetSlotAssignment {
+  widgetId   Int
+  slotId     Int
+  widget     Widget     @relation(fields: [widgetId], references: [id])
+  slot       WidgetSlot @relation(fields: [slotId], references: [id])
+  assignedAt DateTime   @default(now())
+
+  @@id([widgetId, slotId])
+}
+
+enum WidgetElementType {
+  Root
+  Button
+  Table
+  Input
+}
+
 enum ProjectType {
   View
   DataTable

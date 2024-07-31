@@ -17,6 +17,8 @@ import {
   createProjectTreeSlice,
   createUserInfoInitialState,
   createUserInfoSlice,
+  createWidgetTreeInitialState,
+  createWidgetTreeSlice,
 } from './states';
 import { AppMiddleware, RootState } from './types';
 import { findNode, generateProjectTreeMeta } from './utils';
@@ -29,11 +31,13 @@ export class 界面状态仓库模块 extends ModuleBase {
     const layoutSlice = createLayoutSlice();
     const locationSlice = createLocationSlice();
     const userInfoSlice = createUserInfoSlice();
+    const widgetTreeSlice = createWidgetTreeSlice();
     const slices = {
       [projectSlice.name]: projectSlice,
       [layoutSlice.name]: layoutSlice,
       [locationSlice.name]: locationSlice,
       [userInfoSlice.name]: userInfoSlice,
+      [widgetTreeSlice.name]: widgetTreeSlice,
     };
     return slices;
   };
@@ -48,6 +52,7 @@ export class 界面状态仓库模块 extends ModuleBase {
       layout: slices.layout.reducer,
       location: slices.location.reducer,
       userInfo: slices.userInfo.reducer,
+      widgetTree: slices.widgetTree.reducer,
     };
 
     return reducers;
@@ -180,6 +185,7 @@ export class 界面状态仓库模块 extends ModuleBase {
           userInfo: createUserInfoInitialState(),
           location: createLocationInitialState(),
           layout: createLayoutInitialState(),
+          widgetTree: createWidgetTreeInitialState(),
           projectTree: {
             ...createProjectTreeInitialState(),
             项目树节点数据,
