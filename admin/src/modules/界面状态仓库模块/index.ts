@@ -9,13 +9,19 @@ import { 本地数据管理模块 } from '../本地数据管理模块';
 import { 界面导航系统 } from '../界面导航系统';
 import { localStateFieldName } from './constants';
 import {
+  createLayoutInitialState,
   createLayoutSlice,
+  createLocationInitialState,
   createLocationSlice,
+  createProjectTreeInitialState,
   createProjectTreeSlice,
+  createUserInfoInitialState,
   createUserInfoSlice,
 } from './states';
 import { AppMiddleware, RootState } from './types';
-import { findNode } from './utils';
+import { findNode, generateProjectTreeMeta } from './utils';
+import { 项目组表模块 } from '../models/项目组表模块';
+import { 项目表模块 } from '../models/项目表模块';
 
 export class 界面状态仓库模块 extends ModuleBase {
   static createSlices = () => {
@@ -154,15 +160,35 @@ export class 界面状态仓库模块 extends ModuleBase {
   constructor(engine: EngineBase) {
     super(engine);
 
-    // 从数据库同步状态
-    if (this.getDependModule(用户表模块).currentLoginUser) {
-      //
-    }
-
-    const initialState =
+    let initialState =
       this.getDependModule(本地数据管理模块).get<RootState>(
         localStateFieldName,
       );
+
+    // 从数据库同步状态
+    if (this.getDependModule(用户表模块).currentLoginUser) {
+      if (!initialState) {
+        const projectRecords =
+          this.getDependModule(项目表模块).table.getAllRecords();
+        const projectGroupRecords =
+          this.getDependModule(项目组表模块).table.getAllRecords();
+
+        const { 项目树节点数据, 项目结构树, derived_节点到父节点的映射 } =
+          generateProjectTreeMeta(projectRecords, projectGroupRecords);
+
+        initialState = {
+          userInfo: createUserInfoInitialState(),
+          location: createLocationInitialState(),
+          layout: createLayoutInitialState(),
+          projectTree: {
+            ...createProjectTreeInitialState(),
+            项目树节点数据,
+            项目结构树,
+            derived_节点到父节点的映射,
+          },
+        };
+      }
+    }
 
     this.initialState = initialState;
 
@@ -288,6 +314,8 @@ export class 界面状态仓库模块 extends ModuleBase {
     super.requireModules(
       本地数据管理模块.getInstance(this.engine),
       用户表模块.getInstance(this.engine),
+      项目组表模块.getInstance(this.engine),
+      项目表模块.getInstance(this.engine),
       事件中心系统.getInstance(this.engine),
       界面导航系统.getInstance(this.engine),
     );

@@ -6,7 +6,7 @@ import {
   ProjectTreeNodeDataRecordItemBase,
 } from '../../types';
 import {
-  createInitialState,
+  createProjectTreeInitialState,
   createProjectTreeSlice,
   ProjectTreeStates,
 } from '.';
@@ -17,7 +17,7 @@ describe('projectTreeSlice', () => {
   const { actions, reducer } = projectTreeSlice;
 
   // 初始状态
-  const initialState: ProjectTreeStates = createInitialState();
+  const initialState: ProjectTreeStates = createProjectTreeInitialState();
 
   it('应更新节点数据', () => {
     const nodeKey: ViewKey = 'test-node';

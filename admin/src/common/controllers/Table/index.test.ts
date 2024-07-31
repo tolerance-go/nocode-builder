@@ -140,4 +140,14 @@ describe('Table 类测试', () => {
 
     unregister();
   });
+
+  it('应该获取全部记录', () => {
+    table.addRecord({ id: 1, name: 'Alice', age: 30 });
+    table.addRecord({ id: 2, name: 'Bob', age: 25 });
+    const allRecords = table.getAllRecords();
+    expect(allRecords).toEqual([
+      { id: 1, name: 'Alice', age: 30 },
+      { id: 2, name: 'Bob', age: 25 },
+    ]);
+  });
 });

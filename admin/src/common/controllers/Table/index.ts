@@ -87,6 +87,11 @@ export class Table<T extends RecordWithId> {
     return this.records.filter(predicate);
   }
 
+  // 获取全部记录
+  getAllRecords(): T[] {
+    return this.records;
+  }
+
   // 将 records 转换为 JSON 对象
   toTestSnapshot(): { [key: string]: JSONValue }[] {
     // 递归修改对象中的日期属性值为空字符串

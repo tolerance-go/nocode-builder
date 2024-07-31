@@ -9,17 +9,21 @@ export type LayoutStates = {
   拖拽时鼠标附近的跟随组件id和参数: Entries<鼠标跟随组件id到组件参数> | null;
 };
 
-const initialState: LayoutStates = {
-  subSiderVisible: false,
-  projectTreeTimeLineVisible: false,
-  拖拽时鼠标附近的跟随组件是否显示: false,
-  拖拽时鼠标附近的跟随组件id和参数: null,
+export const createLayoutInitialState = () => {
+  const initialState: LayoutStates = {
+    subSiderVisible: false,
+    projectTreeTimeLineVisible: false,
+    拖拽时鼠标附近的跟随组件是否显示: false,
+    拖拽时鼠标附近的跟随组件id和参数: null,
+  };
+
+  return initialState;
 };
 
 export const createLayoutSlice = () =>
   createSlice({
     name: 'layout',
-    initialState,
+    initialState: createLayoutInitialState(),
     reducers: {
       显示拖拽时鼠标跟随组件: (
         state,

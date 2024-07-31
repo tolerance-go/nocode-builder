@@ -36,7 +36,7 @@ export type ProjectTreeStates = {
   当前聚焦的节点key: ViewKey | null;
 };
 
-export const createInitialState = () => {
+export const createProjectTreeInitialState = () => {
   const initialState: ProjectTreeStates = {
     derived_节点到父节点的映射: {},
     编辑节点标题之前暂存的聚焦的节点key: null,
@@ -58,7 +58,7 @@ export const createInitialState = () => {
   return initialState;
 };
 
-const initialState: ProjectTreeStates = createInitialState();
+const initialState: ProjectTreeStates = createProjectTreeInitialState();
 
 export const createProjectTreeSlice = () => {
   const projectTreeSlice = createSlice({
