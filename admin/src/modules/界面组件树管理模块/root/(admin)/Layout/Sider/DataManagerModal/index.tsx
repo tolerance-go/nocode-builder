@@ -18,6 +18,7 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
   (props, ref) => {
     const [visible, setVisible] = useState(false);
     const [data, setData] = useState<WidgetResponseDto[]>([]);
+    const [loading, setLoading] = useState(false); // 增加加载状态
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [form] = Form.useForm<FormValues>();
 
@@ -27,8 +28,13 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     }));
 
     const fetchData = async () => {
-      const widgets = await api.widgets.getWidgets();
-      setData(widgets);
+      setLoading(true); // 设置加载状态为 true
+      try {
+        const widgets = await api.widgets.getWidgets();
+        setData(widgets);
+      } finally {
+        setLoading(false); // 设置加载状态为 false
+      }
     };
 
     useEffect(() => {
@@ -97,6 +103,7 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
               },
             ]}
             dataSource={data}
+            loading={loading} // 传递加载状态
           />
         </Modal>
 
