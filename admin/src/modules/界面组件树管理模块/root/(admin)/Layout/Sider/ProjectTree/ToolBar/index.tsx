@@ -52,7 +52,7 @@ export const ToolBar = () => {
   const projectTreeDataRecord = useAppSelector(
     (state) => state.projectTree.项目树节点数据,
   );
-  const nodeParentKeyRecord = useAppSelector(
+  const derived_节点到父节点的映射 = useAppSelector(
     (state) => state.projectTree.derived_节点到父节点的映射,
   );
   const dispatch = useAppDispatch();
@@ -184,7 +184,7 @@ export const ToolBar = () => {
         在指定节点下插入新文件夹(selectedNode);
       }
     } else if (节点是不是文件(selectedRecordItem)) {
-      const parentKey = nodeParentKeyRecord[selectedKey];
+      const parentKey = derived_节点到父节点的映射[selectedKey];
       if (parentKey) {
         const parent = 查询项目树中的节点(
           reduxStore.getState().projectTree,
@@ -216,12 +216,12 @@ export const ToolBar = () => {
     if (!selectedRecordItem) {
       throw new Error('数据不完整。');
     }
-    if (节点是不是文件夹(selectedRecordItem)) {
+    if (selectedRecordItem.type === DirectoryTreeNodeTypeEnum.Folder) {
       if (selectedNode) {
         在指定节点下插入新文件(selectedNode, projectFileType);
       }
-    } else if (节点是不是文件(selectedRecordItem)) {
-      const parentKey = nodeParentKeyRecord[selectedKey];
+    } else {
+      const parentKey = derived_节点到父节点的映射[selectedKey];
 
       if (parentKey) {
         const parent = 查询项目树中的节点(
@@ -262,7 +262,7 @@ export const ToolBar = () => {
                 onClick: () =>
                   handleProjectFileCreateBtnClick(ProjectTypeEnum.View),
                 icon: 图标管理者实例.根据id获取组件('视图项目节点'),
-                className: 组件类名.创建视图项目节点的菜单项,
+                className: 组件类名.创建项目节点的菜单项,
               },
               {
                 key: 'data-table',
@@ -276,6 +276,7 @@ export const ToolBar = () => {
                 icon: 图标管理者实例.根据id获取组件('数据表项目节点'),
                 onClick: () =>
                   handleProjectFileCreateBtnClick(ProjectTypeEnum.DataTable),
+                className: 组件类名.创建项目节点的菜单项,
               },
               {
                 key: 'bluemap',
@@ -289,6 +290,7 @@ export const ToolBar = () => {
                 icon: 图标管理者实例.根据id获取组件('蓝图项目节点'),
                 onClick: () =>
                   handleProjectFileCreateBtnClick(ProjectTypeEnum.Bluemap),
+                className: 组件类名.创建项目节点的菜单项,
               },
             ],
           }}
@@ -299,7 +301,6 @@ export const ToolBar = () => {
             data-test-id={组件测试标识.创建项目节点的按钮}
             type="text"
             disabled={projectTreeTimeLineVisible}
-            // loading={addFileLoading}
             icon={<PlusOutlined />}
           ></Button>
         </Dropdown>
@@ -308,7 +309,6 @@ export const ToolBar = () => {
           id={组件标识.创建项目组节点的按钮}
           data-test-id={组件测试标识.创建项目组节点的按钮}
           disabled={projectTreeTimeLineVisible}
-          // loading={addFolderLoading}
           icon={<FolderAddOutlined />}
           onClick={处理项目组新建按钮点击事件}
         ></Button>

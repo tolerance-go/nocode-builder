@@ -129,9 +129,7 @@ export const ProjectTree = () => {
   useClickAway(containerRef, (event) => {
     if (
       // 如果点击的是创建项目或者项目组按钮，则不取消选中
-      (event.target as Element).closest(
-        `.${组件类名.创建视图项目节点的菜单项}`,
-      ) ||
+      (event.target as Element).closest(`.${组件类名.创建项目节点的菜单项}`) ||
       // 如果点击的项目树上下文菜单，则不取消选中
       (event.target as Element).closest(`.${组件类名.项目树节点右键菜单容器}`)
     ) {
