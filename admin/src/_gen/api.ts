@@ -133,6 +133,20 @@ export interface ProjectGroupUpdateDto {
   parentGroupId?: number;
 }
 
+export interface WidgetResponseDto {
+  id: number;
+  elementType: 'Root' | 'Button' | 'Table' | 'Input';
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WidgetCreateDto {
+  elementType: 'Root' | 'Button' | 'Table' | 'Input';
+}
+
+export type WidgetUpdateDto = Record<string, unknown>;
+
 import type {
   AxiosInstance,
   AxiosRequestConfig,
@@ -651,6 +665,94 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     ) =>
       this.request<ProjectGroupResponseDto, void>({
         path: `/project-groups`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+  };
+  widgets = {
+    /**
+     * No description
+     *
+     * @name WidgetControllerGetWidget
+     * @request GET:/widgets/{id}
+     */
+    getWidget: (id: string, params: RequestParams = {}) =>
+      this.request<WidgetResponseDto, unknown>({
+        path: `/widgets/${id}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerUpdateWidget
+     * @request PATCH:/widgets/{id}
+     */
+    updateWidget: (
+      id: string,
+      data: WidgetUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetResponseDto, unknown>({
+        path: `/widgets/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerDeleteWidget
+     * @request DELETE:/widgets/{id}
+     */
+    deleteWidget: (id: string, params: RequestParams = {}) =>
+      this.request<WidgetResponseDto, unknown>({
+        path: `/widgets/${id}`,
+        method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerGetWidgets
+     * @request GET:/widgets
+     */
+    getWidgets: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetResponseDto[], unknown>({
+        path: `/widgets`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerCreateWidget
+     * @request POST:/widgets
+     */
+    createWidget: (data: WidgetCreateDto, params: RequestParams = {}) =>
+      this.request<WidgetResponseDto, void>({
+        path: `/widgets`,
         method: 'POST',
         body: data,
         type: ContentType.Json,

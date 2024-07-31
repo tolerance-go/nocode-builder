@@ -105,4 +105,29 @@ export const apiUrls = {
     route: '/project-groups',
     path: '/project-groups',
   },
+  WidgetController_getWidget: {
+    method: 'get',
+    route: '/widgets/{id}',
+    path: '/widgets/${id}',
+  },
+  WidgetController_updateWidget: {
+    method: 'patch',
+    route: '/widgets/{id}',
+    path: '/widgets/${id}',
+  },
+  WidgetController_deleteWidget: {
+    method: 'delete',
+    route: '/widgets/{id}',
+    path: '/widgets/${id}',
+  },
+  WidgetController_getWidgets: {
+    method: 'get',
+    route: '/widgets',
+    path: '/widgets',
+  },
+  WidgetController_createWidget: {
+    method: 'post',
+    route: '/widgets',
+    path: '/widgets',
+  },
 } as const;

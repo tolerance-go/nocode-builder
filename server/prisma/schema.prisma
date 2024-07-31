@@ -23,6 +23,8 @@ model User {
   updatedAt     DateTime       @updatedAt
   projectGroups ProjectGroup[]
   isAdmin       Boolean        @default(false)
+  widgets       Widget[]
+  widgetSlots   WidgetSlot[]
 }
 
 model Project {
@@ -54,12 +56,20 @@ model Widget {
   id          Int                    @id @default(autoincrement())
   elementType WidgetElementType
   slots       WidgetSlotAssignment[]
+  ownerId     Int
+  owner       User                   @relation(fields: [ownerId], references: [id])
+  createdAt   DateTime               @default(now())
+  updatedAt   DateTime               @updatedAt
 }
 
 model WidgetSlot {
-  id      Int                    @id @default(autoincrement())
-  name    String                 @unique
-  widgets WidgetSlotAssignment[]
+  id        Int                    @id @default(autoincrement())
+  name      String                 @unique
+  ownerId   Int
+  owner     User                   @relation(fields: [ownerId], references: [id])
+  widgets   WidgetSlotAssignment[]
+  createdAt DateTime               @default(now())
+  updatedAt DateTime               @updatedAt
 }
 
 model WidgetSlotAssignment {

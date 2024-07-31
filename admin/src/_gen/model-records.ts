@@ -133,15 +133,30 @@ export class WidgetModelRecord {
 
   elementType: WidgetElementTypeEnum;
 
+  ownerId: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
   constructor({
     id,
     elementType,
+    ownerId,
+    createdAt,
+    updatedAt,
   }: {
     id: number;
     elementType: WidgetElementTypeEnum;
+    ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
   }) {
     this.id = id;
     this.elementType = elementType;
+    this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 
@@ -150,9 +165,30 @@ export class WidgetSlotModelRecord {
 
   name: string;
 
-  constructor({ id, name }: { id: number; name: string }) {
+  ownerId: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    name,
+    ownerId,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    name: string;
+    ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
     this.id = id;
     this.name = name;
+    this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 

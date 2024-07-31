@@ -17,6 +17,68 @@ export enum ProjectTypeEnum {
   Bluemap = 'Bluemap',
 }
 
+export class UserModel {
+  id: number;
+
+  name: string;
+
+  email?: string;
+
+  password: string;
+
+  projects: ProjectModel[];
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  projectGroups: ProjectGroupModel[];
+
+  isAdmin: boolean;
+
+  widgets: WidgetModel[];
+
+  widgetSlots: WidgetSlotModel[];
+
+  constructor({
+    id,
+    name,
+    email,
+    password,
+    projects,
+    createdAt,
+    updatedAt,
+    projectGroups,
+    isAdmin,
+    widgets,
+    widgetSlots,
+  }: {
+    id: number;
+    name: string;
+    email?: string;
+    password: string;
+    projects: ProjectModel[];
+    createdAt: Date;
+    updatedAt: Date;
+    projectGroups: ProjectGroupModel[];
+    isAdmin: boolean;
+    widgets: WidgetModel[];
+    widgetSlots: WidgetSlotModel[];
+  }) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.password = password;
+    this.projects = projects;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.projectGroups = projectGroups;
+    this.isAdmin = isAdmin;
+    this.widgets = widgets;
+    this.widgetSlots = widgetSlots;
+  }
+}
+
 export class WidgetModel {
   id: number;
 
@@ -24,18 +86,38 @@ export class WidgetModel {
 
   slots: WidgetSlotAssignmentModel[];
 
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
   constructor({
     id,
     elementType,
     slots,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
   }: {
     id: number;
     elementType: WidgetElementTypeEnum;
     slots: WidgetSlotAssignmentModel[];
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
   }) {
     this.id = id;
     this.elementType = elementType;
     this.slots = slots;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 
@@ -76,72 +158,40 @@ export class WidgetSlotModel {
 
   name: string;
 
+  ownerId: number;
+
+  owner: UserModel;
+
   widgets: WidgetSlotAssignmentModel[];
-
-  constructor({
-    id,
-    name,
-    widgets,
-  }: {
-    id: number;
-    name: string;
-    widgets: WidgetSlotAssignmentModel[];
-  }) {
-    this.id = id;
-    this.name = name;
-    this.widgets = widgets;
-  }
-}
-
-export class UserModel {
-  id: number;
-
-  name: string;
-
-  email?: string;
-
-  password: string;
-
-  projects: ProjectModel[];
 
   createdAt: Date;
 
   updatedAt: Date;
 
-  projectGroups: ProjectGroupModel[];
-
-  isAdmin: boolean;
-
   constructor({
     id,
     name,
-    email,
-    password,
-    projects,
+    ownerId,
+    owner,
+    widgets,
     createdAt,
     updatedAt,
-    projectGroups,
-    isAdmin,
   }: {
     id: number;
     name: string;
-    email?: string;
-    password: string;
-    projects: ProjectModel[];
+    ownerId: number;
+    owner: UserModel;
+    widgets: WidgetSlotAssignmentModel[];
     createdAt: Date;
     updatedAt: Date;
-    projectGroups: ProjectGroupModel[];
-    isAdmin: boolean;
   }) {
     this.id = id;
     this.name = name;
-    this.email = email;
-    this.password = password;
-    this.projects = projects;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.widgets = widgets;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
-    this.projectGroups = projectGroups;
-    this.isAdmin = isAdmin;
   }
 }
 

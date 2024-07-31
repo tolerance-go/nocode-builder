@@ -257,7 +257,10 @@ export class 界面状态仓库模块 extends ModuleBase {
 
     if (userInfo) {
       this.store.dispatch(
-        this.slices.userInfo.actions.更新用户名(userInfo.name),
+        this.slices.userInfo.actions.更新用户信息({
+          username: userInfo.name,
+          isAdmin: userInfo.isAdmin,
+        }),
       );
     }
 
@@ -265,7 +268,10 @@ export class 界面状态仓库模块 extends ModuleBase {
       '用户模型表/获取登录用户信息成功',
       ({ userInfo }) => {
         this.store.dispatch(
-          this.slices.userInfo.actions.更新用户名(userInfo.name),
+          this.slices.userInfo.actions.更新用户信息({
+            username: userInfo.name,
+            isAdmin: userInfo.isAdmin,
+          }),
         );
       },
     );

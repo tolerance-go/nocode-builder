@@ -110,6 +110,18 @@ export class WidgetModelRecordDto {
   @ApiProperty({ enum: WidgetElementType })
   @IsEnum(WidgetElementType)
   elementType: WidgetElementType;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
 }
 
 export class WidgetSlotModelRecordDto {
@@ -120,6 +132,18 @@ export class WidgetSlotModelRecordDto {
   @ApiProperty({})
   @IsString()
   name: string;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
 }
 
 export class WidgetSlotAssignmentModelRecordDto {
