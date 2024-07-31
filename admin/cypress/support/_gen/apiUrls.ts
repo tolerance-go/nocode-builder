@@ -145,6 +145,11 @@ export const apiUrls = {
     route: '/widgets/{id}',
     path: '/widgets/${id}',
   },
+  WidgetController_deleteSlotAssignment: {
+    method: 'delete',
+    route: '/widgets/{widgetId}/slot/{slotId}',
+    path: '/widgets/${widgetId}/slot/${slotId}',
+  },
   WidgetSlotController_getWidgetSlot: {
     method: 'get',
     route: '/widgetSlots/detail/{id}',
@@ -159,6 +164,11 @@ export const apiUrls = {
     method: 'post',
     route: '/widgetSlots',
     path: '/widgetSlots',
+  },
+  WidgetSlotController_searchWidgetSlotsByName: {
+    method: 'get',
+    route: '/widgetSlots/search',
+    path: '/widgetSlots/search',
   },
   WidgetSlotController_createWidgetSlots: {
     method: 'post',

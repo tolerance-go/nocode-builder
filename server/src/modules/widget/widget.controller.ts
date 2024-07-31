@@ -182,4 +182,23 @@ export class WidgetController {
     });
     return toWidgetDto(widget);
   }
+
+  @Delete(':widgetId/slot/:slotId')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    description: 'The slot assignment has been successfully deleted.',
+  })
+  async deleteSlotAssignment(
+    @Param('widgetId') widgetId: string,
+    @Param('slotId') slotId: string,
+    @Req() req: Request & { user: JwtUserDto },
+  ): Promise<void> {
+    const userId = req.user.id;
+    await this.widgetService.deleteSlotAssignment(
+      Number(widgetId),
+      Number(slotId),
+      userId,
+    );
+  }
 }

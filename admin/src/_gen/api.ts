@@ -864,6 +864,23 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         format: 'json',
         ...params,
       }),
+
+    /**
+     * No description
+     *
+     * @name WidgetControllerDeleteSlotAssignment
+     * @request DELETE:/widgets/{widgetId}/slot/{slotId}
+     */
+    deleteSlotAssignment: (
+      widgetId: string,
+      slotId: string,
+      params: RequestParams = {},
+    ) =>
+      this.request<void, unknown>({
+        path: `/widgets/${widgetId}/slot/${slotId}`,
+        method: 'DELETE',
+        ...params,
+      }),
   };
   widgetSlots = {
     /**
@@ -915,6 +932,26 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         method: 'POST',
         body: data,
         type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotControllerSearchWidgetSlotsByName
+     * @request GET:/widgetSlots/search
+     */
+    searchWidgetSlotsByName: (
+      query: {
+        name: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetSlotResponseDto[], unknown>({
+        path: `/widgetSlots/search`,
+        method: 'GET',
+        query: query,
         format: 'json',
         ...params,
       }),

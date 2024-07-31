@@ -188,6 +188,46 @@ export class WidgetService {
     }
   }
 
+  async deleteSlotAssignment(
+    widgetId: number,
+    slotId: number,
+    userId: number,
+    tx?: Prisma.TransactionClient,
+  ): Promise<void> {
+    const client = tx || this.prisma;
+    const assignment = await client.widgetSlotAssignment.findUnique({
+      where: {
+        widgetId_slotId: {
+          widgetId,
+          slotId,
+        },
+      },
+    });
+
+    if (!assignment || assignment.ownerId !== userId) {
+      throw new HttpException('Slot assignment not found or unauthorized', 404);
+    }
+
+    await client.widgetSlotAssignment.delete({
+      where: {
+        widgetId_slotId: {
+          widgetId,
+          slotId,
+        },
+      },
+    });
+
+    const remainingAssignments = await client.widgetSlotAssignment.findMany({
+      where: { slotId },
+    });
+
+    if (remainingAssignments.length === 0) {
+      await client.widgetSlot.delete({
+        where: { id: slotId },
+      });
+    }
+  }
+
   private async connectSlot(
     params: {
       widgetId: number;

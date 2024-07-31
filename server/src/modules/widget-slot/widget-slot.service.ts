@@ -37,6 +37,22 @@ export class WidgetSlotService {
     });
   }
 
+  async searchWidgetSlotsByName(
+    name: string,
+    tx?: Prisma.TransactionClient,
+  ): Promise<WidgetSlot[]> {
+    const client = tx || this.prisma;
+    return client.widgetSlot.findMany({
+      where: {
+        name: {
+          contains: name,
+          // 忽略字符串的大小写差异
+          mode: 'insensitive',
+        },
+      },
+    });
+  }
+
   async createWidgetSlot(
     data: Prisma.WidgetSlotCreateInput,
     tx?: Prisma.TransactionClient,

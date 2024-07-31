@@ -4,8 +4,9 @@ import {
 } from '@/_gen/api';
 import { WidgetElementTypeEnum } from '@/_gen/models';
 import { api } from '@/globals';
-import { Button, Form, Input, Modal, Select, Table } from 'antd';
+import { Button, Form, Modal, Select, Table } from 'antd';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
+import { AddSlotModal } from './AddSlotModal';
 
 export interface DataManagerModalRef {
   open: () => void;
@@ -27,7 +28,6 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     const [isSlotModalVisible, setIsSlotModalVisible] = useState(false);
     const [currentWidgetId, setCurrentWidgetId] = useState<number | null>(null);
     const [form] = Form.useForm<FormValues>();
-    const [slotForm] = Form.useForm<{ slotName: string }>();
 
     useImperativeHandle(ref, () => ({
       open: () => setVisible(true),
@@ -69,24 +69,6 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
 
     const handleSelectAll = () => {
       form.setFieldsValue({ widgetType: Object.values(WidgetElementTypeEnum) });
-    };
-
-    const handleAddSlot = async () => {
-      try {
-        const values = await slotForm.validateFields();
-        if (currentWidgetId !== null) {
-          await api.widgets.addSlot({
-            widgetId: currentWidgetId,
-            slot: {
-              name: values.slotName,
-            },
-          });
-          setIsSlotModalVisible(false);
-          fetchData(); // 刷新表格数据
-        }
-      } catch (error) {
-        console.error('Failed to add slot:', error);
-      }
     };
 
     const openSlotModal = (widgetId: number) => {
@@ -198,22 +180,22 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
           </Form>
         </Modal>
 
-        <Modal
-          open={isSlotModalVisible}
-          title="添加 Slot"
+        <AddSlotModal
+          visible={isSlotModalVisible}
           onCancel={() => setIsSlotModalVisible(false)}
-          onOk={handleAddSlot}
-        >
-          <Form form={slotForm} layout="vertical">
-            <Form.Item
-              name="slotName"
-              label="Slot 名称"
-              rules={[{ required: true, message: '请输入 Slot 名称!' }]}
-            >
-              <Input placeholder="请输入 Slot 名称" />
-            </Form.Item>
-          </Form>
-        </Modal>
+          onAddSlot={async (slotName) => {
+            if (currentWidgetId !== null) {
+              await api.widgets.addSlot({
+                widgetId: currentWidgetId,
+                slot: {
+                  name: slotName,
+                },
+              });
+              setIsSlotModalVisible(false);
+              fetchData(); // 刷新表格数据
+            }
+          }}
+        />
       </>
     );
   },

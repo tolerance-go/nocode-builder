@@ -62,6 +62,20 @@ export class WidgetSlotController {
     return widgetSlots.map(toWidgetSlotDto);
   }
 
+  @Get('search')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    type: [WidgetSlotResponseDto],
+  })
+  async searchWidgetSlotsByName(
+    @Query('name') name: string,
+  ): Promise<WidgetSlotResponseDto[]> {
+    const widgetSlots =
+      await this.widgetSlotService.searchWidgetSlotsByName(name);
+    return widgetSlots.map(toWidgetSlotDto);
+  }
+
   @Post()
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
