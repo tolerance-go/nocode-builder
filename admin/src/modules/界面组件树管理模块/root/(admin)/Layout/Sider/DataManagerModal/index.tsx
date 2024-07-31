@@ -2,7 +2,6 @@ import { WidgetResponseDto } from '@/_gen/api';
 import { WidgetElementTypeEnum } from '@/_gen/models';
 import { api } from '@/globals';
 import { Button, Form, Modal, Select, Table } from 'antd';
-import dayjs from 'dayjs';
 import { forwardRef, useEffect, useImperativeHandle, useState } from 'react';
 
 export interface DataManagerModalRef {
@@ -10,12 +9,17 @@ export interface DataManagerModalRef {
   close: () => void;
 }
 
+// 定义表单值的类型
+interface FormValues {
+  widgetType: WidgetElementTypeEnum[];
+}
+
 export const DataManagerModal = forwardRef<DataManagerModalRef>(
   (props, ref) => {
     const [visible, setVisible] = useState(false);
     const [data, setData] = useState<WidgetResponseDto[]>([]);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-    const [form] = Form.useForm();
+    const [form] = Form.useForm<FormValues>();
 
     useImperativeHandle(ref, () => ({
       open: () => setVisible(true),
@@ -36,13 +40,10 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     const handleAdd = async () => {
       try {
         const values = await form.validateFields();
-        const currentDateTime = dayjs().toISOString();
         await api.widgets.createWidgets({
           createDtos: values.widgetType.map((type) => {
             return {
-              widgetType: type,
-              createdAt: currentDateTime,
-              updatedAt: currentDateTime,
+              elementType: type,
             };
           }),
         });
@@ -54,12 +55,13 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     };
 
     const handleSelectAll = () => {
-      form.setFieldsValue({ type: Object.values(WidgetElementTypeEnum) });
+      form.setFieldsValue({ widgetType: Object.values(WidgetElementTypeEnum) });
     };
 
     return (
       <>
         <Modal
+          width={'40%'}
           open={visible}
           onCancel={() => setVisible(false)}
           onOk={() => setVisible(false)}
@@ -80,7 +82,7 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
             columns={[
               {
                 title: 'WidgetType',
-                dataIndex: 'type',
+                dataIndex: 'elementType',
                 key: 'type',
               },
               {
@@ -138,5 +140,3 @@ export const DataManagerModal = forwardRef<DataManagerModalRef>(
     );
   },
 );
-
-export default DataManagerModal;

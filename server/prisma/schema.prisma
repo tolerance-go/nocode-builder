@@ -54,7 +54,7 @@ model ProjectGroup {
 
 model Widget {
   id          Int                    @id @default(autoincrement())
-  elementType WidgetElementType
+  elementType WidgetElementType      @unique
   slots       WidgetSlotAssignment[]
   ownerId     Int
   owner       User                   @relation(fields: [ownerId], references: [id])
