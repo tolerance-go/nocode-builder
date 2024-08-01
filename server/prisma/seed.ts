@@ -1,24 +1,30 @@
 import * as dotenv from 'dotenv';
 import { UserService } from '../src/modules/user/user.service';
 import { PrismaService } from '../src/prisma/prisma.service';
-import { antdMobileWidgetsData, antdPcWidgetsData } from './seedData';
+import {
+  antdMiniWidgetsData,
+  antdMobileWidgetsData,
+  antdPcWidgetsData,
+} from './seedData';
 
 dotenv.config();
 
 const prismaService = new PrismaService();
 const userService = new UserService(prismaService);
 
-const widgets = [...antdPcWidgetsData, ...antdMobileWidgetsData].map(
-  (widget) => {
-    return {
-      name: widget.name,
-      widgetLib: widget.widgetLib,
-      slots: widget.slots || ['children'],
-      platforms: widget.platforms,
-      category: widget.category,
-    };
-  },
-);
+const widgets = [
+  ...antdPcWidgetsData,
+  ...antdMobileWidgetsData,
+  ...antdMiniWidgetsData,
+].map((widget) => {
+  return {
+    name: widget.name,
+    widgetLib: widget.widgetLib,
+    slots: widget.slots || ['children'],
+    platforms: widget.platforms,
+    category: widget.category,
+  };
+});
 
 const defaultPassword = '123456a.'; // 默认密码
 
