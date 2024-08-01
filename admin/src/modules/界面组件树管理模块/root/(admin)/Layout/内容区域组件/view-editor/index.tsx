@@ -1,10 +1,14 @@
 import { layoutPadding } from '@/modules/界面组件树管理模块/configs';
 import { 组件测试标识 } from '@/common/constants';
-import { theme } from 'antd';
+import { Button, theme } from 'antd';
 import { WidgetTree } from './WidgetTree';
+import { WidgetDrawer, WidgetDrawerRef } from './WidgetDrawer';
+import { useRef } from 'react';
 
 export const ViewEditor = () => {
   const { token } = theme.useToken();
+  const drawerRef = useRef<WidgetDrawerRef>(null);
+
   return (
     <div
       style={{
@@ -19,6 +23,7 @@ export const ViewEditor = () => {
         style={{
           display: 'flex',
           flexGrow: 1,
+          position: 'relative',
         }}
       >
         <div
@@ -85,16 +90,27 @@ export const ViewEditor = () => {
             </div>
           </div>
         </div>
+
+        <WidgetDrawer ref={drawerRef} />
       </div>
       <div
         style={{
           borderTop: `1px solid ${token.colorBorderSecondary}`,
           backgroundColor: token.colorBgContainer,
           padding: layoutPadding(token),
+          zIndex: token.zIndexPopupBase + 1,
         }}
         data-test-id={组件测试标识.视图编辑页面.底部}
       >
-        footer
+        <Button
+          size="small"
+          type="text"
+          onClick={() => {
+            drawerRef.current?.switch();
+          }}
+        >
+          部件库
+        </Button>
       </div>
     </div>
   );
