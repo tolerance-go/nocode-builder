@@ -9,6 +9,7 @@ import {
   Query,
   UseGuards,
   Req,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiResponse } from '@nestjs/swagger';
 import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
@@ -38,14 +39,14 @@ export class WidgetSlotAssignmentController {
     type: WidgetSlotAssignmentResponseDto,
   })
   async getWidgetSlotAssignment(
-    @Param('widgetId') widgetId: string,
-    @Param('slotId') slotId: string,
+    @Param('widgetId', ParseIntPipe) widgetId: number,
+    @Param('slotId', ParseIntPipe) slotId: number,
   ): Promise<WidgetSlotAssignmentResponseDto | null> {
     const widgetSlotAssignment =
       await this.widgetSlotAssignmentService.widgetSlotAssignment({
         widgetId_slotId: {
-          widgetId: Number(widgetId),
-          slotId: Number(slotId),
+          widgetId: widgetId,
+          slotId: slotId,
         },
       });
     return widgetSlotAssignment
@@ -143,16 +144,16 @@ export class WidgetSlotAssignmentController {
     type: WidgetSlotAssignmentResponseDto,
   })
   async updateWidgetSlotAssignment(
-    @Param('widgetId') widgetId: string,
-    @Param('slotId') slotId: string,
+    @Param('widgetId', ParseIntPipe) widgetId: number,
+    @Param('slotId', ParseIntPipe) slotId: number,
     @Body() data: WidgetSlotAssignmentUpdateDto,
   ): Promise<WidgetSlotAssignmentResponseDto> {
     const widgetSlotAssignment =
       await this.widgetSlotAssignmentService.updateWidgetSlotAssignment({
         where: {
           widgetId_slotId: {
-            widgetId: Number(widgetId),
-            slotId: Number(slotId),
+            widgetId: widgetId,
+            slotId: slotId,
           },
         },
         data,
@@ -168,14 +169,14 @@ export class WidgetSlotAssignmentController {
     type: WidgetSlotAssignmentResponseDto,
   })
   async deleteWidgetSlotAssignment(
-    @Param('widgetId') widgetId: string,
-    @Param('slotId') slotId: string,
+    @Param('widgetId', ParseIntPipe) widgetId: number,
+    @Param('slotId', ParseIntPipe) slotId: number,
   ): Promise<WidgetSlotAssignmentResponseDto> {
     const widgetSlotAssignment =
       await this.widgetSlotAssignmentService.deleteWidgetSlotAssignment({
         widgetId_slotId: {
-          widgetId: Number(widgetId),
-          slotId: Number(slotId),
+          widgetId: widgetId,
+          slotId: slotId,
         },
       });
     return toWidgetSlotAssignmentDto(widgetSlotAssignment);
