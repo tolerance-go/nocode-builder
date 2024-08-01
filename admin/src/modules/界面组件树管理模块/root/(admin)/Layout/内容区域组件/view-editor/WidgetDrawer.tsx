@@ -3,7 +3,6 @@ import { css } from '@emotion/css';
 import { Card, Col, Drawer, Row, Typography } from 'antd';
 import { mock } from 'mockjs';
 import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { useClickAway } from 'react-use';
 
 // 定义抽屉的引用类型
 export type WidgetDrawerRef = {
