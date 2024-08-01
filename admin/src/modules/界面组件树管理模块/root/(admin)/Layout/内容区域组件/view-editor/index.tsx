@@ -8,6 +8,7 @@ import { useRef } from 'react';
 export const ViewEditor = () => {
   const { token } = theme.useToken();
   const drawerRef = useRef<WidgetDrawerRef>(null);
+  const widgetOpenBtnRef = useRef<HTMLButtonElement>(null);
 
   return (
     <div
@@ -90,8 +91,7 @@ export const ViewEditor = () => {
             </div>
           </div>
         </div>
-
-        <WidgetDrawer ref={drawerRef} />
+        <WidgetDrawer widgetOpenBtnRef={widgetOpenBtnRef} ref={drawerRef} />
       </div>
       <div
         style={{
@@ -103,6 +103,7 @@ export const ViewEditor = () => {
         data-test-id={组件测试标识.视图编辑页面.底部}
       >
         <Button
+          ref={widgetOpenBtnRef}
           size="small"
           type="text"
           onClick={() => {

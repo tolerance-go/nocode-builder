@@ -1,6 +1,9 @@
-import { Drawer, Card, Row, Col, Flex } from 'antd';
+import useMultipleClickAway from '@/common/hooks/useMultipleClickAway';
+import { css } from '@emotion/css';
+import { Card, Col, Drawer, Row, Typography } from 'antd';
 import { mock } from 'mockjs';
-import { forwardRef, useImperativeHandle, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { useClickAway } from 'react-use';
 
 // 定义抽屉的引用类型
 export type WidgetDrawerRef = {
@@ -21,13 +24,19 @@ const data: CardData[] = mock({
   'data|100': [
     {
       title: '@title',
-      image: '@image(200x150, @color)',
+      image: '@image(150x100, @color)',
     },
   ],
 }).data;
 
-export const WidgetDrawer = forwardRef<WidgetDrawerRef>((_props, ref) => {
+export const WidgetDrawer = forwardRef<
+  WidgetDrawerRef,
+  {
+    widgetOpenBtnRef: React.RefObject<HTMLButtonElement>;
+  }
+>((props, ref) => {
   const [visible, setVisible] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const showDrawer = () => {
     setVisible(true);
@@ -46,32 +55,50 @@ export const WidgetDrawer = forwardRef<WidgetDrawerRef>((_props, ref) => {
     },
   }));
 
+  useMultipleClickAway([containerRef, props.widgetOpenBtnRef], () => {
+    onClose();
+  });
+
   return (
     <Drawer
-      title="部件库"
       placement="bottom"
+      title={'部件库'}
       closable={true}
       onClose={onClose}
       open={visible}
       height={400}
       mask={false}
       getContainer={false}
+      drawerRender={(drawer) => {
+        return (
+          <div
+            ref={containerRef}
+            className={css`
+              height: 100%;
+              overflow-y: auto;
+            `}
+          >
+            {drawer}
+          </div>
+        );
+      }}
     >
-      <Row gutter={[16, 16]}>
-        {data.map((item, index) => (
-          <Col key={index} span={24 / 6}>
-            <Card hoverable title={item.title} bordered={false}>
-              <Flex justify="center">
-                <img
-                  alt={item.title}
-                  src={item.image}
-                  style={{ borderRadius: 0 }}
-                />
-              </Flex>
-            </Card>
-          </Col>
-        ))}
-      </Row>
+      <div>
+        <Row gutter={[16, 16]}>
+          {data.map((item, index) => (
+            <Col key={index} span={24 / 8}>
+              <Card
+                size="small"
+                hoverable
+                bordered={false}
+                cover={<img alt={item.title} src={item.image} />}
+              >
+                <Typography.Text strong>{item.title}</Typography.Text>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </div>
     </Drawer>
   );
 });
