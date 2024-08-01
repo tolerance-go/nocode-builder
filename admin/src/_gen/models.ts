@@ -18,6 +18,17 @@ export enum ProjectTypeEnum {
   Bluemap = 'Bluemap',
 }
 
+export enum WidgetCategoryEnum {
+  General = 'General',
+  Layout = 'Layout',
+  Navigation = 'Navigation',
+  DataEntry = 'DataEntry',
+  DataDisplay = 'DataDisplay',
+  Feedback = 'Feedback',
+  Other = 'Other',
+  Heavyweight = 'Heavyweight',
+}
+
 export class UserModel {
   id: number;
 
@@ -45,8 +56,6 @@ export class UserModel {
 
   widgetLibs: WidgetLibModel[];
 
-  components: ComponentModel[];
-
   constructor({
     id,
     name,
@@ -61,7 +70,6 @@ export class UserModel {
     widgetSlots,
     WidgetSlotAssignments,
     widgetLibs,
-    components,
   }: {
     id: number;
     name: string;
@@ -76,7 +84,6 @@ export class UserModel {
     widgetSlots: WidgetSlotModel[];
     WidgetSlotAssignments: WidgetSlotAssignmentModel[];
     widgetLibs: WidgetLibModel[];
-    components: ComponentModel[];
   }) {
     this.id = id;
     this.name = name;
@@ -91,16 +98,17 @@ export class UserModel {
     this.widgetSlots = widgetSlots;
     this.WidgetSlotAssignments = WidgetSlotAssignments;
     this.widgetLibs = widgetLibs;
-    this.components = components;
   }
 }
 
 export class WidgetModel {
   id: number;
 
-  component: ComponentModel;
-
   name: string;
+
+  name_en: string;
+
+  platforms: WidgetPlatformTypeEnum[];
 
   slots: WidgetSlotAssignmentModel[];
 
@@ -108,11 +116,11 @@ export class WidgetModel {
 
   owner: UserModel;
 
-  componentId: number;
-
   widgetLib?: WidgetLibModel;
 
   widgetLibId?: number;
+
+  category: WidgetCategoryEnum;
 
   createdAt: Date;
 
@@ -120,38 +128,41 @@ export class WidgetModel {
 
   constructor({
     id,
-    component,
     name,
+    name_en,
+    platforms,
     slots,
     ownerId,
     owner,
-    componentId,
     widgetLib,
     widgetLibId,
+    category,
     createdAt,
     updatedAt,
   }: {
     id: number;
-    component: ComponentModel;
     name: string;
+    name_en: string;
+    platforms: WidgetPlatformTypeEnum[];
     slots: WidgetSlotAssignmentModel[];
     ownerId: number;
     owner: UserModel;
-    componentId: number;
     widgetLib?: WidgetLibModel;
     widgetLibId?: number;
+    category: WidgetCategoryEnum;
     createdAt: Date;
     updatedAt: Date;
   }) {
     this.id = id;
-    this.component = component;
     this.name = name;
+    this.name_en = name_en;
+    this.platforms = platforms;
     this.slots = slots;
     this.ownerId = ownerId;
     this.owner = owner;
-    this.componentId = componentId;
     this.widgetLib = widgetLib;
     this.widgetLibId = widgetLibId;
+    this.category = category;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -159,6 +170,8 @@ export class WidgetModel {
 
 export class WidgetLibModel {
   id: number;
+
+  name: string;
 
   widgets: WidgetModel[];
 
@@ -172,6 +185,7 @@ export class WidgetLibModel {
 
   constructor({
     id,
+    name,
     widgets,
     ownerId,
     owner,
@@ -179,6 +193,7 @@ export class WidgetLibModel {
     updatedAt,
   }: {
     id: number;
+    name: string;
     widgets: WidgetModel[];
     ownerId: number;
     owner: UserModel;
@@ -186,6 +201,7 @@ export class WidgetLibModel {
     updatedAt: Date;
   }) {
     this.id = id;
+    this.name = name;
     this.widgets = widgets;
     this.ownerId = ownerId;
     this.owner = owner;
@@ -273,53 +289,6 @@ export class WidgetSlotModel {
     this.ownerId = ownerId;
     this.owner = owner;
     this.widgets = widgets;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-}
-
-export class ComponentModel {
-  id: number;
-
-  name: string;
-
-  widgets: WidgetModel[];
-
-  platforms: WidgetPlatformTypeEnum[];
-
-  ownerId: number;
-
-  owner: UserModel;
-
-  createdAt: Date;
-
-  updatedAt: Date;
-
-  constructor({
-    id,
-    name,
-    widgets,
-    platforms,
-    ownerId,
-    owner,
-    createdAt,
-    updatedAt,
-  }: {
-    id: number;
-    name: string;
-    widgets: WidgetModel[];
-    platforms: WidgetPlatformTypeEnum[];
-    ownerId: number;
-    owner: UserModel;
-    createdAt: Date;
-    updatedAt: Date;
-  }) {
-    this.id = id;
-    this.name = name;
-    this.widgets = widgets;
-    this.platforms = platforms;
-    this.ownerId = ownerId;
-    this.owner = owner;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

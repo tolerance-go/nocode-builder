@@ -27,7 +27,6 @@ model User {
   widgetSlots           WidgetSlot[]
   WidgetSlotAssignments WidgetSlotAssignment[]
   widgetLibs            WidgetLib[]
-  components            Component[]
 }
 
 model Project {
@@ -68,12 +67,14 @@ model WidgetLib {
 model Widget {
   id          Int                    @id @default(autoincrement())
   name        String
+  name_en     String
   platforms   WidgetPlatformType[]
   slots       WidgetSlotAssignment[]
   ownerId     Int
   owner       User                   @relation(fields: [ownerId], references: [id])
   widgetLib   WidgetLib?             @relation(fields: [widgetLibId], references: [id])
   widgetLibId Int?
+  category    WidgetCategory
   createdAt   DateTime               @default(now())
   updatedAt   DateTime               @updatedAt
 }
@@ -112,4 +113,15 @@ enum ProjectType {
   View
   DataTable
   Bluemap
+}
+
+enum WidgetCategory {
+  General
+  Layout
+  Navigation
+  DataEntry
+  DataDisplay
+  Feedback
+  Other
+  Heavyweight
 }

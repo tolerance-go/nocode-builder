@@ -6,6 +6,7 @@
 
 import { WidgetPlatformTypeEnum } from './models';
 import { ProjectTypeEnum } from './models';
+import { WidgetCategoryEnum } from './models';
 
 export class UserModelRecord {
   id: number;
@@ -128,12 +129,10 @@ export class ProjectGroupModelRecord {
   }
 }
 
-export class ComponentModelRecord {
+export class WidgetLibModelRecord {
   id: number;
 
   name: string;
-
-  platforms: WidgetPlatformTypeEnum[];
 
   ownerId: number;
 
@@ -144,48 +143,18 @@ export class ComponentModelRecord {
   constructor({
     id,
     name,
-    platforms,
     ownerId,
     createdAt,
     updatedAt,
   }: {
     id: number;
     name: string;
-    platforms: WidgetPlatformTypeEnum[];
     ownerId: number;
     createdAt: Date;
     updatedAt: Date;
   }) {
     this.id = id;
     this.name = name;
-    this.platforms = platforms;
-    this.ownerId = ownerId;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-}
-
-export class WidgetLibModelRecord {
-  id: number;
-
-  ownerId: number;
-
-  createdAt: Date;
-
-  updatedAt: Date;
-
-  constructor({
-    id,
-    ownerId,
-    createdAt,
-    updatedAt,
-  }: {
-    id: number;
-    ownerId: number;
-    createdAt: Date;
-    updatedAt: Date;
-  }) {
-    this.id = id;
     this.ownerId = ownerId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
@@ -197,11 +166,15 @@ export class WidgetModelRecord {
 
   name: string;
 
+  name_en: string;
+
+  platforms: WidgetPlatformTypeEnum[];
+
   ownerId: number;
 
-  componentId: number;
-
   widgetLibId?: number;
+
+  category: WidgetCategoryEnum;
 
   createdAt: Date;
 
@@ -210,25 +183,31 @@ export class WidgetModelRecord {
   constructor({
     id,
     name,
+    name_en,
+    platforms,
     ownerId,
-    componentId,
     widgetLibId,
+    category,
     createdAt,
     updatedAt,
   }: {
     id: number;
     name: string;
+    name_en: string;
+    platforms: WidgetPlatformTypeEnum[];
     ownerId: number;
-    componentId: number;
     widgetLibId?: number;
+    category: WidgetCategoryEnum;
     createdAt: Date;
     updatedAt: Date;
   }) {
     this.id = id;
     this.name = name;
+    this.name_en = name_en;
+    this.platforms = platforms;
     this.ownerId = ownerId;
-    this.componentId = componentId;
     this.widgetLibId = widgetLibId;
+    this.category = category;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
