@@ -20,6 +20,8 @@ const widgets = [...antdPcWidgetsData, ...antdMobileWidgetsData].map(
   },
 );
 
+const defaultPassword = '123456a.'; // 默认密码
+
 async function main() {
   // 检查并创建 root 用户
   let rootUser = await prismaService.user.findUnique({
@@ -30,7 +32,7 @@ async function main() {
     const newRootUser = {
       name: 'root',
       email: 'root@example.com',
-      password: process.env.ROOT_PASSWORD || '123456a.', // 从环境变量读取密码
+      password: process.env.ROOT_PASSWORD || defaultPassword, // 从环境变量读取密码
       isAdmin: true,
     };
 
@@ -56,7 +58,7 @@ async function main() {
     const newTestUser = {
       name: 'test',
       email: 'test@example.com',
-      password: '', // 空密码
+      password: defaultPassword, // 空密码
       isAdmin: false,
     };
 

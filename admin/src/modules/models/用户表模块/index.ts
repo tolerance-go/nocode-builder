@@ -91,6 +91,12 @@ export class 用户表模块 extends ModuleBase {
 
   private async getUserByToken() {
     const user = await api.users.getUserByToken();
+
+    if (!user) {
+      redirectToLogin();
+      return;
+    }
+
     const userInfo = new ClientUserModel({
       id: user.id,
       name: user.name,
