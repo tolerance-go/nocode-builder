@@ -30,6 +30,7 @@ model User {
   widgetSlotInstanceAssignments WidgetSlotInstanceAssignment[]
   widgetInstances               WidgetInstance[]
   widgetSlotInstances           WidgetSlotInstance[]
+  viewProjects                  ViewProject[]
 }
 
 model Project {
@@ -42,6 +43,20 @@ model Project {
   projectGroup   ProjectGroup? @relation(fields: [projectGroupId], references: [id])
   projectGroupId Int?
   type           ProjectType
+  viewProject    ViewProject?  @relation(fields: [viewProjectId], references: [id])
+  viewProjectId  Int?
+}
+
+model ViewProject {
+  id              Int                @id @default(autoincrement())
+  projects        Project[]
+  widgetInstances WidgetInstance[]
+  platformType    WidgetPlatformType
+
+  ownerId   Int
+  owner     User     @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ProjectGroup {
@@ -76,9 +91,13 @@ model WidgetInstance {
   // 在插槽中的 index 顺序，从 0 开始
   order                         Int?
   widgetSlotInstanceAssignments WidgetSlotInstanceAssignment[]
+  viewProject                   ViewProject?                   @relation(fields: [viewProjectId], references: [id])
+  viewProjectId                 Int?
 
-  ownerId Int
-  owner   User @relation(fields: [ownerId], references: [id])
+  ownerId   Int
+  owner     User     @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model WidgetSlotInstance {
@@ -88,8 +107,10 @@ model WidgetSlotInstance {
   widgetSlotInstanceAssignments WidgetSlotInstanceAssignment[]
   childWidgetInstances          WidgetInstance[]
 
-  ownerId Int
-  owner   User @relation(fields: [ownerId], references: [id])
+  ownerId   Int
+  owner     User     @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model WidgetSlotInstanceAssignment {
