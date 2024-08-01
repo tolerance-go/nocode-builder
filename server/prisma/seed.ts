@@ -8,33 +8,27 @@ dotenv.config();
 const prismaService = new PrismaService();
 const userService = new UserService(prismaService);
 
-const components = [
+const widgets = [
   {
-    name: 'Header',
+    name: 'HeaderWidget1',
+    component: 'Header',
+    widgetLib: 'HeaderLib',
+    slots: ['HeaderSlot1', 'HeaderSlot2'],
     platforms: [WidgetPlatformType.PcWeb, WidgetPlatformType.MobileWeb],
-    widgets: [
-      {
-        name: 'HeaderWidget1',
-        widgetLib: 'HeaderLib',
-        slots: ['HeaderSlot1', 'HeaderSlot2'],
-      },
-      {
-        name: 'HeaderWidget2',
-        widgetLib: 'HeaderLib',
-        slots: ['HeaderSlot1', 'HeaderSlot3'],
-      },
-    ],
   },
   {
-    name: 'Footer',
+    name: 'HeaderWidget2',
+    component: 'Header',
+    widgetLib: 'HeaderLib',
+    slots: ['HeaderSlot1', 'HeaderSlot3'],
     platforms: [WidgetPlatformType.PcWeb, WidgetPlatformType.MobileWeb],
-    widgets: [
-      {
-        name: 'FooterWidget1',
-        widgetLib: 'FooterLib',
-        slots: ['FooterSlot1', 'FooterSlot2'],
-      },
-    ],
+  },
+  {
+    name: 'FooterWidget1',
+    component: 'Footer',
+    widgetLib: 'FooterLib',
+    slots: ['FooterSlot1', 'FooterSlot2'],
+    platforms: [WidgetPlatformType.PcWeb, WidgetPlatformType.MobileWeb],
   },
 ];
 
@@ -60,28 +54,66 @@ async function main() {
     process.exit(1);
   }
 
-  for (const componentData of components) {
-    // 创建组件
-    const component = await prismaService.component.create({
+  const componentMap = new Map<string, any>();
+
+  for (const widgetData of widgets) {
+    let component = componentMap.get(widgetData.component);
+
+    if (!component) {
+      // 创建组件
+      component = await prismaService.component.create({
+        data: {
+          name: widgetData.component,
+          platforms: widgetData.platforms,
+          owner: {
+            connect: { id: rootUserId }, // 使用 root 用户的 ID
+          },
+        },
+      });
+      componentMap.set(widgetData.component, component);
+    }
+
+    // 创建 WidgetLib，如果不存在
+    let widgetLib = await prismaService.widgetLib.findUnique({
+      where: { name: widgetData.widgetLib },
+    });
+
+    if (!widgetLib) {
+      widgetLib = await prismaService.widgetLib.create({
+        data: {
+          name: widgetData.widgetLib,
+          owner: {
+            connect: { id: rootUserId }, // 使用 root 用户的 ID
+          },
+        },
+      });
+    }
+
+    // 创建 Widget
+    const widget = await prismaService.widget.create({
       data: {
-        name: componentData.name,
-        platforms: componentData.platforms,
+        name: widgetData.name,
+        component: {
+          connect: { id: component.id },
+        },
         owner: {
           connect: { id: rootUserId }, // 使用 root 用户的 ID
+        },
+        widgetLib: {
+          connect: { id: widgetLib.id },
         },
       },
     });
 
-    for (const widgetData of componentData.widgets) {
-      // 创建 WidgetLib，如果不存在
-      let widgetLib = await prismaService.widgetLib.findUnique({
-        where: { name: widgetData.widgetLib },
+    for (const slotName of widgetData.slots) {
+      let widgetSlot = await prismaService.widgetSlot.findUnique({
+        where: { name: slotName },
       });
 
-      if (!widgetLib) {
-        widgetLib = await prismaService.widgetLib.create({
+      if (!widgetSlot) {
+        widgetSlot = await prismaService.widgetSlot.create({
           data: {
-            name: widgetData.widgetLib,
+            name: slotName,
             owner: {
               connect: { id: rootUserId }, // 使用 root 用户的 ID
             },
@@ -89,53 +121,20 @@ async function main() {
         });
       }
 
-      // 创建 Widget
-      const widget = await prismaService.widget.create({
+      // 创建 WidgetSlotAssignment
+      await prismaService.widgetSlotAssignment.create({
         data: {
-          name: widgetData.name,
-          component: {
-            connect: { id: component.id },
+          widget: {
+            connect: { id: widget.id },
+          },
+          slot: {
+            connect: { id: widgetSlot.id },
           },
           owner: {
             connect: { id: rootUserId }, // 使用 root 用户的 ID
           },
-          widgetLib: {
-            connect: { id: widgetLib.id },
-          },
         },
       });
-
-      for (const slotName of widgetData.slots) {
-        let widgetSlot = await prismaService.widgetSlot.findUnique({
-          where: { name: slotName },
-        });
-
-        if (!widgetSlot) {
-          widgetSlot = await prismaService.widgetSlot.create({
-            data: {
-              name: slotName,
-              owner: {
-                connect: { id: rootUserId }, // 使用 root 用户的 ID
-              },
-            },
-          });
-        }
-
-        // 创建 WidgetSlotAssignment
-        await prismaService.widgetSlotAssignment.create({
-          data: {
-            widget: {
-              connect: { id: widget.id },
-            },
-            slot: {
-              connect: { id: widgetSlot.id },
-            },
-            owner: {
-              connect: { id: rootUserId }, // 使用 root 用户的 ID
-            },
-          },
-        });
-      }
     }
   }
 

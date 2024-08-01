@@ -77,27 +77,27 @@ model WidgetLib {
 }
 
 model Widget {
-  id          Int                    @id @default(autoincrement())
-  name        String
-  slots       WidgetSlotAssignment[]
-  componentId Int
-  component   Component              @relation(fields: [componentId], references: [id])
-  ownerId     Int
-  owner       User                   @relation(fields: [ownerId], references: [id])
-  widgetLib   WidgetLib?             @relation(fields: [widgetLibId], references: [id])
-  widgetLibId Int?
-  createdAt   DateTime               @default(now())
-  updatedAt   DateTime               @updatedAt
+  id                    Int                    @id @default(autoincrement())
+  name                  String
+  widgetSlotAssignments WidgetSlotAssignment[]
+  componentId           Int
+  component             Component              @relation(fields: [componentId], references: [id])
+  ownerId               Int
+  owner                 User                   @relation(fields: [ownerId], references: [id])
+  widgetLib             WidgetLib?             @relation(fields: [widgetLibId], references: [id])
+  widgetLibId           Int?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
 }
 
 model WidgetSlot {
-  id        Int                    @id @default(autoincrement())
-  name      String                 @unique
-  ownerId   Int
-  owner     User                   @relation(fields: [ownerId], references: [id])
-  widgets   WidgetSlotAssignment[]
-  createdAt DateTime               @default(now())
-  updatedAt DateTime               @updatedAt
+  id                    Int                    @id @default(autoincrement())
+  name                  String                 @unique
+  ownerId               Int
+  owner                 User                   @relation(fields: [ownerId], references: [id])
+  widgetSlotAssignments WidgetSlotAssignment[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
 }
 
 model WidgetSlotAssignment {
