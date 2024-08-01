@@ -61,8 +61,7 @@ export const WidgetDrawer = forwardRef<
   return (
     <Drawer
       placement="bottom"
-      title={'部件库'}
-      closable={true}
+      closable={false}
       onClose={onClose}
       open={visible}
       height={400}
