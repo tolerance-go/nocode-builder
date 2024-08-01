@@ -26,7 +26,7 @@ import {
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get('/getUserByToken')
+  @Get('getUserByToken')
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,

@@ -1,7 +1,8 @@
 import useMultipleClickAway from '@/common/hooks/useMultipleClickAway';
 import { api } from '@/globals';
+import { FileImageOutlined } from '@ant-design/icons';
 import { css } from '@emotion/css';
-import { Card, Col, Drawer, Row, Spin, Typography } from 'antd';
+import { Card, Col, Drawer, Flex, Row, Spin, theme, Typography } from 'antd';
 import {
   forwardRef,
   useEffect,
@@ -47,6 +48,7 @@ export const WidgetDrawer = forwardRef<
   const [data, setData] = useState<CardData[]>([]);
   const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { token } = theme.useToken();
 
   const showDrawer = () => {
     setVisible(true);
@@ -125,7 +127,33 @@ export const WidgetDrawer = forwardRef<
                   size="small"
                   hoverable
                   bordered={false}
-                  cover={<img alt={item.title} src={item.image} />}
+                  cover={
+                    item.image ? (
+                      <img
+                        style={{
+                          width: 200,
+                          height: 150,
+                          objectFit: 'cover',
+                        }}
+                        alt={item.title}
+                        src={item.image}
+                      />
+                    ) : (
+                      <div
+                        style={{
+                          width: '100%',
+                          height: 150,
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          borderRadius: '4px',
+                          backgroundColor: token.colorBgBase,
+                        }}
+                      >
+                        <FileImageOutlined />
+                      </div>
+                    )
+                  }
                 >
                   <Typography.Text strong>{item.title}</Typography.Text>
                 </Card>

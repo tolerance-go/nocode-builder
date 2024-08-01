@@ -54,7 +54,7 @@ export class WidgetService {
     tx?: Prisma.TransactionClient,
   ): Promise<
     (Widget & {
-      slots: (WidgetSlotAssignment & {
+      widgetSlotAssignments: (WidgetSlotAssignment & {
         slot: WidgetSlot;
       })[];
     })[]
@@ -68,7 +68,7 @@ export class WidgetService {
       where,
       orderBy,
       include: {
-        slots: {
+        widgetSlotAssignments: {
           include: {
             slot: true,
           },

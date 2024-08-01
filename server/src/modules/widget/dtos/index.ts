@@ -147,5 +147,5 @@ export class WidgetWithSlotsResponseDto extends WidgetResponseDto {
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => WidgetSlotAssignmentWithSlotsResponseDto)
-  slots: WidgetSlotAssignmentWithSlotsResponseDto[];
+  widgetSlotAssignments: WidgetSlotAssignmentWithSlotsResponseDto[];
 }

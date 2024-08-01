@@ -195,7 +195,7 @@ export interface WidgetWithSlotsResponseDto {
   ownerId: number;
   createdAt: string;
   updatedAt: string;
-  slots: WidgetSlotAssignmentWithSlotsResponseDto[];
+  widgetSlotAssignments: WidgetSlotAssignmentWithSlotsResponseDto[];
 }
 
 export interface WidgetCreateDto {

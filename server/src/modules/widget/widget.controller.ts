@@ -83,7 +83,7 @@ export class WidgetController {
     return widgets.map((item) => {
       return {
         ...toWidgetDto(item),
-        slots: item.slots.map((slot) => {
+        widgetSlotAssignments: item.widgetSlotAssignments.map((slot) => {
           return {
             ...toWidgetSlotAssignmentDto(slot),
             slot: toWidgetSlotDto(slot.slot),
