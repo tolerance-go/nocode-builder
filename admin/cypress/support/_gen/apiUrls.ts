@@ -185,4 +185,34 @@ export const apiUrls = {
     route: '/widgetSlots/{id}',
     path: '/widgetSlots/${id}',
   },
+  WidgetSlotAssignmentController_getWidgetSlotAssignment: {
+    method: 'get',
+    route: '/widgetSlotAssignments/{widgetId}/{slotId}',
+    path: '/widgetSlotAssignments/${widgetId}/${slotId}',
+  },
+  WidgetSlotAssignmentController_updateWidgetSlotAssignment: {
+    method: 'patch',
+    route: '/widgetSlotAssignments/{widgetId}/{slotId}',
+    path: '/widgetSlotAssignments/${widgetId}/${slotId}',
+  },
+  WidgetSlotAssignmentController_deleteWidgetSlotAssignment: {
+    method: 'delete',
+    route: '/widgetSlotAssignments/{widgetId}/{slotId}',
+    path: '/widgetSlotAssignments/${widgetId}/${slotId}',
+  },
+  WidgetSlotAssignmentController_getWidgetSlotAssignments: {
+    method: 'get',
+    route: '/widgetSlotAssignments',
+    path: '/widgetSlotAssignments',
+  },
+  WidgetSlotAssignmentController_createWidgetSlotAssignment: {
+    method: 'post',
+    route: '/widgetSlotAssignments',
+    path: '/widgetSlotAssignments',
+  },
+  WidgetSlotAssignmentController_createWidgetSlotAssignments: {
+    method: 'post',
+    route: '/widgetSlotAssignments/bulk-create',
+    path: '/widgetSlotAssignments/bulk-create',
+  },
 } as const;

@@ -161,12 +161,91 @@ export class WidgetLibModelRecord {
   }
 }
 
+export class WidgetInstanceModelRecord {
+  id: number;
+
+  widgetId: number;
+
+  parentSlotId?: number;
+
+  order?: number;
+
+  ownerId: number;
+
+  constructor({
+    id,
+    widgetId,
+    parentSlotId,
+    order,
+    ownerId,
+  }: {
+    id: number;
+    widgetId: number;
+    parentSlotId?: number;
+    order?: number;
+    ownerId: number;
+  }) {
+    this.id = id;
+    this.widgetId = widgetId;
+    this.parentSlotId = parentSlotId;
+    this.order = order;
+    this.ownerId = ownerId;
+  }
+}
+
+export class WidgetSlotInstanceModelRecord {
+  id: number;
+
+  widgetSlotId: number;
+
+  ownerId: number;
+
+  constructor({
+    id,
+    widgetSlotId,
+    ownerId,
+  }: {
+    id: number;
+    widgetSlotId: number;
+    ownerId: number;
+  }) {
+    this.id = id;
+    this.widgetSlotId = widgetSlotId;
+    this.ownerId = ownerId;
+  }
+}
+
+export class WidgetSlotInstanceAssignmentModelRecord {
+  widgetInstanceId: number;
+
+  slotInstanceId: number;
+
+  ownerId: number;
+
+  assignedAt: Date;
+
+  constructor({
+    widgetInstanceId,
+    slotInstanceId,
+    ownerId,
+    assignedAt,
+  }: {
+    widgetInstanceId: number;
+    slotInstanceId: number;
+    ownerId: number;
+    assignedAt: Date;
+  }) {
+    this.widgetInstanceId = widgetInstanceId;
+    this.slotInstanceId = slotInstanceId;
+    this.ownerId = ownerId;
+    this.assignedAt = assignedAt;
+  }
+}
+
 export class WidgetModelRecord {
   id: number;
 
   name: string;
-
-  name_en: string;
 
   platforms: WidgetPlatformTypeEnum[];
 
@@ -183,7 +262,6 @@ export class WidgetModelRecord {
   constructor({
     id,
     name,
-    name_en,
     platforms,
     ownerId,
     widgetLibId,
@@ -193,7 +271,6 @@ export class WidgetModelRecord {
   }: {
     id: number;
     name: string;
-    name_en: string;
     platforms: WidgetPlatformTypeEnum[];
     ownerId: number;
     widgetLibId?: number;
@@ -203,7 +280,6 @@ export class WidgetModelRecord {
   }) {
     this.id = id;
     this.name = name;
-    this.name_en = name_en;
     this.platforms = platforms;
     this.ownerId = ownerId;
     this.widgetLibId = widgetLibId;

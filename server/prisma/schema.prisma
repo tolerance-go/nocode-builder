@@ -14,19 +14,22 @@ datasource db {
 }
 
 model User {
-  id                    Int                    @id @default(autoincrement())
-  name                  String                 @unique
-  email                 String?                @unique
-  password              String
-  projects              Project[]
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
-  projectGroups         ProjectGroup[]
-  isAdmin               Boolean                @default(false)
-  widgets               Widget[]
-  widgetSlots           WidgetSlot[]
-  WidgetSlotAssignments WidgetSlotAssignment[]
-  widgetLibs            WidgetLib[]
+  id                            Int                            @id @default(autoincrement())
+  name                          String                         @unique
+  email                         String?                        @unique
+  password                      String
+  projects                      Project[]
+  createdAt                     DateTime                       @default(now())
+  updatedAt                     DateTime                       @updatedAt
+  projectGroups                 ProjectGroup[]
+  isAdmin                       Boolean                        @default(false)
+  widgets                       Widget[]
+  widgetSlots                   WidgetSlot[]
+  widgetLibs                    WidgetLib[]
+  widgetSlotAssignments         WidgetSlotAssignment[]
+  widgetSlotInstanceAssignments WidgetSlotInstanceAssignment[]
+  widgetInstances               WidgetInstance[]
+  widgetSlotInstances           WidgetSlotInstance[]
 }
 
 model Project {
@@ -64,28 +67,67 @@ model WidgetLib {
   updatedAt DateTime @updatedAt
 }
 
+model WidgetInstance {
+  id                            Int                            @id
+  widget                        Widget                         @relation(fields: [widgetId], references: [id])
+  widgetId                      Int
+  parentSlot                    WidgetSlotInstance?            @relation(fields: [parentSlotId], references: [id])
+  parentSlotId                  Int?
+  // 在插槽中的 index 顺序，从 0 开始
+  order                         Int?
+  widgetSlotInstanceAssignments WidgetSlotInstanceAssignment[]
+
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id])
+}
+
+model WidgetSlotInstance {
+  id                            Int                            @id
+  widgetSlot                    WidgetSlot                     @relation(fields: [widgetSlotId], references: [id])
+  widgetSlotId                  Int
+  widgetSlotInstanceAssignments WidgetSlotInstanceAssignment[]
+  childWidgetInstances          WidgetInstance[]
+
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id])
+}
+
+model WidgetSlotInstanceAssignment {
+  widgetInstanceId Int
+  slotInstanceId   Int
+  widgetInstance   WidgetInstance     @relation(fields: [widgetInstanceId], references: [id])
+  slotInstance     WidgetSlotInstance @relation(fields: [slotInstanceId], references: [id])
+  ownerId          Int
+  owner            User               @relation(fields: [ownerId], references: [id])
+  assignedAt       DateTime           @default(now())
+
+  @@id([widgetInstanceId, slotInstanceId])
+}
+
 model Widget {
-  id          Int                    @id @default(autoincrement())
-  name        String
-  platforms   WidgetPlatformType[]
-  slots       WidgetSlotAssignment[]
-  ownerId     Int
-  owner       User                   @relation(fields: [ownerId], references: [id])
-  widgetLib   WidgetLib?             @relation(fields: [widgetLibId], references: [id])
-  widgetLibId Int?
-  category    WidgetCategory
-  createdAt   DateTime               @default(now())
-  updatedAt   DateTime               @updatedAt
+  id                    Int                    @id @default(autoincrement())
+  name                  String
+  platforms             WidgetPlatformType[]
+  widgetSlotAssignments WidgetSlotAssignment[]
+  ownerId               Int
+  owner                 User                   @relation(fields: [ownerId], references: [id])
+  widgetLib             WidgetLib?             @relation(fields: [widgetLibId], references: [id])
+  widgetLibId           Int?
+  category              WidgetCategory
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  widgetInstances       WidgetInstance[]
 }
 
 model WidgetSlot {
-  id        Int                    @id @default(autoincrement())
-  name      String                 @unique
-  ownerId   Int
-  owner     User                   @relation(fields: [ownerId], references: [id])
-  widgets   WidgetSlotAssignment[]
-  createdAt DateTime               @default(now())
-  updatedAt DateTime               @updatedAt
+  id                    Int                    @id @default(autoincrement())
+  name                  String                 @unique
+  ownerId               Int
+  owner                 User                   @relation(fields: [ownerId], references: [id])
+  widgetSlotAssignments WidgetSlotAssignment[]
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  widgetSlotInstances   WidgetSlotInstance[]
 }
 
 model WidgetSlotAssignment {

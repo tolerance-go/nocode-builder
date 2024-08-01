@@ -1,8 +1,14 @@
 import useMultipleClickAway from '@/common/hooks/useMultipleClickAway';
+import { api } from '@/globals';
 import { css } from '@emotion/css';
-import { Card, Col, Drawer, Row, Typography } from 'antd';
-import { mock } from 'mockjs';
-import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
+import { Card, Col, Drawer, Row, Spin, Typography } from 'antd';
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from 'react';
 
 // 定义抽屉的引用类型
 export type WidgetDrawerRef = {
@@ -14,19 +20,22 @@ export type WidgetDrawerRef = {
 // 定义数据类型
 type CardData = {
   title: string;
-  content: string;
-  image: string;
+  content?: string;
+  image?: string;
 };
 
-// 使用 Mock.js 生成模拟数据
-const data: CardData[] = mock({
-  'data|100': [
-    {
-      title: '@title',
-      image: '@image(150x100, @color)',
-    },
-  ],
-}).data;
+// 使用 Axios 获取数据
+const fetchData = async (): Promise<CardData[]> => {
+  try {
+    const widgets = await api.widgets.getWidgets();
+    return widgets.map((widget) => ({
+      title: widget.name,
+    }));
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return [];
+  }
+};
 
 export const WidgetDrawer = forwardRef<
   WidgetDrawerRef,
@@ -35,6 +44,8 @@ export const WidgetDrawer = forwardRef<
   }
 >((props, ref) => {
   const [visible, setVisible] = useState(false);
+  const [data, setData] = useState<CardData[]>([]);
+  const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const showDrawer = () => {
@@ -57,6 +68,19 @@ export const WidgetDrawer = forwardRef<
   useMultipleClickAway([containerRef, props.widgetOpenBtnRef], () => {
     onClose();
   });
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      const fetchedData = await fetchData();
+      setData(fetchedData);
+      setLoading(false);
+    };
+
+    if (visible) {
+      loadData();
+    }
+  }, [visible]);
 
   return (
     <Drawer
@@ -82,20 +106,33 @@ export const WidgetDrawer = forwardRef<
       }}
     >
       <div>
-        <Row gutter={[16, 16]}>
-          {data.map((item, index) => (
-            <Col key={index} span={24 / 8}>
-              <Card
-                size="small"
-                hoverable
-                bordered={false}
-                cover={<img alt={item.title} src={item.image} />}
-              >
-                <Typography.Text strong>{item.title}</Typography.Text>
-              </Card>
-            </Col>
-          ))}
-        </Row>
+        {loading ? (
+          <Spin tip="加载中...">
+            <div
+              className={css`
+                height: 400px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              `}
+            />
+          </Spin>
+        ) : (
+          <Row gutter={[16, 16]}>
+            {data.map((item, index) => (
+              <Col key={index} span={24 / 8}>
+                <Card
+                  size="small"
+                  hoverable
+                  bordered={false}
+                  cover={<img alt={item.title} src={item.image} />}
+                >
+                  <Typography.Text strong>{item.title}</Typography.Text>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        )}
       </div>
     </Drawer>
   );

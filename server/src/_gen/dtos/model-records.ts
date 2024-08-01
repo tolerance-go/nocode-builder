@@ -128,6 +128,62 @@ export class WidgetLibModelRecordDto {
   updatedAt: string;
 }
 
+export class WidgetInstanceModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({})
+  @IsInt()
+  widgetId: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  parentSlotId?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  order?: number;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+}
+
+export class WidgetSlotInstanceModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({})
+  @IsInt()
+  widgetSlotId: number;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+}
+
+export class WidgetSlotInstanceAssignmentModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  widgetInstanceId: number;
+
+  @ApiProperty({})
+  @IsInt()
+  slotInstanceId: number;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  assignedAt: string;
+}
+
 export class WidgetModelRecordDto {
   @ApiProperty({})
   @IsInt()
@@ -136,10 +192,6 @@ export class WidgetModelRecordDto {
   @ApiProperty({})
   @IsString()
   name: string;
-
-  @ApiProperty({})
-  @IsString()
-  name_en: string;
 
   @ApiProperty({ enum: WidgetPlatformType })
   @IsEnum(WidgetPlatformType)

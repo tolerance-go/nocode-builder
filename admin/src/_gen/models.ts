@@ -52,9 +52,15 @@ export class UserModel {
 
   widgetSlots: WidgetSlotModel[];
 
-  WidgetSlotAssignments: WidgetSlotAssignmentModel[];
-
   widgetLibs: WidgetLibModel[];
+
+  widgetSlotAssignments: WidgetSlotAssignmentModel[];
+
+  widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
+
+  widgetInstances: WidgetInstanceModel[];
+
+  widgetSlotInstances: WidgetSlotInstanceModel[];
 
   constructor({
     id,
@@ -68,8 +74,11 @@ export class UserModel {
     isAdmin,
     widgets,
     widgetSlots,
-    WidgetSlotAssignments,
     widgetLibs,
+    widgetSlotAssignments,
+    widgetSlotInstanceAssignments,
+    widgetInstances,
+    widgetSlotInstances,
   }: {
     id: number;
     name: string;
@@ -82,8 +91,11 @@ export class UserModel {
     isAdmin: boolean;
     widgets: WidgetModel[];
     widgetSlots: WidgetSlotModel[];
-    WidgetSlotAssignments: WidgetSlotAssignmentModel[];
     widgetLibs: WidgetLibModel[];
+    widgetSlotAssignments: WidgetSlotAssignmentModel[];
+    widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
+    widgetInstances: WidgetInstanceModel[];
+    widgetSlotInstances: WidgetSlotInstanceModel[];
   }) {
     this.id = id;
     this.name = name;
@@ -96,8 +108,11 @@ export class UserModel {
     this.isAdmin = isAdmin;
     this.widgets = widgets;
     this.widgetSlots = widgetSlots;
-    this.WidgetSlotAssignments = WidgetSlotAssignments;
     this.widgetLibs = widgetLibs;
+    this.widgetSlotAssignments = widgetSlotAssignments;
+    this.widgetSlotInstanceAssignments = widgetSlotInstanceAssignments;
+    this.widgetInstances = widgetInstances;
+    this.widgetSlotInstances = widgetSlotInstances;
   }
 }
 
@@ -106,11 +121,9 @@ export class WidgetModel {
 
   name: string;
 
-  name_en: string;
-
   platforms: WidgetPlatformTypeEnum[];
 
-  slots: WidgetSlotAssignmentModel[];
+  widgetSlotAssignments: WidgetSlotAssignmentModel[];
 
   ownerId: number;
 
@@ -126,12 +139,13 @@ export class WidgetModel {
 
   updatedAt: Date;
 
+  widgetInstances: WidgetInstanceModel[];
+
   constructor({
     id,
     name,
-    name_en,
     platforms,
-    slots,
+    widgetSlotAssignments,
     ownerId,
     owner,
     widgetLib,
@@ -139,12 +153,12 @@ export class WidgetModel {
     category,
     createdAt,
     updatedAt,
+    widgetInstances,
   }: {
     id: number;
     name: string;
-    name_en: string;
     platforms: WidgetPlatformTypeEnum[];
-    slots: WidgetSlotAssignmentModel[];
+    widgetSlotAssignments: WidgetSlotAssignmentModel[];
     ownerId: number;
     owner: UserModel;
     widgetLib?: WidgetLibModel;
@@ -152,12 +166,12 @@ export class WidgetModel {
     category: WidgetCategoryEnum;
     createdAt: Date;
     updatedAt: Date;
+    widgetInstances: WidgetInstanceModel[];
   }) {
     this.id = id;
     this.name = name;
-    this.name_en = name_en;
     this.platforms = platforms;
-    this.slots = slots;
+    this.widgetSlotAssignments = widgetSlotAssignments;
     this.ownerId = ownerId;
     this.owner = owner;
     this.widgetLib = widgetLib;
@@ -165,6 +179,7 @@ export class WidgetModel {
     this.category = category;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.widgetInstances = widgetInstances;
   }
 }
 
@@ -261,36 +276,177 @@ export class WidgetSlotModel {
 
   owner: UserModel;
 
-  widgets: WidgetSlotAssignmentModel[];
+  widgetSlotAssignments: WidgetSlotAssignmentModel[];
 
   createdAt: Date;
 
   updatedAt: Date;
+
+  widgetSlotInstances: WidgetSlotInstanceModel[];
 
   constructor({
     id,
     name,
     ownerId,
     owner,
-    widgets,
+    widgetSlotAssignments,
     createdAt,
     updatedAt,
+    widgetSlotInstances,
   }: {
     id: number;
     name: string;
     ownerId: number;
     owner: UserModel;
-    widgets: WidgetSlotAssignmentModel[];
+    widgetSlotAssignments: WidgetSlotAssignmentModel[];
     createdAt: Date;
     updatedAt: Date;
+    widgetSlotInstances: WidgetSlotInstanceModel[];
   }) {
     this.id = id;
     this.name = name;
     this.ownerId = ownerId;
     this.owner = owner;
-    this.widgets = widgets;
+    this.widgetSlotAssignments = widgetSlotAssignments;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.widgetSlotInstances = widgetSlotInstances;
+  }
+}
+
+export class WidgetSlotInstanceModel {
+  id: number;
+
+  widgetSlot: WidgetSlotModel;
+
+  widgetSlotId: number;
+
+  widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
+
+  childWidgetInstances: WidgetInstanceModel[];
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  constructor({
+    id,
+    widgetSlot,
+    widgetSlotId,
+    widgetSlotInstanceAssignments,
+    childWidgetInstances,
+    ownerId,
+    owner,
+  }: {
+    id: number;
+    widgetSlot: WidgetSlotModel;
+    widgetSlotId: number;
+    widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
+    childWidgetInstances: WidgetInstanceModel[];
+    ownerId: number;
+    owner: UserModel;
+  }) {
+    this.id = id;
+    this.widgetSlot = widgetSlot;
+    this.widgetSlotId = widgetSlotId;
+    this.widgetSlotInstanceAssignments = widgetSlotInstanceAssignments;
+    this.childWidgetInstances = childWidgetInstances;
+    this.ownerId = ownerId;
+    this.owner = owner;
+  }
+}
+
+export class WidgetSlotInstanceAssignmentModel {
+  widgetInstanceId: number;
+
+  slotInstanceId: number;
+
+  widgetInstance: WidgetInstanceModel;
+
+  slotInstance: WidgetSlotInstanceModel;
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  assignedAt: Date;
+
+  constructor({
+    widgetInstanceId,
+    slotInstanceId,
+    widgetInstance,
+    slotInstance,
+    ownerId,
+    owner,
+    assignedAt,
+  }: {
+    widgetInstanceId: number;
+    slotInstanceId: number;
+    widgetInstance: WidgetInstanceModel;
+    slotInstance: WidgetSlotInstanceModel;
+    ownerId: number;
+    owner: UserModel;
+    assignedAt: Date;
+  }) {
+    this.widgetInstanceId = widgetInstanceId;
+    this.slotInstanceId = slotInstanceId;
+    this.widgetInstance = widgetInstance;
+    this.slotInstance = slotInstance;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.assignedAt = assignedAt;
+  }
+}
+
+export class WidgetInstanceModel {
+  id: number;
+
+  widget: WidgetModel;
+
+  widgetId: number;
+
+  parentSlot?: WidgetSlotInstanceModel;
+
+  parentSlotId?: number;
+
+  order?: number;
+
+  widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  constructor({
+    id,
+    widget,
+    widgetId,
+    parentSlot,
+    parentSlotId,
+    order,
+    widgetSlotInstanceAssignments,
+    ownerId,
+    owner,
+  }: {
+    id: number;
+    widget: WidgetModel;
+    widgetId: number;
+    parentSlot?: WidgetSlotInstanceModel;
+    parentSlotId?: number;
+    order?: number;
+    widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
+    ownerId: number;
+    owner: UserModel;
+  }) {
+    this.id = id;
+    this.widget = widget;
+    this.widgetId = widgetId;
+    this.parentSlot = parentSlot;
+    this.parentSlotId = parentSlotId;
+    this.order = order;
+    this.widgetSlotInstanceAssignments = widgetSlotInstanceAssignments;
+    this.ownerId = ownerId;
+    this.owner = owner;
   }
 }
 

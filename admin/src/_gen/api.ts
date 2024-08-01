@@ -135,7 +135,23 @@ export interface ProjectGroupUpdateDto {
 
 export interface WidgetResponseDto {
   id: number;
-  elementType: 'Root' | 'Button' | 'Table' | 'Input';
+  name: string;
+  platforms: (
+    | 'PcWeb'
+    | 'MobileWeb'
+    | 'MiniProgram'
+    | 'NativeMobile'
+    | 'DesktopClient'
+  )[];
+  category:
+    | 'General'
+    | 'Layout'
+    | 'Navigation'
+    | 'DataEntry'
+    | 'DataDisplay'
+    | 'Feedback'
+    | 'Other'
+    | 'Heavyweight';
   ownerId: number;
   createdAt: string;
   updatedAt: string;
@@ -159,7 +175,23 @@ export interface WidgetSlotAssignmentWithSlotsResponseDto {
 
 export interface WidgetWithSlotsResponseDto {
   id: number;
-  elementType: 'Root' | 'Button' | 'Table' | 'Input';
+  name: string;
+  platforms: (
+    | 'PcWeb'
+    | 'MobileWeb'
+    | 'MiniProgram'
+    | 'NativeMobile'
+    | 'DesktopClient'
+  )[];
+  category:
+    | 'General'
+    | 'Layout'
+    | 'Navigation'
+    | 'DataEntry'
+    | 'DataDisplay'
+    | 'Feedback'
+    | 'Other'
+    | 'Heavyweight';
   ownerId: number;
   createdAt: string;
   updatedAt: string;
@@ -167,7 +199,24 @@ export interface WidgetWithSlotsResponseDto {
 }
 
 export interface WidgetCreateDto {
-  elementType: 'Root' | 'Button' | 'Table' | 'Input';
+  name: string;
+  order: number;
+  platforms: (
+    | 'PcWeb'
+    | 'MobileWeb'
+    | 'MiniProgram'
+    | 'NativeMobile'
+    | 'DesktopClient'
+  )[];
+  category:
+    | 'General'
+    | 'Layout'
+    | 'Navigation'
+    | 'DataEntry'
+    | 'DataDisplay'
+    | 'Feedback'
+    | 'Other'
+    | 'Heavyweight';
 }
 
 export interface WidgetSlotCreateDto {
@@ -196,6 +245,24 @@ export interface WidgetSlotCreateManyDto {
 export interface WidgetSlotUpdateDto {
   name: string;
 }
+
+export interface WidgetSlotAssignmentResponseDto {
+  widgetId: number;
+  slotId: number;
+  ownerId: number;
+  assignedAt: string;
+}
+
+export interface WidgetSlotAssignmentCreateDto {
+  widgetId: number;
+  slotId: number;
+}
+
+export interface WidgetSlotAssignmentCreateManyDto {
+  createDtos: WidgetSlotAssignmentCreateDto[];
+}
+
+export type WidgetSlotAssignmentUpdateDto = Record<string, unknown>;
 
 import type {
   AxiosInstance,
@@ -1005,6 +1072,126 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
       this.request<WidgetSlotResponseDto, unknown>({
         path: `/widgetSlots/${id}`,
         method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+  };
+  widgetSlotAssignments = {
+    /**
+     * No description
+     *
+     * @name WidgetSlotAssignmentControllerGetWidgetSlotAssignment
+     * @request GET:/widgetSlotAssignments/{widgetId}/{slotId}
+     */
+    getWidgetSlotAssignment: (
+      widgetId: number,
+      slotId: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetSlotAssignmentResponseDto, unknown>({
+        path: `/widgetSlotAssignments/${widgetId}/${slotId}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotAssignmentControllerUpdateWidgetSlotAssignment
+     * @request PATCH:/widgetSlotAssignments/{widgetId}/{slotId}
+     */
+    updateWidgetSlotAssignment: (
+      widgetId: number,
+      slotId: number,
+      data: WidgetSlotAssignmentUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetSlotAssignmentResponseDto, unknown>({
+        path: `/widgetSlotAssignments/${widgetId}/${slotId}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotAssignmentControllerDeleteWidgetSlotAssignment
+     * @request DELETE:/widgetSlotAssignments/{widgetId}/{slotId}
+     */
+    deleteWidgetSlotAssignment: (
+      widgetId: number,
+      slotId: number,
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetSlotAssignmentResponseDto, unknown>({
+        path: `/widgetSlotAssignments/${widgetId}/${slotId}`,
+        method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotAssignmentControllerGetWidgetSlotAssignments
+     * @request GET:/widgetSlotAssignments
+     */
+    getWidgetSlotAssignments: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filterWidgetId?: number;
+        filterSlotId?: number;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetSlotAssignmentResponseDto[], unknown>({
+        path: `/widgetSlotAssignments`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotAssignmentControllerCreateWidgetSlotAssignment
+     * @request POST:/widgetSlotAssignments
+     */
+    createWidgetSlotAssignment: (
+      data: WidgetSlotAssignmentCreateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetSlotAssignmentResponseDto, void>({
+        path: `/widgetSlotAssignments`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetSlotAssignmentControllerCreateWidgetSlotAssignments
+     * @request POST:/widgetSlotAssignments/bulk-create
+     */
+    createWidgetSlotAssignments: (
+      data: WidgetSlotAssignmentCreateManyDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<CountDto, void>({
+        path: `/widgetSlotAssignments/bulk-create`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
         format: 'json',
         ...params,
       }),
