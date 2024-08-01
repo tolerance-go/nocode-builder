@@ -4,11 +4,12 @@
  * ---------------------------------------------------------------
  */
 
-export enum WidgetElementTypeEnum {
-  Root = 'Root',
-  Button = 'Button',
-  Table = 'Table',
-  Input = 'Input',
+export enum WidgetPlatformTypeEnum {
+  PcWeb = 'PcWeb',
+  MobileWeb = 'MobileWeb',
+  MiniProgram = 'MiniProgram',
+  NativeMobile = 'NativeMobile',
+  DesktopClient = 'DesktopClient',
 }
 
 export enum ProjectTypeEnum {
@@ -40,7 +41,11 @@ export class UserModel {
 
   widgetSlots: WidgetSlotModel[];
 
-  WidgetSlotAssignment: WidgetSlotAssignmentModel[];
+  WidgetSlotAssignments: WidgetSlotAssignmentModel[];
+
+  widgetLibs: WidgetLibModel[];
+
+  components: ComponentModel[];
 
   constructor({
     id,
@@ -54,7 +59,9 @@ export class UserModel {
     isAdmin,
     widgets,
     widgetSlots,
-    WidgetSlotAssignment,
+    WidgetSlotAssignments,
+    widgetLibs,
+    components,
   }: {
     id: number;
     name: string;
@@ -67,7 +74,9 @@ export class UserModel {
     isAdmin: boolean;
     widgets: WidgetModel[];
     widgetSlots: WidgetSlotModel[];
-    WidgetSlotAssignment: WidgetSlotAssignmentModel[];
+    WidgetSlotAssignments: WidgetSlotAssignmentModel[];
+    widgetLibs: WidgetLibModel[];
+    components: ComponentModel[];
   }) {
     this.id = id;
     this.name = name;
@@ -80,16 +89,78 @@ export class UserModel {
     this.isAdmin = isAdmin;
     this.widgets = widgets;
     this.widgetSlots = widgetSlots;
-    this.WidgetSlotAssignment = WidgetSlotAssignment;
+    this.WidgetSlotAssignments = WidgetSlotAssignments;
+    this.widgetLibs = widgetLibs;
+    this.components = components;
   }
 }
 
 export class WidgetModel {
   id: number;
 
-  elementType: WidgetElementTypeEnum;
+  component: ComponentModel;
+
+  name: string;
 
   slots: WidgetSlotAssignmentModel[];
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  componentId: number;
+
+  widgetLib?: WidgetLibModel;
+
+  widgetLibId?: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    component,
+    name,
+    slots,
+    ownerId,
+    owner,
+    componentId,
+    widgetLib,
+    widgetLibId,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    component: ComponentModel;
+    name: string;
+    slots: WidgetSlotAssignmentModel[];
+    ownerId: number;
+    owner: UserModel;
+    componentId: number;
+    widgetLib?: WidgetLibModel;
+    widgetLibId?: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.component = component;
+    this.name = name;
+    this.slots = slots;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.componentId = componentId;
+    this.widgetLib = widgetLib;
+    this.widgetLibId = widgetLibId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class WidgetLibModel {
+  id: number;
+
+  widgets: WidgetModel[];
 
   ownerId: number;
 
@@ -101,24 +172,21 @@ export class WidgetModel {
 
   constructor({
     id,
-    elementType,
-    slots,
+    widgets,
     ownerId,
     owner,
     createdAt,
     updatedAt,
   }: {
     id: number;
-    elementType: WidgetElementTypeEnum;
-    slots: WidgetSlotAssignmentModel[];
+    widgets: WidgetModel[];
     ownerId: number;
     owner: UserModel;
     createdAt: Date;
     updatedAt: Date;
   }) {
     this.id = id;
-    this.elementType = elementType;
-    this.slots = slots;
+    this.widgets = widgets;
     this.ownerId = ownerId;
     this.owner = owner;
     this.createdAt = createdAt;
@@ -205,6 +273,53 @@ export class WidgetSlotModel {
     this.ownerId = ownerId;
     this.owner = owner;
     this.widgets = widgets;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class ComponentModel {
+  id: number;
+
+  name: string;
+
+  widgets: WidgetModel[];
+
+  platforms: WidgetPlatformTypeEnum[];
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    name,
+    widgets,
+    platforms,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    name: string;
+    widgets: WidgetModel[];
+    platforms: WidgetPlatformTypeEnum[];
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.name = name;
+    this.widgets = widgets;
+    this.platforms = platforms;
+    this.ownerId = ownerId;
+    this.owner = owner;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }

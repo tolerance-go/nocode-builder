@@ -12,7 +12,7 @@ import {
   IsDateString,
   IsEnum,
 } from 'class-validator';
-import { ProjectType, WidgetElementType } from '@prisma/client';
+import { ProjectType, WidgetPlatformType } from '@prisma/client';
 
 export class UserModelRecordDto {
   @ApiProperty({})
@@ -102,18 +102,71 @@ export class ProjectGroupModelRecordDto {
   updatedAt: string;
 }
 
+export class ComponentModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({})
+  @IsString()
+  name: string;
+
+  @ApiProperty({ enum: WidgetPlatformType })
+  @IsEnum(WidgetPlatformType)
+  platforms: WidgetPlatformType[];
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
+}
+
+export class WidgetLibModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
+}
+
 export class WidgetModelRecordDto {
   @ApiProperty({})
   @IsInt()
   id: number;
 
-  @ApiProperty({ enum: WidgetElementType })
-  @IsEnum(WidgetElementType)
-  elementType: WidgetElementType;
+  @ApiProperty({})
+  @IsString()
+  name: string;
 
   @ApiProperty({})
   @IsInt()
   ownerId: number;
+
+  @ApiProperty({})
+  @IsInt()
+  componentId: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  widgetLibId?: number;
 
   @ApiProperty({})
   @IsDateString()

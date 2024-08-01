@@ -4,7 +4,7 @@
  * ---------------------------------------------------------------
  */
 
-import { WidgetElementTypeEnum } from './models';
+import { WidgetPlatformTypeEnum } from './models';
 import { ProjectTypeEnum } from './models';
 
 export class UserModelRecord {
@@ -128,10 +128,12 @@ export class ProjectGroupModelRecord {
   }
 }
 
-export class WidgetModelRecord {
+export class ComponentModelRecord {
   id: number;
 
-  elementType: WidgetElementTypeEnum;
+  name: string;
+
+  platforms: WidgetPlatformTypeEnum[];
 
   ownerId: number;
 
@@ -141,20 +143,92 @@ export class WidgetModelRecord {
 
   constructor({
     id,
-    elementType,
+    name,
+    platforms,
     ownerId,
     createdAt,
     updatedAt,
   }: {
     id: number;
-    elementType: WidgetElementTypeEnum;
+    name: string;
+    platforms: WidgetPlatformTypeEnum[];
     ownerId: number;
     createdAt: Date;
     updatedAt: Date;
   }) {
     this.id = id;
-    this.elementType = elementType;
+    this.name = name;
+    this.platforms = platforms;
     this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class WidgetLibModelRecord {
+  id: number;
+
+  ownerId: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    ownerId,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class WidgetModelRecord {
+  id: number;
+
+  name: string;
+
+  ownerId: number;
+
+  componentId: number;
+
+  widgetLibId?: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    name,
+    ownerId,
+    componentId,
+    widgetLibId,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    name: string;
+    ownerId: number;
+    componentId: number;
+    widgetLibId?: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.name = name;
+    this.ownerId = ownerId;
+    this.componentId = componentId;
+    this.widgetLibId = widgetLibId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
