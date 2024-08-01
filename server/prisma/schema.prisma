@@ -58,12 +58,12 @@ model ProjectGroup {
 model Component {
   id        Int                  @id @default(autoincrement())
   name      String
-  widgets   Widget[]
   platforms WidgetPlatformType[]
   ownerId   Int
   owner     User                 @relation(fields: [ownerId], references: [id])
   createdAt DateTime             @default(now())
   updatedAt DateTime             @updatedAt
+  widgets   Widget[]
 }
 
 model WidgetLib {
@@ -78,12 +78,12 @@ model WidgetLib {
 
 model Widget {
   id          Int                    @id @default(autoincrement())
-  component   Component              @relation(fields: [componentId], references: [id])
   name        String
   slots       WidgetSlotAssignment[]
+  componentId Int
+  component   Component              @relation(fields: [componentId], references: [id])
   ownerId     Int
   owner       User                   @relation(fields: [ownerId], references: [id])
-  componentId Int
   widgetLib   WidgetLib?             @relation(fields: [widgetLibId], references: [id])
   widgetLibId Int?
   createdAt   DateTime               @default(now())
