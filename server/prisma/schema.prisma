@@ -67,7 +67,6 @@ model WidgetLib {
 model Widget {
   id          Int                    @id @default(autoincrement())
   name        String
-  name_en     String
   platforms   WidgetPlatformType[]
   slots       WidgetSlotAssignment[]
   ownerId     Int
