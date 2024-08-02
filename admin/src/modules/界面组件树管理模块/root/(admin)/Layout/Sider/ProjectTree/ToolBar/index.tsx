@@ -10,6 +10,9 @@ import {
   ProjectTreeNodeData,
   ProjectTreeDataNode,
   DirectoryTreeNodeTypeEnum,
+  BluemapProjectDetail,
+  DataTableProjectDetail,
+  ViewProjectDetail,
 } from '@/modules/界面状态仓库模块/types';
 import { 组件标识, 组件类名 } from '@/modules/界面组件树管理模块/constants';
 import {
@@ -25,6 +28,26 @@ import { Button, Dropdown, Flex, Space, theme } from 'antd';
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
 const 找到同层最后一个文件夹的位置 = (nodes: ProjectTreeNodeData[]): number => {
   return nodes.findLastIndex((node) => node.type === 'folder');
+};
+
+const createProjectDetail = (
+  type: ProjectTypeEnum,
+  platform?: WidgetPlatformTypeEnum,
+): ViewProjectDetail | DataTableProjectDetail | BluemapProjectDetail => {
+  if (type === ProjectTypeEnum.View) {
+    if (!platform) {
+      throw new Error('平台类型不能为空。');
+    }
+
+    return {
+      type,
+      platform,
+    };
+  }
+
+  return {
+    type,
+  };
 };
 
 export const ToolBar = () => {
@@ -81,6 +104,7 @@ export const ToolBar = () => {
   const 在指定节点下插入新文件 = (
     target: ProjectTreeDataNode,
     projectType: ProjectType,
+    platform?: WidgetPlatformTypeEnum,
   ) => {
     const folderIndex = 找到同层最后一个文件夹的位置(
       (target.children ?? []).map((node) => {
@@ -104,13 +128,17 @@ export const ToolBar = () => {
         recordItem: {
           title: '',
           type: DirectoryTreeNodeTypeEnum.File,
-          projectType: projectType,
+          projectType,
+          projectDetail: createProjectDetail(projectType, platform),
         },
       }),
     );
   };
 
-  const 在根节点下插入新文件 = (projectFileType: ProjectType) => {
+  const 在根节点下插入新文件 = (
+    projectFileType: ProjectType,
+    platform?: WidgetPlatformTypeEnum,
+  ) => {
     const folderIndex = 找到同层最后一个文件夹的位置(
       projectStructureTreeData.map((node) => {
         const recordItem = projectTreeDataRecord[node.key];
@@ -135,6 +163,7 @@ export const ToolBar = () => {
           title: '',
           type: DirectoryTreeNodeTypeEnum.File,
           projectType: projectFileType,
+          projectDetail: createProjectDetail(projectFileType, platform),
         },
       }),
     );
@@ -199,9 +228,10 @@ export const ToolBar = () => {
 
   const handleProjectFileCreateBtnClick = async (
     projectFileType: ProjectType,
+    platform?: WidgetPlatformTypeEnum,
   ) => {
     if (!selectedKey) {
-      在根节点下插入新文件(projectFileType);
+      在根节点下插入新文件(projectFileType, platform);
       return;
     }
 
@@ -216,7 +246,7 @@ export const ToolBar = () => {
     }
     if (selectedRecordItem.type === DirectoryTreeNodeTypeEnum.Folder) {
       if (selectedNode) {
-        在指定节点下插入新文件(selectedNode, projectFileType);
+        在指定节点下插入新文件(selectedNode, projectFileType, platform);
       }
     } else {
       const parentKey = derived_节点到父节点的映射[selectedKey];
@@ -227,10 +257,10 @@ export const ToolBar = () => {
           parentKey,
         );
         if (parent) {
-          在指定节点下插入新文件(parent, projectFileType);
+          在指定节点下插入新文件(parent, projectFileType, platform);
         }
       } else {
-        在根节点下插入新文件(projectFileType);
+        在根节点下插入新文件(projectFileType, platform);
       }
     }
   };
@@ -264,23 +294,46 @@ export const ToolBar = () => {
                     key: WidgetPlatformTypeEnum.PcWeb,
                     label: <span>PC Web</span>,
                     onClick: () =>
-                      handleProjectFileCreateBtnClick(ProjectTypeEnum.View),
+                      handleProjectFileCreateBtnClick(
+                        ProjectTypeEnum.View,
+                        WidgetPlatformTypeEnum.PcWeb,
+                      ),
                   },
                   {
                     key: WidgetPlatformTypeEnum.MobileWeb,
                     label: <span>移动端 Web</span>,
+                    onClick: () =>
+                      handleProjectFileCreateBtnClick(
+                        ProjectTypeEnum.View,
+                        WidgetPlatformTypeEnum.MobileWeb,
+                      ),
                   },
                   {
                     key: WidgetPlatformTypeEnum.MiniProgram,
                     label: <span>小程序</span>,
+                    onClick: () =>
+                      handleProjectFileCreateBtnClick(
+                        ProjectTypeEnum.View,
+                        WidgetPlatformTypeEnum.MiniProgram,
+                      ),
                   },
                   {
                     key: WidgetPlatformTypeEnum.DesktopClient,
                     label: <span>桌面客户端</span>,
+                    onClick: () =>
+                      handleProjectFileCreateBtnClick(
+                        ProjectTypeEnum.View,
+                        WidgetPlatformTypeEnum.DesktopClient,
+                      ),
                   },
                   {
                     key: WidgetPlatformTypeEnum.NativeMobile,
                     label: <span>移动端 APP</span>,
+                    onClick: () =>
+                      handleProjectFileCreateBtnClick(
+                        ProjectTypeEnum.View,
+                        WidgetPlatformTypeEnum.NativeMobile,
+                      ),
                   },
                 ],
               },

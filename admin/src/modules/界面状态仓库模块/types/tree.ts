@@ -1,4 +1,4 @@
-import { WidgetPlatformTypeEnum } from '@/_gen/models';
+import { ProjectTypeEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
 import { ViewKey } from '@/common/types';
 import { ProjectType } from '@/modules/界面组件树管理模块';
 import { TreeDataNode } from 'antd';
@@ -33,13 +33,22 @@ export type ProjectTreeNodeFileData = {
     | BluemapProjectDetail;
 } & ProjectTreeNodeDataBase;
 
-export type ViewProjectDetail = {
+type ProjectDetailBase = {
+  type: ProjectTypeEnum;
+};
+
+export type ViewProjectDetail = ProjectDetailBase & {
+  type: ProjectTypeEnum.View;
   platform: WidgetPlatformTypeEnum;
 };
 
-export type DataTableProjectDetail = Record<string, unknown>;
+export type DataTableProjectDetail = ProjectDetailBase & {
+  type: ProjectTypeEnum.DataTable;
+};
 
-export type BluemapProjectDetail = Record<string, unknown>;
+export type BluemapProjectDetail = ProjectDetailBase & {
+  type: ProjectTypeEnum.Bluemap;
+};
 
 export type ProjectTreeNodeData =
   | ProjectTreeNodeFolderData
