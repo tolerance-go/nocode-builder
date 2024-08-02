@@ -2,8 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { ViewKey } from '@/common/types';
 import {
   DirectoryTreeNodeTypeEnum,
-  ProjectTreeNodeDataRecordItem,
-  ProjectTreeNodeDataRecordItemBase,
+  ProjectTreeNodeData,
+  ProjectTreeNodeDataBase,
 } from '../../types';
 import {
   createProjectTreeInitialState,
@@ -21,12 +21,12 @@ describe('projectTreeSlice', () => {
 
   it('应更新节点数据', () => {
     const nodeKey: ViewKey = 'test-node';
-    const initialData: ProjectTreeNodeDataRecordItem = {
+    const initialData: ProjectTreeNodeData = {
       type: DirectoryTreeNodeTypeEnum.File,
       projectType: ProjectTypeEnum.View,
       title: '初始标题',
     };
-    const newData: Partial<ProjectTreeNodeDataRecordItem> = {
+    const newData: Partial<ProjectTreeNodeData> = {
       title: '更新后的标题',
     };
 
@@ -56,7 +56,7 @@ describe('projectTreeSlice', () => {
 
   it('应在节点不存在时不进行更新', () => {
     const nodeKey: ViewKey = 'non-existent-node';
-    const newData: Partial<ProjectTreeNodeDataRecordItemBase> = {
+    const newData: Partial<ProjectTreeNodeDataBase> = {
       title: '更新后的标题',
     };
 

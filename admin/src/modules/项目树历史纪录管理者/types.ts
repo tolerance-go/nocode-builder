@@ -1,7 +1,7 @@
 import { ViewKey } from '@/common/types';
 import {
-  ProjectTreeNodeDataRecordItem,
-  ProjectStructureTreeDataNode,
+  ProjectTreeNodeData,
+  ProjectTreeDataNode,
   ProjectTreeNodeDataRecord,
 } from '../界面状态仓库模块';
 
@@ -9,15 +9,15 @@ export type 历史记录操作类型 = '插入' | '删除' | '移动' | '更新'
 
 export interface 历史记录更新操作详情 {
   节点key: ViewKey;
-  oldRecordItem: ProjectTreeNodeDataRecordItem;
-  newRecordItem: ProjectTreeNodeDataRecordItem;
+  oldRecordItem: ProjectTreeNodeData;
+  newRecordItem: ProjectTreeNodeData;
 }
 
 export interface 历史记录插入操作详情 {
   节点key: ViewKey;
   父节点key: ViewKey | null;
   index: number;
-  recordItem: ProjectTreeNodeDataRecordItem;
+  recordItem: ProjectTreeNodeData;
 }
 
 export interface 历史记录删除操作详情 {
@@ -39,7 +39,7 @@ export type 历史记录操作详情 =
 export type 历史记录 = {
   createTime: number;
   state: {
-    treeNodes: ProjectStructureTreeDataNode[];
+    treeNodes: ProjectTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   };
   操作: 历史记录操作详情;

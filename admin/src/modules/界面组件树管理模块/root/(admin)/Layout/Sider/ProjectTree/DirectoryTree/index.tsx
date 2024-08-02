@@ -11,7 +11,7 @@ import {
   findNode,
   节点是不是文件,
 } from '@/modules/界面状态仓库模块';
-import { ProjectStructureTreeDataNode } from '@/modules/界面状态仓库模块/types';
+import { ProjectTreeDataNode } from '@/modules/界面状态仓库模块/types';
 import { ViewKey } from '@/common/types';
 import { ProjectTypeEnum } from '@/_gen/models';
 
@@ -42,7 +42,7 @@ export const DirectoryTree = () => {
   );
 
   return (
-    <AntdDirectoryTree<ProjectStructureTreeDataNode>
+    <AntdDirectoryTree<ProjectTreeDataNode>
       multiple
       treeData={项目节点树}
       height={节点树容器的高度}

@@ -8,7 +8,7 @@ import {
 import {
   compareTrees,
   DirectoryTreeNodeTypeEnum,
-  ProjectStructureTreeDataNode,
+  ProjectTreeDataNode,
   RootState,
 } from '../界面状态仓库模块';
 import { 事件中心系统 } from '../事件中心系统';
@@ -56,7 +56,7 @@ export class 项目树后台同步模块 extends ModuleBase {
   }
 
   private syncBackend(prevState: RootState | null, currentState: RootState) {
-    const diffs = compareTrees<ProjectStructureTreeDataNode>(
+    const diffs = compareTrees<ProjectTreeDataNode>(
       prevState?.projectTree.项目结构树 ?? [],
       currentState.projectTree.项目结构树,
       (oldNode, newNode) => {
@@ -117,7 +117,7 @@ export class 项目树后台同步模块 extends ModuleBase {
   }
 
   private handleAddInfo(
-    addInfo: 新增操作详情<ProjectStructureTreeDataNode>,
+    addInfo: 新增操作详情<ProjectTreeDataNode>,
     currentState: RootState,
     项目表模块实例: 项目表模块,
     项目组表模块实例: 项目组表模块,
@@ -155,7 +155,7 @@ export class 项目树后台同步模块 extends ModuleBase {
 
         // 递归处理子节点
         if (item.children) {
-          const nestedAddInfo: 新增操作详情<ProjectStructureTreeDataNode> = {
+          const nestedAddInfo: 新增操作详情<ProjectTreeDataNode> = {
             父节点key: item.key,
             index: 0,
             recordItems: item.children,
@@ -173,7 +173,7 @@ export class 项目树后台同步模块 extends ModuleBase {
   }
 
   private handleDeleteInfo(
-    item: ProjectStructureTreeDataNode,
+    item: ProjectTreeDataNode,
     prevState: RootState | null,
     项目表模块实例: 项目表模块,
     项目组表模块实例: 项目组表模块,
@@ -208,7 +208,7 @@ export class 项目树后台同步模块 extends ModuleBase {
   }
 
   private handleMoveInfo(
-    moveInfo: 移动操作详情<ProjectStructureTreeDataNode>,
+    moveInfo: 移动操作详情<ProjectTreeDataNode>,
     currentState: RootState,
     项目表模块实例: 项目表模块,
     项目组表模块实例: 项目组表模块,
@@ -235,7 +235,7 @@ export class 项目树后台同步模块 extends ModuleBase {
 
       // 递归处理子节点移动
       if (item.children) {
-        const nestedMoveInfo: 移动操作详情<ProjectStructureTreeDataNode> = {
+        const nestedMoveInfo: 移动操作详情<ProjectTreeDataNode> = {
           节点keys: item.children.map((child) => child.key),
           目标父节点key: item.key,
           index: 0,

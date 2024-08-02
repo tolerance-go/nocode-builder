@@ -5,7 +5,7 @@ import {
 import { ViewKey } from '@/common/types';
 import {
   ProjectTreeNodeDataRecord,
-  ProjectStructureTreeDataNode,
+  ProjectTreeDataNode,
   DirectoryTreeNodeTypeEnum,
 } from '../types';
 
@@ -15,13 +15,13 @@ function generateProjectTreeMeta(
 ) {
   const 项目树节点数据: ProjectTreeNodeDataRecord = {};
   const derived_节点到父节点的映射: Record<ViewKey, ViewKey | null> = {};
-  const 项目结构树: ProjectStructureTreeDataNode[] = [];
+  const 项目结构树: ProjectTreeDataNode[] = [];
 
   // 创建项目组节点
-  const groupNodes: Record<ViewKey, ProjectStructureTreeDataNode> = {};
+  const groupNodes: Record<ViewKey, ProjectTreeDataNode> = {};
   projectGroupRecords.forEach((group) => {
     const groupKey = `${group.id}_group`;
-    const groupNode: ProjectStructureTreeDataNode = {
+    const groupNode: ProjectTreeDataNode = {
       key: groupKey,
       title: group.name,
       children: [],
@@ -40,7 +40,7 @@ function generateProjectTreeMeta(
   // 创建项目节点并放入对应的项目组中
   projectRecords.forEach((project) => {
     const projectKey = `${project.id}_project`;
-    const projectNode: ProjectStructureTreeDataNode = {
+    const projectNode: ProjectTreeDataNode = {
       key: projectKey,
       title: project.name,
       children: [], // 保证符合 ProjectStructureTreeDataNode 类型
@@ -75,7 +75,7 @@ function generateProjectTreeMeta(
   });
 
   // 递归排序函数，使项目组在项目之前
-  function sortTreeNodes(nodes: ProjectStructureTreeDataNode[]) {
+  function sortTreeNodes(nodes: ProjectTreeDataNode[]) {
     nodes.sort((a, b) => {
       const aData = 项目树节点数据[a.key];
       const bData = 项目树节点数据[b.key];

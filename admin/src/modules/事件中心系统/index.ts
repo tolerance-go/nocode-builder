@@ -5,9 +5,9 @@ import { ClientUserModel } from '../models/用户表模块';
 import { ClientProjectGroupModel } from '../models/项目组表模块';
 import { ClientProjectModel } from '../models/项目表模块';
 import {
-  ProjectStructureTreeDataNode,
+  ProjectTreeDataNode,
   ProjectTreeNodeDataRecord,
-  ProjectTreeNodeDataRecordItem,
+  ProjectTreeNodeData,
 } from '../界面状态仓库模块';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
 
@@ -34,26 +34,26 @@ type 界面状态管理者事件类型 = {
   };
   新增节点: {
     nodeKey: ViewKey;
-    nodeData: ProjectTreeNodeDataRecordItem;
+    nodeData: ProjectTreeNodeData;
     parentKey: ViewKey | null;
-    treeNodes: ProjectStructureTreeDataNode[];
+    treeNodes: ProjectTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
     index: number;
   };
   修改节点: {
     nodeKey: ViewKey;
-    oldTreeNodeData: ProjectTreeNodeDataRecordItem;
-    newTreeNodeData: ProjectTreeNodeDataRecordItem;
-    treeNodes: ProjectStructureTreeDataNode[];
+    oldTreeNodeData: ProjectTreeNodeData;
+    newTreeNodeData: ProjectTreeNodeData;
+    treeNodes: ProjectTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   };
   删除节点: {
     nodeKeys: ViewKey[];
-    treeNodes: ProjectStructureTreeDataNode[];
+    treeNodes: ProjectTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   };
   移动节点: {
-    treeNodes: ProjectStructureTreeDataNode[];
+    treeNodes: ProjectTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
     节点keys: ViewKey[];
     目标父节点key: ViewKey | null;

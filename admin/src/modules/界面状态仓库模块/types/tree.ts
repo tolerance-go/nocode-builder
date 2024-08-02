@@ -1,14 +1,16 @@
+import { WidgetPlatformTypeEnum } from '@/_gen/models';
 import { ViewKey } from '@/common/types';
 import { ProjectType } from '@/modules/界面组件树管理模块';
 import { TreeDataNode } from 'antd';
 
-export interface ProjectStructureTreeDataNode extends TreeDataNode {
+export interface ProjectTreeDataNode extends TreeDataNode {
   key: ViewKey;
-  children?: ProjectStructureTreeDataNode[];
+  children?: ProjectTreeDataNode[];
 }
 
-export type ProjectTreeNodeDataRecordItemBase = {
+export type ProjectTreeNodeDataBase = {
   title: string;
+  // 内存数据库和远程数据库的 id 关联
   recordId?: number;
 };
 
@@ -18,24 +20,21 @@ export enum DirectoryTreeNodeTypeEnum {
   Folder = 'folder',
   File = 'file',
 }
-export type ProjectTreeNodeFolderDataRecordItem = {
+export type ProjectTreeNodeFolderData = {
   type: DirectoryTreeNodeTypeEnum.Folder;
-} & ProjectTreeNodeDataRecordItemBase;
+} & ProjectTreeNodeDataBase;
 
 export type ProjectTreeNodeFileDataRecordItem = {
   type: DirectoryTreeNodeTypeEnum.File;
   projectType: ProjectType;
-} & ProjectTreeNodeDataRecordItemBase;
+} & ProjectTreeNodeDataBase;
 
-export type ProjectTreeNodeDataRecordItem =
-  | ProjectTreeNodeFolderDataRecordItem
+export type ProjectTreeNodeData =
+  | ProjectTreeNodeFolderData
   | ProjectTreeNodeFileDataRecordItem;
 
 /** key 到树节点数据的映射 */
-export type ProjectTreeNodeDataRecord = Record<
-  string,
-  ProjectTreeNodeDataRecordItem
->;
+export type ProjectTreeNodeDataRecord = Record<string, ProjectTreeNodeData>;
 
 // ====================== 视图部件树 ======================
 

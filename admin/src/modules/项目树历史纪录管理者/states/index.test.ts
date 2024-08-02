@@ -3,16 +3,16 @@ import { createActor } from 'xstate';
 import { 历史状态机 } from '.';
 import { 历史记录 } from '../types';
 import {
-  ProjectStructureTreeDataNode,
+  ProjectTreeDataNode,
   ProjectTreeNodeDataRecord,
-  ProjectTreeNodeDataRecordItem,
+  ProjectTreeNodeData,
 } from '@/modules/界面状态仓库模块';
 
 describe('历史状态机', () => {
   const 创建Mock记录 = (
     key: string,
   ): {
-    treeNodes: ProjectStructureTreeDataNode[];
+    treeNodes: ProjectTreeDataNode[];
     treeDataRecord: ProjectTreeNodeDataRecord;
   } => ({
     treeNodes: [{ key }],
@@ -28,7 +28,7 @@ describe('历史状态机', () => {
         节点key: key,
         父节点key: null,
         index: 0,
-        recordItem: {} as ProjectTreeNodeDataRecordItem,
+        recordItem: {} as ProjectTreeNodeData,
       },
     },
   });

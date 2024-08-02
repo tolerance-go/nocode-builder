@@ -1,4 +1,4 @@
-import { ProjectTypeEnum } from '@/_gen/models';
+import { ProjectTypeEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
 import {
   useAppSelector,
   useAppDispatch,
@@ -7,8 +7,8 @@ import {
   节点是不是文件夹,
 } from '@/modules/界面状态仓库模块';
 import {
-  ProjectTreeNodeDataRecordItem,
-  ProjectStructureTreeDataNode,
+  ProjectTreeNodeData,
+  ProjectTreeDataNode,
   DirectoryTreeNodeTypeEnum,
 } from '@/modules/界面状态仓库模块/types';
 import { 组件标识, 组件类名 } from '@/modules/界面组件树管理模块/constants';
@@ -23,9 +23,7 @@ import { 组件测试标识 } from '@/common/constants';
 import { Button, Dropdown, Flex, Space, theme } from 'antd';
 
 /** 找到节点数组中从前到后顺序的第一个文件夹的位置 */
-const 找到同层最后一个文件夹的位置 = (
-  nodes: ProjectTreeNodeDataRecordItem[],
-): number => {
+const 找到同层最后一个文件夹的位置 = (nodes: ProjectTreeNodeData[]): number => {
   return nodes.findLastIndex((node) => node.type === 'folder');
 };
 
@@ -63,7 +61,7 @@ export const ToolBar = () => {
       ]
     : null;
 
-  const 在指定节点下插入新文件夹 = (target: ProjectStructureTreeDataNode) => {
+  const 在指定节点下插入新文件夹 = (target: ProjectTreeDataNode) => {
     const newKey = Math.random() + '';
     dispatch(
       projectTreeActions.插入节点({
@@ -81,7 +79,7 @@ export const ToolBar = () => {
   };
 
   const 在指定节点下插入新文件 = (
-    target: ProjectStructureTreeDataNode,
+    target: ProjectTreeDataNode,
     projectType: ProjectType,
   ) => {
     const folderIndex = 找到同层最后一个文件夹的位置(
@@ -259,10 +257,32 @@ export const ToolBar = () => {
                     视图
                   </span>
                 ),
-                onClick: () =>
-                  handleProjectFileCreateBtnClick(ProjectTypeEnum.View),
                 icon: 图标管理者实例.根据id获取组件('视图项目节点'),
                 className: 组件类名.创建项目节点的菜单项,
+                children: [
+                  {
+                    key: WidgetPlatformTypeEnum.PcWeb,
+                    label: <span>PC Web</span>,
+                    onClick: () =>
+                      handleProjectFileCreateBtnClick(ProjectTypeEnum.View),
+                  },
+                  {
+                    key: WidgetPlatformTypeEnum.MobileWeb,
+                    label: <span>移动端 Web</span>,
+                  },
+                  {
+                    key: WidgetPlatformTypeEnum.MiniProgram,
+                    label: <span>小程序</span>,
+                  },
+                  {
+                    key: WidgetPlatformTypeEnum.DesktopClient,
+                    label: <span>桌面客户端</span>,
+                  },
+                  {
+                    key: WidgetPlatformTypeEnum.NativeMobile,
+                    label: <span>移动端 APP</span>,
+                  },
+                ],
               },
               {
                 key: 'data-table',

@@ -1,19 +1,19 @@
 import { ViewKey } from '@/common/types';
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
-  ProjectTreeNodeDataRecord,
-  ProjectStructureTreeDataNode,
-  TreeNode,
-  ProjectTreeNodeDataRecordItemBase,
   AppSlices,
+  ProjectTreeDataNode,
+  ProjectTreeNodeDataRecord,
+  ProjectTreeNodeDataBase,
+  TreeNode,
 } from '../../types';
 import {
   compareTrees,
+  insertNodeAtIndex,
   removeNode,
   批量删除节点,
-  insertNodeAtIndex,
-  插入节点,
   批量插入节点,
+  插入节点,
 } from '../../utils';
 
 export type ProjectTreeStates = {
@@ -21,7 +21,7 @@ export type ProjectTreeStates = {
   derived_节点到父节点的映射: Record<ViewKey, ViewKey | null>;
   // 关联数据
   项目树节点数据: ProjectTreeNodeDataRecord;
-  项目结构树: ProjectStructureTreeDataNode[];
+  项目结构树: ProjectTreeDataNode[];
   所有已经选中的节点: ViewKey[];
   所有展开的节点的key: ViewKey[];
   当前正在编辑的项目树节点的key: ViewKey | null;
@@ -65,9 +65,15 @@ const initialState: ProjectTreeStates = createProjectTreeInitialState();
 export const createProjectTreeAsyncActions = (_slices: AppSlices) => {
   return {};
   // return {
-  //   更新并更新: createAsyncThunk(
+  //   更新并更新: createAppAsyncThunk(
   //     'nodes/更新节点并清空输入',
-  //     async (payload: { nodeKey: ViewKey; title: string }, { dispatch }) => {
+  //     async (
+  //       payload: {
+  //         nodeKey: ViewKey;
+  //         title: string;
+  //       },
+  //       { dispatch, getState },
+  //     ) => {
   //       dispatch(
   //         slices.projectTree.actions.更新节点的数据({
   //           key: payload.nodeKey,
@@ -122,7 +128,7 @@ export const createProjectTreeSlice = () => {
       更新项目节点树: (
         state,
         action: PayloadAction<{
-          结构树: ProjectStructureTreeDataNode[];
+          结构树: ProjectTreeDataNode[];
           节点数据: ProjectTreeNodeDataRecord;
         }>,
       ) => {
@@ -167,7 +173,7 @@ export const createProjectTreeSlice = () => {
         state,
         action: PayloadAction<{
           key: ViewKey;
-          data: Partial<ProjectTreeNodeDataRecordItemBase>;
+          data: Partial<ProjectTreeNodeDataBase>;
         }>,
       ) => {
         const { key, data } = action.payload;
@@ -268,7 +274,7 @@ export const createProjectTreeSlice = () => {
       同步删除的节点的关联状态: (
         state,
         action: PayloadAction<{
-          node: TreeNode<ProjectStructureTreeDataNode>;
+          node: TreeNode<ProjectTreeDataNode>;
         }>,
       ) => {
         const { node } = action.payload;
@@ -367,7 +373,7 @@ export const createProjectTreeSlice = () => {
         state,
         action: PayloadAction<{
           parentKey: ViewKey | null;
-          node: ProjectStructureTreeDataNode;
+          node: ProjectTreeDataNode;
           index: number;
           recordItem: ProjectTreeNodeDataRecord[number];
         }>,
@@ -398,7 +404,7 @@ export const createProjectTreeSlice = () => {
         state,
         action: PayloadAction<{
           parentKey: ViewKey | null;
-          node: ProjectStructureTreeDataNode;
+          node: ProjectTreeDataNode;
           index: number;
           recordItem: ProjectTreeNodeDataRecord[number];
         }>,
@@ -419,7 +425,7 @@ export const createProjectTreeSlice = () => {
         state,
         action: PayloadAction<{
           parentKey: ViewKey | null;
-          node: ProjectStructureTreeDataNode;
+          node: ProjectTreeDataNode;
           index: number;
           recordItem: ProjectTreeNodeDataRecord[number];
         }>,
