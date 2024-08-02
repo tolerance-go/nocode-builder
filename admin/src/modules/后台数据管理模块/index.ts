@@ -1,7 +1,11 @@
 import {
+  BluemapProjectModelRecord,
+  DataTableProjectModelRecord,
+  ProjectDetailModelRecord,
   ProjectGroupModelRecord,
   ProjectModelRecord,
   UserModelRecord,
+  ViewProjectModelRecord,
 } from '@/_gen/model-records';
 import { EngineBase, ModuleBase } from '@/base';
 import { OperationType } from '@/common/controllers';
@@ -24,12 +28,23 @@ type TransactionFunction = (tables: {
   用户表模块实例: 用户表模块;
   项目表模块实例: 项目表模块;
   项目组表模块实例: 项目组表模块;
+  蓝图项目详情表模块实例: 蓝图项目详情表模块;
+  视图项目详情表模块实例: 视图项目详情表模块;
+  数据表项目详情表模块实例: 数据表项目详情表模块;
+  项目详情表模块实例: 项目详情表模块;
 }) => Promise<void> | void;
 
 interface Operation {
   tableName: TableName;
   operation: OperationType;
-  record?: UserModelRecord | ProjectModelRecord | ProjectGroupModelRecord;
+  record?:
+    | UserModelRecord
+    | ProjectModelRecord
+    | ProjectGroupModelRecord
+    | ProjectDetailModelRecord
+    | ViewProjectModelRecord
+    | DataTableProjectModelRecord
+    | BluemapProjectModelRecord;
 }
 
 export class 后台数据管理模块 extends ModuleBase {
@@ -56,45 +71,43 @@ export class 后台数据管理模块 extends ModuleBase {
     return new Promise<void>((resolve, reject) => {
       this.transactionQueue = this.transactionQueue
         .then(async () => {
-          const 用户表模块实例 = this.getDependModule(用户表模块);
-          const 项目表模块实例 = this.getDependModule(项目表模块);
-          const 项目组表模块实例 = this.getDependModule(项目组表模块);
+          const {
+            用户表模块实例,
+            项目表模块实例,
+            项目组表模块实例,
+            蓝图项目详情表模块实例,
+            视图项目详情表模块实例,
+            数据表项目详情表模块实例,
+            项目详情表模块实例,
+          } = this.getTableInstances();
 
           const 操作收集器: Operation[] = [];
-
-          const 用户表模块监听器 = (
-            operation: OperationType,
-            record?: UserModelRecord,
-          ) => {
-            操作收集器.push({ tableName: TableName.User, operation, record });
-          };
-          const 项目表模块监听器 = (
-            operation: OperationType,
-            record?: ProjectModelRecord,
-          ) => {
-            操作收集器.push({
-              tableName: TableName.Project,
-              operation,
-              record,
-            });
-          };
-          const 项目组表模块监听器 = (
-            operation: OperationType,
-            record?: ProjectGroupModelRecord,
-          ) => {
-            操作收集器.push({
-              tableName: TableName.ProjectGroup,
-              operation,
-              record,
-            });
-          };
+          const listeners = this.createListeners(操作收集器);
 
           const 用户表模块实例TableUnregister =
-            用户表模块实例.table.registerListener(用户表模块监听器);
+            用户表模块实例.table.registerListener(listeners.用户表模块监听器);
           const 项目表模块实例TableUnregister =
-            项目表模块实例.table.registerListener(项目表模块监听器);
+            项目表模块实例.table.registerListener(listeners.项目表模块监听器);
           const 项目组表模块实例TableUnregister =
-            项目组表模块实例.table.registerListener(项目组表模块监听器);
+            项目组表模块实例.table.registerListener(
+              listeners.项目组表模块监听器,
+            );
+          const 蓝图项目详情表模块实例TableUnregister =
+            蓝图项目详情表模块实例.table.registerListener(
+              listeners.蓝图项目详情表监听器,
+            );
+          const 视图项目详情表模块实例TableUnregister =
+            视图项目详情表模块实例.table.registerListener(
+              listeners.视图项目详情表监听器,
+            );
+          const 数据表项目详情表模块实例TableUnregister =
+            数据表项目详情表模块实例.table.registerListener(
+              listeners.数据表项目详情表监听器,
+            );
+          const 项目详情表模块实例TableUnregister =
+            项目详情表模块实例.table.registerListener(
+              listeners.项目详情表监听器,
+            );
 
           try {
             await 用户表模块实例.table.$transaction(async () => {
@@ -104,6 +117,10 @@ export class 后台数据管理模块 extends ModuleBase {
                     用户表模块实例,
                     项目表模块实例,
                     项目组表模块实例,
+                    蓝图项目详情表模块实例,
+                    视图项目详情表模块实例,
+                    数据表项目详情表模块实例,
+                    项目详情表模块实例,
                   });
                 });
               });
@@ -148,6 +165,10 @@ export class 后台数据管理模块 extends ModuleBase {
             用户表模块实例TableUnregister();
             项目表模块实例TableUnregister();
             项目组表模块实例TableUnregister();
+            蓝图项目详情表模块实例TableUnregister();
+            视图项目详情表模块实例TableUnregister();
+            数据表项目详情表模块实例TableUnregister();
+            项目详情表模块实例TableUnregister();
           }
         })
         .catch((error) => {
@@ -166,5 +187,103 @@ export class 后台数据管理模块 extends ModuleBase {
       数据表项目详情表模块.getInstance(this.engine),
       项目详情表模块.getInstance(this.engine),
     );
+  }
+
+  private getTableInstances() {
+    const 用户表模块实例 = this.getDependModule(用户表模块);
+    const 项目表模块实例 = this.getDependModule(项目表模块);
+    const 项目组表模块实例 = this.getDependModule(项目组表模块);
+    const 蓝图项目详情表模块实例 = this.getDependModule(蓝图项目详情表模块);
+    const 视图项目详情表模块实例 = this.getDependModule(视图项目详情表模块);
+    const 数据表项目详情表模块实例 = this.getDependModule(数据表项目详情表模块);
+    const 项目详情表模块实例 = this.getDependModule(项目详情表模块);
+    return {
+      用户表模块实例,
+      项目表模块实例,
+      项目组表模块实例,
+      蓝图项目详情表模块实例,
+      视图项目详情表模块实例,
+      数据表项目详情表模块实例,
+      项目详情表模块实例,
+    };
+  }
+
+  private createListeners(操作收集器: Operation[]) {
+    const 用户表模块监听器 = (
+      operation: OperationType,
+      record?: UserModelRecord,
+    ) => {
+      操作收集器.push({ tableName: TableName.User, operation, record });
+    };
+    const 项目表模块监听器 = (
+      operation: OperationType,
+      record?: ProjectModelRecord,
+    ) => {
+      操作收集器.push({
+        tableName: TableName.Project,
+        operation,
+        record,
+      });
+    };
+    const 项目组表模块监听器 = (
+      operation: OperationType,
+      record?: ProjectGroupModelRecord,
+    ) => {
+      操作收集器.push({
+        tableName: TableName.ProjectGroup,
+        operation,
+        record,
+      });
+    };
+    const 蓝图项目详情表监听器 = (
+      operation: OperationType,
+      record?: BluemapProjectModelRecord,
+    ) => {
+      操作收集器.push({
+        tableName: TableName.BluemapProject,
+        operation,
+        record,
+      });
+    };
+    const 视图项目详情表监听器 = (
+      operation: OperationType,
+      record?: ViewProjectModelRecord,
+    ) => {
+      操作收集器.push({
+        tableName: TableName.ViewProject,
+        operation,
+        record,
+      });
+    };
+    const 数据表项目详情表监听器 = (
+      operation: OperationType,
+      record?: DataTableProjectModelRecord,
+    ) => {
+      操作收集器.push({
+        tableName: TableName.DataTableProject,
+        operation,
+        record,
+      });
+    };
+    const 项目详情表监听器 = (
+      operation: OperationType,
+      record?: ProjectDetailModelRecord,
+    ) => {
+      操作收集器.push({
+        tableName: TableName.ProjectDetail,
+        operation,
+        record,
+      });
+    };
+
+    return {
+      用户表模块监听器,
+      项目表模块监听器,
+      项目组表模块监听器,
+      蓝图项目详情表监听器,
+      视图项目详情表监听器,
+      数据表项目详情表监听器,
+      项目详情表监听器,
+    };
   }
 }
