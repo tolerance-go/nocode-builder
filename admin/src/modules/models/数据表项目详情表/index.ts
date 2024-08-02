@@ -53,6 +53,20 @@ export class 数据表项目详情表模块 extends ModuleBase {
     window.dataTableProjectTable = this.table;
   }
 
+  addDataTableProject(): ClientDataTableProjectModel {
+    const 用户表模块实例 = this.getDependModule(用户表模块);
+    const ownerId = 用户表模块实例.loginUser.id;
+
+    const record = new ClientDataTableProjectModel({
+      id: this.table.getNextId(),
+      ownerId,
+    });
+
+    this.table.addRecord(record);
+
+    return record;
+  }
+
   protected requireModules(): void {
     super.requireModules(
       事件中心系统.getInstance(this.engine),

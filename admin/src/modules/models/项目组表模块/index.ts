@@ -5,6 +5,7 @@ import { api } from '@/globals';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import { TableName } from '@unocode/common';
 import { 用户表模块 } from '../用户表模块';
+import { TableTransactions } from '@/modules/后台数据管理模块';
 
 export class ClientProjectGroupModel extends ProjectGroupModelRecord {
   static createFromRecord(
@@ -66,18 +67,19 @@ export class 项目组表模块 extends ModuleBase {
     window.projectGroupTable = this.table;
   }
 
-  public removeProjectGroup(id: number): void {
-    this.table.deleteRecord(id);
+  public removeProjectGroup(id: number, txs: TableTransactions): void {
+    txs.项目组表Tx.deleteRecord(id);
   }
 
   public moveProjectGroup(
     id: number,
-    newParentGroupId?: number,
+    newParentGroupId: number | undefined,
+    txs: TableTransactions,
   ): ClientProjectGroupModel {
-    const record = this.table.findRecordOrThrow(id);
+    const record = txs.项目组表Tx.findRecordOrThrow(id);
 
     record.parentGroupId = newParentGroupId;
-    this.table.updateRecord(record);
+    txs.项目组表Tx.updateRecord(record);
 
     return record;
   }
@@ -87,33 +89,37 @@ export class 项目组表模块 extends ModuleBase {
     data: {
       name?: string;
     },
+    txs: TableTransactions,
   ): ClientProjectGroupModel {
-    const record = this.table.findRecordOrThrow(id);
+    const record = txs.项目组表Tx.findRecordOrThrow(id);
 
     if (data.name !== undefined) {
       record.name = data.name;
     }
 
-    this.table.updateRecord(record);
+    txs.项目组表Tx.updateRecord(record);
 
     return record;
   }
 
-  public addProjectGroup(data: {
-    name: string;
-    parentGroupId?: number;
-  }): ClientProjectGroupModel {
+  public addProjectGroup(
+    data: {
+      name: string;
+      parentGroupId?: number;
+    },
+    txs: TableTransactions,
+  ): ClientProjectGroupModel {
     const 用户表模块实例 = this.getDependModule(用户表模块);
     const ownerId = 用户表模块实例.loginUser.id;
 
     const record = new ClientProjectGroupModel({
       ...data,
-      id: this.table.getNextId(),
+      id: txs.项目组表Tx.getNextId(),
       ownerId,
       parentGroupId: data.parentGroupId,
     });
 
-    this.table.addRecord(record);
+    txs.项目组表Tx.addRecord(record);
 
     return record;
   }

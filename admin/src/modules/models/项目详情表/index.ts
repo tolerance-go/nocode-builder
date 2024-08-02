@@ -5,6 +5,11 @@ import { 事件中心系统 } from '@/modules/事件中心系统';
 import { 用户表模块 } from '../用户表模块';
 import { TableName } from '@unocode/common';
 import { api } from '@/globals';
+import { ProjectTypeEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
+import { 视图项目详情表模块 } from '../视图项目详情表';
+import { 蓝图项目详情表模块 } from '../蓝图项目详情表';
+import { 数据表项目详情表模块 } from '../数据表项目详情表';
+import { TableTransactions } from '@/modules/后台数据管理模块';
 
 export class ClientProjectDetailModel extends ProjectDetailModelRecord {
   // 静态方法: 从 ProjectDetailModelRecord 实例创建 ClientProjectDetailModel 实例
@@ -71,10 +76,60 @@ export class 项目详情表模块 extends ModuleBase {
     window.projectDetailTable = this.table;
   }
 
+  public addProjectDetail(
+    {
+      projectType,
+      platformType,
+    }: {
+      projectType: ProjectTypeEnum;
+      platformType: WidgetPlatformTypeEnum | undefined;
+    },
+    txs: TableTransactions,
+  ): ClientProjectDetailModel {
+    const 用户表模块实例 = this.getDependModule(用户表模块);
+    const ownerId = 用户表模块实例.loginUser.id;
+
+    let viewProject;
+    if (projectType === ProjectTypeEnum.View) {
+      if (!platformType) {
+        throw new Error('platformType 不能为空');
+      }
+
+      viewProject = this.getDependModule(视图项目详情表模块).addViewProject({
+        platformType,
+      });
+    }
+
+    let blueMapProject;
+    if (projectType === ProjectTypeEnum.Bluemap) {
+      blueMapProject =
+        this.getDependModule(蓝图项目详情表模块).addBluemapProject();
+    }
+
+    let dataTableProject;
+    if (projectType === ProjectTypeEnum.DataTable) {
+      dataTableProject =
+        this.getDependModule(数据表项目详情表模块).addDataTableProject();
+    }
+
+    const record = new ClientProjectDetailModel({
+      id: txs.项目详情表Tx.getNextId(),
+      ownerId,
+      viewProjectId: viewProject?.id,
+      bluemapProjectId: blueMapProject?.id,
+      dataTableProjectId: dataTableProject?.id,
+    });
+
+    txs.项目详情表Tx.addRecord(record);
+
+    return record;
+  }
+
   protected requireModules(): void {
     super.requireModules(
       事件中心系统.getInstance(this.engine),
       用户表模块.getInstance(this.engine),
+      视图项目详情表模块.getInstance(this.engine),
     );
   }
 

@@ -1,5 +1,4 @@
 import { BluemapProjectModelRecord } from '@/_gen/model-records';
-import { WidgetPlatformTypeEnum } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
 import { api } from '@/globals';
@@ -52,6 +51,20 @@ export class 蓝图项目详情表模块 extends ModuleBase {
     this.table = new Table<ClientBluemapProjectModel>();
 
     window.bluemapProjectTable = this.table;
+  }
+
+  addBluemapProject(): ClientBluemapProjectModel {
+    const 用户表模块实例 = this.getDependModule(用户表模块);
+    const ownerId = 用户表模块实例.loginUser.id;
+
+    const record = new ClientBluemapProjectModel({
+      id: this.table.getNextId(),
+      ownerId,
+    });
+
+    this.table.addRecord(record);
+
+    return record;
   }
 
   protected requireModules(): void {

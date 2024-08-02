@@ -33,7 +33,7 @@ export type ProjectTreeNodeFileData = {
     | BluemapProjectDetail;
 } & ProjectTreeNodeDataBase;
 
-type ProjectDetailBase = {
+export type ProjectDetailBase = {
   type: ProjectTypeEnum;
 };
 

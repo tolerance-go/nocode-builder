@@ -1,6 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { 后台数据管理模块 } from '../../后台数据管理模块';
+import { TableTransactions, 后台数据管理模块 } from '../../后台数据管理模块';
 import {
+  projectDetailIsViewProjectDetail,
   新增操作详情,
   界面状态仓库模块,
   移动操作详情,
@@ -67,60 +68,50 @@ export class 项目树后台同步模块 extends ModuleBase {
       },
     );
 
-    this.getDependModule(后台数据管理模块).$transaction(
-      ({ 项目表模块实例, 项目组表模块实例 }) => {
-        diffs.新增.forEach((addInfo) => {
-          this.handleAddInfo(
-            addInfo,
-            currentState,
-            项目表模块实例,
-            项目组表模块实例,
-          );
-        });
-        diffs.删除.recordItems.forEach((item) => {
-          this.handleDeleteInfo(
-            item,
-            prevState,
-            项目表模块实例,
-            项目组表模块实例,
-          );
-        });
-        diffs.移动.forEach((moveInfo) => {
-          this.handleMoveInfo(
-            moveInfo,
-            currentState,
-            项目表模块实例,
-            项目组表模块实例,
-          );
-        });
+    this.getDependModule(后台数据管理模块).$transaction((txs) => {
+      diffs.新增.forEach((addInfo) => {
+        this.handleAddInfo(addInfo, currentState, txs);
+      });
+      diffs.删除.recordItems.forEach((item) => {
+        this.handleDeleteInfo(item, prevState, txs);
+      });
+      diffs.移动.forEach((moveInfo) => {
+        this.handleMoveInfo(moveInfo, currentState, txs);
+      });
 
-        diffs.更新?.forEach((updateInfo) => {
-          const itemData =
-            currentState.projectTree.项目树节点数据[updateInfo.节点key];
+      diffs.更新?.forEach((updateInfo) => {
+        const itemData =
+          currentState.projectTree.项目树节点数据[updateInfo.节点key];
 
-          if (!itemData.recordId) {
-            throw new Error('无法移动未保存的项目');
-          }
+        if (!itemData.recordId) {
+          throw new Error('无法移动未保存的项目');
+        }
 
-          if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
-            项目表模块实例.updateProjectTitle(itemData.recordId, {
+        if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
+          this.getDependModule(项目表模块).updateProjectTitle(
+            itemData.recordId,
+            {
               name: itemData.title,
-            });
-          } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
-            项目组表模块实例.updateProjectGroup(itemData.recordId, {
+            },
+            txs,
+          );
+        } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
+          this.getDependModule(项目组表模块).updateProjectGroup(
+            itemData.recordId,
+            {
               name: itemData.title,
-            });
-          }
-        });
-      },
-    );
+            },
+            txs,
+          );
+        }
+      });
+    });
   }
 
   private handleAddInfo(
     addInfo: 新增操作详情<ProjectTreeDataNode>,
     currentState: RootState,
-    项目表模块实例: 项目表模块,
-    项目组表模块实例: 项目组表模块,
+    txs: TableTransactions,
   ) {
     addInfo.recordItems.forEach((item) => {
       const parentData = addInfo.父节点key
@@ -128,11 +119,19 @@ export class 项目树后台同步模块 extends ModuleBase {
         : undefined;
       const itemData = currentState.projectTree.项目树节点数据[item.key];
       if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
-        const record = 项目表模块实例.addProject({
-          name: itemData.title,
-          type: itemData.projectType,
-          projectGroupId: parentData?.recordId,
-        });
+        const record = this.getDependModule(项目表模块).addProject(
+          {
+            name: itemData.title,
+            type: itemData.projectType,
+            projectGroupId: parentData?.recordId,
+            platformType: projectDetailIsViewProjectDetail(
+              itemData.projectDetail,
+            )
+              ? itemData.projectDetail.platform
+              : undefined,
+          },
+          txs,
+        );
         this.getDependModule(事件中心系统).emit(
           '项目树后台同步模块/新增项目记录成功',
           {
@@ -141,10 +140,13 @@ export class 项目树后台同步模块 extends ModuleBase {
           },
         );
       } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
-        const record = 项目组表模块实例.addProjectGroup({
-          name: itemData.title,
-          parentGroupId: parentData?.recordId,
-        });
+        const record = this.getDependModule(项目组表模块).addProjectGroup(
+          {
+            name: itemData.title,
+            parentGroupId: parentData?.recordId,
+          },
+          txs,
+        );
         this.getDependModule(事件中心系统).emit(
           '项目树后台同步模块/新增项目组记录成功',
           {
@@ -161,12 +163,7 @@ export class 项目树后台同步模块 extends ModuleBase {
             recordItems: item.children,
             节点keys: item.children.map((child) => child.key),
           };
-          this.handleAddInfo(
-            nestedAddInfo,
-            currentState,
-            项目表模块实例,
-            项目组表模块实例,
-          );
+          this.handleAddInfo(nestedAddInfo, currentState, txs);
         }
       }
     });
@@ -175,8 +172,7 @@ export class 项目树后台同步模块 extends ModuleBase {
   private handleDeleteInfo(
     item: ProjectTreeDataNode,
     prevState: RootState | null,
-    项目表模块实例: 项目表模块,
-    项目组表模块实例: 项目组表模块,
+    txs: TableTransactions,
   ) {
     const itemData = prevState?.projectTree.项目树节点数据[item.key];
 
@@ -189,20 +185,18 @@ export class 项目树后台同步模块 extends ModuleBase {
     }
 
     if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
-      项目表模块实例.removeProject(itemData.recordId);
+      this.getDependModule(项目表模块).removeProject(itemData.recordId, txs);
     } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
-      项目组表模块实例.removeProjectGroup(itemData.recordId);
+      this.getDependModule(项目组表模块).removeProjectGroup(
+        itemData.recordId,
+        txs,
+      );
     }
 
     // 递归处理子节点删除
     if (item.children) {
       item.children.forEach((child) => {
-        this.handleDeleteInfo(
-          child,
-          prevState,
-          项目表模块实例,
-          项目组表模块实例,
-        );
+        this.handleDeleteInfo(child, prevState, txs);
       });
     }
   }
@@ -210,8 +204,7 @@ export class 项目树后台同步模块 extends ModuleBase {
   private handleMoveInfo(
     moveInfo: 移动操作详情<ProjectTreeDataNode>,
     currentState: RootState,
-    项目表模块实例: 项目表模块,
-    项目组表模块实例: 项目组表模块,
+    txs: TableTransactions,
   ) {
     moveInfo.recordItems.forEach((item) => {
       const itemData = currentState.projectTree.项目树节点数据[item.key];
@@ -225,11 +218,16 @@ export class 项目树后台同步模块 extends ModuleBase {
         : undefined;
 
       if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
-        项目表模块实例.moveProject(itemData.recordId, parentData?.recordId);
-      } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
-        项目组表模块实例.moveProjectGroup(
+        this.getDependModule(项目表模块).moveProject(
           itemData.recordId,
           parentData?.recordId,
+          txs,
+        );
+      } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
+        this.getDependModule(项目组表模块).moveProjectGroup(
+          itemData.recordId,
+          parentData?.recordId,
+          txs,
         );
       }
 
@@ -241,12 +239,7 @@ export class 项目树后台同步模块 extends ModuleBase {
           index: 0,
           recordItems: item.children,
         };
-        this.handleMoveInfo(
-          nestedMoveInfo,
-          currentState,
-          项目表模块实例,
-          项目组表模块实例,
-        );
+        this.handleMoveInfo(nestedMoveInfo, currentState, txs);
       }
     });
   }

@@ -1,11 +1,13 @@
 import { ProjectModelRecord } from '@/_gen/model-records';
-import { ProjectTypeEnum } from '@/_gen/models';
+import { ProjectTypeEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
-import { 事件中心系统 } from '@/modules/事件中心系统';
-import { 用户表模块 } from '../用户表模块';
-import { TableName } from '@unocode/common';
 import { api } from '@/globals';
+import { 事件中心系统 } from '@/modules/事件中心系统';
+import { TableTransactions } from '@/modules/后台数据管理模块';
+import { TableName } from '@unocode/common';
+import { 用户表模块 } from '../用户表模块';
+import { 项目详情表模块 } from '../项目详情表';
 
 export class ClientProjectModel extends ProjectModelRecord {
   // 静态方法: 从 ProjectModelRecord 实例创建 ClientProjectModel 实例
@@ -74,18 +76,19 @@ export class 项目表模块 extends ModuleBase {
     window.projectTable = this.table;
   }
 
-  public removeProject(id: number): void {
-    this.table.deleteRecord(id);
+  public removeProject(id: number, txs: TableTransactions): void {
+    txs.项目组表Tx.deleteRecord(id);
   }
 
   public moveProject(
     id: number,
-    newProjectGroupId?: number,
+    newProjectGroupId: number | undefined,
+    txs: TableTransactions,
   ): ClientProjectModel {
-    const record = this.table.findRecordOrThrow(id);
+    const record = txs.项目表Tx.findRecordOrThrow(id);
 
     record.projectGroupId = newProjectGroupId;
-    this.table.updateRecord(record);
+    txs.项目表Tx.updateRecord(record);
 
     return record;
   }
@@ -95,36 +98,54 @@ export class 项目表模块 extends ModuleBase {
     data: {
       name?: string;
     },
+    txs: TableTransactions,
   ): ClientProjectModel {
-    const record = this.table.findRecordOrThrow(id);
+    const record = txs.项目表Tx.findRecordOrThrow(id);
 
     if (data.name !== undefined) {
       record.name = data.name;
     }
 
-    this.table.updateRecord(record);
+    txs.项目表Tx.updateRecord(record);
 
     return record;
   }
 
-  public addProject(data: {
-    name: string;
-    projectDetailId: number;
-    projectGroupId?: number;
-    type: ProjectTypeEnum;
-  }): ClientProjectModel {
+  public addProject(
+    {
+      platformType,
+      name,
+      projectGroupId,
+      type,
+    }: {
+      name: string;
+      projectGroupId: number | undefined;
+      type: ProjectTypeEnum;
+      platformType: WidgetPlatformTypeEnum | undefined;
+    },
+    txs: TableTransactions,
+  ): ClientProjectModel {
     const 用户表模块实例 = this.getDependModule(用户表模块);
     const ownerId = 用户表模块实例.loginUser.id;
 
+    const projectDetail = this.getDependModule(项目详情表模块).addProjectDetail(
+      {
+        projectType: type,
+        platformType,
+      },
+      txs,
+    );
+
     const record = new ClientProjectModel({
-      ...data,
-      id: this.table.getNextId(),
+      name,
+      type,
+      id: txs.项目表Tx.getNextId(),
       ownerId,
-      projectGroupId: data.projectGroupId,
-      projectDetailId: data.projectDetailId,
+      projectGroupId,
+      projectDetailId: projectDetail.id,
     });
 
-    this.table.addRecord(record);
+    txs.项目表Tx.addRecord(record);
 
     return record;
   }
@@ -133,6 +154,7 @@ export class 项目表模块 extends ModuleBase {
     super.requireModules(
       事件中心系统.getInstance(this.engine),
       用户表模块.getInstance(this.engine),
+      项目详情表模块.getInstance(this.engine),
     );
   }
 

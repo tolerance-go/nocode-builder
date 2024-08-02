@@ -8,27 +8,38 @@ import {
   ViewProjectModelRecord,
 } from '@/_gen/model-records';
 import { EngineBase, ModuleBase } from '@/base';
-import { OperationType } from '@/common/controllers';
+import { OperationType, TxTable } from '@/common/controllers';
 import { api } from '@/globals';
 import { TableName } from '@unocode/common';
-import { 数据表项目详情表模块 } from '../models/数据表项目详情表';
+import {
+  ClientDataTableProjectModel,
+  数据表项目详情表模块,
+} from '../models/数据表项目详情表';
 import { 用户表模块 } from '../models/用户表模块';
-import { 蓝图项目详情表模块 } from '../models/蓝图项目详情表';
-import { 视图项目详情表模块 } from '../models/视图项目详情表';
-import { 项目组表模块 } from '../models/项目组表模块';
-import { 项目表模块 } from '../models/项目表模块';
-import { 项目详情表模块 } from '../models/项目详情表';
+import {
+  ClientBluemapProjectModel,
+  蓝图项目详情表模块,
+} from '../models/蓝图项目详情表';
+import {
+  ClientViewProjectModel,
+  视图项目详情表模块,
+} from '../models/视图项目详情表';
+import { ClientProjectGroupModel, 项目组表模块 } from '../models/项目组表模块';
+import { ClientProjectModel, 项目表模块 } from '../models/项目表模块';
+import { ClientProjectDetailModel, 项目详情表模块 } from '../models/项目详情表';
 import { convertDatesToISO } from './utils';
 
-type TransactionFunction = (tables: {
-  用户表模块实例: 用户表模块;
-  项目表模块实例: 项目表模块;
-  项目组表模块实例: 项目组表模块;
-  蓝图项目详情表模块实例: 蓝图项目详情表模块;
-  视图项目详情表模块实例: 视图项目详情表模块;
-  数据表项目详情表模块实例: 数据表项目详情表模块;
-  项目详情表模块实例: 项目详情表模块;
-}) => Promise<void> | void;
+export type TableTransactions = {
+  用户表Tx: TxTable<UserModelRecord>;
+  项目表Tx: TxTable<ClientProjectModel>;
+  项目组表Tx: TxTable<ClientProjectGroupModel>;
+  蓝图项目详情表Tx: TxTable<ClientBluemapProjectModel>;
+  视图项目详情表Tx: TxTable<ClientViewProjectModel>;
+  数据表项目详情表Tx: TxTable<ClientDataTableProjectModel>;
+  项目详情表Tx: TxTable<ClientProjectDetailModel>;
+};
+
+type TransactionFunction = (txs: TableTransactions) => Promise<void> | void;
 
 interface Operation {
   tableName: TableName;
@@ -106,33 +117,37 @@ export class 后台数据管理模块 extends ModuleBase {
             );
 
           try {
-            await 用户表模块实例.table.$transaction(async () => {
-              await 项目表模块实例.table.$transaction(async () => {
-                await 项目组表模块实例.table.$transaction(async () => {
-                  await 蓝图项目详情表模块实例.table.$transaction(async () => {
-                    await 视图项目详情表模块实例.table.$transaction(
-                      async () => {
-                        await 数据表项目详情表模块实例.table.$transaction(
-                          async () => {
-                            await 项目详情表模块实例.table.$transaction(
-                              async () => {
-                                await fn({
-                                  用户表模块实例,
-                                  项目表模块实例,
-                                  项目组表模块实例,
-                                  蓝图项目详情表模块实例,
-                                  视图项目详情表模块实例,
-                                  数据表项目详情表模块实例,
-                                  项目详情表模块实例,
-                                });
+            await 用户表模块实例.table.$transaction(async (用户表Tx) => {
+              await 项目表模块实例.table.$transaction(async (项目表Tx) => {
+                await 项目组表模块实例.table.$transaction(
+                  async (项目组表Tx) => {
+                    await 蓝图项目详情表模块实例.table.$transaction(
+                      async (蓝图项目详情表Tx) => {
+                        await 视图项目详情表模块实例.table.$transaction(
+                          async (视图项目详情表Tx) => {
+                            await 数据表项目详情表模块实例.table.$transaction(
+                              async (数据表项目详情表Tx) => {
+                                await 项目详情表模块实例.table.$transaction(
+                                  async (项目详情表Tx) => {
+                                    await fn({
+                                      用户表Tx,
+                                      项目表Tx,
+                                      项目组表Tx,
+                                      蓝图项目详情表Tx,
+                                      视图项目详情表Tx,
+                                      数据表项目详情表Tx,
+                                      项目详情表Tx,
+                                    });
+                                  },
+                                );
                               },
                             );
                           },
                         );
                       },
                     );
-                  });
-                });
+                  },
+                );
               });
             });
 
