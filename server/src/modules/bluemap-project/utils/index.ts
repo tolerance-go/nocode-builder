@@ -6,6 +6,7 @@ export function toBluemapProjectDto(
 ): BluemapProjectResponseDto {
   return {
     id: record.id,
+    ownerId: record.ownerId,
     createdAt: record.createdAt.toISOString(),
     updatedAt: record.updatedAt.toISOString(),
   };

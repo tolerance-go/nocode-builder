@@ -8,6 +8,7 @@ export function toProjectDetailDto(
     viewProjectId: record.viewProjectId ?? undefined,
     dataTableProjectId: record.dataTableProjectId ?? undefined,
     bluemapProjectId: record.bluemapProjectId ?? undefined,
+    ownerId: record.ownerId,
     id: record.id,
     createdAt: record.createdAt.toISOString(),
     updatedAt: record.updatedAt.toISOString(),

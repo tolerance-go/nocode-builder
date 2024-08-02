@@ -8,5 +8,6 @@ export function toDataTableProjectDto(
     id: record.id,
     createdAt: record.createdAt.toISOString(),
     updatedAt: record.updatedAt.toISOString(),
+    ownerId: record.ownerId,
   };
 }

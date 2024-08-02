@@ -67,6 +67,10 @@ export class DataTableProjectResponseDto {
   id: number;
 
   @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
   @IsDateString()
   createdAt: string;
 

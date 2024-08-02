@@ -215,4 +215,104 @@ export const apiUrls = {
     route: '/widgetSlotAssignments/bulk-create',
     path: '/widgetSlotAssignments/bulk-create',
   },
+  ProjectDetailController_getProjectDetail: {
+    method: 'get',
+    route: '/projectDetails/detail/{id}',
+    path: '/projectDetails/detail/${id}',
+  },
+  ProjectDetailController_getProjectDetails: {
+    method: 'get',
+    route: '/projectDetails',
+    path: '/projectDetails',
+  },
+  ProjectDetailController_createProjectDetail: {
+    method: 'post',
+    route: '/projectDetails',
+    path: '/projectDetails',
+  },
+  ProjectDetailController_updateProjectDetail: {
+    method: 'patch',
+    route: '/projectDetails/{id}',
+    path: '/projectDetails/${id}',
+  },
+  ProjectDetailController_deleteProjectDetail: {
+    method: 'delete',
+    route: '/projectDetails/{id}',
+    path: '/projectDetails/${id}',
+  },
+  ViewProjectController_getViewProject: {
+    method: 'get',
+    route: '/viewProjects/detail/{id}',
+    path: '/viewProjects/detail/${id}',
+  },
+  ViewProjectController_getViewProjects: {
+    method: 'get',
+    route: '/viewProjects',
+    path: '/viewProjects',
+  },
+  ViewProjectController_createViewProject: {
+    method: 'post',
+    route: '/viewProjects',
+    path: '/viewProjects',
+  },
+  ViewProjectController_updateViewProject: {
+    method: 'patch',
+    route: '/viewProjects/{id}',
+    path: '/viewProjects/${id}',
+  },
+  ViewProjectController_deleteViewProject: {
+    method: 'delete',
+    route: '/viewProjects/{id}',
+    path: '/viewProjects/${id}',
+  },
+  DataTableProjectController_getDataTableProject: {
+    method: 'get',
+    route: '/dataTableProjects/detail/{id}',
+    path: '/dataTableProjects/detail/${id}',
+  },
+  DataTableProjectController_getDataTableProjects: {
+    method: 'get',
+    route: '/dataTableProjects',
+    path: '/dataTableProjects',
+  },
+  DataTableProjectController_createDataTableProject: {
+    method: 'post',
+    route: '/dataTableProjects',
+    path: '/dataTableProjects',
+  },
+  DataTableProjectController_updateDataTableProject: {
+    method: 'patch',
+    route: '/dataTableProjects/{id}',
+    path: '/dataTableProjects/${id}',
+  },
+  DataTableProjectController_deleteDataTableProject: {
+    method: 'delete',
+    route: '/dataTableProjects/{id}',
+    path: '/dataTableProjects/${id}',
+  },
+  BluemapProjectController_getBluemapProject: {
+    method: 'get',
+    route: '/bluemapProjects/detail/{id}',
+    path: '/bluemapProjects/detail/${id}',
+  },
+  BluemapProjectController_getBluemapProjects: {
+    method: 'get',
+    route: '/bluemapProjects',
+    path: '/bluemapProjects',
+  },
+  BluemapProjectController_createBluemapProject: {
+    method: 'post',
+    route: '/bluemapProjects',
+    path: '/bluemapProjects',
+  },
+  BluemapProjectController_updateBluemapProject: {
+    method: 'patch',
+    route: '/bluemapProjects/{id}',
+    path: '/bluemapProjects/${id}',
+  },
+  BluemapProjectController_deleteBluemapProject: {
+    method: 'delete',
+    route: '/bluemapProjects/{id}',
+    path: '/bluemapProjects/${id}',
+  },
 } as const;

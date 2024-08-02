@@ -80,6 +80,10 @@ export class ProjectDetailResponseDto {
 
   @ApiProperty({})
   @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsInt()
   viewProjectId?: number;
 
   @ApiProperty({})

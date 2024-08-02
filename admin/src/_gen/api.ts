@@ -42,7 +42,14 @@ export interface OperationRecordUnionDto {
 }
 
 export interface OperationDto {
-  tableName: 'User' | 'Project' | 'ProjectGroup';
+  tableName:
+    | 'User'
+    | 'Project'
+    | 'ProjectGroup'
+    | 'ProjectDetail'
+    | 'ViewProject'
+    | 'DataTableProject'
+    | 'BluemapProject';
   operation: 'clearRecords' | 'addRecord' | 'updateRecord' | 'deleteRecord';
   record?: OperationRecordUnionDto;
 }
@@ -266,6 +273,80 @@ export interface WidgetSlotAssignmentCreateManyDto {
 }
 
 export type WidgetSlotAssignmentUpdateDto = Record<string, unknown>;
+
+export interface ProjectDetailResponseDto {
+  id: number;
+  ownerId: number;
+  viewProjectId: number;
+  dataTableProjectId: number;
+  bluemapProjectId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ProjectDetailCreateDto {
+  viewProjectId: number;
+  dataTableProjectId: number;
+  bluemapProjectId: number;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type ProjectDetailUpdateDto = Record<string, unknown>;
+
+export interface ViewProjectResponseDto {
+  id: number;
+  ownerId: number;
+  platformType:
+    | 'PcWeb'
+    | 'MobileWeb'
+    | 'MiniProgram'
+    | 'NativeMobile'
+    | 'DesktopClient';
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ViewProjectCreateDto {
+  platformType:
+    | 'PcWeb'
+    | 'MobileWeb'
+    | 'MiniProgram'
+    | 'NativeMobile'
+    | 'DesktopClient';
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type ViewProjectUpdateDto = Record<string, unknown>;
+
+export interface DataTableProjectResponseDto {
+  id: number;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DataTableProjectCreateDto {
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type DataTableProjectUpdateDto = Record<string, unknown>;
+
+export interface BluemapProjectResponseDto {
+  id: number;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BluemapProjectCreateDto {
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type BluemapProjectUpdateDto = Record<string, unknown>;
 
 import type {
   AxiosInstance,
@@ -1195,6 +1276,370 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         method: 'POST',
         body: data,
         type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+  };
+  projectDetails = {
+    /**
+     * No description
+     *
+     * @name ProjectDetailControllerGetProjectDetail
+     * @request GET:/projectDetails/detail/{id}
+     */
+    getProjectDetail: (id: string, params: RequestParams = {}) =>
+      this.request<ProjectDetailResponseDto, unknown>({
+        path: `/projectDetails/detail/${id}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name ProjectDetailControllerGetProjectDetails
+     * @request GET:/projectDetails
+     */
+    getProjectDetails: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ProjectDetailResponseDto[], unknown>({
+        path: `/projectDetails`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name ProjectDetailControllerCreateProjectDetail
+     * @request POST:/projectDetails
+     */
+    createProjectDetail: (
+      data: ProjectDetailCreateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ProjectDetailResponseDto, unknown>({
+        path: `/projectDetails`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name ProjectDetailControllerUpdateProjectDetail
+     * @request PATCH:/projectDetails/{id}
+     */
+    updateProjectDetail: (
+      id: string,
+      data: ProjectDetailUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ProjectDetailResponseDto, unknown>({
+        path: `/projectDetails/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name ProjectDetailControllerDeleteProjectDetail
+     * @request DELETE:/projectDetails/{id}
+     */
+    deleteProjectDetail: (id: string, params: RequestParams = {}) =>
+      this.request<ProjectDetailResponseDto, unknown>({
+        path: `/projectDetails/${id}`,
+        method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+  };
+  viewProjects = {
+    /**
+     * No description
+     *
+     * @name ViewProjectControllerGetViewProject
+     * @request GET:/viewProjects/detail/{id}
+     */
+    getViewProject: (id: string, params: RequestParams = {}) =>
+      this.request<ViewProjectResponseDto, unknown>({
+        path: `/viewProjects/detail/${id}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name ViewProjectControllerGetViewProjects
+     * @request GET:/viewProjects
+     */
+    getViewProjects: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<ViewProjectResponseDto[], unknown>({
+        path: `/viewProjects`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name ViewProjectControllerCreateViewProject
+     * @request POST:/viewProjects
+     */
+    createViewProject: (
+      data: ViewProjectCreateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ViewProjectResponseDto, unknown>({
+        path: `/viewProjects`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name ViewProjectControllerUpdateViewProject
+     * @request PATCH:/viewProjects/{id}
+     */
+    updateViewProject: (
+      id: string,
+      data: ViewProjectUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<ViewProjectResponseDto, unknown>({
+        path: `/viewProjects/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name ViewProjectControllerDeleteViewProject
+     * @request DELETE:/viewProjects/{id}
+     */
+    deleteViewProject: (id: string, params: RequestParams = {}) =>
+      this.request<ViewProjectResponseDto, unknown>({
+        path: `/viewProjects/${id}`,
+        method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+  };
+  dataTableProjects = {
+    /**
+     * No description
+     *
+     * @name DataTableProjectControllerGetDataTableProject
+     * @request GET:/dataTableProjects/detail/{id}
+     */
+    getDataTableProject: (id: string, params: RequestParams = {}) =>
+      this.request<DataTableProjectResponseDto, unknown>({
+        path: `/dataTableProjects/detail/${id}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name DataTableProjectControllerGetDataTableProjects
+     * @request GET:/dataTableProjects
+     */
+    getDataTableProjects: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<DataTableProjectResponseDto[], unknown>({
+        path: `/dataTableProjects`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name DataTableProjectControllerCreateDataTableProject
+     * @request POST:/dataTableProjects
+     */
+    createDataTableProject: (
+      data: DataTableProjectCreateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<DataTableProjectResponseDto, unknown>({
+        path: `/dataTableProjects`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name DataTableProjectControllerUpdateDataTableProject
+     * @request PATCH:/dataTableProjects/{id}
+     */
+    updateDataTableProject: (
+      id: string,
+      data: DataTableProjectUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<DataTableProjectResponseDto, unknown>({
+        path: `/dataTableProjects/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name DataTableProjectControllerDeleteDataTableProject
+     * @request DELETE:/dataTableProjects/{id}
+     */
+    deleteDataTableProject: (id: string, params: RequestParams = {}) =>
+      this.request<DataTableProjectResponseDto, unknown>({
+        path: `/dataTableProjects/${id}`,
+        method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+  };
+  bluemapProjects = {
+    /**
+     * No description
+     *
+     * @name BluemapProjectControllerGetBluemapProject
+     * @request GET:/bluemapProjects/detail/{id}
+     */
+    getBluemapProject: (id: string, params: RequestParams = {}) =>
+      this.request<BluemapProjectResponseDto, unknown>({
+        path: `/bluemapProjects/detail/${id}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name BluemapProjectControllerGetBluemapProjects
+     * @request GET:/bluemapProjects
+     */
+    getBluemapProjects: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<BluemapProjectResponseDto[], unknown>({
+        path: `/bluemapProjects`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name BluemapProjectControllerCreateBluemapProject
+     * @request POST:/bluemapProjects
+     */
+    createBluemapProject: (
+      data: BluemapProjectCreateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<BluemapProjectResponseDto, unknown>({
+        path: `/bluemapProjects`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name BluemapProjectControllerUpdateBluemapProject
+     * @request PATCH:/bluemapProjects/{id}
+     */
+    updateBluemapProject: (
+      id: string,
+      data: BluemapProjectUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<BluemapProjectResponseDto, unknown>({
+        path: `/bluemapProjects/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name BluemapProjectControllerDeleteBluemapProject
+     * @request DELETE:/bluemapProjects/{id}
+     */
+    deleteBluemapProject: (id: string, params: RequestParams = {}) =>
+      this.request<BluemapProjectResponseDto, unknown>({
+        path: `/bluemapProjects/${id}`,
+        method: 'DELETE',
         format: 'json',
         ...params,
       }),

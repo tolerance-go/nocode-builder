@@ -15,6 +15,10 @@ import {
   convertProjectGroupDatesToISO,
   convertUserDatesToISO,
 } from './utils';
+import { 蓝图项目详情表模块 } from '../models/蓝图项目详情表';
+import { 视图项目详情表模块 } from '../models/视图项目详情表';
+import { 数据表项目详情表模块 } from '../models/数据表项目详情表';
+import { 项目详情表模块 } from '../models/项目详情表';
 
 type TransactionFunction = (tables: {
   用户表模块实例: 用户表模块;
@@ -55,6 +59,14 @@ export class 后台数据管理模块 extends ModuleBase {
           const 用户表模块实例 = this.getDependModule(用户表模块);
           const 项目表模块实例 = this.getDependModule(项目表模块);
           const 项目组表模块实例 = this.getDependModule(项目组表模块);
+
+          const 蓝图项目详情表模块实例 =
+            this.getDependModule(蓝图项目详情表模块);
+          const 视图项目详情表模块实例 =
+            this.getDependModule(视图项目详情表模块);
+          const 数据表项目详情表模块实例 =
+            this.getDependModule(数据表项目详情表模块);
+          const 项目详情表模块实例 = this.getDependModule(项目详情表模块);
 
           const 操作收集器: Operation[] = [];
 
@@ -157,6 +169,10 @@ export class 后台数据管理模块 extends ModuleBase {
       用户表模块.getInstance(this.engine),
       项目表模块.getInstance(this.engine),
       项目组表模块.getInstance(this.engine),
+      蓝图项目详情表模块.getInstance(this.engine),
+      视图项目详情表模块.getInstance(this.engine),
+      数据表项目详情表模块.getInstance(this.engine),
+      项目详情表模块.getInstance(this.engine),
     );
   }
 }

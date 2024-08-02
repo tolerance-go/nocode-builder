@@ -1,5 +1,5 @@
 import { ViewProjectModelRecord } from '@/_gen/model-records';
-import { ViewProjectTypeEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
+import { WidgetPlatformTypeEnum } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
 import { Table } from '@/common/controllers';
 import { api } from '@/globals';
@@ -81,11 +81,8 @@ export class 视图项目详情表模块 extends ModuleBase {
       viewProjects.map((viewProject) =>
         ClientViewProjectModel.createFromRecord({
           id: viewProject.id,
-          viewProjectDetailId: viewProject.viewProjectDetailId,
-          name: viewProject.name,
           ownerId: viewProject.ownerId,
-          viewProjectGroupId: viewProject.viewProjectGroupId,
-          type: this.toViewProjectTypeEnum(viewProject.type),
+          platformType: this.toWidgetPlatformTypeEnum(viewProject.platformType),
           createdAt: new Date(viewProject.createdAt),
           updatedAt: new Date(viewProject.updatedAt),
         }),
@@ -93,11 +90,13 @@ export class 视图项目详情表模块 extends ModuleBase {
     );
   }
 
-  private toViewProjectTypeEnum(type: string): ViewProjectTypeEnum {
-    if (type in ViewProjectTypeEnum) {
-      return ViewProjectTypeEnum[type as keyof typeof ViewProjectTypeEnum];
+  private toWidgetPlatformTypeEnum(type: string): WidgetPlatformTypeEnum {
+    if (type in WidgetPlatformTypeEnum) {
+      return WidgetPlatformTypeEnum[
+        type as keyof typeof WidgetPlatformTypeEnum
+      ];
     }
 
-    throw new Error(`Unknown ViewProjectType: ${type}`);
+    throw new Error(`Unknown WidgetPlatformTypeEnum: ${type}`);
   }
 }

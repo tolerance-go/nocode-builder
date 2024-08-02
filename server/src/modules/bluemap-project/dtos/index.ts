@@ -67,6 +67,10 @@ export class BluemapProjectResponseDto {
   id: number;
 
   @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
   @IsDateString()
   createdAt: string;
 

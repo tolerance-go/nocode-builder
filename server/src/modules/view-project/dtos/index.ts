@@ -74,6 +74,10 @@ export class ViewProjectResponseDto {
   @IsInt()
   id: number;
 
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
   @ApiProperty({
     enum: WidgetPlatformType,
   })
