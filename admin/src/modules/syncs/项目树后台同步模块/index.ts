@@ -1,19 +1,19 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { 后台数据管理模块 } from '../后台数据管理模块';
+import { 后台数据管理模块 } from '../../后台数据管理模块';
 import {
   新增操作详情,
   界面状态仓库模块,
   移动操作详情,
-} from '../界面状态仓库模块';
+} from '../../界面状态仓库模块';
 import {
   compareTrees,
   DirectoryTreeNodeTypeEnum,
   ProjectTreeDataNode,
   RootState,
-} from '../界面状态仓库模块';
-import { 事件中心系统 } from '../事件中心系统';
-import { 项目表模块 } from '../models/项目表模块';
-import { 项目组表模块 } from '../models/项目组表模块';
+} from '../../界面状态仓库模块';
+import { 事件中心系统 } from '../../事件中心系统';
+import { 项目表模块 } from '../../models/项目表模块';
+import { 项目组表模块 } from '../../models/项目组表模块';
 
 export class 项目树后台同步模块 extends ModuleBase {
   private static instance: 项目树后台同步模块;
