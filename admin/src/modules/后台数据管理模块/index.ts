@@ -60,14 +60,6 @@ export class 后台数据管理模块 extends ModuleBase {
           const 项目表模块实例 = this.getDependModule(项目表模块);
           const 项目组表模块实例 = this.getDependModule(项目组表模块);
 
-          const 蓝图项目详情表模块实例 =
-            this.getDependModule(蓝图项目详情表模块);
-          const 视图项目详情表模块实例 =
-            this.getDependModule(视图项目详情表模块);
-          const 数据表项目详情表模块实例 =
-            this.getDependModule(数据表项目详情表模块);
-          const 项目详情表模块实例 = this.getDependModule(项目详情表模块);
-
           const 操作收集器: Operation[] = [];
 
           const 用户表模块监听器 = (
