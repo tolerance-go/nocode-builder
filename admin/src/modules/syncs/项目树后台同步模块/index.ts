@@ -34,6 +34,8 @@ export class 项目树后台同步模块 extends ModuleBase {
       事件中心系统.getInstance(this.engine),
       后台数据管理模块.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),
+      项目表模块.getInstance(this.engine),
+      项目组表模块.getInstance(this.engine),
     );
   }
 

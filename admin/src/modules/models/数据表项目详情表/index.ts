@@ -5,6 +5,7 @@ import { api } from '@/globals';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import { TableName } from '@unocode/common';
 import { 用户表模块 } from '../用户表模块';
+import { TableTransactions } from '@/modules/后台数据管理模块';
 
 export class ClientDataTableProjectModel extends DataTableProjectModelRecord {
   // 静态方法: 从 DataTableProjectModelRecord 实例创建 ClientDataTableProjectModel 实例
@@ -53,16 +54,16 @@ export class 数据表项目详情表模块 extends ModuleBase {
     window.dataTableProjectTable = this.table;
   }
 
-  addDataTableProject(): ClientDataTableProjectModel {
+  addDataTableProject(txs: TableTransactions): ClientDataTableProjectModel {
     const 用户表模块实例 = this.getDependModule(用户表模块);
     const ownerId = 用户表模块实例.loginUser.id;
 
     const record = new ClientDataTableProjectModel({
-      id: this.table.getNextId(),
+      id: txs.数据表项目详情表Tx.getNextId(),
       ownerId,
     });
 
-    this.table.addRecord(record);
+    txs.数据表项目详情表Tx.addRecord(record);
 
     return record;
   }

@@ -48,6 +48,8 @@ export class 用户表模块 extends ModuleBase {
   table: Table<UserModelRecord>;
   token: string | null;
 
+  private currentUser: UserModelRecord | undefined;
+
   constructor(engine: EngineBase) {
     super(engine);
     this.table = new Table<UserModelRecord>();
@@ -60,7 +62,7 @@ export class 用户表模块 extends ModuleBase {
   }
 
   public get currentLoginUser(): UserModelRecord | undefined {
-    return this.table.findRecordByIndex(0);
+    return this.currentUser;
   }
 
   public get loginUser(): UserModelRecord {
@@ -103,6 +105,9 @@ export class 用户表模块 extends ModuleBase {
       email: user.email,
       isAdmin: user.isAdmin,
     });
+
+    this.currentUser = userInfo;
+
     this.table.addRecord(userInfo);
     this.getDependModule(事件中心系统).emit('用户模型表/获取登录用户信息成功', {
       userInfo,

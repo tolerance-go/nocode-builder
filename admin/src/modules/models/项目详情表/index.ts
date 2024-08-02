@@ -95,21 +95,24 @@ export class 项目详情表模块 extends ModuleBase {
         throw new Error('platformType 不能为空');
       }
 
-      viewProject = this.getDependModule(视图项目详情表模块).addViewProject({
-        platformType,
-      });
+      viewProject = this.getDependModule(视图项目详情表模块).addViewProject(
+        {
+          platformType,
+        },
+        txs,
+      );
     }
 
     let blueMapProject;
     if (projectType === ProjectTypeEnum.Bluemap) {
       blueMapProject =
-        this.getDependModule(蓝图项目详情表模块).addBluemapProject();
+        this.getDependModule(蓝图项目详情表模块).addBluemapProject(txs);
     }
 
     let dataTableProject;
     if (projectType === ProjectTypeEnum.DataTable) {
       dataTableProject =
-        this.getDependModule(数据表项目详情表模块).addDataTableProject();
+        this.getDependModule(数据表项目详情表模块).addDataTableProject(txs);
     }
 
     const record = new ClientProjectDetailModel({
