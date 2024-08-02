@@ -10,7 +10,7 @@ import {
   createProjectTreeSlice,
   ProjectTreeStates,
 } from '.';
-import { ProjectTypeEnum } from '@/_gen/models';
+import { ProjectTypeEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
 
 describe('projectTreeSlice', () => {
   const projectTreeSlice = createProjectTreeSlice();
@@ -25,6 +25,10 @@ describe('projectTreeSlice', () => {
       type: DirectoryTreeNodeTypeEnum.File,
       projectType: ProjectTypeEnum.View,
       title: '初始标题',
+      projectDetail: {
+        type: ProjectTypeEnum.View,
+        platform: WidgetPlatformTypeEnum.PcWeb,
+      },
     };
     const newData: Partial<ProjectTreeNodeData> = {
       title: '更新后的标题',

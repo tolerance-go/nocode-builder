@@ -11,7 +11,7 @@ export interface ProjectTreeDataNode extends TreeDataNode {
 export type ProjectTreeNodeDataBase = {
   title: string;
   // 内存数据库和远程数据库的 id 关联
-  recordId?: number;
+  backfillRecordId?: number;
 };
 
 export type DirectoryTreeNodeType = DirectoryTreeNodeTypeEnum;
