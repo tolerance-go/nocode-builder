@@ -13,6 +13,10 @@ declare global {
     全局事件系统实例?: 事件中心系统;
     全局界面导航系统实例?: 界面导航系统;
     projectTable?: Table;
+    projectDetailTable?: Table;
+    viewProjectTable?: Table;
+    dataTableProjectTable?: Table;
+    bluemapProjectTable?: Table;
     projectGroupTable?: Table;
   }
 }

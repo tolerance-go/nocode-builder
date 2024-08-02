@@ -123,6 +123,10 @@ export class ProjectResponseDto {
 
   @ApiProperty({})
   @IsInt()
+  projectDetailId: number;
+
+  @ApiProperty({})
+  @IsInt()
   ownerId: number;
 
   @ApiProperty({})

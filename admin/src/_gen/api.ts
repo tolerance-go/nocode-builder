@@ -95,6 +95,7 @@ export interface ProjectResponseDto {
   name: string;
   type: 'View' | 'DataTable' | 'Bluemap';
   projectGroupId?: number;
+  projectDetailId: number;
   ownerId: number;
   createdAt: string;
   updatedAt: string;

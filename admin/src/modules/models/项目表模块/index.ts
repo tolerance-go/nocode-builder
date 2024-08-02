@@ -16,6 +16,7 @@ export class ClientProjectModel extends ProjectModelRecord {
       ownerId: record.ownerId,
       projectGroupId: record.projectGroupId,
       type: record.type,
+      projectDetailId: record.projectDetailId,
     });
 
     instance.createdAt = record.createdAt;
@@ -29,6 +30,7 @@ export class ClientProjectModel extends ProjectModelRecord {
     name,
     ownerId,
     projectGroupId,
+    projectDetailId,
     type,
   }: {
     id: number;
@@ -36,6 +38,7 @@ export class ClientProjectModel extends ProjectModelRecord {
     ownerId: number;
     projectGroupId: number | undefined;
     type: ProjectTypeEnum;
+    projectDetailId: number;
   }) {
     super({
       id,
@@ -45,6 +48,7 @@ export class ClientProjectModel extends ProjectModelRecord {
       updatedAt: new Date(),
       projectGroupId,
       type,
+      projectDetailId,
     });
   }
 }
@@ -105,6 +109,7 @@ export class 项目表模块 extends ModuleBase {
 
   public addProject(data: {
     name: string;
+    projectDetailId: number;
     projectGroupId?: number;
     type: ProjectTypeEnum;
   }): ClientProjectModel {
@@ -116,6 +121,7 @@ export class 项目表模块 extends ModuleBase {
       id: this.table.getNextId(),
       ownerId,
       projectGroupId: data.projectGroupId,
+      projectDetailId: data.projectDetailId,
     });
 
     this.table.addRecord(record);
@@ -140,6 +146,7 @@ export class 项目表模块 extends ModuleBase {
       projects.map((project) =>
         ClientProjectModel.createFromRecord({
           id: project.id,
+          projectDetailId: project.projectDetailId,
           name: project.name,
           ownerId: project.ownerId,
           projectGroupId: project.projectGroupId,

@@ -50,7 +50,7 @@ model Project {
 }
 
 model ProjectDetail {
-  id                 Int               @id @default(autoincrement())
+  id                 Int               @id
   viewProject        ViewProject?      @relation(fields: [viewProjectId], references: [id])
   viewProjectId      Int?
   dataTableProject   DataTableProject? @relation(fields: [dataTableProjectId], references: [id])
@@ -61,19 +61,20 @@ model ProjectDetail {
 }
 
 model ViewProject {
-  id              Int                @id @default(autoincrement())
-  projectDetails  ProjectDetail[]
-  widgetInstances WidgetInstance[]
-  platformType    WidgetPlatformType
+  id           Int                @id
+  platformType WidgetPlatformType
 
   ownerId   Int
   owner     User     @relation(fields: [ownerId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  projectDetails  ProjectDetail[]
+  widgetInstances WidgetInstance[]
 }
 
 model DataTableProject {
-  id             Int             @id @default(autoincrement())
+  id             Int             @id
   projectDetails ProjectDetail[]
   ownerId        Int
   owner          User            @relation(fields: [ownerId], references: [id])
@@ -82,7 +83,7 @@ model DataTableProject {
 }
 
 model BluemapProject {
-  id             Int             @id @default(autoincrement())
+  id             Int             @id
   projectDetails ProjectDetail[]
   ownerId        Int
   owner          User            @relation(fields: [ownerId], references: [id])

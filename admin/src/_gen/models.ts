@@ -317,10 +317,6 @@ export class DataTableProjectModel {
 export class ViewProjectModel {
   id: number;
 
-  projectDetails: ProjectDetailModel[];
-
-  widgetInstances: WidgetInstanceModel[];
-
   platformType: WidgetPlatformTypeEnum;
 
   ownerId: number;
@@ -331,33 +327,37 @@ export class ViewProjectModel {
 
   updatedAt: Date;
 
+  projectDetails: ProjectDetailModel[];
+
+  widgetInstances: WidgetInstanceModel[];
+
   constructor({
     id,
-    projectDetails,
-    widgetInstances,
     platformType,
     ownerId,
     owner,
     createdAt,
     updatedAt,
+    projectDetails,
+    widgetInstances,
   }: {
     id: number;
-    projectDetails: ProjectDetailModel[];
-    widgetInstances: WidgetInstanceModel[];
     platformType: WidgetPlatformTypeEnum;
     ownerId: number;
     owner: UserModel;
     createdAt: Date;
     updatedAt: Date;
+    projectDetails: ProjectDetailModel[];
+    widgetInstances: WidgetInstanceModel[];
   }) {
     this.id = id;
-    this.projectDetails = projectDetails;
-    this.widgetInstances = widgetInstances;
     this.platformType = platformType;
     this.ownerId = ownerId;
     this.owner = owner;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.projectDetails = projectDetails;
+    this.widgetInstances = widgetInstances;
   }
 }
 
