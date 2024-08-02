@@ -35,10 +35,51 @@ export interface ProjectGroupModelRecordDto {
   updatedAt: string;
 }
 
+export interface ProjectDetailModelRecordDto {
+  id: number;
+  viewProjectId?: number;
+  dataTableProjectId?: number;
+  bluemapProjectId?: number;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ViewProjectModelRecordDto {
+  id: number;
+  platformType:
+    | 'PcWeb'
+    | 'MobileWeb'
+    | 'MiniProgram'
+    | 'NativeMobile'
+    | 'DesktopClient';
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface DataTableProjectModelRecordDto {
+  id: number;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface BluemapProjectModelRecordDto {
+  id: number;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface OperationRecordUnionDto {
   userOperationRecord?: UserModelRecordDto;
   projectOperationRecord?: ProjectModelRecordDto;
   projectGroupOperationRecord?: ProjectGroupModelRecordDto;
+  projectDetailOperationRecord?: ProjectDetailModelRecordDto;
+  viewProjectOperationRecord?: ViewProjectModelRecordDto;
+  dataTableProjectOperationRecord?: DataTableProjectModelRecordDto;
+  bluemapProjectOperationRecord?: BluemapProjectModelRecordDto;
 }
 
 export interface OperationDto {

@@ -7,6 +7,10 @@ import {
   UserModelRecordDto,
   ProjectModelRecordDto,
   ProjectGroupModelRecordDto,
+  BluemapProjectModelRecordDto,
+  DataTableProjectModelRecordDto,
+  ProjectDetailModelRecordDto,
+  ViewProjectModelRecordDto,
 } from 'src/_gen/dtos/model-records';
 
 class OperationRecordUnionDto {
@@ -36,6 +40,42 @@ class OperationRecordUnionDto {
   @ValidateNested()
   @Type(() => ProjectGroupModelRecordDto)
   projectGroupOperationRecord?: ProjectGroupModelRecordDto;
+
+  @ApiProperty({
+    type: () => ProjectDetailModelRecordDto,
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ProjectDetailModelRecordDto)
+  projectDetailOperationRecord?: ProjectDetailModelRecordDto;
+
+  @ApiProperty({
+    type: () => ViewProjectModelRecordDto,
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => ViewProjectModelRecordDto)
+  viewProjectOperationRecord?: ViewProjectModelRecordDto;
+
+  @ApiProperty({
+    type: () => DataTableProjectModelRecordDto,
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DataTableProjectModelRecordDto)
+  dataTableProjectOperationRecord?: DataTableProjectModelRecordDto;
+
+  @ApiProperty({
+    type: () => BluemapProjectModelRecordDto,
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => BluemapProjectModelRecordDto)
+  bluemapProjectOperationRecord?: BluemapProjectModelRecordDto;
 }
 
 export class OperationDto {

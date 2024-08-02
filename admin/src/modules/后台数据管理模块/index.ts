@@ -11,18 +11,14 @@ import { EngineBase, ModuleBase } from '@/base';
 import { OperationType } from '@/common/controllers';
 import { api } from '@/globals';
 import { TableName } from '@unocode/common';
+import { 数据表项目详情表模块 } from '../models/数据表项目详情表';
 import { 用户表模块 } from '../models/用户表模块';
-import { 项目组表模块 } from '../models/项目组表模块';
-import { 项目表模块 } from '../models/项目表模块';
-import {
-  convertProjectDatesToISO,
-  convertProjectGroupDatesToISO,
-  convertUserDatesToISO,
-} from './utils';
 import { 蓝图项目详情表模块 } from '../models/蓝图项目详情表';
 import { 视图项目详情表模块 } from '../models/视图项目详情表';
-import { 数据表项目详情表模块 } from '../models/数据表项目详情表';
+import { 项目组表模块 } from '../models/项目组表模块';
+import { 项目表模块 } from '../models/项目表模块';
 import { 项目详情表模块 } from '../models/项目详情表';
+import { convertDatesToISO } from './utils';
 
 type TransactionFunction = (tables: {
   用户表模块实例: 用户表模块;
@@ -113,14 +109,28 @@ export class 后台数据管理模块 extends ModuleBase {
             await 用户表模块实例.table.$transaction(async () => {
               await 项目表模块实例.table.$transaction(async () => {
                 await 项目组表模块实例.table.$transaction(async () => {
-                  await fn({
-                    用户表模块实例,
-                    项目表模块实例,
-                    项目组表模块实例,
-                    蓝图项目详情表模块实例,
-                    视图项目详情表模块实例,
-                    数据表项目详情表模块实例,
-                    项目详情表模块实例,
+                  await 蓝图项目详情表模块实例.table.$transaction(async () => {
+                    await 视图项目详情表模块实例.table.$transaction(
+                      async () => {
+                        await 数据表项目详情表模块实例.table.$transaction(
+                          async () => {
+                            await 项目详情表模块实例.table.$transaction(
+                              async () => {
+                                await fn({
+                                  用户表模块实例,
+                                  项目表模块实例,
+                                  项目组表模块实例,
+                                  蓝图项目详情表模块实例,
+                                  视图项目详情表模块实例,
+                                  数据表项目详情表模块实例,
+                                  项目详情表模块实例,
+                                });
+                              },
+                            );
+                          },
+                        );
+                      },
+                    );
                   });
                 });
               });
@@ -141,15 +151,32 @@ export class 后台数据管理模块 extends ModuleBase {
                       record: {
                         userOperationRecord:
                           operation.record instanceof UserModelRecord
-                            ? convertUserDatesToISO(operation.record)
+                            ? convertDatesToISO(operation.record)
                             : undefined,
                         projectOperationRecord:
                           operation.record instanceof ProjectModelRecord
-                            ? convertProjectDatesToISO(operation.record)
+                            ? convertDatesToISO(operation.record)
                             : undefined,
                         projectGroupOperationRecord:
                           operation.record instanceof ProjectGroupModelRecord
-                            ? convertProjectGroupDatesToISO(operation.record)
+                            ? convertDatesToISO(operation.record)
+                            : undefined,
+                        projectDetailOperationRecord:
+                          operation.record instanceof ProjectDetailModelRecord
+                            ? convertDatesToISO(operation.record)
+                            : undefined,
+                        viewProjectOperationRecord:
+                          operation.record instanceof ViewProjectModelRecord
+                            ? convertDatesToISO(operation.record)
+                            : undefined,
+                        dataTableProjectOperationRecord:
+                          operation.record instanceof
+                          DataTableProjectModelRecord
+                            ? convertDatesToISO(operation.record)
+                            : undefined,
+                        bluemapProjectOperationRecord:
+                          operation.record instanceof BluemapProjectModelRecord
+                            ? convertDatesToISO(operation.record)
                             : undefined,
                       },
                     };
