@@ -108,6 +108,11 @@ export class SyncService {
           id: record.ownerId,
         },
       },
+      projectDetail: {
+        connect: {
+          id: record.projectDetailId,
+        },
+      },
     };
 
     // 检查 projectGroupId 是否存在，若存在则添加连接信息

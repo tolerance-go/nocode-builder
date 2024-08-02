@@ -65,6 +65,8 @@ export class ProjectModelRecord {
 
   type: ProjectTypeEnum;
 
+  projectDetailId: number;
+
   constructor({
     id,
     name,
@@ -73,6 +75,7 @@ export class ProjectModelRecord {
     updatedAt,
     projectGroupId,
     type,
+    projectDetailId,
   }: {
     id: number;
     name: string;
@@ -81,6 +84,7 @@ export class ProjectModelRecord {
     updatedAt: Date;
     projectGroupId?: number;
     type: ProjectTypeEnum;
+    projectDetailId: number;
   }) {
     this.id = id;
     this.name = name;
@@ -89,6 +93,120 @@ export class ProjectModelRecord {
     this.updatedAt = updatedAt;
     this.projectGroupId = projectGroupId;
     this.type = type;
+    this.projectDetailId = projectDetailId;
+  }
+}
+
+export class ProjectDetailModelRecord {
+  id: number;
+
+  viewProjectId?: number;
+
+  dataTableProjectId?: number;
+
+  bluemapProjectId?: number;
+
+  constructor({
+    id,
+    viewProjectId,
+    dataTableProjectId,
+    bluemapProjectId,
+  }: {
+    id: number;
+    viewProjectId?: number;
+    dataTableProjectId?: number;
+    bluemapProjectId?: number;
+  }) {
+    this.id = id;
+    this.viewProjectId = viewProjectId;
+    this.dataTableProjectId = dataTableProjectId;
+    this.bluemapProjectId = bluemapProjectId;
+  }
+}
+
+export class ViewProjectModelRecord {
+  id: number;
+
+  platformType: WidgetPlatformTypeEnum;
+
+  ownerId: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    platformType,
+    ownerId,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    platformType: WidgetPlatformTypeEnum;
+    ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.platformType = platformType;
+    this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class DataTableProjectModelRecord {
+  id: number;
+
+  ownerId: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    ownerId,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class BluemapProjectModelRecord {
+  id: number;
+
+  ownerId: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    ownerId,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 
@@ -170,26 +288,41 @@ export class WidgetInstanceModelRecord {
 
   order?: number;
 
+  viewProjectId?: number;
+
   ownerId: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
 
   constructor({
     id,
     widgetId,
     parentSlotId,
     order,
+    viewProjectId,
     ownerId,
+    createdAt,
+    updatedAt,
   }: {
     id: number;
     widgetId: number;
     parentSlotId?: number;
     order?: number;
+    viewProjectId?: number;
     ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
   }) {
     this.id = id;
     this.widgetId = widgetId;
     this.parentSlotId = parentSlotId;
     this.order = order;
+    this.viewProjectId = viewProjectId;
     this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 
@@ -200,18 +333,28 @@ export class WidgetSlotInstanceModelRecord {
 
   ownerId: number;
 
+  createdAt: Date;
+
+  updatedAt: Date;
+
   constructor({
     id,
     widgetSlotId,
     ownerId,
+    createdAt,
+    updatedAt,
   }: {
     id: number;
     widgetSlotId: number;
     ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
   }) {
     this.id = id;
     this.widgetSlotId = widgetSlotId;
     this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 

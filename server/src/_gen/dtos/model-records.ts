@@ -77,6 +77,89 @@ export class ProjectModelRecordDto {
   @ApiProperty({ enum: ProjectType })
   @IsEnum(ProjectType)
   type: ProjectType;
+
+  @ApiProperty({})
+  @IsInt()
+  projectDetailId: number;
+}
+
+export class ProjectDetailModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  viewProjectId?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  dataTableProjectId?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  bluemapProjectId?: number;
+}
+
+export class ViewProjectModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({ enum: WidgetPlatformType })
+  @IsEnum(WidgetPlatformType)
+  platformType: WidgetPlatformType;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
+}
+
+export class DataTableProjectModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
+}
+
+export class BluemapProjectModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
 }
 
 export class ProjectGroupModelRecordDto {
@@ -147,9 +230,22 @@ export class WidgetInstanceModelRecordDto {
   @IsInt()
   order?: number;
 
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  viewProjectId?: number;
+
   @ApiProperty({})
   @IsInt()
   ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
 }
 
 export class WidgetSlotInstanceModelRecordDto {
@@ -164,6 +260,14 @@ export class WidgetSlotInstanceModelRecordDto {
   @ApiProperty({})
   @IsInt()
   ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
 }
 
 export class WidgetSlotInstanceAssignmentModelRecordDto {

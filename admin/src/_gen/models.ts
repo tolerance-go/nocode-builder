@@ -62,6 +62,12 @@ export class UserModel {
 
   widgetSlotInstances: WidgetSlotInstanceModel[];
 
+  viewProjects: ViewProjectModel[];
+
+  dataTableProjects: DataTableProjectModel[];
+
+  bluemapProjects: BluemapProjectModel[];
+
   constructor({
     id,
     name,
@@ -79,6 +85,9 @@ export class UserModel {
     widgetSlotInstanceAssignments,
     widgetInstances,
     widgetSlotInstances,
+    viewProjects,
+    dataTableProjects,
+    bluemapProjects,
   }: {
     id: number;
     name: string;
@@ -96,6 +105,9 @@ export class UserModel {
     widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
     widgetInstances: WidgetInstanceModel[];
     widgetSlotInstances: WidgetSlotInstanceModel[];
+    viewProjects: ViewProjectModel[];
+    dataTableProjects: DataTableProjectModel[];
+    bluemapProjects: BluemapProjectModel[];
   }) {
     this.id = id;
     this.name = name;
@@ -113,6 +125,311 @@ export class UserModel {
     this.widgetSlotInstanceAssignments = widgetSlotInstanceAssignments;
     this.widgetInstances = widgetInstances;
     this.widgetSlotInstances = widgetSlotInstances;
+    this.viewProjects = viewProjects;
+    this.dataTableProjects = dataTableProjects;
+    this.bluemapProjects = bluemapProjects;
+  }
+}
+
+export class ProjectModel {
+  id: number;
+
+  name: string;
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  projectGroup?: ProjectGroupModel;
+
+  projectGroupId?: number;
+
+  type: ProjectTypeEnum;
+
+  projectDetail: ProjectDetailModel;
+
+  projectDetailId: number;
+
+  constructor({
+    id,
+    name,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
+    projectGroup,
+    projectGroupId,
+    type,
+    projectDetail,
+    projectDetailId,
+  }: {
+    id: number;
+    name: string;
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
+    projectGroup?: ProjectGroupModel;
+    projectGroupId?: number;
+    type: ProjectTypeEnum;
+    projectDetail: ProjectDetailModel;
+    projectDetailId: number;
+  }) {
+    this.id = id;
+    this.name = name;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+    this.projectGroup = projectGroup;
+    this.projectGroupId = projectGroupId;
+    this.type = type;
+    this.projectDetail = projectDetail;
+    this.projectDetailId = projectDetailId;
+  }
+}
+
+export class ProjectDetailModel {
+  id: number;
+
+  viewProject?: ViewProjectModel;
+
+  viewProjectId?: number;
+
+  dataTableProject?: DataTableProjectModel;
+
+  dataTableProjectId?: number;
+
+  bluemapProject?: BluemapProjectModel;
+
+  bluemapProjectId?: number;
+
+  Project: ProjectModel[];
+
+  constructor({
+    id,
+    viewProject,
+    viewProjectId,
+    dataTableProject,
+    dataTableProjectId,
+    bluemapProject,
+    bluemapProjectId,
+    Project,
+  }: {
+    id: number;
+    viewProject?: ViewProjectModel;
+    viewProjectId?: number;
+    dataTableProject?: DataTableProjectModel;
+    dataTableProjectId?: number;
+    bluemapProject?: BluemapProjectModel;
+    bluemapProjectId?: number;
+    Project: ProjectModel[];
+  }) {
+    this.id = id;
+    this.viewProject = viewProject;
+    this.viewProjectId = viewProjectId;
+    this.dataTableProject = dataTableProject;
+    this.dataTableProjectId = dataTableProjectId;
+    this.bluemapProject = bluemapProject;
+    this.bluemapProjectId = bluemapProjectId;
+    this.Project = Project;
+  }
+}
+
+export class BluemapProjectModel {
+  id: number;
+
+  projectDetails: ProjectDetailModel[];
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    projectDetails,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    projectDetails: ProjectDetailModel[];
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.projectDetails = projectDetails;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class DataTableProjectModel {
+  id: number;
+
+  projectDetails: ProjectDetailModel[];
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    projectDetails,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    projectDetails: ProjectDetailModel[];
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.projectDetails = projectDetails;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class ViewProjectModel {
+  id: number;
+
+  projectDetails: ProjectDetailModel[];
+
+  widgetInstances: WidgetInstanceModel[];
+
+  platformType: WidgetPlatformTypeEnum;
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    projectDetails,
+    widgetInstances,
+    platformType,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    projectDetails: ProjectDetailModel[];
+    widgetInstances: WidgetInstanceModel[];
+    platformType: WidgetPlatformTypeEnum;
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.projectDetails = projectDetails;
+    this.widgetInstances = widgetInstances;
+    this.platformType = platformType;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class WidgetInstanceModel {
+  id: number;
+
+  widget: WidgetModel;
+
+  widgetId: number;
+
+  parentSlot?: WidgetSlotInstanceModel;
+
+  parentSlotId?: number;
+
+  order?: number;
+
+  widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
+
+  viewProject?: ViewProjectModel;
+
+  viewProjectId?: number;
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    widget,
+    widgetId,
+    parentSlot,
+    parentSlotId,
+    order,
+    widgetSlotInstanceAssignments,
+    viewProject,
+    viewProjectId,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    widget: WidgetModel;
+    widgetId: number;
+    parentSlot?: WidgetSlotInstanceModel;
+    parentSlotId?: number;
+    order?: number;
+    widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
+    viewProject?: ViewProjectModel;
+    viewProjectId?: number;
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.widget = widget;
+    this.widgetId = widgetId;
+    this.parentSlot = parentSlot;
+    this.parentSlotId = parentSlotId;
+    this.order = order;
+    this.widgetSlotInstanceAssignments = widgetSlotInstanceAssignments;
+    this.viewProject = viewProject;
+    this.viewProjectId = viewProjectId;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 
@@ -329,6 +646,10 @@ export class WidgetSlotInstanceModel {
 
   owner: UserModel;
 
+  createdAt: Date;
+
+  updatedAt: Date;
+
   constructor({
     id,
     widgetSlot,
@@ -337,6 +658,8 @@ export class WidgetSlotInstanceModel {
     childWidgetInstances,
     ownerId,
     owner,
+    createdAt,
+    updatedAt,
   }: {
     id: number;
     widgetSlot: WidgetSlotModel;
@@ -345,6 +668,8 @@ export class WidgetSlotInstanceModel {
     childWidgetInstances: WidgetInstanceModel[];
     ownerId: number;
     owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
   }) {
     this.id = id;
     this.widgetSlot = widgetSlot;
@@ -353,6 +678,8 @@ export class WidgetSlotInstanceModel {
     this.childWidgetInstances = childWidgetInstances;
     this.ownerId = ownerId;
     this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 
@@ -395,110 +722,6 @@ export class WidgetSlotInstanceAssignmentModel {
     this.ownerId = ownerId;
     this.owner = owner;
     this.assignedAt = assignedAt;
-  }
-}
-
-export class WidgetInstanceModel {
-  id: number;
-
-  widget: WidgetModel;
-
-  widgetId: number;
-
-  parentSlot?: WidgetSlotInstanceModel;
-
-  parentSlotId?: number;
-
-  order?: number;
-
-  widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
-
-  ownerId: number;
-
-  owner: UserModel;
-
-  constructor({
-    id,
-    widget,
-    widgetId,
-    parentSlot,
-    parentSlotId,
-    order,
-    widgetSlotInstanceAssignments,
-    ownerId,
-    owner,
-  }: {
-    id: number;
-    widget: WidgetModel;
-    widgetId: number;
-    parentSlot?: WidgetSlotInstanceModel;
-    parentSlotId?: number;
-    order?: number;
-    widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
-    ownerId: number;
-    owner: UserModel;
-  }) {
-    this.id = id;
-    this.widget = widget;
-    this.widgetId = widgetId;
-    this.parentSlot = parentSlot;
-    this.parentSlotId = parentSlotId;
-    this.order = order;
-    this.widgetSlotInstanceAssignments = widgetSlotInstanceAssignments;
-    this.ownerId = ownerId;
-    this.owner = owner;
-  }
-}
-
-export class ProjectModel {
-  id: number;
-
-  name: string;
-
-  ownerId: number;
-
-  owner: UserModel;
-
-  createdAt: Date;
-
-  updatedAt: Date;
-
-  projectGroup?: ProjectGroupModel;
-
-  projectGroupId?: number;
-
-  type: ProjectTypeEnum;
-
-  constructor({
-    id,
-    name,
-    ownerId,
-    owner,
-    createdAt,
-    updatedAt,
-    projectGroup,
-    projectGroupId,
-    type,
-  }: {
-    id: number;
-    name: string;
-    ownerId: number;
-    owner: UserModel;
-    createdAt: Date;
-    updatedAt: Date;
-    projectGroup?: ProjectGroupModel;
-    projectGroupId?: number;
-    type: ProjectTypeEnum;
-  }) {
-    this.id = id;
-    this.name = name;
-    this.ownerId = ownerId;
-    this.owner = owner;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.projectGroup = projectGroup;
-    this.projectGroupId = projectGroupId;
-    this.type = type;
   }
 }
 

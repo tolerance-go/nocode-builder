@@ -21,6 +21,7 @@ import {
   ProjectUpdateDto,
 } from './dtos';
 import { toProjectDto } from './utils';
+import { Prisma } from '@prisma/client';
 
 @Controller('projects')
 export class ProjectController {
@@ -65,17 +66,17 @@ export class ProjectController {
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 201,
-    description: 'The project has been successfully created.',
     type: ProjectResponseDto,
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async createProject(
-    @Body() { projectGroupId, ...rest }: ProjectCreateDto,
+    @Body() { projectGroupId, projectDetailId, ...rest }: ProjectCreateDto,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<ProjectResponseDto> {
     const userId = req.user.id;
     const id = await this.projectService.getNextProjectId();
-    const project = await this.projectService.createProject({
+
+    const projectData: Prisma.ProjectCreateInput = {
       id,
       ...rest,
       owner: {
@@ -83,14 +84,22 @@ export class ProjectController {
           id: userId,
         },
       },
-      projectGroup: projectGroupId
-        ? {
-            connect: {
-              id: projectGroupId,
-            },
-          }
-        : undefined,
-    });
+      projectDetail: {
+        connect: {
+          id: projectDetailId,
+        },
+      },
+    };
+
+    if (projectGroupId) {
+      projectData.projectGroup = {
+        connect: {
+          id: projectGroupId,
+        },
+      };
+    }
+
+    const project = await this.projectService.createProject(projectData);
     return toProjectDto(project);
   }
 

@@ -23,6 +23,11 @@ export class ProjectCreateDto {
   projectGroupId?: number;
 
   @ApiProperty({ required: false })
+  @IsInt()
+  @IsOptional()
+  projectDetailId?: number;
+
+  @ApiProperty({ required: false })
   @IsDateString()
   @IsOptional()
   createdAt?: string;
