@@ -106,21 +106,36 @@ export class ProjectDetailModelRecord {
 
   bluemapProjectId?: number;
 
+  ownerId: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
   constructor({
     id,
     viewProjectId,
     dataTableProjectId,
     bluemapProjectId,
+    ownerId,
+    createdAt,
+    updatedAt,
   }: {
     id: number;
     viewProjectId?: number;
     dataTableProjectId?: number;
     bluemapProjectId?: number;
+    ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
   }) {
     this.id = id;
     this.viewProjectId = viewProjectId;
     this.dataTableProjectId = dataTableProjectId;
     this.bluemapProjectId = bluemapProjectId;
+    this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 

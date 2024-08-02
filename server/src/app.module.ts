@@ -10,6 +10,11 @@ import { SyncModule } from './modules/sync/sync.module';
 import { WidgetModule } from './modules/widget/widget.module';
 import { WidgetSlotModule } from './modules/widget-slot/widget-slot.module';
 import { WidgetSlotAssignmentModule } from './modules/widget-slot-assignment/widget-slot.module';
+import { ProjectDetailModule } from './modules/project-detail/project-detail.module';
+import { ViewProjectModule } from './modules/view-project/view-project.module';
+import { DataTableProjectModule } from './modules/data-table-project/bluemap-project.module';
+import { BluemapProjectModule } from './modules/bluemap-project/data-table-project.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -24,6 +29,10 @@ import { WidgetSlotAssignmentModule } from './modules/widget-slot-assignment/wid
     WidgetModule,
     WidgetSlotModule,
     WidgetSlotAssignmentModule,
+    ProjectDetailModule,
+    ViewProjectModule,
+    DataTableProjectModule,
+    BluemapProjectModule,
   ],
   controllers: [AppController],
   providers: [AppService],

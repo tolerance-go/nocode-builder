@@ -68,6 +68,8 @@ export class UserModel {
 
   bluemapProjects: BluemapProjectModel[];
 
+  projectDetails: ProjectDetailModel[];
+
   constructor({
     id,
     name,
@@ -88,6 +90,7 @@ export class UserModel {
     viewProjects,
     dataTableProjects,
     bluemapProjects,
+    projectDetails,
   }: {
     id: number;
     name: string;
@@ -108,6 +111,7 @@ export class UserModel {
     viewProjects: ViewProjectModel[];
     dataTableProjects: DataTableProjectModel[];
     bluemapProjects: BluemapProjectModel[];
+    projectDetails: ProjectDetailModel[];
   }) {
     this.id = id;
     this.name = name;
@@ -128,6 +132,7 @@ export class UserModel {
     this.viewProjects = viewProjects;
     this.dataTableProjects = dataTableProjects;
     this.bluemapProjects = bluemapProjects;
+    this.projectDetails = projectDetails;
   }
 }
 
@@ -210,6 +215,14 @@ export class ProjectDetailModel {
 
   Project: ProjectModel[];
 
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
   constructor({
     id,
     viewProject,
@@ -219,6 +232,10 @@ export class ProjectDetailModel {
     bluemapProject,
     bluemapProjectId,
     Project,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
   }: {
     id: number;
     viewProject?: ViewProjectModel;
@@ -228,6 +245,10 @@ export class ProjectDetailModel {
     bluemapProject?: BluemapProjectModel;
     bluemapProjectId?: number;
     Project: ProjectModel[];
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
   }) {
     this.id = id;
     this.viewProject = viewProject;
@@ -237,6 +258,10 @@ export class ProjectDetailModel {
     this.bluemapProject = bluemapProject;
     this.bluemapProjectId = bluemapProjectId;
     this.Project = Project;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 

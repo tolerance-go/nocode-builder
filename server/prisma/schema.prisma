@@ -33,6 +33,7 @@ model User {
   viewProjects                  ViewProject[]
   dataTableProjects             DataTableProject[]
   bluemapProjects               BluemapProject[]
+  projectDetails                ProjectDetail[]
 }
 
 model Project {
@@ -50,14 +51,20 @@ model Project {
 }
 
 model ProjectDetail {
-  id                 Int               @id
-  viewProject        ViewProject?      @relation(fields: [viewProjectId], references: [id])
+  id                 Int  @id
   viewProjectId      Int?
-  dataTableProject   DataTableProject? @relation(fields: [dataTableProjectId], references: [id])
   dataTableProjectId Int?
-  bluemapProject     BluemapProject?   @relation(fields: [bluemapProjectId], references: [id])
   bluemapProjectId   Int?
-  Project            Project[]
+
+  ownerId   Int
+  owner     User     @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Project          Project[]
+  bluemapProject   BluemapProject?   @relation(fields: [bluemapProjectId], references: [id])
+  dataTableProject DataTableProject? @relation(fields: [dataTableProjectId], references: [id])
+  viewProject      ViewProject?      @relation(fields: [viewProjectId], references: [id])
 }
 
 model ViewProject {

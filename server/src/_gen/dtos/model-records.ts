@@ -102,6 +102,18 @@ export class ProjectDetailModelRecordDto {
   @IsOptional()
   @IsInt()
   bluemapProjectId?: number;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
 }
 
 export class ViewProjectModelRecordDto {
