@@ -12,8 +12,8 @@ import { WidgetSlotModule } from './modules/widget-slot/widget-slot.module';
 import { WidgetSlotAssignmentModule } from './modules/widget-slot-assignment/widget-slot.module';
 import { ProjectDetailModule } from './modules/project-detail/project-detail.module';
 import { ViewProjectModule } from './modules/view-project/view-project.module';
-import { DataTableProjectModule } from './modules/data-table-project/bluemap-project.module';
-import { BluemapProjectModule } from './modules/bluemap-project/data-table-project.module';
+import { DataTableProjectModule } from './modules/data-table-project/data-table-project.module';
+import { BluemapProjectModule } from './modules/bluemap-project/bluemap-project.module';
 
 @Module({
   imports: [

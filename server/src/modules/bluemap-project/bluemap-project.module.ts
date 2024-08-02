@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { BluemapProjectService } from './data-table-project.service';
-import { BluemapProjectController } from './data-table-project.controller';
+import { BluemapProjectService } from './bluemap-project.service';
+import { BluemapProjectController } from './bluemap-project.controller';
 import { PrismaModule } from '../../prisma/prisma.module';
 
 @Module({

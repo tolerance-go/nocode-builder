@@ -8,7 +8,15 @@ import { OperationType, TableName } from '@unocode/common';
 import {
   ProjectModelRecordDto,
   ProjectGroupModelRecordDto,
+  BluemapProjectModelRecordDto,
+  DataTableProjectModelRecordDto,
+  ProjectDetailModelRecordDto,
+  ViewProjectModelRecordDto,
 } from 'src/_gen/dtos/model-records';
+import { ProjectDetailService } from 'src/modules/project-detail/project-detail.service';
+import { ViewProjectService } from 'src/modules/view-project/view-project.service';
+import { BluemapProjectService } from '../bluemap-project/bluemap-project.service';
+import { DataTableProjectService } from '../data-table-project/data-table-project.service';
 
 @Injectable()
 export class SyncService {
@@ -16,6 +24,10 @@ export class SyncService {
     private prisma: PrismaService,
     private projectService: ProjectService,
     private projectGroupService: ProjectGroupService,
+    private projectDetailService: ProjectDetailService,
+    private viewProjectService: ViewProjectService,
+    private dataTableProjectService: DataTableProjectService,
+    private bluemapProjectService: BluemapProjectService,
   ) {}
 
   async applyOperations(operations: OperationsDto): Promise<void> {
@@ -25,66 +37,19 @@ export class SyncService {
 
         switch (operationType) {
           case OperationType.ADD_RECORD:
-            if (tableName === TableName.Project) {
-              const projectRecord = record.projectOperationRecord!;
-              await this.projectService.createProject(
-                this.createProjectCreateInput(projectRecord),
-                tx,
-              );
-            } else if (tableName === TableName.ProjectGroup) {
-              const projectGroupRecord = record.projectGroupOperationRecord!;
-              await this.projectGroupService.createProjectGroup(
-                this.createProjectGroupCreateInput(projectGroupRecord),
-                tx,
-              );
-            }
+            await this.handleAddOperation(record, tableName, tx);
             break;
 
           case OperationType.UPDATE_RECORD:
-            if (tableName === TableName.Project) {
-              const projectRecord = record.projectOperationRecord!;
-              await this.projectService.updateProject(
-                {
-                  where: { id: projectRecord.id },
-                  data: this.createProjectUpdateInput(projectRecord),
-                },
-                tx,
-              );
-            } else if (tableName === TableName.ProjectGroup) {
-              const projectGroupRecord = record.projectGroupOperationRecord!;
-
-              await this.projectGroupService.updateProjectGroup(
-                {
-                  where: { id: projectGroupRecord.id },
-                  data: this.createProjectGroupUpdateInput(projectGroupRecord),
-                },
-                tx,
-              );
-            }
+            await this.handleUpdateOperation(record, tableName, tx);
             break;
 
           case OperationType.DELETE_RECORD:
-            if (tableName === TableName.Project) {
-              const projectRecord = record.projectOperationRecord!;
-              await this.projectService.deleteProject(
-                { id: projectRecord.id },
-                tx,
-              );
-            } else if (tableName === TableName.ProjectGroup) {
-              const projectGroupRecord = record.projectGroupOperationRecord!;
-              await this.projectGroupService.deleteProjectGroup(
-                { id: projectGroupRecord.id },
-                tx,
-              );
-            }
+            await this.handleDeleteOperation(record, tableName, tx);
             break;
 
           case OperationType.CLEAR_RECORDS:
-            if (tableName === TableName.Project) {
-              await this.projectService.clearProjects(tx);
-            } else if (tableName === TableName.ProjectGroup) {
-              await this.projectGroupService.clearProjectGroups(tx);
-            }
+            await this.handleClearOperation(tableName, tx);
             break;
 
           default:
@@ -92,6 +57,211 @@ export class SyncService {
         }
       }
     });
+  }
+
+  private async handleAddOperation(
+    record: any,
+    tableName: TableName,
+    tx: Prisma.TransactionClient,
+  ) {
+    switch (tableName) {
+      case TableName.Project:
+        await this.projectService.createProject(
+          this.createProjectCreateInput(record.projectOperationRecord!),
+          tx,
+        );
+        break;
+      case TableName.ProjectGroup:
+        await this.projectGroupService.createProjectGroup(
+          this.createProjectGroupCreateInput(
+            record.projectGroupOperationRecord!,
+          ),
+          tx,
+        );
+        break;
+      case TableName.ProjectDetail:
+        await this.projectDetailService.createProjectDetail(
+          this.createProjectDetailCreateInput(
+            record.projectDetailOperationRecord!,
+          ),
+          tx,
+        );
+        break;
+      case TableName.ViewProject:
+        await this.viewProjectService.createViewProject(
+          this.createViewProjectCreateInput(record.viewProjectOperationRecord!),
+          tx,
+        );
+        break;
+      case TableName.DataTableProject:
+        await this.dataTableProjectService.createDataTableProject(
+          this.createDataTableProjectCreateInput(
+            record.dataTableProjectOperationRecord!,
+          ),
+          tx,
+        );
+        break;
+      case TableName.BluemapProject:
+        await this.bluemapProjectService.createBluemapProject(
+          this.createBluemapProjectCreateInput(
+            record.bluemapProjectOperationRecord!,
+          ),
+          tx,
+        );
+        break;
+      default:
+        throw new Error(`未知的表名: ${tableName}`);
+    }
+  }
+
+  private async handleUpdateOperation(
+    record: any,
+    tableName: TableName,
+    tx: Prisma.TransactionClient,
+  ) {
+    switch (tableName) {
+      case TableName.Project:
+        await this.projectService.updateProject(
+          {
+            where: { id: record.projectOperationRecord!.id },
+            data: this.createProjectUpdateInput(record.projectOperationRecord!),
+          },
+          tx,
+        );
+        break;
+      case TableName.ProjectGroup:
+        await this.projectGroupService.updateProjectGroup(
+          {
+            where: { id: record.projectGroupOperationRecord!.id },
+            data: this.createProjectGroupUpdateInput(
+              record.projectGroupOperationRecord!,
+            ),
+          },
+          tx,
+        );
+        break;
+      case TableName.ProjectDetail:
+        await this.projectDetailService.updateProjectDetail(
+          {
+            where: { id: record.projectDetailOperationRecord!.id },
+            data: this.createProjectDetailUpdateInput(
+              record.projectDetailOperationRecord!,
+            ),
+          },
+          tx,
+        );
+        break;
+      case TableName.ViewProject:
+        await this.viewProjectService.updateViewProject(
+          {
+            where: { id: record.viewProjectOperationRecord!.id },
+            data: this.createViewProjectUpdateInput(
+              record.viewProjectOperationRecord!,
+            ),
+          },
+          tx,
+        );
+        break;
+      case TableName.DataTableProject:
+        await this.dataTableProjectService.updateDataTableProject(
+          {
+            where: { id: record.dataTableProjectOperationRecord!.id },
+            data: this.createDataTableProjectUpdateInput(
+              record.dataTableProjectOperationRecord!,
+            ),
+          },
+          tx,
+        );
+        break;
+      case TableName.BluemapProject:
+        await this.bluemapProjectService.updateBluemapProject(
+          {
+            where: { id: record.bluemapProjectOperationRecord!.id },
+            data: this.createBluemapProjectUpdateInput(
+              record.bluemapProjectOperationRecord!,
+            ),
+          },
+          tx,
+        );
+        break;
+      default:
+        throw new Error(`未知的表名: ${tableName}`);
+    }
+  }
+
+  private async handleDeleteOperation(
+    record: any,
+    tableName: TableName,
+    tx: Prisma.TransactionClient,
+  ) {
+    switch (tableName) {
+      case TableName.Project:
+        await this.projectService.deleteProject(
+          { id: record.projectOperationRecord!.id },
+          tx,
+        );
+        break;
+      case TableName.ProjectGroup:
+        await this.projectGroupService.deleteProjectGroup(
+          { id: record.projectGroupOperationRecord!.id },
+          tx,
+        );
+        break;
+      case TableName.ProjectDetail:
+        await this.projectDetailService.deleteProjectDetail(
+          { id: record.projectDetailOperationRecord!.id },
+          tx,
+        );
+        break;
+      case TableName.ViewProject:
+        await this.viewProjectService.deleteViewProject(
+          { id: record.viewProjectOperationRecord!.id },
+          tx,
+        );
+        break;
+      case TableName.DataTableProject:
+        await this.dataTableProjectService.deleteDataTableProject(
+          { id: record.dataTableProjectOperationRecord!.id },
+          tx,
+        );
+        break;
+      case TableName.BluemapProject:
+        await this.bluemapProjectService.deleteBluemapProject(
+          { id: record.bluemapProjectOperationRecord!.id },
+          tx,
+        );
+        break;
+      default:
+        throw new Error(`未知的表名: ${tableName}`);
+    }
+  }
+
+  private async handleClearOperation(
+    tableName: TableName,
+    tx: Prisma.TransactionClient,
+  ) {
+    switch (tableName) {
+      case TableName.Project:
+        await this.projectService.clearProjects(tx);
+        break;
+      case TableName.ProjectGroup:
+        await this.projectGroupService.clearProjectGroups(tx);
+        break;
+      case TableName.ProjectDetail:
+        await this.projectDetailService.clearProjectDetails(tx);
+        break;
+      case TableName.ViewProject:
+        await this.viewProjectService.clearViewProjects(tx);
+        break;
+      case TableName.DataTableProject:
+        await this.dataTableProjectService.clearDataTableProjects(tx);
+        break;
+      case TableName.BluemapProject:
+        await this.bluemapProjectService.clearBluemapProjects(tx);
+        break;
+      default:
+        throw new Error(`未知的表名: ${tableName}`);
+    }
   }
 
   private createProjectCreateInput(
@@ -154,6 +324,96 @@ export class SyncService {
     return input;
   }
 
+  private createProjectDetailCreateInput(
+    record: ProjectDetailModelRecordDto,
+  ): Prisma.ProjectDetailCreateInput {
+    const input: Prisma.ProjectDetailCreateInput = {
+      id: record.id,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    };
+
+    // 检查 projectDetailId 是否存在，若存在则添加连接信息
+    if (record.viewProjectId) {
+      input.viewProject = {
+        connect: {
+          id: record.viewProjectId,
+        },
+      };
+    } else if (record.dataTableProjectId) {
+      input.dataTableProject = {
+        connect: {
+          id: record.dataTableProjectId,
+        },
+      };
+    } else if (record.bluemapProjectId) {
+      input.bluemapProject = {
+        connect: {
+          id: record.bluemapProjectId,
+        },
+      };
+    }
+
+    return input;
+  }
+
+  private createViewProjectCreateInput(
+    record: ViewProjectModelRecordDto,
+  ): Prisma.ViewProjectCreateInput {
+    const input: Prisma.ViewProjectCreateInput = {
+      id: record.id,
+      platformType: record.platformType,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    };
+
+    return input;
+  }
+
+  private createDataTableProjectCreateInput(
+    record: DataTableProjectModelRecordDto,
+  ): Prisma.DataTableProjectCreateInput {
+    const input: Prisma.DataTableProjectCreateInput = {
+      id: record.id,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    };
+
+    return input;
+  }
+
+  private createBluemapProjectCreateInput(
+    record: BluemapProjectModelRecordDto,
+  ): Prisma.BluemapProjectCreateInput {
+    const input: Prisma.BluemapProjectCreateInput = {
+      id: record.id,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    };
+
+    return input;
+  }
+
   private createProjectUpdateInput(
     record: ProjectModelRecordDto,
   ): Prisma.ProjectUpdateInput {
@@ -201,6 +461,91 @@ export class SyncService {
         },
       };
     }
+
+    return input;
+  }
+
+  private createProjectDetailUpdateInput(
+    record: ProjectDetailModelRecordDto,
+  ): Prisma.ProjectDetailUpdateInput {
+    const input: Prisma.ProjectDetailUpdateInput = {
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+    };
+
+    if (record.viewProjectId) {
+      input.viewProject = {
+        connect: {
+          id: record.viewProjectId,
+        },
+      };
+    } else if (record.dataTableProjectId) {
+      input.dataTableProject = {
+        connect: {
+          id: record.dataTableProjectId,
+        },
+      };
+    } else if (record.bluemapProjectId) {
+      input.bluemapProject = {
+        connect: {
+          id: record.bluemapProjectId,
+        },
+      };
+    }
+
+    return input;
+  }
+
+  private createViewProjectUpdateInput(
+    record: ViewProjectModelRecordDto,
+  ): Prisma.ViewProjectUpdateInput {
+    const input: Prisma.ViewProjectUpdateInput = {
+      platformType: record.platformType,
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    };
+
+    return input;
+  }
+
+  private createDataTableProjectUpdateInput(
+    record: DataTableProjectModelRecordDto,
+  ): Prisma.DataTableProjectUpdateInput {
+    const input: Prisma.DataTableProjectUpdateInput = {
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    };
+
+    return input;
+  }
+
+  private createBluemapProjectUpdateInput(
+    record: BluemapProjectModelRecordDto,
+  ): Prisma.BluemapProjectUpdateInput {
+    const input: Prisma.BluemapProjectUpdateInput = {
+      owner: {
+        connect: {
+          id: record.ownerId,
+        },
+      },
+      createdAt: record.createdAt,
+      updatedAt: record.updatedAt,
+    };
 
     return input;
   }

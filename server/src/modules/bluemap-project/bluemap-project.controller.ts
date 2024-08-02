@@ -13,7 +13,7 @@ import {
 import { ApiResponse } from '@nestjs/swagger';
 import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { BluemapProjectService } from './data-table-project.service';
+import { BluemapProjectService } from './bluemap-project.service';
 import {
   BluemapProjectResponseDto,
   BluemapProjectQueryDto,
