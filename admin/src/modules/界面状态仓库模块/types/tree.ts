@@ -24,14 +24,26 @@ export type ProjectTreeNodeFolderData = {
   type: DirectoryTreeNodeTypeEnum.Folder;
 } & ProjectTreeNodeDataBase;
 
-export type ProjectTreeNodeFileDataRecordItem = {
+export type ProjectTreeNodeFileData = {
   type: DirectoryTreeNodeTypeEnum.File;
   projectType: ProjectType;
+  projectDetail:
+    | ViewProjectDetail
+    | DataTableProjectDetail
+    | BluemapProjectDetail;
 } & ProjectTreeNodeDataBase;
+
+export type ViewProjectDetail = {
+  platform: WidgetPlatformTypeEnum;
+};
+
+export type DataTableProjectDetail = Record<string, unknown>;
+
+export type BluemapProjectDetail = Record<string, unknown>;
 
 export type ProjectTreeNodeData =
   | ProjectTreeNodeFolderData
-  | ProjectTreeNodeFileDataRecordItem;
+  | ProjectTreeNodeFileData;
 
 /** key 到树节点数据的映射 */
 export type ProjectTreeNodeDataRecord = Record<string, ProjectTreeNodeData>;
