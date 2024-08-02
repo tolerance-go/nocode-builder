@@ -10,6 +10,11 @@ export type 图标id到组件的映射 = {
   蓝图项目节点: AntdIcon;
   项目组文件夹: AntdIcon;
   项目组文件夹展开中: AntdIcon;
+  PcWeb平台logo: AntdIcon;
+  MobileWeb平台logo: AntdIcon;
+  MiniProgram平台logo: AntdIcon;
+  NativeMobile平台logo: AntdIcon;
+  DesktopClient平台logo: AntdIcon;
 };
 
 export type 图标组件id联合 = keyof 图标id到组件的映射;

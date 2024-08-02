@@ -1,19 +1,23 @@
+import { ProjectTypeEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
+import { ViewKey } from '@/common/types';
+import { projectDetailIsViewProjectDetail } from '@/common/utils';
 import {
-  use界面状态管理者,
-  use图标管理者,
-} from '@/modules/界面组件树管理模块/hooks';
-import { css } from '@emotion/css';
-import { theme, Tree } from 'antd';
-import { Title } from './Title';
-import {
-  useAppSelector,
-  useAppDispatch,
   findNode,
+  useAppDispatch,
+  useAppSelector,
   节点是不是文件,
 } from '@/modules/界面状态仓库模块';
-import { ProjectTreeDataNode } from '@/modules/界面状态仓库模块/types';
-import { ViewKey } from '@/common/types';
-import { ProjectTypeEnum } from '@/_gen/models';
+import {
+  DirectoryTreeNodeTypeEnum,
+  ProjectTreeDataNode,
+} from '@/modules/界面状态仓库模块/types';
+import {
+  use图标管理者,
+  use界面状态管理者,
+} from '@/modules/界面组件树管理模块/hooks';
+import { css } from '@emotion/css';
+import { Badge, theme, Tree } from 'antd';
+import { Title } from './Title';
 
 const { DirectoryTree: AntdDirectoryTree } = Tree;
 
@@ -291,8 +295,109 @@ export const DirectoryTree = () => {
         }
 
         const nodeData = connected_树节点key到节点数据的映射[nodeKey];
-        if (nodeData.type === 'file') {
+        if (nodeData.type === DirectoryTreeNodeTypeEnum.File) {
           if (nodeData.projectType === ProjectTypeEnum.View) {
+            if (!projectDetailIsViewProjectDetail(nodeData.projectDetail)) {
+              throw new Error('error data');
+            }
+
+            if (
+              nodeData.projectDetail.platform === WidgetPlatformTypeEnum.PcWeb
+            ) {
+              return (
+                <Badge
+                  offset={[-3, 13]}
+                  count={图标管理者实例.根据id获取组件('PcWeb平台logo', {
+                    style: {
+                      fontSize: 10,
+                      color: token.blue6,
+                    },
+                  })}
+                >
+                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                </Badge>
+              );
+            }
+
+            if (
+              nodeData.projectDetail.platform ===
+              WidgetPlatformTypeEnum.DesktopClient
+            ) {
+              return (
+                <Badge
+                  offset={[-3, 13]}
+                  count={图标管理者实例.根据id获取组件(
+                    'DesktopClient平台logo',
+                    {
+                      style: {
+                        fontSize: 10,
+                        color: token.purple8,
+                      },
+                    },
+                  )}
+                >
+                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                </Badge>
+              );
+            }
+
+            if (
+              nodeData.projectDetail.platform ===
+              WidgetPlatformTypeEnum.MiniProgram
+            ) {
+              return (
+                <Badge
+                  offset={[-3, 13]}
+                  count={图标管理者实例.根据id获取组件('MiniProgram平台logo', {
+                    style: {
+                      fontSize: 10,
+                      color: token.green6,
+                    },
+                  })}
+                >
+                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                </Badge>
+              );
+            }
+
+            if (
+              nodeData.projectDetail.platform ===
+              WidgetPlatformTypeEnum.MobileWeb
+            ) {
+              return (
+                <Badge
+                  offset={[-3, 13]}
+                  count={图标管理者实例.根据id获取组件('MobileWeb平台logo', {
+                    style: {
+                      fontSize: 10,
+                      color: token.blue6,
+                    },
+                  })}
+                >
+                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                </Badge>
+              );
+            }
+
+            if (
+              nodeData.projectDetail.platform ===
+              WidgetPlatformTypeEnum.NativeMobile
+            ) {
+              return (
+                <Badge
+                  offset={[-3, 13]}
+                  count={图标管理者实例.根据id获取组件('NativeMobile平台logo', {
+                    style: {
+                      fontSize: 10,
+                      color: token.purple8,
+                    },
+                  })}
+                >
+                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                </Badge>
+              );
+            }
+
             return 图标管理者实例.根据id获取组件('视图项目节点');
           }
           if (nodeData.projectType === ProjectTypeEnum.DataTable) {

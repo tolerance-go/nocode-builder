@@ -1,10 +1,13 @@
 import { EngineBase, ModuleBase } from '@/base';
 import {
   BuildOutlined,
+  DesktopOutlined,
   FolderOpenOutlined,
   FolderOutlined,
+  MobileOutlined,
   PartitionOutlined,
   TableOutlined,
+  TabletOutlined,
 } from '@ant-design/icons';
 import { AntdIconProps } from '@ant-design/icons/lib/components/AntdIcon';
 import { createElement } from 'react';
@@ -17,6 +20,11 @@ export class 图标管理者 extends ModuleBase {
     蓝图项目节点: PartitionOutlined,
     项目组文件夹: FolderOutlined,
     项目组文件夹展开中: FolderOpenOutlined,
+    PcWeb平台logo: DesktopOutlined,
+    MobileWeb平台logo: MobileOutlined,
+    MiniProgram平台logo: TabletOutlined,
+    NativeMobile平台logo: MobileOutlined,
+    DesktopClient平台logo: DesktopOutlined,
   };
 
   private static instance: 图标管理者;
