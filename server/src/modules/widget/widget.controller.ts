@@ -18,6 +18,7 @@ import {
   WidgetAddSlotDto,
   WidgetCreateDto,
   WidgetCreateManyDto,
+  WidgetQueryByPlatformDto,
   WidgetQueryDto,
   WidgetResponseDto,
   WidgetUpdateDto,
@@ -61,6 +62,29 @@ export class WidgetController {
       take: query.take,
       cursor: query.filter ? { id: Number(query.filter) } : undefined,
       orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
+    });
+    return widgets.map(toWidgetDto);
+  }
+
+  @Get('filter-by-platform')
+  @UseGuards(JwtAuthGuard)
+  @ApiResponse({
+    status: 200,
+    type: [WidgetResponseDto],
+  })
+  async getWidgetsFilterByPlatform(
+    @Query() query: WidgetQueryByPlatformDto,
+  ): Promise<WidgetResponseDto[]> {
+    const widgets = await this.widgetService.widgets({
+      skip: query.skip,
+      take: query.take,
+      cursor: query.filter ? { id: Number(query.filter) } : undefined,
+      orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
+      where: {
+        platforms: {
+          has: query.platformType,
+        },
+      },
     });
     return widgets.map(toWidgetDto);
   }

@@ -120,6 +120,11 @@ export const apiUrls = {
     route: '/widgets',
     path: '/widgets',
   },
+  WidgetController_getWidgetsFilterByPlatform: {
+    method: 'get',
+    route: '/widgets/filter-by-platform',
+    path: '/widgets/filter-by-platform',
+  },
   WidgetController_getWidgetsWithSlots: {
     method: 'get',
     route: '/widgets/with-slots',

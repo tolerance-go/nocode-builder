@@ -1,7 +1,6 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { TableTransactions, 后台数据管理模块 } from '../../后台数据管理模块';
 import {
-  projectDetailIsViewProjectDetail,
   新增操作详情,
   界面状态仓库模块,
   移动操作详情,
@@ -15,6 +14,7 @@ import {
 import { 事件中心系统 } from '../../事件中心系统';
 import { 项目表模块 } from '../../models/项目表模块';
 import { 项目组表模块 } from '../../models/项目组表模块';
+import { projectDetailIsViewProjectDetail } from '@/common/utils';
 
 export class 项目树后台同步模块 extends ModuleBase {
   private static instance: 项目树后台同步模块;

@@ -1,8 +1,14 @@
+import { WidgetPlatformTypeEnum } from '@/_gen/models';
 import useMultipleClickAway from '@/common/hooks/useMultipleClickAway';
+import {
+  projectDetailIsViewProjectDetail,
+  projectTreeNodeDataIsProjectTreeNodeFileData,
+} from '@/common/utils';
 import { api } from '@/globals';
+import { useAppSelector } from '@/modules/界面状态仓库模块';
 import { FileImageOutlined } from '@ant-design/icons';
 import { css } from '@emotion/css';
-import { Card, Col, Drawer, Flex, Row, Spin, theme, Typography } from 'antd';
+import { Card, Col, Drawer, Row, Spin, theme, Typography } from 'antd';
 import {
   forwardRef,
   useEffect,
@@ -26,9 +32,13 @@ type CardData = {
 };
 
 // 使用 Axios 获取数据
-const fetchData = async (): Promise<CardData[]> => {
+const fetchData = async (
+  platformType: WidgetPlatformTypeEnum,
+): Promise<CardData[]> => {
   try {
-    const widgets = await api.widgets.getWidgets();
+    const widgets = await api.widgets.getWidgetsFilterByPlatform({
+      platformType,
+    });
     return widgets.map((widget) => ({
       title: widget.name,
     }));
@@ -49,6 +59,11 @@ export const WidgetDrawer = forwardRef<
   const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   const { token } = theme.useToken();
+  const 激活的项目节点数据 = useAppSelector((state) =>
+    state.projectTree.激活的节点的key
+      ? state.projectTree.项目树节点数据[state.projectTree.激活的节点的key]
+      : null,
+  );
 
   const showDrawer = () => {
     setVisible(true);
@@ -73,8 +88,22 @@ export const WidgetDrawer = forwardRef<
 
   useEffect(() => {
     const loadData = async () => {
+      if (!激活的项目节点数据) {
+        throw new Error('data error');
+      }
+
+      if (!projectTreeNodeDataIsProjectTreeNodeFileData(激活的项目节点数据)) {
+        throw new Error('data error');
+      }
+
+      if (!projectDetailIsViewProjectDetail(激活的项目节点数据.projectDetail)) {
+        throw new Error('data error');
+      }
+
       setLoading(true);
-      const fetchedData = await fetchData();
+      const fetchedData = await fetchData(
+        激活的项目节点数据.projectDetail.platform,
+      );
       setData(fetchedData);
       setLoading(false);
     };
@@ -82,7 +111,7 @@ export const WidgetDrawer = forwardRef<
     if (visible) {
       loadData();
     }
-  }, [visible]);
+  }, [visible, 激活的项目节点数据]);
 
   return (
     <Drawer

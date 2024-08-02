@@ -971,6 +971,35 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     /**
      * No description
      *
+     * @name WidgetControllerGetWidgetsFilterByPlatform
+     * @request GET:/widgets/filter-by-platform
+     */
+    getWidgetsFilterByPlatform: (
+      query: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+        platformType:
+          | 'PcWeb'
+          | 'MobileWeb'
+          | 'MiniProgram'
+          | 'NativeMobile'
+          | 'DesktopClient';
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetResponseDto[], unknown>({
+        path: `/widgets/filter-by-platform`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
      * @name WidgetControllerGetWidgetsWithSlots
      * @request GET:/widgets/with-slots
      */

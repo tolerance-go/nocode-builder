@@ -96,6 +96,14 @@ export class WidgetQueryDto {
   filter?: string;
 }
 
+export class WidgetQueryByPlatformDto extends WidgetQueryDto {
+  @ApiProperty({
+    enum: WidgetPlatformType,
+  })
+  @IsEnum(WidgetPlatformType)
+  platformType: WidgetPlatformType;
+}
+
 export class WidgetUpdateDto {}
 
 export class WidgetUpdateWithIdDto extends WidgetUpdateDto {
