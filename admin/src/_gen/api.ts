@@ -23,6 +23,7 @@ export interface ProjectModelRecordDto {
   updatedAt: string;
   projectGroupId?: number;
   type: 'View' | 'DataTable' | 'Bluemap';
+  projectDetailId: number;
 }
 
 export interface ProjectGroupModelRecordDto {
@@ -102,6 +103,7 @@ export interface ProjectResponseDto {
 export interface ProjectCreateDto {
   name: string;
   projectGroupId?: number;
+  projectDetailId?: number;
   createdAt?: string;
   updatedAt?: string;
   type: 'View' | 'DataTable' | 'Bluemap';

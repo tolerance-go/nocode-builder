@@ -13,6 +13,7 @@ import {
   createLayoutSlice,
   createLocationInitialState,
   createLocationSlice,
+  createProjectTreeAsyncActions,
   createProjectTreeInitialState,
   createProjectTreeSlice,
   createUserInfoInitialState,
@@ -20,12 +21,20 @@ import {
   createWidgetTreeInitialState,
   createWidgetTreeSlice,
 } from './states';
-import { AppMiddleware, RootState } from './types';
+import { AppMiddleware, AppSlices, RootState } from './types';
 import { findNode, generateProjectTreeMeta } from './utils';
 import { 项目组表模块 } from '../models/项目组表模块';
 import { 项目表模块 } from '../models/项目表模块';
 
 export class 界面状态仓库模块 extends ModuleBase {
+  static createAsyncActions = (slices: AppSlices) => {
+    const projectSlice = createProjectTreeAsyncActions(slices);
+    const actions = {
+      [slices.projectTree.name]: projectSlice,
+    };
+    return actions;
+  };
+
   static createSlices = () => {
     const projectSlice = createProjectTreeSlice();
     const layoutSlice = createLayoutSlice();
@@ -85,6 +94,7 @@ export class 界面状态仓库模块 extends ModuleBase {
   slices;
   reducers;
   store;
+  asyncActions;
 
   public handleMiddleware: AppMiddleware = (store) => (next) => (action) => {
     const prevState = store.getState();
@@ -199,6 +209,7 @@ export class 界面状态仓库模块 extends ModuleBase {
     this.initialState = initialState;
 
     this.slices = 界面状态仓库模块.createSlices();
+    this.asyncActions = 界面状态仓库模块.createAsyncActions(this.slices);
 
     this.reducers = 界面状态仓库模块.createReducers(this.slices);
 

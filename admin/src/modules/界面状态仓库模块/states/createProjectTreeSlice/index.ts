@@ -1,10 +1,11 @@
 import { ViewKey } from '@/common/types';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   ProjectTreeNodeDataRecord,
   ProjectStructureTreeDataNode,
   TreeNode,
   ProjectTreeNodeDataRecordItemBase,
+  AppSlices,
 } from '../../types';
 import {
   compareTrees,
@@ -59,6 +60,25 @@ export const createProjectTreeInitialState = () => {
 };
 
 const initialState: ProjectTreeStates = createProjectTreeInitialState();
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const createProjectTreeAsyncActions = (_slices: AppSlices) => {
+  return {};
+  // return {
+  //   更新并更新: createAsyncThunk(
+  //     'nodes/更新节点并清空输入',
+  //     async (payload: { nodeKey: ViewKey; title: string }, { dispatch }) => {
+  //       dispatch(
+  //         slices.projectTree.actions.更新节点的数据({
+  //           key: payload.nodeKey,
+  //           data: { title: payload.title },
+  //         }),
+  //       );
+  //       dispatch(slices.projectTree.actions.停止节点编辑状态并清空输入内容());
+  //     },
+  //   ),
+  // };
+};
 
 export const createProjectTreeSlice = () => {
   const projectTreeSlice = createSlice({
