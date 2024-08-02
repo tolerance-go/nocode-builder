@@ -307,12 +307,12 @@ export const DirectoryTree = () => {
               return (
                 <Badge
                   offset={[
-                    -((token.fontSizeIcon / 12) * 3),
-                    (token.fontSizeIcon / 12) * 13,
+                    -((token.fontSize / 14) * 3),
+                    (token.fontSize / 14) * 13,
                   ]}
                   count={图标管理者实例.根据id获取组件('PcWeb平台logo', {
                     style: {
-                      fontSize: (token.fontSizeIcon / 12) * 10,
+                      fontSize: (token.fontSize / 14) * 10,
                       color: token.blue6,
                     },
                   })}
@@ -329,14 +329,14 @@ export const DirectoryTree = () => {
               return (
                 <Badge
                   offset={[
-                    -((token.fontSizeIcon / 12) * 3),
-                    (token.fontSizeIcon / 12) * 13,
+                    -((token.fontSize / 14) * 3),
+                    (token.fontSize / 14) * 13,
                   ]}
                   count={图标管理者实例.根据id获取组件(
                     'DesktopClient平台logo',
                     {
                       style: {
-                        fontSize: (token.fontSizeIcon / 12) * 10,
+                        fontSize: (token.fontSize / 14) * 10,
                         color: token.purple8,
                       },
                     },
@@ -354,12 +354,12 @@ export const DirectoryTree = () => {
               return (
                 <Badge
                   offset={[
-                    -((token.fontSizeIcon / 12) * 3),
-                    (token.fontSizeIcon / 12) * 13,
+                    -((token.fontSize / 14) * 3),
+                    (token.fontSize / 14) * 13,
                   ]}
                   count={图标管理者实例.根据id获取组件('MiniProgram平台logo', {
                     style: {
-                      fontSize: (token.fontSizeIcon / 12) * 10,
+                      fontSize: (token.fontSize / 14) * 10,
                       color: token.green6,
                     },
                   })}
@@ -376,12 +376,12 @@ export const DirectoryTree = () => {
               return (
                 <Badge
                   offset={[
-                    -((token.fontSizeIcon / 12) * 3),
-                    (token.fontSizeIcon / 12) * 13,
+                    -((token.fontSize / 14) * 3),
+                    (token.fontSize / 14) * 13,
                   ]}
                   count={图标管理者实例.根据id获取组件('MobileWeb平台logo', {
                     style: {
-                      fontSize: (token.fontSizeIcon / 12) * 10,
+                      fontSize: (token.fontSize / 14) * 10,
                       color: token.blue6,
                     },
                   })}
@@ -398,12 +398,12 @@ export const DirectoryTree = () => {
               return (
                 <Badge
                   offset={[
-                    -((token.fontSizeIcon / 12) * 3),
-                    (token.fontSizeIcon / 12) * 13,
+                    -((token.fontSize / 14) * 3),
+                    (token.fontSize / 14) * 13,
                   ]}
                   count={图标管理者实例.根据id获取组件('NativeMobile平台logo', {
                     style: {
-                      fontSize: (token.fontSizeIcon / 12) * 10,
+                      fontSize: (token.fontSize / 14) * 10,
                       color: token.purple8,
                     },
                   })}
