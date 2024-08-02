@@ -28,7 +28,7 @@ function generateProjectTreeMeta(
     };
     groupNodes[groupKey] = groupNode;
     项目树节点数据[groupKey] = {
-      backfillRecordId: group.id,
+      backfillProjectRecordId: group.id,
       title: group.name,
       type: DirectoryTreeNodeTypeEnum.Folder,
     };
@@ -46,7 +46,7 @@ function generateProjectTreeMeta(
       children: [], // 保证符合 ProjectStructureTreeDataNode 类型
     };
     项目树节点数据[projectKey] = {
-      backfillRecordId: project.id,
+      backfillProjectRecordId: project.id,
       title: project.name,
       type: DirectoryTreeNodeTypeEnum.File,
       projectType: project.type,

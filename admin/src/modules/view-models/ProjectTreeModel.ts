@@ -28,7 +28,7 @@ export class ProjectTreeModel extends ModuleBase {
           storeModule.slices.projectTree.actions.更新节点的数据({
             key: event.key,
             data: {
-              backfillRecordId: event.record.id,
+              backfillProjectRecordId: event.record.id,
             },
           }),
         );
@@ -42,7 +42,7 @@ export class ProjectTreeModel extends ModuleBase {
           storeModule.slices.projectTree.actions.更新节点的数据({
             key: event.key,
             data: {
-              backfillRecordId: event.record.id,
+              backfillProjectRecordId: event.record.id,
             },
           }),
         );

@@ -85,13 +85,13 @@ export class 项目树后台同步模块 extends ModuleBase {
         const itemData =
           currentState.projectTree.项目树节点数据[updateInfo.节点key];
 
-        if (!itemData.backfillRecordId) {
+        if (!itemData.backfillProjectRecordId) {
           throw new Error('无法移动未保存的项目');
         }
 
         if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
           this.getDependModule(项目表模块).updateProjectTitle(
-            itemData.backfillRecordId,
+            itemData.backfillProjectRecordId,
             {
               name: itemData.title,
             },
@@ -99,7 +99,7 @@ export class 项目树后台同步模块 extends ModuleBase {
           );
         } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
           this.getDependModule(项目组表模块).updateProjectGroup(
-            itemData.backfillRecordId,
+            itemData.backfillProjectRecordId,
             {
               name: itemData.title,
             },
@@ -125,7 +125,7 @@ export class 项目树后台同步模块 extends ModuleBase {
           {
             name: itemData.title,
             type: itemData.projectType,
-            projectGroupId: parentData?.backfillRecordId,
+            projectGroupId: parentData?.backfillProjectRecordId,
             platformType: projectDetailIsViewProjectDetail(
               itemData.projectDetail,
             )
@@ -145,7 +145,7 @@ export class 项目树后台同步模块 extends ModuleBase {
         const record = this.getDependModule(项目组表模块).addProjectGroup(
           {
             name: itemData.title,
-            parentGroupId: parentData?.backfillRecordId,
+            parentGroupId: parentData?.backfillProjectRecordId,
           },
           txs,
         );
@@ -182,18 +182,18 @@ export class 项目树后台同步模块 extends ModuleBase {
       throw new Error('删除项目时发生错误，无法获取项目数据');
     }
 
-    if (!itemData.backfillRecordId) {
+    if (!itemData.backfillProjectRecordId) {
       throw new Error('无法删除未保存的项目');
     }
 
     if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
       this.getDependModule(项目表模块).removeProject(
-        itemData.backfillRecordId,
+        itemData.backfillProjectRecordId,
         txs,
       );
     } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
       this.getDependModule(项目组表模块).removeProjectGroup(
-        itemData.backfillRecordId,
+        itemData.backfillProjectRecordId,
         txs,
       );
     }
@@ -214,7 +214,7 @@ export class 项目树后台同步模块 extends ModuleBase {
     moveInfo.recordItems.forEach((item) => {
       const itemData = currentState.projectTree.项目树节点数据[item.key];
 
-      if (!itemData.backfillRecordId) {
+      if (!itemData.backfillProjectRecordId) {
         throw new Error('无法移动未保存的项目');
       }
 
@@ -224,14 +224,14 @@ export class 项目树后台同步模块 extends ModuleBase {
 
       if (itemData.type === DirectoryTreeNodeTypeEnum.File) {
         this.getDependModule(项目表模块).moveProject(
-          itemData.backfillRecordId,
-          parentData?.backfillRecordId,
+          itemData.backfillProjectRecordId,
+          parentData?.backfillProjectRecordId,
           txs,
         );
       } else if (itemData.type === DirectoryTreeNodeTypeEnum.Folder) {
         this.getDependModule(项目组表模块).moveProjectGroup(
-          itemData.backfillRecordId,
-          parentData?.backfillRecordId,
+          itemData.backfillProjectRecordId,
+          parentData?.backfillProjectRecordId,
           txs,
         );
       }
