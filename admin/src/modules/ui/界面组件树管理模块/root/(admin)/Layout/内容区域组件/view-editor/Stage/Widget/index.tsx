@@ -1,19 +1,28 @@
 import {
-  widgetTreeNodeDataBaseIsWidgetTreeNodeData,
   widgetTreeNodeDataBaseIsWidgetSlotTreeNodeData,
+  widgetTreeNodeDataBaseIsWidgetTreeNodeData,
 } from '@/common/utils';
 import {
   useAppSelector,
   WidgetTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
-import { ReactElement, createElement } from 'react';
+import { theme } from 'antd';
+import React, { createElement, CSSProperties, ReactElement } from 'react';
+import { useDrop } from 'react-dnd';
+import { SlotItem, SlotItemProps } from '../SlotItem';
+
+// 定义拖放类型
+const ItemType = {
+  CARD: 'CARD',
+};
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
 }
 
 export const Widget: React.FC<WidgetProps> = ({ node }) => {
+  const { token } = theme.useToken();
   const nodeData = useAppSelector(
     (state) => state.projectContent.widgetTreeNodeDatas[node.key],
   );
@@ -46,8 +55,22 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
     {} as Record<string, ReactElement<SlotItemProps>[]>,
   );
 
+  const [{ isOver }, drop] = useDrop({
+    accept: ItemType.CARD,
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+    }),
+  });
+
+  const widgetStyle: CSSProperties = {
+    border: isOver ? `2px dashed ${token.colorPrimary}` : 'none',
+    padding: '16px',
+    borderRadius: '4px',
+    backgroundColor: isOver ? token.colorBgBase : 'transparent',
+  };
+
   return (
-    <div>
+    <div ref={drop} style={widgetStyle}>
       {createElement(
         部件组件管理模块.getWidgetComponent(
           nodeData.widgetLibName,
@@ -57,18 +80,6 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
           slotElements,
         },
       )}
-    </div>
-  );
-};
-
-export interface SlotItemProps {
-  node: WidgetTreeDataNode;
-}
-
-const SlotItem: React.FC<SlotItemProps> = ({ node }) => {
-  return (
-    <div>
-      <Widget node={node} />
     </div>
   );
 };
