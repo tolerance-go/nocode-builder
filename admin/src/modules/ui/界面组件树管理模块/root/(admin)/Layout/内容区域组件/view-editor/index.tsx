@@ -15,7 +15,7 @@ export const ViewEditor = () => {
   const widgetOpenBtnRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <DndProvider backend={HTML5Backend}>
+    <>
       <div
         style={{
           display: 'flex',
@@ -122,6 +122,6 @@ export const ViewEditor = () => {
         </div>
       </div>
       <CustomDragLayer />
-    </DndProvider>
+    </>
   );
 };

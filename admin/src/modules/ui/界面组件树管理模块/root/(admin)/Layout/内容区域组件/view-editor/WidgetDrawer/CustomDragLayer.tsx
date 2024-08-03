@@ -49,7 +49,7 @@ export const CustomDragLayer: React.FC = () => {
   };
 
   return (
-    <div style={layerStyles}>
+    <div data-test-id="custom-drag-layer" style={layerStyles}>
       <div style={getItemStyles(currentOffset, item.width)}>
         <CardItem item={item} />
       </div>
