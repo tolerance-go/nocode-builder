@@ -13,10 +13,10 @@ hero:
       text: 快速上手
       link: /cases
     - theme: alt
-      text: 案例分享
+      text: 什么是 UNOCODEX？
       link: /docs
     - theme: alt
-      text: 什么是 UNOCODEX？
+      text: 案例分享
       link: /docs
 
 features:
