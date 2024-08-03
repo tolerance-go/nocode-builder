@@ -51,8 +51,8 @@ export const use导航系统 = () => {
   return 导航系统;
 };
 
-export const 获取系统上下文 = () => {
-  const 系统上下文对象 = useContext(模块上下文);
-  if (!系统上下文对象) throw new Error('系统上下文未初始化');
-  return 系统上下文对象;
+export const 获取模块上下文 = () => {
+  const 上下文对象 = useContext(模块上下文);
+  if (!上下文对象) throw new Error('系统上下文未初始化');
+  return 上下文对象;
 };

@@ -1,4 +1,11 @@
 import { Button as AntdButton } from 'antd';
-export const Button = () => {
-  return <AntdButton>hi</AntdButton>;
+import { WidgetComponentProps } from '../../../types';
+
+export const Button = ({
+  text,
+  slotElements,
+}: WidgetComponentProps & {
+  text?: string;
+}) => {
+  return <AntdButton>hi{text ?? slotElements?.children}</AntdButton>;
 };

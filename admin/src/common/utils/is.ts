@@ -5,6 +5,10 @@ import {
   ProjectTreeNodeData,
   ProjectTreeNodeFileData,
   ViewProjectDetail,
+  WidgetSlotTreeNodeData,
+  WidgetTreeNodeData,
+  WidgetTreeNodeDataBase,
+  WidgetTreeNodeType,
 } from '@/modules/ui/界面状态仓库模块';
 
 export const projectDetailIsViewProjectDetail = (
@@ -17,4 +21,16 @@ export const projectTreeNodeDataIsProjectTreeNodeFileData = (
   node: ProjectTreeNodeData,
 ): node is ProjectTreeNodeFileData => {
   return node.type === DirectoryTreeNodeTypeEnum.File;
+};
+
+export const widgetTreeNodeDataBaseIsWidgetTreeNodeData = (
+  node: WidgetTreeNodeDataBase,
+): node is WidgetTreeNodeData => {
+  return node.type === WidgetTreeNodeType.Widget;
+};
+
+export const widgetTreeNodeDataBaseIsWidgetSlotTreeNodeData = (
+  node: WidgetTreeNodeDataBase,
+): node is WidgetSlotTreeNodeData => {
+  return node.type === WidgetTreeNodeType.Slot;
 };

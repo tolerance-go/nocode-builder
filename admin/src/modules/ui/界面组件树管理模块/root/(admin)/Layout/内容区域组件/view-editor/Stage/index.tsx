@@ -1,46 +1,74 @@
-import React, { ReactNode } from 'react';
+import {
+  widgetTreeNodeDataBaseIsWidgetSlotTreeNodeData,
+  widgetTreeNodeDataBaseIsWidgetTreeNodeData,
+} from '@/common/utils';
 import {
   useAppSelector,
-  WidgetSlotTreeDataNode,
   WidgetTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块';
+import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
+import React, { createElement, ReactElement } from 'react';
 
 interface WidgetProps {
   node: WidgetTreeDataNode;
 }
 
-interface SlotProps {
-  node: WidgetSlotTreeDataNode;
+interface SlotItemProps {
+  node: WidgetTreeDataNode;
 }
 
 const Widget: React.FC<WidgetProps> = ({ node }) => {
+  const nodeData = useAppSelector(
+    (state) => state.projectContent.widgetTreeNodeDatas[node.key],
+  );
+
+  const widgetTreeNodeDatas = useAppSelector(
+    (state) => state.projectContent.widgetTreeNodeDatas,
+  );
+
+  if (!widgetTreeNodeDataBaseIsWidgetTreeNodeData(nodeData)) {
+    throw new Error('nodeData is not a WidgetTreeNodeData');
+  }
+
+  const { 部件组件管理模块 } = 获取模块上下文();
+
+  const slotElements = node.children?.reduce(
+    (prev, curr) => {
+      const slotNodeData = widgetTreeNodeDatas[curr.key];
+
+      if (!widgetTreeNodeDataBaseIsWidgetSlotTreeNodeData(slotNodeData)) {
+        throw new Error('slotNodeData is not a WidgetSlotTreeNodeData');
+      }
+
+      prev[slotNodeData.name] =
+        curr.children?.map((child) => (
+          <SlotItem key={child.key} node={child} />
+        )) ?? [];
+
+      return prev;
+    },
+    {} as Record<string, ReactElement<SlotItemProps>[]>,
+  );
+
   return (
-    <div style={{ border: '1px solid black', padding: '10px', margin: '5px' }}>
-      <h3>{node.title as ReactNode}</h3>
-      <p>Widget内容</p>
-      {node.children && (
-        <div style={{ marginLeft: '20px' }}>
-          {node.children.map((child) => (
-            <Slot key={child.key} node={child} />
-          ))}
-        </div>
+    <div>
+      {createElement(
+        部件组件管理模块.getWidgetComponent(
+          nodeData.widgetLibName,
+          nodeData.componentName,
+        ),
+        {
+          slotElements,
+        },
       )}
     </div>
   );
 };
 
-const Slot: React.FC<SlotProps> = ({ node }) => {
+const SlotItem: React.FC<SlotItemProps> = ({ node }) => {
   return (
-    <div style={{ border: '1px solid gray', padding: '10px', margin: '5px' }}>
-      <h4>{node.title as ReactNode}</h4>
-      <p>Slot内容</p>
-      {node.children && (
-        <div style={{ marginLeft: '20px' }}>
-          {node.children.map((child) => (
-            <Widget key={child.key} node={child} />
-          ))}
-        </div>
-      )}
+    <div>
+      <Widget node={node} />
     </div>
   );
 };
