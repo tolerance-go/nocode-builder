@@ -6,9 +6,8 @@ import {
 } from '@/common/utils';
 import { api } from '@/globals';
 import { useAppSelector } from '@/modules/界面状态仓库模块';
-import { FileImageOutlined } from '@ant-design/icons';
 import { css } from '@emotion/css';
-import { Card, Col, Drawer, Row, Spin, theme, Typography } from 'antd';
+import { Col, Drawer, Row, Spin } from 'antd';
 import {
   forwardRef,
   useEffect,
@@ -16,19 +15,13 @@ import {
   useRef,
   useState,
 } from 'react';
+import { CardData, CardItem } from './CardItem';
 
 // 定义抽屉的引用类型
 export type WidgetDrawerRef = {
   open: () => void;
   close: () => void;
   switch: () => void;
-};
-
-// 定义数据类型
-type CardData = {
-  title: string;
-  content?: string;
-  image?: string;
 };
 
 // 使用 Axios 获取数据
@@ -58,7 +51,6 @@ export const WidgetDrawer = forwardRef<
   const [data, setData] = useState<CardData[]>([]);
   const [loading, setLoading] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const { token } = theme.useToken();
   const 激活的项目节点数据 = useAppSelector((state) =>
     state.projectTree.激活的节点的key
       ? state.projectTree.项目树节点数据[state.projectTree.激活的节点的key]
@@ -152,40 +144,7 @@ export const WidgetDrawer = forwardRef<
           <Row gutter={[16, 16]}>
             {data.map((item, index) => (
               <Col key={index} span={24 / 8}>
-                <Card
-                  size="small"
-                  hoverable
-                  bordered={false}
-                  cover={
-                    item.image ? (
-                      <img
-                        style={{
-                          width: 200,
-                          height: 150,
-                          objectFit: 'cover',
-                        }}
-                        alt={item.title}
-                        src={item.image}
-                      />
-                    ) : (
-                      <div
-                        style={{
-                          width: '100%',
-                          height: 150,
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          borderRadius: '4px',
-                          backgroundColor: token.colorBgBase,
-                        }}
-                      >
-                        <FileImageOutlined />
-                      </div>
-                    )
-                  }
-                >
-                  <Typography.Text strong>{item.title}</Typography.Text>
-                </Card>
+                <CardItem item={item} />
               </Col>
             ))}
           </Row>
