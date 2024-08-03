@@ -43,6 +43,18 @@ export const createProjectContentSlice = () => {
           action.payload.widgetTree,
         );
       },
+
+      添加根部件(
+        state,
+        action: PayloadAction<{
+          根部件: WidgetTreeDataNode;
+        }>,
+      ) {
+        const { 根部件 } = action.payload;
+        state.widgetTree.push(根部件);
+        state.derived_widget节点到父节点的映射[根部件.key] = null;
+        state.widgetTreeNodeDatas[根部件.key] = 根部件;
+      },
     },
   });
   return projectContentSlice;
