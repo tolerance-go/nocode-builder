@@ -6,7 +6,7 @@ import {
   ProjectTreeDataNode,
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeData,
-} from '@/modules/界面状态仓库模块';
+} from '@/modules/ui/界面状态仓库模块';
 
 describe('历史状态机', () => {
   const 创建Mock记录 = (

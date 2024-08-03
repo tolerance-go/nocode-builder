@@ -3,7 +3,7 @@ import {
   ProjectTreeNodeData,
   ProjectTreeDataNode,
   ProjectTreeNodeDataRecord,
-} from '../界面状态仓库模块';
+} from '@/modules/ui/界面状态仓库模块';
 
 export type 历史记录操作类型 = '插入' | '删除' | '移动' | '更新';
 

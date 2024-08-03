@@ -4,13 +4,13 @@ import {
   新增操作详情,
   界面状态仓库模块,
   移动操作详情,
-} from '../../界面状态仓库模块';
+} from '@/modules/ui/界面状态仓库模块';
 import {
   compareTrees,
   DirectoryTreeNodeTypeEnum,
   ProjectTreeDataNode,
   RootState,
-} from '../../界面状态仓库模块';
+} from '@/modules/ui/界面状态仓库模块';
 import { 事件中心系统 } from '../../事件中心系统';
 import { 项目表模块 } from '../../models/项目表模块';
 import { 项目组表模块 } from '../../models/项目组表模块';

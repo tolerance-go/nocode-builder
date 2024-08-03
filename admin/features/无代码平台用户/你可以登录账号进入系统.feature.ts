@@ -1,6 +1,6 @@
 import { fullPathnames, 组件测试标识 } from '@/common/constants';
-import { RootState } from '@/modules/界面状态仓库模块/types';
-import { localStateFieldName } from '@/modules/界面状态仓库模块/constants';
+import { RootState } from '@/modules/ui/界面状态仓库模块/types';
+import { localStateFieldName } from '@/modules/ui/界面状态仓库模块/constants';
 import { 使用场景 } from '@cypress/support/utils';
 import { createLocalforageInstance } from '@/modules/services/LocalForageService';
 

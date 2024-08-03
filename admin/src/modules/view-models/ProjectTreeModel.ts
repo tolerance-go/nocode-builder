@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { ViewKey } from '@/common/types';
-import { ProjectTreeNodeDataRecord } from '../界面状态仓库模块/types';
-import { 界面状态仓库模块 } from '../界面状态仓库模块';
+import { ProjectTreeNodeDataRecord } from '@/modules/ui/界面状态仓库模块/types';
+import { 界面状态仓库模块 } from '@/modules/ui/界面状态仓库模块';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 
 export class ProjectTreeModel extends ModuleBase {

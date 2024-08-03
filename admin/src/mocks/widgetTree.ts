@@ -2,7 +2,7 @@ import {
   WidgetTreeDataNode,
   WidgetTreeNodeDataRecord,
   WidgetTreeNodeType,
-} from '@/modules/界面状态仓库模块';
+} from '@/modules/ui/界面状态仓库模块';
 
 // 模拟的 widgetTree 数据
 export const mockWidgetTree: WidgetTreeDataNode[] = [

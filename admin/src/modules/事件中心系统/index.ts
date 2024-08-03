@@ -8,7 +8,7 @@ import {
   ProjectTreeDataNode,
   ProjectTreeNodeDataRecord,
   ProjectTreeNodeData,
-} from '../界面状态仓库模块';
+} from '@/modules/ui/界面状态仓库模块';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
 
 type 项目树后台同步模块事件类型 = {

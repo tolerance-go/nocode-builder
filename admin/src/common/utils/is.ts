@@ -5,7 +5,7 @@ import {
   ProjectTreeNodeData,
   ProjectTreeNodeFileData,
   ViewProjectDetail,
-} from '@/modules/界面状态仓库模块';
+} from '@/modules/ui/界面状态仓库模块';
 
 export const projectDetailIsViewProjectDetail = (
   projectDetail: ProjectDetailBase,
