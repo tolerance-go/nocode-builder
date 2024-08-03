@@ -1,24 +1,20 @@
-import { DndProvider } from 'react-dnd';
-import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Sider } from './Sider';
 import { 内容区域组件 } from './内容区域组件';
 import { 拖拽跟随鼠标的容器 } from './拖拽跟随鼠标的容器';
 
 export const Layout = () => {
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div
-        style={{
-          overflow: 'hidden',
-          height: '100vh',
-          position: 'relative',
-          display: 'flex',
-        }}
-      >
-        <拖拽跟随鼠标的容器 />
-        <Sider />
-        <内容区域组件 />
-      </div>
-    </DndProvider>
+    <div
+      style={{
+        overflow: 'hidden',
+        height: '100vh',
+        position: 'relative',
+        display: 'flex',
+      }}
+    >
+      <拖拽跟随鼠标的容器 />
+      <Sider />
+      <内容区域组件 />
+    </div>
   );
 };
