@@ -1,6 +1,7 @@
 import { ViewKey } from '@/common/types';
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { WidgetTreeNodeDataRecord, WidgetTreeDataNode } from '../../types';
+import { generateDerivedMapping } from './utils';
 
 export type ProjectContentStates = {
   // 派生数据
@@ -9,6 +10,12 @@ export type ProjectContentStates = {
   widgetTreeNodeDatas: WidgetTreeNodeDataRecord;
   widgetTree: WidgetTreeDataNode[];
 };
+
+// 定义 reducer 的 payload 类型
+interface UpdateWidgetTreePayload {
+  widgetTree: WidgetTreeDataNode[];
+  widgetTreeNodeDatas: WidgetTreeNodeDataRecord;
+}
 
 export const createProjectContentInitialState = () => {
   const initialState: ProjectContentStates = {
@@ -25,7 +32,18 @@ export const createProjectContentSlice = () => {
   const projectContentSlice = createSlice({
     name: 'projectContent',
     initialState,
-    reducers: {},
+    reducers: {
+      updateWidgetTreeData(
+        state,
+        action: PayloadAction<UpdateWidgetTreePayload>,
+      ) {
+        state.widgetTree = action.payload.widgetTree;
+        state.widgetTreeNodeDatas = action.payload.widgetTreeNodeDatas;
+        state.derived_widget节点到父节点的映射 = generateDerivedMapping(
+          action.payload.widgetTree,
+        );
+      },
+    },
   });
   return projectContentSlice;
 };

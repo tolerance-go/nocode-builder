@@ -83,6 +83,7 @@ export enum WidgetTreeNodeType {
 }
 
 export type WidgetTreeNodeDataBase = {
+  key: ViewKey;
   type: WidgetTreeNodeType;
   title: string;
   recordId?: number;

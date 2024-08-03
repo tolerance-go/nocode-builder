@@ -1,73 +1,28 @@
+import { mockWidgetTree, mockWidgetTreeNodeDatas } from '@/mocks/widgetTree';
+import { useAppDispatch, useAppSelector } from '@/modules/界面状态仓库模块';
+import { use界面状态管理者 } from '@/modules/界面组件树管理模块/hooks';
 import { Tree } from 'antd';
-import type { DataNode } from 'antd/es/tree';
-
-const treeData: DataNode[] = [
-  // {
-  //   title: '根节点',
-  //   key: '0-0',
-  //   children: [
-  //     {
-  //       title: 'header',
-  //       key: 'c14',
-  //       children: [
-  //         {
-  //           title: '子子节点3',
-  //           key: '0-330-1-0',
-  //           children: [
-  //             {
-  //               title: '子节点1',
-  //               key: '0-0-0',
-  //               children: [
-  //                 {
-  //                   title: 'children',
-  //                   key: 'c1',
-  //                   children: [
-  //                     {
-  //                       title: '子子节点1',
-  //                       key: '0-0-0-0',
-  //                     },
-  //                     {
-  //                       title: '子子节点2',
-  //                       key: '0-0-0-1',
-  //                     },
-  //                   ],
-  //                 },
-  //               ],
-  //             },
-  //             {
-  //               title: '子节点2',
-  //               key: '0-0-1',
-  //               children: [
-  //                 {
-  //                   title: 'header',
-  //                   key: 'c1',
-  //                   children: [
-  //                     {
-  //                       title: '子子节点3',
-  //                       key: '0-0-1-0',
-  //                     },
-  //                   ],
-  //                 },
-  //                 {
-  //                   title: 'bottom',
-  //                   key: 'c2',
-  //                   children: [
-  //                     {
-  //                       title: '子子节点4',
-  //                       key: '0-0-1-0',
-  //                     },
-  //                   ],
-  //                 },
-  //               ],
-  //             },
-  //           ],
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
-];
+import { useEffect } from 'react';
 
 export const WidgetTree = () => {
-  return <Tree treeData={treeData} blockNode />;
+  const dispatch = useAppDispatch();
+  const {
+    slices: {
+      projectContent: {
+        actions: { updateWidgetTreeData },
+      },
+    },
+  } = use界面状态管理者();
+  const widgetTree = useAppSelector((state) => state.projectContent.widgetTree);
+
+  useEffect(() => {
+    dispatch(
+      updateWidgetTreeData({
+        widgetTree: mockWidgetTree,
+        widgetTreeNodeDatas: mockWidgetTreeNodeDatas,
+      }),
+    );
+  }, [dispatch, updateWidgetTreeData]);
+
+  return <Tree treeData={widgetTree} blockNode />;
 };
