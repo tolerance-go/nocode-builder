@@ -1,6 +1,10 @@
 import { ViewKey } from '@/common/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { WidgetTreeNodeDataRecord, WidgetTreeDataNode } from '../../types';
+import {
+  WidgetTreeNodeDataRecord,
+  WidgetTreeDataNode,
+  WidgetTreeNodeDataRecordItem,
+} from '../../types';
 import { generateDerivedMapping } from './utils';
 
 export type ProjectContentStates = {
@@ -48,12 +52,13 @@ export const createProjectContentSlice = () => {
         state,
         action: PayloadAction<{
           根部件: WidgetTreeDataNode;
+          data: WidgetTreeNodeDataRecordItem;
         }>,
       ) {
-        const { 根部件 } = action.payload;
+        const { 根部件, data } = action.payload;
         state.widgetTree.push(根部件);
         state.derived_widget节点到父节点的映射[根部件.key] = null;
-        state.widgetTreeNodeDatas[根部件.key] = 根部件;
+        state.widgetTreeNodeDatas[根部件.key] = data;
       },
     },
   });
