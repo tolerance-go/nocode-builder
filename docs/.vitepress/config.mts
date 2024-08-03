@@ -5,6 +5,13 @@ export default defineConfig({
   title: 'UNOCODEX',
   description: 'unocodex-doc',
   head: [['link', { rel: 'stylesheet', href: '/styles.css' }]],
+
+  markdown: {
+    toc: {
+      level: [1, 2, 3, 4, 5, 6], // 设置目录生成的层级范围
+    },
+  },
+
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
@@ -28,6 +35,13 @@ export default defineConfig({
         {
           text: 'API 参考',
           items: [],
+        },
+        {
+          text: '用户故事集',
+          items: [
+            { text: '用户', link: '/docs/user-stories/user' },
+            { text: '开发者', link: '/docs/user-stories/developer' },
+          ],
         },
         {
           text: '用户行为手册',
