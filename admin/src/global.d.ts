@@ -1,7 +1,7 @@
 import { EngineBase } from './base';
 import { EngineManagerBase } from './base/EngineManager';
 import { 事件中心系统 } from '@/modules/事件中心系统';
-import { 界面导航系统 } from '@/modules/界面导航系统';
+import { 界面导航系统 } from '@/modules/ui/界面导航系统';
 import { 界面通知系统 } from '@/modules/界面通知系统';
 import { Table } from './common/controllers';
 

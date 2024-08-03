@@ -6,7 +6,7 @@ import { produce } from 'immer';
 import { 用户表模块 } from '../models/用户表模块';
 import { 事件中心系统 } from '../事件中心系统';
 import { 本地数据管理模块 } from '../本地数据管理模块';
-import { 界面导航系统 } from '../界面导航系统';
+import { 界面导航系统 } from '../ui/界面导航系统';
 import { localStateFieldName } from './constants';
 import {
   createLayoutInitialState,
