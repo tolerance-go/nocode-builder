@@ -11,6 +11,7 @@ import { 项目树历史纪录管理者 } from '@/modules/项目树历史纪录�
 import { 验证管理者 } from '@/modules/验证管理者';
 import { renderRoot } from './renderRoot';
 import { 界面状态仓库模块 } from '@/modules/ui/界面状态仓库模块';
+import { 部件组件管理模块 } from '../部件组件管理模块';
 
 export class 界面组件树管理模块 extends ModuleBase {
   private static instance: 界面组件树管理模块;
@@ -35,6 +36,7 @@ export class 界面组件树管理模块 extends ModuleBase {
       跟随鼠标显示内容管理者.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),
       界面状态管理模块.getInstance(this.engine),
+      部件组件管理模块.getInstance(this.engine),
     );
   }
 
