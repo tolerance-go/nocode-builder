@@ -29,6 +29,12 @@ export class 项目树后台同步模块 extends ModuleBase {
 
   private prevState: RootState | null = null;
 
+  constructor(engine: EngineBase) {
+    super(engine);
+
+    this.监听项目变化();
+  }
+
   protected requireModules() {
     super.requireModules(
       事件中心系统.getInstance(this.engine),
@@ -39,7 +45,9 @@ export class 项目树后台同步模块 extends ModuleBase {
     );
   }
 
-  protected async onSetup(): Promise<void> {
+  protected async onSetup(): Promise<void> {}
+
+  private 监听项目变化() {
     const { store } = this.getDependModule(界面状态仓库模块);
     this.prevState = store.getState();
 
