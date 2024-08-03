@@ -15,7 +15,7 @@ import {
   图标管理者Context,
   导航系统Context,
   界面状态仓库模块Context,
-  系统上下文,
+  模块上下文,
   跟随鼠标显示内容管理者Context,
   验证管理者Context,
 } from './contexts';
@@ -29,6 +29,7 @@ import { Login } from './root/(auth)/login';
 import { Register } from './root/(auth)/register';
 import { NotFound } from './root/404';
 import { Custom } from './root/custom';
+import { 部件组件管理模块 } from '../部件组件管理模块';
 
 export const renderRoot = (module: ModuleBase) => {
   const 验证管理者实例 = module.getDependModule(验证管理者);
@@ -39,14 +40,16 @@ export const renderRoot = (module: ModuleBase) => {
   const 全局事件系统实例 = module.getDependModule(事件中心系统);
   const 导航系统实例 = module.getDependModule(界面导航系统);
   const 界面通知系统实例 = module.getDependModule(界面通知系统);
+  const 部件组件管理模块实例 = module.getDependModule(部件组件管理模块);
 
   return (
     <React.StrictMode>
-      <系统上下文.Provider
+      <模块上下文.Provider
         value={{
           导航系统: 导航系统实例,
           全局事件系统: 全局事件系统实例,
           界面通知系统: 界面通知系统实例,
+          部件组件管理模块: 部件组件管理模块实例,
         }}
       >
         <导航系统Context.Provider value={导航系统实例}>
@@ -105,7 +108,7 @@ export const renderRoot = (module: ModuleBase) => {
             </界面状态仓库模块Context.Provider>
           </全局事件系统Context.Provider>
         </导航系统Context.Provider>
-      </系统上下文.Provider>
+      </模块上下文.Provider>
     </React.StrictMode>
   );
 };

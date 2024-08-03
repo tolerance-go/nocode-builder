@@ -15,7 +15,7 @@ export class 部件组件管理模块 extends ModuleBase {
 
   private componentRegistry: Map<string, Map<string, FC<unknown>>>;
 
-  private constructor(engine: EngineBase) {
+  constructor(engine: EngineBase) {
     super(engine);
     this.componentRegistry = new Map();
   }
