@@ -2,7 +2,7 @@ import { EngineBase, ModuleBase } from '@/base';
 import { createActor } from 'xstate';
 import { 事件中心系统 } from '../事件中心系统';
 // import { 历史记录远程同步管理者 } from '../历史记录远程同步管理者';
-import { 界面通知系统 } from '../界面通知系统';
+import { 界面通知系统 } from '../ui/界面通知系统';
 import { 历史状态机 } from './states';
 import { 历史记录 } from './types';
 

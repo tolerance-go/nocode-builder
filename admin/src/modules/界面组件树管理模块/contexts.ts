@@ -4,7 +4,7 @@ import { 界面状态仓库模块 } from '../界面状态仓库模块';
 import { 图标管理者 } from '../图标管理者';
 import { 跟随鼠标显示内容管理者 } from '../跟随鼠标显示内容管理者';
 import { 验证管理者 } from '../验证管理者';
-import { 界面通知系统 } from '@/modules/界面通知系统';
+import { 界面通知系统 } from '@/modules/ui/界面通知系统';
 import { 界面导航系统 } from '../ui/界面导航系统';
 
 export const 图标管理者Context = createContext<图标管理者 | null>(null);
