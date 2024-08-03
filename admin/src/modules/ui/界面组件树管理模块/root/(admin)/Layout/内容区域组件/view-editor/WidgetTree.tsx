@@ -1,4 +1,7 @@
-import { mockWidgetTree, mockWidgetTreeNodeDatas } from '@/mocks/widgetTree';
+import {
+  mockWidgetTree,
+  mockWidgetTreeNodeDatas,
+} from '@cypress/fixtures/widgetTree';
 import { useAppDispatch, useAppSelector } from '@/modules/ui/界面状态仓库模块';
 import { use界面状态管理者 } from '@/modules/ui/界面组件树管理模块/hooks';
 import { Tree } from 'antd';

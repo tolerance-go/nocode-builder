@@ -3,6 +3,7 @@ import { EngineManagerBase } from './base/EngineManager';
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import { 界面导航系统 } from '@/modules/ui/界面导航系统';
 import { 界面通知系统 } from '@/modules/ui/界面通知系统';
+import { 浏览器环境程序接口模块 } from '@/modules/浏览器环境程序接口模块';
 import { Table } from './common/controllers';
 
 declare global {
@@ -18,6 +19,7 @@ declare global {
     dataTableProjectTable?: Table;
     bluemapProjectTable?: Table;
     projectGroupTable?: Table;
+    浏览器环境程序接口模块?: 浏览器环境程序接口模块;
   }
 }
 
