@@ -4,10 +4,11 @@ import { defineConfig } from 'vitepress';
 export default defineConfig({
   title: 'UNOCODEX',
   description: 'unocodex-doc',
+  head: [['link', { rel: 'stylesheet', href: '/styles.css' }]],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     nav: [
-      { text: '在线案例', link: '/' },
+      { text: '在线案例', link: '/cases' },
       { text: '文档', link: '/docs', activeMatch: '^/docs/' },
       { text: '博客', link: '/blogs' },
       { text: '模板', link: '/templates' },

@@ -12,5 +12,14 @@
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"
   },
-  "cSpell.words": ["DERIBIT", "MAIV", "MBIV", "OAIV", "OBIV", "OKEX", "ungap"]
+  "cSpell.words": [
+    "DERIBIT",
+    "MAIV",
+    "MBIV",
+    "OAIV",
+    "OBIV",
+    "OKEX",
+    "ungap",
+    "webp"
+  ]
 }

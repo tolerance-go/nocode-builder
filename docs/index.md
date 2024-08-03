@@ -6,13 +6,16 @@ hero:
   name: 'UNOCODEX'
   text: '下一代无代码应用构建平台'
   tagline: 一键发布，只待设计
+  image:
+    src: /logo.webp
+    alt: UNOCODEX
   actions:
     - theme: brand
       text: 在线案例
-      link: /markdown-examples
+      link: /cases
     - theme: alt
       text: 快速上手
-      link: /api-examples
+      link: /docs
 
 features:
   - title: 版本驱动
