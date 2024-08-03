@@ -6,6 +6,7 @@ import { WidgetDrawer, WidgetDrawerRef } from './WidgetDrawer';
 import { useRef } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { Stage } from './Stage';
 
 export const ViewEditor = () => {
   const { token } = theme.useToken();
@@ -64,7 +65,7 @@ export const ViewEditor = () => {
                 header
               </div>
               <div data-test-id={组件测试标识.视图编辑页面.舞台.内容}>
-                stage
+                <Stage />
               </div>
             </div>
             <div
