@@ -45,7 +45,7 @@ export default defineConfig({
         },
         {
           text: '用户行为手册',
-          items: [{ text: '概览', link: '/docs/user-bdd/' }],
+          items: [{ text: '用户', link: '/docs/user-bdd/user' }],
         },
       ],
     },
