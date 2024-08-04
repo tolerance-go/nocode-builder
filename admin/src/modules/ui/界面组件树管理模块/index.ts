@@ -4,7 +4,6 @@ import { 事件中心系统 } from '@/modules/事件中心系统';
 import { 图标管理者 } from '@/modules/图标管理者';
 import { 文档环境模块 } from '@/modules/文档环境模块';
 import { 界面导航系统 } from '@/modules/ui/界面导航系统';
-import { 界面状态管理模块 } from '@/modules/ui/界面状态管理模块';
 import { 界面通知系统 } from '@/modules/ui/界面通知系统';
 import { 跟随鼠标显示内容管理者 } from '@/modules/跟随鼠标显示内容管理者';
 import { 项目树历史纪录管理者 } from '@/modules/项目树历史纪录管理者';
