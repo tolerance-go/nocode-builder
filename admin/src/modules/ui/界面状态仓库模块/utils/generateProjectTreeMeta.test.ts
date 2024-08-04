@@ -3,9 +3,17 @@ import { generateProjectTreeMeta } from './generateProjectTreeMeta';
 import {
   ProjectModelRecord,
   ProjectGroupModelRecord,
+  ProjectDetailModelRecord,
+  BluemapProjectModelRecord,
+  DataTableProjectModelRecord,
+  ViewProjectModelRecord,
 } from '@/_gen/model-records';
-import { DirectoryTreeNodeTypeEnum } from '../types';
-import { ProjectTypeEnum } from '@/_gen/models';
+import {
+  DirectoryTreeNodeTypeEnum,
+  BluemapProjectDetail,
+  ViewProjectDetail,
+} from '../types';
+import { ProjectTypeEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
 
 describe('generateProjectTreeMeta 函数测试', () => {
   it('应正确生成项目树结构', () => {
@@ -18,6 +26,7 @@ describe('generateProjectTreeMeta 函数测试', () => {
         projectGroupId: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
+        projectDetailId: 1,
       },
       {
         id: 2,
@@ -26,6 +35,7 @@ describe('generateProjectTreeMeta 函数测试', () => {
         type: ProjectTypeEnum.Bluemap,
         createdAt: new Date(),
         updatedAt: new Date(),
+        projectDetailId: 2,
       },
     ];
 
@@ -47,30 +57,86 @@ describe('generateProjectTreeMeta 函数测试', () => {
       },
     ];
 
-    const result = generateProjectTreeMeta(projectRecords, projectGroupRecords);
+    const projectDetailRecords: ProjectDetailModelRecord[] = [
+      {
+        id: 1,
+        viewProjectId: 1,
+        bluemapProjectId: undefined,
+        dataTableProjectId: undefined,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 2,
+        viewProjectId: undefined,
+        bluemapProjectId: 1,
+        dataTableProjectId: undefined,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    const viewProjectModelRecords: ViewProjectModelRecord[] = [
+      {
+        id: 1,
+        platformType: WidgetPlatformTypeEnum.PcWeb,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    const bluemapProjectModelRecords: BluemapProjectModelRecord[] = [
+      {
+        id: 1,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    const dataTableProjectModelRecords: DataTableProjectModelRecord[] = [];
+
+    const result = generateProjectTreeMeta(
+      projectRecords,
+      projectGroupRecords,
+      projectDetailRecords,
+      viewProjectModelRecords,
+      bluemapProjectModelRecords,
+      dataTableProjectModelRecords,
+    );
 
     expect(result.项目树节点数据).toEqual({
       '1_group': {
-        recordId: 1,
+        backfillProjectRecordId: 1,
         title: '项目组1',
         type: DirectoryTreeNodeTypeEnum.Folder,
       },
       '2_group': {
-        recordId: 2,
+        backfillProjectRecordId: 2,
         title: '项目组2',
         type: DirectoryTreeNodeTypeEnum.Folder,
       },
       '1_project': {
-        recordId: 1,
+        backfillProjectRecordId: 1,
         title: '项目A',
         type: DirectoryTreeNodeTypeEnum.File,
         projectType: ProjectTypeEnum.View,
+        projectDetail: {
+          type: ProjectTypeEnum.View,
+          platform: WidgetPlatformTypeEnum.PcWeb,
+        } satisfies ViewProjectDetail,
       },
       '2_project': {
-        recordId: 2,
+        backfillProjectRecordId: 2,
         title: '项目B',
         type: DirectoryTreeNodeTypeEnum.File,
         projectType: ProjectTypeEnum.Bluemap,
+        projectDetail: {
+          type: ProjectTypeEnum.Bluemap,
+        } satisfies BluemapProjectDetail,
       },
     });
 
@@ -116,6 +182,7 @@ describe('generateProjectTreeMeta 函数测试', () => {
         projectGroupId: 1,
         createdAt: new Date(),
         updatedAt: new Date(),
+        projectDetailId: 1,
       },
       {
         id: 2,
@@ -124,6 +191,7 @@ describe('generateProjectTreeMeta 函数测试', () => {
         type: ProjectTypeEnum.Bluemap,
         createdAt: new Date(),
         updatedAt: new Date(),
+        projectDetailId: 2,
       },
       {
         id: 3,
@@ -133,6 +201,7 @@ describe('generateProjectTreeMeta 函数测试', () => {
         projectGroupId: 3,
         createdAt: new Date(),
         updatedAt: new Date(),
+        projectDetailId: 3,
       },
     ];
 
@@ -162,41 +231,117 @@ describe('generateProjectTreeMeta 函数测试', () => {
       },
     ];
 
-    const result = generateProjectTreeMeta(projectRecords, projectGroupRecords);
+    const projectDetailRecords: ProjectDetailModelRecord[] = [
+      {
+        id: 1,
+        viewProjectId: 1,
+        bluemapProjectId: undefined,
+        dataTableProjectId: undefined,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 2,
+        viewProjectId: undefined,
+        bluemapProjectId: 1,
+        dataTableProjectId: undefined,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 3,
+        viewProjectId: 2,
+        bluemapProjectId: undefined,
+        dataTableProjectId: undefined,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    const viewProjectModelRecords: ViewProjectModelRecord[] = [
+      {
+        id: 1,
+        platformType: WidgetPlatformTypeEnum.PcWeb,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+      {
+        id: 2,
+        platformType: WidgetPlatformTypeEnum.MobileWeb,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    const bluemapProjectModelRecords: BluemapProjectModelRecord[] = [
+      {
+        id: 1,
+        ownerId: 1,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    ];
+
+    const dataTableProjectModelRecords: DataTableProjectModelRecord[] = [];
+
+    const result = generateProjectTreeMeta(
+      projectRecords,
+      projectGroupRecords,
+      projectDetailRecords,
+      viewProjectModelRecords,
+      bluemapProjectModelRecords,
+      dataTableProjectModelRecords,
+    );
 
     expect(result.项目树节点数据).toEqual({
       '1_group': {
-        recordId: 1,
+        backfillProjectRecordId: 1,
         title: '项目组1',
         type: DirectoryTreeNodeTypeEnum.Folder,
       },
       '2_group': {
-        recordId: 2,
+        backfillProjectRecordId: 2,
         title: '项目组2',
         type: DirectoryTreeNodeTypeEnum.Folder,
       },
       '3_group': {
-        recordId: 3,
+        backfillProjectRecordId: 3,
         title: '项目组3',
         type: DirectoryTreeNodeTypeEnum.Folder,
       },
       '1_project': {
-        recordId: 1,
+        backfillProjectRecordId: 1,
         title: '项目A',
         type: DirectoryTreeNodeTypeEnum.File,
         projectType: ProjectTypeEnum.View,
+        projectDetail: {
+          type: ProjectTypeEnum.View,
+          platform: WidgetPlatformTypeEnum.PcWeb,
+        } as ViewProjectDetail,
       },
       '2_project': {
-        recordId: 2,
+        backfillProjectRecordId: 2,
         title: '项目B',
         type: DirectoryTreeNodeTypeEnum.File,
         projectType: ProjectTypeEnum.Bluemap,
+        projectDetail: {
+          type: ProjectTypeEnum.Bluemap,
+        } as BluemapProjectDetail,
       },
       '3_project': {
-        recordId: 3,
+        backfillProjectRecordId: 3,
         title: '项目C',
         type: DirectoryTreeNodeTypeEnum.File,
         projectType: ProjectTypeEnum.View,
+        projectDetail: {
+          type: ProjectTypeEnum.View,
+          platform: WidgetPlatformTypeEnum.MobileWeb,
+        } as ViewProjectDetail,
       },
     });
 

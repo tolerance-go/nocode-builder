@@ -1,17 +1,77 @@
 import {
   ProjectModelRecord,
   ProjectGroupModelRecord,
+  ProjectDetailModelRecord,
+  BluemapProjectModelRecord,
+  DataTableProjectModelRecord,
+  ViewProjectModelRecord,
 } from '@/_gen/model-records';
 import { ViewKey } from '@/common/types';
 import {
   ProjectTreeNodeDataRecord,
   ProjectTreeDataNode,
   DirectoryTreeNodeTypeEnum,
+  BluemapProjectDetail,
+  DataTableProjectDetail,
+  ViewProjectDetail,
 } from '../types';
+import { ProjectTypeEnum } from '@/_gen/models';
+
+function getProjectDetail(
+  targetProjectDetailRecord: ProjectDetailModelRecord | undefined,
+  viewProjectModelRecords: ViewProjectModelRecord[],
+  bluemapProjectModelRecords: BluemapProjectModelRecord[],
+  dataTableProjectModelRecords: DataTableProjectModelRecord[],
+): ViewProjectDetail | DataTableProjectDetail | BluemapProjectDetail {
+  if (targetProjectDetailRecord?.viewProjectId) {
+    const targetViewProjectDetail = viewProjectModelRecords.find(
+      (item) => item.id === targetProjectDetailRecord.viewProjectId,
+    );
+
+    if (!targetViewProjectDetail) {
+      throw new Error('ViewProjectDetail not found');
+    }
+
+    return {
+      type: ProjectTypeEnum.View,
+      platform: targetViewProjectDetail.platformType,
+    } as ViewProjectDetail;
+  } else if (targetProjectDetailRecord?.bluemapProjectId) {
+    const targetBluemapProjectDetail = bluemapProjectModelRecords.find(
+      (item) => item.id === targetProjectDetailRecord.bluemapProjectId,
+    );
+
+    if (!targetBluemapProjectDetail) {
+      throw new Error('BluemapProjectDetail not found');
+    }
+
+    return {
+      type: ProjectTypeEnum.Bluemap,
+    } as BluemapProjectDetail;
+  } else if (targetProjectDetailRecord?.dataTableProjectId) {
+    const targetDataTableProjectDetail = dataTableProjectModelRecords.find(
+      (item) => item.id === targetProjectDetailRecord.dataTableProjectId,
+    );
+
+    if (!targetDataTableProjectDetail) {
+      throw new Error('DataTableProjectDetail not found');
+    }
+
+    return {
+      type: ProjectTypeEnum.DataTable,
+    } as DataTableProjectDetail;
+  }
+
+  throw new Error('ProjectDetail not found');
+}
 
 function generateProjectTreeMeta(
   projectRecords: ProjectModelRecord[],
   projectGroupRecords: ProjectGroupModelRecord[],
+  projectDetailRecords: ProjectDetailModelRecord[],
+  viewProjectModelRecords: ViewProjectModelRecord[],
+  bluemapProjectModelRecords: BluemapProjectModelRecord[],
+  dataTableProjectModelRecords: DataTableProjectModelRecord[],
 ) {
   const 项目树节点数据: ProjectTreeNodeDataRecord = {};
   const derived_节点到父节点的映射: Record<ViewKey, ViewKey | null> = {};
@@ -45,11 +105,24 @@ function generateProjectTreeMeta(
       title: project.name,
       children: [], // 保证符合 ProjectStructureTreeDataNode 类型
     };
+
+    const targetProjectDetailRecord = projectDetailRecords.find(
+      (item) => item.id === project.projectDetailId,
+    );
+
+    const projectDetail = getProjectDetail(
+      targetProjectDetailRecord,
+      viewProjectModelRecords,
+      bluemapProjectModelRecords,
+      dataTableProjectModelRecords,
+    );
+
     项目树节点数据[projectKey] = {
       backfillProjectRecordId: project.id,
       title: project.name,
       type: DirectoryTreeNodeTypeEnum.File,
       projectType: project.type,
+      projectDetail,
     };
     derived_节点到父节点的映射[projectKey] = project.projectGroupId
       ? `${project.projectGroupId}_group`

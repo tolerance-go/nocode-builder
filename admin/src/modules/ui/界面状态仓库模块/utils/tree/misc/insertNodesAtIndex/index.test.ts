@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { insertNodesAtIndex } from '.';
-import { TreeNode } from '../../../@/modules/ui/界面状态仓库模块/types/tree-types';
+import { TreeNode } from '@/modules/ui/界面状态仓库模块/types/tree-types';
 
 describe('insertNodesAtIndex', () => {
   it('应该在指定索引处插入一个节点', () => {

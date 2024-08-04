@@ -20,7 +20,7 @@ export class 浏览器环境程序接口模块 extends ModuleBase {
     super(engine);
   }
 
-  向舞台添加组件(libName: string, componentName: string) {}
+  // 向舞台添加组件(libName: string, componentName: string) {}
 
   protected async onSetup(): Promise<void> {}
 

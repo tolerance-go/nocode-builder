@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { 批量插入节点 } from '.';
-import { TreeNode } from '../../../@/modules/ui/界面状态仓库模块/types/tree-types';
+import { TreeNode } from '@/modules/ui/界面状态仓库模块/types/tree-types';
 
 describe('insertNodes', () => {
   it('应该在指定父节点下插入多个节点', () => {

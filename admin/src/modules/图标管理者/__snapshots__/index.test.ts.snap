@@ -1,5 +1,115 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`图标管理者 > 根据id获取组件 - DesktopClient平台logo 1`] = `
+<span
+  aria-label="desktop"
+  class="anticon anticon-desktop"
+  role="img"
+>
+  <svg
+    aria-hidden="true"
+    data-icon="desktop"
+    fill="currentColor"
+    focusable="false"
+    height="1em"
+    viewBox="64 64 896 896"
+    width="1em"
+  >
+    <path
+      d="M928 140H96c-17.7 0-32 14.3-32 32v496c0 17.7 14.3 32 32 32h380v112H304c-8.8 0-16 7.2-16 16v48c0 4.4 3.6 8 8 8h432c4.4 0 8-3.6 8-8v-48c0-8.8-7.2-16-16-16H548V700h380c17.7 0 32-14.3 32-32V172c0-17.7-14.3-32-32-32zm-40 488H136V212h752v416z"
+    />
+  </svg>
+</span>
+`;
+
+exports[`图标管理者 > 根据id获取组件 - MiniProgram平台logo 1`] = `
+<span
+  aria-label="tablet"
+  class="anticon anticon-tablet"
+  role="img"
+>
+  <svg
+    aria-hidden="true"
+    data-icon="tablet"
+    fill="currentColor"
+    focusable="false"
+    height="1em"
+    viewBox="64 64 896 896"
+    width="1em"
+  >
+    <path
+      d="M800 64H224c-35.3 0-64 28.7-64 64v768c0 35.3 28.7 64 64 64h576c35.3 0 64-28.7 64-64V128c0-35.3-28.7-64-64-64zm-8 824H232V136h560v752zM472 784a40 40 0 1080 0 40 40 0 10-80 0z"
+    />
+  </svg>
+</span>
+`;
+
+exports[`图标管理者 > 根据id获取组件 - MobileWeb平台logo 1`] = `
+<span
+  aria-label="mobile"
+  class="anticon anticon-mobile"
+  role="img"
+>
+  <svg
+    aria-hidden="true"
+    data-icon="mobile"
+    fill="currentColor"
+    focusable="false"
+    height="1em"
+    viewBox="64 64 896 896"
+    width="1em"
+  >
+    <path
+      d="M744 62H280c-35.3 0-64 28.7-64 64v768c0 35.3 28.7 64 64 64h464c35.3 0 64-28.7 64-64V126c0-35.3-28.7-64-64-64zm-8 824H288V134h448v752zM472 784a40 40 0 1080 0 40 40 0 10-80 0z"
+    />
+  </svg>
+</span>
+`;
+
+exports[`图标管理者 > 根据id获取组件 - NativeMobile平台logo 1`] = `
+<span
+  aria-label="mobile"
+  class="anticon anticon-mobile"
+  role="img"
+>
+  <svg
+    aria-hidden="true"
+    data-icon="mobile"
+    fill="currentColor"
+    focusable="false"
+    height="1em"
+    viewBox="64 64 896 896"
+    width="1em"
+  >
+    <path
+      d="M744 62H280c-35.3 0-64 28.7-64 64v768c0 35.3 28.7 64 64 64h464c35.3 0 64-28.7 64-64V126c0-35.3-28.7-64-64-64zm-8 824H288V134h448v752zM472 784a40 40 0 1080 0 40 40 0 10-80 0z"
+    />
+  </svg>
+</span>
+`;
+
+exports[`图标管理者 > 根据id获取组件 - PcWeb平台logo 1`] = `
+<span
+  aria-label="desktop"
+  class="anticon anticon-desktop"
+  role="img"
+>
+  <svg
+    aria-hidden="true"
+    data-icon="desktop"
+    fill="currentColor"
+    focusable="false"
+    height="1em"
+    viewBox="64 64 896 896"
+    width="1em"
+  >
+    <path
+      d="M928 140H96c-17.7 0-32 14.3-32 32v496c0 17.7 14.3 32 32 32h380v112H304c-8.8 0-16 7.2-16 16v48c0 4.4 3.6 8 8 8h432c4.4 0 8-3.6 8-8v-48c0-8.8-7.2-16-16-16H548V700h380c17.7 0 32-14.3 32-32V172c0-17.7-14.3-32-32-32zm-40 488H136V212h752v416z"
+    />
+  </svg>
+</span>
+`;
+
 exports[`图标管理者 > 根据id获取组件 - 数据表项目节点 1`] = `
 <span
   aria-label="table"

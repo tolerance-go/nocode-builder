@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { TreeNode } from '../../@/modules/ui/界面状态仓库模块/types/tree-types';
+import { TreeNode } from '@/modules/ui/界面状态仓库模块/types/tree-types';
 import { DiffResult, compareTrees } from './compareTrees';
 
 export type DataTreeNode = TreeNode<{

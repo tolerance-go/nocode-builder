@@ -27,6 +27,10 @@ import { 项目组表模块 } from '@/modules/models/项目组表模块';
 import { 项目表模块 } from '@/modules/models/项目表模块';
 import { 浏览器代理模块 } from '@/modules/simulations/浏览器代理模块';
 import { ViewKey } from '@/common/types';
+import { 项目详情表模块 } from '@/modules/models/项目详情表';
+import { 视图项目详情表模块 } from '@/modules/models/视图项目详情表';
+import { 蓝图项目详情表模块 } from '@/modules/models/蓝图项目详情表';
+import { 数据表项目详情表模块 } from '@/modules/models/数据表项目详情表';
 
 export class 界面状态仓库模块 extends ModuleBase {
   static createAsyncActions = (slices: AppSlices) => {
@@ -189,9 +193,23 @@ export class 界面状态仓库模块 extends ModuleBase {
           this.getDependModule(项目表模块).table.getAllRecords();
         const projectGroupRecords =
           this.getDependModule(项目组表模块).table.getAllRecords();
-
+        const projectDetailRecords =
+          this.getDependModule(项目详情表模块).table.getAllRecords();
+        const viewProjectModelRecords =
+          this.getDependModule(视图项目详情表模块).table.getAllRecords();
+        const bluemapProjectModelRecords =
+          this.getDependModule(蓝图项目详情表模块).table.getAllRecords();
+        const dataTableProjectModelRecords =
+          this.getDependModule(数据表项目详情表模块).table.getAllRecords();
         const { 项目树节点数据, 项目结构树, derived_节点到父节点的映射 } =
-          generateProjectTreeMeta(projectRecords, projectGroupRecords);
+          generateProjectTreeMeta(
+            projectRecords,
+            projectGroupRecords,
+            projectDetailRecords,
+            viewProjectModelRecords,
+            bluemapProjectModelRecords,
+            dataTableProjectModelRecords,
+          );
         const projectKey =
           this.getDependModule(浏览器代理模块).getQueryParameters<ViewKey>(
             ProjectKeyQueryKey,
@@ -348,6 +366,10 @@ export class 界面状态仓库模块 extends ModuleBase {
       事件中心系统.getInstance(this.engine),
       界面导航系统.getInstance(this.engine),
       浏览器代理模块.getInstance(this.engine),
+      项目详情表模块.getInstance(this.engine),
+      视图项目详情表模块.getInstance(this.engine),
+      蓝图项目详情表模块.getInstance(this.engine),
+      数据表项目详情表模块.getInstance(this.engine),
     );
   }
 
