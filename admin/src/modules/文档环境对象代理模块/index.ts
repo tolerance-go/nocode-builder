@@ -1,18 +1,21 @@
 import { 事件中心系统 } from '../事件中心系统';
 import { EngineBase, ModuleBase } from '@/base';
 
-export class 文档环境模块 extends ModuleBase {
-  private static instance: 文档环境模块;
+export class 文档环境对象代理模块 extends ModuleBase {
+  private static instance: 文档环境对象代理模块;
 
   public static getInstance(
     engine: EngineBase,
     document: Document,
-  ): 文档环境模块 {
-    if (!文档环境模块.instance) {
-      文档环境模块.instance = new 文档环境模块(engine, document);
+  ): 文档环境对象代理模块 {
+    if (!文档环境对象代理模块.instance) {
+      文档环境对象代理模块.instance = new 文档环境对象代理模块(
+        engine,
+        document,
+      );
     }
 
-    return 文档环境模块.instance;
+    return 文档环境对象代理模块.instance;
   }
 
   private document: Document;
