@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
 import ReactDOM from 'react-dom/client';
 import { 事件中心系统 } from '@/modules/事件中心系统';
-import { 界面界面图标管理者 } from '@/modules/界面图标管理者';
+import { 界面界面图标管理者 } from '@/modules/ui/界面图标管理者';
 import { 文档环境对象代理模块 } from '@/modules/simulations/文档环境对象代理模块';
 import { 界面导航系统 } from '@/modules/ui/界面导航系统';
 import { 界面通知系统 } from '@/modules/ui/界面通知系统';

@@ -409,7 +409,7 @@ export class WidgetModelRecord {
 
   ownerId: number;
 
-  widgetLibId?: number;
+  widgetLibId: number;
 
   category: WidgetCategoryEnum;
 
@@ -431,7 +431,7 @@ export class WidgetModelRecord {
     name: string;
     platforms: WidgetPlatformTypeEnum[];
     ownerId: number;
-    widgetLibId?: number;
+    widgetLibId: number;
     category: WidgetCategoryEnum;
     createdAt: Date;
     updatedAt: Date;

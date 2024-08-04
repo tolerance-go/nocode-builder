@@ -120,7 +120,7 @@ export const apiUrls = {
     route: '/widgets',
     path: '/widgets',
   },
-  WidgetController_getWidgetsFilterByPlatform: {
+  WidgetController_getWidgetsWithLibFilterByPlatform: {
     method: 'get',
     route: '/widgets/filter-by-platform',
     path: '/widgets/filter-by-platform',
@@ -319,5 +319,30 @@ export const apiUrls = {
     method: 'delete',
     route: '/bluemapProjects/{id}',
     path: '/bluemapProjects/${id}',
+  },
+  WidgetLibController_getWidgetLib: {
+    method: 'get',
+    route: '/widgetLibs/detail/{id}',
+    path: '/widgetLibs/detail/${id}',
+  },
+  WidgetLibController_getWidgetLibs: {
+    method: 'get',
+    route: '/widgetLibs',
+    path: '/widgetLibs',
+  },
+  WidgetLibController_createWidgetLib: {
+    method: 'post',
+    route: '/widgetLibs',
+    path: '/widgetLibs',
+  },
+  WidgetLibController_updateWidgetLib: {
+    method: 'patch',
+    route: '/widgetLibs/{id}',
+    path: '/widgetLibs/${id}',
+  },
+  WidgetLibController_deleteWidgetLib: {
+    method: 'delete',
+    route: '/widgetLibs/{id}',
+    path: '/widgetLibs/${id}',
   },
 } as const;

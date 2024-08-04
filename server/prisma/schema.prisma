@@ -171,8 +171,8 @@ model Widget {
   widgetSlotAssignments WidgetSlotAssignment[]
   ownerId               Int
   owner                 User                   @relation(fields: [ownerId], references: [id])
-  widgetLib             WidgetLib?             @relation(fields: [widgetLibId], references: [id])
-  widgetLibId           Int?
+  widgetLib             WidgetLib              @relation(fields: [widgetLibId], references: [id])
+  widgetLibId           Int
   category              WidgetCategory
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt

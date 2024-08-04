@@ -208,6 +208,39 @@ export interface WidgetResponseDto {
   updatedAt: string;
 }
 
+export interface WidgetLibResponseDto {
+  id: number;
+  name: string;
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WidgetWithLibResponseDto {
+  id: number;
+  name: string;
+  platforms: (
+    | 'PcWeb'
+    | 'MobileWeb'
+    | 'MiniProgram'
+    | 'NativeMobile'
+    | 'DesktopClient'
+  )[];
+  category:
+    | 'General'
+    | 'Layout'
+    | 'Navigation'
+    | 'DataEntry'
+    | 'DataDisplay'
+    | 'Feedback'
+    | 'Other'
+    | 'Heavyweight';
+  ownerId: number;
+  createdAt: string;
+  updatedAt: string;
+  widgetLib: WidgetLibResponseDto;
+}
+
 export interface WidgetSlotResponseDto {
   id: number;
   name: string;
@@ -252,6 +285,7 @@ export interface WidgetWithSlotsResponseDto {
 export interface WidgetCreateDto {
   name: string;
   order: number;
+  widgetLibId: number;
   platforms: (
     | 'PcWeb'
     | 'MobileWeb'
@@ -388,6 +422,14 @@ export interface BluemapProjectCreateDto {
 }
 
 export type BluemapProjectUpdateDto = Record<string, unknown>;
+
+export interface WidgetLibCreateDto {
+  name: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type WidgetLibUpdateDto = Record<string, unknown>;
 
 import type {
   AxiosInstance,
@@ -971,10 +1013,10 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     /**
      * No description
      *
-     * @name WidgetControllerGetWidgetsFilterByPlatform
+     * @name WidgetControllerGetWidgetsWithLibFilterByPlatform
      * @request GET:/widgets/filter-by-platform
      */
-    getWidgetsFilterByPlatform: (
+    getWidgetsWithLibFilterByPlatform: (
       query: {
         skip?: number;
         take?: number;
@@ -989,7 +1031,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
       },
       params: RequestParams = {},
     ) =>
-      this.request<WidgetResponseDto[], unknown>({
+      this.request<WidgetWithLibResponseDto[], unknown>({
         path: `/widgets/filter-by-platform`,
         method: 'GET',
         query: query,
@@ -1709,6 +1751,94 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     deleteBluemapProject: (id: string, params: RequestParams = {}) =>
       this.request<BluemapProjectResponseDto, unknown>({
         path: `/bluemapProjects/${id}`,
+        method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+  };
+  widgetLibs = {
+    /**
+     * No description
+     *
+     * @name WidgetLibControllerGetWidgetLib
+     * @request GET:/widgetLibs/detail/{id}
+     */
+    getWidgetLib: (id: string, params: RequestParams = {}) =>
+      this.request<WidgetLibResponseDto, unknown>({
+        path: `/widgetLibs/detail/${id}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetLibControllerGetWidgetLibs
+     * @request GET:/widgetLibs
+     */
+    getWidgetLibs: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetLibResponseDto[], unknown>({
+        path: `/widgetLibs`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetLibControllerCreateWidgetLib
+     * @request POST:/widgetLibs
+     */
+    createWidgetLib: (data: WidgetLibCreateDto, params: RequestParams = {}) =>
+      this.request<WidgetLibResponseDto, unknown>({
+        path: `/widgetLibs`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetLibControllerUpdateWidgetLib
+     * @request PATCH:/widgetLibs/{id}
+     */
+    updateWidgetLib: (
+      id: string,
+      data: WidgetLibUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetLibResponseDto, unknown>({
+        path: `/widgetLibs/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetLibControllerDeleteWidgetLib
+     * @request DELETE:/widgetLibs/{id}
+     */
+    deleteWidgetLib: (id: string, params: RequestParams = {}) =>
+      this.request<WidgetLibResponseDto, unknown>({
+        path: `/widgetLibs/${id}`,
         method: 'DELETE',
         format: 'json',
         ...params,

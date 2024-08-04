@@ -4,12 +4,22 @@ import { FileImageOutlined } from '@ant-design/icons';
 import { Card, Typography, theme } from 'antd';
 import { useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
+import { ItemType } from '../../constants';
 
 // 定义数据类型
 export type CardData = {
   title: string;
   content?: string;
   image?: string;
+  widgetLibName: string;
+  widgetName: string;
+};
+
+export type CardDragItem = {
+  title: string;
+  width?: number;
+  widgetLibName: string;
+  widgetName: string;
 };
 
 export const CardItem = ({ item }: { item: CardData }) => {
@@ -23,11 +33,14 @@ export const CardItem = ({ item }: { item: CardData }) => {
   } = 获取模块上下文();
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
-    type: 'CARD',
-    item: () => ({
-      title: item.title,
-      width: cardRef.current?.getBoundingClientRect().width,
-    }),
+    type: ItemType.CARD,
+    item: () =>
+      ({
+        title: item.title,
+        width: cardRef.current?.getBoundingClientRect().width,
+        widgetLibName: item.widgetLibName,
+        widgetName: item.widgetName,
+      }) satisfies CardDragItem,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),

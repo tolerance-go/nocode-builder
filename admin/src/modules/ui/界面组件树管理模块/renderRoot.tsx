@@ -4,7 +4,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { 事件中心系统 } from '@/modules/事件中心系统';
-import { 界面界面图标管理者 } from '@/modules/界面图标管理者';
+import { 界面界面图标管理者 } from '@/modules/ui/界面图标管理者';
 import { 界面导航系统 } from '@/modules/ui/界面导航系统';
 import { 界面状态仓库模块 } from '@/modules/ui/界面状态仓库模块';
 import { 界面通知系统 } from '@/modules/ui/界面通知系统';

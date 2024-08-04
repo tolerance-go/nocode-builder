@@ -1,7 +1,7 @@
 import { 事件中心系统 } from '@/modules/事件中心系统';
 import { createContext } from 'react';
 import { 界面状态仓库模块 } from '@/modules/ui/界面状态仓库模块';
-import { 界面界面图标管理者 } from '@/modules/界面图标管理者';
+import { 界面界面图标管理者 } from '@/modules/ui/界面图标管理者';
 import { 跟随鼠标显示内容管理者 } from '@/modules/跟随鼠标显示内容管理者';
 import { 数据验证管理模块 } from '@/modules/数据验证管理模块';
 import { 界面通知系统 } from '@/modules/ui/界面通知系统';

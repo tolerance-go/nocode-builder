@@ -317,10 +317,9 @@ export class WidgetModelRecordDto {
   @IsInt()
   ownerId: number;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
+  @ApiProperty({})
   @IsInt()
-  widgetLibId?: number;
+  widgetLibId: number;
 
   @ApiProperty({ enum: WidgetCategory })
   @IsEnum(WidgetCategory)

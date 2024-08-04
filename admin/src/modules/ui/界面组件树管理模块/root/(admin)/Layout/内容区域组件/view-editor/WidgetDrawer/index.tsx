@@ -29,11 +29,14 @@ const fetchData = async (
   platformType: WidgetPlatformTypeEnum,
 ): Promise<CardData[]> => {
   try {
-    const widgets = await api.widgets.getWidgetsFilterByPlatform({
+    const widgets = await api.widgets.getWidgetsWithLibFilterByPlatform({
       platformType,
     });
     return widgets.map((widget) => ({
       title: widget.name,
+      widgetData: widget,
+      widgetLibName: widget.widgetLib.name,
+      widgetName: widget.name,
     }));
   } catch (error) {
     console.error('Error fetching data:', error);

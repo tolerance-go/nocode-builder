@@ -201,141 +201,67 @@ export class ProjectModel {
 export class ProjectDetailModel {
   id: number;
 
-  viewProject?: ViewProjectModel;
-
   viewProjectId?: number;
-
-  dataTableProject?: DataTableProjectModel;
 
   dataTableProjectId?: number;
 
-  bluemapProject?: BluemapProjectModel;
-
   bluemapProjectId?: number;
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
 
   Project: ProjectModel[];
 
-  ownerId: number;
+  bluemapProject?: BluemapProjectModel;
 
-  owner: UserModel;
+  dataTableProject?: DataTableProjectModel;
 
-  createdAt: Date;
-
-  updatedAt: Date;
+  viewProject?: ViewProjectModel;
 
   constructor({
     id,
-    viewProject,
     viewProjectId,
-    dataTableProject,
     dataTableProjectId,
-    bluemapProject,
     bluemapProjectId,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
     Project,
-    ownerId,
-    owner,
-    createdAt,
-    updatedAt,
+    bluemapProject,
+    dataTableProject,
+    viewProject,
   }: {
     id: number;
-    viewProject?: ViewProjectModel;
     viewProjectId?: number;
-    dataTableProject?: DataTableProjectModel;
     dataTableProjectId?: number;
-    bluemapProject?: BluemapProjectModel;
     bluemapProjectId?: number;
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
     Project: ProjectModel[];
-    ownerId: number;
-    owner: UserModel;
-    createdAt: Date;
-    updatedAt: Date;
+    bluemapProject?: BluemapProjectModel;
+    dataTableProject?: DataTableProjectModel;
+    viewProject?: ViewProjectModel;
   }) {
     this.id = id;
-    this.viewProject = viewProject;
     this.viewProjectId = viewProjectId;
-    this.dataTableProject = dataTableProject;
     this.dataTableProjectId = dataTableProjectId;
-    this.bluemapProject = bluemapProject;
     this.bluemapProjectId = bluemapProjectId;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
     this.Project = Project;
-    this.ownerId = ownerId;
-    this.owner = owner;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-}
-
-export class BluemapProjectModel {
-  id: number;
-
-  projectDetails: ProjectDetailModel[];
-
-  ownerId: number;
-
-  owner: UserModel;
-
-  createdAt: Date;
-
-  updatedAt: Date;
-
-  constructor({
-    id,
-    projectDetails,
-    ownerId,
-    owner,
-    createdAt,
-    updatedAt,
-  }: {
-    id: number;
-    projectDetails: ProjectDetailModel[];
-    ownerId: number;
-    owner: UserModel;
-    createdAt: Date;
-    updatedAt: Date;
-  }) {
-    this.id = id;
-    this.projectDetails = projectDetails;
-    this.ownerId = ownerId;
-    this.owner = owner;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-}
-
-export class DataTableProjectModel {
-  id: number;
-
-  projectDetails: ProjectDetailModel[];
-
-  ownerId: number;
-
-  owner: UserModel;
-
-  createdAt: Date;
-
-  updatedAt: Date;
-
-  constructor({
-    id,
-    projectDetails,
-    ownerId,
-    owner,
-    createdAt,
-    updatedAt,
-  }: {
-    id: number;
-    projectDetails: ProjectDetailModel[];
-    ownerId: number;
-    owner: UserModel;
-    createdAt: Date;
-    updatedAt: Date;
-  }) {
-    this.id = id;
-    this.projectDetails = projectDetails;
-    this.ownerId = ownerId;
-    this.owner = owner;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
+    this.bluemapProject = bluemapProject;
+    this.dataTableProject = dataTableProject;
+    this.viewProject = viewProject;
   }
 }
 
@@ -471,9 +397,9 @@ export class WidgetModel {
 
   owner: UserModel;
 
-  widgetLib?: WidgetLibModel;
+  widgetLib: WidgetLibModel;
 
-  widgetLibId?: number;
+  widgetLibId: number;
 
   category: WidgetCategoryEnum;
 
@@ -503,8 +429,8 @@ export class WidgetModel {
     widgetSlotAssignments: WidgetSlotAssignmentModel[];
     ownerId: number;
     owner: UserModel;
-    widgetLib?: WidgetLibModel;
-    widgetLibId?: number;
+    widgetLib: WidgetLibModel;
+    widgetLibId: number;
     category: WidgetCategoryEnum;
     createdAt: Date;
     updatedAt: Date;
@@ -747,6 +673,80 @@ export class WidgetSlotInstanceAssignmentModel {
     this.ownerId = ownerId;
     this.owner = owner;
     this.assignedAt = assignedAt;
+  }
+}
+
+export class DataTableProjectModel {
+  id: number;
+
+  projectDetails: ProjectDetailModel[];
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    projectDetails,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    projectDetails: ProjectDetailModel[];
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.projectDetails = projectDetails;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
+  }
+}
+
+export class BluemapProjectModel {
+  id: number;
+
+  projectDetails: ProjectDetailModel[];
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    projectDetails,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    projectDetails: ProjectDetailModel[];
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.projectDetails = projectDetails;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 

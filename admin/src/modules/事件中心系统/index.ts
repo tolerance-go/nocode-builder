@@ -65,6 +65,13 @@ type 界面视图管理者事件类型 = {
   用户撤销项目树: undefined;
   用户重做项目树: undefined;
   用户登出成功: undefined;
+  拖动组件放置到指定部件的插槽下时: {
+    被拖动组件Name: string;
+    被拖动组件的libName: string;
+    目标部件key: ViewKey;
+    目标插槽key: ViewKey;
+    目标插槽index: number;
+  };
 };
 
 type 项目树历史记录管理者事件类型 = {

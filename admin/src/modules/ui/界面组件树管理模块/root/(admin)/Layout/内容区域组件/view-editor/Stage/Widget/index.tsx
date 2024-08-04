@@ -10,14 +10,12 @@ import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/
 import { theme } from 'antd';
 import React, { createElement, CSSProperties, ReactElement } from 'react';
 import { useDrop } from 'react-dnd';
-import { SlotElement, SlotElementProps } from '../SlotElement';
-import { SlotPlaceholder } from '../SlotPlaceholder';
-import { SlotPlaceholderType } from '../SlotPlaceholder/enums';
+import { ElementSlotItem, ElementSlotItemProps } from '../ElementSlotItem';
+import { PlaceholderSlotItem } from '../PlaceholderSlotItem';
+import { SlotPlaceholderPosition } from '../PlaceholderSlotItem/enums';
+import { ItemType } from '../../../constants';
 
 // 定义拖放类型
-const ItemType = {
-  CARD: 'CARD',
-};
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
@@ -49,35 +47,47 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
 
       prev[slotNodeData.name] = curr.children?.length
         ? [
-            <SlotPlaceholder
+            <PlaceholderSlotItem
               isDragging={isDragging}
-              key={SlotPlaceholderType.Before}
-              type={SlotPlaceholderType.Before}
+              key={SlotPlaceholderPosition.Before}
+              position={SlotPlaceholderPosition.Before}
+              widgetDataNode={nodeData}
+              slotDataNode={slotNodeData}
+              index={-1}
             />,
             ...curr.children.map((child) => (
-              <SlotElement
+              <ElementSlotItem
                 isDragging={isDragging}
                 key={child.key}
                 node={child}
+                widgetDataNode={nodeData}
+                slotDataNode={slotNodeData}
+                index={-1}
               />
             )),
-            <SlotPlaceholder
+            <PlaceholderSlotItem
               isDragging={isDragging}
-              key={SlotPlaceholderType.After}
-              type={SlotPlaceholderType.After}
+              key={SlotPlaceholderPosition.After}
+              position={SlotPlaceholderPosition.After}
+              widgetDataNode={nodeData}
+              slotDataNode={slotNodeData}
+              index={-1}
             />,
           ]
         : [
-            <SlotPlaceholder
+            <PlaceholderSlotItem
               isDragging={isDragging}
-              key={SlotPlaceholderType.Empty}
-              type={SlotPlaceholderType.Empty}
+              key={SlotPlaceholderPosition.Empty}
+              position={SlotPlaceholderPosition.Empty}
+              widgetDataNode={nodeData}
+              slotDataNode={slotNodeData}
+              index={0}
             />,
           ];
 
       return prev;
     },
-    {} as Record<string, ReactElement<SlotElementProps>[]>,
+    {} as Record<string, ReactElement<ElementSlotItemProps>[]>,
   );
 
   const [{ isOver }, drop] = useDrop({

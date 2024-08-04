@@ -3,7 +3,6 @@ import { WidgetCategory, WidgetPlatformType } from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsArray,
-  IsBoolean,
   IsDateString,
   IsEnum,
   IsIn,
@@ -13,6 +12,7 @@ import {
   Min,
   ValidateNested,
 } from 'class-validator';
+import { WidgetLibResponseDto } from 'src/modules/widget-lib/dtos';
 import { WidgetSlotAssignmentWithSlotsResponseDto } from 'src/modules/widget-slot-assignment/dtos';
 import { WidgetSlotCreateDto } from 'src/modules/widget-slot/dtos';
 
@@ -37,6 +37,10 @@ export class WidgetCreateDto {
   @ApiProperty({})
   @IsInt()
   order: number;
+
+  @ApiProperty({})
+  @IsInt()
+  widgetLibId: number;
 
   @ApiProperty({
     enum: WidgetPlatformType,
@@ -146,6 +150,15 @@ export class WidgetResponseDto {
   @ApiProperty({})
   @IsDateString()
   updatedAt: string;
+}
+
+export class WidgetWithLibResponseDto extends WidgetResponseDto {
+  @ApiProperty({
+    type: () => WidgetLibResponseDto,
+  })
+  @ValidateNested()
+  @Type(() => WidgetLibResponseDto)
+  widgetLib: WidgetLibResponseDto;
 }
 
 export class WidgetWithSlotsResponseDto extends WidgetResponseDto {

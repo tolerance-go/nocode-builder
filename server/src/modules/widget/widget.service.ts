@@ -2,6 +2,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import {
   Prisma,
   Widget,
+  WidgetLib,
   WidgetSlot,
   WidgetSlotAssignment,
 } from '@prisma/client';
@@ -41,6 +42,35 @@ export class WidgetService {
       where,
       orderBy,
     });
+  }
+
+  async widgetsWithLib(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.WidgetWhereUniqueInput;
+      where?: Prisma.WidgetWhereInput;
+      orderBy?: Prisma.WidgetOrderByWithRelationInput;
+    },
+    tx?: Prisma.TransactionClient,
+  ): Promise<
+    (Widget & {
+      widgetLib: WidgetLib;
+    })[]
+  > {
+    const { skip, take, cursor, where, orderBy } = params;
+    const client = tx || this.prisma;
+    const widgets = client.widget.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      include: {
+        widgetLib: true,
+      },
+    });
+    return widgets;
   }
 
   async widgetsWithSlots(

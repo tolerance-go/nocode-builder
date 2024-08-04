@@ -22,6 +22,7 @@ import {
   WidgetQueryDto,
   WidgetResponseDto,
   WidgetUpdateDto,
+  WidgetWithLibResponseDto,
   WidgetWithSlotsResponseDto,
 } from './dtos';
 import { toWidgetDto } from './utils';
@@ -30,6 +31,7 @@ import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { toWidgetSlotAssignmentDto } from '../widget-slot-assignment/utils';
 import { toWidgetSlotDto } from '../widget-slot/utils';
+import { toWidgetLibDto } from '../widget-lib/utils';
 
 @Controller('widgets')
 export class WidgetController {
@@ -70,12 +72,12 @@ export class WidgetController {
   @UseGuards(JwtAuthGuard)
   @ApiResponse({
     status: 200,
-    type: [WidgetResponseDto],
+    type: [WidgetWithLibResponseDto],
   })
-  async getWidgetsFilterByPlatform(
+  async getWidgetsWithLibFilterByPlatform(
     @Query() query: WidgetQueryByPlatformDto,
-  ): Promise<WidgetResponseDto[]> {
-    const widgets = await this.widgetService.widgets({
+  ): Promise<WidgetWithLibResponseDto[]> {
+    const widgets = await this.widgetService.widgetsWithLib({
       skip: query.skip,
       take: query.take,
       cursor: query.filter ? { id: Number(query.filter) } : undefined,
@@ -86,7 +88,10 @@ export class WidgetController {
         },
       },
     });
-    return widgets.map(toWidgetDto);
+    return widgets.map((widget) => ({
+      ...toWidgetDto(widget),
+      widgetLib: toWidgetLibDto(widget.widgetLib),
+    }));
   }
 
   @Get('with-slots')
@@ -125,7 +130,7 @@ export class WidgetController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   async createWidget(
-    @Body() { ...rest }: WidgetCreateDto,
+    @Body() { widgetLibId, ...rest }: WidgetCreateDto,
     @Req() req: Request & { user: JwtUserDto },
   ): Promise<WidgetResponseDto> {
     const userId = req.user.id;
@@ -134,6 +139,11 @@ export class WidgetController {
       owner: {
         connect: {
           id: userId,
+        },
+      },
+      widgetLib: {
+        connect: {
+          id: widgetLibId,
         },
       },
     });
