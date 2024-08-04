@@ -28,6 +28,8 @@ export const createProjectContentInitialState = () => {
 
 const initialState: ProjectContentStates = createProjectContentInitialState();
 
+export const RootWidgetKey = 'root';
+
 function findNodeByKey(
   tree: WidgetTreeDataNode[] | WidgetSlotTreeDataNode[],
   key: ViewKey,
@@ -65,17 +67,22 @@ export const createProjectContentSlice = () => {
         );
       },
 
-      添加根部件(
-        state,
-        action: PayloadAction<{
-          根部件: WidgetTreeDataNode;
-          data: WidgetTreeNodeDataRecordItem;
-        }>,
-      ) {
-        const { 根部件, data } = action.payload;
-        state.widgetTree.push(根部件);
-        state.derived_widget节点到父节点的映射[根部件.key] = null;
-        state.widgetTreeNodeDatas[根部件.key] = data;
+      初始化根部件(state) {
+        if (state.widgetTree.find((item) => item.key === RootWidgetKey)) return;
+
+        state.widgetTree.push({
+          key: RootWidgetKey,
+          type: WidgetTreeNodeType.Widget,
+          title: 'Root',
+        });
+        state.derived_widget节点到父节点的映射[RootWidgetKey] = null;
+        state.widgetTreeNodeDatas[RootWidgetKey] = {
+          key: RootWidgetKey,
+          type: WidgetTreeNodeType.Widget,
+          widgetLibName: 'antd',
+          componentName: 'Flex',
+          title: 'Root',
+        };
       },
 
       添加组件到插槽(
