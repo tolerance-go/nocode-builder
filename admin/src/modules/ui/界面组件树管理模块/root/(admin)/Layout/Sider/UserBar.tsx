@@ -43,7 +43,7 @@ export const UserBar = () => {
         </Button>
       </Dropdown>
 
-      <Button type="text" icon={<EllipsisOutlined />}></Button>
+      {/* <Button type="text" icon={<EllipsisOutlined />}></Button> */}
     </Flex>
   );
 };
