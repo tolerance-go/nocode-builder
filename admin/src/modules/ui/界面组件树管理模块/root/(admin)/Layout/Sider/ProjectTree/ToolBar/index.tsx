@@ -6,6 +6,7 @@ import {
   节点是不是文件,
   节点是不是文件夹,
 } from '@/modules/ui/界面状态仓库模块';
+import { v4 as uuidv4 } from 'uuid';
 import {
   ProjectTreeNodeData,
   ProjectTreeDataNode,
@@ -85,7 +86,7 @@ export const ToolBar = () => {
     : null;
 
   const 在指定节点下插入新文件夹 = (target: ProjectTreeDataNode) => {
-    const newKey = Math.random() + '';
+    const newKey = uuidv4();
     dispatch(
       projectTreeActions.插入节点({
         parentKey: target.key,
@@ -115,7 +116,7 @@ export const ToolBar = () => {
         return recordItem;
       }),
     );
-    const newKey = Math.random() + '';
+    const newKey = uuidv4();
 
     dispatch(
       projectTreeActions.插入节点({
@@ -149,7 +150,7 @@ export const ToolBar = () => {
       }),
     );
 
-    const newKey = Math.random() + '';
+    const newKey = uuidv4();
 
     dispatch(
       projectTreeActions.插入节点({
@@ -170,7 +171,7 @@ export const ToolBar = () => {
   };
 
   const 在根节点下面插入新文件夹 = () => {
-    const newKey = Math.random() + '';
+    const newKey = uuidv4();
     dispatch(
       projectTreeActions.插入节点({
         parentKey: null,

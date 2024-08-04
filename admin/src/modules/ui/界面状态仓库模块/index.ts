@@ -1,6 +1,6 @@
 import { ProjectTypeEnum } from '@/_gen/models';
 import { EngineBase, ModuleBase } from '@/base';
-import { pathItems } from '@/common/constants';
+import { pathItems, ProjectKeyQueryKey } from '@/common/constants';
 import { configureStore, Middleware } from '@reduxjs/toolkit';
 import { produce } from 'immer';
 import { 用户表模块 } from '@/modules/models/用户表模块';
@@ -25,6 +25,8 @@ import { AppMiddleware, AppSlices, RootState } from './types';
 import { findNode, generateProjectTreeMeta } from './utils';
 import { 项目组表模块 } from '@/modules/models/项目组表模块';
 import { 项目表模块 } from '@/modules/models/项目表模块';
+import { 浏览器代理模块 } from '@/modules/simulations/浏览器代理模块';
+import { ViewKey } from '@/common/types';
 
 export class 界面状态仓库模块 extends ModuleBase {
   static createAsyncActions = (slices: AppSlices) => {
@@ -190,7 +192,10 @@ export class 界面状态仓库模块 extends ModuleBase {
 
         const { 项目树节点数据, 项目结构树, derived_节点到父节点的映射 } =
           generateProjectTreeMeta(projectRecords, projectGroupRecords);
-
+        const projectKey =
+          this.getDependModule(浏览器代理模块).getQueryParameters<ViewKey>(
+            ProjectKeyQueryKey,
+          );
         initialState = {
           userInfo: createUserInfoInitialState(),
           location: createLocationInitialState(),
@@ -201,6 +206,7 @@ export class 界面状态仓库模块 extends ModuleBase {
             项目树节点数据,
             项目结构树,
             derived_节点到父节点的映射,
+            激活的节点的key: projectKey ?? null,
           },
         };
       }
@@ -341,6 +347,7 @@ export class 界面状态仓库模块 extends ModuleBase {
       项目表模块.getInstance(this.engine),
       事件中心系统.getInstance(this.engine),
       界面导航系统.getInstance(this.engine),
+      浏览器代理模块.getInstance(this.engine),
     );
   }
 

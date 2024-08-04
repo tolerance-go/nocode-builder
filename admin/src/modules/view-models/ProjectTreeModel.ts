@@ -3,6 +3,8 @@ import { ViewKey } from '@/common/types';
 import { ProjectTreeNodeDataRecord } from '@/modules/ui/界面状态仓库模块/types';
 import { 界面状态仓库模块 } from '@/modules/ui/界面状态仓库模块';
 import { 事件中心系统 } from '@/modules/事件中心系统';
+import { 浏览器代理模块 } from '../simulations/浏览器代理模块';
+import { ProjectKeyQueryKey } from '@/common/constants';
 
 export class ProjectTreeModel extends ModuleBase {
   private static instance: ProjectTreeModel;
@@ -56,6 +58,7 @@ export class ProjectTreeModel extends ModuleBase {
     super.requireModules(
       事件中心系统.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),
+      浏览器代理模块.getInstance(this.engine),
     );
   }
 
@@ -65,6 +68,16 @@ export class ProjectTreeModel extends ModuleBase {
 
     store.subscribe(() => {
       const currentState = store.getState(); // 获取当前的 state
+
+      if (
+        currentState.projectTree.激活的节点的key !==
+        previousState.projectTree.激活的节点的key
+      ) {
+        this.当激活项目节点变化时(
+          currentState.projectTree.激活的节点的key,
+          previousState.projectTree.激活的节点的key,
+        );
+      }
 
       if (
         currentState.projectTree.当前正在拖拽的节点key &&
@@ -127,5 +140,13 @@ export class ProjectTreeModel extends ModuleBase {
 
       previousState = currentState; // 更新之前的 state
     });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private 当激活项目节点变化时(key: ViewKey | null, _prevKey: ViewKey | null) {
+    this.getDependModule(浏览器代理模块).updateQueryParameter(
+      ProjectKeyQueryKey,
+      typeof key === 'number' ? String(key) : key,
+    );
   }
 }
