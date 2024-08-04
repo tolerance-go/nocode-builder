@@ -1,15 +1,14 @@
 import { cloneElement } from 'react';
 import { WidgetComponentProps } from '../../types';
-import { theme } from 'antd';
+import { useStageHeight } from '@/common/contexts';
 
 export const Root = ({
   slotElements,
   isOverWidget,
   isDragging,
-  getStageHeight,
 }: WidgetComponentProps) => {
-  const { token } = theme.useToken();
-  console.log('slotElements', slotElements, getStageHeight());
+  const stageHeight = useStageHeight();
+  console.log('slotElements', slotElements, stageHeight);
   return (
     <div data-test-id="root-component">
       {isDragging &&
@@ -17,9 +16,7 @@ export const Root = ({
           return cloneElement(child, {
             style: {
               ...child.props?.style,
-              height: getStageHeight(),
-              background: token.blue2,
-              border: `1px solid ${token.blue6}`,
+              height: stageHeight - 2,
             },
           });
         })}

@@ -13,5 +13,4 @@ export type WidgetComponentProps = {
 
   isDragging: boolean;
   isOverWidget: boolean;
-  getStageHeight: () => number; // 添加获取高度的方法
 };

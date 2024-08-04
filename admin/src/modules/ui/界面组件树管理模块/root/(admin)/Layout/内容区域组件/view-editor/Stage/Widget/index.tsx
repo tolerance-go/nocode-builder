@@ -21,10 +21,9 @@ const ItemType = {
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
-  getStageHeight: () => number; // 添加获取高度的方法
 }
 
-export const Widget: React.FC<WidgetProps> = ({ node, getStageHeight }) => {
+export const Widget: React.FC<WidgetProps> = ({ node }) => {
   const { token } = theme.useToken();
   const nodeData = useAppSelector(
     (state) => state.projectContent.widgetTreeNodeDatas[node.key],
@@ -51,23 +50,26 @@ export const Widget: React.FC<WidgetProps> = ({ node, getStageHeight }) => {
       prev[slotNodeData.name] = curr.children?.length
         ? [
             <SlotPlaceholder
+              isDragging={isDragging}
               key={SlotPlaceholderType.Before}
               type={SlotPlaceholderType.Before}
             />,
             ...curr.children.map((child) => (
               <SlotElement
+                isDragging={isDragging}
                 key={child.key}
                 node={child}
-                getStageHeight={getStageHeight}
               />
             )),
             <SlotPlaceholder
+              isDragging={isDragging}
               key={SlotPlaceholderType.After}
               type={SlotPlaceholderType.After}
             />,
           ]
         : [
             <SlotPlaceholder
+              isDragging={isDragging}
               key={SlotPlaceholderType.Empty}
               type={SlotPlaceholderType.Empty}
             />,
@@ -103,7 +105,6 @@ export const Widget: React.FC<WidgetProps> = ({ node, getStageHeight }) => {
           slotElements,
           isDragging,
           isOverWidget: isOver,
-          getStageHeight,
         },
       )}
     </div>
