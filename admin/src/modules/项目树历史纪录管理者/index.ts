@@ -34,23 +34,7 @@ export class 项目树历史纪录管理者 extends ModuleBase {
         历史指针: this.历史指针,
       },
     });
-  }
 
-  addRecordToHistory(record: 历史记录) {
-    this.历史状态机Actor.send({
-      type: '推入历史记录',
-      data: record,
-    });
-  }
-
-  protected requireModules() {
-    super.requireModules(
-      界面通知系统.getInstance(this.engine),
-      事件中心系统.getInstance(this.engine),
-    );
-  }
-
-  protected async onSetup(): Promise<void> {
     this.历史状态机Actor.start().subscribe((state) => {
       if (this.历史指针 !== state.context.历史指针) {
         this.getDependModule(事件中心系统).emit(
@@ -177,6 +161,22 @@ export class 项目树历史纪录管理者 extends ModuleBase {
       },
     );
   }
+
+  addRecordToHistory(record: 历史记录) {
+    this.历史状态机Actor.send({
+      type: '推入历史记录',
+      data: record,
+    });
+  }
+
+  protected requireModules() {
+    super.requireModules(
+      界面通知系统.getInstance(this.engine),
+      事件中心系统.getInstance(this.engine),
+    );
+  }
+
+  protected async onSetup(): Promise<void> {}
 }
 
 export * from './states';
