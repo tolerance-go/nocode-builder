@@ -2,18 +2,18 @@ import { useContext } from 'react';
 import {
   界面状态仓库模块Context,
   全局事件系统Context,
-  图标管理者Context,
+  界面图标管理者Context,
   导航系统Context,
   模块上下文,
   跟随鼠标显示内容管理者Context,
   验证管理者Context,
 } from './contexts';
 
-export const use图标管理者 = () => {
+export const use界面图标管理者 = () => {
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const 图标管理者 = useContext(图标管理者Context);
-  if (!图标管理者) throw new Error('图标管理者未初始化');
-  return 图标管理者;
+  const 界面图标管理者 = useContext(界面图标管理者Context);
+  if (!界面图标管理者) throw new Error('界面图标管理者未初始化');
+  return 界面图标管理者;
 };
 
 export const use跟随鼠标显示内容管理者 = () => {

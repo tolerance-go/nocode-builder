@@ -1,7 +1,7 @@
 import { EngineBase, ModuleBase } from '@/base';
 import ReactDOM from 'react-dom/client';
 import { 事件中心系统 } from '@/modules/事件中心系统';
-import { 图标管理者 } from '@/modules/图标管理者';
+import { 界面界面图标管理者 } from '@/modules/界面图标管理者';
 import { 文档环境对象代理模块 } from '@/modules/simulations/文档环境对象代理模块';
 import { 界面导航系统 } from '@/modules/ui/界面导航系统';
 import { 界面通知系统 } from '@/modules/ui/界面通知系统';
@@ -31,7 +31,7 @@ export class 界面组件树管理模块 extends ModuleBase {
       文档环境对象代理模块.getInstance(this.engine, document),
       界面通知系统.getInstance(this.engine),
       验证管理者.getInstance(this.engine),
-      图标管理者.getInstance(this.engine),
+      界面界面图标管理者.getInstance(this.engine),
       跟随鼠标显示内容管理者.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),
       部件组件管理模块.getInstance(this.engine),

@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`图标管理者 > 根据id获取组件 - DesktopClient平台logo 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - DesktopClient平台logo 1`] = `
 <span
   aria-label="desktop"
   class="anticon anticon-desktop"
@@ -22,7 +22,7 @@ exports[`图标管理者 > 根据id获取组件 - DesktopClient平台logo 1`] = 
 </span>
 `;
 
-exports[`图标管理者 > 根据id获取组件 - MiniProgram平台logo 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - MiniProgram平台logo 1`] = `
 <span
   aria-label="tablet"
   class="anticon anticon-tablet"
@@ -44,7 +44,7 @@ exports[`图标管理者 > 根据id获取组件 - MiniProgram平台logo 1`] = `
 </span>
 `;
 
-exports[`图标管理者 > 根据id获取组件 - MobileWeb平台logo 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - MobileWeb平台logo 1`] = `
 <span
   aria-label="mobile"
   class="anticon anticon-mobile"
@@ -66,7 +66,7 @@ exports[`图标管理者 > 根据id获取组件 - MobileWeb平台logo 1`] = `
 </span>
 `;
 
-exports[`图标管理者 > 根据id获取组件 - NativeMobile平台logo 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - NativeMobile平台logo 1`] = `
 <span
   aria-label="mobile"
   class="anticon anticon-mobile"
@@ -88,7 +88,7 @@ exports[`图标管理者 > 根据id获取组件 - NativeMobile平台logo 1`] = `
 </span>
 `;
 
-exports[`图标管理者 > 根据id获取组件 - PcWeb平台logo 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - PcWeb平台logo 1`] = `
 <span
   aria-label="desktop"
   class="anticon anticon-desktop"
@@ -110,7 +110,7 @@ exports[`图标管理者 > 根据id获取组件 - PcWeb平台logo 1`] = `
 </span>
 `;
 
-exports[`图标管理者 > 根据id获取组件 - 数据表项目节点 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - 数据表项目节点 1`] = `
 <span
   aria-label="table"
   class="anticon anticon-table"
@@ -132,7 +132,7 @@ exports[`图标管理者 > 根据id获取组件 - 数据表项目节点 1`] = `
 </span>
 `;
 
-exports[`图标管理者 > 根据id获取组件 - 蓝图项目节点 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - 蓝图项目节点 1`] = `
 <span
   aria-label="partition"
   class="anticon anticon-partition"
@@ -157,7 +157,7 @@ exports[`图标管理者 > 根据id获取组件 - 蓝图项目节点 1`] = `
 </span>
 `;
 
-exports[`图标管理者 > 根据id获取组件 - 视图项目节点 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - 视图项目节点 1`] = `
 <span
   aria-label="build"
   class="anticon anticon-build"
@@ -179,7 +179,7 @@ exports[`图标管理者 > 根据id获取组件 - 视图项目节点 1`] = `
 </span>
 `;
 
-exports[`图标管理者 > 根据id获取组件 - 项目组文件夹 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - 项目组文件夹 1`] = `
 <span
   aria-label="folder"
   class="anticon anticon-folder"
@@ -201,7 +201,7 @@ exports[`图标管理者 > 根据id获取组件 - 项目组文件夹 1`] = `
 </span>
 `;
 
-exports[`图标管理者 > 根据id获取组件 - 项目组文件夹展开中 1`] = `
+exports[`界面图标管理者 > 根据id获取组件 - 项目组文件夹展开中 1`] = `
 <span
   aria-label="folder-open"
   class="anticon anticon-folder-open"

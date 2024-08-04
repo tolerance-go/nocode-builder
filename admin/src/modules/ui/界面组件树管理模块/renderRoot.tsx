@@ -4,7 +4,7 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { 事件中心系统 } from '@/modules/事件中心系统';
-import { 图标管理者 } from '@/modules/图标管理者';
+import { 界面界面图标管理者 } from '@/modules/界面图标管理者';
 import { 界面导航系统 } from '@/modules/ui/界面导航系统';
 import { 界面状态仓库模块 } from '@/modules/ui/界面状态仓库模块';
 import { 界面通知系统 } from '@/modules/ui/界面通知系统';
@@ -12,7 +12,7 @@ import { 跟随鼠标显示内容管理者 } from '@/modules/跟随鼠标显示�
 import { 验证管理者 } from '@/modules/验证管理者';
 import {
   全局事件系统Context,
-  图标管理者Context,
+  界面图标管理者Context,
   导航系统Context,
   界面状态仓库模块Context,
   模块上下文,
@@ -33,7 +33,7 @@ import { 部件组件管理模块 } from '../部件组件管理模块';
 
 export const renderRoot = (module: ModuleBase) => {
   const 验证管理者实例 = module.getDependModule(验证管理者);
-  const 图标管理者实例 = module.getDependModule(图标管理者);
+  const 界面图标管理者实例 = module.getDependModule(界面界面图标管理者);
   const 跟随鼠标显示内容管理者实例 =
     module.getDependModule(跟随鼠标显示内容管理者);
   const 界面状态管理者实例 = module.getDependModule(界面状态仓库模块);
@@ -60,7 +60,7 @@ export const renderRoot = (module: ModuleBase) => {
                 <跟随鼠标显示内容管理者Context.Provider
                   value={跟随鼠标显示内容管理者实例}
                 >
-                  <图标管理者Context.Provider value={图标管理者实例}>
+                  <界面图标管理者Context.Provider value={界面图标管理者实例}>
                     <Provider store={界面状态管理者实例.store}>
                       <BrowserRouter
                         basename={import.meta.env.DEV ? '' : '/admin'}
@@ -103,7 +103,7 @@ export const renderRoot = (module: ModuleBase) => {
                         </Routes>
                       </BrowserRouter>
                     </Provider>
-                  </图标管理者Context.Provider>
+                  </界面图标管理者Context.Provider>
                 </跟随鼠标显示内容管理者Context.Provider>
               </验证管理者Context.Provider>
             </界面状态仓库模块Context.Provider>

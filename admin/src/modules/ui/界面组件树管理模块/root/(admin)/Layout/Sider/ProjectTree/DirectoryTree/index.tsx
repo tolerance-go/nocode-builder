@@ -12,7 +12,7 @@ import {
   ProjectTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块/types';
 import {
-  use图标管理者,
+  use界面图标管理者,
   use界面状态管理者,
 } from '@/modules/ui/界面组件树管理模块/hooks';
 import { css } from '@emotion/css';
@@ -29,7 +29,7 @@ export const DirectoryTree = () => {
     },
   } = use界面状态管理者();
 
-  const 图标管理者实例 = use图标管理者();
+  const 界面图标管理者实例 = use界面图标管理者();
 
   const { token } = theme.useToken();
   const 节点树容器的高度 = useAppSelector(
@@ -310,14 +310,14 @@ export const DirectoryTree = () => {
                     -((token.fontSize / 14) * 3),
                     (token.fontSize / 14) * 13,
                   ]}
-                  count={图标管理者实例.根据id获取组件('PcWeb平台logo', {
+                  count={界面图标管理者实例.根据id获取组件('PcWeb平台logo', {
                     style: {
                       fontSize: (token.fontSize / 14) * 10,
                       color: token.blue6,
                     },
                   })}
                 >
-                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                  {界面图标管理者实例.根据id获取组件('视图项目节点')}
                 </Badge>
               );
             }
@@ -332,7 +332,7 @@ export const DirectoryTree = () => {
                     -((token.fontSize / 14) * 3),
                     (token.fontSize / 14) * 13,
                   ]}
-                  count={图标管理者实例.根据id获取组件(
+                  count={界面图标管理者实例.根据id获取组件(
                     'DesktopClient平台logo',
                     {
                       style: {
@@ -342,7 +342,7 @@ export const DirectoryTree = () => {
                     },
                   )}
                 >
-                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                  {界面图标管理者实例.根据id获取组件('视图项目节点')}
                 </Badge>
               );
             }
@@ -357,14 +357,17 @@ export const DirectoryTree = () => {
                     -((token.fontSize / 14) * 3),
                     (token.fontSize / 14) * 13,
                   ]}
-                  count={图标管理者实例.根据id获取组件('MiniProgram平台logo', {
-                    style: {
-                      fontSize: (token.fontSize / 14) * 10,
-                      color: token.green6,
+                  count={界面图标管理者实例.根据id获取组件(
+                    'MiniProgram平台logo',
+                    {
+                      style: {
+                        fontSize: (token.fontSize / 14) * 10,
+                        color: token.green6,
+                      },
                     },
-                  })}
+                  )}
                 >
-                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                  {界面图标管理者实例.根据id获取组件('视图项目节点')}
                 </Badge>
               );
             }
@@ -379,14 +382,17 @@ export const DirectoryTree = () => {
                     -((token.fontSize / 14) * 3),
                     (token.fontSize / 14) * 13,
                   ]}
-                  count={图标管理者实例.根据id获取组件('MobileWeb平台logo', {
-                    style: {
-                      fontSize: (token.fontSize / 14) * 10,
-                      color: token.blue6,
+                  count={界面图标管理者实例.根据id获取组件(
+                    'MobileWeb平台logo',
+                    {
+                      style: {
+                        fontSize: (token.fontSize / 14) * 10,
+                        color: token.blue6,
+                      },
                     },
-                  })}
+                  )}
                 >
-                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                  {界面图标管理者实例.根据id获取组件('视图项目节点')}
                 </Badge>
               );
             }
@@ -401,31 +407,34 @@ export const DirectoryTree = () => {
                     -((token.fontSize / 14) * 3),
                     (token.fontSize / 14) * 13,
                   ]}
-                  count={图标管理者实例.根据id获取组件('NativeMobile平台logo', {
-                    style: {
-                      fontSize: (token.fontSize / 14) * 10,
-                      color: token.purple8,
+                  count={界面图标管理者实例.根据id获取组件(
+                    'NativeMobile平台logo',
+                    {
+                      style: {
+                        fontSize: (token.fontSize / 14) * 10,
+                        color: token.purple8,
+                      },
                     },
-                  })}
+                  )}
                 >
-                  {图标管理者实例.根据id获取组件('视图项目节点')}
+                  {界面图标管理者实例.根据id获取组件('视图项目节点')}
                 </Badge>
               );
             }
 
-            return 图标管理者实例.根据id获取组件('视图项目节点');
+            return 界面图标管理者实例.根据id获取组件('视图项目节点');
           }
           if (nodeData.projectType === ProjectTypeEnum.DataTable) {
-            return 图标管理者实例.根据id获取组件('数据表项目节点');
+            return 界面图标管理者实例.根据id获取组件('数据表项目节点');
           }
           if (nodeData.projectType === ProjectTypeEnum.Bluemap) {
-            return 图标管理者实例.根据id获取组件('蓝图项目节点');
+            return 界面图标管理者实例.根据id获取组件('蓝图项目节点');
           }
         } else {
           if (expanded) {
-            return 图标管理者实例.根据id获取组件('项目组文件夹展开中');
+            return 界面图标管理者实例.根据id获取组件('项目组文件夹展开中');
           }
-          return 图标管理者实例.根据id获取组件('项目组文件夹');
+          return 界面图标管理者实例.根据id获取组件('项目组文件夹');
         }
       }}
       titleRender={(nodeData) => <Title nodeKey={nodeData.key} />}

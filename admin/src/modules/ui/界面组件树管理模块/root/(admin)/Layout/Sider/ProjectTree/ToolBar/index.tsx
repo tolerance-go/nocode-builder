@@ -18,7 +18,7 @@ import {
 import { 组件标识, 组件类名 } from '@/modules/ui/界面组件树管理模块/constants';
 import {
   use界面状态管理者,
-  use图标管理者,
+  use界面图标管理者,
 } from '@/modules/ui/界面组件树管理模块/hooks';
 import { ProjectType } from '@/modules/ui/界面组件树管理模块/types';
 
@@ -59,7 +59,7 @@ export const ToolBar = () => {
     },
   } = use界面状态管理者();
 
-  const 图标管理者实例 = use图标管理者();
+  const 界面图标管理者实例 = use界面图标管理者();
   const { token } = theme.useToken();
 
   const projectTreeTimeLineVisible = useAppSelector(
@@ -288,7 +288,7 @@ export const ToolBar = () => {
                     视图
                   </span>
                 ),
-                icon: 图标管理者实例.根据id获取组件('视图项目节点'),
+                icon: 界面图标管理者实例.根据id获取组件('视图项目节点'),
                 className: 组件类名.创建项目节点的菜单项,
                 children: [
                   {
@@ -347,7 +347,7 @@ export const ToolBar = () => {
                     数据表
                   </span>
                 ),
-                icon: 图标管理者实例.根据id获取组件('数据表项目节点'),
+                icon: 界面图标管理者实例.根据id获取组件('数据表项目节点'),
                 onClick: () =>
                   handleProjectFileCreateBtnClick(ProjectTypeEnum.DataTable),
                 className: 组件类名.创建项目节点的菜单项,
@@ -361,7 +361,7 @@ export const ToolBar = () => {
                     蓝图
                   </span>
                 ),
-                icon: 图标管理者实例.根据id获取组件('蓝图项目节点'),
+                icon: 界面图标管理者实例.根据id获取组件('蓝图项目节点'),
                 onClick: () =>
                   handleProjectFileCreateBtnClick(ProjectTypeEnum.Bluemap),
                 className: 组件类名.创建项目节点的菜单项,
