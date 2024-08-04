@@ -50,6 +50,7 @@ export const renderRoot = (module: ModuleBase) => {
           全局事件系统: 全局事件系统实例,
           界面通知系统: 界面通知系统实例,
           部件组件管理模块: 部件组件管理模块实例,
+          界面状态仓库模块: 界面状态管理者实例,
         }}
       >
         <导航系统Context.Provider value={导航系统实例}>

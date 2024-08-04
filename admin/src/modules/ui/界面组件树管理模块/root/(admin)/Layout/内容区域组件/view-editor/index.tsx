@@ -65,7 +65,13 @@ export const ViewEditor = () => {
               >
                 header
               </div>
-              <div data-test-id={组件测试标识.视图编辑页面.舞台.内容}>
+              <div
+                data-test-id={组件测试标识.视图编辑页面.舞台.内容}
+                style={{
+                  flexGrow: 1,
+                  backgroundColor: token.colorBgContainer,
+                }}
+              >
                 <Stage />
               </div>
             </div>

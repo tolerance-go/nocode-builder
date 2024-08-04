@@ -2,6 +2,7 @@ import { useAppDispatch, useAppSelector } from '@/modules/ui/界面状态仓库�
 import { use界面状态管理者 } from '@/modules/ui/界面组件树管理模块/hooks';
 import { Tree } from 'antd';
 import { useEffect } from 'react';
+import { Title } from './Title';
 
 export const WidgetTree = () => {
   const dispatch = useAppDispatch();
@@ -14,5 +15,13 @@ export const WidgetTree = () => {
     dispatch(projectContent.actions.初始化根部件());
   }, [dispatch, projectContent]);
 
-  return <Tree treeData={widgetTree} blockNode />;
+  return (
+    <Tree
+      treeData={widgetTree}
+      blockNode
+      titleRender={(node) => {
+        return <Title nodeKey={node.key} />;
+      }}
+    />
+  );
 };

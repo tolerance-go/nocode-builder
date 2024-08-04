@@ -10,7 +10,9 @@ import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/
 import { theme } from 'antd';
 import React, { createElement, CSSProperties, ReactElement } from 'react';
 import { useDrop } from 'react-dnd';
-import { SlotItem, SlotItemProps } from '../SlotItem';
+import { SlotElement, SlotElementProps } from '../SlotElement';
+import { SlotPlaceholder } from '../SlotPlaceholder';
+import { SlotPlaceholderType } from '../SlotPlaceholder/enums';
 
 // 定义拖放类型
 const ItemType = {
@@ -19,9 +21,10 @@ const ItemType = {
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
+  getStageHeight: () => number; // 添加获取高度的方法
 }
 
-export const Widget: React.FC<WidgetProps> = ({ node }) => {
+export const Widget: React.FC<WidgetProps> = ({ node, getStageHeight }) => {
   const { token } = theme.useToken();
   const nodeData = useAppSelector(
     (state) => state.projectContent.widgetTreeNodeDatas[node.key],
@@ -30,7 +33,7 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
   const widgetTreeNodeDatas = useAppSelector(
     (state) => state.projectContent.widgetTreeNodeDatas,
   );
-
+  const isDragging = useAppSelector((state) => state.projectContent.isDragging);
   if (!widgetTreeNodeDataBaseIsWidgetTreeNodeData(nodeData)) {
     throw new Error('nodeData is not a WidgetTreeNodeData');
   }
@@ -45,14 +48,34 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
         throw new Error('slotNodeData is not a WidgetSlotTreeNodeData');
       }
 
-      prev[slotNodeData.name] =
-        curr.children?.map((child) => (
-          <SlotItem key={child.key} node={child} />
-        )) ?? [];
+      prev[slotNodeData.name] = curr.children?.length
+        ? [
+            <SlotPlaceholder
+              key={SlotPlaceholderType.Before}
+              type={SlotPlaceholderType.Before}
+            />,
+            ...curr.children.map((child) => (
+              <SlotElement
+                key={child.key}
+                node={child}
+                getStageHeight={getStageHeight}
+              />
+            )),
+            <SlotPlaceholder
+              key={SlotPlaceholderType.After}
+              type={SlotPlaceholderType.After}
+            />,
+          ]
+        : [
+            <SlotPlaceholder
+              key={SlotPlaceholderType.Empty}
+              type={SlotPlaceholderType.Empty}
+            />,
+          ];
 
       return prev;
     },
-    {} as Record<string, ReactElement<SlotItemProps>[]>,
+    {} as Record<string, ReactElement<SlotElementProps>[]>,
   );
 
   const [{ isOver }, drop] = useDrop({
@@ -63,9 +86,9 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
   });
 
   const widgetStyle: CSSProperties = {
-    border: isOver ? `2px dashed ${token.colorPrimary}` : 'none',
-    padding: '16px',
-    borderRadius: '4px',
+    // border: isOver ? `2px dashed ${token.colorPrimary}` : 'none',
+    // padding: '16px',
+    // borderRadius: '4px',
     backgroundColor: isOver ? token.colorBgBase : 'transparent',
   };
 
@@ -78,6 +101,9 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
         ),
         {
           slotElements,
+          isDragging,
+          isOverWidget: isOver,
+          getStageHeight,
         },
       )}
     </div>

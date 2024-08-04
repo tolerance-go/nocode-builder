@@ -2,6 +2,11 @@ import { EngineBase, ModuleBase } from '@/base';
 import { Button as AntdButton, Flex as AntdFlex } from './components/antd';
 import { FC } from 'react';
 import { WidgetComponentProps } from './types';
+import { Root } from './components/Root';
+import {
+  RootComponentName,
+  SystemWidgetLibName,
+} from '@/common/constants/components';
 
 export class 部件组件管理模块 extends ModuleBase {
   private static instance: 部件组件管理模块;
@@ -34,6 +39,11 @@ export class 部件组件管理模块 extends ModuleBase {
   }
 
   protected async onSetup(): Promise<void> {
+    this.registerComponentToWidget(
+      SystemWidgetLibName,
+      RootComponentName,
+      Root,
+    );
     this.registerComponentToWidget('antd', 'Button', AntdButton);
     this.registerComponentToWidget('antd', 'Flex', AntdFlex);
   }

@@ -8,6 +8,10 @@ import {
   WidgetSlotTreeDataNode,
 } from '../../types';
 import { generateDerivedMapping } from './utils';
+import {
+  RootComponentName,
+  SystemWidgetLibName,
+} from '@/common/constants/components';
 
 export type ProjectContentStates = {
   // 派生数据
@@ -15,6 +19,7 @@ export type ProjectContentStates = {
   // 关联数据
   widgetTreeNodeDatas: WidgetTreeNodeDataRecord;
   widgetTree: WidgetTreeDataNode[];
+  isDragging: boolean;
 };
 
 export const createProjectContentInitialState = () => {
@@ -22,6 +27,7 @@ export const createProjectContentInitialState = () => {
     derived_widget节点到父节点的映射: {},
     widgetTree: [],
     widgetTreeNodeDatas: {},
+    isDragging: false,
   };
   return initialState;
 };
@@ -73,16 +79,31 @@ export const createProjectContentSlice = () => {
         state.widgetTree.push({
           key: RootWidgetKey,
           type: WidgetTreeNodeType.Widget,
-          title: 'Root',
+          children: [
+            {
+              key: 'root-children',
+              type: WidgetTreeNodeType.Slot,
+            },
+          ],
         });
-        state.derived_widget节点到父节点的映射[RootWidgetKey] = null;
+
         state.widgetTreeNodeDatas[RootWidgetKey] = {
           key: RootWidgetKey,
           type: WidgetTreeNodeType.Widget,
-          widgetLibName: 'antd',
-          componentName: 'Flex',
+          widgetLibName: SystemWidgetLibName,
+          componentName: RootComponentName,
           title: 'Root',
         };
+
+        state.widgetTreeNodeDatas['root-children'] = {
+          key: 'root-children',
+          type: WidgetTreeNodeType.Slot,
+          name: 'children',
+          title: 'children',
+        };
+
+        state.derived_widget节点到父节点的映射[RootWidgetKey] = null;
+        state.derived_widget节点到父节点的映射['root-children'] = null;
       },
 
       添加组件到插槽(
@@ -113,6 +134,10 @@ export const createProjectContentSlice = () => {
               parentKey;
           }
         }
+      },
+
+      更新拖拽状态(state, action: PayloadAction<boolean>) {
+        state.isDragging = action.payload;
       },
     },
   });

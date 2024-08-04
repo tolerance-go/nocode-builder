@@ -1,3 +1,5 @@
+import { useAppDispatch } from '@/modules/ui/界面状态仓库模块';
+import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
 import { FileImageOutlined } from '@ant-design/icons';
 import { Card, Typography, theme } from 'antd';
 import { useEffect, useRef } from 'react';
@@ -13,6 +15,12 @@ export type CardData = {
 export const CardItem = ({ item }: { item: CardData }) => {
   const { token } = theme.useToken();
   const cardRef = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
+  const {
+    界面状态仓库模块: {
+      slices: { projectContent },
+    },
+  } = 获取模块上下文();
 
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: 'CARD',
@@ -30,6 +38,10 @@ export const CardItem = ({ item }: { item: CardData }) => {
       preview(new Image());
     }
   }, [preview]);
+
+  useEffect(() => {
+    dispatch(projectContent.actions.更新拖拽状态(isDragging));
+  }, [isDragging, dispatch, projectContent.actions]);
 
   return (
     <div ref={cardRef} style={{ opacity: isDragging ? 0.5 : 1 }}>
