@@ -1,4 +1,4 @@
-import { 事件中心系统 } from '../事件中心系统';
+import { 事件中心系统 } from '../../事件中心系统';
 import { EngineBase, ModuleBase } from '@/base';
 
 export class 文档环境对象代理模块 extends ModuleBase {
