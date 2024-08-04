@@ -4,6 +4,8 @@ import {
   WidgetTreeNodeDataRecord,
   WidgetTreeDataNode,
   WidgetTreeNodeDataRecordItem,
+  WidgetTreeNodeType,
+  WidgetSlotTreeDataNode,
 } from '../../types';
 import { generateDerivedMapping } from './utils';
 
@@ -14,12 +16,6 @@ export type ProjectContentStates = {
   widgetTreeNodeDatas: WidgetTreeNodeDataRecord;
   widgetTree: WidgetTreeDataNode[];
 };
-
-// 定义 reducer 的 payload 类型
-interface UpdateWidgetTreePayload {
-  widgetTree: WidgetTreeDataNode[];
-  widgetTreeNodeDatas: WidgetTreeNodeDataRecord;
-}
 
 export const createProjectContentInitialState = () => {
   const initialState: ProjectContentStates = {
@@ -32,6 +28,24 @@ export const createProjectContentInitialState = () => {
 
 const initialState: ProjectContentStates = createProjectContentInitialState();
 
+function findNodeByKey(
+  tree: WidgetTreeDataNode[] | WidgetSlotTreeDataNode[],
+  key: ViewKey,
+): WidgetTreeDataNode | WidgetSlotTreeDataNode | null {
+  for (const node of tree) {
+    if (node.key === key) {
+      return node;
+    }
+    if (node.children) {
+      const found = findNodeByKey(node.children, key);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
+}
+
 export const createProjectContentSlice = () => {
   const projectContentSlice = createSlice({
     name: 'projectContent',
@@ -39,7 +53,10 @@ export const createProjectContentSlice = () => {
     reducers: {
       updateWidgetTreeData(
         state,
-        action: PayloadAction<UpdateWidgetTreePayload>,
+        action: PayloadAction<{
+          widgetTree: WidgetTreeDataNode[];
+          widgetTreeNodeDatas: WidgetTreeNodeDataRecord;
+        }>,
       ) {
         state.widgetTree = action.payload.widgetTree;
         state.widgetTreeNodeDatas = action.payload.widgetTreeNodeDatas;
@@ -59,6 +76,36 @@ export const createProjectContentSlice = () => {
         state.widgetTree.push(根部件);
         state.derived_widget节点到父节点的映射[根部件.key] = null;
         state.widgetTreeNodeDatas[根部件.key] = data;
+      },
+
+      添加组件到插槽(
+        state,
+        action: PayloadAction<{
+          parentKey: ViewKey;
+          slotKey: ViewKey;
+          newComponent: WidgetTreeDataNode;
+          newData: WidgetTreeNodeDataRecordItem;
+          index: number;
+        }>,
+      ) {
+        const { parentKey, slotKey, newComponent, newData, index } =
+          action.payload;
+        const parent = findNodeByKey(state.widgetTree, parentKey);
+
+        if (parent && parent.type === WidgetTreeNodeType.Widget) {
+          const slot = parent.children?.find(
+            (child) =>
+              child.key === slotKey && child.type === WidgetTreeNodeType.Slot,
+          ) as WidgetSlotTreeDataNode | undefined;
+
+          if (slot) {
+            slot.children = slot.children ?? [];
+            slot.children.splice(index, 0, newComponent);
+            state.widgetTreeNodeDatas[newComponent.key] = newData;
+            state.derived_widget节点到父节点的映射[newComponent.key] =
+              parentKey;
+          }
+        }
       },
     },
   });
