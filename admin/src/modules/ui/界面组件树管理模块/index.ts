@@ -35,7 +35,6 @@ export class 界面组件树管理模块 extends ModuleBase {
       图标管理者.getInstance(this.engine),
       跟随鼠标显示内容管理者.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),
-      界面状态管理模块.getInstance(this.engine),
       部件组件管理模块.getInstance(this.engine),
     );
   }
