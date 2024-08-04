@@ -7,7 +7,7 @@ import { 界面导航系统 } from '@/modules/ui/界面导航系统';
 import { 界面通知系统 } from '@/modules/ui/界面通知系统';
 import { 跟随鼠标显示内容管理者 } from '@/modules/跟随鼠标显示内容管理者';
 import { 项目树历史纪录管理者 } from '@/modules/项目树历史纪录管理者';
-import { 验证管理者 } from '@/modules/验证管理者';
+import { 数据验证管理模块 } from '@/modules/数据验证管理模块';
 import { renderRoot } from './renderRoot';
 import { 界面状态仓库模块 } from '@/modules/ui/界面状态仓库模块';
 import { 部件组件管理模块 } from '../部件组件管理模块';
@@ -30,7 +30,7 @@ export class 界面组件树管理模块 extends ModuleBase {
       项目树历史纪录管理者.getInstance(this.engine),
       文档环境对象代理模块.getInstance(this.engine, document),
       界面通知系统.getInstance(this.engine),
-      验证管理者.getInstance(this.engine),
+      数据验证管理模块.getInstance(this.engine),
       界面界面图标管理者.getInstance(this.engine),
       跟随鼠标显示内容管理者.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),

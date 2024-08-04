@@ -20,15 +20,15 @@ const illegalPostgresqlChars = [
   ':',
 ];
 
-export class 验证管理者 extends ModuleBase {
-  private static instance: 验证管理者;
+export class 数据验证管理模块 extends ModuleBase {
+  private static instance: 数据验证管理模块;
 
-  public static getInstance(engine: EngineBase): 验证管理者 {
-    if (!验证管理者.instance) {
-      验证管理者.instance = new 验证管理者(engine);
+  public static getInstance(engine: EngineBase): 数据验证管理模块 {
+    if (!数据验证管理模块.instance) {
+      数据验证管理模块.instance = new 数据验证管理模块(engine);
     }
 
-    return 验证管理者.instance;
+    return 数据验证管理模块.instance;
   }
 
   项目树节点标题是否有效(input: string): string | null {
