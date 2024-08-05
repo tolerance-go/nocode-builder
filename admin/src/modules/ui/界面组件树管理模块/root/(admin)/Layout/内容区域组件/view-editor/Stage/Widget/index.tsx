@@ -68,7 +68,7 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
     // border: isOver ? `2px dashed ${token.colorPrimary}` : 'none',
     // padding: '16px',
     // borderRadius: '4px',
-    backgroundColor: isOver ? token.colorBgBase : 'transparent',
+    // backgroundColor: isOver ? token.colorBgBase : 'transparent',
   };
 
   return (
