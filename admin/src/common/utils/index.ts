@@ -7,3 +7,4 @@ export * from './delay';
 export * from './hexToRgb';
 export * from './redirectToX';
 export * from './is';
+export * from './generateId';

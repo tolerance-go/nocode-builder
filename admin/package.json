@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "daily:run": "pnpm lint && vitest run --passWithNoTests && pnpm build",
+    "commit-before:run": "pnpm lint && vitest run --passWithNoTests",
     "cypress:open": "pnpm cypress open",
     "cypress:run-dev": "pnpm cypress run",
     "cypress:run": "cross-env CYPRESS_BASE_URL=http://127.0.0.1/admin pnpm cypress run --env baseApi=http://127.0.0.1/api"

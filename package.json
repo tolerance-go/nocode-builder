@@ -25,7 +25,7 @@
     "dev:admin": "pnpm --filter admin dev",
     "dev:server": "pnpm --filter server start:dev",
     "dev:docs": "pnpm --filter docs dev",
-    "commit-before:run": "pnpm format && pnpm generate:source && pnpm build-depends && pnpm -r run daily:run",
+    "commit-before:run": "pnpm format && pnpm -r run commit-before:run",
     "daily:run": "pnpm format && pnpm generate:source && pnpm build-depends && pnpm -r run daily:run && pnpm docker:dev-build && pnpm cypress:run",
     "cypress:run": "pnpm --filter admin cypress:run",
     "prepare": "husky"

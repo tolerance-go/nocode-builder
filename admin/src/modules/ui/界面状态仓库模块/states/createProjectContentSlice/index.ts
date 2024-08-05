@@ -111,12 +111,12 @@ export const createProjectContentSlice = () => {
         action: PayloadAction<{
           parentKey: ViewKey;
           slotKey: ViewKey;
-          newComponent: WidgetTreeDataNode;
-          newData: WidgetTreeNodeDataRecordItem;
+          widgetNode: WidgetTreeDataNode;
+          widgetData: WidgetTreeNodeDataRecordItem;
           index: number;
         }>,
       ) {
-        const { parentKey, slotKey, newComponent, newData, index } =
+        const { parentKey, slotKey, widgetNode, widgetData, index } =
           action.payload;
         const parent = findNodeByKey(state.widgetTree, parentKey);
 
@@ -128,10 +128,9 @@ export const createProjectContentSlice = () => {
 
           if (slot) {
             slot.children = slot.children ?? [];
-            slot.children.splice(index, 0, newComponent);
-            state.widgetTreeNodeDatas[newComponent.key] = newData;
-            state.derived_widget节点到父节点的映射[newComponent.key] =
-              parentKey;
+            slot.children.splice(index, 0, widgetNode);
+            state.widgetTreeNodeDatas[widgetNode.key] = widgetData;
+            state.derived_widget节点到父节点的映射[widgetNode.key] = parentKey;
           }
         }
       },
