@@ -38,6 +38,11 @@ export class 部件组件管理模块 extends ModuleBase {
     return component;
   }
 
+  public isComponentRegistered(lib: string, name: string): boolean {
+    const library = this.componentRegistry.get(lib);
+    return library ? library.has(name) : false;
+  }
+
   protected async onSetup(): Promise<void> {
     this.registerComponentToWidget(
       SystemWidgetLibName,

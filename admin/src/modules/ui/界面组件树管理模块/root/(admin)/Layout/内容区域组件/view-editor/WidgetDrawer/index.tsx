@@ -17,6 +17,8 @@ import {
   useState,
 } from 'react';
 import { CardData, CardItem } from './CardItem';
+import { 部件组件管理模块 } from '@/modules/ui/部件组件管理模块';
+import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
 
 // 定义抽屉的引用类型
 export type WidgetDrawerRef = {
@@ -28,18 +30,26 @@ export type WidgetDrawerRef = {
 // 使用 Axios 获取数据
 const fetchData = async (
   platformType: WidgetPlatformTypeEnum,
+  部件组件管理模块单例: 部件组件管理模块,
 ): Promise<CardData[]> => {
   try {
     const widgets = await api.widgets.getWidgetsWithLibFilterByPlatform({
       platformType,
     });
-    return widgets.map((widget) => ({
-      title: widget.name,
-      widgetData: widget,
-      widgetLibName: widget.widgetLib.name,
-      widgetName: widget.name,
-      componentDisplay: assertEnumValue(widget.display, WidgetDisplayEnum),
-    }));
+    return widgets
+      .map((widget) => ({
+        title: widget.name,
+        widgetData: widget,
+        widgetLibName: widget.widgetLib.name,
+        widgetName: widget.name,
+        componentDisplay: assertEnumValue(widget.display, WidgetDisplayEnum),
+      }))
+      .filter((item) =>
+        部件组件管理模块单例.isComponentRegistered(
+          item.widgetLibName,
+          item.widgetName,
+        ),
+      );
   } catch (error) {
     console.error('Error fetching data:', error);
     return [];
@@ -61,6 +71,8 @@ export const WidgetDrawer = forwardRef<
       ? state.projectTree.项目树节点数据[state.projectTree.激活的节点的key]
       : null,
   );
+
+  const { 部件组件管理模块 } = 获取模块上下文();
 
   const showDrawer = () => {
     setVisible(true);
@@ -100,6 +112,7 @@ export const WidgetDrawer = forwardRef<
       setLoading(true);
       const fetchedData = await fetchData(
         激活的项目节点数据.projectDetail.platform,
+        部件组件管理模块,
       );
       setData(fetchedData);
       setLoading(false);
@@ -108,7 +121,7 @@ export const WidgetDrawer = forwardRef<
     if (visible) {
       loadData();
     }
-  }, [visible, 激活的项目节点数据]);
+  }, [visible, 激活的项目节点数据, 部件组件管理模块]);
 
   return (
     <Drawer
