@@ -186,6 +186,14 @@ export interface ProjectGroupUpdateDto {
 
 export interface WidgetResponseDto {
   id: number;
+  display:
+    | 'Block'
+    | 'InlineBlock'
+    | 'Flex'
+    | 'InlineFlex'
+    | 'Grid'
+    | 'InlineGrid'
+    | 'Table';
   name: string;
   platforms: (
     | 'PcWeb'
@@ -218,6 +226,14 @@ export interface WidgetLibResponseDto {
 
 export interface WidgetWithLibResponseDto {
   id: number;
+  display:
+    | 'Block'
+    | 'InlineBlock'
+    | 'Flex'
+    | 'InlineFlex'
+    | 'Grid'
+    | 'InlineGrid'
+    | 'Table';
   name: string;
   platforms: (
     | 'PcWeb'
@@ -259,6 +275,14 @@ export interface WidgetSlotAssignmentWithSlotsResponseDto {
 
 export interface WidgetWithSlotsResponseDto {
   id: number;
+  display:
+    | 'Block'
+    | 'InlineBlock'
+    | 'Flex'
+    | 'InlineFlex'
+    | 'Grid'
+    | 'InlineGrid'
+    | 'Table';
   name: string;
   platforms: (
     | 'PcWeb'
@@ -284,6 +308,14 @@ export interface WidgetWithSlotsResponseDto {
 
 export interface WidgetCreateDto {
   name: string;
+  display:
+    | 'Block'
+    | 'InlineBlock'
+    | 'Flex'
+    | 'InlineFlex'
+    | 'Grid'
+    | 'InlineGrid'
+    | 'Table';
   order: number;
   widgetLibId: number;
   platforms: (

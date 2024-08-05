@@ -8,6 +8,7 @@ export function toWidgetDto(widget: Widget): WidgetResponseDto {
     platforms: widget.platforms,
     category: widget.category,
     ownerId: widget.ownerId,
+    display: widget.display,
     createdAt: widget.createdAt.toISOString(),
     updatedAt: widget.updatedAt.toISOString(),
   };

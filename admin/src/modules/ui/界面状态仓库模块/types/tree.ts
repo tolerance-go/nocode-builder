@@ -1,4 +1,8 @@
-import { ProjectTypeEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
+import {
+  ProjectTypeEnum,
+  WidgetDisplayEnum,
+  WidgetPlatformTypeEnum,
+} from '@/_gen/models';
 import { ViewKey } from '@/common/types';
 import { TreeDataNode } from 'antd';
 import { ProjectType } from '../../界面组件树管理模块';
@@ -93,6 +97,7 @@ export type WidgetTreeNodeData = {
   type: WidgetTreeNodeType.Widget;
   widgetLibName: string;
   componentName: string;
+  display: WidgetDisplayEnum;
 } & WidgetTreeNodeDataBase;
 
 export type WidgetSlotTreeNodeData = {

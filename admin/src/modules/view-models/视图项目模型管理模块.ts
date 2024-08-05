@@ -43,6 +43,7 @@ export class 视图项目模型管理模块 extends ModuleBase {
               widgetLibName: event.被拖动组件的libName,
               componentName: event.被拖动组件Name,
               title: event.被拖动组件Name,
+              display: event.被拖动组件的display,
             },
             index: event.目标插槽index,
           }),

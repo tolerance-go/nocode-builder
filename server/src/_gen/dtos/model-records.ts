@@ -16,6 +16,7 @@ import {
   ProjectType,
   WidgetPlatformType,
   WidgetCategory,
+  WidgetDisplay,
 } from '@prisma/client';
 
 export class UserModelRecordDto {
@@ -332,6 +333,10 @@ export class WidgetModelRecordDto {
   @ApiProperty({})
   @IsDateString()
   updatedAt: string;
+
+  @ApiProperty({ enum: WidgetDisplay })
+  @IsEnum(WidgetDisplay)
+  display: WidgetDisplay;
 }
 
 export class WidgetSlotModelRecordDto {

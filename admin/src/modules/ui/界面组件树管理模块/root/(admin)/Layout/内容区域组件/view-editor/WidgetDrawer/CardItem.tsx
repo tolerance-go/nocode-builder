@@ -5,6 +5,7 @@ import { Card, Typography, theme } from 'antd';
 import { useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { ItemType } from '../../constants';
+import { WidgetDisplayEnum } from '@/_gen/models';
 
 // 定义数据类型
 export type CardData = {
@@ -13,6 +14,7 @@ export type CardData = {
   image?: string;
   widgetLibName: string;
   widgetName: string;
+  componentDisplay: WidgetDisplayEnum;
 };
 
 export type CardDragItem = {
@@ -20,6 +22,7 @@ export type CardDragItem = {
   width?: number;
   widgetLibName: string;
   widgetName: string;
+  componentDisplay: WidgetDisplayEnum;
 };
 
 export const CardItem = ({ item }: { item: CardData }) => {
@@ -40,6 +43,7 @@ export const CardItem = ({ item }: { item: CardData }) => {
         width: cardRef.current?.getBoundingClientRect().width,
         widgetLibName: item.widgetLibName,
         widgetName: item.widgetName,
+        componentDisplay: item.componentDisplay,
       }) satisfies CardDragItem,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),

@@ -10,6 +10,7 @@ import {
   ProjectTreeNodeData,
 } from '@/modules/ui/界面状态仓库模块';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
+import { WidgetDisplayEnum } from '@/_gen/models';
 
 type 项目树后台同步模块事件类型 = {
   新增项目记录成功: {
@@ -71,6 +72,7 @@ type 界面视图管理者事件类型 = {
     目标部件key: ViewKey;
     目标插槽key: ViewKey;
     目标插槽index: number;
+    被拖动组件的display: WidgetDisplayEnum;
   };
 };
 

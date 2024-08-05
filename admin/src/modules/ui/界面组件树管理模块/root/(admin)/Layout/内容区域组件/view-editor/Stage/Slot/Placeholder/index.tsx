@@ -9,6 +9,7 @@ import { CardDragItem } from '../../../WidgetDrawer/CardItem';
 import { theme } from 'antd';
 import { createContext, CSSProperties, useContext } from 'react';
 import { SlotPlaceholderPosition } from './enums';
+import { WidgetDisplayEnum } from '@/_gen/models';
 
 export interface PlaceholderProps {
   style?: React.CSSProperties;
@@ -21,7 +22,6 @@ export interface PlaceholderProps {
 
 interface SlotStyleContextType {
   getSlotItemStyle: (options: {
-    isDragging: boolean;
     isOver: boolean;
     position: SlotPlaceholderPosition;
   }) => CSSProperties | void;
@@ -32,7 +32,6 @@ export const SlotStyleContext = createContext<SlotStyleContextType | undefined>(
 );
 
 const useSlotItemStyle = ({
-  isDragging,
   isOver,
   position,
 }: {
@@ -44,20 +43,15 @@ const useSlotItemStyle = ({
 
   const context = useContext(SlotStyleContext);
 
-  const style = context?.getSlotItemStyle({ isDragging, isOver, position });
+  const style = context?.getSlotItemStyle({ isOver, position });
 
-  return isDragging
-    ? {
-        background: token.blue2,
-        border: `1px ${isOver ? 'solid' : 'dashed'} ${token.blue6}`,
-        height: 20,
-        width: 20,
-        ...style,
-      }
-    : {
-        display: 'none',
-        ...style,
-      };
+  return {
+    background: token.blue2,
+    border: `1px ${isOver ? 'solid' : 'dashed'} ${token.blue6}`,
+    height: 20,
+    width: 20,
+    ...style,
+  };
 };
 
 export const Placeholder = ({
@@ -69,16 +63,18 @@ export const Placeholder = ({
 }: PlaceholderProps) => {
   const { 全局事件系统 } = 获取模块上下文();
 
-  const [{ isOver }, drop] = useDrop<
+  const [{ isOver, componentDisplay }, drop] = useDrop<
     CardDragItem,
     unknown,
     {
       isOver: boolean;
+      componentDisplay: WidgetDisplayEnum;
     }
   >({
     accept: ItemType.CARD,
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
+      componentDisplay: monitor.getItem()?.componentDisplay,
     }),
     drop(item) {
       全局事件系统.emit('界面视图管理者/拖动组件放置到指定部件的插槽下时', {
@@ -87,6 +83,7 @@ export const Placeholder = ({
         目标部件key: widgetDataNode.key,
         目标插槽key: slotDataNode.key,
         目标插槽index: 0,
+        被拖动组件的display: componentDisplay,
       });
     },
   });
@@ -96,6 +93,10 @@ export const Placeholder = ({
     isOver,
     position,
   });
+
+  if (!isDragging) {
+    return null;
+  }
 
   return (
     <div

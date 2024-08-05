@@ -7,6 +7,7 @@
 import { WidgetPlatformTypeEnum } from './models';
 import { ProjectTypeEnum } from './models';
 import { WidgetCategoryEnum } from './models';
+import { WidgetDisplayEnum } from './models';
 
 export class UserModelRecord {
   id: number;
@@ -417,6 +418,8 @@ export class WidgetModelRecord {
 
   updatedAt: Date;
 
+  display: WidgetDisplayEnum;
+
   constructor({
     id,
     name,
@@ -426,6 +429,7 @@ export class WidgetModelRecord {
     category,
     createdAt,
     updatedAt,
+    display,
   }: {
     id: number;
     name: string;
@@ -435,6 +439,7 @@ export class WidgetModelRecord {
     category: WidgetCategoryEnum;
     createdAt: Date;
     updatedAt: Date;
+    display: WidgetDisplayEnum;
   }) {
     this.id = id;
     this.name = name;
@@ -444,6 +449,7 @@ export class WidgetModelRecord {
     this.category = category;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
+    this.display = display;
   }
 }
 

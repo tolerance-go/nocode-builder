@@ -23,6 +23,7 @@ const widgets = [
     slots: widget.slots || ['children'],
     platforms: widget.platforms,
     category: widget.category,
+    display: widget.display,
   };
 });
 
@@ -126,6 +127,7 @@ async function main() {
     } else {
       widget = await prismaService.widget.create({
         data: {
+          display: widgetData.display,
           name: widgetData.name,
           platforms: widgetData.platforms,
           category: widgetData.category,

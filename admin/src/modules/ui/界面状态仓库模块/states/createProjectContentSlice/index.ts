@@ -12,6 +12,7 @@ import {
   RootComponentName,
   SystemWidgetLibName,
 } from '@/common/constants/components';
+import { WidgetDisplayEnum } from '@/_gen/models';
 
 export type ProjectContentStates = {
   // 派生数据
@@ -92,6 +93,7 @@ export const createProjectContentSlice = () => {
           type: WidgetTreeNodeType.Widget,
           widgetLibName: SystemWidgetLibName,
           componentName: RootComponentName,
+          display: WidgetDisplayEnum.Block,
           title: 'Root',
         };
 

@@ -1,6 +1,7 @@
-import { WidgetPlatformTypeEnum } from '@/_gen/models';
+import { WidgetDisplayEnum, WidgetPlatformTypeEnum } from '@/_gen/models';
 import useMultipleClickAway from '@/common/hooks/useMultipleClickAway';
 import {
+  assertEnumValue,
   projectDetailIsViewProjectDetail,
   projectTreeNodeDataIsProjectTreeNodeFileData,
 } from '@/common/utils';
@@ -37,6 +38,7 @@ const fetchData = async (
       widgetData: widget,
       widgetLibName: widget.widgetLib.name,
       widgetName: widget.name,
+      componentDisplay: assertEnumValue(widget.display, WidgetDisplayEnum),
     }));
   } catch (error) {
     console.error('Error fetching data:', error);

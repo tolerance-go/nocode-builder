@@ -177,6 +177,7 @@ model Widget {
   createdAt             DateTime               @default(now())
   updatedAt             DateTime               @updatedAt
   widgetInstances       WidgetInstance[]
+  display               WidgetDisplay
 }
 
 model WidgetSlot {
@@ -225,4 +226,14 @@ enum WidgetCategory {
   Feedback
   Other
   Heavyweight
+}
+
+enum WidgetDisplay {
+  Block
+  InlineBlock
+  Flex
+  InlineFlex
+  Grid
+  InlineGrid
+  Table
 }

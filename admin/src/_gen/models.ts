@@ -29,6 +29,16 @@ export enum WidgetCategoryEnum {
   Heavyweight = 'Heavyweight',
 }
 
+export enum WidgetDisplayEnum {
+  Block = 'Block',
+  InlineBlock = 'InlineBlock',
+  Flex = 'Flex',
+  InlineFlex = 'InlineFlex',
+  Grid = 'Grid',
+  InlineGrid = 'InlineGrid',
+  Table = 'Table',
+}
+
 export class UserModel {
   id: number;
 
@@ -409,6 +419,8 @@ export class WidgetModel {
 
   widgetInstances: WidgetInstanceModel[];
 
+  display: WidgetDisplayEnum;
+
   constructor({
     id,
     name,
@@ -422,6 +434,7 @@ export class WidgetModel {
     createdAt,
     updatedAt,
     widgetInstances,
+    display,
   }: {
     id: number;
     name: string;
@@ -435,6 +448,7 @@ export class WidgetModel {
     createdAt: Date;
     updatedAt: Date;
     widgetInstances: WidgetInstanceModel[];
+    display: WidgetDisplayEnum;
   }) {
     this.id = id;
     this.name = name;
@@ -448,6 +462,7 @@ export class WidgetModel {
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
     this.widgetInstances = widgetInstances;
+    this.display = display;
   }
 }
 

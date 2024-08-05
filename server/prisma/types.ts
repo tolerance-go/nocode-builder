@@ -1,4 +1,8 @@
-import { WidgetCategory, WidgetPlatformType } from '@prisma/client';
+import {
+  WidgetCategory,
+  WidgetDisplay,
+  WidgetPlatformType,
+} from '@prisma/client';
 
 export type WidgetData = {
   name: string;
@@ -6,4 +10,5 @@ export type WidgetData = {
   category: WidgetCategory;
   platforms: WidgetPlatformType[];
   slots?: string[];
+  display: WidgetDisplay;
 };

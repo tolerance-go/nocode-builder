@@ -7,20 +7,31 @@ import {
   WidgetTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
-import { theme } from 'antd';
+// import { theme } from 'antd';
 import React, { createElement, CSSProperties, ReactElement } from 'react';
 import { useDrop } from 'react-dnd';
 import { ItemType } from '../../../constants';
 import { Slot, SlotProps } from '../Slot';
+import { WidgetDisplayEnum } from '@/_gen/models';
 
 // 定义拖放类型
+
+const widgetDisplayMap = new Map<WidgetDisplayEnum, string>([
+  [WidgetDisplayEnum.Block, 'block'],
+  [WidgetDisplayEnum.InlineBlock, 'inline-block'],
+  [WidgetDisplayEnum.Flex, 'flex'],
+  [WidgetDisplayEnum.InlineFlex, 'inline-flex'],
+  [WidgetDisplayEnum.Grid, 'grid'],
+  [WidgetDisplayEnum.InlineGrid, 'inline-grid'],
+  [WidgetDisplayEnum.Table, 'table'],
+]);
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
 }
 
 export const Widget: React.FC<WidgetProps> = ({ node }) => {
-  const { token } = theme.useToken();
+  // const { token } = theme.useToken();
   const nodeData = useAppSelector(
     (state) => state.projectContent.widgetTreeNodeDatas[node.key],
   );
@@ -69,7 +80,10 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
     // padding: '16px',
     // borderRadius: '4px',
     // backgroundColor: isOver ? token.colorBgBase : 'transparent',
+    display: widgetDisplayMap.get(nodeData.display),
   };
+
+  console.log('nodeData', nodeData);
 
   return (
     <div ref={drop} style={widgetStyle}>

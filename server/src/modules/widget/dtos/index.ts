@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { WidgetCategory, WidgetPlatformType } from '@prisma/client';
+import {
+  WidgetCategory,
+  WidgetDisplay,
+  WidgetPlatformType,
+} from '@prisma/client';
 import { Type } from 'class-transformer';
 import {
   IsArray,
@@ -33,6 +37,12 @@ export class WidgetCreateDto {
   @ApiProperty({})
   @IsString()
   name: string;
+
+  @ApiProperty({
+    enum: WidgetDisplay,
+  })
+  @IsEnum(WidgetDisplay)
+  display: WidgetDisplay;
 
   @ApiProperty({})
   @IsInt()
@@ -120,6 +130,12 @@ export class WidgetResponseDto {
   @ApiProperty()
   @IsInt()
   id: number;
+
+  @ApiProperty({
+    enum: WidgetDisplay,
+  })
+  @IsEnum(WidgetDisplay)
+  display: WidgetDisplay;
 
   @ApiProperty({})
   @IsString()
