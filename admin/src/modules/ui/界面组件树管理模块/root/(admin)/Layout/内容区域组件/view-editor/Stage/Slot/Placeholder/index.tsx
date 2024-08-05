@@ -7,7 +7,8 @@ import { useDrop } from 'react-dnd';
 import { ItemType } from '../../../../constants';
 import { CardDragItem } from '../../../WidgetDrawer/CardItem';
 import { theme } from 'antd';
-import { CSSProperties } from 'react';
+import { createContext, CSSProperties, useContext } from 'react';
+import { SlotPlaceholderPosition } from './enums';
 
 export interface PlaceholderProps {
   style?: React.CSSProperties;
@@ -15,25 +16,47 @@ export interface PlaceholderProps {
   widgetDataNode: WidgetTreeDataNode;
   slotDataNode: WidgetSlotTreeDataNode;
   index: number;
+  position: SlotPlaceholderPosition;
 }
+
+interface SlotStyleContextType {
+  getSlotItemStyle: (options: {
+    isDragging: boolean;
+    isOver: boolean;
+    position: SlotPlaceholderPosition;
+  }) => CSSProperties | void;
+}
+
+export const SlotStyleContext = createContext<SlotStyleContextType | undefined>(
+  undefined,
+);
 
 const useSlotItemStyle = ({
   isDragging,
   isOver,
+  position,
 }: {
   isDragging: boolean;
   isOver: boolean;
+  position: SlotPlaceholderPosition;
 }): CSSProperties => {
   const { token } = theme.useToken();
+
+  const context = useContext(SlotStyleContext);
+
+  const style = context?.getSlotItemStyle({ isDragging, isOver, position });
+
   return isDragging
     ? {
         background: token.blue2,
-        border: `1px solid ${isOver ? token.yellow6 : token.blue6}`,
-        height: 100,
-        width: 100,
+        border: `1px ${isOver ? 'solid' : 'dashed'} ${token.blue6}`,
+        height: 50,
+        width: 50,
+        ...style,
       }
     : {
         display: 'none',
+        ...style,
       };
 };
 
@@ -42,6 +65,7 @@ export const Placeholder = ({
   isDragging,
   widgetDataNode,
   slotDataNode,
+  position,
 }: PlaceholderProps) => {
   const { 全局事件系统 } = 获取模块上下文();
 
@@ -70,6 +94,7 @@ export const Placeholder = ({
   const slotItemStyle = useSlotItemStyle({
     isDragging,
     isOver,
+    position,
   });
 
   return (

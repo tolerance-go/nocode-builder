@@ -6,6 +6,7 @@ import {
 import { Widget } from '../Widget';
 import { Placeholder } from './Placeholder';
 import { Fragment } from 'react/jsx-runtime';
+import { SlotPlaceholderPosition } from './Placeholder/enums';
 
 export type SlotProps = {
   node: WidgetSlotTreeDataNode;
@@ -24,20 +25,24 @@ export const Slot = ({
     <>
       {node.children?.length ? (
         <>
-          <Placeholder
-            isDragging={isDragging}
-            widgetDataNode={widgetDataNode}
-            slotDataNode={slotNodeData}
-            index={0}
-          />
           {node.children.map((child, nodeIndex) => (
             <Fragment key={child.key}>
+              {nodeIndex === 0 && (
+                <Placeholder
+                  isDragging={isDragging}
+                  widgetDataNode={widgetDataNode}
+                  slotDataNode={slotNodeData}
+                  index={0}
+                  position={SlotPlaceholderPosition.Split}
+                />
+              )}
               <Widget node={child} />
               <Placeholder
                 isDragging={isDragging}
                 widgetDataNode={widgetDataNode}
                 slotDataNode={slotNodeData}
                 index={nodeIndex + 1}
+                position={SlotPlaceholderPosition.Split}
               />
             </Fragment>
           ))}
@@ -48,6 +53,7 @@ export const Slot = ({
           widgetDataNode={widgetDataNode}
           slotDataNode={slotNodeData}
           index={0}
+          position={SlotPlaceholderPosition.Empty}
         />
       )}
     </>
