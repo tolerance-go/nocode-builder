@@ -50,8 +50,8 @@ const useSlotItemStyle = ({
     ? {
         background: token.blue2,
         border: `1px ${isOver ? 'solid' : 'dashed'} ${token.blue6}`,
-        height: 50,
-        width: 50,
+        height: 20,
+        width: 20,
         ...style,
       }
     : {

@@ -10,11 +10,17 @@ export const Root = ({ slotElements }: WidgetComponentProps) => {
     <div data-test-id="root-component">
       <SlotStyleContext.Provider
         value={{
-          getSlotItemStyle({ position }) {
-            if (position === SlotPlaceholderPosition.Empty) {
+          getSlotItemStyle({ isDragging, position }) {
+            if (isDragging) {
+              if (position === SlotPlaceholderPosition.Empty) {
+                return {
+                  width: stageSize.width - 2,
+                  height: stageSize.height - 2,
+                };
+              }
               return {
-                width: stageSize.width - 2,
-                height: stageSize.height - 2,
+                width: '100%',
+                height: 10,
               };
             }
           },
