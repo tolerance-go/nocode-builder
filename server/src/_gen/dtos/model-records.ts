@@ -5,18 +5,21 @@
  */
 
 import { ApiProperty } from '@nestjs/swagger';
+import { JsonValue } from '@prisma/client/runtime/library';
 import {
   IsInt,
   IsString,
   IsOptional,
   IsDateString,
   IsEnum,
+  IsNumber,
 } from 'class-validator';
 import {
   ProjectType,
   WidgetPlatformType,
   WidgetCategory,
   WidgetDisplay,
+  WidgetPropValueType,
 } from '@prisma/client';
 
 export class UserModelRecordDto {
@@ -377,4 +380,58 @@ export class WidgetSlotAssignmentModelRecordDto {
   @ApiProperty({})
   @IsDateString()
   assignedAt: string;
+}
+
+export class WidgetPropModelRecordDto {
+  @ApiProperty({})
+  @IsInt()
+  id: number;
+
+  @ApiProperty({})
+  @IsString()
+  key: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  jsonValue?: JsonValue;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsString()
+  stringValue?: string;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsNumber()
+  numberValue?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  boolValue?: boolean;
+
+  @ApiProperty({ enum: WidgetPropValueType })
+  @IsEnum(WidgetPropValueType)
+  valueType: WidgetPropValueType;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  widgetInstanceId?: number;
+
+  @ApiProperty({ required: false })
+  @IsOptional()
+  @IsInt()
+  widgetId?: number;
+
+  @ApiProperty({})
+  @IsInt()
+  ownerId: number;
+
+  @ApiProperty({})
+  @IsDateString()
+  createdAt: string;
+
+  @ApiProperty({})
+  @IsDateString()
+  updatedAt: string;
 }

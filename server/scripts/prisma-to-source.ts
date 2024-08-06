@@ -27,13 +27,14 @@ class Decorator {
 class Field {
   name: string;
   type: string | Class | Enum;
+  dbType: string;
   isRequired: boolean;
   isArray: boolean;
   isId: boolean;
   isUpdatedAt: boolean; // 是否为更新时间字段
   hasDefaultValue: boolean; // 是否有默认值
   relationFromFields?: string[];
-  relationToFields?: any[];
+  relationToFields?: unknown[];
   relationOnDelete?: string;
   relationName?: string;
   decorators: Decorator[];
@@ -41,6 +42,7 @@ class Field {
   constructor({
     name,
     type,
+    dbType,
     isRequired,
     isArray,
     isId,
@@ -54,19 +56,21 @@ class Field {
   }: {
     name: string;
     type: string | Class | Enum;
+    dbType: string;
     isRequired: boolean;
     isArray: boolean;
     isId: boolean;
     isUpdatedAt?: boolean;
     hasDefaultValue?: boolean;
     relationFromFields?: string[];
-    relationToFields?: any[];
+    relationToFields?: unknown[];
     relationOnDelete?: string;
     relationName?: string;
     decorators?: Decorator[];
   }) {
     this.name = name;
     this.type = type;
+    this.dbType = dbType;
     this.isRequired = isRequired;
     this.isArray = isArray;
     this.isId = isId;
@@ -96,6 +100,7 @@ class Field {
     return new Field({
       name: this.name,
       type: this.type,
+      dbType: this.dbType,
       isRequired: this.isRequired,
       isArray: this.isArray,
       isId: this.isId,
@@ -363,7 +368,10 @@ class DTOFile extends File {
   }
 
   print(): string {
-    const dtoImports = [new Import(['ApiProperty'], '@nestjs/swagger')];
+    const dtoImports = [
+      new Import(['ApiProperty'], '@nestjs/swagger'),
+      new Import(['JsonValue'], '@prisma/client/runtime/library'),
+    ];
 
     const usedValidators = new Set<string>();
 
@@ -437,24 +445,21 @@ class DTOFile extends File {
           usedValidators.add('IsOptional');
         }
 
-        if (field.type === 'Date') {
+        if (field.dbType === 'Float') {
+          decorators.push(new Decorator('IsNumber', []));
+          usedValidators.add('IsNumber');
+        } else if (field.type === 'Date') {
           field.type = 'string';
           decorators.push(new Decorator('IsDateString', []));
           usedValidators.add('IsDateString');
-        } else {
-          switch (field.type) {
-            case 'number':
-              decorators.push(new Decorator('IsInt', []));
-              usedValidators.add('IsInt');
-              break;
-            case 'string':
-              decorators.push(new Decorator('IsString', []));
-              usedValidators.add('IsString');
-              break;
-            default:
-              break;
-          }
+        } else if (field.type === 'number') {
+          decorators.push(new Decorator('IsInt', []));
+          usedValidators.add('IsInt');
+        } else if (field.type === 'string') {
+          decorators.push(new Decorator('IsString', []));
+          usedValidators.add('IsString');
         }
+
         field.decorators = decorators;
       });
     });
@@ -542,6 +547,8 @@ async function parseSchema(schema: string) {
     String: 'string',
     Boolean: 'boolean',
     DateTime: 'Date',
+    Json: 'JsonValue',
+    Float: 'number',
   };
 
   const modelClassMap: { [name: string]: Class } = {};
@@ -557,6 +564,7 @@ async function parseSchema(schema: string) {
       return new Field({
         name: field.name,
         type: fieldType,
+        dbType: field.type,
         isRequired: field.isRequired,
         isArray: field.isList,
         isId: field.isId,

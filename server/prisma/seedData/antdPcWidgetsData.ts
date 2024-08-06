@@ -12,6 +12,9 @@ export const antdPcWidgetsData: WidgetData[] = [
     category: WidgetCategory.General,
     platforms: [WidgetPlatformType.PcWeb],
     display: WidgetDisplay.InlineBlock,
+    props: {
+      text: 'Button',
+    },
   },
   {
     widgetLib: 'antd',

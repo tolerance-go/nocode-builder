@@ -4,6 +4,7 @@
  * ---------------------------------------------------------------
  */
 
+import { WidgetPropValueTypeEnum } from './models';
 import { WidgetPlatformTypeEnum } from './models';
 import { ProjectTypeEnum } from './models';
 import { WidgetCategoryEnum } from './models';
@@ -509,5 +510,72 @@ export class WidgetSlotAssignmentModelRecord {
     this.slotId = slotId;
     this.ownerId = ownerId;
     this.assignedAt = assignedAt;
+  }
+}
+
+export class WidgetPropModelRecord {
+  id: number;
+
+  key: string;
+
+  jsonValue?: JsonValue;
+
+  stringValue?: string;
+
+  numberValue?: number;
+
+  boolValue?: boolean;
+
+  valueType: WidgetPropValueTypeEnum;
+
+  widgetInstanceId?: number;
+
+  widgetId?: number;
+
+  ownerId: number;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    key,
+    jsonValue,
+    stringValue,
+    numberValue,
+    boolValue,
+    valueType,
+    widgetInstanceId,
+    widgetId,
+    ownerId,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    key: string;
+    jsonValue?: JsonValue;
+    stringValue?: string;
+    numberValue?: number;
+    boolValue?: boolean;
+    valueType: WidgetPropValueTypeEnum;
+    widgetInstanceId?: number;
+    widgetId?: number;
+    ownerId: number;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.key = key;
+    this.jsonValue = jsonValue;
+    this.stringValue = stringValue;
+    this.numberValue = numberValue;
+    this.boolValue = boolValue;
+    this.valueType = valueType;
+    this.widgetInstanceId = widgetInstanceId;
+    this.widgetId = widgetId;
+    this.ownerId = ownerId;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }

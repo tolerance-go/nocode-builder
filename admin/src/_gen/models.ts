@@ -4,6 +4,13 @@
  * ---------------------------------------------------------------
  */
 
+export enum WidgetPropValueTypeEnum {
+  String = 'String',
+  Number = 'Number',
+  Boolean = 'Boolean',
+  Json = 'Json',
+}
+
 export enum WidgetPlatformTypeEnum {
   PcWeb = 'PcWeb',
   MobileWeb = 'MobileWeb',
@@ -80,6 +87,8 @@ export class UserModel {
 
   projectDetails: ProjectDetailModel[];
 
+  widgetProps: WidgetPropModel[];
+
   constructor({
     id,
     name,
@@ -101,6 +110,7 @@ export class UserModel {
     dataTableProjects,
     bluemapProjects,
     projectDetails,
+    widgetProps,
   }: {
     id: number;
     name: string;
@@ -122,6 +132,7 @@ export class UserModel {
     dataTableProjects: DataTableProjectModel[];
     bluemapProjects: BluemapProjectModel[];
     projectDetails: ProjectDetailModel[];
+    widgetProps: WidgetPropModel[];
   }) {
     this.id = id;
     this.name = name;
@@ -143,6 +154,7 @@ export class UserModel {
     this.dataTableProjects = dataTableProjects;
     this.bluemapProjects = bluemapProjects;
     this.projectDetails = projectDetails;
+    this.widgetProps = widgetProps;
   }
 }
 
@@ -341,6 +353,8 @@ export class WidgetInstanceModel {
 
   viewProjectId?: number;
 
+  widgetProps: WidgetPropModel[];
+
   ownerId: number;
 
   owner: UserModel;
@@ -359,6 +373,7 @@ export class WidgetInstanceModel {
     widgetSlotInstanceAssignments,
     viewProject,
     viewProjectId,
+    widgetProps,
     ownerId,
     owner,
     createdAt,
@@ -373,6 +388,7 @@ export class WidgetInstanceModel {
     widgetSlotInstanceAssignments: WidgetSlotInstanceAssignmentModel[];
     viewProject?: ViewProjectModel;
     viewProjectId?: number;
+    widgetProps: WidgetPropModel[];
     ownerId: number;
     owner: UserModel;
     createdAt: Date;
@@ -387,6 +403,7 @@ export class WidgetInstanceModel {
     this.widgetSlotInstanceAssignments = widgetSlotInstanceAssignments;
     this.viewProject = viewProject;
     this.viewProjectId = viewProjectId;
+    this.widgetProps = widgetProps;
     this.ownerId = ownerId;
     this.owner = owner;
     this.createdAt = createdAt;
@@ -421,6 +438,8 @@ export class WidgetModel {
 
   display: WidgetDisplayEnum;
 
+  props: WidgetPropModel[];
+
   constructor({
     id,
     name,
@@ -435,6 +454,7 @@ export class WidgetModel {
     updatedAt,
     widgetInstances,
     display,
+    props,
   }: {
     id: number;
     name: string;
@@ -449,6 +469,7 @@ export class WidgetModel {
     updatedAt: Date;
     widgetInstances: WidgetInstanceModel[];
     display: WidgetDisplayEnum;
+    props: WidgetPropModel[];
   }) {
     this.id = id;
     this.name = name;
@@ -463,6 +484,89 @@ export class WidgetModel {
     this.updatedAt = updatedAt;
     this.widgetInstances = widgetInstances;
     this.display = display;
+    this.props = props;
+  }
+}
+
+export class WidgetPropModel {
+  id: number;
+
+  key: string;
+
+  jsonValue?: JsonValue;
+
+  stringValue?: string;
+
+  numberValue?: number;
+
+  boolValue?: boolean;
+
+  valueType: WidgetPropValueTypeEnum;
+
+  widgetInstance?: WidgetInstanceModel;
+
+  widgetInstanceId?: number;
+
+  widget?: WidgetModel;
+
+  widgetId?: number;
+
+  ownerId: number;
+
+  owner: UserModel;
+
+  createdAt: Date;
+
+  updatedAt: Date;
+
+  constructor({
+    id,
+    key,
+    jsonValue,
+    stringValue,
+    numberValue,
+    boolValue,
+    valueType,
+    widgetInstance,
+    widgetInstanceId,
+    widget,
+    widgetId,
+    ownerId,
+    owner,
+    createdAt,
+    updatedAt,
+  }: {
+    id: number;
+    key: string;
+    jsonValue?: JsonValue;
+    stringValue?: string;
+    numberValue?: number;
+    boolValue?: boolean;
+    valueType: WidgetPropValueTypeEnum;
+    widgetInstance?: WidgetInstanceModel;
+    widgetInstanceId?: number;
+    widget?: WidgetModel;
+    widgetId?: number;
+    ownerId: number;
+    owner: UserModel;
+    createdAt: Date;
+    updatedAt: Date;
+  }) {
+    this.id = id;
+    this.key = key;
+    this.jsonValue = jsonValue;
+    this.stringValue = stringValue;
+    this.numberValue = numberValue;
+    this.boolValue = boolValue;
+    this.valueType = valueType;
+    this.widgetInstance = widgetInstance;
+    this.widgetInstanceId = widgetInstanceId;
+    this.widget = widget;
+    this.widgetId = widgetId;
+    this.ownerId = ownerId;
+    this.owner = owner;
+    this.createdAt = createdAt;
+    this.updatedAt = updatedAt;
   }
 }
 

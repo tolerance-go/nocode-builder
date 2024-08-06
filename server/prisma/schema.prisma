@@ -34,6 +34,7 @@ model User {
   dataTableProjects             DataTableProject[]
   bluemapProjects               BluemapProject[]
   projectDetails                ProjectDetail[]
+  widgetProps                   WidgetProp[]
 }
 
 model Project {
@@ -132,6 +133,7 @@ model WidgetInstance {
   widgetSlotInstanceAssignments WidgetSlotInstanceAssignment[]
   viewProject                   ViewProject?                   @relation(fields: [viewProjectId], references: [id])
   viewProjectId                 Int?
+  widgetProps                   WidgetProp[]
 
   ownerId   Int
   owner     User     @relation(fields: [ownerId], references: [id])
@@ -178,6 +180,7 @@ model Widget {
   updatedAt             DateTime               @updatedAt
   widgetInstances       WidgetInstance[]
   display               WidgetDisplay
+  props                 WidgetProp[]
 }
 
 model WidgetSlot {
@@ -201,6 +204,35 @@ model WidgetSlotAssignment {
   assignedAt DateTime   @default(now())
 
   @@id([widgetId, slotId])
+}
+
+model WidgetProp {
+  id          Int                 @id @default(autoincrement())
+  key         String
+  jsonValue   Json?
+  stringValue String?
+  numberValue Float?
+  boolValue   Boolean?
+  valueType   WidgetPropValueType
+
+  widgetInstance   WidgetInstance? @relation(fields: [widgetInstanceId], references: [id])
+  widgetInstanceId Int?
+  widget           Widget?         @relation(fields: [widgetId], references: [id])
+  widgetId         Int?
+
+  ownerId   Int
+  owner     User     @relation(fields: [ownerId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([widgetInstanceId])
+}
+
+enum WidgetPropValueType {
+  String
+  Number
+  Boolean
+  Json
 }
 
 enum WidgetPlatformType {
