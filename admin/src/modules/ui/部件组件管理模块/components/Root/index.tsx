@@ -19,10 +19,6 @@ export const Root = (props: WidgetComponentProps) => {
                   height: stageSize.height - 2,
                 };
               }
-              return {
-                width: '100%',
-                height: 10,
-              };
             },
           }}
         >

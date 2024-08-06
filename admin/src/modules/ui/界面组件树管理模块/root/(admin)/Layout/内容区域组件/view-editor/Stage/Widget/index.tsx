@@ -12,19 +12,7 @@ import React, { createElement, CSSProperties, ReactElement } from 'react';
 import { useDrop } from 'react-dnd';
 import { ItemType } from '../../../constants';
 import { Slot, SlotProps } from '../Slot';
-import { WidgetDisplayEnum } from '@/_gen/models';
-
-// 定义拖放类型
-
-const widgetDisplayMap = new Map<WidgetDisplayEnum, string>([
-  [WidgetDisplayEnum.Block, 'block'],
-  [WidgetDisplayEnum.InlineBlock, 'inline-block'],
-  [WidgetDisplayEnum.Flex, 'flex'],
-  [WidgetDisplayEnum.InlineFlex, 'inline-flex'],
-  [WidgetDisplayEnum.Grid, 'grid'],
-  [WidgetDisplayEnum.InlineGrid, 'inline-grid'],
-  [WidgetDisplayEnum.Table, 'table'],
-]);
+import { widgetDisplayEnumToCssValue } from '@/modules/ui/界面组件树管理模块/utils';
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
@@ -80,7 +68,7 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
     // padding: '16px',
     // borderRadius: '4px',
     // backgroundColor: isOver ? token.colorBgBase : 'transparent',
-    display: widgetDisplayMap.get(nodeData.display),
+    display: widgetDisplayEnumToCssValue(nodeData.display),
   };
 
   console.log('nodeData', nodeData);

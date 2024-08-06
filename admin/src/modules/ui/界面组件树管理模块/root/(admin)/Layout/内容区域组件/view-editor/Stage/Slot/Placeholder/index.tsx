@@ -3,13 +3,19 @@ import {
   WidgetTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
-import { useDrop } from 'react-dnd';
+import { ConnectDropTarget, useDrop } from 'react-dnd';
 import { ItemType } from '../../../../constants';
 import { CardDragItem } from '../../../WidgetDrawer/CardItem';
 import { theme } from 'antd';
-import { createContext, CSSProperties, useContext } from 'react';
+import { createContext, createElement, CSSProperties, useContext } from 'react';
 import { SlotPlaceholderPosition } from './enums';
 import { WidgetDisplayEnum } from '@/_gen/models';
+import {
+  generateDefaultProps,
+  widgetDisplayEnumToCssValue,
+} from '@/modules/ui/界面组件树管理模块/utils';
+import { WidgetWithLibAndPropsResponseDto } from '@/_gen/api';
+import { assertEnumValue } from '@/common/utils';
 
 export interface PlaceholderProps {
   style?: React.CSSProperties;
@@ -34,8 +40,9 @@ export const SlotStyleContext = createContext<SlotStyleContextType | undefined>(
 const useSlotItemStyle = ({
   isOver,
   position,
+  display,
 }: {
-  isDragging: boolean;
+  display: WidgetDisplayEnum;
   isOver: boolean;
   position: SlotPlaceholderPosition;
 }): CSSProperties => {
@@ -48,10 +55,54 @@ const useSlotItemStyle = ({
   return {
     background: token.blue2,
     border: `1px ${isOver ? 'solid' : 'dashed'} ${token.blue6}`,
-    height: 20,
-    width: 20,
+    display: widgetDisplayEnumToCssValue(display),
+    opacity: !isOver ? 0.5 : 1,
     ...style,
   };
+};
+
+const Inner = ({
+  widgetData,
+  isOver,
+  position,
+  style,
+  drop,
+}: {
+  widgetData: WidgetWithLibAndPropsResponseDto;
+  isOver: boolean;
+  position: SlotPlaceholderPosition;
+  style?: CSSProperties;
+  drop: ConnectDropTarget;
+}) => {
+  const { 部件组件管理模块 } = 获取模块上下文();
+  const slotItemStyle = useSlotItemStyle({
+    isOver,
+    position,
+    display: assertEnumValue(widgetData.display, WidgetDisplayEnum),
+  });
+
+  const defaultProps = generateDefaultProps(widgetData.props);
+
+  return (
+    <div
+      ref={drop}
+      style={{
+        ...style,
+        ...slotItemStyle,
+      }}
+    >
+      {createElement(
+        部件组件管理模块.getWidgetComponent(
+          widgetData.widgetLib.name,
+          widgetData.name,
+        ),
+        {
+          mode: 'preview',
+          defaultProps,
+        },
+      )}
+    </div>
+  );
 };
 
 export const Placeholder = ({
@@ -63,48 +114,52 @@ export const Placeholder = ({
 }: PlaceholderProps) => {
   const { 全局事件系统 } = 获取模块上下文();
 
-  const [{ isOver, componentDisplay }, drop] = useDrop<
+  const [{ isOver, widgetData }, drop] = useDrop<
     CardDragItem,
     unknown,
     {
       isOver: boolean;
-      componentDisplay: WidgetDisplayEnum;
+      widgetData?: WidgetWithLibAndPropsResponseDto;
     }
   >({
     accept: ItemType.CARD,
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
-      componentDisplay: monitor.getItem()?.componentDisplay,
+      widgetData: monitor.getItem()?.widgetData,
     }),
     drop(item) {
+      if (!widgetData) {
+        return;
+      }
       全局事件系统.emit('界面视图管理者/拖动组件放置到指定部件的插槽下时', {
         被拖动组件Name: item.widgetName,
         被拖动组件的libName: item.widgetLibName,
         目标部件key: widgetDataNode.key,
         目标插槽key: slotDataNode.key,
         目标插槽index: 0,
-        被拖动组件的display: componentDisplay,
+        被拖动组件的display: assertEnumValue(
+          widgetData.display,
+          WidgetDisplayEnum,
+        ),
       });
     },
-  });
-
-  const slotItemStyle = useSlotItemStyle({
-    isDragging,
-    isOver,
-    position,
   });
 
   if (!isDragging) {
     return null;
   }
 
+  if (!widgetData) {
+    return null;
+  }
+
   return (
-    <div
-      ref={drop}
-      style={{
-        ...style,
-        ...slotItemStyle,
-      }}
-    ></div>
+    <Inner
+      widgetData={widgetData}
+      isOver={isOver}
+      position={position}
+      style={style}
+      drop={drop}
+    />
   );
 };

@@ -1,8 +1,4 @@
+import { JsonValue } from '@unocode/common';
+
 export type ViewKey = number | string;
-export type JSONValue =
-  | string
-  | number
-  | boolean
-  | null
-  | { [key: string]: JSONValue }
-  | JSONValue[];
+export type JSONValue = JsonValue;
