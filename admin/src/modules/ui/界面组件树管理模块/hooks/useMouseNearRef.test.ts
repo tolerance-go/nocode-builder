@@ -20,7 +20,7 @@ describe('useMouseNearRef', () => {
     const { result } = renderHook(() => useMouseNearRef(ref, 100, true));
 
     act(() => {
-      const event = new MouseEvent('mousemove', {
+      const event = new MouseEvent('drag', {
         clientX: element.getBoundingClientRect().left + 50,
         clientY: element.getBoundingClientRect().top + 50,
       });
@@ -34,7 +34,7 @@ describe('useMouseNearRef', () => {
     const { result } = renderHook(() => useMouseNearRef(ref, 100, true));
 
     act(() => {
-      const event = new MouseEvent('mousemove', {
+      const event = new MouseEvent('drag', {
         clientX: element.getBoundingClientRect().left - 150,
         clientY: element.getBoundingClientRect().top - 150,
       });
@@ -48,7 +48,7 @@ describe('useMouseNearRef', () => {
     const { result } = renderHook(() => useMouseNearRef(ref, 100, false));
 
     act(() => {
-      const event = new MouseEvent('mousemove', {
+      const event = new MouseEvent('drag', {
         clientX: element.getBoundingClientRect().left + 50,
         clientY: element.getBoundingClientRect().top + 50,
       });
@@ -65,7 +65,7 @@ describe('useMouseNearRef', () => {
     );
 
     act(() => {
-      const event = new MouseEvent('mousemove', {
+      const event = new MouseEvent('drag', {
         clientX: element.getBoundingClientRect().left + 50,
         clientY: element.getBoundingClientRect().top + 50,
       });
@@ -77,7 +77,7 @@ describe('useMouseNearRef', () => {
     rerender({ shouldListen: true });
 
     act(() => {
-      const event = new MouseEvent('mousemove', {
+      const event = new MouseEvent('drag', {
         clientX: element.getBoundingClientRect().left + 50,
         clientY: element.getBoundingClientRect().top + 50,
       });
