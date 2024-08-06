@@ -1,8 +1,9 @@
 import {
   WidgetCategory,
-  WidgetPlatformType,
   WidgetDisplay,
+  WidgetPlatformType,
 } from '@prisma/client';
+import { antdProps } from '@unocode/common';
 import { WidgetData } from 'prisma/types';
 
 export const antdPcWidgetsData: WidgetData[] = [
@@ -12,9 +13,7 @@ export const antdPcWidgetsData: WidgetData[] = [
     category: WidgetCategory.General,
     platforms: [WidgetPlatformType.PcWeb],
     display: WidgetDisplay.InlineBlock,
-    props: {
-      text: 'Button',
-    },
+    defaultProps: antdProps.Button.defaultProps,
   },
   {
     widgetLib: 'antd',

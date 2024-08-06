@@ -93,6 +93,7 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
           nodeData.componentName,
         ),
         {
+          mode: 'edit',
           slotElements,
           isDragging,
           isOverWidget: isOver,

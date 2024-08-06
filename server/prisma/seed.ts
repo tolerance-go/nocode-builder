@@ -27,8 +27,11 @@ const widgets = [
     platforms: widget.platforms,
     category: widget.category,
     display: widget.display,
-    props: widget.props
-      ? Object.entries(widget.props).map(([key, value]) => ({ key, value }))
+    props: widget.defaultProps
+      ? Object.entries(widget.defaultProps).map(([key, value]) => ({
+          key,
+          value,
+        }))
       : [], // 转换 props
   } satisfies WidgetDataRecord;
 });

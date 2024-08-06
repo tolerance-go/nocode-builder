@@ -17,6 +17,7 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { WidgetLibResponseDto } from 'src/modules/widget-lib/dtos';
+import { WidgetPropResponseDto } from 'src/modules/widget-prop/dtos';
 import { WidgetSlotAssignmentWithSlotsResponseDto } from 'src/modules/widget-slot-assignment/dtos';
 import { WidgetSlotCreateDto } from 'src/modules/widget-slot/dtos';
 
@@ -175,6 +176,15 @@ export class WidgetWithLibResponseDto extends WidgetResponseDto {
   @ValidateNested()
   @Type(() => WidgetLibResponseDto)
   widgetLib: WidgetLibResponseDto;
+}
+
+export class WidgetWithLibAndPropsResponseDto extends WidgetWithLibResponseDto {
+  @ApiProperty({
+    type: [WidgetPropResponseDto],
+  })
+  @ValidateNested({ each: true })
+  @Type(() => WidgetPropResponseDto)
+  props: WidgetPropResponseDto[];
 }
 
 export class WidgetWithSlotsResponseDto extends WidgetResponseDto {

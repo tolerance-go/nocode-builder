@@ -125,6 +125,11 @@ export const apiUrls = {
     route: '/widgets/filter-by-platform',
     path: '/widgets/filter-by-platform',
   },
+  WidgetController_getWidgetsWithLibAndPropsFilterByPlatform: {
+    method: 'get',
+    route: '/widgets/with-lib-and-props-filter-by-platform',
+    path: '/widgets/with-lib-and-props-filter-by-platform',
+  },
   WidgetController_getWidgetsWithSlots: {
     method: 'get',
     route: '/widgets/with-slots',

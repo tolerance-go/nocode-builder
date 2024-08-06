@@ -3,6 +3,7 @@ import {
   Prisma,
   Widget,
   WidgetLib,
+  WidgetProp,
   WidgetSlot,
   WidgetSlotAssignment,
 } from '@prisma/client';
@@ -68,6 +69,37 @@ export class WidgetService {
       orderBy,
       include: {
         widgetLib: true,
+      },
+    });
+    return widgets;
+  }
+
+  async widgetsWithLibAndProps(
+    params: {
+      skip?: number;
+      take?: number;
+      cursor?: Prisma.WidgetWhereUniqueInput;
+      where?: Prisma.WidgetWhereInput;
+      orderBy?: Prisma.WidgetOrderByWithRelationInput;
+    },
+    tx?: Prisma.TransactionClient,
+  ): Promise<
+    (Widget & {
+      widgetLib: WidgetLib;
+      props: WidgetProp[];
+    })[]
+  > {
+    const { skip, take, cursor, where, orderBy } = params;
+    const client = tx || this.prisma;
+    const widgets = client.widget.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+      include: {
+        widgetLib: true,
+        props: true,
       },
     });
     return widgets;

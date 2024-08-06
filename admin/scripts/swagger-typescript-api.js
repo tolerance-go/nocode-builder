@@ -13,12 +13,14 @@ generateApi({
   templates: path.resolve('./templates/api/used'),
   httpClientType: 'axios', // or "fetch"
   unwrapResponseData: true,
-  codeGenConstructs: () => ({
-    Keyword: {
-      Any: 'unknown',
-      Object: 'Record<string, unknown>',
-    },
-  }),
+  codeGenConstructs: () => {
+    return {
+      Keyword: {
+        Any: 'unknown',
+        Object: 'Record<string, unknown>',
+      },
+    };
+  },
   hooks: {
     onCreateRoute: (routeData) => {
       const { raw, request } = routeData;

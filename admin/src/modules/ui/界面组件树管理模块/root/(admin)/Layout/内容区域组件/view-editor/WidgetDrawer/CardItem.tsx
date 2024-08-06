@@ -6,12 +6,14 @@ import { useEffect, useRef } from 'react';
 import { useDrag } from 'react-dnd';
 import { ItemType } from '../../constants';
 import { WidgetDisplayEnum } from '@/_gen/models';
+import { WidgetWithLibAndPropsResponseDto } from '@/_gen/api';
 
 // 定义数据类型
 export type CardData = {
   title: string;
   content?: string;
   image?: string;
+  widgetData: WidgetWithLibAndPropsResponseDto;
   widgetLibName: string;
   widgetName: string;
   componentDisplay: WidgetDisplayEnum;
@@ -23,6 +25,7 @@ export type CardDragItem = {
   widgetLibName: string;
   widgetName: string;
   componentDisplay: WidgetDisplayEnum;
+  widgetData: WidgetWithLibAndPropsResponseDto;
 };
 
 export const CardItem = ({ item }: { item: CardData }) => {
@@ -44,6 +47,7 @@ export const CardItem = ({ item }: { item: CardData }) => {
         widgetLibName: item.widgetLibName,
         widgetName: item.widgetName,
         componentDisplay: item.componentDisplay,
+        widgetData: item.widgetData,
       }) satisfies CardDragItem,
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),

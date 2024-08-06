@@ -33,17 +33,25 @@ const fetchData = async (
   部件组件管理模块单例: 部件组件管理模块,
 ): Promise<CardData[]> => {
   try {
-    const widgets = await api.widgets.getWidgetsWithLibFilterByPlatform({
-      platformType,
-    });
+    const widgets = await api.widgets.getWidgetsWithLibAndPropsFilterByPlatform(
+      {
+        platformType,
+      },
+    );
     return widgets
-      .map((widget) => ({
-        title: widget.name,
-        widgetData: widget,
-        widgetLibName: widget.widgetLib.name,
-        widgetName: widget.name,
-        componentDisplay: assertEnumValue(widget.display, WidgetDisplayEnum),
-      }))
+      .map(
+        (widget) =>
+          ({
+            title: widget.name,
+            widgetData: widget,
+            widgetLibName: widget.widgetLib.name,
+            widgetName: widget.name,
+            componentDisplay: assertEnumValue(
+              widget.display,
+              WidgetDisplayEnum,
+            ),
+          }) satisfies CardData,
+      )
       .filter((item) =>
         部件组件管理模块单例.isComponentRegistered(
           item.widgetLibName,

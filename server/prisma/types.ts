@@ -12,7 +12,7 @@ export type WidgetData = {
   platforms: WidgetPlatformType[];
   slots?: string[];
   display: WidgetDisplay;
-  props?: Record<string, JsonValue>;
+  defaultProps?: Record<string, JsonValue>;
 };
 
 export type WidgetDataRecord = {
