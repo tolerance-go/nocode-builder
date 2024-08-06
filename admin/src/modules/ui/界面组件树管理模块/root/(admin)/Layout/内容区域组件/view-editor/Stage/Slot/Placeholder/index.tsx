@@ -1,21 +1,21 @@
+import { WidgetWithLibAndPropsResponseDto } from '@/_gen/api';
+import { WidgetDisplayEnum } from '@/_gen/models';
+import { assertEnumValue } from '@/common/utils';
 import {
   WidgetSlotTreeDataNode,
   WidgetTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
-import { ConnectDropTarget, useDrop } from 'react-dnd';
-import { ItemType } from '../../../../constants';
-import { CardDragItem } from '../../../WidgetDrawer/CardItem';
-import { theme } from 'antd';
-import { createContext, createElement, CSSProperties, useContext } from 'react';
-import { SlotPlaceholderPosition } from './enums';
-import { WidgetDisplayEnum } from '@/_gen/models';
 import {
   generateDefaultProps,
   widgetDisplayEnumToCssValue,
 } from '@/modules/ui/界面组件树管理模块/utils';
-import { WidgetWithLibAndPropsResponseDto } from '@/_gen/api';
-import { assertEnumValue } from '@/common/utils';
+import { theme } from 'antd';
+import { createContext, createElement, CSSProperties, useContext } from 'react';
+import { ConnectDropTarget, useDrop } from 'react-dnd';
+import { ItemType } from '../../../../constants';
+import { CardDragItem } from '../../../WidgetDrawer/CardItem';
+import { SlotPlaceholderPosition } from './enums';
 
 export interface PlaceholderProps {
   isDragging: boolean;

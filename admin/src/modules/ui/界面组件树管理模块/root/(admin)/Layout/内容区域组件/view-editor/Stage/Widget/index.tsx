@@ -71,8 +71,6 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
     display: widgetDisplayEnumToCssValue(nodeData.display),
   };
 
-  console.log('nodeData', nodeData);
-
   return (
     <div ref={drop} style={widgetStyle}>
       {createElement(
