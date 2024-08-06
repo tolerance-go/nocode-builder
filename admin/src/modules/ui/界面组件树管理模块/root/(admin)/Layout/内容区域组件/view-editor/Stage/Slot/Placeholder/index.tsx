@@ -18,7 +18,6 @@ import { WidgetWithLibAndPropsResponseDto } from '@/_gen/api';
 import { assertEnumValue } from '@/common/utils';
 
 export interface PlaceholderProps {
-  style?: React.CSSProperties;
   isDragging: boolean;
   widgetDataNode: WidgetTreeDataNode;
   slotDataNode: WidgetSlotTreeDataNode;
@@ -65,13 +64,11 @@ const Inner = ({
   widgetData,
   isOver,
   position,
-  style,
   drop,
 }: {
   widgetData: WidgetWithLibAndPropsResponseDto;
   isOver: boolean;
   position: SlotPlaceholderPosition;
-  style?: CSSProperties;
   drop: ConnectDropTarget;
 }) => {
   const { 部件组件管理模块 } = 获取模块上下文();
@@ -87,7 +84,6 @@ const Inner = ({
     <div
       ref={drop}
       style={{
-        ...style,
         ...slotItemStyle,
       }}
     >
@@ -106,7 +102,6 @@ const Inner = ({
 };
 
 export const Placeholder = ({
-  style,
   isDragging,
   widgetDataNode,
   slotDataNode,
@@ -158,7 +153,6 @@ export const Placeholder = ({
       widgetData={widgetData}
       isOver={isOver}
       position={position}
-      style={style}
       drop={drop}
     />
   );
