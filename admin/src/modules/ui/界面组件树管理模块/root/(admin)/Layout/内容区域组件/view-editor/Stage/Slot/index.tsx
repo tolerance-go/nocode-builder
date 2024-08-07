@@ -36,7 +36,15 @@ export const Slot = ({
                   position={SlotPlaceholderPosition.Split}
                 />
               )}
-              <Widget node={child} />
+              <Widget
+                node={child}
+                onDragEnter={() => {
+                  console.log('onDragEnter', child);
+                }}
+                onDragLeave={() => {
+                  console.log('onDragLeave', child);
+                }}
+              />
               <Placeholder
                 isDragging={isDragging}
                 widgetDataNode={widgetDataNode}

@@ -34,7 +34,7 @@ export default defineConfig({
         },
         {
           text: 'API 参考',
-          items: [],
+          items: [{ text: '内部系统', link: '/docs/system-apis' }],
         },
         {
           text: '用户故事集',
@@ -45,7 +45,10 @@ export default defineConfig({
         },
         {
           text: '用户行为手册',
-          items: [{ text: '用户', link: '/docs/user-bdd/user' }],
+          items: [
+            { text: '用户', link: '/docs/user-bdd/user' },
+            { text: '开发者', link: '/docs/user-bdd/developer' },
+          ],
         },
       ],
     },

@@ -24,7 +24,9 @@
 
 **验收标准**
 
-- Widget 组件提供一组回调函数，当 hover 在部件上时或者离开时，可以触发它
+- [Widget 组件需要提供一组回调函数，当 hover 在部件上时或者离开时，可以触发它](../system-apis.md#widget-drag-enter-and-leave-api)
+
+:::
 
 ## ✔️ 我希望部件的 display 和其内部的组件的 display 可以保持一致
 

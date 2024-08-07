@@ -16,9 +16,15 @@ import { Slot, SlotProps } from '../Slot';
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
+  onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
 }
 
-export const Widget: React.FC<WidgetProps> = ({ node }) => {
+export const Widget: React.FC<WidgetProps> = ({
+  node,
+  onDragEnter,
+  onDragLeave,
+}) => {
   const nodeData = useAppSelector(
     (state) => state.projectContent.widgetTreeNodeDatas[node.key],
   );
@@ -74,6 +80,16 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
     display: widgetDisplayEnumToCssValue(nodeData.display),
   };
 
+  const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    onDragEnter?.(event);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    onDragLeave?.(event);
+  };
+
   return (
     <div
       ref={drop}
@@ -81,12 +97,8 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
         ...widgetStyle,
         background: 'red',
       }}
-      onDragEnter={() => {
-        console.log('drag enter');
-      }}
-      onDragLeave={() => {
-        console.log('drag leave');
-      }}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
     >
       {createElement(
         部件组件管理模块.getWidgetComponent(
