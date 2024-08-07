@@ -35,8 +35,13 @@
 **依赖**
 
 - Placeholder 组件应该可以发现自己是不是当前拖动中鼠标悬停相邻的插槽
+  - Placeholder 组件应该暴露接口，控制自己是不是当前鼠标悬停组件相邻的插槽
+  - Placeholder 组件应该接口通知外部拖拽是不是进入和离开该插槽
 - Widget 可以通知外部，拖拽进入和离开的时机
   - [Widget 组件需要提供一组回调函数，当 hover 在部件上时或者离开时，可以触发它](../system-apis.md#widget-drag-enter-and-leave-api)
+- Slot 应该可以管理内部所有 Widget 当前拖拽进入离开的状态
+  - Slot 应该向当前拖拽悬停组件的 widget 的相邻 Placeholder 组件提示它是其相邻插槽
+  - Slot 应该可以管理当前鼠标悬停的插槽是哪个的状态
 
 :::
 

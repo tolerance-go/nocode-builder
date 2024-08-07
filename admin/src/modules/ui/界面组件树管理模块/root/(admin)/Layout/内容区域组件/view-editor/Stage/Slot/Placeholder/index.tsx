@@ -23,6 +23,9 @@ export interface PlaceholderProps {
   slotDataNode: WidgetSlotTreeDataNode;
   index: number;
   position: SlotPlaceholderPosition;
+  isHoverWidgetAdjacent: boolean; // 新增的 boolean 属性，用于控制是否为相邻的插槽
+  onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
 }
 
 interface SlotStyleContextType {
@@ -65,11 +68,15 @@ const Inner = ({
   isOver,
   position,
   drop,
+  onDragEnter,
+  onDragLeave,
 }: {
   widgetData: WidgetWithLibAndPropsResponseDto;
   isOver: boolean;
   position: SlotPlaceholderPosition;
   drop: ConnectDropTarget;
+  onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
 }) => {
   const { 部件组件管理模块 } = 获取模块上下文();
   const slotItemStyle = useSlotItemStyle({
@@ -80,12 +87,24 @@ const Inner = ({
 
   const defaultProps = generateDefaultProps(widgetData.props);
 
+  const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    onDragEnter?.(event);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.stopPropagation();
+    onDragLeave?.(event);
+  };
+
   return (
     <div
       ref={drop}
       style={{
         ...slotItemStyle,
       }}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
     >
       {createElement(
         部件组件管理模块.getWidgetComponent(
@@ -106,6 +125,9 @@ export const Placeholder = ({
   widgetDataNode,
   slotDataNode,
   position,
+  isHoverWidgetAdjacent,
+  onDragEnter,
+  onDragLeave,
 }: PlaceholderProps) => {
   const { 全局事件系统 } = 获取模块上下文();
 
@@ -144,12 +166,18 @@ export const Placeholder = ({
     return null;
   }
 
+  if (!isHoverWidgetAdjacent && position === SlotPlaceholderPosition.Split) {
+    return null;
+  }
+
   if (!widgetData) {
     return null;
   }
 
   return (
     <Inner
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
       widgetData={widgetData}
       isOver={isOver}
       position={position}
