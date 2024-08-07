@@ -7,19 +7,18 @@ import {
   WidgetTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
-// import { theme } from 'antd';
+import { widgetDisplayEnumToCssValue } from '@/modules/ui/界面组件树管理模块/utils';
 import React, { createElement, CSSProperties, ReactElement } from 'react';
 import { useDrop } from 'react-dnd';
 import { ItemType } from '../../../constants';
+import { CardDragItem } from '../../WidgetDrawer/CardItem';
 import { Slot, SlotProps } from '../Slot';
-import { widgetDisplayEnumToCssValue } from '@/modules/ui/界面组件树管理模块/utils';
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
 }
 
 export const Widget: React.FC<WidgetProps> = ({ node }) => {
-  // const { token } = theme.useToken();
   const nodeData = useAppSelector(
     (state) => state.projectContent.widgetTreeNodeDatas[node.key],
   );
@@ -56,23 +55,39 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
     {} as Record<string, ReactElement<SlotProps>>,
   );
 
-  const [{ isOver }, drop] = useDrop({
+  const [{ isOver }, drop] = useDrop<
+    CardDragItem,
+    unknown,
+    {
+      isOver: boolean;
+      dragItem?: CardDragItem;
+    }
+  >({
     accept: ItemType.CARD,
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
+      dragItem: monitor.getItem(),
     }),
   });
 
   const widgetStyle: CSSProperties = {
-    // border: isOver ? `2px dashed ${token.colorPrimary}` : 'none',
-    // padding: '16px',
-    // borderRadius: '4px',
-    // backgroundColor: isOver ? token.colorBgBase : 'transparent',
     display: widgetDisplayEnumToCssValue(nodeData.display),
   };
 
   return (
-    <div ref={drop} style={widgetStyle}>
+    <div
+      ref={drop}
+      style={{
+        ...widgetStyle,
+        background: 'red',
+      }}
+      onDragEnter={() => {
+        console.log('drag enter');
+      }}
+      onDragLeave={() => {
+        console.log('drag leave');
+      }}
+    >
       {createElement(
         部件组件管理模块.getWidgetComponent(
           nodeData.widgetLibName,
@@ -83,6 +98,9 @@ export const Widget: React.FC<WidgetProps> = ({ node }) => {
           slotElements,
           isDragging,
           isOverWidget: isOver,
+          dataSets: {
+            ['data-widget-key']: node.key,
+          },
         },
       )}
     </div>

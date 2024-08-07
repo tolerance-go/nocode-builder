@@ -4,8 +4,8 @@ import { WidgetComponentProps } from '../../../types';
 
 export const Button = (props: WidgetComponentProps) => {
   if (props.mode === 'edit') {
-    const { slotElements } = props;
-    return <AntdButton>{slotElements?.children}</AntdButton>;
+    const { slotElements, dataSets } = props;
+    return <AntdButton {...dataSets}>{slotElements?.children}</AntdButton>;
   }
 
   const { text, ...buttonProps } = validateComponentProps(

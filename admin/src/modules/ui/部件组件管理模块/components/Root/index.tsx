@@ -7,9 +7,9 @@ export const Root = (props: WidgetComponentProps) => {
   const stageSize = useStageSize();
 
   if (props.mode === 'edit') {
-    const { slotElements } = props;
+    const { slotElements, dataSets } = props;
     return (
-      <div data-test-id="root-component">
+      <div {...dataSets} data-test-id="root-component">
         <SlotStyleContext.Provider
           value={{
             getSlotItemStyle({ position }) {

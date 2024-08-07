@@ -20,4 +20,5 @@ export type WidgetComponentProps =
 
       isDragging: boolean;
       isOverWidget: boolean;
+      dataSets?: Record<string, string | number>;
     };
