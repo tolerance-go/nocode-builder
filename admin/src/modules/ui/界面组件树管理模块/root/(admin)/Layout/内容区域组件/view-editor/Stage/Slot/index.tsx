@@ -1,11 +1,12 @@
 import { ViewKey } from '@/common/types';
 import {
+  useAppSelector,
   WidgetSlotTreeDataNode,
   WidgetSlotTreeNodeData,
   WidgetTreeDataNode,
   WidgetTreeNodeData,
 } from '@/modules/ui/界面状态仓库模块';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Widget } from '../Widget';
 import { Placeholder } from './Placeholder';
 import { SlotPlaceholderPosition } from './Placeholder/enums';
@@ -25,7 +26,6 @@ const SlotItem = ({
   nodeIndex,
   widgetHoveredIndex,
   onDragEnter,
-  onDragLeave,
 }: {
   node: WidgetTreeDataNode;
   isDragging: boolean;
@@ -34,31 +34,22 @@ const SlotItem = ({
   nodeIndex: number;
   widgetHoveredIndex?: number;
   onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
-  onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
 }) => {
-  const itemRef = useRef<HTMLDivElement>(null);
+  const placeholderStartRef = useRef<HTMLDivElement>(null);
+  const widgetRef = useRef<HTMLDivElement>(null);
+  const placeholderEndRef = useRef<HTMLDivElement>(null);
 
-  const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+  const handleWidgetDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
     event.stopPropagation();
-    if (!itemRef.current?.contains(event.relatedTarget as Node)) {
+    if (!widgetRef.current?.contains(event.relatedTarget as Node)) {
       onDragEnter?.(event);
     }
   };
 
-  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    if (!itemRef.current?.contains(event.relatedTarget as Node)) {
-      onDragLeave?.(event);
-    }
-  };
-
   return (
-    <div
-      ref={itemRef}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-    >
+    <>
       <Placeholder
+        ref={placeholderStartRef}
         isDragging={isDragging}
         widgetDataNode={widgetDataNode}
         slotDataNode={slotNodeData}
@@ -66,8 +57,9 @@ const SlotItem = ({
         position={SlotPlaceholderPosition.Split}
         isHoverWidgetAdjacent={widgetHoveredIndex === nodeIndex}
       />
-      <Widget node={node} />
+      <Widget ref={widgetRef} node={node} onDragEnter={handleWidgetDragEnter} />
       <Placeholder
+        ref={placeholderEndRef}
         isDragging={isDragging}
         widgetDataNode={widgetDataNode}
         slotDataNode={slotNodeData}
@@ -75,10 +67,9 @@ const SlotItem = ({
         position={SlotPlaceholderPosition.Split}
         isHoverWidgetAdjacent={widgetHoveredIndex === nodeIndex}
       />
-    </div>
+    </>
   );
 };
-
 export const Slot = ({
   node,
   isDragging,
@@ -89,8 +80,6 @@ export const Slot = ({
     index: number;
     widgetKey: ViewKey;
   } | null>(null);
-
-  const widgetHoveredRef = useRef(widgetHoveredItem);
 
   /**
    * 组件下一个组件，enter 会先执行，但是 state 不会立即更新，这里用 ref 存储突变数据
@@ -103,18 +92,13 @@ export const Slot = ({
       index,
       widgetKey,
     });
-    widgetHoveredRef.current = {
-      index,
-      widgetKey,
-    };
   };
 
-  const handleWidgetDragLeave = (widgetKey: ViewKey) => {
-    // 只有当当前离开的 Widget 是被拖拽进入的那个时，才清除状态
-    if (widgetHoveredRef.current?.widgetKey === widgetKey) {
+  useEffect(() => {
+    if (!isDragging) {
       setWidgetHovered(null);
     }
-  };
+  }, [isDragging]);
 
   return (
     <>
@@ -130,7 +114,6 @@ export const Slot = ({
               nodeIndex={nodeIndex}
               widgetHoveredIndex={widgetHoveredItem?.index}
               onDragEnter={() => handleWidgetDragEnter(child.key, nodeIndex)}
-              onDragLeave={() => handleWidgetDragLeave(child.key)}
             />
           ))}
         </>
@@ -141,7 +124,6 @@ export const Slot = ({
           slotDataNode={slotNodeData}
           index={0}
           position={SlotPlaceholderPosition.Empty}
-          isHoverWidgetAdjacent={false}
         />
       )}
     </>
