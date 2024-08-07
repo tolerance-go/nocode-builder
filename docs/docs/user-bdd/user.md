@@ -10,7 +10,7 @@
 
 # 平台用户行为手册
 
-## 👨‍💻 假如用户可以拖动组件的时候，hover 部件相邻的插槽才应该显示。 {#hover-slot-when-dragging-component}
+## ✔️ 假如用户可以拖动组件的时候，hover 部件相邻的插槽才应该显示。 {#hover-slot-when-dragging-component}
 
 ::: details
 
@@ -42,10 +42,12 @@
 - Slot 需要可以管理内部所有 Widget 当前拖拽进入离开的状态
   - Slot 需要向当前拖拽悬停组件的 widget 的相邻 Placeholder 组件提示它是其相邻插槽
   - Slot 需要可以管理当前鼠标悬停的组件是哪个的状态
+- SlotItem 需要只处理 widget 的 dragEnter
+  - 因为如果同时处理 dragLeave，交替触发，插槽会闪烁；结合监听取消拖拽事件，清空上次遗留的状态
 
 :::
 
-## 👨‍💻 假如用户拖动组件的时候，预览图片应该显示组件实际渲染的样子。
+## ✔️ 假如用户拖动组件的时候，预览图片应该显示组件实际渲染的样子。
 
 ::: details
 
