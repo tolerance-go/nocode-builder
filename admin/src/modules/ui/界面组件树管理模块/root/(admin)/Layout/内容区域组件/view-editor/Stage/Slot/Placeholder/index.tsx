@@ -172,7 +172,12 @@ const Inner = forwardRef<
         ref={mergeRefs((el) => drop(el), innerRef)}
         style={{
           ...slotItemStyle,
+
+          /**
+           * 支持 Cover 组件
+           */
           position: 'relative',
+          overflow: 'hidden',
         }}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
@@ -222,10 +227,11 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
         isOver: !!monitor.isOver(),
         widgetData: monitor.getItem()?.widgetData,
       }),
-      drop(item) {
-        if (!widgetData) {
-          return;
-        }
+      drop(item, monitor) {
+        const { widgetData } = monitor.getItem();
+
+        setIsCollapsed(true);
+
         全局事件系统.emit('界面视图管理者/拖动组件放置到指定部件的插槽下时', {
           被拖动组件Name: item.widgetName,
           被拖动组件的libName: item.widgetLibName,
