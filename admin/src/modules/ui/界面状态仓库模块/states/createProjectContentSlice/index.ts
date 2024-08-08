@@ -21,6 +21,7 @@ export type ProjectContentStates = {
   widgetTreeNodeDatas: WidgetTreeNodeDataRecord;
   widgetTree: WidgetTreeDataNode[];
   isDragging: boolean;
+  // dragClientOffset: { x: number; y: number } | null;
   previewCompSize: { width: number; height: number } | null;
 };
 
@@ -31,6 +32,7 @@ export const createProjectContentInitialState = () => {
     widgetTreeNodeDatas: {},
     isDragging: false,
     previewCompSize: null,
+    // dragClientOffset: null,
   };
   return initialState;
 };
@@ -149,6 +151,13 @@ export const createProjectContentSlice = () => {
       ) {
         state.previewCompSize = action.payload;
       },
+
+      // 更新拖动中当前鼠标指针相对于页面左上角的坐标(
+      //   state,
+      //   action: PayloadAction<{ x: number; y: number } | null>,
+      // ) {
+      //   state.dragClientOffset = action.payload;
+      // },
     },
   });
   return projectContentSlice;

@@ -9,3 +9,4 @@ export * from './redirectToX';
 export * from './is';
 export * from './generateId';
 export * from './assertEnumValue';
+export * from './mergeRefs';

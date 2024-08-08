@@ -1,7 +1,6 @@
 import { WidgetWithLibAndPropsResponseDto } from '@/_gen/api';
 import { WidgetDisplayEnum } from '@/_gen/models';
-import { assertEnumValue } from '@/common/utils';
-import mergeRefs from 'merge-refs';
+import { assertEnumValue, mergeRefs } from '@/common/utils';
 import {
   useAppSelector,
   WidgetSlotTreeDataNode,
@@ -28,6 +27,8 @@ import { ItemType } from '../../../../constants';
 import { CardDragItem } from '../../../WidgetDrawer/CardItem';
 import { SlotPlaceholderPosition } from './enums';
 import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
+import { css, keyframes } from '@emotion/css';
+import { useMountedState } from 'react-use';
 
 export interface PlaceholderProps {
   isDragging: boolean;
@@ -36,6 +37,7 @@ export interface PlaceholderProps {
   index: number;
   position: SlotPlaceholderPosition;
   isHoverWidgetAdjacent?: boolean; // 新增的 boolean 属性，用于控制是否为相邻的插槽
+  isClosestToDragMouse?: boolean; // 新增的 boolean 属性，用于控制是否为鼠标最接近的插槽
   onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
 }
@@ -65,6 +67,15 @@ const Cover = ({ isCollapsed }: { isCollapsed?: boolean }) => {
     ></div>
   );
 };
+
+const createFadeInAndExpand = (width: string) => keyframes`
+  from {
+    width: 0;
+  }
+  to {
+    width: ${width};
+  }
+`;
 
 const useInnerStyle = ({
   isOver,
@@ -142,6 +153,8 @@ const Inner = forwardRef<
 
     const innerRef = useRef<HTMLDivElement>(null);
 
+    const isMounted = useMountedState();
+
     useImperativeHandle(ref, () => {
       if (innerRef.current) {
         return innerRef.current;
@@ -152,27 +165,31 @@ const Inner = forwardRef<
     const defaultProps = generateDefaultProps(widgetData.props);
 
     const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-      event.stopPropagation();
-
       if (!innerRef.current?.contains(event.relatedTarget as Node)) {
         onDragEnter?.(event);
       }
     };
 
     const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-      event.stopPropagation();
-
       if (!innerRef.current?.contains(event.relatedTarget as Node)) {
         onDragLeave?.(event);
       }
     };
-
+    const fadeInAndExpand = createFadeInAndExpand(
+      (slotItemStyle.width ?? 0) + 'px',
+    );
     return (
       <div
+        className={
+          !isMounted() && isCollapsed
+            ? css`
+                animation: ${fadeInAndExpand} 0.15s ease-in-out;
+              `
+            : undefined
+        }
         ref={mergeRefs((el) => drop(el), innerRef)}
         style={{
           ...slotItemStyle,
-
           /**
            * 支持 Cover 组件
            */
@@ -206,6 +223,7 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
       slotDataNode,
       position,
       isHoverWidgetAdjacent,
+      isClosestToDragMouse,
       onDragEnter,
       onDragLeave,
     },
@@ -251,6 +269,10 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
     }
 
     if (!isHoverWidgetAdjacent && position === SlotPlaceholderPosition.Split) {
+      return null;
+    }
+
+    if (!isClosestToDragMouse) {
       return null;
     }
 

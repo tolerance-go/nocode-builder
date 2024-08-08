@@ -1,4 +1,5 @@
 import {
+  mergeRefs,
   widgetTreeNodeDataBaseIsWidgetSlotTreeNodeData,
   widgetTreeNodeDataBaseIsWidgetTreeNodeData,
 } from '@/common/utils';
@@ -13,6 +14,8 @@ import React, {
   CSSProperties,
   ReactElement,
   forwardRef,
+  useImperativeHandle,
+  useRef,
 } from 'react';
 import { useDrop } from 'react-dnd';
 import { ItemType } from '../../../constants';
@@ -24,10 +27,11 @@ export interface WidgetProps {
   node: WidgetTreeDataNode;
   onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragOver?: (event: React.DragEvent<HTMLDivElement>) => void;
 }
 
 export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
-  ({ node, onDragEnter, onDragLeave }, ref) => {
+  ({ node, onDragEnter, onDragLeave, onDragOver }, ref) => {
     const nodeData = useAppSelector(
       (state) => state.projectContent.widgetTreeNodeDatas[node.key],
     );
@@ -41,7 +45,14 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
     if (!widgetTreeNodeDataBaseIsWidgetTreeNodeData(nodeData)) {
       throw new Error('nodeData is not a WidgetTreeNodeData');
     }
+    const innerRef = useRef<HTMLDivElement>(null);
 
+    useImperativeHandle(ref, () => {
+      if (innerRef.current) {
+        return innerRef.current;
+      }
+      throw new Error('innerRef is not defined');
+    });
     const { 部件组件管理模块 } = 获取模块上下文();
 
     const slotElements = node.children?.reduce(
@@ -86,32 +97,32 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
     };
 
     const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-      event.stopPropagation();
-      onDragEnter?.(event);
+      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
+        onDragEnter?.(event);
+      }
     };
 
     const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-      event.stopPropagation();
-      onDragLeave?.(event);
+      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
+        onDragLeave?.(event);
+      }
+    };
+
+    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
+        onDragOver?.(event);
+      }
     };
 
     return (
       <div
-        ref={(node) => {
-          drop(node);
-          if (ref) {
-            if (typeof ref === 'function') {
-              ref(node);
-            } else {
-              ref.current = node;
-            }
-          }
-        }}
+        ref={mergeRefs(innerRef, (el) => drop(el))}
         style={{
           ...widgetStyle,
         }}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
       >
         {createElement(
           部件组件管理模块.getWidgetComponent(
