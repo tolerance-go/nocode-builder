@@ -12,7 +12,7 @@ export const antdPcWidgetsData: WidgetData[] = [
     name: 'Button',
     category: WidgetCategory.General,
     platforms: [WidgetPlatformType.PcWeb],
-    display: WidgetDisplay.InlineBlock,
+    display: WidgetDisplay.InlineFlex,
     defaultProps: antdProps.Button.defaultProps,
   },
   {

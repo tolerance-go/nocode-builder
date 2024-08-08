@@ -21,6 +21,7 @@ export type ProjectContentStates = {
   widgetTreeNodeDatas: WidgetTreeNodeDataRecord;
   widgetTree: WidgetTreeDataNode[];
   isDragging: boolean;
+  previewCompSize: { width: number; height: number } | null;
 };
 
 export const createProjectContentInitialState = () => {
@@ -29,6 +30,7 @@ export const createProjectContentInitialState = () => {
     widgetTree: [],
     widgetTreeNodeDatas: {},
     isDragging: false,
+    previewCompSize: null,
   };
   return initialState;
 };
@@ -139,6 +141,13 @@ export const createProjectContentSlice = () => {
 
       更新拖拽状态(state, action: PayloadAction<boolean>) {
         state.isDragging = action.payload;
+      },
+
+      更新预览组件尺寸(
+        state,
+        action: PayloadAction<{ width: number; height: number } | null>,
+      ) {
+        state.previewCompSize = action.payload;
       },
     },
   });

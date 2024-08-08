@@ -1,7 +1,9 @@
 import { WidgetWithLibAndPropsResponseDto } from '@/_gen/api';
 import { WidgetDisplayEnum } from '@/_gen/models';
 import { assertEnumValue } from '@/common/utils';
+import mergeRefs from 'merge-refs';
 import {
+  useAppSelector,
   WidgetSlotTreeDataNode,
   WidgetTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块';
@@ -17,11 +19,15 @@ import {
   CSSProperties,
   forwardRef,
   useContext,
+  useImperativeHandle,
+  useRef,
+  useState,
 } from 'react';
 import { ConnectDropTarget, useDrop } from 'react-dnd';
 import { ItemType } from '../../../../constants';
 import { CardDragItem } from '../../../WidgetDrawer/CardItem';
 import { SlotPlaceholderPosition } from './enums';
+import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
 
 export interface PlaceholderProps {
   isDragging: boolean;
@@ -35,7 +41,7 @@ export interface PlaceholderProps {
 }
 
 interface SlotStyleContextType {
-  getSlotItemStyle: (options: {
+  getSlotPlaceholderStyle: (options: {
     isOver: boolean;
     position: SlotPlaceholderPosition;
   }) => CSSProperties | void;
@@ -49,22 +55,27 @@ const useSlotItemStyle = ({
   isOver,
   position,
   display,
+  isCollapsed,
 }: {
   display: WidgetDisplayEnum;
   isOver: boolean;
   position: SlotPlaceholderPosition;
+  isCollapsed?: boolean;
 }): CSSProperties => {
   const { token } = theme.useToken();
 
   const context = useContext(SlotStyleContext);
 
-  const style = context?.getSlotItemStyle({ isOver, position });
+  const style = context?.getSlotPlaceholderStyle({ isOver, position });
+
+  const displayValue = widgetDisplayEnumToCssValue(display);
 
   return {
     background: token.blue2,
     border: `1px ${isOver ? 'solid' : 'dashed'} ${token.blue6}`,
-    display: widgetDisplayEnumToCssValue(display),
+    display: displayValue,
     opacity: !isOver ? 0.5 : 1,
+    visibility: isCollapsed ? 'hidden' : 'visible',
     ...style,
   };
 };
@@ -78,49 +89,93 @@ const Inner = forwardRef<
     drop: ConnectDropTarget;
     onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
     onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
+    isCollapsed?: boolean;
   }
->(({ widgetData, isOver, position, drop, onDragEnter, onDragLeave }) => {
-  const { 部件组件管理模块 } = 获取模块上下文();
-  const slotItemStyle = useSlotItemStyle({
-    isOver,
-    position,
-    display: assertEnumValue(widgetData.display, WidgetDisplayEnum),
-  });
+>(
+  (
+    {
+      widgetData,
+      isOver,
+      position,
+      isCollapsed,
+      drop,
+      onDragEnter,
+      onDragLeave,
+    },
+    ref,
+  ) => {
+    const { 部件组件管理模块 } = 获取模块上下文();
+    const slotItemStyle = useSlotItemStyle({
+      isCollapsed,
+      isOver,
+      position,
+      display: assertEnumValue(widgetData.display, WidgetDisplayEnum),
+    });
 
-  const defaultProps = generateDefaultProps(widgetData.props);
+    const innerRef = useRef<HTMLDivElement>(null);
 
-  const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    onDragEnter?.(event);
-  };
+    const previewCompSize = useAppSelector(
+      (state) => state.projectContent.previewCompSize,
+    );
 
-  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    event.stopPropagation();
-    onDragLeave?.(event);
-  };
+    useImperativeHandle(ref, () => {
+      if (innerRef.current) {
+        return innerRef.current;
+      }
+      throw new Error('innerRef is not defined');
+    });
 
-  return (
-    <div
-      ref={drop}
-      style={{
-        ...slotItemStyle,
-      }}
-      onDragEnter={handleDragEnter}
-      onDragLeave={handleDragLeave}
-    >
-      {createElement(
-        部件组件管理模块.getWidgetComponent(
-          widgetData.widgetLib.name,
-          widgetData.name,
-        ),
-        {
-          mode: 'preview',
-          defaultProps,
-        },
-      )}
-    </div>
-  );
-});
+    const defaultProps = generateDefaultProps(widgetData.props);
+
+    const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+      event.stopPropagation();
+
+      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
+        onDragEnter?.(event);
+      }
+    };
+
+    const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+      event.stopPropagation();
+
+      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
+        onDragLeave?.(event);
+      }
+    };
+
+    return (
+      <div
+        ref={mergeRefs((el) => drop(el), innerRef)}
+        style={{
+          ...slotItemStyle,
+          transition: 'width 0.3s, height 0.3s, border-radius 0.3s',
+          ...(isCollapsed
+            ? {
+                width: 8,
+                height: previewCompSize?.height,
+                overflow: 'hidden',
+              }
+            : {
+                ...previewCompSize,
+              }),
+        }}
+        onDragEnter={handleDragEnter}
+        onDragLeave={handleDragLeave}
+      >
+        {createElement(
+          部件组件管理模块.getWidgetComponent(
+            widgetData.widgetLib.name,
+            widgetData.name,
+          ) as HTMLComponent<HTMLElement>,
+          {
+            mode: 'preview',
+            defaultProps,
+          },
+        )}
+      </div>
+    );
+  },
+);
 
 export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
   (
@@ -136,6 +191,7 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
     ref,
   ) => {
     const { 全局事件系统 } = 获取模块上下文();
+    const [isCollapsed, setIsCollapsed] = useState(true);
 
     const [{ isOver, widgetData }, drop] = useDrop<
       CardDragItem,
@@ -183,12 +239,19 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
     return (
       <Inner
         ref={ref}
-        onDragEnter={onDragEnter}
-        onDragLeave={onDragLeave}
+        onDragEnter={(event) => {
+          setIsCollapsed(false);
+          onDragEnter?.(event);
+        }}
+        onDragLeave={(event) => {
+          setIsCollapsed(true);
+          onDragLeave?.(event);
+        }}
         widgetData={widgetData}
         isOver={isOver}
         position={position}
         drop={drop}
+        isCollapsed={isCollapsed}
       />
     );
   },

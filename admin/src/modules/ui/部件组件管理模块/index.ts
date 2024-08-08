@@ -1,12 +1,21 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { Button as AntdButton, Flex as AntdFlex } from './components/antd';
-import { FC } from 'react';
-import { WidgetComponentProps } from './types';
-import { Root } from './components/Root';
 import {
   RootComponentName,
   SystemWidgetLibName,
 } from '@/common/constants/components';
+import { ForwardRefExoticComponent, RefAttributes } from 'react';
+import { Button as AntdButton, Flex as AntdFlex } from './components/antd';
+import { Root } from './components/Root';
+import { EditModeProps, PreviewModeProps } from './types';
+
+export type HTMLComponent<T extends HTMLElement> = ForwardRefExoticComponent<
+  (Omit<PreviewModeProps, 'ref'> | Omit<EditModeProps, 'ref'>) &
+    RefAttributes<T>
+>;
+
+type Component =
+  | HTMLComponent<HTMLButtonElement>
+  | HTMLComponent<HTMLDivElement>;
 
 export class 部件组件管理模块 extends ModuleBase {
   private static instance: 部件组件管理模块;
@@ -19,17 +28,14 @@ export class 部件组件管理模块 extends ModuleBase {
     return 部件组件管理模块.instance;
   }
 
-  private componentRegistry: Map<string, Map<string, FC<WidgetComponentProps>>>;
+  private componentRegistry: Map<string, Map<string, Component>>;
 
   constructor(engine: EngineBase) {
     super(engine);
     this.componentRegistry = new Map();
   }
 
-  public getWidgetComponent(
-    lib: string,
-    name: string,
-  ): FC<WidgetComponentProps> {
+  public getWidgetComponent(lib: string, name: string): Component {
     const library = this.componentRegistry.get(lib);
     const component = library ? library.get(name) : undefined;
     if (!component) {
@@ -56,7 +62,7 @@ export class 部件组件管理模块 extends ModuleBase {
   private registerComponentToWidget(
     lib: string,
     name: string,
-    component: FC<WidgetComponentProps>,
+    component: Component,
   ): void {
     if (!this.componentRegistry.has(lib)) {
       this.componentRegistry.set(lib, new Map());

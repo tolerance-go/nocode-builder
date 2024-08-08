@@ -21,7 +21,7 @@ export type CardData = {
 
 export type CardDragItem = {
   title: string;
-  width?: number;
+  cardWidth?: number;
   widgetLibName: string;
   widgetName: string;
   componentDisplay: WidgetDisplayEnum;
@@ -43,7 +43,7 @@ export const CardItem = ({ item }: { item: CardData }) => {
     item: () =>
       ({
         title: item.title,
-        width: cardRef.current?.getBoundingClientRect().width,
+        cardWidth: cardRef.current?.getBoundingClientRect().width,
         widgetLibName: item.widgetLibName,
         widgetName: item.widgetName,
         componentDisplay: item.componentDisplay,
