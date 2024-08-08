@@ -56,10 +56,10 @@ const Cover = ({ isCollapsed }: { isCollapsed?: boolean }) => {
   return (
     <div
       style={{
-        transition: 'background 0.25s',
+        transition: 'background 0.4s',
         position: 'absolute',
         inset: 0,
-        background: isCollapsed ? token.blue8 : 'transparent',
+        background: isCollapsed ? token.blue6 : 'transparent',
         zIndex: 10,
       }}
     ></div>
@@ -93,7 +93,6 @@ const useInnerStyle = ({
     zIndex: isCollapsed ? undefined : 1, // 让 outline 在同级上层显示
     outline: `2px dashed ${isCollapsed ? 'transparent' : token.blue6}`,
     display: displayValue,
-    opacity: !isOver ? 0.5 : 1,
     transition: 'width 0.25s, height 0.25s, outline 0.25s, border 0.25s',
     borderRight: `${isCollapsed ? '4px' : '0px'} solid transparent`,
     borderLeft: `${isCollapsed ? '4px' : '0px'} solid transparent`,
