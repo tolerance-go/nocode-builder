@@ -51,7 +51,22 @@ export const SlotStyleContext = createContext<SlotStyleContextType | undefined>(
   undefined,
 );
 
-const useSlotItemStyle = ({
+const Cover = ({ isCollapsed }: { isCollapsed?: boolean }) => {
+  const { token } = theme.useToken();
+  return (
+    <div
+      style={{
+        transition: 'background 0.25s',
+        position: 'absolute',
+        inset: 0,
+        background: isCollapsed ? token.blue8 : 'transparent',
+        zIndex: 10,
+      }}
+    ></div>
+  );
+};
+
+const useInnerStyle = ({
   isOver,
   position,
   display,
@@ -70,12 +85,27 @@ const useSlotItemStyle = ({
 
   const displayValue = widgetDisplayEnumToCssValue(display);
 
+  const previewCompSize = useAppSelector(
+    (state) => state.projectContent.previewCompSize,
+  );
+
   return {
     background: token.blue2,
-    border: `1px ${isOver ? 'solid' : 'dashed'} ${token.blue6}`,
+    border: `2px dashed ${isCollapsed ? 'transparent' : token.blue6}`,
     display: displayValue,
     opacity: !isOver ? 0.5 : 1,
-    visibility: isCollapsed ? 'hidden' : 'visible',
+    transition: 'width 0.25s, height 0.25s, border-radius 0.25s, border 0.25s',
+    ...(isCollapsed
+      ? {
+          width: 8,
+          borderRadius: 8,
+          height: previewCompSize?.height,
+          overflow: 'hidden',
+        }
+      : {
+          ...previewCompSize,
+          borderRadius: 0,
+        }),
     ...style,
   };
 };
@@ -105,18 +135,14 @@ const Inner = forwardRef<
     ref,
   ) => {
     const { 部件组件管理模块 } = 获取模块上下文();
-    const slotItemStyle = useSlotItemStyle({
-      isCollapsed,
+    const slotItemStyle = useInnerStyle({
       isOver,
       position,
       display: assertEnumValue(widgetData.display, WidgetDisplayEnum),
+      isCollapsed,
     });
 
     const innerRef = useRef<HTMLDivElement>(null);
-
-    const previewCompSize = useAppSelector(
-      (state) => state.projectContent.previewCompSize,
-    );
 
     useImperativeHandle(ref, () => {
       if (innerRef.current) {
@@ -148,16 +174,7 @@ const Inner = forwardRef<
         ref={mergeRefs((el) => drop(el), innerRef)}
         style={{
           ...slotItemStyle,
-          transition: 'width 0.3s, height 0.3s, border-radius 0.3s',
-          ...(isCollapsed
-            ? {
-                width: 8,
-                height: previewCompSize?.height,
-                overflow: 'hidden',
-              }
-            : {
-                ...previewCompSize,
-              }),
+          position: 'relative',
         }}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
@@ -172,6 +189,7 @@ const Inner = forwardRef<
             defaultProps,
           },
         )}
+        <Cover isCollapsed={isCollapsed} />
       </div>
     );
   },

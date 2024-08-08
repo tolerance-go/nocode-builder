@@ -13,6 +13,7 @@ export const Sider = () => {
         height: '100vh',
         backgroundColor: token.colorBgContainer,
         width: 300,
+        flexShrink: 0,
       }}
     >
       <UserBar />

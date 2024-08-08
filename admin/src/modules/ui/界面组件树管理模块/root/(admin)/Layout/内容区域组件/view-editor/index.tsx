@@ -37,6 +37,7 @@ export const ViewEditor = () => {
               backgroundColor: token.colorBgContainer,
               borderRight: `1px solid ${token.colorBorderSecondary}`,
               width: 300,
+              flexShrink: 0,
             }}
           >
             <WidgetTree />
@@ -78,6 +79,7 @@ export const ViewEditor = () => {
             <div
               style={{
                 width: 300,
+                flexShrink: 0,
                 borderLeft: `1px solid ${token.colorBorderSecondary}`,
                 backgroundColor: token.colorBgContainer,
                 display: 'flex',
