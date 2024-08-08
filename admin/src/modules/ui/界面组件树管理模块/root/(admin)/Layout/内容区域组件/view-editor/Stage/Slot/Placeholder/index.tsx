@@ -11,6 +11,8 @@ import {
   generateDefaultProps,
   widgetDisplayEnumToCssValue,
 } from '@/modules/ui/界面组件树管理模块/utils';
+import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
+import { css, keyframes } from '@emotion/css';
 import { theme } from 'antd';
 import {
   createContext,
@@ -26,9 +28,6 @@ import { ConnectDropTarget, useDrop } from 'react-dnd';
 import { ItemType } from '../../../../constants';
 import { CardDragItem } from '../../../WidgetDrawer/CardItem';
 import { SlotPlaceholderPosition } from './enums';
-import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
-import { css, keyframes } from '@emotion/css';
-import { useMountedState } from 'react-use';
 
 export interface PlaceholderProps {
   isDragging: boolean;
@@ -153,7 +152,8 @@ const Inner = forwardRef<
 
     const innerRef = useRef<HTMLDivElement>(null);
 
-    const isMounted = useMountedState();
+    // 插槽是否拖拽进入过
+    const [isDragEntered, setIsDragEntered] = useState(false);
 
     useImperativeHandle(ref, () => {
       if (innerRef.current) {
@@ -167,6 +167,7 @@ const Inner = forwardRef<
     const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
       if (!innerRef.current?.contains(event.relatedTarget as Node)) {
         onDragEnter?.(event);
+        setIsDragEntered(true);
       }
     };
 
@@ -178,10 +179,11 @@ const Inner = forwardRef<
     const fadeInAndExpand = createFadeInAndExpand(
       (slotItemStyle.width ?? 0) + 'px',
     );
+
     return (
       <div
         className={
-          !isMounted() && isCollapsed
+          !isDragEntered && isCollapsed
             ? css`
                 animation: ${fadeInAndExpand} 0.15s ease-in-out;
               `
