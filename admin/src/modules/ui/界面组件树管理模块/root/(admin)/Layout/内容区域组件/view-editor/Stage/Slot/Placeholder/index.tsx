@@ -183,6 +183,9 @@ const Inner = forwardRef<
     return (
       <div
         className={
+          /**
+           * animation 和 过渡会有冲突
+           */
           !isDragEntered && isCollapsed
             ? css`
                 animation: ${fadeInAndExpand} 0.15s ease-in-out;
