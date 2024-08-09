@@ -126,7 +126,7 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
         当前选中的部件包括自身 || isHovered || 当前聚集的部件是自身
           ? 1
           : undefined,
-      position: 'relative',
+      position: 'relative', // 搭配 zIndex 生效
       ...(当前选中的部件包括自身 && {
         outline: `2px solid ${token.geekblue6}`,
       }),
