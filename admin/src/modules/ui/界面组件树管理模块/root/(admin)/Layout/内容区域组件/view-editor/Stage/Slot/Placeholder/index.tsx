@@ -100,7 +100,7 @@ const useInnerStyle = ({
   const displayValue = widgetDisplayEnumToCssValue(display);
 
   const previewCompSize = useAppSelector(
-    (state) => state.projectContent.previewCompSize,
+    (state) => state.projectContent.stagePreviewCompSize,
   );
 
   if (position === SlotPlaceholderPosition.Split) {
@@ -194,7 +194,9 @@ const Inner = forwardRef<
       }
     };
     const fadeInAndExpand = createFadeInAndExpand(
-      (slotItemStyle.width ?? 0) + 'px',
+      typeof slotItemStyle.width === 'string'
+        ? slotItemStyle.width
+        : (slotItemStyle.width ?? 0) + 'px',
     );
 
     const getClassName = () => {
@@ -232,7 +234,7 @@ const Inner = forwardRef<
             widgetData.name,
           ) as HTMLComponent<HTMLElement>,
           {
-            mode: 'preview',
+            mode: 'stage-preview',
             defaultProps,
           },
         )}

@@ -1,10 +1,10 @@
 import { useAppDispatch } from '@/modules/ui/界面状态仓库模块';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
-import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
 import { theme } from 'antd';
 import React, { createElement, useEffect, useRef, useState } from 'react';
 import { useDragLayer } from 'react-dnd';
 import { CardDragItem } from './CardItem';
+import { WidgetCompApis } from '@/modules/ui/部件组件管理模块/types';
 
 const getItemStyles = (
   currentOffset: { x: number; y: number } | null,
@@ -39,10 +39,11 @@ export const CustomDragLayer: React.FC = () => {
   }));
 
   const { token } = theme.useToken();
-  const compRef = useRef<HTMLElement>(null);
-  const [size, setSize] = useState<{ width: number; height: number } | null>(
-    null,
-  );
+  const compRef = useRef<WidgetCompApis>(null);
+  const [size, setSize] = useState<{
+    width: number | string;
+    height: number | string;
+  } | null>(null);
 
   const {
     界面状态仓库模块: {
@@ -54,13 +55,14 @@ export const CustomDragLayer: React.FC = () => {
 
   useEffect(() => {
     if (compRef.current) {
-      const { offsetWidth: width, offsetHeight: height } = compRef.current;
+      const { width = 0, height = 0 } =
+        compRef.current.获取舞台预览组件尺寸() ?? {};
       setSize({ width, height });
     }
   }, [isDragging]);
 
   useEffect(() => {
-    dispatch(projectContent.actions.更新预览组件尺寸(size));
+    dispatch(projectContent.actions.更新舞台预览组件尺寸(size));
   }, [dispatch, projectContent.actions, size]);
 
   // useEffect(() => {
@@ -97,7 +99,7 @@ export const CustomDragLayer: React.FC = () => {
           部件组件管理模块.getWidgetComponent(
             item.widgetLibName,
             item.widgetName,
-          ) as HTMLComponent<HTMLElement>,
+          ),
           {
             mode: 'preview',
             defaultProps,

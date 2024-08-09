@@ -16,20 +16,24 @@ import {
   JsonValue,
   NameKey,
   PreviewModeProps,
+  StagePreviewModeProps,
+  WidgetCompApis,
 } from './types';
 
 import Ajv, { JSONSchemaType, ValidationError } from 'ajv';
 import addFormats from 'ajv-formats';
 import addErrors from 'ajv-errors';
 
-export type HTMLComponent<T extends HTMLElement> = ForwardRefExoticComponent<
-  (Omit<PreviewModeProps, 'ref'> | Omit<EditModeProps, 'ref'>) &
+export type HTMLComponent<T> = ForwardRefExoticComponent<
+  (
+    | Omit<PreviewModeProps, 'ref'>
+    | Omit<EditModeProps, 'ref'>
+    | Omit<StagePreviewModeProps, 'ref'>
+  ) &
     RefAttributes<T>
 >;
 
-type Component =
-  | HTMLComponent<HTMLButtonElement>
-  | HTMLComponent<HTMLDivElement>;
+type Component = HTMLComponent<WidgetCompApis>;
 
 export class 部件组件管理模块 extends ModuleBase {
   private static instance: 部件组件管理模块;
@@ -144,20 +148,41 @@ export class 部件组件管理模块 extends ModuleBase {
       RootComponentName,
       Root,
     );
-    this.registerComponentToWidget('antd', 'Button', AntdButton);
-    this.registerFormConfigToWidget(
+    this.registerWidgetWithConfigs(
       'antd',
       'Button',
+      AntdButton,
       antdProps.Button.formConfig,
-    );
-    this.registerPropsSchemaToWidget('antd', 'Button', antdProps.Button.schema);
-    this.registerComponentDefaultPropsToWidget(
-      'antd',
-      'Button',
+      antdProps.Button.schema,
       antdProps.Button.defaultProps,
     );
 
-    this.registerComponentToWidget('antd', 'Flex', AntdFlex);
+    this.registerWidgetWithConfigs(
+      'antd',
+      'Flex',
+      AntdFlex,
+      antdProps.Flex.formConfig,
+      antdProps.Flex.schema,
+      antdProps.Flex.defaultProps,
+    );
+  }
+
+  private registerWidgetWithConfigs(
+    lib: string,
+    name: string,
+    component: Component,
+    formConfig: JsonFormConfig,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    schema: JSONSchemaType<any>,
+    defaultProps: Record<NameKey, JsonValue>,
+  ): void {
+    this.registerComponentToWidget(lib, name, component);
+
+    this.registerFormConfigToWidget(lib, name, formConfig);
+
+    this.registerPropsSchemaToWidget(lib, name, schema);
+
+    this.registerComponentDefaultPropsToWidget(lib, name, defaultProps);
   }
 
   private registerComponentToWidget(

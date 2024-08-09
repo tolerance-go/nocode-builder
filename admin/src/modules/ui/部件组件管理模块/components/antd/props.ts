@@ -5,9 +5,16 @@ import {
   ButtonPropsType,
   buttonSchema,
 } from './Button/props';
+import {
+  flexDefaultProps,
+  flexSchema,
+  flexFormConfig,
+  FlexPropsType,
+} from './Flex/props';
 
 interface Antd {
   Button: Component<ButtonPropsType>;
+  Flex: Component<FlexPropsType>;
 }
 
 export const antdProps: Antd = {
@@ -15,5 +22,10 @@ export const antdProps: Antd = {
     defaultProps: buttonDefaultProps,
     schema: buttonSchema,
     formConfig: buttonFormConfig,
+  },
+  Flex: {
+    defaultProps: flexDefaultProps,
+    schema: flexSchema,
+    formConfig: flexFormConfig,
   },
 };

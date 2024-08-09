@@ -1,12 +1,25 @@
 import { Button as AntdButton } from 'antd';
-import { WidgetComponentProps } from '../../../types';
-import { forwardRef } from 'react';
+import { WidgetCompApis, WidgetComponentProps } from '../../../types';
+import { forwardRef, useImperativeHandle, useRef } from 'react';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
 import { buttonSchema } from './props';
 
-export const Button = forwardRef<HTMLButtonElement, WidgetComponentProps>(
+export const Button = forwardRef<WidgetCompApis, WidgetComponentProps>(
   (props, ref) => {
     const { 部件组件管理模块 } = 获取模块上下文();
+    const innerRef = useRef<HTMLButtonElement>(null);
+
+    useImperativeHandle(ref, () => {
+      return {
+        获取舞台预览组件尺寸: () => {
+          if (innerRef.current) {
+            const { offsetWidth: width, offsetHeight: height } =
+              innerRef.current;
+            return { width, height };
+          }
+        },
+      };
+    });
 
     if (props.mode === 'edit') {
       const { slotElements, dataSets, props: propsData } = props;
@@ -17,7 +30,7 @@ export const Button = forwardRef<HTMLButtonElement, WidgetComponentProps>(
       );
 
       return (
-        <AntdButton ref={ref} {...dataSets}>
+        <AntdButton ref={innerRef} {...dataSets}>
           {text ?? slotElements?.children}
         </AntdButton>
       );
@@ -28,6 +41,6 @@ export const Button = forwardRef<HTMLButtonElement, WidgetComponentProps>(
       props.defaultProps,
     );
 
-    return <AntdButton ref={ref}>{text}</AntdButton>;
+    return <AntdButton ref={innerRef}>{text}</AntdButton>;
   },
 );
