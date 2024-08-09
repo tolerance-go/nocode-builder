@@ -125,11 +125,11 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
       ...(当前选中的部件包括自身 && {
         border: `2px solid ${token.geekblue6}`,
       }),
-      ...(当前聚集的部件是自身 && {
-        border: `2px solid ${token.blue6}`,
-      }),
       ...(isHovered && {
         border: `2px solid ${token.gold6}`,
+      }),
+      ...(当前聚集的部件是自身 && {
+        border: `2px solid ${token.blue6}`,
       }),
     };
 
