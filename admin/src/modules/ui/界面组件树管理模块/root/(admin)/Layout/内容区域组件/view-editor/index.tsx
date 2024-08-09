@@ -90,11 +90,11 @@ export const ViewEditor = () => {
             >
               <div
                 style={{
-                  flexGrow: 1,
+                  flexGrow: 1.5,
                 }}
                 data-test-id={组件测试标识.视图编辑页面.配置栏目.上部}
               >
-                toolPanel-top
+                <WidgetPropsPanel />
               </div>
               <div
                 style={{
@@ -103,7 +103,7 @@ export const ViewEditor = () => {
                 }}
                 data-test-id={组件测试标识.视图编辑页面.配置栏目.下部}
               >
-                <WidgetPropsPanel />
+                toolPanel-top
               </div>
             </div>
           </div>
