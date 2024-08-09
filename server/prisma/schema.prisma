@@ -180,7 +180,6 @@ model Widget {
   updatedAt             DateTime               @updatedAt
   widgetInstances       WidgetInstance[]
   display               WidgetDisplay
-  props                 WidgetProp[]
 }
 
 model WidgetSlot {
@@ -217,8 +216,6 @@ model WidgetProp {
 
   widgetInstance   WidgetInstance? @relation(fields: [widgetInstanceId], references: [id])
   widgetInstanceId Int?
-  widget           Widget?         @relation(fields: [widgetId], references: [id])
-  widgetId         Int?
 
   ownerId   Int
   owner     User     @relation(fields: [ownerId], references: [id])

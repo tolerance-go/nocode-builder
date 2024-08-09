@@ -1,4 +1,4 @@
-import { WidgetWithLibAndPropsResponseDto } from '@/_gen/api';
+import { WidgetWithLibResponseDto } from '@/_gen/api';
 import { WidgetDisplayEnum } from '@/_gen/models';
 import { assertEnumValue, mergeRefs } from '@/common/utils';
 import {
@@ -7,10 +7,7 @@ import {
   WidgetTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
-import {
-  generateDefaultProps,
-  widgetDisplayEnumToCssValue,
-} from '@/modules/ui/界面组件树管理模块/utils';
+import { widgetDisplayEnumToCssValue } from '@/modules/ui/界面组件树管理模块/utils';
 import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
 import { css, keyframes } from '@emotion/css';
 import { theme } from 'antd';
@@ -138,7 +135,7 @@ const useInnerStyle = ({
 const Inner = forwardRef<
   HTMLDivElement,
   {
-    widgetData: WidgetWithLibAndPropsResponseDto;
+    widgetData: WidgetWithLibResponseDto;
     isOver: boolean;
     position: SlotPlaceholderPosition;
     drop: ConnectDropTarget;
@@ -179,7 +176,10 @@ const Inner = forwardRef<
       throw new Error('innerRef is not defined');
     });
 
-    const defaultProps = generateDefaultProps(widgetData.props);
+    const defaultProps = 部件组件管理模块.getComponentDefaultProps(
+      widgetData.widgetLib.name,
+      widgetData.name,
+    );
 
     const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
       if (!innerRef.current?.contains(event.relatedTarget as Node)) {
@@ -258,7 +258,7 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
     },
     ref,
   ) => {
-    const { 全局事件系统 } = 获取模块上下文();
+    const { 全局事件系统, 部件组件管理模块 } = 获取模块上下文();
     const [isCollapsed, setIsCollapsed] = useState(true);
 
     const [{ isOver, widgetData }, drop] = useDrop<
@@ -266,7 +266,7 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
       unknown,
       {
         isOver: boolean;
-        widgetData?: WidgetWithLibAndPropsResponseDto;
+        widgetData?: WidgetWithLibResponseDto;
       }
     >({
       accept: ItemType.CARD,
@@ -291,7 +291,10 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
               widgetData.display,
               WidgetDisplayEnum,
             ),
-            被拖动组件的默认props: generateDefaultProps(widgetData.props),
+            被拖动组件的默认props: 部件组件管理模块.getComponentDefaultProps(
+              item.widgetLibName,
+              item.widgetName,
+            ),
           },
         );
       },

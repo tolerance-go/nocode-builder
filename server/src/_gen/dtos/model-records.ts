@@ -418,11 +418,6 @@ export class WidgetPropModelRecordDto {
   @IsInt()
   widgetInstanceId?: number;
 
-  @ApiProperty({ required: false })
-  @IsOptional()
-  @IsInt()
-  widgetId?: number;
-
   @ApiProperty({})
   @IsInt()
   ownerId: number;

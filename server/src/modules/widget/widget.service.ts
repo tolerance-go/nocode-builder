@@ -3,7 +3,6 @@ import {
   Prisma,
   Widget,
   WidgetLib,
-  WidgetProp,
   WidgetSlot,
   WidgetSlotAssignment,
 } from '@prisma/client';
@@ -86,7 +85,6 @@ export class WidgetService {
   ): Promise<
     (Widget & {
       widgetLib: WidgetLib;
-      props: WidgetProp[];
     })[]
   > {
     const { skip, take, cursor, where, orderBy } = params;
@@ -99,7 +97,6 @@ export class WidgetService {
       orderBy,
       include: {
         widgetLib: true,
-        props: true,
       },
     });
     return widgets;

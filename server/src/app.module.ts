@@ -15,6 +15,7 @@ import { ViewProjectModule } from './modules/view-project/view-project.module';
 import { DataTableProjectModule } from './modules/data-table-project/data-table-project.module';
 import { BluemapProjectModule } from './modules/bluemap-project/bluemap-project.module';
 import { WidgetLibModule } from './modules/widget-lib/widget-lib.module';
+import { WidgetPropModule } from './modules/widget-prop/widget-prop.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { WidgetLibModule } from './modules/widget-lib/widget-lib.module';
     DataTableProjectModule,
     BluemapProjectModule,
     WidgetLibModule,
+    WidgetPropModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,6 +1,6 @@
 import { WidgetPropResponseDto } from '@/_gen/api';
 import { WidgetPropValueTypeEnum } from '@/_gen/models';
-import { JSONValue } from '@/common/types';
+import { JsonValue } from '@/common/types';
 
 export const generateDefaultProps = (
   props: Array<
@@ -14,7 +14,7 @@ export const generateDefaultProps = (
       | 'jsonValue'
     >
   >,
-): Record<string, JSONValue | undefined> => {
+): Record<string, JsonValue | undefined> => {
   return props.reduce(
     (prev, cur) => {
       let value;
@@ -26,7 +26,7 @@ export const generateDefaultProps = (
       } else if (cur.valueType === WidgetPropValueTypeEnum.String) {
         value = cur.stringValue;
       } else if (cur.valueType === WidgetPropValueTypeEnum.Json) {
-        value = cur.jsonValue as JSONValue | undefined;
+        value = cur.jsonValue as JsonValue | undefined;
       } else {
         throw new Error(`Unknown value type: ${cur.valueType}`);
       }
@@ -36,6 +36,6 @@ export const generateDefaultProps = (
         [cur.key]: value,
       };
     },
-    {} as Record<string, JSONValue | undefined>,
+    {} as Record<string, JsonValue | undefined>,
   );
 };

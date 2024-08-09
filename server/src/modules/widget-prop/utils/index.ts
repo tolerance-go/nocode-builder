@@ -11,7 +11,6 @@ export function toWidgetPropResponseDto(
     stringValue: record.stringValue ?? undefined,
     numberValue: record.numberValue ?? undefined,
     boolValue: record.boolValue ?? undefined,
-    widgetId: record.widgetId ?? undefined,
     widgetInstanceId: record.widgetInstanceId ?? undefined,
     valueType: record.valueType,
     ownerId: record.ownerId,

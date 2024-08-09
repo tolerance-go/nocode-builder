@@ -33,11 +33,9 @@ const fetchData = async (
   部件组件管理模块单例: 部件组件管理模块,
 ): Promise<CardData[]> => {
   try {
-    const widgets = await api.widgets.getWidgetsWithLibAndPropsFilterByPlatform(
-      {
-        platformType,
-      },
-    );
+    const widgets = await api.widgets.getWidgetsWithLibFilterByPlatform({
+      platformType,
+    });
     return widgets
       .map(
         (widget) =>

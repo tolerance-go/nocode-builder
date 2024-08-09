@@ -14,6 +14,11 @@ import {
 import { ApiResponse } from '@nestjs/swagger';
 import { Prisma } from '@prisma/client';
 import { CountDto } from 'src/common/dtos';
+import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { toWidgetLibDto } from '../widget-lib/utils';
+import { toWidgetSlotAssignmentDto } from '../widget-slot-assignment/utils';
+import { toWidgetSlotDto } from '../widget-slot/utils';
 import {
   WidgetAddSlotDto,
   WidgetCreateDto,
@@ -22,18 +27,11 @@ import {
   WidgetQueryDto,
   WidgetResponseDto,
   WidgetUpdateDto,
-  WidgetWithLibAndPropsResponseDto,
   WidgetWithLibResponseDto,
   WidgetWithSlotsResponseDto,
 } from './dtos';
 import { toWidgetDto } from './utils';
 import { WidgetService } from './widget.service';
-import { JwtUserDto } from '../auth/dtos/jwt-user.dto';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { toWidgetSlotAssignmentDto } from '../widget-slot-assignment/utils';
-import { toWidgetSlotDto } from '../widget-slot/utils';
-import { toWidgetLibDto } from '../widget-lib/utils';
-import { toWidgetPropResponseDto } from '../widget-prop/utils';
 
 @Controller('widgets')
 export class WidgetController {
@@ -93,33 +91,6 @@ export class WidgetController {
     return widgets.map((widget) => ({
       ...toWidgetDto(widget),
       widgetLib: toWidgetLibDto(widget.widgetLib),
-    }));
-  }
-
-  @Get('with-lib-and-props-filter-by-platform')
-  @UseGuards(JwtAuthGuard)
-  @ApiResponse({
-    status: 200,
-    type: [WidgetWithLibAndPropsResponseDto],
-  })
-  async getWidgetsWithLibAndPropsFilterByPlatform(
-    @Query() query: WidgetQueryByPlatformDto,
-  ): Promise<WidgetWithLibAndPropsResponseDto[]> {
-    const widgets = await this.widgetService.widgetsWithLibAndProps({
-      skip: query.skip,
-      take: query.take,
-      cursor: query.filter ? { id: Number(query.filter) } : undefined,
-      orderBy: query.orderBy ? { [query.orderBy]: 'asc' } : undefined,
-      where: {
-        platforms: {
-          has: query.platformType,
-        },
-      },
-    });
-    return widgets.map((widget) => ({
-      ...toWidgetDto(widget),
-      widgetLib: toWidgetLibDto(widget.widgetLib),
-      props: widget.props.map(toWidgetPropResponseDto),
     }));
   }
 

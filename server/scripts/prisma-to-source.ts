@@ -297,6 +297,13 @@ class ModelsFile extends File {
     this.enums.forEach((enumItem) => {
       enumItem.printName = `${enumItem.name}Enum`;
     });
+
+    const jsonValueUsed = this.classes.some((cls) =>
+      cls.fields.some((field) => field.type === 'JsonValue'),
+    );
+    if (jsonValueUsed) {
+      this.imports.unshift(new Import(['JsonValue'], '@/common/types'));
+    }
   }
 
   print(): string {
@@ -327,6 +334,14 @@ class ModelRecordsFile extends File {
     const dtoImports = this.enums.map((enumItem) => {
       return new Import([enumItem.printName], './models');
     });
+
+    const jsonValueUsed = this.classes.some((cls) =>
+      cls.fields.some((field) => field.type === 'JsonValue'),
+    );
+
+    if (jsonValueUsed) {
+      dtoImports.unshift(new Import(['JsonValue'], '@/common/types'));
+    }
 
     const classesStr = this.classes.map((cls) => cls.print()).join('\n\n');
     const importsStr = dtoImports.map((imp) => imp.print()).join('\n');

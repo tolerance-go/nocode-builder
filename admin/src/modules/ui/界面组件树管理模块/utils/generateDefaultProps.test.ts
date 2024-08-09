@@ -1,8 +1,8 @@
 import { WidgetPropResponseDto } from '@/_gen/api';
 import { WidgetPropValueTypeEnum } from '@/_gen/models';
-import { JsonObject } from '@unocode/common';
 import { describe, expect, it } from 'vitest';
 import { generateDefaultProps } from './generateDefaultProps';
+import { JsonObject } from '@/common/types';
 
 describe('generateDefaultProps', () => {
   it('应正确生成布尔类型的属性', () => {

@@ -1,5 +1,16 @@
-import { JsonFormProps, JsonFormItemConfig } from '@unocode/common';
-import { Button, ConfigProvider, Form, Input, Select, theme } from 'antd';
+import {
+  JsonFormProps,
+  JsonFormItemConfig,
+} from '@/modules/ui/部件组件管理模块/types';
+import {
+  Button,
+  ConfigProvider,
+  Form,
+  Input,
+  Select,
+  Switch,
+  theme,
+} from 'antd';
 import React from 'react';
 
 export const JsonForm: React.FC<JsonFormProps> = ({
@@ -25,6 +36,13 @@ export const JsonForm: React.FC<JsonFormProps> = ({
               </Select.Option>
             ))}
           </Select>
+        );
+      case 'switch':
+        return (
+          <Switch
+            checkedChildren={item.checkedChildren}
+            unCheckedChildren={item.unCheckedChildren}
+          />
         );
       default:
         return null;
@@ -60,6 +78,7 @@ export const JsonForm: React.FC<JsonFormProps> = ({
             name={item.name}
             label={item.label}
             rules={item.rules}
+            valuePropName={item.type === 'switch' ? 'checked' : 'value'}
           >
             {renderFormItem(item)}
           </Form.Item>

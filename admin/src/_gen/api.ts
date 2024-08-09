@@ -257,55 +257,6 @@ export interface WidgetWithLibResponseDto {
   widgetLib: WidgetLibResponseDto;
 }
 
-export interface WidgetPropResponseDto {
-  id: number;
-  key: string;
-  jsonValue?: Record<string, unknown>;
-  stringValue?: string;
-  numberValue?: number;
-  boolValue?: boolean;
-  valueType: 'String' | 'Number' | 'Boolean' | 'Json';
-  ownerId: number;
-  widgetInstanceId?: number;
-  widgetId?: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface WidgetWithLibAndPropsResponseDto {
-  id: number;
-  display:
-    | 'Block'
-    | 'InlineBlock'
-    | 'Flex'
-    | 'InlineFlex'
-    | 'Grid'
-    | 'InlineGrid'
-    | 'Table';
-  name: string;
-  platforms: (
-    | 'PcWeb'
-    | 'MobileWeb'
-    | 'MiniProgram'
-    | 'NativeMobile'
-    | 'DesktopClient'
-  )[];
-  category:
-    | 'General'
-    | 'Layout'
-    | 'Navigation'
-    | 'DataEntry'
-    | 'DataDisplay'
-    | 'Feedback'
-    | 'Other'
-    | 'Heavyweight';
-  ownerId: number;
-  createdAt: string;
-  updatedAt: string;
-  widgetLib: WidgetLibResponseDto;
-  props: WidgetPropResponseDto[];
-}
-
 export interface WidgetSlotResponseDto {
   id: number;
   name: string;
@@ -511,6 +462,34 @@ export interface WidgetLibCreateDto {
 }
 
 export type WidgetLibUpdateDto = Record<string, unknown>;
+
+export interface WidgetPropResponseDto {
+  id: number;
+  key: string;
+  jsonValue?: Record<string, unknown>;
+  stringValue?: string;
+  numberValue?: number;
+  boolValue?: boolean;
+  valueType: 'String' | 'Number' | 'Boolean' | 'Json';
+  ownerId: number;
+  widgetInstanceId?: number;
+  widgetId?: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface WidgetPropCreateDto {
+  key: string;
+  jsonValue?: Record<string, unknown>;
+  stringValue?: string;
+  numberValue?: number;
+  boolValue?: boolean;
+  valueType: 'String' | 'Number' | 'Boolean' | 'Json';
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export type WidgetPropUpdateDto = Record<string, unknown>;
 
 import type {
   AxiosInstance,
@@ -1114,35 +1093,6 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     ) =>
       this.request<WidgetWithLibResponseDto[], unknown>({
         path: `/widgets/filter-by-platform`,
-        method: 'GET',
-        query: query,
-        format: 'json',
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @name WidgetControllerGetWidgetsWithLibAndPropsFilterByPlatform
-     * @request GET:/widgets/with-lib-and-props-filter-by-platform
-     */
-    getWidgetsWithLibAndPropsFilterByPlatform: (
-      query: {
-        skip?: number;
-        take?: number;
-        orderBy?: string;
-        filter?: string;
-        platformType:
-          | 'PcWeb'
-          | 'MobileWeb'
-          | 'MiniProgram'
-          | 'NativeMobile'
-          | 'DesktopClient';
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<WidgetWithLibAndPropsResponseDto[], unknown>({
-        path: `/widgets/with-lib-and-props-filter-by-platform`,
         method: 'GET',
         query: query,
         format: 'json',
@@ -1949,6 +1899,94 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
     deleteWidgetLib: (id: string, params: RequestParams = {}) =>
       this.request<WidgetLibResponseDto, unknown>({
         path: `/widgetLibs/${id}`,
+        method: 'DELETE',
+        format: 'json',
+        ...params,
+      }),
+  };
+  widgetProps = {
+    /**
+     * No description
+     *
+     * @name WidgetPropControllerGetWidgetProp
+     * @request GET:/widgetProps/detail/{id}
+     */
+    getWidgetProp: (id: string, params: RequestParams = {}) =>
+      this.request<WidgetPropResponseDto, unknown>({
+        path: `/widgetProps/detail/${id}`,
+        method: 'GET',
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetPropControllerGetWidgetProps
+     * @request GET:/widgetProps
+     */
+    getWidgetProps: (
+      query?: {
+        skip?: number;
+        take?: number;
+        orderBy?: string;
+        filter?: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetPropResponseDto[], unknown>({
+        path: `/widgetProps`,
+        method: 'GET',
+        query: query,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetPropControllerCreateWidgetProp
+     * @request POST:/widgetProps
+     */
+    createWidgetProp: (data: WidgetPropCreateDto, params: RequestParams = {}) =>
+      this.request<WidgetPropResponseDto, unknown>({
+        path: `/widgetProps`,
+        method: 'POST',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetPropControllerUpdateWidgetProp
+     * @request PATCH:/widgetProps/{id}
+     */
+    updateWidgetProp: (
+      id: string,
+      data: WidgetPropUpdateDto,
+      params: RequestParams = {},
+    ) =>
+      this.request<WidgetPropResponseDto, unknown>({
+        path: `/widgetProps/${id}`,
+        method: 'PATCH',
+        body: data,
+        type: ContentType.Json,
+        format: 'json',
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @name WidgetPropControllerDeleteWidgetProp
+     * @request DELETE:/widgetProps/{id}
+     */
+    deleteWidgetProp: (id: string, params: RequestParams = {}) =>
+      this.request<WidgetPropResponseDto, unknown>({
+        path: `/widgetProps/${id}`,
         method: 'DELETE',
         format: 'json',
         ...params,

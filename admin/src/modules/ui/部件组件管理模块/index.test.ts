@@ -1,15 +1,29 @@
-import { describe, it, expect } from 'vitest';
-import { JSONSchemaType, ValidationError } from 'ajv';
-import { validateComponentProps, antdProps } from './props';
+import { ValidationError } from 'ajv';
+import { describe, expect, it } from 'vitest';
+import { antdProps } from './components/antd/props';
+import { 部件组件管理模块 } from '.';
+import { EngineBase } from '@/base';
+import { EngineManagerBase } from '@/base/EngineManager';
 
 describe('按钮模式验证', () => {
+  let 部件组件管理模块实例: 部件组件管理模块;
+
+  beforeEach(() => {
+    const engineManager = new EngineManagerBase();
+    const engine = new EngineBase(engineManager);
+    部件组件管理模块实例 = new 部件组件管理模块(engine);
+  });
+
   it('应通过正确的按钮属性验证', () => {
     const validData = {
       text: '点击我',
     };
 
     expect(() =>
-      validateComponentProps(antdProps.Button.schema, validData),
+      部件组件管理模块实例.validateComponentProps(
+        antdProps.Button.schema,
+        validData,
+      ),
     ).not.toThrow();
   });
 
@@ -19,7 +33,10 @@ describe('按钮模式验证', () => {
     };
 
     expect(() =>
-      validateComponentProps(antdProps.Button.schema, validData),
+      部件组件管理模块实例.validateComponentProps(
+        antdProps.Button.schema,
+        validData,
+      ),
     ).not.toThrow();
   });
 
@@ -29,7 +46,10 @@ describe('按钮模式验证', () => {
     };
 
     expect(() =>
-      validateComponentProps(antdProps.Button.schema, invalidData),
+      部件组件管理模块实例.validateComponentProps(
+        antdProps.Button.schema,
+        invalidData,
+      ),
     ).not.toThrow();
   });
 
@@ -39,7 +59,10 @@ describe('按钮模式验证', () => {
     };
 
     expect(() =>
-      validateComponentProps(antdProps.Button.schema, invalidData),
+      部件组件管理模块实例.validateComponentProps(
+        antdProps.Button.schema,
+        invalidData,
+      ),
     ).toThrow(ValidationError);
   });
 
@@ -50,7 +73,10 @@ describe('按钮模式验证', () => {
     };
 
     expect(() =>
-      validateComponentProps(antdProps.Button.schema, invalidData),
+      部件组件管理模块实例.validateComponentProps(
+        antdProps.Button.schema,
+        invalidData,
+      ),
     ).toThrow(ValidationError);
   });
 
@@ -60,7 +86,10 @@ describe('按钮模式验证', () => {
     };
 
     try {
-      validateComponentProps(antdProps.Button.schema, invalidData);
+      部件组件管理模块实例.validateComponentProps(
+        antdProps.Button.schema,
+        invalidData,
+      );
     } catch (error) {
       if (error instanceof ValidationError) {
         expect(error.errors).toMatchInlineSnapshot(`

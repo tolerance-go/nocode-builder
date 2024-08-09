@@ -1,4 +1,4 @@
-import { JSONValue } from '@/common/types';
+import { JsonValue } from '@/common/types';
 import { OperationType } from '@unocode/common';
 
 export type RecordWithId = {
@@ -188,20 +188,23 @@ export class Table<T extends RecordWithId> {
   }
 
   // 将 records 转换为 JSON 对象
-  toTestSnapshot(): { [key: string]: JSONValue }[] {
+  toTestSnapshot(): { [key: string]: JsonValue }[] {
     this.checkTransactionState();
 
     // 递归修改对象中的日期属性值为空字符串
-    const replaceDatesWithEmptyString = (obj: JSONValue): JSONValue => {
+    const replaceDatesWithEmptyString = (obj: JsonValue): JsonValue => {
       if (Array.isArray(obj)) {
         return obj.map((item) => replaceDatesWithEmptyString(item));
       } else if (obj !== null && typeof obj === 'object') {
-        const newObj: { [key: string]: JSONValue } = {};
+        const newObj: { [key: string]: JsonValue | undefined } = {};
         for (const key in obj) {
           if (key === 'createdAt' || key === 'updatedAt') {
             newObj[key] = '';
           } else {
-            newObj[key] = replaceDatesWithEmptyString(obj[key]);
+            newObj[key] =
+              obj[key] !== undefined
+                ? replaceDatesWithEmptyString(obj[key])
+                : obj[key];
           }
         }
         return newObj;
@@ -210,7 +213,7 @@ export class Table<T extends RecordWithId> {
     };
 
     return replaceDatesWithEmptyString(this.records) as {
-      [key: string]: JSONValue;
+      [key: string]: JsonValue;
     }[];
   }
 

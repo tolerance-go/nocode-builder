@@ -13,7 +13,6 @@ import {
   SystemWidgetLibName,
 } from '@/common/constants/components';
 import { WidgetDisplayEnum } from '@/_gen/models';
-import { validateComponentProps } from '@unocode/common';
 import { widgetTreeNodeDataBaseIsWidgetTreeNodeData } from '@/common/utils';
 import { 部件组件管理模块 } from '@/modules/ui/部件组件管理模块';
 
@@ -203,7 +202,10 @@ export const createProjectContentSlice = () => {
           widgetData.componentName,
         );
 
-        const props = validateComponentProps(schema, allValues);
+        const props = 部件组件管理模块实例.validateComponentProps(
+          schema,
+          allValues,
+        );
 
         widgetData.props = props;
       },

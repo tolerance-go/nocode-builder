@@ -124,7 +124,9 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
       transition: 'outline 0.1s ease-in-out',
       zIndex:
         当前选中的部件包括自身 || isHovered || 当前聚集的部件是自身
-          ? 1
+          ? isHovered
+            ? 2
+            : 1
           : undefined,
       position: 'relative', // 搭配 zIndex 生效
       ...(当前选中的部件包括自身 && {

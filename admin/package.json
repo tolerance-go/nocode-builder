@@ -11,12 +11,15 @@
     "preview": "vite preview",
     "test": "vitest",
     "daily:run": "pnpm lint && vitest run --passWithNoTests && pnpm build",
-    "commit-before:run": "pnpm lint && vitest run --passWithNoTests",
+    "commit-before:run": "pnpm lint && pnpm tsc && vitest run --passWithNoTests",
     "cypress:open": "pnpm cypress open",
     "cypress:run-dev": "pnpm cypress run",
     "cypress:run": "cross-env CYPRESS_BASE_URL=http://127.0.0.1/admin pnpm cypress run --env baseApi=http://127.0.0.1/api"
   },
   "dependencies": {
+    "ajv": "^8.17.1",
+    "ajv-errors": "^3.0.0",
+    "ajv-formats": "^3.0.1",
     "@ag-grid-community/client-side-row-model": "^32.0.2",
     "@ag-grid-community/core": "^32.0.2",
     "@ag-grid-community/react": "^32.0.2",

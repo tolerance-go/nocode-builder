@@ -1,5 +1,5 @@
 import { EngineBase, ModuleBase, ModuleBaseOptions } from '@/base';
-import { ViewKey } from '@/common/types';
+import { JsonValue, ViewKey } from '@/common/types';
 import Emittery from 'emittery';
 import { ClientUserModel } from '../models/用户表模块';
 import { ClientProjectGroupModel } from '../models/项目组表模块';
@@ -11,7 +11,6 @@ import {
 } from '@/modules/ui/界面状态仓库模块';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
 import { WidgetDisplayEnum } from '@/_gen/models';
-import { JsonValue } from '@unocode/common';
 
 type 项目树后台同步模块事件类型 = {
   新增项目记录成功: {

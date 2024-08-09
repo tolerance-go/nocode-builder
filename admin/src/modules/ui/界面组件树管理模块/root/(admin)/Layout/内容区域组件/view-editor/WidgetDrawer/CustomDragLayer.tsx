@@ -1,11 +1,10 @@
+import { useAppDispatch } from '@/modules/ui/界面状态仓库模块';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
-import { generateDefaultProps } from '@/modules/ui/界面组件树管理模块/utils';
+import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
 import { theme } from 'antd';
 import React, { createElement, useEffect, useRef, useState } from 'react';
 import { useDragLayer } from 'react-dnd';
 import { CardDragItem } from './CardItem';
-import { useAppDispatch } from '@/modules/ui/界面状态仓库模块';
-import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
 
 const getItemStyles = (
   currentOffset: { x: number; y: number } | null,
@@ -41,7 +40,6 @@ export const CustomDragLayer: React.FC = () => {
 
   const { token } = theme.useToken();
   const compRef = useRef<HTMLElement>(null);
-  const { 部件组件管理模块 } = 获取模块上下文();
   const [size, setSize] = useState<{ width: number; height: number } | null>(
     null,
   );
@@ -50,6 +48,7 @@ export const CustomDragLayer: React.FC = () => {
     界面状态仓库模块: {
       slices: { projectContent },
     },
+    部件组件管理模块,
   } = 获取模块上下文();
   const dispatch = useAppDispatch();
 
@@ -86,7 +85,10 @@ export const CustomDragLayer: React.FC = () => {
     height: '100%',
   };
 
-  const defaultProps = generateDefaultProps(item.widgetData.props);
+  const defaultProps = 部件组件管理模块.getComponentDefaultProps(
+    item.widgetLibName,
+    item.widgetName,
+  );
 
   return (
     <div data-test-id="custom-drag-layer" style={layerStyles}>

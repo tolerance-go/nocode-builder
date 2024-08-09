@@ -4,6 +4,7 @@
  * ---------------------------------------------------------------
  */
 
+import { JsonValue } from '@/common/types';
 import { WidgetPropValueTypeEnum } from './models';
 import { WidgetPlatformTypeEnum } from './models';
 import { ProjectTypeEnum } from './models';
@@ -530,8 +531,6 @@ export class WidgetPropModelRecord {
 
   widgetInstanceId?: number;
 
-  widgetId?: number;
-
   ownerId: number;
 
   createdAt: Date;
@@ -547,7 +546,6 @@ export class WidgetPropModelRecord {
     boolValue,
     valueType,
     widgetInstanceId,
-    widgetId,
     ownerId,
     createdAt,
     updatedAt,
@@ -560,7 +558,6 @@ export class WidgetPropModelRecord {
     boolValue?: boolean;
     valueType: WidgetPropValueTypeEnum;
     widgetInstanceId?: number;
-    widgetId?: number;
     ownerId: number;
     createdAt: Date;
     updatedAt: Date;
@@ -573,7 +570,6 @@ export class WidgetPropModelRecord {
     this.boolValue = boolValue;
     this.valueType = valueType;
     this.widgetInstanceId = widgetInstanceId;
-    this.widgetId = widgetId;
     this.ownerId = ownerId;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;

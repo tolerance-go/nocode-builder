@@ -12,7 +12,6 @@ export type WidgetData = {
   platforms: WidgetPlatformType[];
   slots?: string[];
   display: WidgetDisplay;
-  defaultProps?: Record<string, JsonValue>;
 };
 
 export type WidgetDataRecord = {
@@ -22,7 +21,6 @@ export type WidgetDataRecord = {
   platforms: WidgetPlatformType[];
   slots?: string[];
   display: WidgetDisplay;
-  props: WidgetPropRecord[];
 };
 
 export type WidgetPropRecord = {

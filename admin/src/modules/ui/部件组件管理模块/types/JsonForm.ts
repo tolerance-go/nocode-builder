@@ -18,7 +18,16 @@ interface SelectFormItemConfig extends BaseFormItemConfig {
   options: Option[];
 }
 
-export type JsonFormItemConfig = InputFormItemConfig | SelectFormItemConfig;
+interface SwitchFormItemConfig extends BaseFormItemConfig {
+  type: 'switch';
+  checkedChildren?: string; // 开启时显示的内容
+  unCheckedChildren?: string; // 关闭时显示的内容
+}
+
+export type JsonFormItemConfig =
+  | InputFormItemConfig
+  | SelectFormItemConfig
+  | SwitchFormItemConfig;
 
 export type JsonFormConfig = JsonFormItemConfig[];
 

@@ -3,8 +3,7 @@ import {
   WidgetDisplayEnum,
   WidgetPlatformTypeEnum,
 } from '@/_gen/models';
-import { ViewKey } from '@/common/types';
-import { JsonValue } from '@unocode/common';
+import { JsonValue, ViewKey } from '@/common/types';
 import { TreeDataNode } from 'antd';
 import { ProjectType } from '../../界面组件树管理模块';
 

@@ -125,11 +125,6 @@ export const apiUrls = {
     route: '/widgets/filter-by-platform',
     path: '/widgets/filter-by-platform',
   },
-  WidgetController_getWidgetsWithLibAndPropsFilterByPlatform: {
-    method: 'get',
-    route: '/widgets/with-lib-and-props-filter-by-platform',
-    path: '/widgets/with-lib-and-props-filter-by-platform',
-  },
   WidgetController_getWidgetsWithSlots: {
     method: 'get',
     route: '/widgets/with-slots',
@@ -349,5 +344,30 @@ export const apiUrls = {
     method: 'delete',
     route: '/widgetLibs/{id}',
     path: '/widgetLibs/${id}',
+  },
+  WidgetPropController_getWidgetProp: {
+    method: 'get',
+    route: '/widgetProps/detail/{id}',
+    path: '/widgetProps/detail/${id}',
+  },
+  WidgetPropController_getWidgetProps: {
+    method: 'get',
+    route: '/widgetProps',
+    path: '/widgetProps',
+  },
+  WidgetPropController_createWidgetProp: {
+    method: 'post',
+    route: '/widgetProps',
+    path: '/widgetProps',
+  },
+  WidgetPropController_updateWidgetProp: {
+    method: 'patch',
+    route: '/widgetProps/{id}',
+    path: '/widgetProps/${id}',
+  },
+  WidgetPropController_deleteWidgetProp: {
+    method: 'delete',
+    route: '/widgetProps/{id}',
+    path: '/widgetProps/${id}',
   },
 } as const;
