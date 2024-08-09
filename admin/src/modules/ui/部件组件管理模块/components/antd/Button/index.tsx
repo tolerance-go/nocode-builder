@@ -6,23 +6,27 @@ import { forwardRef } from 'react';
 export const Button = forwardRef<HTMLButtonElement, WidgetComponentProps>(
   (props, ref) => {
     if (props.mode === 'edit') {
-      const { slotElements, dataSets } = props;
+      const { slotElements, dataSets, props: propsData } = props;
+
+      const { text } = validateComponentProps(
+        antdProps.Button.schema,
+        propsData,
+      );
+
+      console.log('Button text', text);
+
       return (
         <AntdButton ref={ref} {...dataSets}>
-          {'Button' ?? slotElements?.children}
+          {text ?? slotElements?.children}
         </AntdButton>
       );
     }
 
-    const { text, ...buttonProps } = validateComponentProps(
+    const { text } = validateComponentProps(
       antdProps.Button.schema,
       props.defaultProps,
     );
 
-    return (
-      <AntdButton ref={ref} {...buttonProps}>
-        {text}
-      </AntdButton>
-    );
+    return <AntdButton ref={ref}>{text}</AntdButton>;
   },
 );

@@ -21,8 +21,8 @@ import {
 } from './contexts';
 import { Root } from './root';
 import { Admin } from './root/(admin)';
-import { BluemapEditor } from './root/(admin)/Layout/内容区域组件/bluemap-editor';
-import { DataTableEditor } from './root/(admin)/Layout/内容区域组件/data-table-editor';
+import { BluemapEditor } from './root/(admin)/Layout/内容区域组件/BluemapEditor';
+import { DataTableEditor } from './root/(admin)/Layout/内容区域组件/DataTableEditor';
 import { ViewEditor } from './root/(admin)/Layout/内容区域组件/view-editor';
 import { Auth } from './root/(auth)';
 import { Login } from './root/(auth)/login';

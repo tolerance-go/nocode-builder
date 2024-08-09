@@ -8,6 +8,7 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { Stage } from './Stage';
 import { CustomDragLayer } from './WidgetDrawer/CustomDragLayer';
+import { WidgetPropsPanel } from './WidgetPropsPanel';
 
 export const ViewEditor = () => {
   const { token } = theme.useToken();
@@ -102,7 +103,7 @@ export const ViewEditor = () => {
                 }}
                 data-test-id={组件测试标识.视图编辑页面.配置栏目.下部}
               >
-                toolPanel-bottom
+                <WidgetPropsPanel />
               </div>
             </div>
           </div>

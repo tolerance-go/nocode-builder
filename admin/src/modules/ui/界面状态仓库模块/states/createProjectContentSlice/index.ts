@@ -13,6 +13,9 @@ import {
   SystemWidgetLibName,
 } from '@/common/constants/components';
 import { WidgetDisplayEnum } from '@/_gen/models';
+import { validateComponentProps } from '@unocode/common';
+import { widgetTreeNodeDataBaseIsWidgetTreeNodeData } from '@/common/utils';
+import { 部件组件管理模块 } from '@/modules/ui/部件组件管理模块';
 
 export type ProjectContentStates = {
   // 派生数据
@@ -23,6 +26,9 @@ export type ProjectContentStates = {
   isDragging: boolean;
   // dragClientOffset: { x: number; y: number } | null;
   previewCompSize: { width: number; height: number } | null;
+  当前选中的部件keys: ViewKey[];
+  当前聚集的部件key: ViewKey | null;
+  当前鼠标hover的部件key: ViewKey | null;
 };
 
 export const createProjectContentInitialState = () => {
@@ -32,6 +38,9 @@ export const createProjectContentInitialState = () => {
     widgetTreeNodeDatas: {},
     isDragging: false,
     previewCompSize: null,
+    当前选中的部件keys: [],
+    当前聚集的部件key: null,
+    当前鼠标hover的部件key: null,
     // dragClientOffset: null,
   };
   return initialState;
@@ -99,6 +108,7 @@ export const createProjectContentSlice = () => {
           componentName: RootComponentName,
           display: WidgetDisplayEnum.Block,
           title: 'Root',
+          props: {},
         };
 
         state.widgetTreeNodeDatas['root-children'] = {
@@ -158,6 +168,56 @@ export const createProjectContentSlice = () => {
       // ) {
       //   state.dragClientOffset = action.payload;
       // },
+
+      更新当前选中的部件keys(state, action: PayloadAction<ViewKey[]>) {
+        state.当前选中的部件keys = action.payload;
+      },
+
+      更新当前聚焦的部件key(state, action: PayloadAction<ViewKey | null>) {
+        state.当前聚集的部件key = action.payload;
+      },
+
+      选中某个部件(state, action: PayloadAction<ViewKey>) {
+        state.当前聚集的部件key = action.payload;
+        state.当前选中的部件keys = [action.payload];
+      },
+
+      更新组件部件的props(
+        state,
+        {
+          payload: { widgetKey, allValues, 部件组件管理模块实例 },
+        }: PayloadAction<{
+          部件组件管理模块实例: 部件组件管理模块;
+          widgetKey: ViewKey;
+          allValues: Record<string, unknown>;
+        }>,
+      ) {
+        const widgetData = state.widgetTreeNodeDatas[widgetKey];
+
+        if (!widgetTreeNodeDataBaseIsWidgetTreeNodeData(widgetData)) {
+          throw new Error('数据非法');
+        }
+
+        const schema = 部件组件管理模块实例.getWidgetPropsSchema(
+          widgetData.widgetLibName,
+          widgetData.componentName,
+        );
+
+        const props = validateComponentProps(schema, allValues);
+
+        widgetData.props = props;
+      },
+
+      更新当前悬停的组件部件key(
+        state,
+        {
+          payload: { widgetKey },
+        }: PayloadAction<{
+          widgetKey: ViewKey | null;
+        }>,
+      ) {
+        state.当前鼠标hover的部件key = widgetKey;
+      },
     },
   });
   return projectContentSlice;

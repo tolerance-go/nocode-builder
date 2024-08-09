@@ -4,6 +4,7 @@ import {
   widgetTreeNodeDataBaseIsWidgetTreeNodeData,
 } from '@/common/utils';
 import {
+  useAppDispatch,
   useAppSelector,
   WidgetTreeDataNode,
 } from '@/modules/ui/界面状态仓库模块';
@@ -22,6 +23,7 @@ import { ItemType } from '../../../constants';
 import { CardDragItem } from '../../WidgetDrawer/CardItem';
 import { Slot, SlotProps } from '../Slot';
 import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
+import { theme } from 'antd';
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
@@ -32,8 +34,34 @@ export interface WidgetProps {
 
 export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
   ({ node, onDragEnter, onDragLeave, onDragOver }, ref) => {
+    const dispatch = useAppDispatch();
+    const { 部件组件管理模块, 界面状态仓库模块 } = 获取模块上下文();
+
+    const isHovered = useAppSelector(
+      (state) => state.projectContent.当前鼠标hover的部件key === node.key,
+    );
+
+    const hoverCurrentNode = () => {
+      dispatch(
+        界面状态仓库模块.slices.projectContent.actions.更新当前悬停的组件部件key(
+          {
+            widgetKey: node.key,
+          },
+        ),
+      );
+    };
+
     const nodeData = useAppSelector(
       (state) => state.projectContent.widgetTreeNodeDatas[node.key],
+    );
+
+    const { token } = theme.useToken();
+
+    const 当前聚集的部件是自身 = useAppSelector(
+      (state) => state.projectContent.当前聚集的部件key === node.key,
+    );
+    const 当前选中的部件包括自身 = useAppSelector((state) =>
+      state.projectContent.当前选中的部件keys.includes(node.key),
     );
 
     const widgetTreeNodeDatas = useAppSelector(
@@ -53,7 +81,6 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
       }
       throw new Error('innerRef is not defined');
     });
-    const { 部件组件管理模块 } = 获取模块上下文();
 
     const slotElements = node.children?.reduce(
       (prev, slotNode) => {
@@ -94,6 +121,32 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
 
     const widgetStyle: CSSProperties = {
       display: widgetDisplayEnumToCssValue(nodeData.display),
+      transition: 'border 0.1s ease-in-out',
+      ...(当前选中的部件包括自身 && {
+        border: `2px solid ${token.geekblue6}`,
+      }),
+      ...(当前聚集的部件是自身 && {
+        border: `2px solid ${token.blue6}`,
+      }),
+      ...(isHovered && {
+        border: `2px solid ${token.gold6}`,
+      }),
+    };
+
+    const handleMouseOver = (event: React.MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation();
+      hoverCurrentNode();
+    };
+
+    const handleMouseOut = (event: React.MouseEvent<HTMLDivElement>) => {
+      event.stopPropagation();
+      dispatch(
+        界面状态仓库模块.slices.projectContent.actions.更新当前悬停的组件部件key(
+          {
+            widgetKey: null,
+          },
+        ),
+      );
     };
 
     const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
@@ -120,9 +173,21 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
         style={{
           ...widgetStyle,
         }}
+        onMouseOver={handleMouseOver}
+        onMouseOut={handleMouseOut}
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
+        onMouseDown={(event) => {
+          // 防止最上层 widget 覆盖
+          event.stopPropagation();
+
+          dispatch(
+            界面状态仓库模块.slices.projectContent.actions.选中某个部件(
+              node.key,
+            ),
+          );
+        }}
       >
         {createElement(
           部件组件管理模块.getWidgetComponent(
@@ -137,6 +202,7 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
             dataSets: {
               ['data-widget-key']: node.key,
             },
+            props: nodeData.props,
           },
         )}
       </div>

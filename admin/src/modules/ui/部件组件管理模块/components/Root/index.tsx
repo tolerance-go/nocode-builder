@@ -14,11 +14,11 @@ export const Root = forwardRef<HTMLDivElement, WidgetComponentProps>(
         <div ref={ref} {...dataSets} data-test-id="root-component">
           <SlotStyleContext.Provider
             value={{
-              getSlotPlaceholderStyle({ position }) {
+              getSlotPlaceholderStyle({ position, emptyBorderWidth }) {
                 if (position === SlotPlaceholderPosition.Empty) {
                   return {
-                    width: stageSize.width - 2,
-                    height: stageSize.height - 2,
+                    width: stageSize.width - emptyBorderWidth * 2,
+                    height: stageSize.height - emptyBorderWidth * 2,
                   };
                 }
               },

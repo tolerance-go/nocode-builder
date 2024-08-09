@@ -4,6 +4,7 @@ import {
   WidgetPlatformTypeEnum,
 } from '@/_gen/models';
 import { ViewKey } from '@/common/types';
+import { JsonValue } from '@unocode/common';
 import { TreeDataNode } from 'antd';
 import { ProjectType } from '../../界面组件树管理模块';
 
@@ -98,6 +99,7 @@ export type WidgetTreeNodeData = {
   widgetLibName: string;
   componentName: string;
   display: WidgetDisplayEnum;
+  props: Record<string, JsonValue | undefined>;
 } & WidgetTreeNodeDataBase;
 
 export type WidgetSlotTreeNodeData = {

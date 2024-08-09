@@ -3,6 +3,7 @@ import {
   RootComponentName,
   SystemWidgetLibName,
 } from '@/common/constants/components';
+import { antdProps, JsonFormConfig, JSONSchemaType } from '@unocode/common';
 import { ForwardRefExoticComponent, RefAttributes } from 'react';
 import { Button as AntdButton, Flex as AntdFlex } from './components/antd';
 import { Root } from './components/Root';
@@ -29,10 +30,15 @@ export class 部件组件管理模块 extends ModuleBase {
   }
 
   private componentRegistry: Map<string, Map<string, Component>>;
+  private propsFormConfigRegistry: Map<string, Map<string, JsonFormConfig>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  private propsSchemaRegistry: Map<string, Map<string, JSONSchemaType<any>>>;
 
   constructor(engine: EngineBase) {
     super(engine);
     this.componentRegistry = new Map();
+    this.propsFormConfigRegistry = new Map();
+    this.propsSchemaRegistry = new Map();
   }
 
   public getWidgetComponent(lib: string, name: string): Component {
@@ -44,8 +50,41 @@ export class 部件组件管理模块 extends ModuleBase {
     return component;
   }
 
+  public getWidgetFormConfig(
+    lib: string,
+    name: string,
+  ): JsonFormConfig | undefined {
+    const library = this.propsFormConfigRegistry.get(lib);
+    return library ? library.get(name) : undefined;
+  }
+
+  public getWidgetPropsSchema(
+    lib: string,
+    name: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): JSONSchemaType<any> {
+    const library = this.propsSchemaRegistry.get(lib);
+    if (library) {
+      const schema = library.get(name);
+      if (schema) {
+        return schema;
+      }
+    }
+    throw new Error(`Props schema ${name} from library ${lib} not found`);
+  }
+
   public isComponentRegistered(lib: string, name: string): boolean {
     const library = this.componentRegistry.get(lib);
+    return library ? library.has(name) : false;
+  }
+
+  public isFormConfigRegistered(lib: string, name: string): boolean {
+    const library = this.propsFormConfigRegistry.get(lib);
+    return library ? library.has(name) : false;
+  }
+
+  public isPropsSchemaRegistered(lib: string, name: string): boolean {
+    const library = this.propsSchemaRegistry.get(lib);
     return library ? library.has(name) : false;
   }
 
@@ -56,6 +95,13 @@ export class 部件组件管理模块 extends ModuleBase {
       Root,
     );
     this.registerComponentToWidget('antd', 'Button', AntdButton);
+    this.registerFormConfigToWidget(
+      'antd',
+      'Button',
+      antdProps.Button.formConfig,
+    );
+    this.registerPropsSchemaToWidget('antd', 'Button', antdProps.Button.schema);
+
     this.registerComponentToWidget('antd', 'Flex', AntdFlex);
   }
 
@@ -71,6 +117,37 @@ export class 部件组件管理模块 extends ModuleBase {
     const library = this.componentRegistry.get(lib);
     if (library) {
       library.set(name, component);
+    }
+  }
+
+  private registerFormConfigToWidget(
+    lib: string,
+    name: string,
+    formConfig: JsonFormConfig,
+  ): void {
+    if (!this.propsFormConfigRegistry.has(lib)) {
+      this.propsFormConfigRegistry.set(lib, new Map());
+    }
+
+    const library = this.propsFormConfigRegistry.get(lib);
+    if (library) {
+      library.set(name, formConfig);
+    }
+  }
+
+  private registerPropsSchemaToWidget(
+    lib: string,
+    name: string,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    schema: JSONSchemaType<any>,
+  ): void {
+    if (!this.propsSchemaRegistry.has(lib)) {
+      this.propsSchemaRegistry.set(lib, new Map());
+    }
+
+    const library = this.propsSchemaRegistry.get(lib);
+    if (library) {
+      library.set(name, schema);
     }
   }
 }

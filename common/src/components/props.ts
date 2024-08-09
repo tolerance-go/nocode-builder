@@ -1,4 +1,4 @@
-import { JsonValue } from 'src/types';
+import { JsonFormConfig, JsonValue } from 'src/types';
 import Ajv, { JSONSchemaType, ValidationError } from 'ajv';
 import addFormats from 'ajv-formats';
 import addErrors from 'ajv-errors';
@@ -16,7 +16,7 @@ interface ButtonProps {
 
 const buttonDefaultProps: Record<NameKey, JsonValue> = {
   text: 'Button',
-};
+} satisfies ButtonProps;
 
 const buttonSchema: JSONSchemaType<ButtonProps> = {
   type: 'object',
@@ -33,15 +33,26 @@ const buttonSchema: JSONSchemaType<ButtonProps> = {
   },
 };
 
+const buttonFormConfig: JsonFormConfig = [
+  {
+    name: 'text',
+    label: '文本',
+    type: 'input',
+  },
+];
+
 // 定义组件类型
 interface Component<Props> {
   defaultProps: Record<NameKey, JsonValue>;
   schema: JSONSchemaType<Props>;
+  formConfig: JsonFormConfig;
 }
 
 interface Antd {
   Button: Component<ButtonProps>;
 }
+
+export { JSONSchemaType };
 
 export const validateComponentProps = <T, D>(
   schema: JSONSchemaType<T>,
@@ -59,5 +70,6 @@ export const antdProps: Antd = {
   Button: {
     defaultProps: buttonDefaultProps,
     schema: buttonSchema,
+    formConfig: buttonFormConfig,
   },
 };

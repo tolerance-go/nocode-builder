@@ -1,5 +1,5 @@
 import { EngineBase, ModuleBase } from '@/base';
-import { generateId } from '@/common/utils/generateId';
+import { generateUuid } from '@/common/utils/generateId';
 import {
   WidgetTreeNodeType,
   界面状态仓库模块,
@@ -21,13 +21,11 @@ export class 视图项目模型管理模块 extends ModuleBase {
     super(engine);
 
     this.getDependModule(事件中心系统).on(
-      '界面视图管理者/拖动组件放置到指定部件的插槽下时',
+      '界面视图管理者/拖动部件弹窗中的组件放置到指定部件的插槽下时',
       (event) => {
-        console.log('拖动组件放置到指定部件的插槽下时', event);
-
         const { store, slices } = this.getDependModule(界面状态仓库模块);
 
-        const key = generateId();
+        const key = generateUuid();
 
         store.dispatch(
           slices.projectContent.actions.添加组件到插槽({
@@ -44,6 +42,9 @@ export class 视图项目模型管理模块 extends ModuleBase {
               componentName: event.被拖动组件Name,
               title: event.被拖动组件Name,
               display: event.被拖动组件的display,
+              props: {
+                ...event.被拖动组件的默认props,
+              },
             },
             index: event.目标插槽index,
           }),

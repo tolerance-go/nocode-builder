@@ -11,6 +11,7 @@ import {
 } from '@/modules/ui/界面状态仓库模块';
 import { 历史记录 } from '../项目树历史纪录管理者/types';
 import { WidgetDisplayEnum } from '@/_gen/models';
+import { JsonValue } from '@unocode/common';
 
 type 项目树后台同步模块事件类型 = {
   新增项目记录成功: {
@@ -66,13 +67,14 @@ type 界面视图管理者事件类型 = {
   用户撤销项目树: undefined;
   用户重做项目树: undefined;
   用户登出成功: undefined;
-  拖动组件放置到指定部件的插槽下时: {
+  拖动部件弹窗中的组件放置到指定部件的插槽下时: {
     被拖动组件Name: string;
     被拖动组件的libName: string;
     目标部件key: ViewKey;
     目标插槽key: ViewKey;
     目标插槽index: number;
     被拖动组件的display: WidgetDisplayEnum;
+    被拖动组件的默认props: Record<string, JsonValue | undefined>;
   };
 };
 

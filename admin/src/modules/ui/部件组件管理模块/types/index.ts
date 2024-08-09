@@ -23,6 +23,7 @@ export interface EditModeProps {
   isDragging: boolean;
   isOverWidget: boolean;
   dataSets?: Record<string, string | number>;
+  props?: Record<string, JSONValue | undefined>;
 }
 
 export type WidgetComponentProps = PreviewModeProps | EditModeProps;
