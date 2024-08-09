@@ -121,15 +121,20 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
 
     const widgetStyle: CSSProperties = {
       display: widgetDisplayEnumToCssValue(nodeData.display),
-      transition: 'border 0.1s ease-in-out',
+      transition: 'outline 0.1s ease-in-out',
+      zIndex:
+        当前选中的部件包括自身 || isHovered || 当前聚集的部件是自身
+          ? 1
+          : undefined,
+      position: 'relative',
       ...(当前选中的部件包括自身 && {
-        border: `2px solid ${token.geekblue6}`,
+        outline: `2px solid ${token.geekblue6}`,
       }),
       ...(isHovered && {
-        border: `2px solid ${token.gold6}`,
+        outline: `2px solid ${token.gold6}`,
       }),
       ...(当前聚集的部件是自身 && {
-        border: `2px solid ${token.blue6}`,
+        outline: `2px solid ${token.blue6}`,
       }),
     };
 

@@ -50,6 +50,7 @@ export const Stage: React.FC = () => {
             overflow: 'auto',
             backgroundColor: token.colorBgBase,
             position: 'relative',
+            padding: 2, // 设置 2 为 outline 的边框宽度，防止最外层被舞台边缘盖住
           }}
         >
           {widgetTree.map((node) => (
