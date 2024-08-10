@@ -47,22 +47,26 @@ export class 部件组件管理模块 extends ModuleBase {
   }
 
   public getWidgetComponent(lib: string, name: string) {
-    return this.getWidgetConfigs(lib, name).component;
+    return this.getWidgetComponentConfigs(lib, name).component;
   }
 
   public getWidgetFormConfig(lib: string, name: string): JsonFormConfig {
-    return this.getWidgetConfigs(lib, name).formConfig;
+    return this.getWidgetComponentConfigs(lib, name).formConfig;
   }
 
   public getWidgetPropsSchema(lib: string, name: string) {
-    return this.getWidgetConfigs(lib, name).schema;
+    return this.getWidgetComponentConfigs(lib, name).schema;
   }
 
   public getComponentDefaultProps(lib: string, name: string) {
-    return this.getWidgetConfigs(lib, name).defaultProps;
+    return this.getWidgetComponentConfigs(lib, name).defaultProps;
   }
 
-  public getWidgetConfigs(lib: string, name: string) {
+  public getComponentSlots(lib: string, name: string) {
+    return this.getWidgetComponentConfigs(lib, name).slots;
+  }
+
+  public getWidgetComponentConfigs(lib: string, name: string) {
     const configs = this.findWidgetConfigs(lib, name);
 
     if (configs) {

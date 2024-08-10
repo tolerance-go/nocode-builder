@@ -35,6 +35,6 @@ export interface LibConfigs {
   name: string;
   components: ComponentConfigs<
     Record<string, JsonValue | undefined>,
-    unknown
+    Record<string, string>
   >[];
 }

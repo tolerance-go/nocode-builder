@@ -1,10 +1,13 @@
 import { EngineBase, ModuleBase } from '@/base';
 import { generateUuid } from '@/common/utils/generateId';
 import {
+  WidgetSlotTreeDataNode,
+  WidgetSlotTreeNodeData,
   WidgetTreeNodeType,
   界面状态仓库模块,
 } from '@/modules/ui/界面状态仓库模块';
 import { 事件中心系统 } from '@/modules/事件中心系统';
+import { 部件组件管理模块 } from '../ui/部件组件管理模块';
 
 export class 视图项目模型管理模块 extends ModuleBase {
   private static instance: 视图项目模型管理模块;
@@ -25,7 +28,34 @@ export class 视图项目模型管理模块 extends ModuleBase {
       (event) => {
         const { store, slices } = this.getDependModule(界面状态仓库模块);
 
+        const 部件组件管理模块实例 = this.getDependModule(部件组件管理模块);
+
         const key = generateUuid();
+
+        const slots = 部件组件管理模块实例.getComponentSlots(
+          event.被拖动组件的libName,
+          event.被拖动组件Name,
+        );
+
+        const widgetSlotsData: Record<string, WidgetSlotTreeNodeData> = {};
+
+        const childrenSlots = Object.entries(slots).map(
+          ([slotName]): WidgetSlotTreeDataNode => {
+            const key = generateUuid();
+
+            widgetSlotsData[key] = {
+              key,
+              type: WidgetTreeNodeType.Slot,
+              name: slotName,
+              title: slotName,
+            };
+
+            return {
+              key,
+              type: WidgetTreeNodeType.Slot,
+            };
+          },
+        );
 
         store.dispatch(
           slices.projectContent.actions.添加组件到插槽({
@@ -34,6 +64,7 @@ export class 视图项目模型管理模块 extends ModuleBase {
             widgetNode: {
               key,
               type: WidgetTreeNodeType.Widget,
+              children: childrenSlots,
             },
             widgetData: {
               key,
@@ -46,6 +77,7 @@ export class 视图项目模型管理模块 extends ModuleBase {
                 ...event.被拖动组件的默认props,
               },
             },
+            widgetSlotsData,
             index: event.目标插槽index,
           }),
         );
@@ -60,6 +92,7 @@ export class 视图项目模型管理模块 extends ModuleBase {
       事件中心系统.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),
       界面状态仓库模块.getInstance(this.engine),
+      部件组件管理模块.getInstance(this.engine),
     );
   }
 }

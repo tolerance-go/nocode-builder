@@ -6,6 +6,7 @@ import {
   WidgetTreeNodeDataRecordItem,
   WidgetTreeNodeType,
   WidgetSlotTreeDataNode,
+  WidgetSlotTreeNodeData,
 } from '../../types';
 import { generateDerivedMapping } from './utils';
 import {
@@ -131,11 +132,18 @@ export const createProjectContentSlice = () => {
           slotKey: ViewKey;
           widgetNode: WidgetTreeDataNode;
           widgetData: WidgetTreeNodeDataRecordItem;
+          widgetSlotsData: Record<string, WidgetSlotTreeNodeData>;
           index: number;
         }>,
       ) {
-        const { parentKey, slotKey, widgetNode, widgetData, index } =
-          action.payload;
+        const {
+          parentKey,
+          slotKey,
+          widgetNode,
+          widgetData,
+          index,
+          widgetSlotsData,
+        } = action.payload;
         const parent = findNodeByKey(state.widgetTree, parentKey);
 
         if (parent && parent.type === WidgetTreeNodeType.Widget) {
@@ -148,6 +156,12 @@ export const createProjectContentSlice = () => {
             slot.children = slot.children ?? [];
             slot.children.splice(index, 0, widgetNode);
             state.widgetTreeNodeDatas[widgetNode.key] = widgetData;
+
+            state.widgetTreeNodeDatas = {
+              ...state.widgetTreeNodeDatas,
+              ...widgetSlotsData,
+            };
+
             state.derived_widget节点到父节点的映射[widgetNode.key] = parentKey;
           }
         }
