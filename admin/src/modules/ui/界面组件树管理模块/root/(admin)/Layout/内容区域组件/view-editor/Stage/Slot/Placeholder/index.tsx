@@ -257,6 +257,7 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
       isClosestToDragMouse,
       onDragEnter,
       onDragLeave,
+      index,
     },
     ref,
   ) => {
@@ -288,7 +289,7 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
             被拖动组件的libName: item.widgetLibName,
             目标部件key: widgetDataNode.key,
             目标插槽key: slotDataNode.key,
-            目标插槽index: 0,
+            目标插槽index: index,
             被拖动组件的display: assertEnumValue(
               widgetData.display,
               WidgetDisplayEnum,
