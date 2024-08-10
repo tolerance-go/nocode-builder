@@ -15,6 +15,7 @@ const PreviewDumpBox = ({
   width: number | string;
   height?: number | string;
 }) => {
+  const { token } = theme.useToken();
   return (
     <div
       style={{
@@ -22,7 +23,7 @@ const PreviewDumpBox = ({
         height,
         border: `1px dashed ${background}`,
         background,
-        borderRadius: 4,
+        borderRadius: token.borderRadius,
       }}
     ></div>
   );
@@ -83,7 +84,7 @@ export const Flex = forwardRef<WidgetCompApis, WidgetComponentProps>(
         <AntdFlex
           ref={innerRef}
           style={{
-            padding: 15,
+            padding: token.padding,
             width: '100%',
             border: `2px dashed ${token.colorBorder}`,
           }}
@@ -105,7 +106,7 @@ export const Flex = forwardRef<WidgetCompApis, WidgetComponentProps>(
       <AntdFlex
         ref={innerRef}
         style={{
-          padding: 15,
+          padding: token.padding,
           border: `2px dashed ${token.colorBorder}`,
         }}
         gap={10}
