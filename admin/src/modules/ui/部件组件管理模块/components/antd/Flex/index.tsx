@@ -9,17 +9,20 @@ import { SlotPlaceholderPosition } from '@/modules/ui/界面组件树管理模�
 const PreviewDumpBox = ({
   background,
   width,
+  height = 40,
 }: {
   background: string;
-  width: number;
+  width: number | string;
+  height?: number | string;
 }) => {
   return (
     <div
       style={{
         width,
-        height: 40,
+        height,
         border: `1px dashed ${background}`,
         background,
+        borderRadius: 4,
       }}
     ></div>
   );
@@ -35,6 +38,10 @@ export const Flex = forwardRef<WidgetCompApis, WidgetComponentProps>(
     useImperativeHandle(ref, () => {
       return {
         获取舞台预览组件尺寸: () => {
+          if (props.mode !== 'preview') {
+            throw new Error('非预览模式下无法获取组件舞台预览尺寸');
+          }
+
           return {
             width: '100%',
             height: innerRef.current?.offsetHeight,
@@ -77,12 +84,19 @@ export const Flex = forwardRef<WidgetCompApis, WidgetComponentProps>(
           ref={innerRef}
           style={{
             padding: 15,
+            width: '100%',
             border: `2px dashed ${token.colorBorder}`,
           }}
           gap={10}
         >
-          <PreviewDumpBox width={20} background={token.green3}></PreviewDumpBox>
-          <PreviewDumpBox width={40} background={token.cyan3}></PreviewDumpBox>
+          <PreviewDumpBox
+            width={'33%'}
+            background={token.green3}
+          ></PreviewDumpBox>
+          <PreviewDumpBox
+            width={'67%'}
+            background={token.cyan3}
+          ></PreviewDumpBox>
         </AntdFlex>
       );
     }

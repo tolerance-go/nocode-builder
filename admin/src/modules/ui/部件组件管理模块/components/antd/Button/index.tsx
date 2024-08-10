@@ -12,6 +12,10 @@ export const Button = forwardRef<WidgetCompApis, WidgetComponentProps>(
     useImperativeHandle(ref, () => {
       return {
         获取舞台预览组件尺寸: () => {
+          if (props.mode !== 'preview') {
+            throw new Error('非预览模式下无法获取组件舞台预览尺寸');
+          }
+
           if (innerRef.current) {
             const { offsetWidth: width, offsetHeight: height } =
               innerRef.current;
