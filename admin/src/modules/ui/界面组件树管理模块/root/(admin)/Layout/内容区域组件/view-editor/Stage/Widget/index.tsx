@@ -22,7 +22,6 @@ import { useDrop } from 'react-dnd';
 import { ItemType } from '../../../constants';
 import { CardDragItem } from '../../WidgetDrawer/CardItem';
 import { Slot, SlotProps } from '../Slot';
-import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
 import { theme } from 'antd';
 
 export interface WidgetProps {
@@ -200,7 +199,7 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
           部件组件管理模块.getWidgetComponent(
             nodeData.widgetLibName,
             nodeData.componentName,
-          ) as HTMLComponent<HTMLElement>,
+          ),
           {
             mode: 'edit',
             slotElements,

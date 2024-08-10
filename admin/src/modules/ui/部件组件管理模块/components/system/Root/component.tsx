@@ -1,8 +1,8 @@
 import { useStageSize } from '@/common/contexts';
 import { SlotStyleContext } from '@/modules/ui/界面组件树管理模块/root/(admin)/Layout/内容区域组件/view-editor/Stage/Slot/Placeholder';
 import { SlotPlaceholderPosition } from '@/modules/ui/界面组件树管理模块/root/(admin)/Layout/内容区域组件/view-editor/Stage/Slot/Placeholder/enums';
-import { WidgetCompApis, WidgetComponentProps } from '../../types';
 import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { WidgetCompApis, WidgetComponentProps } from '../../../types';
 
 export const Root = forwardRef<WidgetCompApis, WidgetComponentProps>(
   (props, ref) => {

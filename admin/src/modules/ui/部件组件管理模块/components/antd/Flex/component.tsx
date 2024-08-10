@@ -52,15 +52,22 @@ export const Flex = forwardRef<WidgetCompApis, WidgetComponentProps>(
     });
 
     if (props.mode === 'edit') {
-      const { slotElements, props: propsData } = props;
+      const { slotElements, isDragging, props: propsData } = props;
 
       const compProps = 部件组件管理模块.validateComponentProps(
         flexSchema,
         propsData,
       );
 
+      const style = isDragging
+        ? {
+            border: `2px dashed ${token.colorBorder}`,
+            padding: token.padding,
+          }
+        : undefined;
+
       return (
-        <AntdFlex ref={innerRef} {...compProps}>
+        <AntdFlex ref={innerRef} style={style} {...compProps}>
           <SlotStyleContext.Provider
             value={{
               getSlotPlaceholderStyle({ position }) {

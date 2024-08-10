@@ -1,9 +1,9 @@
-import { ValidationError } from 'ajv';
-import { describe, expect, it } from 'vitest';
-import { antdProps } from './components/antd/props';
-import { 部件组件管理模块 } from '.';
 import { EngineBase } from '@/base';
 import { EngineManagerBase } from '@/base/EngineManager';
+import { ValidationError } from 'ajv';
+import { describe, expect, it } from 'vitest';
+import { 部件组件管理模块 } from '.';
+import { buttonSchema } from './components/antd/Button/props';
 
 describe('按钮模式验证', () => {
   let 部件组件管理模块实例: 部件组件管理模块;
@@ -20,10 +20,7 @@ describe('按钮模式验证', () => {
     };
 
     expect(() =>
-      部件组件管理模块实例.validateComponentProps(
-        antdProps.Button.schema,
-        validData,
-      ),
+      部件组件管理模块实例.validateComponentProps(buttonSchema, validData),
     ).not.toThrow();
   });
 
@@ -33,10 +30,7 @@ describe('按钮模式验证', () => {
     };
 
     expect(() =>
-      部件组件管理模块实例.validateComponentProps(
-        antdProps.Button.schema,
-        validData,
-      ),
+      部件组件管理模块实例.validateComponentProps(buttonSchema, validData),
     ).not.toThrow();
   });
 
@@ -46,10 +40,7 @@ describe('按钮模式验证', () => {
     };
 
     expect(() =>
-      部件组件管理模块实例.validateComponentProps(
-        antdProps.Button.schema,
-        invalidData,
-      ),
+      部件组件管理模块实例.validateComponentProps(buttonSchema, invalidData),
     ).not.toThrow();
   });
 
@@ -59,10 +50,7 @@ describe('按钮模式验证', () => {
     };
 
     expect(() =>
-      部件组件管理模块实例.validateComponentProps(
-        antdProps.Button.schema,
-        invalidData,
-      ),
+      部件组件管理模块实例.validateComponentProps(buttonSchema, invalidData),
     ).toThrow(ValidationError);
   });
 
@@ -73,10 +61,7 @@ describe('按钮模式验证', () => {
     };
 
     expect(() =>
-      部件组件管理模块实例.validateComponentProps(
-        antdProps.Button.schema,
-        invalidData,
-      ),
+      部件组件管理模块实例.validateComponentProps(buttonSchema, invalidData),
     ).toThrow(ValidationError);
   });
 
@@ -86,10 +71,7 @@ describe('按钮模式验证', () => {
     };
 
     try {
-      部件组件管理模块实例.validateComponentProps(
-        antdProps.Button.schema,
-        invalidData,
-      );
+      部件组件管理模块实例.validateComponentProps(buttonSchema, invalidData);
     } catch (error) {
       if (error instanceof ValidationError) {
         expect(error.errors).toMatchInlineSnapshot(`

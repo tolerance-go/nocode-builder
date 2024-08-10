@@ -8,7 +8,6 @@ import {
 } from '@/modules/ui/界面状态仓库模块';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
 import { widgetDisplayEnumToCssValue } from '@/modules/ui/界面组件树管理模块/utils';
-import { HTMLComponent } from '@/modules/ui/部件组件管理模块';
 import { css, keyframes } from '@emotion/css';
 import { theme } from 'antd';
 import {
@@ -232,7 +231,7 @@ const Inner = forwardRef<
           部件组件管理模块.getWidgetComponent(
             widgetData.widgetLib.name,
             widgetData.name,
-          ) as HTMLComponent<HTMLElement>,
+          ),
           {
             mode: 'stage-preview',
             defaultProps,

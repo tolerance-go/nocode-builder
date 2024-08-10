@@ -48,4 +48,4 @@ export type WidgetComponentProps =
 
 export * from '../../../../common/types/JsonValue';
 export * from './JsonForm';
-export * from './props';
+export * from './component';

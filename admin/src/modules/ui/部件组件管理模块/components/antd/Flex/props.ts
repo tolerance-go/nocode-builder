@@ -1,5 +1,5 @@
 import { JSONSchemaType } from 'ajv';
-import { NameKey } from '../../../types/props';
+import { NameKey } from '../../../types/component';
 import { JsonValue, JsonFormConfig } from '../../../types';
 
 export interface FlexPropsType {
