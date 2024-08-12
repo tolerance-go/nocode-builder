@@ -1,6 +1,6 @@
 import { Flex as AntdFlex, theme } from 'antd';
 import { WidgetCompApis, WidgetComponentProps } from '../../../types';
-import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { CSSProperties, forwardRef, useImperativeHandle, useRef } from 'react';
 import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
 import { flexSchema } from './props';
 import { SlotStyleContext } from '@/modules/ui/界面组件树管理模块/root/(admin)/Layout/内容区域组件/view-editor/Stage/Slot/Placeholder';
@@ -24,6 +24,7 @@ const PreviewDumpBox = ({
         border: `1px dashed ${background}`,
         background,
         borderRadius: token.borderRadius,
+        flexShrink: 0,
       }}
     ></div>
   );
@@ -59,10 +60,11 @@ export const Flex = forwardRef<WidgetCompApis, WidgetComponentProps>(
         propsData,
       );
 
-      const style = isDragging
+      const style: CSSProperties | undefined = isDragging
         ? {
             border: `2px dashed ${token.colorBorder}`,
             padding: token.padding,
+            width: '100%',
           }
         : undefined;
 
@@ -73,8 +75,7 @@ export const Flex = forwardRef<WidgetCompApis, WidgetComponentProps>(
               getSlotPlaceholderStyle({ position }) {
                 if (position === SlotPlaceholderPosition.Empty) {
                   return {
-                    height: 50,
-                    background: 'red',
+                    width: '100%',
                   };
                 }
               },
