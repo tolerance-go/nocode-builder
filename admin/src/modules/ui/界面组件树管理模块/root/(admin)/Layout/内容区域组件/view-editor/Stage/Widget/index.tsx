@@ -26,13 +26,25 @@ import { theme } from 'antd';
 
 export interface WidgetProps {
   node: WidgetTreeDataNode;
+  onDragEnterWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragLeaveWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragOver?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
-  onDragOver?: (event: React.DragEvent<HTMLDivElement>) => void;
 }
 
 export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
-  ({ node, onDragEnter, onDragLeave, onDragOver }, ref) => {
+  (
+    {
+      node,
+      onDragEnterWithoutInner,
+      onDragLeaveWithoutInner,
+      onDragOver,
+      onDragEnter,
+      onDragLeave,
+    },
+    ref,
+  ) => {
     const dispatch = useAppDispatch();
     const { 部件组件管理模块, 界面状态仓库模块 } = 获取模块上下文();
 
@@ -42,7 +54,7 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
 
     const hoverCurrentNode = () => {
       dispatch(
-        界面状态仓库模块.slices.projectContent.actions.更新当前悬停的组件部件key(
+        界面状态仓库模块.slices.projectContent.actions.更新当前鼠标悬停的组件部件key(
           {
             widgetKey: node.key,
           },
@@ -93,7 +105,7 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
           <Slot
             node={slotNode}
             isDragging={isDragging}
-            widgetDataNode={nodeData}
+            widgetNodeData={nodeData}
             slotNodeData={slotNodeData}
           />
         );
@@ -147,7 +159,7 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
     const handleMouseOut = (event: React.MouseEvent<HTMLDivElement>) => {
       event.stopPropagation();
       dispatch(
-        界面状态仓库模块.slices.projectContent.actions.更新当前悬停的组件部件key(
+        界面状态仓库模块.slices.projectContent.actions.更新当前鼠标悬停的组件部件key(
           {
             widgetKey: null,
           },
@@ -156,21 +168,40 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>(
     };
 
     const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
-        onDragEnter?.(event);
+      onDragEnter?.(event);
+
+      if (
+        event.currentTarget.contains(event.relatedTarget as Node) &&
+        event.currentTarget !== event.relatedTarget
+      ) {
+        return;
       }
+
+      onDragEnterWithoutInner?.(event);
     };
 
     const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
-        onDragLeave?.(event);
+      onDragLeave?.(event);
+
+      /**
+       * 当拖动的元素进入子组件时，onDragLeave 事件会在父组件上触发。
+       * 原因是从父组件的角度来看，拖动的元素已经“离开”了父组件的范围，
+       * 尽管它只是进入了父组件的一个子组件。
+       *
+       * 这里为了避免在组件内部的元素进出时触发，需要判断是否在元素内
+       */
+      if (
+        event.currentTarget.contains(event.relatedTarget as Node) &&
+        event.currentTarget !== event.relatedTarget
+      ) {
+        return;
       }
+
+      onDragLeaveWithoutInner?.(event);
     };
 
     const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
-        onDragOver?.(event);
-      }
+      onDragOver?.(event);
     };
 
     return (

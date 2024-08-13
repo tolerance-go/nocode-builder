@@ -33,6 +33,8 @@ export interface PlaceholderProps {
   position: SlotPlaceholderPosition;
   isHoverWidgetAdjacent?: boolean; // 新增的 boolean 属性，用于控制是否为相邻的插槽
   isClosestToDragMouse?: boolean; // 新增的 boolean 属性，用于控制是否为鼠标最接近的插槽
+  onDragEnterWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragLeaveWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
 }
@@ -53,6 +55,7 @@ const Cover = ({ isCollapsed }: { isCollapsed?: boolean }) => {
   const { token } = theme.useToken();
   return (
     <div
+      data-tag="slot-placeholder-cover"
       style={{
         transition: 'background 0.4s',
         position: 'absolute',
@@ -138,6 +141,8 @@ const Inner = forwardRef<
     isOver: boolean;
     position: SlotPlaceholderPosition;
     drop: ConnectDropTarget;
+    onDragEnterWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
+    onDragLeaveWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
     onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
     onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
     isCollapsed?: boolean;
@@ -150,6 +155,8 @@ const Inner = forwardRef<
       position,
       isCollapsed,
       drop,
+      onDragEnterWithoutInner,
+      onDragLeaveWithoutInner,
       onDragEnter,
       onDragLeave,
     },
@@ -181,17 +188,39 @@ const Inner = forwardRef<
     );
 
     const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
-        onDragEnter?.(event);
-        setIsDragEntered(true);
+      onDragEnter?.(event);
+
+      if (
+        event.currentTarget.contains(event.relatedTarget as Node) &&
+        event.currentTarget !== event.relatedTarget
+      ) {
+        return;
       }
+
+      onDragEnterWithoutInner?.(event);
+      setIsDragEntered(true);
     };
 
     const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-      if (!innerRef.current?.contains(event.relatedTarget as Node)) {
-        onDragLeave?.(event);
+      onDragLeave?.(event);
+
+      /**
+       * 当拖动的元素进入子组件时，onDragLeave 事件会在父组件上触发。
+       * 原因是从父组件的角度来看，拖动的元素已经“离开”了父组件的范围，
+       * 尽管它只是进入了父组件的一个子组件。
+       *
+       * 这里为了避免在组件内部的元素进出时触发，需要判断是否在元素内
+       */
+      if (
+        event.currentTarget.contains(event.relatedTarget as Node) &&
+        event.currentTarget !== event.relatedTarget
+      ) {
+        return;
       }
+
+      onDragLeaveWithoutInner?.(event);
     };
+
     const fadeInAndExpand = createFadeInAndExpand(
       typeof slotItemStyle.width === 'string'
         ? slotItemStyle.width
@@ -214,6 +243,7 @@ const Inner = forwardRef<
 
     return (
       <div
+        data-tag="slot-placeholder"
         className={getClassName()}
         ref={mergeRefs((el) => drop(el), innerRef)}
         style={{
@@ -254,6 +284,8 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
       position,
       isHoverWidgetAdjacent,
       isClosestToDragMouse,
+      onDragEnterWithoutInner,
+      onDragLeaveWithoutInner,
       onDragEnter,
       onDragLeave,
       index,
@@ -321,13 +353,15 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
     return (
       <Inner
         ref={ref}
-        onDragEnter={(event) => {
+        onDragEnter={onDragEnter}
+        onDragLeave={onDragLeave}
+        onDragEnterWithoutInner={(event) => {
           setIsCollapsed(false);
-          onDragEnter?.(event);
+          onDragEnterWithoutInner?.(event);
         }}
-        onDragLeave={(event) => {
+        onDragLeaveWithoutInner={(event) => {
           setIsCollapsed(true);
-          onDragLeave?.(event);
+          onDragLeaveWithoutInner?.(event);
         }}
         widgetData={widgetData}
         isOver={isOver}

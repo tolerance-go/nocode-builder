@@ -32,6 +32,7 @@ export type ProjectContentStates = {
   当前选中的部件keys: ViewKey[];
   当前聚集的部件key: ViewKey | null;
   当前鼠标hover的部件key: ViewKey | null;
+  当前拖拽stay的部件keys: ViewKey[];
 };
 
 export const createProjectContentInitialState = () => {
@@ -44,6 +45,7 @@ export const createProjectContentInitialState = () => {
     当前选中的部件keys: [],
     当前聚集的部件key: null,
     当前鼠标hover的部件key: null,
+    当前stay的部件keys: [],
     // dragClientOffset: null,
   };
   return initialState;
@@ -230,7 +232,7 @@ export const createProjectContentSlice = () => {
         widgetData.props = props;
       },
 
-      更新当前悬停的组件部件key(
+      更新当前鼠标悬停的组件部件key(
         state,
         {
           payload: { widgetKey },
