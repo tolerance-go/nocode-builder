@@ -3,3 +3,4 @@ export * from './查询项目树中的节点';
 export * from './tree';
 export * from './generateProjectTreeMeta';
 export * from './createAppAsyncThunk';
+export * from './updateLocalStateWithDiffs';

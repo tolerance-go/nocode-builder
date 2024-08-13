@@ -37,6 +37,7 @@ export interface PlaceholderProps {
   onDragLeaveWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
+  temporarilyCloseSlot?: boolean;
 }
 
 interface SlotStyleContextType {
@@ -289,6 +290,7 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
       onDragEnter,
       onDragLeave,
       index,
+      temporarilyCloseSlot,
     },
     ref,
   ) => {
@@ -333,6 +335,10 @@ export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
         );
       },
     });
+
+    if (temporarilyCloseSlot) {
+      return null;
+    }
 
     if (!isDragging) {
       return null;

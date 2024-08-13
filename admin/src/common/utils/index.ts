@@ -10,3 +10,4 @@ export * from './is';
 export * from './generateId';
 export * from './assertEnumValue';
 export * from './mergeRefs';
+export * from './compareObjects';

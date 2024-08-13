@@ -32,7 +32,8 @@ export type ProjectContentStates = {
   当前选中的部件keys: ViewKey[];
   当前聚集的部件key: ViewKey | null;
   当前鼠标hover的部件key: ViewKey | null;
-  当前拖拽stay的部件keys: ViewKey[];
+  拖拽stay的插槽节点keys路径: ViewKey[];
+  haha: string;
 };
 
 export const createProjectContentInitialState = () => {
@@ -45,7 +46,8 @@ export const createProjectContentInitialState = () => {
     当前选中的部件keys: [],
     当前聚集的部件key: null,
     当前鼠标hover的部件key: null,
-    当前stay的部件keys: [],
+    拖拽stay的插槽节点keys路径: [],
+    haha: '0',
     // dragClientOffset: null,
   };
   return initialState;
@@ -241,6 +243,39 @@ export const createProjectContentSlice = () => {
         }>,
       ) {
         state.当前鼠标hover的部件key = widgetKey;
+      },
+
+      向拖拽stay的插槽节点路径添加key(
+        state,
+        {
+          payload: { widgetKey },
+        }: PayloadAction<{
+          widgetKey: ViewKey;
+        }>,
+      ) {
+        // 检测重复
+        if (state.拖拽stay的插槽节点keys路径.includes(widgetKey)) {
+          return;
+        }
+
+        state.拖拽stay的插槽节点keys路径.push(widgetKey);
+      },
+
+      删除拖拽stay的插槽节点路径中的key(
+        state,
+        {
+          payload: { widgetKey },
+        }: PayloadAction<{
+          widgetKey: ViewKey;
+        }>,
+      ) {
+        const index = state.拖拽stay的插槽节点keys路径.findIndex(
+          (item) => item === widgetKey,
+        );
+
+        if (index !== -1) {
+          state.拖拽stay的插槽节点keys路径.splice(index, 1);
+        }
       },
     },
   });

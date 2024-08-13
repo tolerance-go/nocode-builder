@@ -26,6 +26,8 @@
 
 - [假如我拖动按钮组件到舞台上存在子组件的 Flex 组件，并且鼠标悬停在组件上，那么应该只显示和鼠标关系最近的坍缩状态的占位插槽而不包括组件嵌套层级上所有的插槽](../user-bdd/user.md#hover-nearest-collapsed-placeholder-slot)
 
+:::
+
 ## ✔️ 我希望拖动组件过程中，Flex 组件可以变化 UI，让我可以发现它
 
 ::: details

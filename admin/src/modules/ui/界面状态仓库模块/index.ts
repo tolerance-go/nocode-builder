@@ -22,7 +22,11 @@ import {
   createUserInfoSlice,
 } from './states';
 import { AppMiddleware, AppSlices, RootState } from './types';
-import { findNode, generateProjectTreeMeta } from './utils';
+import {
+  findNode,
+  generateProjectTreeMeta,
+  updateLocalStateWithDiffs,
+} from './utils';
 import { 项目组表模块 } from '@/modules/models/项目组表模块';
 import { 项目表模块 } from '@/modules/models/项目表模块';
 import { 浏览器代理模块 } from '@/modules/simulations/浏览器代理模块';
@@ -31,6 +35,7 @@ import { 项目详情表模块 } from '@/modules/models/项目详情表';
 import { 视图项目详情表模块 } from '@/modules/models/视图项目详情表';
 import { 蓝图项目详情表模块 } from '@/modules/models/蓝图项目详情表';
 import { 数据表项目详情表模块 } from '@/modules/models/数据表项目详情表';
+import { compareObjects } from '@/common/utils';
 
 export class 界面状态仓库模块 extends ModuleBase {
   static createAsyncActions = (slices: AppSlices) => {
@@ -181,56 +186,32 @@ export class 界面状态仓库模块 extends ModuleBase {
   constructor(engine: EngineBase) {
     super(engine);
 
-    let initialState =
+    let localInitialState =
       this.getDependModule(本地数据管理模块).get<RootState>(
         localStateFieldName,
       );
 
     // 从数据库同步状态
     if (this.getDependModule(用户表模块).currentLoginUser) {
-      if (!initialState) {
-        const projectRecords =
-          this.getDependModule(项目表模块).table.getAllRecords();
-        const projectGroupRecords =
-          this.getDependModule(项目组表模块).table.getAllRecords();
-        const projectDetailRecords =
-          this.getDependModule(项目详情表模块).table.getAllRecords();
-        const viewProjectModelRecords =
-          this.getDependModule(视图项目详情表模块).table.getAllRecords();
-        const bluemapProjectModelRecords =
-          this.getDependModule(蓝图项目详情表模块).table.getAllRecords();
-        const dataTableProjectModelRecords =
-          this.getDependModule(数据表项目详情表模块).table.getAllRecords();
-        const { 项目树节点数据, 项目结构树, derived_节点到父节点的映射 } =
-          generateProjectTreeMeta(
-            projectRecords,
-            projectGroupRecords,
-            projectDetailRecords,
-            viewProjectModelRecords,
-            bluemapProjectModelRecords,
-            dataTableProjectModelRecords,
-          );
-        const projectKey =
-          this.getDependModule(浏览器代理模块).getQueryParameters<ViewKey>(
-            ProjectKeyQueryKey,
-          );
-        initialState = {
-          userInfo: createUserInfoInitialState(),
-          location: createLocationInitialState(),
-          layout: createLayoutInitialState(),
-          projectContent: createProjectContentInitialState(),
-          projectTree: {
-            ...createProjectTreeInitialState(),
-            项目树节点数据,
-            项目结构树,
-            derived_节点到父节点的映射,
-            激活的节点的key: projectKey ?? null,
-          },
-        };
+      if (!localInitialState) {
+        localInitialState = this.创建初始化数据();
+      } else {
+        const programInitialState = this.创建初始化数据();
+
+        const diffs = compareObjects(localInitialState, programInitialState);
+
+        // 使用更新后的本地数据初始化 store
+        if (diffs.added.length > 0 || diffs.changed.length > 0) {
+          localInitialState = updateLocalStateWithDiffs(
+            localInitialState,
+            programInitialState,
+            { added: diffs.added, changed: diffs.changed },
+          ) as RootState;
+        }
       }
     }
 
-    this.initialState = initialState;
+    this.initialState = localInitialState;
 
     this.slices = 界面状态仓库模块.createSlices();
     this.asyncActions = 界面状态仓库模块.createAsyncActions(this.slices);
@@ -240,7 +221,7 @@ export class 界面状态仓库模块 extends ModuleBase {
     this.store = 界面状态仓库模块.createStore(
       this.reducers,
       [this.handleMiddleware],
-      initialState,
+      localInitialState,
     );
 
     this.注册用户信息监听();
@@ -379,6 +360,49 @@ export class 界面状态仓库模块 extends ModuleBase {
     return produce(state, (draft) => {
       draft.location.pathname = null;
     });
+  }
+
+  private 创建初始化数据() {
+    const projectRecords =
+      this.getDependModule(项目表模块).table.getAllRecords();
+    const projectGroupRecords =
+      this.getDependModule(项目组表模块).table.getAllRecords();
+    const projectDetailRecords =
+      this.getDependModule(项目详情表模块).table.getAllRecords();
+    const viewProjectModelRecords =
+      this.getDependModule(视图项目详情表模块).table.getAllRecords();
+    const bluemapProjectModelRecords =
+      this.getDependModule(蓝图项目详情表模块).table.getAllRecords();
+    const dataTableProjectModelRecords =
+      this.getDependModule(数据表项目详情表模块).table.getAllRecords();
+    const { 项目树节点数据, 项目结构树, derived_节点到父节点的映射 } =
+      generateProjectTreeMeta(
+        projectRecords,
+        projectGroupRecords,
+        projectDetailRecords,
+        viewProjectModelRecords,
+        bluemapProjectModelRecords,
+        dataTableProjectModelRecords,
+      );
+    const projectKey =
+      this.getDependModule(浏览器代理模块).getQueryParameters<ViewKey>(
+        ProjectKeyQueryKey,
+      );
+    const initialState = {
+      userInfo: createUserInfoInitialState(),
+      location: createLocationInitialState(),
+      layout: createLayoutInitialState(),
+      projectContent: createProjectContentInitialState(),
+      projectTree: {
+        ...createProjectTreeInitialState(),
+        项目树节点数据,
+        项目结构树,
+        derived_节点到父节点的映射,
+        激活的节点的key: projectKey ?? null,
+      },
+    };
+
+    return initialState;
   }
 }
 

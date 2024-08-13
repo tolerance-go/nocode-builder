@@ -1,5 +1,7 @@
 import { ViewKey } from '@/common/types';
 import {
+  useAppDispatch,
+  useAppSelector,
   WidgetSlotTreeDataNode,
   WidgetSlotTreeNodeData,
   WidgetTreeDataNode,
@@ -9,6 +11,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Widget } from '../Widget';
 import { Placeholder } from './Placeholder';
 import { SlotPlaceholderPosition } from './Placeholder/enums';
+import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
 
 export type SlotProps = {
   node: WidgetSlotTreeDataNode;
@@ -60,6 +63,7 @@ const PlaceholderGroup = ({
   onWidgetDragLeave,
   onWidgetDragEnterWithoutInner: onDragEnterWithoutInner,
   onWidgetDragLeaveWithoutInner: onDragLeaveWithoutInner,
+  temporarilyCloseSlot,
 }: {
   node: WidgetTreeDataNode;
   isDragging: boolean;
@@ -75,6 +79,8 @@ const PlaceholderGroup = ({
   ) => void;
   onWidgetDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
   onWidgetDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
+  // 占位插槽组件需要提供一个接口来暂时关闭占位插槽
+  temporarilyCloseSlot?: boolean;
 }) => {
   const placeholderStartRef = useRef<HTMLDivElement>(null);
   const widgetRef = useRef<HTMLDivElement>(null);
@@ -122,6 +128,7 @@ const PlaceholderGroup = ({
         position={SlotPlaceholderPosition.Split}
         isHoverWidgetAdjacent={widgetHoveredIndex === nodeIndex}
         isClosestToDragMouse={closestToDragMouseHolderIndex === nodeIndex}
+        temporarilyCloseSlot={temporarilyCloseSlot}
       />
       <Widget
         ref={widgetRef}
@@ -141,6 +148,7 @@ const PlaceholderGroup = ({
         position={SlotPlaceholderPosition.Split}
         isHoverWidgetAdjacent={widgetHoveredIndex === nodeIndex}
         isClosestToDragMouse={closestToDragMouseHolderIndex === nodeIndex + 1}
+        temporarilyCloseSlot={temporarilyCloseSlot}
       />
     </>
   );
@@ -156,11 +164,24 @@ export const Slot = ({
     widgetKey: ViewKey;
   } | null>(null);
 
-  /**
-   * Slot 组件需要维护内部某个状态，用来表示鼠标是否已经 hover 自己的后代元素而非自身
-   */
-  const [isDragStayedOnDescendant, setIsDragStayedOnDescendant] =
-    useState(false);
+  const dispatch = useAppDispatch();
+
+  const { 界面状态仓库模块 } = 获取模块上下文();
+
+  const childrenSlots = node.children?.flatMap(
+    (childCompWidget) => childCompWidget.children || [],
+  );
+
+  const 子插槽正在被鼠标拖拽stay = useAppSelector((state) => {
+    return (
+      state.projectContent.拖拽stay的插槽节点keys路径.includes(node.key) &&
+      childrenSlots
+        ?.map((item) => item.key)
+        .some((item) =>
+          state.projectContent.拖拽stay的插槽节点keys路径.includes(item),
+        )
+    );
+  });
 
   const handleWidgetDragEnterWithoutInner = (
     widgetKey: ViewKey,
@@ -170,6 +191,13 @@ export const Slot = ({
       index,
       widgetKey,
     });
+    dispatch(
+      界面状态仓库模块.slices.projectContent.actions.向拖拽stay的插槽节点路径添加key(
+        {
+          widgetKey: node.key,
+        },
+      ),
+    );
   };
 
   useEffect(() => {
@@ -180,7 +208,6 @@ export const Slot = ({
 
   return (
     <>
-      {isDragStayedOnDescendant ? 'true' : 'false'}
       {node.children?.length ? (
         <>
           {node.children.map((child, nodeIndex) => (
@@ -192,9 +219,19 @@ export const Slot = ({
               slotNodeData={slotNodeData}
               nodeIndex={nodeIndex}
               widgetHoveredIndex={widgetDragStayedItemMeta?.index}
+              temporarilyCloseSlot={子插槽正在被鼠标拖拽stay}
               onWidgetDragEnterWithoutInner={() =>
                 handleWidgetDragEnterWithoutInner(child.key, nodeIndex)
               }
+              onWidgetDragLeaveWithoutInner={() => {
+                dispatch(
+                  界面状态仓库模块.slices.projectContent.actions.删除拖拽stay的插槽节点路径中的key(
+                    {
+                      widgetKey: node.key,
+                    },
+                  ),
+                );
+              }}
             />
           ))}
         </>
@@ -205,6 +242,7 @@ export const Slot = ({
           slotDataNode={slotNodeData}
           index={0}
           position={SlotPlaceholderPosition.Empty}
+          temporarilyCloseSlot={子插槽正在被鼠标拖拽stay}
         />
       )}
     </>
