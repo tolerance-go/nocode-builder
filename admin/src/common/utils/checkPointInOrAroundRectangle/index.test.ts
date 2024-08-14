@@ -14,6 +14,7 @@ describe('checkPointInOrAroundRectangle 方法测试', () => {
     const result = checkPointInOrAroundRectangle(point, rect);
     expect(result).toEqual({
       position: 'inside',
+      distance: 0,
     });
   });
 
@@ -29,6 +30,7 @@ describe('checkPointInOrAroundRectangle 方法测试', () => {
     const result = checkPointInOrAroundRectangle(point, rect, 5);
     expect(result).toEqual({
       position: 'top-left',
+      distance: Math.sqrt(8),
     });
   });
 
@@ -44,6 +46,7 @@ describe('checkPointInOrAroundRectangle 方法测试', () => {
     const result = checkPointInOrAroundRectangle(point, rect, 5);
     expect(result).toEqual({
       position: 'top-right',
+      distance: Math.sqrt(8),
     });
   });
 
@@ -59,6 +62,7 @@ describe('checkPointInOrAroundRectangle 方法测试', () => {
     const result = checkPointInOrAroundRectangle(point, rect, 5);
     expect(result).toEqual({
       position: 'bottom-left',
+      distance: Math.sqrt(8),
     });
   });
 
@@ -74,11 +78,12 @@ describe('checkPointInOrAroundRectangle 方法测试', () => {
     const result = checkPointInOrAroundRectangle(point, rect, 5);
     expect(result).toEqual({
       position: 'bottom-right',
+      distance: Math.sqrt(8),
     });
   });
 
   it('当点在矩形上方且超出周围区域时，应该返回 position: top', () => {
-    const point: Point = { x: 15, y: 2 };
+    const point: Point = { x: 15, y: 5 };
     const rect: Rectangle = {
       x: 10,
       y: 10,
@@ -89,11 +94,12 @@ describe('checkPointInOrAroundRectangle 方法测试', () => {
     const result = checkPointInOrAroundRectangle(point, rect, 5);
     expect(result).toEqual({
       position: 'top',
+      distance: 5,
     });
   });
 
   it('当点在矩形下方且超出周围区域时，应该返回 position: bottom', () => {
-    const point: Point = { x: 15, y: 28 };
+    const point: Point = { x: 15, y: 25 };
     const rect: Rectangle = {
       x: 10,
       y: 10,
@@ -104,11 +110,12 @@ describe('checkPointInOrAroundRectangle 方法测试', () => {
     const result = checkPointInOrAroundRectangle(point, rect, 5);
     expect(result).toEqual({
       position: 'bottom',
+      distance: 5,
     });
   });
 
   it('当点在矩形左侧且超出周围区域时，应该返回 position: left', () => {
-    const point: Point = { x: 2, y: 15 };
+    const point: Point = { x: 5, y: 15 };
     const rect: Rectangle = {
       x: 10,
       y: 10,
@@ -119,11 +126,12 @@ describe('checkPointInOrAroundRectangle 方法测试', () => {
     const result = checkPointInOrAroundRectangle(point, rect, 5);
     expect(result).toEqual({
       position: 'left',
+      distance: 5,
     });
   });
 
   it('当点在矩形右侧且超出周围区域时，应该返回 position: right', () => {
-    const point: Point = { x: 28, y: 15 };
+    const point: Point = { x: 25, y: 15 };
     const rect: Rectangle = {
       x: 10,
       y: 10,
@@ -134,6 +142,7 @@ describe('checkPointInOrAroundRectangle 方法测试', () => {
     const result = checkPointInOrAroundRectangle(point, rect, 5);
     expect(result).toEqual({
       position: 'right',
+      distance: 5,
     });
   });
 
