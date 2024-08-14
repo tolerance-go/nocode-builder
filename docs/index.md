@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: 'UNOCODEX'
-  text: '下一代无代码应用构建平台'
-  tagline: 一键发布，只待设计
+  text: '专业的在线无代码 Web 应用开发引擎'
+  tagline: Web 应用开发的引擎时代已经到来。
   image:
     src: /logo.webp
     alt: UNOCODEX
