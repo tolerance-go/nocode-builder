@@ -14,9 +14,7 @@ import {
   createContext,
   createElement,
   CSSProperties,
-  forwardRef,
   useContext,
-  useImperativeHandle,
   useRef,
   useState,
 } from 'react';
@@ -135,246 +133,225 @@ const useInnerStyle = ({
   };
 };
 
-const Inner = forwardRef<
-  HTMLDivElement,
-  {
-    widgetData: WidgetWithLibResponseDto;
-    isOver: boolean;
-    position: SlotPlaceholderPosition;
-    drop: ConnectDropTarget;
-    onDragEnterWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
-    onDragLeaveWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
-    onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
-    onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
-    isCollapsed?: boolean;
-  }
->(
-  (
-    {
-      widgetData,
-      isOver,
-      position,
-      isCollapsed,
-      drop,
-      onDragEnterWithoutInner,
-      onDragLeaveWithoutInner,
-      onDragEnter,
-      onDragLeave,
-    },
-    ref,
-  ) => {
-    const { 部件组件管理模块 } = 获取模块上下文();
-    const slotItemStyle = useInnerStyle({
-      isOver,
-      position,
-      display: assertEnumValue(widgetData.display, WidgetDisplayEnum),
-      isCollapsed,
-    });
+const Inner = ({
+  widgetData,
+  isOver,
+  position,
+  isCollapsed,
+  drop,
+  onDragEnterWithoutInner,
+  onDragLeaveWithoutInner,
+  onDragEnter,
+  onDragLeave,
+}: {
+  widgetData: WidgetWithLibResponseDto;
+  isOver: boolean;
+  position: SlotPlaceholderPosition;
+  isCollapsed?: boolean;
+  drop: ConnectDropTarget;
+  onDragEnterWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragLeaveWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
+  onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
+}) => {
+  const { 部件组件管理模块 } = 获取模块上下文();
+  const slotItemStyle = useInnerStyle({
+    isOver,
+    position,
+    display: assertEnumValue(widgetData.display, WidgetDisplayEnum),
+    isCollapsed,
+  });
 
-    const innerRef = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
 
-    // 插槽是否拖拽进入过
-    const [isDragEntered, setIsDragEntered] = useState(false);
+  // 插槽是否拖拽进入过
+  const [isDragEntered, setIsDragEntered] = useState(false);
 
-    useImperativeHandle(ref, () => {
-      if (innerRef.current) {
-        return innerRef.current;
-      }
-      throw new Error('innerRef is not defined');
-    });
+  const defaultProps = 部件组件管理模块.getComponentDefaultProps(
+    widgetData.widgetLib.name,
+    widgetData.name,
+  );
 
-    const defaultProps = 部件组件管理模块.getComponentDefaultProps(
-      widgetData.widgetLib.name,
-      widgetData.name,
-    );
+  const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
+    onDragEnter?.(event);
 
-    const handleDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-      onDragEnter?.(event);
+    if (
+      event.currentTarget.contains(event.relatedTarget as Node) &&
+      event.currentTarget !== event.relatedTarget
+    ) {
+      return;
+    }
 
-      if (
-        event.currentTarget.contains(event.relatedTarget as Node) &&
-        event.currentTarget !== event.relatedTarget
-      ) {
-        return;
-      }
+    onDragEnterWithoutInner?.(event);
+    setIsDragEntered(true);
+  };
 
-      onDragEnterWithoutInner?.(event);
-      setIsDragEntered(true);
-    };
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    onDragLeave?.(event);
 
-    const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-      onDragLeave?.(event);
+    /**
+     * 当拖动的元素进入子组件时，onDragLeave 事件会在父组件上触发。
+     * 原因是从父组件的角度来看，拖动的元素已经“离开”了父组件的范围，
+     * 尽管它只是进入了父组件的一个子组件。
+     *
+     * 这里为了避免在组件内部的元素进出时触发，需要判断是否在元素内
+     */
+    if (
+      event.currentTarget.contains(event.relatedTarget as Node) &&
+      event.currentTarget !== event.relatedTarget
+    ) {
+      return;
+    }
 
+    onDragLeaveWithoutInner?.(event);
+  };
+
+  const fadeInAndExpand = createFadeInAndExpand(
+    typeof slotItemStyle.width === 'string'
+      ? slotItemStyle.width
+      : (slotItemStyle.width ?? 0) + 'px',
+  );
+
+  const getClassName = () => {
+    if (position === SlotPlaceholderPosition.Split) {
       /**
-       * 当拖动的元素进入子组件时，onDragLeave 事件会在父组件上触发。
-       * 原因是从父组件的角度来看，拖动的元素已经“离开”了父组件的范围，
-       * 尽管它只是进入了父组件的一个子组件。
-       *
-       * 这里为了避免在组件内部的元素进出时触发，需要判断是否在元素内
+       * animation 和 过渡会有冲突
        */
-      if (
-        event.currentTarget.contains(event.relatedTarget as Node) &&
-        event.currentTarget !== event.relatedTarget
-      ) {
-        return;
-      }
+      return !isDragEntered && isCollapsed
+        ? css`
+            animation: ${fadeInAndExpand} 0.15s ease-in-out;
+          `
+        : undefined;
+    }
+    return undefined;
+  };
 
-      onDragLeaveWithoutInner?.(event);
-    };
-
-    const fadeInAndExpand = createFadeInAndExpand(
-      typeof slotItemStyle.width === 'string'
-        ? slotItemStyle.width
-        : (slotItemStyle.width ?? 0) + 'px',
-    );
-
-    const getClassName = () => {
-      if (position === SlotPlaceholderPosition.Split) {
+  return (
+    <div
+      data-tag="slot-placeholder"
+      className={getClassName()}
+      ref={mergeRefs((el) => drop(el), innerRef)}
+      style={{
+        ...slotItemStyle,
         /**
-         * animation 和 过渡会有冲突
+         * 支持 Cover 组件
          */
-        return !isDragEntered && isCollapsed
-          ? css`
-              animation: ${fadeInAndExpand} 0.15s ease-in-out;
-            `
-          : undefined;
-      }
-      return undefined;
-    };
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+      onDragEnter={handleDragEnter}
+      onDragLeave={handleDragLeave}
+    >
+      {createElement(
+        部件组件管理模块.getWidgetComponent(
+          widgetData.widgetLib.name,
+          widgetData.name,
+        ),
+        {
+          mode: 'stage-preview',
+          defaultProps,
+        },
+      )}
+      {position === SlotPlaceholderPosition.Split && (
+        <Cover isCollapsed={isCollapsed} />
+      )}
+    </div>
+  );
+};
 
-    return (
-      <div
-        data-tag="slot-placeholder"
-        className={getClassName()}
-        ref={mergeRefs((el) => drop(el), innerRef)}
-        style={{
-          ...slotItemStyle,
-          /**
-           * 支持 Cover 组件
-           */
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-        onDragEnter={handleDragEnter}
-        onDragLeave={handleDragLeave}
-      >
-        {createElement(
-          部件组件管理模块.getWidgetComponent(
-            widgetData.widgetLib.name,
-            widgetData.name,
-          ),
-          {
-            mode: 'stage-preview',
-            defaultProps,
-          },
-        )}
-        {position === SlotPlaceholderPosition.Split && (
-          <Cover isCollapsed={isCollapsed} />
-        )}
-      </div>
-    );
-  },
-);
+export const Placeholder = ({
+  isDragging,
+  widgetDataNode,
+  slotDataNode,
+  position,
+  isHoverWidgetAdjacent,
+  isClosestToDragMouse,
+  onDragEnterWithoutInner,
+  onDragLeaveWithoutInner,
+  onDragEnter,
+  onDragLeave,
+  index,
+  temporarilyCloseSlot,
+}: PlaceholderProps) => {
+  const { 全局事件系统, 部件组件管理模块 } = 获取模块上下文();
+  const [isCollapsed, setIsCollapsed] = useState(true);
 
-export const Placeholder = forwardRef<HTMLDivElement, PlaceholderProps>(
-  (
+  const [{ isOver, widgetData }, drop] = useDrop<
+    CardDragItem,
+    unknown,
     {
-      isDragging,
-      widgetDataNode,
-      slotDataNode,
-      position,
-      isHoverWidgetAdjacent,
-      isClosestToDragMouse,
-      onDragEnterWithoutInner,
-      onDragLeaveWithoutInner,
-      onDragEnter,
-      onDragLeave,
-      index,
-      temporarilyCloseSlot,
+      isOver: boolean;
+      widgetData?: WidgetWithLibResponseDto;
+    }
+  >({
+    accept: ItemType.CARD,
+    collect: (monitor) => ({
+      isOver: !!monitor.isOver(),
+      widgetData: monitor.getItem()?.widgetData,
+    }),
+    drop(item, monitor) {
+      const { widgetData } = monitor.getItem();
+
+      setIsCollapsed(true);
+
+      全局事件系统.emit(
+        '界面视图管理者/拖动部件弹窗中的组件放置到指定部件的插槽下时',
+        {
+          被拖动组件Name: item.widgetName,
+          被拖动组件的libName: item.widgetLibName,
+          目标部件key: widgetDataNode.key,
+          目标插槽key: slotDataNode.key,
+          目标插槽index: index,
+          被拖动组件的display: assertEnumValue(
+            widgetData.display,
+            WidgetDisplayEnum,
+          ),
+          被拖动组件的默认props: 部件组件管理模块.getComponentDefaultProps(
+            item.widgetLibName,
+            item.widgetName,
+          ),
+        },
+      );
     },
-    ref,
-  ) => {
-    const { 全局事件系统, 部件组件管理模块 } = 获取模块上下文();
-    const [isCollapsed, setIsCollapsed] = useState(true);
+  });
 
-    const [{ isOver, widgetData }, drop] = useDrop<
-      CardDragItem,
-      unknown,
-      {
-        isOver: boolean;
-        widgetData?: WidgetWithLibResponseDto;
-      }
-    >({
-      accept: ItemType.CARD,
-      collect: (monitor) => ({
-        isOver: !!monitor.isOver(),
-        widgetData: monitor.getItem()?.widgetData,
-      }),
-      drop(item, monitor) {
-        const { widgetData } = monitor.getItem();
+  if (temporarilyCloseSlot) {
+    return null;
+  }
 
+  if (!isDragging) {
+    return null;
+  }
+
+  if (!isHoverWidgetAdjacent && position === SlotPlaceholderPosition.Split) {
+    return null;
+  }
+
+  if (!isClosestToDragMouse && position === SlotPlaceholderPosition.Split) {
+    return null;
+  }
+
+  if (!widgetData) {
+    return null;
+  }
+
+  return (
+    <Inner
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+      onDragEnterWithoutInner={(event) => {
+        setIsCollapsed(false);
+        onDragEnterWithoutInner?.(event);
+      }}
+      onDragLeaveWithoutInner={(event) => {
         setIsCollapsed(true);
-
-        全局事件系统.emit(
-          '界面视图管理者/拖动部件弹窗中的组件放置到指定部件的插槽下时',
-          {
-            被拖动组件Name: item.widgetName,
-            被拖动组件的libName: item.widgetLibName,
-            目标部件key: widgetDataNode.key,
-            目标插槽key: slotDataNode.key,
-            目标插槽index: index,
-            被拖动组件的display: assertEnumValue(
-              widgetData.display,
-              WidgetDisplayEnum,
-            ),
-            被拖动组件的默认props: 部件组件管理模块.getComponentDefaultProps(
-              item.widgetLibName,
-              item.widgetName,
-            ),
-          },
-        );
-      },
-    });
-
-    if (temporarilyCloseSlot) {
-      return null;
-    }
-
-    if (!isDragging) {
-      return null;
-    }
-
-    if (!isHoverWidgetAdjacent && position === SlotPlaceholderPosition.Split) {
-      return null;
-    }
-
-    if (!isClosestToDragMouse && position === SlotPlaceholderPosition.Split) {
-      return null;
-    }
-
-    if (!widgetData) {
-      return null;
-    }
-
-    return (
-      <Inner
-        ref={ref}
-        onDragEnter={onDragEnter}
-        onDragLeave={onDragLeave}
-        onDragEnterWithoutInner={(event) => {
-          setIsCollapsed(false);
-          onDragEnterWithoutInner?.(event);
-        }}
-        onDragLeaveWithoutInner={(event) => {
-          setIsCollapsed(true);
-          onDragLeaveWithoutInner?.(event);
-        }}
-        widgetData={widgetData}
-        isOver={isOver}
-        position={position}
-        drop={drop}
-        isCollapsed={isCollapsed}
-      />
-    );
-  },
-);
+        onDragLeaveWithoutInner?.(event);
+      }}
+      widgetData={widgetData}
+      isOver={isOver}
+      position={position}
+      drop={drop}
+      isCollapsed={isCollapsed}
+    />
+  );
+};

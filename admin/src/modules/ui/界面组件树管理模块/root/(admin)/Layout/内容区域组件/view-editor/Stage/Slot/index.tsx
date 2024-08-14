@@ -7,11 +7,11 @@ import {
   WidgetTreeDataNode,
   WidgetTreeNodeData,
 } from '@/modules/ui/界面状态仓库模块';
-import { useEffect, useRef, useState } from 'react';
+import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
+import { useEffect, useState } from 'react';
 import { Widget } from '../Widget';
 import { Placeholder } from './Placeholder';
 import { SlotPlaceholderPosition } from './Placeholder/enums';
-import { 获取模块上下文 } from '@/modules/ui/界面组件树管理模块/hooks';
 
 export type SlotProps = {
   node: WidgetSlotTreeDataNode;
@@ -59,11 +59,11 @@ const PlaceholderGroup = ({
   slotNodeData,
   nodeIndex,
   widgetHoveredIndex,
+  temporarilyCloseSlot,
   onWidgetDragEnter,
   onWidgetDragLeave,
-  onWidgetDragEnterWithoutInner: onDragEnterWithoutInner,
-  onWidgetDragLeaveWithoutInner: onDragLeaveWithoutInner,
-  temporarilyCloseSlot,
+  onWidgetDragEnterWithoutInner,
+  onWidgetDragLeaveWithoutInner,
 }: {
   node: WidgetTreeDataNode;
   isDragging: boolean;
@@ -82,19 +82,15 @@ const PlaceholderGroup = ({
   // 占位插槽组件需要提供一个接口来暂时关闭占位插槽
   temporarilyCloseSlot?: boolean;
 }) => {
-  const placeholderStartRef = useRef<HTMLDivElement>(null);
-  const widgetRef = useRef<HTMLDivElement>(null);
-  const placeholderEndRef = useRef<HTMLDivElement>(null);
-
   const [closestToDragMouseHolderIndex, setClosestToDragMouseHolderIndex] =
     useState<number | null>(null);
 
   const handleWidgetDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
-    onDragEnterWithoutInner?.(event);
+    onWidgetDragEnterWithoutInner?.(event);
   };
 
   const handleWidgetDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    onDragLeaveWithoutInner?.(event);
+    onWidgetDragLeaveWithoutInner?.(event);
   };
 
   const handleWidgetDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -120,7 +116,6 @@ const PlaceholderGroup = ({
   return (
     <>
       <Placeholder
-        ref={placeholderStartRef}
         isDragging={isDragging}
         widgetDataNode={widgetDataNode}
         slotDataNode={slotNodeData}
@@ -131,7 +126,6 @@ const PlaceholderGroup = ({
         temporarilyCloseSlot={temporarilyCloseSlot}
       />
       <Widget
-        ref={widgetRef}
         node={node}
         onDragEnterWithoutInner={handleWidgetDragEnter}
         onDragOver={handleWidgetDragOver}
@@ -140,7 +134,6 @@ const PlaceholderGroup = ({
         onDragLeave={onWidgetDragLeave}
       />
       <Placeholder
-        ref={placeholderEndRef}
         isDragging={isDragging}
         widgetDataNode={widgetDataNode}
         slotDataNode={slotNodeData}
