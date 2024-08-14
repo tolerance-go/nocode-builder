@@ -71,6 +71,8 @@ const PlaceholderGroup = ({
   slotNodeData: WidgetSlotTreeNodeData;
   nodeIndex: number;
   widgetHoveredIndex?: number;
+  // 占位插槽组件需要提供一个接口来暂时关闭占位插槽
+  temporarilyCloseSlot?: boolean;
   onWidgetDragEnterWithoutInner?: (
     event: React.DragEvent<HTMLDivElement>,
   ) => void;
@@ -79,8 +81,6 @@ const PlaceholderGroup = ({
   ) => void;
   onWidgetDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
   onWidgetDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
-  // 占位插槽组件需要提供一个接口来暂时关闭占位插槽
-  temporarilyCloseSlot?: boolean;
 }) => {
   const [closestToDragMouseHolderIndex, setClosestToDragMouseHolderIndex] =
     useState<number | null>(null);
