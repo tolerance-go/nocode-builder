@@ -29,13 +29,10 @@ export interface PlaceholderProps {
   slotDataNode: WidgetSlotTreeDataNode;
   index: number;
   position: SlotPlaceholderPosition;
-  isHoverWidgetAdjacent?: boolean; // 新增的 boolean 属性，用于控制是否为相邻的插槽
-  isClosestToDragMouse?: boolean; // 新增的 boolean 属性，用于控制是否为鼠标最接近的插槽
   onDragEnterWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragLeaveWithoutInner?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
   onDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
-  temporarilyCloseSlot?: boolean;
 }
 
 interface SlotStyleContextType {
@@ -260,18 +257,15 @@ const Inner = ({
 };
 
 export const Placeholder = ({
+  index,
   isDragging,
   widgetDataNode,
   slotDataNode,
   position,
-  isHoverWidgetAdjacent,
-  isClosestToDragMouse,
   onDragEnterWithoutInner,
   onDragLeaveWithoutInner,
   onDragEnter,
   onDragLeave,
-  index,
-  temporarilyCloseSlot,
 }: PlaceholderProps) => {
   const { 全局事件系统, 部件组件管理模块 } = 获取模块上下文();
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -315,23 +309,11 @@ export const Placeholder = ({
     },
   });
 
-  if (temporarilyCloseSlot) {
+  if (!widgetData) {
     return null;
   }
 
   if (!isDragging) {
-    return null;
-  }
-
-  if (!isHoverWidgetAdjacent && position === SlotPlaceholderPosition.Split) {
-    return null;
-  }
-
-  if (!isClosestToDragMouse && position === SlotPlaceholderPosition.Split) {
-    return null;
-  }
-
-  if (!widgetData) {
     return null;
   }
 

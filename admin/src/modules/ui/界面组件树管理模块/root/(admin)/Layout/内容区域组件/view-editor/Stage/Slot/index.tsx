@@ -1,7 +1,6 @@
 import { ViewKey } from '@/common/types';
 import {
   useAppDispatch,
-  useAppSelector,
   WidgetSlotTreeDataNode,
   WidgetSlotTreeNodeData,
   WidgetTreeDataNode,
@@ -20,46 +19,13 @@ export type SlotProps = {
   slotNodeData: WidgetSlotTreeNodeData;
 };
 
-enum RelativePosition {
-  TopLeft = 'top-left',
-  TopRight = 'top-right',
-  BottomLeft = 'bottom-left',
-  BottomRight = 'bottom-right',
-  Center = 'center',
-  Unknown = 'unknown',
-}
-
-const getRelativePosition = (
-  x: number,
-  y: number,
-  width: number,
-  height: number,
-): RelativePosition => {
-  const centerX = width / 2;
-  const centerY = height / 2;
-  if (x < centerX && y < centerY) {
-    return RelativePosition.TopLeft;
-  } else if (x >= centerX && y < centerY) {
-    return RelativePosition.TopRight;
-  } else if (x < centerX && y >= centerY) {
-    return RelativePosition.BottomLeft;
-  } else if (x >= centerX && y >= centerY) {
-    return RelativePosition.BottomRight;
-  } else if (x === centerX && y === centerY) {
-    return RelativePosition.Center;
-  } else {
-    return RelativePosition.Unknown;
-  }
-};
-
 const PlaceholderGroup = ({
   node,
   isDragging,
   widgetDataNode,
   slotNodeData,
   nodeIndex,
-  widgetHoveredIndex,
-  temporarilyCloseSlot,
+  hasNextWidget,
   onWidgetDragEnter,
   onWidgetDragLeave,
   onWidgetDragEnterWithoutInner,
@@ -70,9 +36,7 @@ const PlaceholderGroup = ({
   widgetDataNode: WidgetTreeNodeData;
   slotNodeData: WidgetSlotTreeNodeData;
   nodeIndex: number;
-  widgetHoveredIndex?: number;
-  // 占位插槽组件需要提供一个接口来暂时关闭占位插槽
-  temporarilyCloseSlot?: boolean;
+  hasNextWidget: boolean;
   onWidgetDragEnterWithoutInner?: (
     event: React.DragEvent<HTMLDivElement>,
   ) => void;
@@ -82,35 +46,12 @@ const PlaceholderGroup = ({
   onWidgetDragEnter?: (event: React.DragEvent<HTMLDivElement>) => void;
   onWidgetDragLeave?: (event: React.DragEvent<HTMLDivElement>) => void;
 }) => {
-  const [closestToDragMouseHolderIndex, setClosestToDragMouseHolderIndex] =
-    useState<number | null>(null);
-
   const handleWidgetDragEnter = (event: React.DragEvent<HTMLDivElement>) => {
     onWidgetDragEnterWithoutInner?.(event);
   };
 
   const handleWidgetDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
     onWidgetDragLeaveWithoutInner?.(event);
-  };
-
-  const handleWidgetDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    const x = event.clientX - rect.left; // x 坐标相对于组件区域左上角
-    const y = event.clientY - rect.top; // y 坐标相对于组件区域左上角
-
-    const position = getRelativePosition(x, y, rect.width, rect.height);
-
-    if (
-      position === RelativePosition.TopLeft ||
-      position === RelativePosition.BottomLeft
-    ) {
-      setClosestToDragMouseHolderIndex(nodeIndex);
-    } else if (
-      position === RelativePosition.TopRight ||
-      position === RelativePosition.BottomRight
-    ) {
-      setClosestToDragMouseHolderIndex(nodeIndex + 1);
-    }
   };
 
   return (
@@ -121,28 +62,23 @@ const PlaceholderGroup = ({
         slotDataNode={slotNodeData}
         index={nodeIndex}
         position={SlotPlaceholderPosition.Split}
-        isHoverWidgetAdjacent={widgetHoveredIndex === nodeIndex}
-        isClosestToDragMouse={closestToDragMouseHolderIndex === nodeIndex}
-        temporarilyCloseSlot={temporarilyCloseSlot}
       />
       <Widget
         node={node}
         onDragEnterWithoutInner={handleWidgetDragEnter}
-        onDragOver={handleWidgetDragOver}
         onDragLeaveWithoutInner={handleWidgetDragLeave}
         onDragEnter={onWidgetDragEnter}
         onDragLeave={onWidgetDragLeave}
       />
-      <Placeholder
-        isDragging={isDragging}
-        widgetDataNode={widgetDataNode}
-        slotDataNode={slotNodeData}
-        index={nodeIndex + 1}
-        position={SlotPlaceholderPosition.Split}
-        isHoverWidgetAdjacent={widgetHoveredIndex === nodeIndex}
-        isClosestToDragMouse={closestToDragMouseHolderIndex === nodeIndex + 1}
-        temporarilyCloseSlot={temporarilyCloseSlot}
-      />
+      {!hasNextWidget && (
+        <Placeholder
+          isDragging={isDragging}
+          widgetDataNode={widgetDataNode}
+          slotDataNode={slotNodeData}
+          index={nodeIndex + 1}
+          position={SlotPlaceholderPosition.Split}
+        />
+      )}
     </>
   );
 };
@@ -152,7 +88,7 @@ export const Slot = ({
   widgetNodeData,
   slotNodeData,
 }: SlotProps) => {
-  const [widgetDragStayedItemMeta, setWidgetDragStayedItemMeta] = useState<{
+  const [, setWidgetDragStayedItemMeta] = useState<{
     index: number;
     widgetKey: ViewKey;
   } | null>(null);
@@ -160,21 +96,6 @@ export const Slot = ({
   const dispatch = useAppDispatch();
 
   const { 界面状态仓库模块 } = 获取模块上下文();
-
-  const childrenSlots = node.children?.flatMap(
-    (childCompWidget) => childCompWidget.children || [],
-  );
-
-  const 子插槽正在被鼠标拖拽stay = useAppSelector((state) => {
-    return (
-      state.projectContent.拖拽stay的插槽节点keys路径.includes(node.key) &&
-      childrenSlots
-        ?.map((item) => item.key)
-        .some((item) =>
-          state.projectContent.拖拽stay的插槽节点keys路径.includes(item),
-        )
-    );
-  });
 
   const handleWidgetDragEnterWithoutInner = (
     widgetKey: ViewKey,
@@ -211,8 +132,7 @@ export const Slot = ({
               widgetDataNode={widgetNodeData}
               slotNodeData={slotNodeData}
               nodeIndex={nodeIndex}
-              widgetHoveredIndex={widgetDragStayedItemMeta?.index}
-              temporarilyCloseSlot={子插槽正在被鼠标拖拽stay}
+              hasNextWidget={nodeIndex < node.children!.length - 1}
               onWidgetDragEnterWithoutInner={() =>
                 handleWidgetDragEnterWithoutInner(child.key, nodeIndex)
               }
@@ -235,7 +155,6 @@ export const Slot = ({
           slotDataNode={slotNodeData}
           index={0}
           position={SlotPlaceholderPosition.Empty}
-          temporarilyCloseSlot={子插槽正在被鼠标拖拽stay}
         />
       )}
     </>
