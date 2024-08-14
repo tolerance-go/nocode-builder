@@ -65,13 +65,13 @@ export const CustomDragLayer: React.FC = () => {
     dispatch(projectContent.actions.更新舞台预览组件尺寸(size));
   }, [dispatch, projectContent.actions, size]);
 
-  // useEffect(() => {
-  //   dispatch(
-  //     projectContent.actions.更新拖动中当前鼠标指针相对于页面左上角的坐标(
-  //       currentOffset,
-  //     ),
-  //   );
-  // }, [dispatch, projectContent.actions, currentOffset]);
+  useEffect(() => {
+    dispatch(
+      projectContent.actions.更新拖动中当前鼠标指针相对于页面左上角的坐标(
+        currentOffset,
+      ),
+    );
+  }, [dispatch, projectContent.actions, currentOffset]);
 
   if (!isDragging) {
     return null;

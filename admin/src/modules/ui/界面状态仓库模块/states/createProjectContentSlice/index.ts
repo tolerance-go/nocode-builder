@@ -24,7 +24,7 @@ export type ProjectContentStates = {
   widgetTreeNodeDatas: WidgetTreeNodeDataRecord;
   widgetTree: WidgetTreeDataNode[];
   isDragging: boolean;
-  // dragClientOffset: { x: number; y: number } | null;
+  dragClientOffset: { x: number; y: number } | null;
   stagePreviewCompSize: {
     width: number | string;
     height: number | string;
@@ -33,11 +33,11 @@ export type ProjectContentStates = {
   当前聚集的部件key: ViewKey | null;
   当前鼠标hover的部件key: ViewKey | null;
   拖拽stay的插槽节点keys路径: ViewKey[];
-  haha: string;
 };
 
 export const createProjectContentInitialState = () => {
   const initialState: ProjectContentStates = {
+    dragClientOffset: null,
     derived_widget节点到父节点的映射: {},
     widgetTree: [],
     widgetTreeNodeDatas: {},
@@ -47,8 +47,6 @@ export const createProjectContentInitialState = () => {
     当前聚集的部件key: null,
     当前鼠标hover的部件key: null,
     拖拽stay的插槽节点keys路径: [],
-    haha: '0',
-    // dragClientOffset: null,
   };
   return initialState;
 };
@@ -185,12 +183,12 @@ export const createProjectContentSlice = () => {
         state.stagePreviewCompSize = action.payload;
       },
 
-      // 更新拖动中当前鼠标指针相对于页面左上角的坐标(
-      //   state,
-      //   action: PayloadAction<{ x: number; y: number } | null>,
-      // ) {
-      //   state.dragClientOffset = action.payload;
-      // },
+      更新拖动中当前鼠标指针相对于页面左上角的坐标(
+        state,
+        action: PayloadAction<{ x: number; y: number } | null>,
+      ) {
+        state.dragClientOffset = action.payload;
+      },
 
       更新当前选中的部件keys(state, action: PayloadAction<ViewKey[]>) {
         state.当前选中的部件keys = action.payload;
